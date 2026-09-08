@@ -102,35 +102,38 @@ class Socket extends EventEmitter {
   terminate() { this.readyState = 3; this.emit('close'); }
 }
 
-function peerFixture(t) {
+function peerFixture(t, options = {}) {
   let now = 1234;
   const messages = [[], []];
-  const match = new PeerMatch({ code: 'ABCDE', host: { name: '甲' }, now: () => now,
+  const match = new PeerMatch({ code: 'ABCDE', host: { name: '甲' }, ...options, now: () => now,
     seed: () => 7, send: (slot, message) => messages[slot].push(message) });
   t.after(() => match.close());
-  match.announce(); match.join({ name: '乙' });
+  match.announce(); match.join({ name: '乙', finale: options.finale === 'father-son' ? 'none' : 'father-son' });
   return { get state() { return match.state; },
     last(type = 'state', slot = 0) { return messages[slot].findLast(message => message.type === type); },
     receive(slot, message) { match.receive(slot, message); },
     broadcast() { match.broadcast(); },
+    announce() { match.announce(); },
     advance(ms) { now += ms; match.tick(); },
     disconnect(slot) { match.disconnect(slot); },
   };
 }
 
-function wsFixture(t) {
+function wsFixture(t, options = {}) {
   let now = 1234;
   const rooms = new Rooms({ now: () => now }); clearInterval(rooms.timer);
   t.after(() => rooms.close());
   const connect = () => { const socket = new Socket(); rooms.attach(socket); return rooms.clients.get(socket); };
   const clients = [connect(), connect()];
-  rooms.message(clients[0], { type: 'create', name: '甲' });
+  rooms.message(clients[0], { type: 'create', name: '甲', ...options });
   const room = clients[0].room;
-  rooms.message(clients[1], { type: 'join', name: '乙', code: room.code });
+  rooms.message(clients[1], { type: 'join', name: '乙', code: room.code,
+    finale: options.finale === 'father-son' ? 'none' : 'father-son', finaleCapability: 'father-son' });
   return { get state() { return room.state; },
     last(type = 'state', slot = 0) { return clients[slot].socket.messages.findLast(message => message.type === type); },
     receive(slot, message) { rooms.message(clients[slot], message); },
     broadcast() { rooms.broadcast(room); },
+    announce() { rooms.roomInfo(room); },
     advance(ms) { now += ms; rooms.tick(); },
     disconnect(slot) { clients[slot].socket.terminate(); },
     reconnect(slot) {
@@ -142,6 +145,33 @@ function wsFixture(t) {
 }
 
 for (const [transport, fixture] of [['Peer', peerFixture], ['WS', wsFixture]]) {
+  test(`${transport} only enables father-son finale for an explicit room-creator choice`, t => {
+    for (const finale of [undefined, null, false, true, 1, {}, [], '', 'none', 'father-son', 'father-son ', 'unknown']) {
+      const f = fixture(t, { finale });
+      const expected = finale === 'father-son' ? 'father-son' : 'none';
+      assert.deepEqual(f.last('room').rules, { finale: expected });
+      assert.deepEqual(f.last('room', 1).rules, { finale: expected });
+    }
+  });
+
+  test(`${transport} keeps the creator's finale rule through completion and rematch`, t => {
+    for (const finale of ['none', 'father-son']) {
+      const f = fixture(t, { finale });
+      const opposite = finale === 'father-son' ? 'none' : 'father-son';
+      f.receive(1, { type: 'settings', finale: opposite, rules: { finale: opposite } });
+      f.state.score = [4, 0]; fallingPoint(f.state); f.advance(50);
+      assert.equal(f.last().state.endReason, 'scored');
+      f.receive(0, { type: 'rematch', finale: opposite });
+      f.receive(1, { type: 'rematch', finale: opposite, rules: { finale: opposite } });
+      assert.equal(f.last().matchId, 2);
+      assert.equal(f.last().state.phase, 'serve');
+      if (f.reconnect) { f.disconnect(1); f.reconnect(1); }
+      f.announce();
+      assert.deepEqual(f.last('room').rules, { finale });
+      assert.deepEqual(f.last('room', 1).rules, { finale });
+    }
+  });
+
   test(`${transport} shares stable room identity and first ending time through broadcasts and rematches`, t => {
     const f = fixture(t);
     const sessionId = f.last('room').sessionId;

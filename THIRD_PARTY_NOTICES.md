@@ -1,9 +1,14 @@
 # Third-party notices
 
-The original game code, procedural models, generated icons, and any synthesized
-audio in this repository are provided under the MIT license in `LICENSE`.
-The recorded WAV sounds in `src/audio/` are CC0 1.0 Universal; their source
+The original game code, procedural models, and generated icons in this
+repository are provided under the MIT license in `LICENSE`.
+The six recorded game WAV sounds listed below are CC0 1.0 Universal; their source
 credits, license URLs and processing details are in `src/audio/LICENSE.txt`.
+The separate synthetic speech file `src/audio/finale-dad.wav` was generated
+locally with Windows SAPI and Microsoft Huihui Desktop. Its provenance and
+reproduction details are in `src/audio/FINALE-VOICE.txt`; it is not covered by
+the recordings' CC0 statement or a blanket MIT claim for speech output.
+No speech engine or voice model files are distributed with the game.
 The project does not include NBA 2K models, commercial motion capture packs,
 or other extracted game assets. Procedural animation is not motion capture.
 

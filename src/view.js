@@ -415,7 +415,7 @@ export class CourtView {
     const camera=this.camera,aspect=this.width/this.height;
     camera.clearViewOffset();camera.aspect=aspect;camera.fov=42;
     const distance=aspect<1.2?7.7:5.8;
-    camera.position.set(.6,2.2,3.4+distance);camera.up.set(0,1,0);camera.lookAt(0,.85,3.4);
+    camera.position.set(0,2.2,3.4+distance);camera.up.set(0,1,0);camera.lookAt(0,.85,3.4);
     camera.updateProjectionMatrix();camera.updateMatrixWorld(true);
     this.finaleAnchors=[];
     for(let index=0;index<2;index++){

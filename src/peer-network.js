@@ -85,6 +85,7 @@ function validRoom(message, code) {
   return message.type === 'room' && message.code === code && message.slot === 1 &&
     typeof message.sessionId === 'string' && message.sessionId.length > 0 && message.sessionId.length <= 128 &&
     ['quick', 'standard21'].includes(message.ruleset) && [5, 11, 21].includes(message.target) &&
+    (message.rules === undefined || record(message.rules) && ['none', 'father-son'].includes(message.rules.finale)) &&
     Array.isArray(message.players) && message.players.length === 2 && message.players.every(player => player === null ||
       record(player) && typeof player.name === 'string' && player.name.length <= 64 &&
       Object.hasOwn(ROLES, player.role) && typeof player.connected === 'boolean' &&
@@ -143,7 +144,7 @@ async function defaultPeerFactory(signal) {
 }
 
 /** Public cloud performs pairing only; slot 0 runs the authoritative match. */
-export async function openPeerRoom({ type, code, name, role, playerId, target = 5, ruleset = 'quick',
+export async function openPeerRoom({ type, code, name, role, playerId, target = 5, ruleset = 'quick', finale = 'none',
   onMessage = () => {}, onClose = () => {}, onStatus = () => {}, signal, peerFactory } = {}) {
   if (type !== 'create' && type !== 'join') throw new Error('请选择创建房间或加入房间');
   const isHost = type === 'create';
@@ -285,6 +286,9 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
             if (message.type !== 'rally-hello' || message.version !== VERSION || !record(message.profile)) {
               rejectChannel('双方游戏版本或直连协议不同，请联网刷新后重试'); return;
             }
+            if (match.rules.finale === 'father-son' && message.finale !== 'father-son') {
+              rejectChannel('父子局需要双方更新游戏，请联网刷新后重试；普通对局可继续使用'); return;
+            }
             helloSeen = true; cancel(handshakeTimer);
             if (!sendData(current, { type: 'rally-accept', version: VERSION })) return;
             try { joined = true; match.join(publicProfile(message.profile)); status('手机直连已建立'); }
@@ -317,7 +321,8 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
       const openedChannel = () => {
         if (opened || ended) return; opened = true;
         if (extra) { rejectChannel('房间已满或比赛已开始'); return; }
-        if (!isHost) sendData(current, { type: 'rally-hello', version: VERSION, profile });
+        // Advertise support separately from the host's selected room mode.
+        if (!isHost) sendData(current, { type: 'rally-hello', version: VERSION, profile, finale: 'father-son' });
       };
       onChannel('open', openedChannel);
       if (current.open) openedChannel();
@@ -363,7 +368,7 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
         if (registered || ended) return; registered = true;
         if (isHost) {
           try {
-            match = new PeerMatch({ code: roomCode, host: profile, target, ruleset,
+            match = new PeerMatch({ code: roomCode, host: profile, target, ruleset, finale,
               send: (slot, message) => slot === 0 ? deliver(message) : sendData(connection, message) });
             match.announce();
             if (ended) return;

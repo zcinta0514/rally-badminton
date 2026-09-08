@@ -14,6 +14,9 @@ test('court finale uses actual winner identity, projects both labels, and restor
   const s=createMatch(),before=structuredClone(s),cameraSettings={pitch:28,zoom:1};view.cameraSettings=cameraSettings;
   for(const winner of [0,1]){
     view.renderFinale(s,{winner,loser:1-winner,age:1.4},1);
+    const leftLine=new THREE.Vector3(-3.05,.03,4).project(view.camera);
+    const rightLine=new THREE.Vector3(3.05,.03,4).project(view.camera);
+    assert.ok(Math.abs(leftLine.y-rightLine.y)<1e-9,'court cross-lines must stay horizontal in the finale');
     const loser=view.players[1-winner],victor=view.players[winner];
     assert.ok(loser.root.userData.pose.joints.head.y<.3);
     assert.ok(victor.root.userData.pose.joints.head.y>1.6);

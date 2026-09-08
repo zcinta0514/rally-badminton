@@ -31,3 +31,16 @@ test('the real skinned rig accepts the finale and resets head/feet orientation f
   assert.ok(rig.skin.skeleton.bones.every(b=>b.matrixWorld.elements.every(Number.isFinite)));
   assert.equal(rig.root.position.x,-.9);assert.ok(rig.bones.head.rotation.x<-.8);
 });
+
+test('kneeling shoes keep their forward direction instead of turning backwards',()=>{
+  const rig=makeAthlete(new THREE.Scene(),0);
+  for(const heading of [-Math.PI/2,Math.PI/2])for(const age of [0,.3,.7,1.4,2.6]){
+    const pose=sampleFinalePose('loser',age,heading);
+    applyAthletePose(rig,pose,{x:0,z:0});rig.root.updateMatrixWorld(true);
+    const forward=new THREE.Vector3(-Math.sin(heading),0,-Math.cos(heading));
+    for(const foot of Object.values(rig.feet)){
+      const toe=new THREE.Vector3(0,0,-1).transformDirection(foot.matrixWorld);
+      assert.ok(toe.dot(forward)>.99,`shoe reverses at age ${age}`);
+    }
+  }
+});

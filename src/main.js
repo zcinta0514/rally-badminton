@@ -19,7 +19,7 @@ const peerMode=globalThis.RALLY_CONFIG?.peerMode===true;
 const practiceOnly=demoMode&&!peerMode;
 const names={easy:'入门',medium:'进阶',hard:'高手'};
 const roleNotes={balanced:'均衡的移动、力量与恢复，适合初次上场。',swift:'移动更快、恢复更快；杀球力量稍弱，靠跑位创造机会。',power:'杀球更重、体力上限更高；步速和恢复较慢，要选好时机。'};
-const settings={role:'balanced',difficulty:'easy',target:5,ruleset:'quick'};
+const settings={role:'balanced',difficulty:'easy',target:5,ruleset:'quick',finale:'none'};
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
 let pendingShot=null,aim=0,dragAim=null,view,controls,lastFrame=performance.now(),accumulator=0,lastSend=0;
@@ -79,7 +79,8 @@ function unlockAudio(){
 }
 function clearFinale(){
   finale.cancel(state?.phase==='over'||finale.blocking);view?.clearFinale();arenaAudio.stopVoices('finale');
-  $('match-finale').hidden=true;delete document.body.dataset.finale;delete document.body.dataset.finalePending;
+  $('match-finale').hidden=true;$('finale-bubble').hidden=true;
+  delete document.body.dataset.finale;delete document.body.dataset.finalePending;
 }
 function showFinale(frame){
   if(finale.blocking)document.body.dataset.finalePending='true';else delete document.body.dataset.finalePending;
@@ -108,7 +109,7 @@ function groupChoice(container,attribute,value){
     const selected=button.dataset[attribute]===String(value);button.classList.toggle('selected',selected);button.setAttribute('aria-pressed',String(selected));
   }
 }
-for(const [id,key,attr] of [['roles','role','role'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset']]){
+for(const [id,key,attr] of [['roles','role','role'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset'],['friend-modes','finale','finale']]){
   $(id).addEventListener('click',event=>{
     const button=event.target.closest('button');if(!button||button.disabled)return;
     settings[key]=key==='target'?Number(button.dataset[attr]):button.dataset[attr];groupChoice(id,attr,settings[key]);
@@ -183,6 +184,7 @@ function handleNetwork(message){
     if(finale.blocking&&message.players.some(player=>!player?.connected))clearFinale();
     currentPlayerId=message.players[side]?.playerId||null;
     setText('waiting-code',message.code);
+    setText('waiting-mode',message.rules?.finale==='father-son'?'父子局 · 赛后互动不可跳过':'普通对局 · 无赛后互动');
     setText('waiting-status',message.players.filter(Boolean).length===2?'● 球友已到，准备开场':'● 房间已创建，等待加入');
     history.replaceState(null,'',`?room=${encodeURIComponent(message.code)}`);
     if(!state){mode='waiting';dialog('waiting-dialog');}
@@ -194,7 +196,7 @@ function handleNetwork(message){
     state=message.state;mode='online';reconnecting=false;reconnectError='';
     if(entering)enterMatch();
     const wasFinaleBlocking=finale.blocking;
-    finale.receive(message,{mode,players:room?.players});
+    finale.receive(message,{mode,players:room?.players,finaleMode:room?.rules?.finale});
     if(wasFinaleBlocking&&!finale.blocking)clearFinale();
   }else if(message.type==='error'){
     showToast(message.message);connecting=false;helpOpen=false;
@@ -244,7 +246,7 @@ async function roomAction(type){
   if(attempt){peerAttempt=attempt;peerDisconnected=false;}
   try{
     const profile=preparePlayerProfile();$('player-name').value=profile.saveName(name);preparePlayerProfile();
-    const options={type,name,role:settings.role,target:settings.target,ruleset:settings.ruleset,...(type==='join'?{code}:{})};
+    const options={type,name,role:settings.role,target:settings.target,ruleset:settings.ruleset,finaleCapability:'father-son',...(type==='join'?{code}:{finale:settings.finale})};
     if(peerMode){
       const playerId=await peerRecords.publicId(profile.playerKey);
       if(generation!==netGeneration)return;
@@ -261,6 +263,7 @@ async function roomAction(type){
 function setRoomBusy(busy,type){
   connecting=busy;
   $('create-room').disabled=busy;$('join-room').disabled=busy;
+  for(const choice of $('friend-modes').querySelectorAll('button'))choice.disabled=busy;
   setText('create-room',busy&&type==='create'?'正在创建…':'创建房间 ＋');
   setText('join-room',busy&&type==='join'?'正在连接…':'加入 ↗');
 }
@@ -280,7 +283,7 @@ function closeHelpOrSetup(){
   helpOpen=false;if(state?.phase==='paused')dialog('pause-dialog');else dialog(null);
 }
 $('start-ai').addEventListener('click',startAI);
-$('open-friends').addEventListener('click',()=>{dialog(practiceOnly?'lan-dialog':'friends-dialog');});
+$('open-friends').addEventListener('click',()=>{settings.finale='none';groupChoice('friend-modes','finale','none');dialog(practiceOnly?'lan-dialog':'friends-dialog');});
 $('open-leaderboard').addEventListener('click',()=>openLeaderboard('menu'));
 $('result-leaderboard').addEventListener('click',()=>openLeaderboard('result'));
 $('close-leaderboard').addEventListener('click',closeLeaderboard);
@@ -347,7 +350,8 @@ function updateUI(info,state){
   setText('name-self',nameSelf);setText('name-other',nameOther);
   setText('role-self',ROLES[self.role].label+'型');setText('role-other',ROLES[opponent.role].label+'型');
   setText('score-self',state.score[side]);setText('score-other',state.score[1-side]);
-  setText('match-label',state.ruleset==='standard21'?`第${state.gameNumber}局 · 局数${state.games[side]}:${state.games[1-side]} · 21分`:`抢 ${state.target} 分 · ${mode==='ai'?'人机练习':'好友对战'}`);
+  const matchType=mode==='ai'?'人机练习':room?.rules?.finale==='father-son'?'父子局':'普通对局';
+  setText('match-label',state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[side]}:${state.games[1-side]} · ${matchType}`:`抢 ${state.target} 分 · ${matchType}`);
   setText('match-message',state.phase==='serve'?(state.server===side?`你发球 · ${state.service?.court==='left'?'左':'右'}发球区 → 对角`:'等待对手对角发球'):relativeMessage(state.message));
   setText('rally',state.phase==='rally'?`${state.rally} 拍回合`:`第 ${state.pointId+1} 分`);
   if(mode==='ai')setText('connection','本地练习');

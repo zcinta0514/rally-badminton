@@ -32,6 +32,6 @@ export function sampleFinalePose(role,age,heading=0) {
   for(const name of Object.keys(joints))joints[name]=turn(joints[name],heading);
   const racketHead=add(joints.rightWrist,turn(v(0,.54,0),heading));
   return {joints,heading,pelvisYaw:heading,chestYaw:heading,headYaw:heading,
-    headPitch:loser?-pitch:-.1*ease(age/.6),ankleYaw:heading+Math.PI*kneel,
+    headPitch:loser?-pitch:-.1*ease(age/.6),ankleYaw:heading,
     racketHead,racketRoll:0,jump:0,actionType:'finale',active:0,crouch:0,stroke:0};
 }

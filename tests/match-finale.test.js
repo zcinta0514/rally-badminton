@@ -5,10 +5,10 @@ import { MatchFinale, FINALE_DURATION, FINALE_VOICE_AT } from '../src/match-fina
 const packet = (winner=1, matchId=1) => ({sessionId:'friends',matchId,matchEndedAt:1000,
   state:{phase:'over',winner,endReason:'scored',rallyEnd:{duration:1.4}}});
 const players = [{name:'橙子 <img>',connected:true},{name:'青柠',connected:true}];
-const receive = (f,p=packet(),extra={}) => f.receive(p,{mode:'online',players,...extra});
+const receive = (f,p=packet(),extra={}) => f.receive(p,{mode:'online',players,finaleMode:'father-son',...extra});
 const draw = (f,dt=.05,extra={}) => f.update({dt,serverNow:2450,phase:'over',rallyEnding:false,visible:true,...extra});
 
-test('a named normal friend result waits for the last fall, then plays the correct loser once',()=>{
+test('a named father-son result waits for the last fall, then plays the correct loser once without skipping',()=>{
   const f=new MatchFinale(),p=packet(),before=structuredClone(p);
   receive(f,p);assert.equal(draw(f,.1,{phase:'rally'}),null);
   assert.equal(draw(f,.1,{rallyEnding:true}),null);
@@ -19,6 +19,23 @@ test('a named normal friend result waits for the last fall, then plays the corre
   assert.equal(cues,1);assert.ok(frames>40);assert.equal(f.blocking,false);
   receive(f,p);assert.equal(draw(f),null);assert.deepEqual(p,before);
   assert.equal(typeof f.skip,'undefined');
+});
+
+test('ordinary, missing and invalid room modes never admit a finale, including after a rematch',()=>{
+  for(const finaleMode of ['normal',undefined,null,'',true,'FATHER-SON']){
+    const f=new MatchFinale();
+    receive(f,packet(),{finaleMode});
+    assert.equal(f.blocking,false,String(finaleMode));assert.equal(draw(f),null);
+    receive(f,packet(0,2),{finaleMode});assert.equal(draw(f),null);
+  }
+  const f=new MatchFinale();f.receive(packet(),{mode:'online',players});
+  assert.equal(draw(f),null,'omitting the setting is ordinary play');
+});
+
+test('a new match cannot inherit father-son admission from the previous match',()=>{
+  const f=new MatchFinale();receive(f);assert.ok(draw(f));draw(f,FINALE_DURATION);
+  receive(f,packet(0,2),{finaleMode:'normal'});assert.equal(draw(f),null);
+  receive(f,packet(0,3));assert.ok(draw(f),'a later explicit father-son match can play');
 });
 
 test('AI, interrupted, missing identity, tied and disconnected results cannot play',()=>{
@@ -32,7 +49,7 @@ test('AI, interrupted, missing identity, tied and disconnected results cannot pl
   }
 });
 
-test('cancel consumes pending/active results, whereas a new match resets the mandatory timeline',()=>{
+test('cancel consumes pending/active results, whereas a new match resets the presentation timeline',()=>{
   const f=new MatchFinale();receive(f);f.cancel();receive(f);assert.equal(draw(f),null);
   receive(f,packet(0,2));const frame=draw(f);assert.equal(frame.loser,1);assert.equal(frame.age,0);
   draw(f);f.cancel();receive(f,packet(0,2));assert.equal(draw(f),null);
@@ -44,7 +61,7 @@ test('both clients sample the same timeline and background cannot emit delayed v
   for(let i=0;i<15;i++)assert.deepEqual(draw(a),draw(b));
   const hidden=draw(a,FINALE_VOICE_AT,{visible:false});assert.equal(hidden.voice,false);
   assert.equal(draw(a,.01).voice,false,'do not queue a voice missed while hidden');
-  const held=a.age;draw(a,100,{visible:false});assert.equal(a.age,held,'background cannot skip the mandatory timeline');
+  const held=a.age;draw(a,100,{visible:false});assert.equal(a.age,held,'background cannot silently skip the presentation timeline');
   draw(a,FINALE_DURATION);assert.equal(a.blocking,false);
 });
 

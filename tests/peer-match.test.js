@@ -25,7 +25,7 @@ test('waiting room is silent until announced and starts only after the guest joi
   f.match.announce();
   assert.equal(f.messages[0].length, 1);
   assert.deepEqual(f.last('room'), { type: 'room', code: 'ABCDE', slot: 0, token: null, target: 5,
-    ruleset: 'quick', sessionId: 'test-session',
+    ruleset: 'quick', rules: { finale: 'none' }, sessionId: 'test-session',
     players: [{ name: '甲', role: 'swift', connected: true, playerId: 'host-id' }, null] });
   assert.equal(f.match.state, null);
   assert.equal(f.join(), true);

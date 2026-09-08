@@ -59,14 +59,75 @@ test('create resolves only after registration and delivers the authoritative loc
   assert.equal(messages[0].slot,0);assert.ok(messages[0].sessionId);assert.equal(messages[0].token,null);
 });
 
-async function pair(t, bus=transportBus()) {
+async function pair(t, bus=transportBus(), hostOptions={}) {
   const hostMessages=[],guestMessages=[],hostCloses=[],guestCloses=[],statuses=[];
-  const host=await api.openPeerRoom({...options,type:'create',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>hostMessages.push(m),onClose:e=>hostCloses.push(e),onStatus:s=>statuses.push(s)});
+  const host=await api.openPeerRoom({...options,...hostOptions,type:'create',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>hostMessages.push(m),onClose:e=>hostCloses.push(e),onStatus:s=>statuses.push(s)});
   t.after(()=>host.close());
   const guest=await api.openPeerRoom({...options,name:'客人',playerId:'public-guest',type:'join',code:hostMessages[0].code,peerFactory:bus.peerFactory,onMessage:m=>guestMessages.push(m),onClose:e=>guestCloses.push(e)});
   t.after(()=>guest.close());await flush();
   return {bus,host,guest,hostMessages,guestMessages,hostCloses,guestCloses,statuses};
 }
+
+test('peer room creation propagates its selected finale to both players', async t => {
+  for (const finale of ['none', 'father-son']) {
+    const { hostMessages, guestMessages, guest, bus } = await pair(t, transportBus(), { finale });
+    assert.deepEqual(hostMessages[0].rules, { finale });
+    assert.deepEqual(guestMessages[0].rules, { finale });
+    assert.equal(guest.send({ type: 'settings', finale: 'father-son' }), false);
+    assert.equal(bus.sent.some(item => item.message.type === 'settings'), false);
+  }
+});
+
+test('peer guest rejects malformed authoritative finale rules', async t => {
+  const { bus, guestMessages, guestCloses } = await pair(t);
+  const message = structuredClone(guestMessages.find(item => item.type === 'room'));
+  message.rules = { finale: true };
+  const count = guestMessages.length;
+  bus.peers[0].connections[0].send(message); await flush();
+  assert.equal(guestMessages.length, count);
+  assert.equal(guestCloses.length, 1);
+});
+
+test('father-son hosts reject a legacy guest before play and remain available for an updated guest', async t => {
+  const bus = transportBus(), hostMessages = [], hostCloses = [];
+  const host = await api.openPeerRoom({ ...options, type: 'create', code: 'ABCDE', finale: 'father-son',
+    peerFactory: bus.peerFactory, onMessage: message => hostMessages.push(message), onClose: error => hostCloses.push(error) });
+  t.after(() => host.close());
+  for (const finale of [undefined, null, false, true, 'none', {}]) {
+    const legacyPeer = bus.peerFactory(); t.after(() => legacyPeer.destroy()); await flush();
+    const messages = [], connection = legacyPeer.connect(bus.peers[0].id, { serialization: 'json', reliable: true });
+    connection.on('data', message => messages.push(message));
+    connection.on('open', () => connection.send({ type: 'rally-hello', version: 1, profile: options,
+      ...(finale === undefined ? {} : { finale }) }));
+    await flush();
+    assert.equal(messages[0].type, 'rally-reject');
+    assert.match(messages[0].message, /更新游戏/);
+    assert.equal(hostMessages.some(message => message.type === 'state'), false);
+    assert.equal(hostCloses.length, 0);
+    connection.close(); await flush();
+  }
+  const guestMessages = [];
+  const guest = await api.openPeerRoom({ ...options, type: 'join', code: 'ABCDE', peerFactory: bus.peerFactory,
+    onMessage: message => guestMessages.push(message) });
+  t.after(() => guest.close()); await flush();
+  assert.deepEqual(guestMessages[0].rules, { finale: 'father-son' });
+  assert.ok(guestMessages.some(message => message.type === 'state'));
+  assert.equal(hostCloses.length, 0);
+});
+
+test('ordinary hosts continue accepting legacy guests without finale capability', async t => {
+  const bus = transportBus();
+  const host = await api.openPeerRoom({ ...options, type: 'create', code: 'ABCDE', peerFactory: bus.peerFactory });
+  t.after(() => host.close());
+  const legacyPeer = bus.peerFactory(); t.after(() => legacyPeer.destroy()); await flush();
+  const messages = [], connection = legacyPeer.connect(bus.peers[0].id, { serialization: 'json', reliable: true });
+  connection.on('data', message => messages.push(message));
+  connection.on('open', () => connection.send({ type: 'rally-hello', version: 1, profile: options }));
+  await flush();
+  assert.equal(messages[0].type, 'rally-accept');
+  assert.deepEqual(messages.find(message => message.type === 'room').rules, { finale: 'none' });
+  assert.ok(messages.some(message => message.type === 'state'));
+});
 
 test('two peers complete version handshake, propagate a real room and exchange ping', async t => {
   const {bus,host,guest,hostMessages,guestMessages}=await pair(t);

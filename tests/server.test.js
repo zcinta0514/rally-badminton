@@ -50,6 +50,30 @@ test('room joins two players and rejects a third',async t=>{
   c.send({type:'join',code:room.code,name:'第三人',role:'balanced'});
   assert.match((await c.wait(m=>m.type==='error')).message,/满|开始/);
 });
+
+test('father-son WebSocket room rejects unsupported guests before starting and accepts an updated retry', async t => {
+  const app = await setup(t), host = await client(app.url), guest = await client(app.url);
+  t.after(() => { host.close(); guest.close(); });
+  host.send({ type: 'create', name: '甲', finale: 'father-son' });
+  const room = await host.wait(message => message.type === 'room');
+  for (const finaleCapability of [undefined, null, false, true, 'none', {}]) {
+    guest.send({ type: 'join', code: room.code, name: '乙',
+      ...(finaleCapability === undefined ? {} : { finaleCapability }) });
+    assert.match((await guest.wait(message => message.type === 'error')).message, /更新游戏/);
+  }
+  guest.send({ type: 'join', code: room.code, name: '乙', finaleCapability: 'father-son' });
+  const joined = await guest.wait(message => message.type === 'room');
+  assert.deepEqual(joined.rules, { finale: 'father-son' });
+  assert.deepEqual((await host.wait(message => message.type === 'room' && message.players[1])).rules, joined.rules);
+  assert.equal((await guest.wait(message => message.type === 'state')).state.phase, 'serve');
+});
+
+test('ordinary WebSocket rooms allow legacy guests without finale capability', async t => {
+  const app = await setup(t), { room, bRoom, initialB } = await pair(t, app);
+  assert.deepEqual(room.rules, { finale: 'none' });
+  assert.deepEqual(bRoom.rules, { finale: 'none' });
+  assert.equal(initialB.phase, 'serve');
+});
 test('server controls identity, vectors, role and score',async t=>{
   const app=await setup(t);const {a,b,initialA}=await pair(t,app);
   a.send({type:'input',x:999,z:0,slot:1,score:[99,0],role:'power',shot:'clear'});

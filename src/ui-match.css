@@ -1,5 +1,5 @@
 /* Match chrome lives in the camera's existing top and side gutters. */
-/* Finale has no controls: the result actions appear when its timeline ends. */
+/* Father-son rooms finish with a mandatory court finale. */
 #match-finale { position:fixed; inset:0; z-index:9; pointer-events:none; color:#f5f7e9; }
 .finale-heading { position:absolute; top:max(16px,env(safe-area-inset-top)); left:50%; transform:translateX(-50%); width:min(55vw,600px); text-align:center; text-shadow:0 2px 8px #001817; }
 .finale-heading small { display:block; font-size:10px; letter-spacing:2px; color:#b8d8bd; }

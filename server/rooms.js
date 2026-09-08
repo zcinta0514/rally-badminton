@@ -37,7 +37,7 @@ export class Rooms {
   error(ctx,message){send(ctx.socket,{type:'error',message});}
   roomInfo(room){
     room.players.forEach((p,slot)=>{
-      if(p)send(p.socket,{type:'room',code:room.code,slot,token:p.token,target:room.target,ruleset:room.ruleset,sessionId:room.sessionId,
+      if(p)send(p.socket,{type:'room',code:room.code,slot,token:p.token,target:room.target,ruleset:room.ruleset,rules:room.rules,sessionId:room.sessionId,
         players:room.players.map(x=>x?{name:x.name,role:x.role,connected:x.connected,playerId:x.identity?.slice(0,12)||null}:null)});
     });
   }
@@ -94,7 +94,8 @@ export class Rooms {
       const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let code;
       do{code=Array.from({length:5},()=>alphabet[randomInt(alphabet.length)]).join('');}while(this.rooms.has(code));
       const ruleset=rulesetOf(m.ruleset);
-      const room={code,ruleset,target:ruleset==='standard21'?21:[5,11,21].includes(m.target)?m.target:5,players:[null,null],state:null,snapshotSeq:0,matchId:1,
+      const room={code,ruleset,rules:Object.freeze({finale:m.finale==='father-son'?'father-son':'none'}),
+        target:ruleset==='standard21'?21:[5,11,21].includes(m.target)?m.target:5,players:[null,null],state:null,snapshotSeq:0,matchId:1,
         sessionId:randomBytes(16).toString('hex'),matchEndedAt:null,abandoned:false,
         inputs:[{},{}],lastInput:[0,0],lastShot:[-Infinity,-Infinity],rematch:new Set(),resumeReady:new Set(),advancedMs:this.accumulator,touched:this.now()};
       this.rooms.set(code,room);this.connect(ctx,room,0,m.name,m.role,m.playerKey);this.roomInfo(room);return;
@@ -105,6 +106,7 @@ export class Rooms {
       if(!room)return this.error(ctx,'未找到房间，请检查房间码');
       if(room.players[1]||room.state)return this.error(ctx,'房间已满或比赛已开始');
       if(!room.players[0]?.connected)return this.error(ctx,'房主暂时离线，请等待房主重新连接后加入');
+      if(room.rules.finale==='father-son'&&m.finaleCapability!=='father-son')return this.error(ctx,'父子局需要双方更新游戏，请联网刷新后重试；普通对局可继续使用');
       this.connect(ctx,room,1,m.name,m.role,m.playerKey);
       room.state=createMatch({ruleset:room.ruleset,target:room.target,roles:room.players.map(p=>p.role),seed:randomInt(1,1000000)});
       room.advancedMs=this.accumulator;

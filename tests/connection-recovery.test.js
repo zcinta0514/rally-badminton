@@ -33,7 +33,7 @@ class Target {
   }
 }
 
-async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0} = {}) {
+async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none'} = {}) {
   let now = 1000, nextId = 0, frame, controls, view, audio;
   const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [];
   let resolvePeer;
@@ -54,6 +54,14 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   const shots = ['clear', 'drop', 'smash'].map(shot => {
     const button = element(shot); button.dataset.shot = shot; return button;
   });
+  const friendModes=['none','father-son'].map(finale=>{
+    const button=element(`mode-${finale}`);button.dataset.finale=finale;
+    button.closest=selector=>selector==='button'?button:null;
+    button.attributes={'aria-pressed':String(finale==='none')};
+    button.setAttribute=(name,value)=>{button.attributes[name]=value;};
+    return button;
+  });
+  element('friend-modes').querySelectorAll=selector=>selector==='button'?friendModes:[];
   const document = Object.assign(new Target(), {
     hidden: false, body: { dataset: { screen: 'menu' } }, getElementById: element,
     createElement: tag => element(`generated-${tag}-${++nextId}`),
@@ -99,7 +107,9 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
       const session={send:message=>{session.sent.push(message);return true;},close(){session.closed=true;},sent:[],isHost:options.type==='create'};
       peerCalls.push({options,session});
       if(pendingPeer)await new Promise(resolve=>{resolvePeer=resolve;});
-      options.onMessage({type:'room',code:'ABCDE',slot:0,sessionId:'test-session',players:[{name:options.name,playerId:options.playerId,connected:true},null]});
+      options.onMessage({type:'room',code:'ABCDE',slot:0,sessionId:'test-session',
+        rules:{finale:options.type==='create'?options.finale:finaleMode},
+        players:[{name:options.name,playerId:options.playerId,connected:true},null]});
       return session;
     },
     createPlayerProfile: () => createPlayerProfile({ storage: null, crypto: webcrypto }),
@@ -126,12 +136,14 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
   const common = { element, click, draw, controls, view, audio, document,
+    friendModes,chooseFinale:value=>{const button=friendModes.find(item=>item.dataset.finale===value);if(!button.disabled)element('friend-modes').emit('click',{target:button});},
     get now() { return now; }, get liveState() { return vm.runInContext('state', context); },
     visibleDialogs: () => dialogs.filter(dialog => !dialog.hidden).map(dialog => dialog.id) };
   if(demoMode||peerMode)return Object.assign(common,{sockets,peerCalls,invites,resolvePeer:()=>resolvePeer?.()});
   element('player-name').value = '球友A';
   const creating = click('create-room'); sockets.at(-1).open(); await creating;
   const room = { type: 'room', code: 'ABCDE', slot, token: 'original-token', sessionId: 'test-session',
+    rules: { finale: finaleMode },
     players: [{ name: '橙子 ID<007>', playerId: 'player-a', connected: true }, { name: '青柠 ID009', playerId: 'player-b', connected: true }] };
   const state = game.createMatch(); if (phase === 'paused') game.pauseMatch(state, 0);
   let seq = 0;
@@ -200,6 +212,51 @@ test('static peer page opens the real five-code room flow without a game server 
   f.click('leave-waiting');
   assert.equal(f.peerCalls[0].session.closed,true);
 });
+
+for(const peerMode of [false,true]){
+  const transport=peerMode?'Peer':'WebSocket';
+  test(`${transport} creation sends the selected father-son mode, locks choices while connecting and resets to ordinary when reopened`,async()=>{
+    const f=await fixture('serve',{peerMode});
+    if(!peerMode)f.click('leave-game');
+    f.click('open-friends');f.element('player-name').value='Mode owner';f.chooseFinale('father-son');
+    assert.equal(f.element('mode-father-son').attributes['aria-pressed'],'true');
+    let creating=f.click('create-room');
+    assert.ok(f.friendModes.every(button=>button.disabled));
+    f.chooseFinale('none');
+    if(!peerMode)f.socket().open();
+    await creating;
+    let request=peerMode?f.peerCalls.at(-1).options:f.socket().sent.find(message=>message.type==='create');
+    assert.equal(request.finale,'father-son','a disabled choice cannot change the in-flight create request');
+    assert.ok(f.friendModes.every(button=>!button.disabled));
+    if(!peerMode)f.socket().message({...f.room,rules:{finale:'father-son'}});
+    assert.match(f.element('waiting-mode').textContent,/父子局.*不可跳过/);
+    f.click('leave-waiting');f.click('open-friends');
+    assert.equal(f.element('mode-none').attributes['aria-pressed'],'true');
+    assert.equal(f.element('mode-father-son').attributes['aria-pressed'],'false');
+    creating=f.click('create-room');if(!peerMode)f.socket().open();await creating;
+    request=peerMode?f.peerCalls.at(-1).options:f.socket().sent.find(message=>message.type==='create');
+    assert.equal(request.finale,'none','opening the friend dialog starts at ordinary play');
+  });
+
+  for(const hostMode of ['none','father-son']){
+    test(`${transport} joining ignores the local mode choice and displays the host's ${hostMode} rule`,async()=>{
+      const f=await fixture('serve',{peerMode,finaleMode:hostMode});
+      if(!peerMode)f.click('leave-game');
+      f.click('open-friends');f.element('player-name').value='Mode guest';f.element('room-code').value='ABCDE';
+      f.chooseFinale(hostMode==='none'?'father-son':'none');
+      const joining=f.click('join-room');if(!peerMode)f.socket().open();await joining;
+      const request=peerMode?f.peerCalls.at(-1).options:f.socket().sent.find(message=>message.type==='join');
+      assert.equal('finale' in request,false,'the joiner has no authority to choose room mode');
+      assert.equal(request.code,'ABCDE');
+      if(!peerMode)f.socket().message({...f.room,rules:{finale:hostMode}});
+      assert.match(f.element('waiting-mode').textContent,hostMode==='father-son'?/父子局.*不可跳过/:/普通对局.*无赛后互动/);
+      if(!peerMode){
+        f.snapshot(game.createMatch());f.draw();
+        assert.match(f.element('match-label').textContent,hostMode==='father-son'?/父子局/:/普通对局/);
+      }
+    });
+  }
+}
 
 test('cancelling a pending peer room cannot open a late room over a new AI match', async () => {
   const f=await fixture('serve',{demoMode:true,peerMode:true,pendingPeer:true});
@@ -347,9 +404,26 @@ function assertFinaleLocked(f) {
     'even a synthetic click on the hidden rematch button cannot bypass the finale');
 }
 
+test('ordinary and legacy rooms go directly from the final shuttle fall to results, including rematches',async()=>{
+  for(const rules of [{finale:'none'},{},undefined]){
+    const f=await fixture();f.room.rules=rules;f.socket().message(f.room);
+    completeScoredMatch(f.state);
+    f.view.rallyEnding=true;f.snapshot(f.state,{matchEndedAt:f.now});f.draw(1700);
+    assert.equal(f.element('match-finale').hidden,true);
+    assert.equal(f.element('result-dialog').hidden,true,'wait for the final shuttle fall');
+    f.view.rallyEnding=false;f.draw(0);
+    assert.deepEqual(f.visibleDialogs(),['result-dialog']);
+    assert.equal(f.view.finale,null);assert.equal(f.audio.finaleCalls.length,0);
+    f.click('rematch');const second=game.createMatch();f.snapshot(second,{matchId:2});f.draw(100);
+    completeScoredMatch(second,1);f.snapshot(second,{matchId:2,matchEndedAt:f.now});f.draw(1700);
+    assert.deepEqual(f.visibleDialogs(),['result-dialog']);
+    assert.equal(f.view.finale,null);assert.equal(f.audio.finaleCalls.length,0);
+  }
+});
+
 for (const side of [0, 1]) for (const winner of [0, 1]) {
-  test(`normal online finale maps winner ${winner} and names correctly for viewer ${side}, then unlocks once`, async () => {
-    const f = await fixture('serve', { slot: side });
+  test(`father-son online finale maps winner ${winner} and names correctly for viewer ${side}, then unlocks once`, async () => {
+    const f = await fixture('serve', { slot: side, finaleMode: 'father-son' });
     completeScoredMatch(f.state, winner);
     const matchEndedAt = f.now;
     const metadata = { matchEndedAt, leaderboard: { status: 'saved' } };
@@ -412,7 +486,7 @@ for (const side of [0, 1]) for (const winner of [0, 1]) {
 }
 
 test('a new online matchId permits exactly one new finale after a rematch', async () => {
-  const f = await fixture();
+  const f = await fixture('serve', { finaleMode: 'father-son' });
   completeScoredMatch(f.state);
   f.snapshot(f.state, { matchEndedAt: f.now }); f.draw(1700); f.draw(1100); f.draw(2000);
   assert.equal(f.audio.finaleCalls.length, 1);
@@ -437,7 +511,7 @@ test('a new online matchId permits exactly one new finale after a rematch', asyn
 
 for (const voiced of [false, true]) {
   test(`disconnect cancels an ${voiced ? 'already voiced' : 'unvoiced'} finale and reconnect never replays it`, async () => {
-    const f = await fixture();
+    const f = await fixture('serve', { finaleMode: 'father-son' });
     completeScoredMatch(f.state);
     const metadata = { matchEndedAt: f.now };
     f.snapshot(f.state, metadata); f.draw(1700);
@@ -466,7 +540,7 @@ for (const voiced of [false, true]) {
 test('interrupted, abandoned and unidentified online endings do not run the finale', async () => {
   const endings = ['interrupted', 'pause-timeout', 'pause-limit', 'quit', 'disconnect'];
   for (const endReason of endings) {
-    const f = await fixture(); f.state.score = [4, 1];
+    const f = await fixture('serve', { finaleMode: 'father-son' }); f.state.score = [4, 1];
     game.finishMatch(f.state, 0, '非正常结束', endReason);
     f.snapshot(f.state, { matchEndedAt: f.now }); f.draw(200); f.draw(5000);
     assert.deepEqual(f.visibleDialogs(), ['result-dialog'], endReason);
@@ -475,7 +549,7 @@ test('interrupted, abandoned and unidentified online endings do not run the fina
     assert.equal(f.audio.finaleCalls.length, 0, endReason);
   }
   for (const invalid of [{ abandoned: true }, { sessionId: null }, { matchEndedAt: null }]) {
-    const f = await fixture(); completeScoredMatch(f.state);
+    const f = await fixture('serve', { finaleMode: 'father-son' }); completeScoredMatch(f.state);
     f.snapshot(f.state, { matchEndedAt: f.now, ...invalid }); f.draw(200); f.draw(5000);
     assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
     assert.equal(f.view.finale, null);
@@ -495,7 +569,7 @@ test('a scored AI match goes directly to results without IDs, bow or voice', asy
 });
 
 test('an opponent disconnect stops an already playing finale voice on the still-connected client',async()=>{
-  const f=await fixture();completeScoredMatch(f.state);
+  const f=await fixture('serve',{finaleMode:'father-son'});completeScoredMatch(f.state);
   const metadata={matchEndedAt:f.now};f.snapshot(f.state,metadata);f.draw(1700);f.draw(1100);
   assert.equal(f.audio.finaleCalls.length,1);const stopped=f.audio.stoppedVoices.length;
   f.socket().message({...f.room,players:[f.room.players[0],{...f.room.players[1],connected:false}]});

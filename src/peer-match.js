@@ -30,11 +30,12 @@ function newSessionId() {
 
 /** A browser-hosted authority; the transport owns its clock timer and peer connections. */
 export class PeerMatch {
-  constructor({ code, host, target = 5, ruleset = 'quick', send, now = () => performance.now(),
+  constructor({ code, host, target = 5, ruleset = 'quick', finale = 'none', send, now = () => performance.now(),
     seed = () => Math.floor(Math.random() * 0xffffffff) + 1, sessionId } = {}) {
     this.code = typeof code === 'string' ? code.trim().toUpperCase() : '';
     this.sessionId = typeof sessionId === 'string' && sessionId.length > 0 && sessionId.length <= 128 ? sessionId : newSessionId();
     this.ruleset = ruleset === 'standard21' ? 'standard21' : 'quick';
+    this.rules = Object.freeze({ finale: finale === 'father-son' ? 'father-son' : 'none' });
     this.target = this.ruleset === 'standard21' ? 21 : [5, 11, 21].includes(target) ? target : 5;
     this.players = [profileOf(host), null];
     this.state = null;
@@ -65,7 +66,7 @@ export class PeerMatch {
     if (this.closed) return;
     for (let slot = 0; slot < 2; slot++) this.emit(slot, {
       type: 'room', code: this.code, slot, token: null, target: this.target,
-      ruleset: this.ruleset, players: this.players, sessionId: this.sessionId,
+      ruleset: this.ruleset, rules: this.rules, players: this.players, sessionId: this.sessionId,
     });
   }
 

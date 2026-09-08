@@ -276,6 +276,14 @@
 }
 
 .dialog .profile-note { margin-top:8px; }
+.room-mode-picker { margin:14px 0 0; }
+.room-mode-row { display:flex; align-items:center; gap:12px; }
+.room-mode-row>span { flex-shrink:0; color:#53685d; font-size:12px; }
+.room-mode-row .segments { flex:1; min-width:0; }
+.room-mode-row .segments button { flex:1; min-height:40px; padding:8px 12px; font-size:13px; }
+.dialog #friend-modes button[aria-pressed=true] { background:var(--green); color:#fff; box-shadow:none; }
+.room-mode-picker>small { display:block; margin-top:5px; color:#66796e; font-size:11px; line-height:1.45; }
+.dialog .room-mode-summary { display:block; color:var(--green); font-weight:700; font-size:12px; line-height:1.5; }
 .dialog .result-record { color:var(--green, #008650); text-align:center; }
 #dialog-backdrop .leaderboard-dialog { flex-basis:640px; width:640px; }
 .leaderboard-table-wrap { width:100%; overflow-x:auto; touch-action:pan-x pan-y; }
@@ -495,8 +503,19 @@
   #waiting-dialog .primary-btn { min-height: 40px; padding: 8px 14px; margin-top: 8px; }
   #friends-dialog .join-row .secondary-btn { margin: 0; }
   #friends-dialog .divider { margin: 8px 0; }
+  #friends-dialog .room-mode-picker { margin-top:8px; }
   #friends-dialog #friends-network-note { display: block; margin-top: 6px; font-size: 11px; line-height: 1.4; }
   #waiting-dialog .room-code { margin: 8px 0; padding: 10px 8px; }
+}
+
+@media (max-height:360px) and (orientation:landscape) {
+  #dialog-backdrop #friends-dialog { padding:10px 20px; }
+  #friends-dialog h2 { font-size:20px; margin-bottom:3px; }
+  #friends-dialog .input-label { margin-top:3px; }
+  #friends-dialog .room-mode-picker { margin-top:5px; }
+  #friends-dialog .room-mode-row .segments button { min-height:34px; padding:5px 10px; }
+  #friends-dialog .divider { margin:5px 0; }
+  #friends-dialog #friends-network-note { display:none; }
 }
 
 @media (max-width: 380px) {

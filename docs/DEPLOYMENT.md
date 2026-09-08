@@ -1,6 +1,6 @@
 # 使用与部署指南
 
-1.3.0 默认提供**人机练习＋双手机好友 1V1**。两台手机可直接打开
+1.4.0 默认提供**人机练习＋双手机好友 1V1**。两台手机可直接打开
 [Vercel 主入口](https://kaipai-rally.vercel.app/) 或
 [GitHub Pages 备用入口](https://zcinta0514.github.io/rally-badminton/) 建房和加入，
 无需用户电脑运行比赛服务。推荐双方连接同一 Wi-Fi，或支持设备互访的同一热点；
@@ -9,9 +9,13 @@
 ## 双手机开始对打
 
 1. 两台手机打开游戏，横屏游玩，并保持页面在前台。
-2. 房主点「好友对打」，填写昵称、选择角色和分制，创建房间。
+2. 房主点「好友对打」，填写昵称、选择角色、分制和对局类型，创建房间。默认「普通对局」，也可选择「父子局」；加入者可看到房间类型。
 3. 分享邀请链接或 **5 位房间码**。对方打开邀请链接，或在游戏中输码加入。
 4. 两人到齐后自动开始。比赛结束后双方同意可再来一局；退出或直连中断后重新建房。
+
+普通对局和人机正常结束后直接进入结算。只有父子局通过得分正常完赛，才会在原球场
+展示双方昵称／玩家 ID，败者朝胜者跪拜一次，配合“爸爸”气泡与固定中文语音。
+演出约 3 秒，不提供跳过；语音遵循静音设置。局间、暂停超时、退出和断线结算不触发。
 
 默认使用 PeerJS 和免费的 **PeerServer Cloud** 公共配对服务，无需填写私人
 API Key。公共服务帮助两台手机找到彼此，比赛随后通过 WebRTC 连接传输，
@@ -106,7 +110,8 @@ PUBLIC_PEER_MODE=0 npm start
 ## 静态网站构建、GitHub Pages 与 Vercel
 
 执行 `npm ci` 和 `npm run build` 导出 `dist/` 静态包，包含 Three.js、PeerJS
-及离线资源，包括 6 个录制音效与 `src/audio/LICENSE.txt`。默认启用手机直连，
+及离线资源，包括 6 个录制音效、1 个固定赛后合成语音，及各自的
+`src/audio/LICENSE.txt` 与 `src/audio/FINALE-VOICE.txt` 来源说明。默认启用手机直连，
 静态主机只需提供网页文件，无需运行 Node 比赛服务。
 
 仓库自带 `.github/workflows/pages.yml`。在仓库 Settings → Pages 选择 GitHub
@@ -115,8 +120,8 @@ Actions 后，推送 `main` 会按工作流执行测试、构建和发布。工�
 
 现有 Vercel 项目已连接 GitHub 仓库，生产环境跟踪 `main`；根目录 `vercel.json`
 提供安装、测试、构建及响应头配置，具体流程见 [公开网站说明](PUBLIC-WEBSITE.md)。两处产物
-应对应同一发布提交，分别使用各自路径配置。1.3.0 使用
-[v1.3.0 标签](https://github.com/zcinta0514/rally-badminton/tree/v1.3.0) 作为发布标识。
+应对应同一发布提交，分别使用各自路径配置。1.4.0 使用
+[v1.4.0 标签](https://github.com/zcinta0514/rally-badminton/tree/v1.4.0) 作为发布标识。
 
 手动构建项目子路径时，设置以下环境变量后执行 `npm run build`：
 
