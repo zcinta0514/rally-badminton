@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#008650">
+  <meta name="description" content="开拍 RALLY — 有空，就开拍。手机横屏羽毛球，随时与人机或球友对打。">
+  <title>开拍 RALLY · 随时上场</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="/icons/rally.svg">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="开拍">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="/src/pwa.css">
+  <script type="importmap">{"imports":{"three":"/vendor/three.module.js"}}</script>
+</head>
+<body data-screen="menu">
+  <canvas id="court" aria-label="立体羽毛球场"></canvas>
+  <div class="screen-vignette"></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="开拍首页"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M8 29 23 7h6L14 29Z" fill="currentColor"/><path d="m19 29 12-18h5L24 29Z" fill="currentColor"/><circle cx="10" cy="32" r="4" fill="currentColor"/></svg></span><span>开拍<small>RALLY</small></span></a>
+    <span class="edition">BADMINTON <i></i> 随时上场</span>
+    <button id="camera-toggle" class="camera-toggle" aria-expanded="false" aria-controls="camera-panel" title="调整视角">视角 <span aria-hidden="true">⌄</span></button>
+    <div class="top-actions">
+      <button id="sound" class="icon-btn" aria-label="关闭声音" title="声音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4Z"/><path class="sound-on" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path class="sound-off" d="m16 9 5 6m0-6-5 6"/></svg></button>
+      <button id="fullscreen" class="icon-btn" aria-label="全屏" title="全屏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></svg></button>
+      <button id="help" class="icon-btn" aria-label="操作说明" title="操作说明"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 8.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16h.01"/></svg></button>
+      <button id="pause" class="icon-btn" hidden aria-label="暂停比赛"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" stroke-width="3"/></svg></button>
+    </div>
+  </header>
+  <aside id="camera-panel" class="camera-panel" hidden aria-label="比赛视角设置">
+    <div class="camera-panel-heading"><strong>比赛视角</strong><button id="camera-reset">恢复默认</button></div>
+    <label for="camera-pitch"><span>俯仰</span><output id="camera-pitch-value" for="camera-pitch">24°</output></label>
+    <input id="camera-pitch" type="range" min="18" max="40" value="24" step="1" aria-label="视角俯仰角">
+    <label for="camera-zoom"><span>远近 · 缩放</span><output id="camera-zoom-value" for="camera-zoom">100%</output></label>
+    <input id="camera-zoom" type="range" min="85" max="112" value="100" step="1" aria-label="视角远近缩放">
+    <details id="performance-details"><summary>性能与网络</summary><output id="performance-readout">采样中…</output></details>
+  </aside>
+  <main id="menu" class="menu-panel">
+    <div class="menu-heading"><div class="eyebrow"><span></span> READY FOR THE NEXT POINT</div>
+    <h1>有空，<br><span>就开拍。</span></h1>
+    <p class="intro">等上场的几分钟，也能打得尽兴。</p></div>
+    <div class="setup">
+      <div class="setup-fields"><div class="section-label"><b>01</b><span>选个打法，准备上场</span></div>
+      <div class="role-grid" id="roles" role="group" aria-label="角色打法">
+        <button data-role="balanced" class="role-card selected" aria-pressed="true"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3"/></svg></span><strong>均衡型</strong><small>攻守兼备</small></button>
+        <button data-role="swift" class="role-card" aria-pressed="false"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h12a3 3 0 1 0-3-3M2 12h18m-16 5h10a3 3 0 1 1-3 3"/></svg></span><strong>灵巧型</strong><small>更快到位</small></button>
+        <button data-role="power" class="role-card" aria-pressed="false"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 2-10 12h7l-1 8L21 9h-8Z"/></svg></span><strong>力量型</strong><small>更强扣杀</small></button>
+      </div>
+      <p id="role-note" class="role-note">均衡的移动、力量与恢复，适合初次上场。</p>
+      <div class="setup-row"><span class="field-label">人机难度</span><div id="difficulties" class="segments" role="group" aria-label="人机难度"><button data-difficulty="easy" class="selected" aria-pressed="true">入门</button><button data-difficulty="medium" aria-pressed="false">进阶</button><button data-difficulty="hard" aria-pressed="false">高手</button></div></div>
+      <div class="setup-row"><span class="field-label">抢分赛</span><div id="targets" class="segments" role="group" aria-label="比赛分制"><button data-target="5" class="selected" aria-pressed="true">5 分</button><button data-target="11" aria-pressed="false">11 分</button><button data-target="21" aria-pressed="false">21 分</button></div></div>
+      <div class="setup-row"><span class="field-label">比赛规则</span><div id="rulesets" class="segments" role="group" aria-label="比赛规则"><button data-ruleset="quick" class="selected" aria-pressed="true">单局快赛</button><button data-ruleset="standard21" aria-pressed="false">标准计分</button></div></div>
+      <p id="rules-note" class="rules-note">先到目标分获胜 · 对角发球</p></div>
+      <div class="launch-actions"><button id="start-ai" class="primary-btn">人机开打 <span aria-hidden="true">↗</span></button>
+      <button id="open-friends" class="secondary-btn">好友对打 <span>1V1 ＋</span></button></div>
+    </div>
+    <div class="menu-foot"><span class="menu-tip-desktop">手机横屏 · 双手操控</span><span class="menu-tip-compact">↑ 上滑设置</span><button id="open-leaderboard" class="leaderboard-entry" type="button">排行榜 ↗</button><span>正式版 1.0</span></div>
+  </main>
+  <aside id="court-caption" class="court-caption"><div class="live-tag"><i></i> LIVE COURT <span>实时演示</span></div><div class="court-poster"><span>PLAY THE NEXT POINT.</span><strong>下一分，<br>由你拿下。</strong></div><div class="court-strip"><b>01</b><span>一块球场 · 随时开打</span><span>MOVE. AIM. RALLY.</span></div></aside>
+  <section id="hud" class="hud" hidden aria-label="比赛信息">
+    <div class="scoreboard">
+      <small id="match-label" class="match-label">抢 5 分 · 人机</small>
+      <div class="score-player"><span class="player-dot"></span><span id="name-self">你</span><small id="role-self">均衡型</small><b id="score-self">0</b></div>
+      <div class="score-player opponent"><span class="player-dot"></span><span id="name-other">入门陪练</span><small id="role-other">均衡型</small><b id="score-other">0</b></div>
+    </div>
+    <div class="match-note"><span id="rally">第 1 分</span><strong id="match-message">点击回球发球</strong><span id="connection">本地练习</span></div>
+  </section>
+  <section id="game-controls" class="game-controls" hidden aria-label="比赛操作">
+    <div class="movement-panel">
+    <div class="joystick-wrap"><div id="joystick" class="joystick" aria-hidden="true"><span class="stick-cross"></span><span id="knob"></span></div><small>左侧任意处拖动<span>W A S D</span></small></div>
+    <div class="energy-panel"><div><span id="energy-name">你的体力</span><strong id="energy-value">100%</strong></div><div class="energy-track"><i id="energy-fill"></i></div><small id="energy-hint">回位调整，恢复体力</small></div>
+    <div class="assist-panel"><strong id="assist-status">按住击球键，拖动选落点</strong><small><i class="legend-dot landing"></i>预计落点 <i class="legend-dot intercept"></i>接球位置 <i class="legend-dot target"></i>你的目标</small></div>
+    </div>
+    <div class="shots-wrap"><div class="aim-heading"><b id="aim-value">按住击球键拖动</b></div><div class="shot-buttons"><button data-shot="clear" class="shot-btn"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 18C4 2 20 2 21 18m-5-3 5 3 1-6"/></svg></span><strong>高远</strong><small>J</small></button><button data-shot="drop" class="shot-btn"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10c7-10 12-2 12 10m-4-4 4 4 4-4"/></svg></span><strong>吊球</strong><small>K</small></button><button data-shot="smash" class="shot-btn smash"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 2-10 12h7l-1 8L21 9h-8Z"/></svg></span><strong>杀球</strong><small>L</small></button></div><small class="shot-instruction"><span>↑ 更深 · ↓ 靠网</span><span id="shot-risk" data-risk="idle">左右选线 · 松手击球</span></small></div>
+    <div id="gesture-pad" class="gesture-pad" hidden aria-hidden="true"><span class="gesture-up">深</span><span class="gesture-down">短</span><i id="gesture-dot"></i></div>
+  </section>
+  <div id="dialog-backdrop" class="dialog-backdrop" hidden>
+    <section id="friends-dialog" class="dialog" hidden aria-labelledby="friends-title"><button class="close-dialog" data-close aria-label="关闭">×</button><div class="eyebrow">PLAY TOGETHER</div><h2 id="friends-title">球友，球场见。</h2><p>各用一台手机打开同一游戏地址，填好名称后，一人建房，一人加入。</p><label class="input-label" for="player-name">昵称 / 玩家 ID</label><input id="player-name" maxlength="16" placeholder="输入昵称或常用 ID" autocomplete="nickname" aria-describedby="player-profile-note" required><small id="player-profile-note" class="dialog-foot profile-note"></small><button id="create-room" class="primary-btn">创建房间 <span>＋</span></button><div class="divider">或加入球友的房间</div><div class="join-row"><input id="room-code" maxlength="5" placeholder="5 位房间码" autocomplete="off" autocapitalize="characters" aria-label="房间码"><button id="join-room" class="secondary-btn">加入 ↗</button></div><small class="dialog-foot">分享链接后，对方填好名称、点「加入」即可开赛。规则由房主选择，角色各自选择；名称可以重复，战绩按各自身份独立记录。</small></section>
+    <section id="waiting-dialog" class="dialog" hidden aria-labelledby="waiting-title"><div class="eyebrow">YOUR COURT IS READY</div><h2 id="waiting-title">等一位球友。</h2><p>把房间码或邀请链接发给对方；对方点「加入」后自动开赛。</p><div id="waiting-code" class="room-code">—</div><button id="copy-invite" class="primary-btn">复制邀请链接 <span>↗</span></button><p id="waiting-status" class="waiting-status">● 房间已创建，等待加入</p><button id="leave-waiting" class="text-btn">退出房间</button></section>
+    <section id="pause-dialog" class="dialog compact" hidden aria-labelledby="pause-title"><div class="eyebrow">TAKE A BREATHER</div><h2 id="pause-title">休息一下。</h2><div id="pause-time" class="pause-clock">30</div><p id="pause-description">每人每场可暂停一次，最多 30 秒。</p><p class="rule-note">超时按当前领先方获胜；平分则结束，不计胜负。</p><button id="resume" class="primary-btn">准备继续 <span>↗</span></button><button id="leave-game" class="text-btn">结束本局并返回</button></section>
+    <section id="result-dialog" class="dialog compact" hidden aria-labelledby="result-title"><div class="eyebrow">GOOD GAME</div><h2 id="result-title">打得尽兴。</h2><div id="result-score" class="result-score">5 : 3</div><p id="result-reason"></p><small id="result-record" class="dialog-foot result-record" role="status" hidden></small><button id="rematch" class="primary-btn">再来一局 <span>↗</span></button><button id="result-leaderboard" class="secondary-btn" hidden>查看排行榜 <span>↗</span></button><button id="back-menu" class="text-btn">返回首页</button></section>
+    <section id="leaderboard-dialog" class="dialog leaderboard-dialog" hidden aria-labelledby="leaderboard-title"><button id="close-leaderboard" class="close-dialog" aria-label="关闭排行榜">×</button><div class="eyebrow">THE RALLY BOARD</div><h2 id="leaderboard-title">球友排行榜。</h2><p>胜场优先；同胜场比较胜率，再比较累计得分。</p><p id="leaderboard-status" class="leaderboard-status" role="status" aria-live="polite"></p><div class="leaderboard-table-wrap"><table id="leaderboard-table" class="leaderboard-table" hidden><thead><tr><th scope="col">排名</th><th scope="col">玩家</th><th scope="col">胜场</th><th scope="col">胜率</th><th scope="col">得分</th></tr></thead><tbody id="leaderboard-rows"></tbody></table></div><small id="leaderboard-storage" class="dialog-foot"></small><button id="leaderboard-retry" class="secondary-btn">刷新排行榜 <span>↻</span></button></section>
+    <section id="help-dialog" class="dialog help-dialog" hidden aria-labelledby="help-title"><button class="close-dialog" data-close aria-label="关闭">×</button><div class="eyebrow">A LITTLE COURT SENSE</div><h2 id="help-title">看落点，抢高点。</h2><div class="help-item"><b>01</b><p><strong>左手跑位，看清来球</strong>在左半屏空白处按下，摇杆就出现在手指下；拖动跑位，松手停止。方向对应屏幕方向，右手可同时击球。己方地板上的青圈是来球预计落点，琥珀圈是建议接球位置。脚下提示亮起时可击球，杀球按钮亮起时可下压；球落地前就要到位。</p></div><div class="help-item"><b>02</b><p><strong>右手选线，松开击球</strong>按住高远、吊球或杀球按钮直接拖动：左拖打左、右拖打右，上拖更深，下拖更靠网。斜拖同时改变左右和深浅，地板上的粉圈标记瞄准目标，外圈越大表示控制风险越高；它不保证最终落点。松手击球，按住越久蓄力越多。</p></div><div class="help-item"><b>03</b><p><strong>够到高点，起跳杀球</strong>出现“可杀球”时出手；高球会配合起跳，低球或远球有伸臂与跨步。站稳、触点高时更可靠。低点击杀、极限够球、大力压线可能下网或出界；保守高远球容错更宽。</p></div><div class="help-item"><b>04</b><p><strong>发球和计分</strong>发球从正确左右区打向对角区，发球时站稳。快赛先到目标分获胜；标准计分为三局两胜、每局21分、净胜2分、30分封顶，局间休息简化。</p></div><div class="help-item"><b>05</b><p><strong>电脑键位与暂停</strong>WASD／方向键移动，J／K／L击球，Z／X／C选线。每人每场可暂停一次，30秒超时由领先方获胜，平分不计胜负。</p></div><button class="primary-btn" data-close>准备好了 ↗</button></section>
+  </div>
+  <div id="countdown" class="countdown" hidden aria-live="polite">3</div>
+  <div id="rotate-note" class="rotate-note"><span>⤾</span><p><strong>横过来，球场更开阔。</strong><small>推荐横屏，左手跑位，右手击球。</small></p></div>
+  <div id="toast" role="status" class="toast" hidden></div>
+  <div id="loading" class="loading"><span class="spinner"></span> 球场准备中…</div>
+  <script type="module" src="/src/entry.js"></script>
+</body>
+</html>
