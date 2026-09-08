@@ -482,6 +482,20 @@
   .dialog .rule-note { margin: 10px 0; }
   .dialog .help-item { padding: 12px 0; }
   #toast { bottom: max(12px, env(safe-area-inset-bottom)); padding: 10px 14px; }
+  /* Keep both room actions visible together on short phone screens. */
+  #dialog-backdrop #friends-dialog,
+  #dialog-backdrop #waiting-dialog { padding: 14px 24px; }
+  #friends-dialog .eyebrow, #friends-dialog > p,
+  #friends-dialog > .dialog-foot,
+  #waiting-dialog .eyebrow, #waiting-dialog > p { display: none; }
+  #friends-dialog h2, #waiting-dialog h2 { margin: 0 40px 6px 0; font-size: 24px; }
+  #friends-dialog .input-label { margin: 6px 0 4px; font-size: 11px; }
+  #friends-dialog input { height: 40px; min-height: 40px; padding: 8px 12px; }
+  #friends-dialog .primary-btn, #friends-dialog .secondary-btn,
+  #waiting-dialog .primary-btn { min-height: 40px; padding: 8px 14px; margin-top: 8px; }
+  #friends-dialog .join-row .secondary-btn { margin: 0; }
+  #friends-dialog .divider { margin: 8px 0; }
+  #waiting-dialog .room-code { margin: 8px 0; padding: 10px 8px; }
 }
 
 @media (max-width: 380px) {

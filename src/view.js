@@ -114,17 +114,19 @@ export class CourtView {
     box(scene, 5.18, 0.007, 6.7, courtMat, 0, 0.01, -3.35);
 
     const lineY = 0.018;
-    const lineWidth = 0.036;
+    const lineWidth = 0.04;
+    const doublesWidth = 6.1;
+    const baseline = COURT.halfLength-lineWidth/2;
+    // BWF Diagram A: 0.720 m clear space between the two 40 mm rear lines.
+    // Their centres are 0.760 m apart; the short line starts 1.980 m from the net.
+    const longService = baseline-0.76;
+    const shortService = 1.98+lineWidth/2;
     for (const sign of [-1, 1]) box(scene, lineWidth, 0.008, COURT.halfLength*2, lineMat, sign*(COURT.halfWidth-lineWidth/2), lineY, 0);
-    for (const sign of [-1, 1]) box(scene, COURT.halfWidth*2, 0.008, lineWidth, lineMat, 0, lineY, sign*(COURT.halfLength-lineWidth/2));
-    for (const z of [-1.98, 1.98]) box(scene, 5.18, 0.008, lineWidth, lineMat, 0, lineY, z);
-    for (const z of [-4.34, 4.34]) box(scene, lineWidth, 0.008, 4.72, lineMat, 0, lineY, z);
-    // Fine outside tramlines add familiar badminton markings without obscuring singles bounds.
-    for (const sign of [-1, 1]) box(scene, 0.022, 0.007, COURT.halfLength*2, lineMat, sign*(3.05-.011), lineY, 0);
-    for (const z of [-(COURT.halfLength-lineWidth/2), COURT.halfLength-lineWidth/2]) {
-      box(scene, 0.46, 0.008, lineWidth, lineMat, -2.82, lineY, z);
-      box(scene, 0.46, 0.008, lineWidth, lineMat, 2.82, lineY, z);
+    for (const sign of [-1, 1]) {
+      box(scene, lineWidth, 0.008, COURT.halfLength*2, lineMat, sign*(doublesWidth/2-lineWidth/2), lineY, 0);
+      for (const z of [baseline, longService, shortService]) box(scene, doublesWidth, 0.008, lineWidth, lineMat, 0, lineY, sign*z);
     }
+    for (const z of [-4.34, 4.34]) box(scene, lineWidth, 0.008, 4.72, lineMat, 0, lineY, z);
 
     const postMat = material(0xd4e6cf, { roughness: 0.5 });
     for (const x of [-3.23, 3.23]) {

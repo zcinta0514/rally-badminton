@@ -7,7 +7,6 @@ import { bindCameraSettings } from './camera-settings.js';
 import { initPWA, getWebSocketURL } from './pwa.js';
 import { createPlayerProfile, normalizePlayerName } from './player-profile.js';
 import { createLeaderboard, getLeaderboardURL, resultRecordText } from './leaderboard.js';
-import { normalizeLanAddress } from './lan-entry.js';
 import { resolveShotAim, toWorldInput } from './play-input.js';
 import { createMatch, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, ROLES, predictLanding, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
 
@@ -39,6 +38,7 @@ function preparePlayerProfile(){
 if(demoMode){
   for(const id of ['open-leaderboard','result-leaderboard'])$(id).hidden=true;
   setText('menu-intro','与人机练习，或通过局域网和好友 1V1。');
+  setText('open-friends','局域网 1V1 说明 ↗');
 }else try{$('player-name').value=preparePlayerProfile().name;}catch(error){setText('player-profile-note',error.message);}
 function dialog(id){
   for(const el of document.querySelectorAll('.dialog'))el.hidden=el.id!==id;
@@ -202,12 +202,6 @@ function closeHelpOrSetup(){
 }
 $('start-ai').addEventListener('click',startAI);
 $('open-friends').addEventListener('click',()=>{dialog(demoMode?'lan-dialog':'friends-dialog');});
-function openLanGame(){
-  try{location.assign(normalizeLanAddress($('lan-address').value));}
-  catch(error){showToast(error.message);$('lan-address').focus();}
-}
-$('open-lan-game').addEventListener('click',openLanGame);
-$('lan-address').addEventListener('keydown',event=>{if(event.key==='Enter')openLanGame();});
 $('open-leaderboard').addEventListener('click',()=>openLeaderboard('menu'));
 $('result-leaderboard').addEventListener('click',()=>openLeaderboard('result'));
 $('close-leaderboard').addEventListener('click',closeLeaderboard);
