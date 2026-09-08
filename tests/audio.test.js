@@ -122,9 +122,9 @@ function audioFixture({ fetchFailure = false, decodeFailure = false, resumeFailu
 
 test('gesture unlock loads local samples once and uses decoded sources without oscillators', async () => {
   const f = audioFixture(); await f.audio.unlock(); await f.audio.unlock(); assert.equal(f.contexts.length, 1);
-  assert.equal(f.requests.length, 6); assert.equal(new Set(f.requests).size, 6);
+  assert.equal(f.requests.length, 7); assert.equal(new Set(f.requests).size, 7);
   assert.ok(f.requests.every(url => url.startsWith(new URL('../src/audio/', import.meta.url).href)));
-  assert.equal(f.contexts[0].decodes, 6);
+  assert.equal(f.contexts[0].decodes, 7);
   const s = state(); f.audio.update(s); advance(s); s.hitId++; f.audio.update(s);
   assert.equal(f.sources.length, 1); assert.equal(f.sources[0].buffer.sample, true); assert.equal(f.sources[0].starts.length, 1);
 });
@@ -208,4 +208,16 @@ test('voices are bounded and finished sources release all connected event nodes'
   assert.ok(f.sources.filter(s => !s.disconnected).length <= 12);
   for (const source of f.sources) source.onended?.();
   assert.ok(f.sources.every(s => s.disconnected)); assert.ok(f.gains.slice(1).every(g => g.disconnected));
+});
+
+test('finale voice is fixed-rate once per key and is never queued after mute or background', async()=>{
+  const f=audioFixture();await f.audio.unlock();f.audio.update({...state(),phase:'over'});
+  f.audio.playFinale('room:1');f.audio.playFinale('room:1');
+  assert.equal(f.sources.length,1);assert.equal(f.sources[0].playbackRate.value,1);
+  f.audio.setEnabled(false);f.audio.playFinale('room:2');f.audio.setEnabled(true);f.audio.playFinale('room:2');
+  assert.equal(f.sources.length,1);
+  f.audio.setVisible(false);f.audio.playFinale('room:3');f.audio.update({...state(),phase:'over'});f.audio.playFinale('room:3');
+  assert.equal(f.sources.length,1);
+  f.audio.playFinale('room:4');assert.equal(f.sources.length,2);
+  f.audio.reset();assert.ok(f.sources.every(source=>source.disconnected));
 });

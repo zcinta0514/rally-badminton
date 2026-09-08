@@ -7,6 +7,7 @@ export const ARENA_AUDIO_SAMPLES = Object.freeze({
   foot: [new URL('./audio/step-1.wav', import.meta.url)],
   applause: [new URL('./audio/applause.wav', import.meta.url)],
   cheer: [new URL('./audio/cheer.wav', import.meta.url)],
+  finale: [new URL('./audio/finale-dad.wav', import.meta.url)],
 });
 
 const movingPhase = phase => phase === 'serve' || phase === 'rally';
@@ -220,6 +221,13 @@ export class ArenaAudio {
     });
   }
 
+  playFinale(key) {
+    if(!key||this.finaleKey===key)return;
+    this.finaleKey=key;
+    this.stopVoices('reaction');
+    this.sample('finale',{group:'finale',duration:1.3,volume:.85,rate:1});
+  }
+
   update(state, visible = true) {
     this.setVisible(visible);
     const events = collectArenaSounds(state, this.memory);
@@ -240,7 +248,7 @@ export class ArenaAudio {
   }
 
   reset() {
-    this.memory = {}; this.suppressNext = false;
+    this.memory = {}; this.suppressNext = false;this.finaleKey=null;
     this.stopVoices(); this.setActive(false);
   }
 }

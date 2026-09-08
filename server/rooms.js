@@ -37,7 +37,7 @@ export class Rooms {
   error(ctx,message){send(ctx.socket,{type:'error',message});}
   roomInfo(room){
     room.players.forEach((p,slot)=>{
-      if(p)send(p.socket,{type:'room',code:room.code,slot,token:p.token,target:room.target,ruleset:room.ruleset,
+      if(p)send(p.socket,{type:'room',code:room.code,slot,token:p.token,target:room.target,ruleset:room.ruleset,sessionId:room.sessionId,
         players:room.players.map(x=>x?{name:x.name,role:x.role,connected:x.connected,playerId:x.identity?.slice(0,12)||null}:null)});
     });
   }
@@ -46,8 +46,10 @@ export class Rooms {
     this.recordResult(room);
     // Tag the simulated instant, excluding the unfinished fixed-step remainder.
     // This clock keeps advancing during pauses while state.time stays frozen.
+    const serverTime=this.lastTick-this.accumulator+(room.advancedMs||0);
+    if(room.state.phase==='over'&&room.matchEndedAt===null)room.matchEndedAt=serverTime;
     const message={type:'state',state:room.state,seq:++room.snapshotSeq,matchId:room.matchId,leaderboard:room.leaderboardResult||null,
-      serverTime:this.lastTick-this.accumulator+(room.advancedMs||0)};
+      serverTime,sessionId:room.sessionId,matchEndedAt:room.matchEndedAt,abandoned:room.abandoned};
     for(const p of room.players)if(p)send(p.socket,message);
   }
   broadcastReady(room){for(const p of room.players)if(p)send(p.socket,{type:'resumeReady',ready:[...room.resumeReady].sort()});}
@@ -93,6 +95,7 @@ export class Rooms {
       do{code=Array.from({length:5},()=>alphabet[randomInt(alphabet.length)]).join('');}while(this.rooms.has(code));
       const ruleset=rulesetOf(m.ruleset);
       const room={code,ruleset,target:ruleset==='standard21'?21:[5,11,21].includes(m.target)?m.target:5,players:[null,null],state:null,snapshotSeq:0,matchId:1,
+        sessionId:randomBytes(16).toString('hex'),matchEndedAt:null,abandoned:false,
         inputs:[{},{}],lastInput:[0,0],lastShot:[-Infinity,-Infinity],rematch:new Set(),resumeReady:new Set(),advancedMs:this.accumulator,touched:this.now()};
       this.rooms.set(code,room);this.connect(ctx,room,0,m.name,m.role,m.playerKey);this.roomInfo(room);return;
     }
@@ -151,6 +154,7 @@ export class Rooms {
       for(const p of room.players)if(p)send(p.socket,{type:'rematch',ready:[...room.rematch]});
       if(room.rematch.size===2&&room.players.every(p=>p?.connected)){
         room.matchId++;
+        room.matchEndedAt=null;
         room.leaderboardResult=null;room.abandoned=false;
         room.state=createMatch({ruleset:room.ruleset,target:room.target,roles:room.players.map(p=>p.role),seed:randomInt(1,1000000)});
         room.advancedMs=this.accumulator;
@@ -167,7 +171,7 @@ export class Rooms {
       s.phase='paused';s.timer=s.pause.remaining;s.message='比赛暂停 · 等待双方重新准备';
     }else if(!pauseMatch(s,slot)){
       // No fresh budget after a previous interruption; never let reconnect reset it.
-      finishMatch(s,scoreWinner(s),'暂停次数已用完，本局按当前比分结束');
+      finishMatch(s,scoreWinner(s),'暂停次数已用完，本局按当前比分结束','pause-limit');
     }
   }
   disconnect(ctx){
@@ -185,7 +189,7 @@ export class Rooms {
     else room.abandoned=true;
     if(p)this.tokens.delete(p.token);
     room.players[slot]=null;ctx.room=null;ctx.slot=null;
-    if(room.state&&room.state.phase!=='over')finishMatch(room.state,null,'球友已离开，本局结束');
+    if(room.state&&room.state.phase!=='over')finishMatch(room.state,null,'球友已离开，本局结束','quit');
     this.roomInfo(room);this.broadcast(room);
     // A waiting host leaving invalidates its invitation.
     if(!room.state||room.players.every(p=>!p))this.remove(room);
@@ -193,7 +197,7 @@ export class Rooms {
   remove(room){
     if(room.state?.phase==='over')this.recordResult(room);
     else room.abandoned=true;
-    if(room.state&&room.state.phase!=='over')finishMatch(room.state,null,'房间已关闭，本局结束');
+    if(room.state&&room.state.phase!=='over')finishMatch(room.state,null,'房间已关闭，本局结束','disconnect');
     this.broadcast(room);
     for(const p of room.players)if(p)this.tokens.delete(p.token);
     this.rooms.delete(room.code);

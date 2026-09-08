@@ -1,6 +1,7 @@
 import { CourtView } from './view.js';
 import { Controls } from './controls.js';
 import { ArenaAudio } from './arena-audio.js';
+import { MatchFinale } from './match-finale.js';
 import { NetworkPlayback } from './network-playback.js';
 import { PerformanceMonitor, formatPerformance } from './performance.js';
 import { bindCameraSettings } from './camera-settings.js';
@@ -26,6 +27,7 @@ let toastTimer,helpOpen=false,rematchRequested=false,lastPhase='',lastHit=0,last
 let reconnectError='';
 let playerProfile=null,currentPlayerId=null,leaderboardRecord=null,leaderboardReturn=null;
 const arenaAudio=new ArenaAudio();
+const finale=new MatchFinale();
 let sound=true;
 let selectedShot='clear',dragDepth=0,lastShotRequest=null,gestureOrigin=null;
 const showToast=text=>{clearTimeout(toastTimer);$('toast').textContent=text;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,3800);};
@@ -75,6 +77,27 @@ function showConnectionRecovery(){
 function unlockAudio(){
   if(sound&&(!arenaAudio.context||arenaAudio.context.state!=='running'))void arenaAudio.unlock();
 }
+function clearFinale(){
+  finale.cancel(state?.phase==='over'||finale.blocking);view?.clearFinale();arenaAudio.stopVoices('finale');
+  $('match-finale').hidden=true;delete document.body.dataset.finale;delete document.body.dataset.finalePending;
+}
+function showFinale(frame){
+  if(finale.blocking)document.body.dataset.finalePending='true';else delete document.body.dataset.finalePending;
+  $('match-finale').hidden=!frame;
+  if(!frame){delete document.body.dataset.finale;return;}
+  document.body.dataset.finale='true';
+  setText('finale-winner',`${frame.names[frame.winner]} 赢了`);
+  for(let index=0;index<2;index++){
+    const label=$(`finale-player-${index}`),anchor=view.finaleAnchors[index];
+    label.dataset.result=index===frame.winner?'winner':'loser';
+    setText(`finale-role-${index}`,index===frame.winner?'胜者':'败者');
+    setText(`finale-name-${index}`,frame.names[index]);
+    label.style.left=`${anchor.x}px`;label.style.top=`${Math.max(68,anchor.y)}px`;
+  }
+  const bubble=$('finale-bubble'),anchor=view.finaleAnchors[frame.loser];
+  bubble.hidden=!frame.bubble;bubble.style.left=`${anchor.x}px`;bubble.style.top=`${Math.max(122,anchor.y+60)}px`;
+  if(frame.voice)arenaAudio.playFinale(frame.key);
+}
 // Safari can interrupt an already-unlocked device after a background/lock cycle.
 // Retry inside the next real gesture; a running or muted device needs no work.
 document.addEventListener('pointerdown',unlockAudio);
@@ -109,6 +132,7 @@ function setScreen(screen){
   view?.setMode(screen);
 }
 function enterMatch(){
+  clearFinale();
   resultPending=false;
   leaderboardReturn=null;leaderboard.cancel();
   lastPhase='';lastHit=state?.hitId||0;lastPoint=state?.pointId||0;arenaAudio.reset();view?.resetCrowd();
@@ -119,6 +143,7 @@ function enterMatch(){
   dots[1].style.background=side===1?'#fb7959':'#b5ebc7';
 }
 function exitToMenu(){
+  clearFinale();finale.reset();
   resultPending=false;
   leaderboardReturn=null;leaderboard.cancel();leaderboardRecord=null;
   if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify({type:'leave'}));
@@ -155,6 +180,7 @@ function requestPause(){
 function handleNetwork(message){
   if(message.type==='room'){
     room=message;side=message.slot;
+    if(finale.blocking&&message.players.some(player=>!player?.connected))clearFinale();
     currentPlayerId=message.players[side]?.playerId||null;
     setText('waiting-code',message.code);
     setText('waiting-status',message.players.filter(Boolean).length===2?'● 球友已到，准备开场':'● 房间已创建，等待加入');
@@ -167,6 +193,9 @@ function handleNetwork(message){
     if(reconnecting)lastPhase='';
     state=message.state;mode='online';reconnecting=false;reconnectError='';
     if(entering)enterMatch();
+    const wasFinaleBlocking=finale.blocking;
+    finale.receive(message,{mode,players:room?.players});
+    if(wasFinaleBlocking&&!finale.blocking)clearFinale();
   }else if(message.type==='error'){
     showToast(message.message);connecting=false;helpOpen=false;
     if(reconnecting){reconnectError=message.message;controls.setEnabled(false);showConnectionRecovery();}
@@ -188,6 +217,7 @@ async function connect(){
   ws.addEventListener('message',event=>{if(generation!==netGeneration)return;try{handleNetwork(JSON.parse(event.data));}catch(error){console.error(error);showToast('收到无效比赛状态，请重新进入房间');}});
   ws.addEventListener('close',()=>{
     if(generation!==netGeneration)return;
+    clearFinale();
     controls.reset();pendingShot=null;
     if(room&&mode==='online'){
       playback.freeze(performance.now());controls.setEnabled(false);lastRtt=null;
@@ -235,6 +265,7 @@ function setRoomBusy(busy,type){
   setText('join-room',busy&&type==='join'?'正在连接…':'加入 ↗');
 }
 function peerClosed(error){
+  clearFinale();
   peerDisconnected=true;peerSession?.close();peerSession=null;controls.reset();
   if(!state){exitToMenu();showToast(error?.message||'房间已断开，请重新创建');return;}
   if(state.phase!=='over'){
@@ -261,12 +292,14 @@ $('pause').addEventListener('click',requestPause);
 $('resume').addEventListener('click',()=>{if(mode==='online')send({type:'resume'});else if(state)resumeMatch(state);});
 for(const id of ['leave-game','back-menu','leave-waiting'])$(id).addEventListener('click',exitToMenu);
 $('rematch').addEventListener('click',()=>{
+  if(finale.blocking)return;
   if(peerMode&&peerDisconnected){exitToMenu();dialog('friends-dialog');return;}
   if(mode==='online'){send({type:'rematch'});rematchRequested=true;setText('rematch','等待球友同意…');}
   else startAI();
 });
 for(const button of document.querySelectorAll('[data-close]'))button.addEventListener('click',closeHelpOrSetup);
 $('help').addEventListener('click',()=>{
+  if(finale.blocking)return;
   if(state?.phase==='countdown')return;
   if(state&&['serve','rally','point','intermission'].includes(state.phase)){helpOpen=true;requestPause();return;}
   helpOpen=true;dialog('help-dialog');
@@ -279,6 +312,7 @@ $('copy-invite').addEventListener('click',async()=>{
 });
 $('sound').addEventListener('click',()=>{sound=!sound;arenaAudio.setEnabled(sound);$('sound').dataset.muted=String(!sound);$('sound').setAttribute('aria-label',sound?'关闭声音':'开启声音');showToast(sound?'声音已开启':'声音已关闭');});
 document.addEventListener('visibilitychange',()=>{
+  if(finale.blocking)lastFrame=performance.now();
   arenaAudio.setVisible(!document.hidden);
   if(!document.hidden||!state||state.phase==='over')return;
   controls?.reset();pendingShot=null;
@@ -351,7 +385,7 @@ function updateUI(info,state){
   if(!info.prepare&&lastShot?.side===side&&state.time-lastShot.at<1.2&&lastShot.quality.risk>.25)guidance='刚才一拍 · '+lastShot.quality.reason.split(' · ')[0];
   setText('assist-status',guidance);
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
-  $('help').disabled=reconnecting||state.phase==='countdown';
+  $('help').disabled=reconnecting||state.phase==='countdown'||finale.blocking;
   controls.setEnabled(['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting);
   $('pause').disabled=!['serve','rally','point','intermission'].includes(state.phase);
   $('countdown').hidden=!['countdown','intermission'].includes(state.phase)||(state.phase==='intermission'&&view.rallyEnding);
@@ -374,7 +408,7 @@ function updateUI(info,state){
       rematchRequested=false;helpOpen=false;resultPending=true;dialog(null);
     }else if(!helpOpen)dialog(null);
   }
-  if(state.phase==='over'&&resultPending&&!view.rallyEnding){
+  if(state.phase==='over'&&resultPending&&!view.rallyEnding&&!finale.blocking){
     resultPending=false;dialog('result-dialog');
   }
   if(state.phase==='paused'){
@@ -428,8 +462,12 @@ try{
       }
       const displayed=mode==='online'?(playback.sample(now)||state):state;
       const guidanceStart=performance.now();const info=shotGuidance(displayed);guidanceMs=performance.now()-guidanceStart;
+      const finaleFrame=mode==='online'?finale.update({dt:elapsed,serverNow:now-(playback.clockOffset??0)-playback.bufferMs,
+        phase:displayed.phase,rallyEnding:view.rallyEnding,visible:!document.hidden}):null;
+      if(finaleFrame)info.finale=finaleFrame;
       const renderStart=performance.now();view.render(displayed,side,reconnecting?0:Math.min(elapsed,.1),info);renderMs=performance.now()-renderStart;
       const uiStart=performance.now();updateUI(info,displayed);uiMs=performance.now()-uiStart;
+      showFinale(finaleFrame);
       // Input eligibility follows authority as well as the delayed presentation.
       if(reconnecting||!['serve','rally'].includes(state.phase))controls.setEnabled(false);
     }

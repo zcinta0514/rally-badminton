@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createPwaBuild } from '../scripts/build-pwa.js';
 import { createServer } from '../server/index.js';
 
-const names = ['hit-1', 'hit-2', 'smash-1', 'step-1', 'applause', 'cheer'];
+const names = ['hit-1', 'hit-2', 'smash-1', 'step-1', 'applause', 'cheer', 'finale-dad'];
 
 test('recorded sound and license bytes are cached under root and project subpaths', async () => {
   for (const basePath of ['/', '/rally-badminton/']) {
@@ -26,6 +26,7 @@ test('recorded sound and license bytes are cached under root and project subpath
     assert.ok(license, 'redistributed recordings include their provenance');
     assert.match(license.toString(), /CC0|Creative Commons Zero/i);
     assert.match(license.toString(), /bigsoundbank\.com/i);
+    assert.ok(build.assets.has(`${basePath}src/audio/FINALE-VOICE.txt`));
     assert.ok([...build.assets.keys()].every(url => !/artifacts|audio-sources|\.env|data\//.test(url)));
   }
 });

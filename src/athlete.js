@@ -18,7 +18,7 @@ const curve=(a,b,da,db,t)=>{
 };
 
 // Analytic two-bone bend: upper/lower arms and thighs/calves keep joint continuity.
-function bend(start,end,a,b,pole) {
+export function bend(start,end,a,b,pole) {
   const delta=sub(end,start), d=clamp(length(delta),.025,a+b-.001), axis=unit(delta);
   const along=(a*a-b*b+d*d)/(2*d);
   let perpendicular=sub(pole,mul(axis,dot(pole,axis)));
@@ -289,11 +289,18 @@ export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze
     pose.feet[name]={planted:!pose.actionType&&pose.jump<.005&&foot.planted,id:foot.id};
   }
   if(pose.jump>.005||(transition?.from.jump>.005&&blend<1))motion.inAction=true;
+  return applyAthletePose(visual,pose,{x:player.x,z:player.z,side,selected,
+    ankleYaws:Object.fromEntries(['left','right'].map(name=>[name,pose.actionType?pose.heading:motion.feet[name].yaw]))});
+}
+
+/** Apply a sampled pose without changing the match or its locomotion clock. */
+export function applyAthletePose(visual,pose,{x,z,side=0,selected=false,ankleYaws={}}={}) {
+  visual.root.position.set(x,0,z);visual.ground.position.set(x,0,z);
   visual.root.rotation.y=(side===0?0:Math.PI)+pose.heading;
   const joints={};for(const [name,p]of Object.entries(pose.joints))joints[name]=turn(p,-pose.heading);
   for(const [name,parent]of Object.entries(JOINT_PARENTS)){const p=joints[name],q=parent?joints[parent]:v();visual.bones[name].position.set(p.x-q.x,p.y-q.y,p.z-q.z);}
-  visual.bones.head.rotation.y=pose.headYaw-pose.heading;
-  for(const name of ['left','right'])visual.bones[`${name}Ankle`].rotation.y=(pose.actionType?pose.heading:motion.feet[name].yaw)-pose.heading;
+  visual.bones.head.rotation.set(pose.headPitch||0,pose.headYaw-pose.heading,0);
+  for(const name of ['left','right'])visual.bones[`${name}Ankle`].rotation.set(0,(ankleYaws[name]??pose.ankleYaw??pose.heading)-pose.heading,0);
   visual.skin.userData.updatePose(joints,pose);
   visual.shorts.rotation.y=pose.pelvisYaw-pose.heading;
   for(const hem of visual.hems){const thigh=sub(joints[`${hem.name}Knee`],joints[`${hem.name}Hip`]);temp.set(thigh.x,thigh.y,thigh.z).normalize();hem.mesh.position.copy(temp).multiplyScalar(hem.offset);hem.mesh.quaternion.setFromUnitVectors(UP,temp);}

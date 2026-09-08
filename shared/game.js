@@ -46,7 +46,7 @@ export function createMatch({ target = 5, roles = ['balanced', 'balanced'], diff
     phase: 'serve', time: 0, timer: 0, target: ruleset === 'standard21' ? 21 : [5, 11, 21].includes(target) ? target : 5,
     ruleset, games: [0, 0], gameNumber: 1, gameScores: [],
     sideChange: { id: 0, at: 0, reason: null, ends: [1, -1] }, _deciderChanged: false,
-    score: [0, 0], server: 0, winner: null, message: '你来发球 · 点击任意击球键',
+    score: [0, 0], server: 0, winner: null, endReason: null, message: '你来发球 · 点击任意击球键',
     rally: 0, hitId: 0, pointId: 0, rallyEnd: null, lastShot: 'clear', lastShotInfo: null, difficulty: difficultyOf(difficulty),
     players: [0, 1].map(side => {
       const role = roleOf(roles?.[side]);
@@ -85,10 +85,10 @@ function startServe(state) {
   attachServe(state);
 }
 
-export function finishMatch(state, winner, reason = '本局结束') {
+export function finishMatch(state, winner, reason = '本局结束', endReason = 'interrupted') {
   if (state.phase === 'over') return state;
   state.phase = 'over'; state.winner = winner === 0 || winner === 1 ? winner : null;
-  state.message = reason; state.timer = 0; state.shuttle.active = false;
+  state.endReason = endReason; state.message = reason; state.timer = 0; state.shuttle.active = false;
   for (const player of state.players) {
     player.vx = 0; player.vz = 0; player.pendingShot = null;
     if (player.action?.stage === 'prepare' || player.action?.stage === 'windup') player.action = null;
@@ -111,13 +111,13 @@ function awardPoint(state, winner, reason, impact) {
     || state.score[winner] - state.score[1 - winner] >= 2 || state.score[winner] === 30);
   if (wonGame && state.ruleset === 'standard21') {
     state.games[winner]++; state.gameScores.push([...state.score]);
-    if (state.games[winner] >= 2) finishMatch(state, winner, `${winner === 0 ? '近场' : '远场'}获胜 · 局数 ${state.games[0]} : ${state.games[1]}`);
+    if (state.games[winner] >= 2) finishMatch(state, winner, `${winner === 0 ? '近场' : '远场'}获胜 · 局数 ${state.games[0]} : ${state.games[1]}`, 'scored');
     else {
       state.phase = 'intermission'; state.timer = 4;
       changeEnds(state, '局间换边');
       state.message = `本局 ${state.score[0]} : ${state.score[1]} · 局间休息，4 秒后换边继续`;
     }
-  } else if (wonGame) finishMatch(state, winner, `${winner === 0 ? '近场' : '远场'}获胜 · ${state.score[0]} : ${state.score[1]}`);
+  } else if (wonGame) finishMatch(state, winner, `${winner === 0 ? '近场' : '远场'}获胜 · ${state.score[0]} : ${state.score[1]}`, 'scored');
   else {
     state.phase = 'point';
     if (state.ruleset === 'standard21' && state.gameNumber === 3 && !state._deciderChanged && state.score[winner] === 11) {
@@ -463,7 +463,7 @@ export function stepMatch(state, inputs = [{}, {}], dt = 1 / 60) {
     state.pause.remaining = Math.max(0, state.pause.remaining - dt); state.timer = state.pause.remaining;
     if (state.pause.remaining <= 0.00001) {
       const winner = state.score[0] === state.score[1] ? null : state.score[0] > state.score[1] ? 0 : 1;
-      finishMatch(state, winner, `暂停超时 · ${winner === null ? '平分，本局不计胜负' : `${winner === 0 ? '近场' : '远场'}领先获胜`}`);
+      finishMatch(state, winner, `暂停超时 · ${winner === null ? '平分，本局不计胜负' : `${winner === 0 ? '近场' : '远场'}领先获胜`}`, 'pause-timeout');
     }
     return state;
   }

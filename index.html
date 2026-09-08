@@ -20,6 +20,13 @@
 <body data-screen="menu">
   <canvas id="court" aria-label="立体羽毛球场"></canvas>
   <div class="screen-vignette"></div>
+  <section id="match-finale" hidden aria-label="好友赛后彩蛋" aria-live="polite">
+    <div class="finale-heading"><small>好友对决 · 本场胜负已定</small><strong id="finale-winner"></strong></div>
+    <div id="finale-player-0" class="finale-player"><small id="finale-role-0"></small><strong id="finale-name-0"></strong></div>
+    <div id="finale-player-1" class="finale-player"><small id="finale-role-1"></small><strong id="finale-name-1"></strong></div>
+    <div id="finale-bubble" class="finale-bubble" hidden>爸爸</div>
+    <div class="finale-caption">说到做到，球场见分晓。</div>
+  </section>
   <header class="topbar">
     <a class="brand" href="./" aria-label="开拍首页"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M8 29 23 7h6L14 29Z" fill="currentColor"/><path d="m19 29 12-18h5L24 29Z" fill="currentColor"/><circle cx="10" cy="32" r="4" fill="currentColor"/></svg></span><span>开拍<small>RALLY</small></span></a>
     <span class="edition">BADMINTON <i></i> 随时上场</span>

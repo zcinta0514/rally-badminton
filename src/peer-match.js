@@ -47,6 +47,7 @@ export class PeerMatch {
     this.tickCount = 0;
     this.snapshotSeq = 0;
     this.matchId = 1;
+    this.matchEndedAt = null;
     this.inputs = [{}, {}];
     this.lastInput = [-Infinity, -Infinity];
     this.lastShot = [-Infinity, -Infinity];
@@ -81,6 +82,7 @@ export class PeerMatch {
 
   startMatch() {
     this.abandoned = false;
+    this.matchEndedAt = null;
     this.state = createMatch({ target: this.target, ruleset: this.ruleset,
       roles: this.players.map(player => player.role), seed: this.seed() });
     this.inputs = [{}, {}];
@@ -95,8 +97,10 @@ export class PeerMatch {
 
   broadcast() {
     if (this.closed || !this.state) return;
+    const serverTime = this.lastTick - this.accumulator;
+    if (this.state.phase === 'over' && this.matchEndedAt === null) this.matchEndedAt = serverTime;
     const message = { type: 'state', state: this.state, seq: ++this.snapshotSeq, matchId: this.matchId,
-      serverTime: this.lastTick - this.accumulator, leaderboard: null, sessionId: this.sessionId, abandoned: this.abandoned };
+      serverTime, matchEndedAt: this.matchEndedAt, leaderboard: null, sessionId: this.sessionId, abandoned: this.abandoned };
     for (let slot = 0; slot < 2; slot++) this.emit(slot, message);
   }
 
@@ -173,7 +177,7 @@ export class PeerMatch {
       state.phase = 'paused'; state.timer = state.pause.remaining;
       state.message = '比赛暂停 · 等待双方重新准备';
     } else if (!pauseMatch(state, slot)) {
-      finishMatch(state, scoreWinner(state), '暂停次数已用完，本局按当前比分结束');
+      finishMatch(state, scoreWinner(state), '暂停次数已用完，本局按当前比分结束', 'pause-limit');
     }
   }
 
@@ -184,7 +188,7 @@ export class PeerMatch {
     this.inputs = [{}, {}]; this.resumeReady.clear(); this.rematch.clear();
     if (this.state && this.state.phase !== 'over') {
       this.abandoned = true;
-      finishMatch(this.state, null, leaving ? '球友已离开，本局结束' : '球友连接已断开，本局结束，请重新约战');
+      finishMatch(this.state, null, leaving ? '球友已离开，本局结束' : '球友连接已断开，本局结束，请重新约战', leaving ? 'quit' : 'disconnect');
     }
     this.announce(); this.broadcast();
   }

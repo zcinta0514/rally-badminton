@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { fitCourtViewport, getShuttleEdgeHint } from './court-layout.js';
 import { normalizeCameraSettings } from './camera-settings.js';
-import { makeAthlete, updateAthlete } from './athlete.js';
+import { makeAthlete, updateAthlete, applyAthletePose } from './athlete.js';
+import { sampleFinalePose } from './finale-pose.js';
 import { makeArena, makeCourtMaterial, resetArenaCrowd, updateArenaCrowd } from './arena.js';
 import { makeNetVisual, updateNetVisual } from './net-visual.js';
 import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
@@ -402,8 +403,41 @@ export class CourtView {
     this.hintCache = { side, pointId: state.pointId, hitId: state.hitId };
   }
 
+  clearFinale() {
+    if(!this.finaleActive)return;
+    this.finaleActive=false;this.finaleAnchors=null;this.cameraSide=null;this.initialized=false;
+    for(const player of this.players){player.motion=null;player.racket.visible=true;player.ground.visible=true;}
+    this.trail.visible=true;
+  }
+
+  renderFinale(state,finale,side) {
+    this.finaleActive=true;this.rallyEnding=false;
+    const camera=this.camera,aspect=this.width/this.height;
+    camera.clearViewOffset();camera.aspect=aspect;camera.fov=42;
+    const distance=aspect<1.2?7.7:5.8;
+    camera.position.set(.6,2.2,3.4+distance);camera.up.set(0,1,0);camera.lookAt(0,.85,3.4);
+    camera.updateProjectionMatrix();camera.updateMatrixWorld(true);
+    this.finaleAnchors=[];
+    for(let index=0;index<2;index++){
+      const loser=index===finale.loser,player=this.players[index],x=loser?-.9:.9;
+      const pose=sampleFinalePose(loser?'loser':'winner',finale.age,loser?-Math.PI/2:Math.PI/2);
+      applyAthletePose(player,pose,{x,z:3.4,side:0,selected:false});
+      player.racket.visible=false;player.ground.visible=false;
+      // Keep identity labels steady while the head bows down; the voice bubble
+      // shares the loser's column and never migrates to the other player.
+      const anchor=new THREE.Vector3(x,2.03,3.4).project(camera);
+      this.finaleAnchors[index]={x:(anchor.x+1)*this.width/2,y:(1-anchor.y)*this.height/2};
+    }
+    for(const object of [this.shuttle,this.groundMarker,this.impactMarker,this.trail,
+      this.landingHint,this.interceptHint,this.targetHint,this.readyHint])if(object)object.visible=false;
+    this.edgeIndicator.hidden=true;
+    this.renderer.render(this.scene,camera);
+  }
+
   render(state, side=0, dt=1/60, info={}) {
     if(!state?.players||!state.shuttle)return;
+    if(info.finale){this.renderFinale(state,info.finale,side);return;}
+    this.clearFinale();
     dt=clamp(Number.isFinite(dt)?dt:1/60,0,.06);
     updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
     if(this.cameraSide!==side)this.updateCamera(side);

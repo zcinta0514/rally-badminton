@@ -9,6 +9,7 @@ import { PerformanceMonitor, formatPerformance } from '../src/performance.js';
 import { resolveShotAim, toWorldInput } from '../src/play-input.js';
 import { createPlayerProfile, normalizePlayerName } from '../src/player-profile.js';
 import { createLeaderboard, getLeaderboardURL, resultRecordText } from '../src/leaderboard.js';
+import { MatchFinale } from '../src/match-finale.js';
 
 const source = (await readFile(new URL('../src/main.js', import.meta.url), 'utf8'))
   .replace(/\r\n/g, '\n').replace(/^import .*;\n/gm, '');
@@ -32,7 +33,7 @@ class Target {
   }
 }
 
-async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false} = {}) {
+async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0} = {}) {
   let now = 1000, nextId = 0, frame, controls, view, audio;
   const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [];
   let resolvePeer;
@@ -69,13 +70,20 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     close() { if (this.readyState === 3) return; this.readyState = 3; this.emit('close'); }
   }
   class View {
-    constructor() { view = this; this.rallyEnding = false; this.crowdResets = 0; }
+    constructor() {
+      view = this; this.rallyEnding = false; this.crowdResets = 0; this.finaleClears = 0;
+      this.finaleAnchors = [{ x: 170, y: 210 }, { x: 830, y: 260 }];
+    }
     setMode(mode) { this.mode = mode; }
     resetCrowd() { this.crowdResets++; }
+    clearFinale() { this.finaleClears++; this.finale = null; }
     resize() {}
     setQuality() {}
     getRendererMetrics() { return { pixelRatio: 1, shadows: true, calls: 1 }; }
-    render(state, side, dt) { this.drawn = structuredClone(state); this.dt = dt; this.lastPhase = state.phase; }
+    render(state, side, dt, info) {
+      this.drawn = structuredClone(state); this.side = side; this.dt = dt; this.lastPhase = state.phase;
+      this.finale = info?.finale ? structuredClone(info.finale) : null;
+    }
   }
   class Input {
     constructor() { controls = this; this.enabled = true; }
@@ -84,7 +92,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     sample() { return { x: 0, z: 0, prepare: null, charge: 0 }; }
   }
   const context = vm.createContext({
-    ...game, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput,
+    ...game, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
     createPeerRecords:()=>({publicId:async()=> 'public123abc',record:()=>({status:'local'}),list:()=>({entries:[],storage:'local'})}),
     openPeerRoom:async options=>{
@@ -101,8 +109,10 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     location: { pathname: '/rally-badminton/', href:'http://localhost/rally-badminton/'+search, search, origin: 'http://localhost' }, history: { replaceState() {} },
     navigator:{clipboard:{writeText:async value=>invites.push(value)}},
     ArenaAudio: class {
-      constructor() { audio = this; this.context = null; this.unlocks = 0; }
+      constructor() { audio = this; this.context = null; this.unlocks = 0; this.finaleCalls = []; this.stoppedVoices = []; }
       reset() {} update() {} setVisible() {} setEnabled() {}
+      stopVoices(group) { this.stoppedVoices.push(group); }
+      playFinale(key) { this.finaleCalls.push(key); }
       unlock() { this.unlocks++; this.context = { state: 'running' }; }
     },
     initPWA: () => ({ setMatchActive() {} }), getWebSocketURL: () => 'ws://localhost/ws',
@@ -115,14 +125,18 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   assert.equal(typeof frame, 'function', 'the real application must initialize its render loop');
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
-  if(demoMode||peerMode)return {element,click,draw,controls,view,audio,document,sockets,peerCalls,invites,resolvePeer:()=>resolvePeer?.(),visibleDialogs:()=>dialogs.filter(dialog=>!dialog.hidden).map(dialog=>dialog.id)};
+  const common = { element, click, draw, controls, view, audio, document,
+    get now() { return now; }, get liveState() { return vm.runInContext('state', context); },
+    visibleDialogs: () => dialogs.filter(dialog => !dialog.hidden).map(dialog => dialog.id) };
+  if(demoMode||peerMode)return Object.assign(common,{sockets,peerCalls,invites,resolvePeer:()=>resolvePeer?.()});
   element('player-name').value = '球友A';
   const creating = click('create-room'); sockets.at(-1).open(); await creating;
-  const room = { type: 'room', code: 'ABCDE', slot: 0, token: 'original-token',
-    players: [{ name: 'A', connected: true }, { name: 'B', connected: true }] };
+  const room = { type: 'room', code: 'ABCDE', slot, token: 'original-token', sessionId: 'test-session',
+    players: [{ name: '橙子 ID<007>', playerId: 'player-a', connected: true }, { name: '青柠 ID009', playerId: 'player-b', connected: true }] };
   const state = game.createMatch(); if (phase === 'paused') game.pauseMatch(state, 0);
   let seq = 0;
-  const snapshot = (state, metadata = {}) => sockets.at(-1).message({ type: 'state', state, seq: ++seq, matchId: 1, serverTime: now, ...metadata });
+  const snapshot = (state, metadata = {}) => sockets.at(-1).message({ type: 'state', state, seq: ++seq,
+    matchId: 1, serverTime: now, sessionId: room.sessionId, matchEndedAt: null, abandoned: false, ...metadata });
   sockets.at(-1).message(room); snapshot(state); draw();
   function retry() {
     const pending = [...timers].find(([, timer]) => timer.delay === 1200);
@@ -130,8 +144,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     const [id, timer] = pending; timers.delete(id); now = Math.max(now, timer.at);
     const result = timer.callback(); return { socket: sockets.at(-1), result };
   }
-  return { element, click, draw, retry, snapshot, room, state, controls, view, document,
-    socket: () => sockets.at(-1), visibleDialogs: () => dialogs.filter(dialog => !dialog.hidden).map(dialog => dialog.id) };
+  return Object.assign(common, { retry, snapshot, room, state, socket: () => sockets.at(-1) });
 }
 
 test('static page explains LAN room codes without pretending to host a room and still runs AI', async () => {
@@ -312,3 +325,182 @@ for (const phase of ['serve', 'paused']) {
     }
   });
 }
+
+function completeScoredMatch(state, winner = 0) {
+  state.score = winner === 0 ? [4, 2] : [2, 4];
+  state.phase = 'rally'; state.service.active = false;
+  Object.assign(state.shuttle, { x: 0, y: 0.01, z: winner === 0 ? -3 : 3,
+    vx: 0, vy: -1, vz: 0, active: true, lastHit: winner });
+  game.stepMatch(state, [{}, {}], 1 / 60);
+  assert.equal(state.phase, 'over');
+  assert.equal(state.endReason, 'scored');
+  assert.equal(state.rallyEnd.kind, 'in');
+  return state;
+}
+
+function assertFinaleLocked(f) {
+  assert.equal(f.element('result-dialog').hidden, true, 'result controls stay behind their hidden dialog');
+  assert.equal(f.controls.enabled, false, 'a finished match cannot accept court inputs');
+  const rematches = f.socket().sent.filter(message => message.type === 'rematch').length;
+  f.click('rematch');
+  assert.equal(f.socket().sent.filter(message => message.type === 'rematch').length, rematches,
+    'even a synthetic click on the hidden rematch button cannot bypass the finale');
+}
+
+for (const side of [0, 1]) for (const winner of [0, 1]) {
+  test(`normal online finale maps winner ${winner} and names correctly for viewer ${side}, then unlocks once`, async () => {
+    const f = await fixture('serve', { slot: side });
+    completeScoredMatch(f.state, winner);
+    const matchEndedAt = f.now;
+    const metadata = { matchEndedAt, leaderboard: { status: 'saved' } };
+    f.view.rallyEnding = true;
+    f.snapshot(f.state, metadata); f.draw(200);
+    assert.equal(f.view.drawn.phase, 'over');
+    assert.equal(f.view.finale, null);
+    assert.equal(f.element('match-finale').hidden, true);
+    assertFinaleLocked(f);
+
+    f.view.rallyEnding = false; f.draw(1000);
+    assert.equal(f.view.finale, null, 'the server ending time plus the fall duration has not elapsed');
+    assertFinaleLocked(f);
+    f.view.rallyEnding = true; f.draw(500);
+    assert.equal(f.view.finale, null, 'the actual final shuttle animation must also finish');
+    assert.equal(f.audio.finaleCalls.length, 0);
+    f.view.rallyEnding = false; f.draw(0);
+
+    assert.equal(f.view.side, side);
+    assert.equal(f.view.finale.winner, winner);
+    assert.equal(f.view.finale.loser, 1 - winner);
+    assert.equal(f.view.finale.age, 0);
+    assert.equal(f.document.body.dataset.finale, 'true');
+    assert.equal(f.element('match-finale').hidden, false);
+    assert.equal(f.element('finale-winner').textContent, `${f.room.players[winner].name} 赢了`);
+    for (const index of [0, 1]) {
+      assert.equal(f.element(`finale-name-${index}`).textContent, f.room.players[index].name);
+      assert.equal(f.element(`finale-role-${index}`).textContent, index === winner ? '胜者' : '败者');
+      assert.equal(f.element(`finale-player-${index}`).dataset.result, index === winner ? 'winner' : 'loser');
+      assert.equal(f.element(`finale-player-${index}`).style.left, `${f.view.finaleAnchors[index].x}px`);
+    }
+    assertFinaleLocked(f);
+    f.draw(1049);
+    assert.equal(f.audio.finaleCalls.length, 0);
+    assert.equal(f.element('finale-bubble').hidden, true);
+    f.draw(2);
+    const key = JSON.stringify([f.room.sessionId, 1]);
+    assert.deepEqual(f.audio.finaleCalls, [key]);
+    assert.equal(f.element('finale-bubble').hidden, false);
+    assert.equal(f.element('finale-bubble').style.left, `${f.view.finaleAnchors[1 - winner].x}px`);
+    assertFinaleLocked(f);
+    f.draw(1948);
+    assertFinaleLocked(f);
+    assert.equal(f.element('finale-bubble').hidden, true);
+    f.draw(2);
+    assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
+    assert.equal(f.element('match-finale').hidden, true);
+    assert.equal(f.document.body.dataset.finale, undefined);
+    assert.equal(f.view.finale, null);
+    assert.deepEqual(f.audio.finaleCalls, [key]);
+    f.click('rematch');
+    assert.deepEqual(f.socket().sent.at(-1), { type: 'rematch' });
+    for (let repeat = 0; repeat < 3; repeat++) {
+      f.snapshot(f.state, metadata); f.draw(1500);
+      assert.deepEqual(f.audio.finaleCalls, [key]);
+      assert.equal(f.view.finale, null);
+      assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
+    }
+  });
+}
+
+test('a new online matchId permits exactly one new finale after a rematch', async () => {
+  const f = await fixture();
+  completeScoredMatch(f.state);
+  f.snapshot(f.state, { matchEndedAt: f.now }); f.draw(1700); f.draw(1100); f.draw(2000);
+  assert.equal(f.audio.finaleCalls.length, 1);
+  assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
+  f.click('rematch');
+  const second = game.createMatch();
+  f.snapshot(second, { matchId: 2 }); f.draw(100);
+  assert.deepEqual(f.visibleDialogs(), []);
+  assert.equal(f.controls.enabled, true);
+  assert.equal(f.view.finale, null);
+  completeScoredMatch(second, 1);
+  const endedAt = f.now;
+  f.snapshot(second, { matchId: 2, matchEndedAt: endedAt }); f.draw(1700);
+  assert.equal(f.view.finale.winner, 1);
+  assertFinaleLocked(f);
+  f.draw(1100); f.draw(2000);
+  assert.deepEqual(f.audio.finaleCalls, [JSON.stringify([f.room.sessionId, 1]), JSON.stringify([f.room.sessionId, 2])]);
+  f.snapshot(second, { matchId: 2, matchEndedAt: endedAt }); f.draw(5000);
+  assert.equal(f.audio.finaleCalls.length, 2);
+  assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
+});
+
+for (const voiced of [false, true]) {
+  test(`disconnect cancels an ${voiced ? 'already voiced' : 'unvoiced'} finale and reconnect never replays it`, async () => {
+    const f = await fixture();
+    completeScoredMatch(f.state);
+    const metadata = { matchEndedAt: f.now };
+    f.snapshot(f.state, metadata); f.draw(1700);
+    assert.ok(f.view.finale);
+    if (voiced) f.draw(1100);
+    const calls = [...f.audio.finaleCalls], stops = f.audio.stoppedVoices.length, clears = f.view.finaleClears;
+    f.socket().close(); f.draw(100);
+    assert.equal(f.view.finale, null);
+    assert.equal(f.element('match-finale').hidden, true);
+    assert.equal(f.audio.stoppedVoices.length, stops + 1);
+    assert.equal(f.audio.stoppedVoices.at(-1), 'finale');
+    assert.equal(f.view.finaleClears, clears + 1);
+    assertRecovery(f);
+    const retry = f.retry(); retry.socket.open(); await retry.result;
+    retry.socket.message(f.room); f.snapshot(f.state, metadata); f.draw(200);
+    assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
+    for (let repeat = 0; repeat < 3; repeat++) {
+      f.snapshot(f.state, metadata); f.draw(1600);
+      assert.equal(f.view.finale, null);
+      assert.equal(f.element('match-finale').hidden, true);
+      assert.deepEqual(f.audio.finaleCalls, calls);
+    }
+  });
+}
+
+test('interrupted, abandoned and unidentified online endings do not run the finale', async () => {
+  const endings = ['interrupted', 'pause-timeout', 'pause-limit', 'quit', 'disconnect'];
+  for (const endReason of endings) {
+    const f = await fixture(); f.state.score = [4, 1];
+    game.finishMatch(f.state, 0, '非正常结束', endReason);
+    f.snapshot(f.state, { matchEndedAt: f.now }); f.draw(200); f.draw(5000);
+    assert.deepEqual(f.visibleDialogs(), ['result-dialog'], endReason);
+    assert.equal(f.element('match-finale').hidden, true, endReason);
+    assert.equal(f.view.finale, null, endReason);
+    assert.equal(f.audio.finaleCalls.length, 0, endReason);
+  }
+  for (const invalid of [{ abandoned: true }, { sessionId: null }, { matchEndedAt: null }]) {
+    const f = await fixture(); completeScoredMatch(f.state);
+    f.snapshot(f.state, { matchEndedAt: f.now, ...invalid }); f.draw(200); f.draw(5000);
+    assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
+    assert.equal(f.view.finale, null);
+    assert.equal(f.audio.finaleCalls.length, 0);
+  }
+});
+
+test('a scored AI match goes directly to results without IDs, bow or voice', async () => {
+  const f = await fixture('serve', { demoMode: true });
+  f.click('start-ai'); f.draw();
+  completeScoredMatch(f.liveState, 1); f.draw(200); f.draw(5000);
+  assert.equal(f.view.drawn.endReason, 'scored');
+  assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
+  assert.equal(f.element('match-finale').hidden, true);
+  assert.equal(f.view.finale, null);
+  assert.equal(f.audio.finaleCalls.length, 0);
+});
+
+test('an opponent disconnect stops an already playing finale voice on the still-connected client',async()=>{
+  const f=await fixture();completeScoredMatch(f.state);
+  const metadata={matchEndedAt:f.now};f.snapshot(f.state,metadata);f.draw(1700);f.draw(1100);
+  assert.equal(f.audio.finaleCalls.length,1);const stopped=f.audio.stoppedVoices.length;
+  f.socket().message({...f.room,players:[f.room.players[0],{...f.room.players[1],connected:false}]});
+  f.snapshot(f.state,metadata);f.draw(20);
+  assert.equal(f.element('match-finale').hidden,true);
+  assert.ok(f.audio.stoppedVoices.length>stopped,'remote disconnect must stop the active voice');
+  assert.equal(f.audio.stoppedVoices.at(-1),'finale');
+});

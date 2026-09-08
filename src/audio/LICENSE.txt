@@ -1,11 +1,15 @@
 Recorded audio credits and license
 =================================
 
-The WAV recordings in this directory are distributed under CC0 1.0 Universal,
+The six recordings listed below (hit-1, hit-2, smash-1, step-1, applause, cheer)
+are distributed under CC0 1.0 Universal,
 not the MIT license used for the original game code. The source recording pages
 and the publisher's license page explicitly allow editing, redistribution and
 commercial use without asking permission. Attribution is optional under CC0;
 the credits below are retained to document provenance.
+
+The separate synthesized finale-dad.wav is not covered by this CC0 recording
+notice. Its generation provenance is documented in FINALE-VOICE.txt.
 
 CC0 1.0 Universal:
 https://creativecommons.org/publicdomain/zero/1.0/

@@ -1,0 +1,47 @@
+finale-dad.wav - fixed Mandarin match-finale voice
+================================================
+
+Text: U+7238 U+7238 (爸爸, "baba").
+This is synthetic speech, not a recording of a real person or a cloned voice.
+It was generated locally on 2026-09-09 from the installed Windows voice
+Microsoft Huihui Desktop - Chinese (Simplified), using the Windows SAPI COM API.
+No downloaded audio, external speech service, or visitor speech synthesis is
+used. Microsoft speech engine/model files are not included in this project.
+
+Voice token:
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ZH-CN_HUIHUI_11.0
+Installed model:
+C:\WINDOWS\Speech_OneCore\Engines\TTS\zh-CN\M2052Huihui
+
+The generator first checks the installed OneCore Kangkang token without
+changing the registry. On this machine that token reports Kangkang/Male but
+its VoicePath points to M2052Yaoyao. It was skipped because the model does not
+match the token name; the correctly configured Huihui voice was selected.
+
+Reproduce from the repository root on Windows with this voice installed:
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File scripts/generate-finale-voice.ps1
+
+The script writes to src/audio/finale-dad.wav and never plays audio. It uses
+SAPI rate -3 and volume 100, trims silence below approximately -60 dBFS while
+retaining 30 ms of edge protection, and normalizes the peak to 72% full scale.
+The output is a standard little-endian PCM WAV: 22050 Hz, 16-bit, mono.
+An optional -OutputPath selects another existing output directory; -Rate can
+adjust duration. The script rejects silence, clipping, unsupported PCM, and
+trimmed durations outside 0.6-1.2 seconds. Reproduction requires access to the
+Windows voice registry: this Codex sandbox returned SAPI 0x80045040 at Speak,
+while the same script succeeded outside the sandbox. No registry was changed.
+
+Validation of this checked-in file (independently read with Python wave):
+  Frames: 13970
+  Duration: 0.6335600907 seconds
+  File size: 27984 bytes
+  Peak: 23592 / 32768 (-2.8537 dBFS)
+  RMS: 3809.6037
+  Clipped samples: 0
+  Samples below approximately -60 dBFS: 21.5963%
+  Leading/trailing quiet at that threshold: 30.02 ms / 36.60 ms
+  SHA-256: 90f3618a5caba9cf15611ebd3c568b8c5451e50aa65ccbaeaeabe8d16fb9debb
+
+This is a provenance record, not a claim of CC0 or of independently verified
+commercial redistribution rights. The BigSoundBank recording credits and CC0
+terms for the other named audio files do not establish this file's license.

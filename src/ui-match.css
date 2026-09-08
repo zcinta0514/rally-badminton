@@ -1,4 +1,19 @@
 /* Match chrome lives in the camera's existing top and side gutters. */
+/* Finale has no controls: the result actions appear when its timeline ends. */
+#match-finale { position:fixed; inset:0; z-index:9; pointer-events:none; color:#f5f7e9; }
+.finale-heading { position:absolute; top:max(16px,env(safe-area-inset-top)); left:50%; transform:translateX(-50%); width:min(55vw,600px); text-align:center; text-shadow:0 2px 8px #001817; }
+.finale-heading small { display:block; font-size:10px; letter-spacing:2px; color:#b8d8bd; }
+.finale-heading strong { display:block; margin-top:5px; font-size:clamp(17px,2.5vw,28px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.finale-player { position:absolute; transform:translate(-50%,-50%); text-align:center; padding:5px 12px 7px; max-width:min(210px,36vw); background:#102d2de8; border:1px solid #afcdb44d; border-radius:5px; box-shadow:0 3px 14px #0719176b; }
+.finale-player small { display:block; font-size:10px; margin-bottom:2px; color:#b8d7d0; }
+.finale-player strong { display:block; font-size:clamp(12px,1.6vw,17px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.finale-player[data-result=winner] { border-color:#d9ec92b0; }
+.finale-player[data-result=winner] small { color:#e0ef98; }
+.finale-bubble { position:absolute; transform:translate(-50%,-50%); background:#fffce8; color:#243c32; padding:8px 22px; border-radius:16px; font-size:24px; font-weight:800; box-shadow:0 4px 14px #061c3455; }
+.finale-bubble::after { content:''; position:absolute; left:50%; bottom:-8px; border:9px solid transparent; border-top-color:#fffce8; border-bottom:0; transform:translateX(-50%); }
+.finale-caption { position:absolute; bottom:max(15px,env(safe-area-inset-bottom)); width:100%; text-align:center; font-size:11px; letter-spacing:1px; color:#c1d9c5; text-shadow:0 2px 5px #001817; }
+body[data-finale=true] :is(#hud,#game-controls,#help,#pause,.camera-toggle,.camera-panel,.court-edge-hint) { visibility:hidden!important; }
+body[data-finale-pending=true] .topbar .brand { visibility:hidden; }
 body[data-screen=match] .topbar { height:40px; top:max(10px,env(safe-area-inset-top)); left:max(16px,env(safe-area-inset-left)); right:max(16px,env(safe-area-inset-right)); padding:0; background:transparent; border:0; color:white; pointer-events:none; }
 body[data-screen=match] .topbar a,body[data-screen=match] .topbar button { pointer-events:auto; }
 body[data-screen=match] .brand { font-size:17px; gap:8px; }
