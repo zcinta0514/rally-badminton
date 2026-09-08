@@ -49,6 +49,7 @@ export function makeArena(scene) {
   const box = (color, x, y, z, sx, sy, sz, ry = 0) => place('box', color, x, y, z, sx, sy, sz, ry);
   const metal = 0x35454b, seat = 0x264c58, wall = 0x132733, trim = 0x43706c;
   const seatedPeople = [];
+  const contactShadows = [];
   // Every part uses this same local frame, including knees, shoes and hair.
   // seatY is the actual top surface; footY is the floor or raised footrest top.
   const seated = ({ x, seatY, z, yaw, shirt, skin, footY = 0, role = 'spectator' }) => {
@@ -77,6 +78,7 @@ export function makeArena(scene) {
     seatedPeople.push({ role, x, z, seatY, footY, yaw });
   };
   const lowChair = (x, z, yaw) => {
+    contactShadows.push({ x, z, sx: .46, sz: .5 });
     const frame = new THREE.Matrix4().makeRotationY(yaw); frame.setPosition(x, 0, z);
     const part = (color, px, py, pz, sx, sy, sz) => place('box', color, px, py, pz, sx, sy, sz, 0, 0, 0, false, frame);
     part(seat, 0, .41, 0, .48, .075, .44);
@@ -94,7 +96,10 @@ export function makeArena(scene) {
       box(0x203f4a, column * 2.35, 1.46, end * 13.24, .055, 2.35, .08);
     }
     // Discrete overhead strip fixtures suggest the hall without extra lights.
-    for (const x of [-5, 0, 5]) place('box', 0xd6e7df, x, 3.02, end * 13.16, 2.3, .055, .035, 0, 0, 0, true);
+    for (const x of [-5, 0, 5]) {
+      box(0x304853, x, 3.02, end * 13.20, 2.48, .14, .095);
+      place('box', 0xe6ecdc, x, 3.02, end * 13.14, 2.3, .05, .035, 0, 0, 0, true);
+    }
     for (let row = 0; row < 3; row++) {
       const z = end * (9.55 + row * .92), level = row * .28;
       box(0x20343d, 0, (level - .20) / 2, z, 11, level + .20, .87);
@@ -123,9 +128,17 @@ export function makeArena(scene) {
     box(0x132b34, side * 7.775, -.10, 0, 5.85, .20, 26.7);
     box(wall, side * 10.7, 1.5, 0, .14, 3.4, 26.7);
     for (let i = -3; i <= 3; i++) box(0x24434d, side * 10.59, 1.5, i * 3.5, .08, 3.2, .09);
+    // Low wall skirting and ceiling-line fixtures add depth but stay outside the
+    // court sightline. These share existing instanced batches, with no new lights.
+    box(0x36565b, side * 10.55, .10, 0, .07, .15, 26.5);
+    for (const z of [-8.4, -2.8, 2.8, 8.4]) {
+      box(0x2b4652, side * 10.54, 3.03, z, .11, .12, 3.45);
+      place('box', side < 0 ? 0xc3dfe7 : 0xe3ddc8, side * 10.47, 3.03, z, .028, .045, 3.24, 0, 0, 0, true);
+    }
     // Four low benches with legs, backs, a bag and a folded towel.
     for (const end of [-1, 1]) {
       const x = side * 5.65, z = end * 4.7;
+      contactShadows.push({ x, z, sx: .65, sz: 1.3 });
       const staffHere = side * end === -1;
       box(0x88785d, x, .44, z, .49, .085, 2.1);
       box(0x88785d, x + side * .2, .71, z, .06, .42, 2.1);
@@ -141,6 +154,7 @@ export function makeArena(scene) {
   }
   // A single elevated umpire chair beside the net, entirely outside tramlines.
   const chairX = -4.13;
+  contactShadows.push({ x: chairX, z: 0, sx: .58, sz: .58 });
   for (const x of [chairX - .25, chairX + .25]) for (const z of [-.30, .30]) {
     box(0x7c9198, x, .78, z, .055, 1.58, .055);
   }
@@ -169,5 +183,26 @@ export function makeArena(scene) {
     mesh.computeBoundingSphere();
     arena.add(mesh);
   }
+  // Static furniture receives soft grounding even when adaptive quality disables
+  // dynamic shadows. Vertex alpha avoids a texture request and costs one batch.
+  const shadowPositions = [0, 0, 0], shadowColors = [1, 1, 1, .24], shadowIndices = [];
+  const segments = 24;
+  for (let i = 0; i < segments; i++) {
+    const angle = i / segments * Math.PI * 2;
+    shadowPositions.push(Math.cos(angle), 0, Math.sin(angle)); shadowColors.push(1, 1, 1, 0);
+    shadowIndices.push(0, 1 + (i + 1) % segments, i + 1);
+  }
+  const contactGeometry = new THREE.BufferGeometry();
+  contactGeometry.setAttribute('position', new THREE.Float32BufferAttribute(shadowPositions, 3));
+  contactGeometry.setAttribute('color', new THREE.Float32BufferAttribute(shadowColors, 4));
+  contactGeometry.setIndex(shadowIndices);
+  const shadows = new THREE.InstancedMesh(contactGeometry,
+    new THREE.MeshBasicMaterial({ color: 0x061713, transparent: true, vertexColors: true, depthWrite: false }), contactShadows.length);
+  shadows.name = 'furniture-contact-shadows';
+  contactShadows.forEach(({ x, z, sx, sz }, index) => {
+    transform.position.set(x, .004, z); transform.rotation.set(0, 0, 0); transform.scale.set(sx, 1, sz); transform.updateMatrix();
+    shadows.setMatrixAt(index, transform.matrix);
+  });
+  shadows.instanceMatrix.needsUpdate = true; shadows.computeBoundingSphere(); arena.add(shadows);
   return arena;
 }

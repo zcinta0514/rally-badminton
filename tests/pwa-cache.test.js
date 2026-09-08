@@ -6,8 +6,8 @@ import { createPwaBuild } from '../scripts/build-pwa.js';
 
 // Only browser-owned storage/event primitives are simulated. Tests execute the
 // generated production worker, its real digest validation and real Responses.
-async function fixture({wsUrl='', stores=new Map()} = {}) {
-  const build = await createPwaBuild({wsUrl});
+async function fixture({wsUrl='', basePath='/', demoMode=false, stores=new Map()} = {}) {
+  const build = await createPwaBuild({wsUrl,basePath,demoMode});
   const listeners = new Map();
   let altered = '', offline = false, skipCalls = 0, claimCalls = 0;
   const key = value => new URL(typeof value === 'string' ? value : value.url, 'https://rally.example').pathname;
@@ -46,23 +46,23 @@ test('offline worker serves full local app, vendor and query navigation from its
   assert.deepEqual(f.calls(),{skipCalls:0,claimCalls:0});
 });
 test('a corrupted resource rejects installation and preserves the previous complete version', async () => {
-  const f=await fixture();await f.caches.open('rally-assets-previous');f.setAltered('/vendor/three.core.js');
+  const f=await fixture();await f.caches.open(f.build.cachePrefix+'previous');f.setAltered('/vendor/three.core.js');
   await assert.rejects(f.event('install'),/changed during download/);
-  assert.equal(f.stores.has('rally-assets-previous'),true);
-  assert.equal(f.stores.has('rally-assets-'+f.build.version),false);
+  assert.equal(f.stores.has(f.build.cachePrefix+'previous'),true);
+  assert.equal(f.stores.has(f.build.cachePrefix+f.build.version),false);
 });
 test('new installation preserves old-tab resources until browser activation, then only prunes this app caches', async () => {
-  const f=await fixture();await f.caches.open('rally-assets-previous');await f.caches.open('other-application');
+  const f=await fixture();await f.caches.open(f.build.cachePrefix+'previous');await f.caches.open('other-application');
   await f.event('install');
-  assert.equal(f.stores.has('rally-assets-previous'),true);
+  assert.equal(f.stores.has(f.build.cachePrefix+'previous'),true);
   assert.deepEqual(f.calls(),{skipCalls:0,claimCalls:0});
   await f.event('activate');
-  assert.equal(f.stores.has('rally-assets-previous'),false);
+  assert.equal(f.stores.has(f.build.cachePrefix+'previous'),false);
   assert.equal(f.stores.has('other-application'),true);
 });
 test('missing cache entries cannot be replaced by newer network code and status reports incomplete', async () => {
   const f=await fixture();await f.event('install');
-  f.stores.get('rally-assets-'+f.build.version).delete('/src/main.js');
+  f.stores.get(f.build.cachePrefix+f.build.version).delete('/src/main.js');
   f.setAltered('/src/main.js');
   const response=await f.event('fetch',{request:{method:'GET',url:'https://rally.example/src/main.js'}});
   assert.equal(response.status,503);
@@ -71,17 +71,17 @@ test('missing cache entries cannot be replaced by newer network code and status 
 });
 test('same-version reinstall can reuse its complete active cache even offline', async () => {
   const f=await fixture();await f.event('install');f.setOffline(true);await f.event('install');
-  assert.equal(f.stores.get('rally-assets-'+f.build.version).size,f.build.assets.size);
+  assert.equal(f.stores.get(f.build.cachePrefix+f.build.version).size,f.build.assets.size);
 });
 test('same-version failed reinstall preserves every previously cached entry', async () => {
   const f=await fixture();await f.event('install');
-  const store=f.stores.get('rally-assets-'+f.build.version);store.delete('/src/main.js');f.setOffline(true);
+  const store=f.stores.get(f.build.cachePrefix+f.build.version);store.delete('/src/main.js');f.setOffline(true);
   await assert.rejects(f.event('install'),/offline/);
-  assert.equal(f.stores.get('rally-assets-'+f.build.version).size,f.build.assets.size-1);
+  assert.equal(f.stores.get(f.build.cachePrefix+f.build.version).size,f.build.assets.size-1);
 });
 test('repair recovers evicted resources only when network bytes match this exact version', async () => {
   const f=await fixture();await f.event('install');
-  const store=f.stores.get('rally-assets-'+f.build.version);store.delete('/src/main.js');
+  const store=f.stores.get(f.build.cachePrefix+f.build.version);store.delete('/src/main.js');
   let status;await f.event('message',{data:{type:'REPAIR_CACHE'},ports:[{postMessage(value){status=value;}}]});
   assert.equal(status.complete,true);assert.equal(store.size,f.build.assets.size);
   store.delete('/src/main.js');f.setAltered('/src/main.js');
@@ -103,4 +103,22 @@ test('old and new versions serve their own runtime bytes while new worker waits'
   assert.equal(await (await old.event('fetch',{request})).text(),old.build.assets.get('/runtime-config.js').toString());
   assert.equal(await (await next.event('fetch',{request})).text(),next.build.assets.get('/runtime-config.js').toString());
   assert.equal(old.stores.size,2);assert.deepEqual(next.calls(),{skipCalls:0,claimCalls:0});
+});
+test('project worker serves offline query navigation and never deletes another project or root cache', async () => {
+  const root=await fixture();await root.event('install');
+  const first=await fixture({basePath:'/first/',demoMode:true,stores:root.stores});await first.event('install');
+  const oldFirstKeys=new Set(first.stores.keys());
+  const next=await fixture({basePath:'/first/',stores:first.stores});await next.event('install');
+  const second=await fixture({basePath:'/second/',stores:first.stores});await second.event('install');
+  const oldCount=next.stores.size;await next.event('activate');
+  assert.equal(next.stores.size,oldCount-1,'only the previous version of this same project is removed');
+  assert.ok([...next.stores.keys()].some(key=>oldFirstKeys.has(key)),'the root app remains cached');
+  for(const f of [root,next,second]){
+    f.setOffline(true);
+    const response=await f.event('fetch',{request:{method:'GET',mode:'navigate',url:'https://rally.example'+f.build.basePath+'?source=homescreen'}});
+    assert.equal(response.status,200);
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()),f.build.assets.get(f.build.basePath));
+  }
+  assert.equal(await next.event('fetch',{request:{method:'GET',mode:'navigate',url:'https://rally.example/'}}),undefined);
+  assert.equal(await next.event('fetch',{request:{method:'GET',url:'https://rally.example/api/leaderboard'}}),undefined);
 });

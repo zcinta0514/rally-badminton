@@ -1,4 +1,5 @@
 export function getWebSocketURL(page = globalThis.location, config = globalThis.RALLY_CONFIG || {}) {
+  if (config.demoMode === true) throw new Error('此入口仅提供人机试玩，不提供联机与排行榜');
   const base = new URL(page.href);
   const url = new URL(config.wsUrl || `${base.protocol === 'https:' ? 'wss:' : 'ws:'}//${base.host}/ws`);
   if (!['ws:', 'wss:'].includes(url.protocol) || url.username || url.password || url.hash || url.search || url.pathname !== '/ws') throw new Error('联机地址配置无效');
@@ -6,11 +7,16 @@ export function getWebSocketURL(page = globalThis.location, config = globalThis.
   return url.href;
 }
 
+export function getPwaRegistrationURLs(moduleURL = import.meta.url) {
+  return {scriptURL:new URL('../sw.js', moduleURL).href, scope:new URL('../', moduleURL).pathname};
+}
+
 export function displayAction({standalone, fullscreenEnabled, canRequest}) {
   return standalone ? 'standalone' : fullscreenEnabled && canRequest ? 'fullscreen' : 'install';
 }
 
 export function initPWA({ fullscreenButton, showToast = () => {} } = {}) {
+  const demoMode = globalThis.RALLY_CONFIG?.demoMode === true;
   let matchActive = false, registration = null, installPrompt = null, cached = false, version = '', failure = false, checking = false;
   const supported = globalThis.isSecureContext && 'serviceWorker' in navigator;
   const standaloneQuery = matchMedia('(display-mode: standalone)');
@@ -44,7 +50,7 @@ export function initPWA({ fullscreenButton, showToast = () => {} } = {}) {
       long = '新版资源已下载。请结束比赛，关闭所有开拍浏览器标签页和主屏幕窗口，再重新打开；系统会启用新版。当前比赛不会刷新，单独刷新一个标签页可能仍是旧版。';
     } else if (cached) {
       short = navigator.onLine ? '离线人机已就绪' : '当前离线 · 可人机开打';
-      long = `本机离线资源已备好${version ? '（' + version.slice(0,8) + '）' : ''}。断网后仍可从同一网址或主屏幕进入人机；好友对打需要连接比赛服务器。浏览器清理存储后需重新联网下载。`;
+      long = `本机离线资源已备好${version ? '（' + version.slice(0,8) + '）' : ''}。断网后仍可从同一网址或主屏幕进入人机。${demoMode ? '此入口仅提供人机试玩，不含联机和排行榜。' : '好友对打需要连接比赛服务器。'}浏览器清理存储后需重新联网下载。`;
     } else if (failure) {
       short = '离线资源未就绪 · 点击重试'; long = '离线资源尚未完整下载，当前可继续在线玩。联网后点击“重试缓存”；若服务器已更新，请关闭全部开拍窗口再重新打开。';
     } else {
@@ -111,7 +117,8 @@ export function initPWA({ fullscreenButton, showToast = () => {} } = {}) {
   }
   async function register() {
     try {
-      registration = await navigator.serviceWorker.register('/sw.js', {scope:'/', updateViaCache:'none'});
+      const {scriptURL, scope} = getPwaRegistrationURLs();
+      registration = await navigator.serviceWorker.register(scriptURL, {scope, updateViaCache:'none'});
       failure = false; watchWorker(registration.installing);
       registration.addEventListener('updatefound', () => { watchWorker(registration.installing); updateUI(); });
       await cacheStatus(); updateUI();

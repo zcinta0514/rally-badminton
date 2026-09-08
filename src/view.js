@@ -3,15 +3,16 @@ import { fitCourtViewport, getShuttleEdgeHint } from './court-layout.js';
 import { normalizeCameraSettings } from './camera-settings.js';
 import { makeAthlete, updateAthlete } from './athlete.js';
 import { makeArena, makeCourtMaterial } from './arena.js';
+import { makeNetVisual, updateNetVisual } from './net-visual.js';
 import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
 import { COURT } from '../shared/game.js';
 
 const COLORS = {
   background: 0x101e29,
   floor: 0x132b34,
-  apron: 0x17433f,
-  court: 0x096247,
-  farCourt: 0x096247,
+  apron: 0x1c4248,
+  court: 0x0c7054,
+  farCourt: 0x0c7054,
   line: 0xf0f5e7,
   coral: 0xfb7959,
   mint: 0xb7e2cb,
@@ -52,7 +53,7 @@ export class CourtView {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.02;
+    this.renderer.toneMappingExposure = 1.06;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -62,15 +63,19 @@ export class CourtView {
     this.camera = new THREE.PerspectiveCamera(45,1,0.1,100);
     this.cameraSide = null;
     this.cameraSettings = normalizeCameraSettings();
-    this.scene.add(new THREE.HemisphereLight(0xf0f7ff, 0x536961, 1.9));
-    const sunlight = new THREE.DirectionalLight(0xfff2de, 2.5);
-    sunlight.position.set(-7, 15, 5);
+    // One shadowed soft key plus a cheap opposite fill gives bodies and rackets
+    // readable depth from either end of the court. Fixtures remain unlit meshes.
+    this.scene.add(new THREE.HemisphereLight(0xe4f0fb, 0x43584f, 1.35));
+    const sunlight = new THREE.DirectionalLight(0xffefd6, 2.65);
+    sunlight.position.set(-6, 15, 4);
     sunlight.castShadow = true;
     sunlight.shadow.mapSize.set(1024, 1024);
     Object.assign(sunlight.shadow.camera, { left: -10, right: 10, top: 12, bottom: -12, near: 1, far: 35 });
     sunlight.shadow.bias = -0.0004;
     sunlight.shadow.normalBias = 0.018;
     this.scene.add(sunlight);
+    const fill = new THREE.DirectionalLight(0xc3e2f4, .8);
+    fill.position.set(8, 9, -6); this.scene.add(fill);
     this.makeCourt();
     this.players = [makeAthlete(this.scene, 0), makeAthlete(this.scene, 1)];
     this.mode = 'menu';
@@ -127,19 +132,9 @@ export class CourtView {
       box(scene, 0.066, 1.6, 0.066, postMat, x, 0.8, 0, true);
       box(scene, 0.09, 0.052, 0.09, material(COLORS.coral), x, 1.61, 0);
     }
-    const netPositions = [];
-    for (let x = -3.17; x <= 3.18; x += 0.135) netPositions.push(x, 0.79, 0, x, 1.52, 0);
-    for (let y = 0.79; y < 1.52; y += 0.115) {
-      for (let x = -3.17; x < 3.17; x += .135) netPositions.push(x, y, 0, Math.min(x+.135, 3.17), y, 0);
-    }
-    const netGeo = new THREE.BufferGeometry();
-    netGeo.setAttribute('position', new THREE.Float32BufferAttribute(netPositions, 3));
-    const net = new THREE.LineSegments(netGeo, new THREE.LineBasicMaterial({ color: 0xc0d6be, transparent: true, opacity: 0.38 }));
-    scene.add(net);
-    this.netGeometry = netGeo;
+    this.netVisual = makeNetVisual(scene);
+    this.netGeometry = this.netVisual.wires.geometry;
     this.netAtRest = true;
-    box(scene, 6.42, 0.062, 0.026, lineMat, 0, 1.52, 0);
-    box(scene, 6.35, 0.018, 0.018, edgeMat, 0, 0.77, 0);
 
     // Only low apron accents: the court and athletes own the available pixels.
     for (const z of [-7.15, 7.15]) box(scene, 6.6, 0.012, 0.055, edgeMat, 0, 0.008, z);
@@ -440,15 +435,9 @@ export class CourtView {
       this.impactMarker.material.opacity=tail.markOpacity;
       this.impactMarker.material.color.setHex(state.rallyEnd.kind==='in'?0xb7e2cb:0xff9270);
     }
-    const netMoving=tail&&state.rallyEnd.kind==='net'&&tail.age<1;
-    if(netMoving||!this.netAtRest){
-      const positions=this.netGeometry.attributes.position;
-      for(let i=0;i<positions.count;i++){
-        const x=positions.getX(i),y=positions.getY(i);
-        const weight=Math.exp(-(((x-(state.rallyEnd?.x||0))/.75)**2))*Math.sin(Math.PI*clamp((y-.77)/.78,0,1));
-        positions.setZ(i,netMoving ? .055*weight*Math.sin(tail.age*22)*Math.exp(-6*tail.age)*(state.rallyEnd.hitSide===0?-1:1) : 0);
-      }
-      positions.needsUpdate=true;this.netAtRest=!netMoving;
+    if(this.netVisual){
+      updateNetVisual(this.netVisual,tail?state.rallyEnd:null,tail?.age||0);
+      this.netAtRest=this.netVisual.atRest;
     }
     this.updateHints(state,info,freeze,reset,side);
     const showEdge=this.mode==='match'&&shuttle.active&&['rally','paused','countdown'].includes(state.phase);
@@ -484,7 +473,9 @@ export class CourtView {
     const geometries = new Set();
     const materials = new Set();
     const textures = new Set();
+    const skeletons = new Set();
     this.scene.traverse((object) => {
+      if (object.isSkinnedMesh && object.skeleton) skeletons.add(object.skeleton);
       if (object.geometry) geometries.add(object.geometry);
       if (object.material) for (const mat of Array.isArray(object.material) ? object.material : [object.material]) materials.add(mat);
     });
@@ -494,6 +485,7 @@ export class CourtView {
     }
     for (const geometry of geometries) geometry.dispose();
     for (const texture of textures) texture.dispose();
+    for (const skeleton of skeletons) skeleton.dispose();
     this.renderer.dispose();
   }
 }

@@ -16,3 +16,14 @@ test('fullscreen action reflects actual capability and standalone state', async 
   assert.equal(displayAction({standalone:false, fullscreenEnabled:true, canRequest:true}), 'fullscreen');
   assert.equal(displayAction({standalone:true, fullscreenEnabled:true, canRequest:true}), 'standalone');
 });
+test('worker registration resolves from its module location within the project and demo mode refuses networking', async () => {
+  const pwa=await import('../src/pwa.js');
+  assert.equal(typeof pwa.getPwaRegistrationURLs,'function');
+  assert.deepEqual(pwa.getPwaRegistrationURLs('https://player.example/rally-badminton/src/pwa.js'),{
+    scriptURL:'https://player.example/rally-badminton/sw.js',scope:'/rally-badminton/'
+  });
+  assert.deepEqual(pwa.getPwaRegistrationURLs('https://player.example/src/pwa.js'),{
+    scriptURL:'https://player.example/sw.js',scope:'/'
+  });
+  assert.throws(()=>pwa.getWebSocketURL({href:'https://player.example/rally-badminton/'},{demoMode:true}),/人机/);
+});

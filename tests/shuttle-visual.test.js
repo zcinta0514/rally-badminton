@@ -13,6 +13,19 @@ test('shuttle body has real court scale and its leading cork meets the flight po
  assert.ok(size.y>=.073&&size.y<=.092,`full body length ${size.y}`);
  assert.ok(Math.abs(box.max.y)<.002,'the leading point is the model origin');
 });
+test('individual feather detail has a bounded mobile geometry cost and no downloaded textures',()=>{
+ const ball=visual.makeShuttleModel();
+ assert.equal(ball.userData.featherCount,16);
+ assert.ok(ball.children.length<=4,'feathers must be merged rather than sixteen separately drawn objects');
+ let triangles=0;
+ ball.traverse(mesh=>{
+  if(mesh.isMesh)triangles+=(mesh.geometry.index?.count||mesh.geometry.attributes.position.count)/3;
+  if(mesh.material)assert.equal(mesh.material.map,null);
+ });
+ assert.ok(triangles<700,`shuttle triangle budget: ${triangles}`);
+ const feathers=ball.getObjectByName('sixteen-separated-feather-vanes');
+ assert.ok(feathers.geometry.index.count>0,'feathers have actual surfaces, not only lines');
+});
 test('net tail visibly loses flight, drops on the hitting side and rests without changing the event',()=>{
  assert.equal(typeof visual.sampleRallyEnd,'function');
  const e=end(),before=structuredClone(e),start=visual.sampleRallyEnd(e,0),fall=visual.sampleRallyEnd(e,.35),rest=visual.sampleRallyEnd(e,1.35);

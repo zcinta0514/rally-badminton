@@ -6,22 +6,22 @@
   <meta name="theme-color" content="#008650">
   <meta name="description" content="开拍 RALLY — 有空，就开拍。手机横屏羽毛球，随时与人机或球友对打。">
   <title>开拍 RALLY · 随时上场</title>
-  <link rel="stylesheet" href="/src/style.css">
-  <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="icon" type="image/svg+xml" href="/icons/rally.svg">
-  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="./src/style.css">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./icons/rally.svg">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="开拍">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="stylesheet" href="/src/pwa.css">
-  <script type="importmap">{"imports":{"three":"/vendor/three.module.js"}}</script>
+  <link rel="stylesheet" href="./src/pwa.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 </head>
 <body data-screen="menu">
   <canvas id="court" aria-label="立体羽毛球场"></canvas>
   <div class="screen-vignette"></div>
   <header class="topbar">
-    <a class="brand" href="/" aria-label="开拍首页"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M8 29 23 7h6L14 29Z" fill="currentColor"/><path d="m19 29 12-18h5L24 29Z" fill="currentColor"/><circle cx="10" cy="32" r="4" fill="currentColor"/></svg></span><span>开拍<small>RALLY</small></span></a>
+    <a class="brand" href="./" aria-label="开拍首页"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M8 29 23 7h6L14 29Z" fill="currentColor"/><path d="m19 29 12-18h5L24 29Z" fill="currentColor"/><circle cx="10" cy="32" r="4" fill="currentColor"/></svg></span><span>开拍<small>RALLY</small></span></a>
     <span class="edition">BADMINTON <i></i> 随时上场</span>
     <button id="camera-toggle" class="camera-toggle" aria-expanded="false" aria-controls="camera-panel" title="调整视角">视角 <span aria-hidden="true">⌄</span></button>
     <div class="top-actions">
@@ -42,7 +42,7 @@
   <main id="menu" class="menu-panel">
     <div class="menu-heading"><div class="eyebrow"><span></span> READY FOR THE NEXT POINT</div>
     <h1>有空，<br><span>就开拍。</span></h1>
-    <p class="intro">等上场的几分钟，也能打得尽兴。</p></div>
+    <p id="menu-intro" class="intro">等上场的几分钟，也能打得尽兴。</p></div>
     <div class="setup">
       <div class="setup-fields"><div class="section-label"><b>01</b><span>选个打法，准备上场</span></div>
       <div class="role-grid" id="roles" role="group" aria-label="角色打法">
@@ -58,7 +58,7 @@
       <div class="launch-actions"><button id="start-ai" class="primary-btn">人机开打 <span aria-hidden="true">↗</span></button>
       <button id="open-friends" class="secondary-btn">好友对打 <span>1V1 ＋</span></button></div>
     </div>
-    <div class="menu-foot"><span class="menu-tip-desktop">手机横屏 · 双手操控</span><span class="menu-tip-compact">↑ 上滑设置</span><button id="open-leaderboard" class="leaderboard-entry" type="button">排行榜 ↗</button><span>正式版 1.0</span></div>
+    <div class="menu-foot"><span class="menu-tip-desktop">手机横屏 · 双手操控</span><span class="menu-tip-compact">↑ 上滑设置</span><button id="open-leaderboard" class="leaderboard-entry" type="button">排行榜 ↗</button><span>正式版 1.1</span></div>
   </main>
   <aside id="court-caption" class="court-caption"><div class="live-tag"><i></i> LIVE COURT <span>实时演示</span></div><div class="court-poster"><span>PLAY THE NEXT POINT.</span><strong>下一分，<br>由你拿下。</strong></div><div class="court-strip"><b>01</b><span>一块球场 · 随时开打</span><span>MOVE. AIM. RALLY.</span></div></aside>
   <section id="hud" class="hud" hidden aria-label="比赛信息">
@@ -90,6 +90,6 @@
   <div id="rotate-note" class="rotate-note"><span>⤾</span><p><strong>横过来，球场更开阔。</strong><small>推荐横屏，左手跑位，右手击球。</small></p></div>
   <div id="toast" role="status" class="toast" hidden></div>
   <div id="loading" class="loading"><span class="spinner"></span> 球场准备中…</div>
-  <script type="module" src="/src/entry.js"></script>
+  <script type="module" src="./src/entry.js"></script>
 </body>
 </html>

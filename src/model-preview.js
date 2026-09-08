@@ -3,10 +3,10 @@ import { makeAthlete, updateAthlete } from './athlete.js';
 import { createMatch, stepMatch } from '../shared/game.js';
 
 document.title = '开拍 · 球员预览';
-document.querySelector('link[rel="stylesheet"]')?.setAttribute('href', '/src/model-preview.css');
+document.querySelector('link[rel="stylesheet"]')?.setAttribute('href', new URL('./model-preview.css', import.meta.url).href);
 document.body.removeAttribute('data-screen');
 document.body.innerHTML = `
- <header class="preview-header"><strong><i aria-hidden="true">/</i>开拍 <span>RALLY / PLAYER STUDIO</span></strong><a href="/">返回球场 <span aria-hidden="true">↗</span></a></header>
+ <header class="preview-header"><strong><i aria-hidden="true">/</i>开拍 <span>RALLY / PLAYER STUDIO</span></strong><a href="./">返回球场 <span aria-hidden="true">↗</span></a></header>
  <main class="preview-main">
   <section class="preview-stage"><canvas aria-label="可拖动旋转的运动员模型"></canvas><div class="preview-caption"><span>PLAYER IN FOCUS</span><b>看清每一次挥拍。</b>左右拖动，自由查看</div><div class="preview-turn"><span aria-hidden="true">↔</span> 拖动画面旋转球员</div></section>
   <aside class="preview-panel"><div class="preview-eyebrow">PLAYER STUDIO</div><h1>球员预览<span aria-hidden="true">.</span></h1><p>近距离看看你的球员。切换动作与角度，拖动进度查看挥拍细节。</p>

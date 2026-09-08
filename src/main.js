@@ -11,6 +11,7 @@ import { resolveShotAim, toWorldInput } from './play-input.js';
 import { createMatch, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, ROLES, predictLanding, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
 
 const $=id=>document.getElementById(id);
+const demoMode=globalThis.RALLY_CONFIG?.demoMode===true;
 const names={easy:'入门',medium:'进阶',hard:'高手'};
 const roleNotes={balanced:'均衡的移动、力量与恢复，适合初次上场。',swift:'移动更快、恢复更快；杀球力量稍弱，靠跑位创造机会。',power:'杀球更重、体力上限更高；步速和恢复较慢，要选好时机。'};
 const settings={role:'balanced',difficulty:'easy',target:5,ruleset:'quick'};
@@ -34,12 +35,17 @@ function preparePlayerProfile(){
   setText('player-profile-note',playerProfile.persistent?'此名称会显示在比分和榜单中。战绩绑定当前浏览器；换设备或清除网站数据后不自动同步。':'浏览器未允许保存身份。本页可正常记分，关闭后将无法接续此身份的战绩。');
   return playerProfile;
 }
-try{$('player-name').value=preparePlayerProfile().name;}catch(error){setText('player-profile-note',error.message);}
+if(demoMode){
+  for(const id of ['open-friends','open-leaderboard','result-leaderboard'])$(id).hidden=true;
+  setText('menu-intro','免费人机试玩 · 可离线练习。此入口不含联机和排行榜。');
+  setText('start-ai','免费人机试玩 ↗');
+}else try{$('player-name').value=preparePlayerProfile().name;}catch(error){setText('player-profile-note',error.message);}
 function dialog(id){
   for(const el of document.querySelectorAll('.dialog'))el.hidden=el.id!==id;
   $('dialog-backdrop').hidden=!id;
 }
 function openLeaderboard(from){
+  if(demoMode)return;
   if(from==='result'&&state?.phase!=='over')return;
   if(from==='menu'&&mode!=='menu')return;
   leaderboardReturn=from;dialog('leaderboard-dialog');leaderboard.load({selfId:currentPlayerId});
@@ -180,6 +186,7 @@ async function connect(){
   });
 }
 async function roomAction(type){
+  if(demoMode){showToast('此入口仅提供人机试玩');return;}
   if(connecting)return;
   const name=normalizePlayerName($('player-name').value);
   if(!name){showToast('先输入你的昵称或常用玩家 ID');$('player-name').focus();return;}
@@ -194,7 +201,7 @@ function closeHelpOrSetup(){
   helpOpen=false;if(state?.phase==='paused')dialog('pause-dialog');else dialog(null);
 }
 $('start-ai').addEventListener('click',startAI);
-$('open-friends').addEventListener('click',()=>dialog('friends-dialog'));
+$('open-friends').addEventListener('click',()=>{if(!demoMode)dialog('friends-dialog');});
 $('open-leaderboard').addEventListener('click',()=>openLeaderboard('menu'));
 $('result-leaderboard').addEventListener('click',()=>openLeaderboard('result'));
 $('close-leaderboard').addEventListener('click',closeLeaderboard);
@@ -390,7 +397,7 @@ try{
   }
   requestAnimationFrame(frame);
   const invited=new URLSearchParams(location.search).get('room');
-  if(invited){$('room-code').value=invited.toUpperCase().slice(0,5);dialog('friends-dialog');}
+  if(invited&&!demoMode){$('room-code').value=invited.toUpperCase().slice(0,5);dialog('friends-dialog');}
 }catch(error){
   console.error(error);$('loading').textContent='球场加载失败：'+error.message+'。请使用支持 WebGL 2 的浏览器后刷新。';
 }

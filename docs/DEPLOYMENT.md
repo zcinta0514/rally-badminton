@@ -41,6 +41,23 @@
 构建前设置 `PUBLIC_WS_URL`，把前端来源加入后端 `ALLOWED_ORIGINS`。
 不能把比赛服务当成只运行一次的无服务器函数。
 
+GitHub Pages 项目站点使用子路径。仓库自带 `.github/workflows/pages.yml`，
+在仓库 Settings → Pages 选择 GitHub Actions 后，推送 `main` 会测试、构建
+并发布纯人机入口。工作流只上传 `dist/`，不上传服务器数据或环境配置。
+Fork 后路径会自动采用新仓库名，自己启用 Pages 即可。
+
+手动构建同样支持以下配置（在 shell 中设置后执行 `npm run build`）：
+
+```ini
+PUBLIC_BASE_PATH=/rally-badminton/
+PUBLIC_DEMO_MODE=1
+PUBLIC_WS_URL=
+```
+
+默认路径是 `/`。子路径须以 `/` 开始和结束。`PUBLIC_DEMO_MODE=1` 会隐藏
+好友与排行榜入口并拒绝配置 WSS；默认关闭时保留完整联机前端。
+Service Worker、manifest 和资源清单均限定当前应用路径。
+
 iPhone 在 Safari 中打开 HTTPS 网址，通过分享菜单添加到主屏幕。首次联网
 等到「离线人机已就绪」再断网。新版备好后，结束比赛并关闭全部游戏标签页与
 主屏幕窗口，再打开启用；不会在对局中强制刷新。

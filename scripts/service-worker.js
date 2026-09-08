@@ -1,5 +1,4 @@
-/* VERSION and ASSETS are injected into /sw.js at build/startup. */
-const CACHE_PREFIX = 'rally-assets-';
+/* VERSION, BASE_PATH, CACHE_PREFIX and ASSETS are injected at build/startup. */
 const CACHE_NAME = CACHE_PREFIX + VERSION;
 const allowedAssets = new Set(ASSETS.map(asset => asset.url));
 
@@ -43,7 +42,7 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
-  const key = request.mode === 'navigate' && url.pathname === '/' ? '/' : url.pathname;
+  const key = request.mode === 'navigate' && url.pathname === BASE_PATH ? BASE_PATH : url.pathname;
   if (!allowedAssets.has(key)) return; // Never cache health or live game traffic.
   event.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);

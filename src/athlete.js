@@ -176,8 +176,8 @@ export function makeAthlete(scene,index) {
   for(const [name,parent] of Object.entries(JOINT_PARENTS)) {
     const bone=new THREE.Bone();bone.name=name;bones[name]=bone;(parent?bones[parent]:root).add(bone);
   }
-  const skeleton=new THREE.Skeleton(Object.values(bones));
   const model=makeAthleteModel(root,bones,index);
+  const skeleton=model.skin.skeleton;
   function mesh(parent,geometry,material) {const m=new THREE.Mesh(geometry,material);parent.add(m);return m;}
   const ground=new THREE.Group();scene.add(ground);
   function ring(radius,width,color,opacity){const r=mesh(ground,new THREE.RingGeometry(radius-width,radius,40),new THREE.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false,side:THREE.DoubleSide}));r.rotation.x=-Math.PI/2;r.position.y=.034;return r;}
@@ -217,21 +217,31 @@ function motionFor(visual,player,side,time,freeze,reset) {
     const foot=m.feet[name],other=m.feet[name==='left'?'right':'left'];
     if(active){foot.planted=false;foot.yaw=m.heading;continue;}
     if(m.inAction){foot.planted=true;foot.progress=1;foot.world.y=.085;foot.yaw=m.heading;foot.id++;}
+    const offset=turn(v(s*.18,0,0),m.heading);
+    const hip=v(player.x+offset.x*sign,.085,player.z+offset.z*sign);
+    const desired=add(hip,mul(travel,speed>.12?Math.min(.34,.17+speed*.04):0));
     if(!foot.planted){
+      // Correct an airborne step early when the player reverses or releases the
+      // stick. Once the foot approaches the floor its landing stays committed;
+      // an existing ground contact is never rotated/slid to follow this target.
+      if(foot.progress<.72){
+        foot.target=mix(foot.target,desired,1-Math.exp(-dt*14));
+        foot.targetYaw+=(m.heading-foot.targetYaw)*(1-Math.exp(-dt*12));
+      }
       foot.progress=clamp(foot.progress+dt/(.18/(1+speed*.32)),0,1);
       foot.world=mix(foot.from,foot.target,smooth(foot.progress));
-      foot.world.y=.085+Math.sin(foot.progress*Math.PI)*.135;
+      foot.world.y=.085+Math.sin(foot.progress*Math.PI)*(foot.lift??.135);
       foot.yaw=foot.fromYaw+(foot.targetYaw-foot.fromYaw)*smooth(foot.progress);
       if(foot.progress===1){foot.planted=true;foot.id++;}
     }
     const behind=dot(sub(position,foot.world),travel);
-    const offset=turn(v(s*.18,0,0),m.heading);
-    const hip=v(player.x+offset.x*sign,.085,player.z+offset.z*sign);
-    const overreach=Math.hypot(hip.x-foot.world.x,hip.z-foot.world.z)>.43;
-    if(foot.planted&&speed>.12&&((behind>.12&&other.planted)||overreach)){
+    const displacement=Math.hypot(hip.x-foot.world.x,hip.z-foot.world.z);
+    const overreach=displacement>.43;
+    const settle=!m.inAction&&speed<=.12&&displacement>.2&&other.planted;
+    if(foot.planted&&((speed>.12&&((behind>.12&&other.planted)||overreach))||settle)){
       foot.planted=false;foot.progress=0;foot.from={...foot.world};
       foot.fromYaw=foot.yaw;foot.targetYaw=m.heading;
-      foot.target=add(hip,mul(travel,Math.min(.34,.17+speed*.04)));
+      foot.target=desired;foot.lift=settle?.05:.135;
     }
   }
   m.inAction=Boolean(active);m.position=position;m.time=time;
@@ -284,13 +294,9 @@ export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze
   for(const [name,parent]of Object.entries(JOINT_PARENTS)){const p=joints[name],q=parent?joints[parent]:v();visual.bones[name].position.set(p.x-q.x,p.y-q.y,p.z-q.z);}
   visual.bones.head.rotation.y=pose.headYaw-pose.heading;
   for(const name of ['left','right'])visual.bones[`${name}Ankle`].rotation.y=(pose.actionType?pose.heading:motion.feet[name].yaw)-pose.heading;
-  const trunk=sub(joints.chest,joints.pelvis);
-  visual.torso.position.set(0,0,0);
-  visual.torso.quaternion.setFromUnitVectors(UP,temp.set(trunk.x,trunk.y,trunk.z).normalize());
-  visual.torso.quaternion.multiply(yawRotation.setFromAxisAngle(UP,pose.chestYaw-pose.heading));
+  visual.skin.userData.updatePose(joints,pose);
   visual.shorts.rotation.y=pose.pelvisYaw-pose.heading;
   for(const hem of visual.hems){const thigh=sub(joints[`${hem.name}Knee`],joints[`${hem.name}Hip`]);temp.set(thigh.x,thigh.y,thigh.z).normalize();hem.mesh.position.copy(temp).multiplyScalar(hem.offset);hem.mesh.quaternion.setFromUnitVectors(UP,temp);}
-  for(const segment of visual.segments){const a=joints[segment.from],b=joints[segment.to];temp.set(b.x-a.x,b.y-a.y,b.z-a.z);const size=temp.length();segment.mesh.position.copy(temp).multiplyScalar(.5);segment.mesh.quaternion.setFromUnitVectors(UP,temp.normalize());segment.mesh.scale.y=size/segment.restLength;}
   const wrist=joints.rightWrist,racketHead=turn(pose.racketHead,-pose.heading);visual.racket.position.set(wrist.x,wrist.y,wrist.z);temp.set(racketHead.x-wrist.x,racketHead.y-wrist.y,racketHead.z-wrist.z);visual.racket.quaternion.setFromUnitVectors(UP,temp.normalize());
   visual.racket.quaternion.multiply(yawRotation.setFromAxisAngle(UP,pose.racketRoll));
   // The gripping palm follows pronation with the handle, while the wrist stays

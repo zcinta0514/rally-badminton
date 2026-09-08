@@ -374,3 +374,24 @@ test('high cross-body recovery transports its elbow plane without reversing the 
     previous=pose;
   }
 });
+
+test('an airborne recovery step redirects after a reversal and a stop settles into a usable stance',()=>{
+  const rig=makeAthlete(new THREE.Scene(),0);let time=0,x=0,changed=false;
+  updateAthlete(rig,player,0,ball,time,1/120,true);
+  for(let i=0;i<36;i++){time+=1/120;x+=.025;updateAthlete(rig,{...player,x,vx:3},0,ball,time,1/120,true);}
+  for(let i=0;i<36;i++){
+    const before=Object.fromEntries(Object.entries(rig.motion.feet).map(([name,f])=>[name,{id:f.id,progress:f.progress,target:f.target&&{...f.target}}]));
+    time+=1/120;x-=.025;updateAthlete(rig,{...player,x,vx:-3},0,ball,time,1/120,true);
+    for(const [name,f]of Object.entries(rig.motion.feet)){
+      const old=before[name];
+      if(old.target&&old.id===f.id&&old.progress>0&&f.progress>old.progress&&f.target.x<old.target.x-.0001)changed=true;
+    }
+  }
+  assert.ok(changed,'a foot already in flight adapts before committing to its old landing direction');
+  for(let i=0;i<240;i++){time+=1/120;updateAthlete(rig,{...player,x},0,ball,time,1/120,true);}
+  for(const [name,sign]of [['left',-1],['right',1]]){
+    const foot=rig.motion.feet[name];
+    assert.ok(foot.planted);
+    assert.ok(Math.hypot(foot.world.x-x-sign*.18,foot.world.z-player.z)<.23,'stopping cannot leave the next stroke in a twisted overextended stance');
+  }
+});

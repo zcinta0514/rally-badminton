@@ -32,7 +32,7 @@ class Target {
   }
 }
 
-async function fixture(phase = 'serve') {
+async function fixture(phase = 'serve', {demoMode=false, search=''} = {}) {
   let now = 1000, nextId = 0, frame, controls, view;
   const timers = new Map(), sockets = [], elements = new Map();
   const element = id => {
@@ -46,7 +46,9 @@ async function fixture(phase = 'serve') {
     }
     return elements.get(id);
   };
-  const dialogs = ['friends-dialog', 'waiting-dialog', 'pause-dialog', 'result-dialog', 'help-dialog', 'leaderboard-dialog'].map(element);
+  const dialogs = ['friends-dialog', 'waiting-dialog', 'pause-dialog', 'result-dialog', 'help-dialog', 'leaderboard-dialog'].map(id=>{
+    const dialog=element(id);dialog.hidden=true;return dialog;
+  });
   const shots = ['clear', 'drop', 'smash'].map(shot => {
     const button = element(shot); button.dataset.shot = shot; return button;
   });
@@ -84,9 +86,9 @@ async function fixture(phase = 'serve') {
     normalizePlayerName, getLeaderboardURL, resultRecordText,
     createPlayerProfile: () => createPlayerProfile({ storage: null, crypto: webcrypto }),
     createLeaderboard: options => createLeaderboard({ ...options, fetchImpl: async () => ({ ok: true, json: async () => ({ entries: [], storage: 'persistent' }) }) }),
-    console, structuredClone, URLSearchParams, document, WebSocket: Socket, CourtView: View, Controls: Input,
+    console, structuredClone, URLSearchParams, document, WebSocket: Socket, CourtView: View, Controls: Input, RALLY_CONFIG:{demoMode},
     performance: { now: () => now }, window: Object.assign(new Target(), { devicePixelRatio: 1 }),
-    location: { pathname: '/', search: '', origin: 'http://localhost' }, history: { replaceState() {} },
+    location: { pathname: '/', search, origin: 'http://localhost' }, history: { replaceState() {} },
     ArenaAudio: class { reset() {} unlock() {} update() {} setVisible() {} },
     initPWA: () => ({ setMatchActive() {} }), getWebSocketURL: () => 'ws://localhost/ws',
     bindCameraSettings() {}, ResizeObserver: class { observe() {} },
@@ -98,6 +100,7 @@ async function fixture(phase = 'serve') {
   assert.equal(typeof frame, 'function', 'the real application must initialize its render loop');
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
+  if(demoMode)return {element,click,draw,controls,view,document,sockets,visibleDialogs:()=>dialogs.filter(dialog=>!dialog.hidden).map(dialog=>dialog.id)};
   element('player-name').value = '球友A';
   const creating = click('create-room'); sockets.at(-1).open(); await creating;
   const room = { type: 'room', code: 'ABCDE', slot: 0, token: 'original-token',
@@ -115,6 +118,21 @@ async function fixture(phase = 'serve') {
   return { element, click, draw, retry, snapshot, room, state, controls, view, document,
     socket: () => sockets.at(-1), visibleDialogs: () => dialogs.filter(dialog => !dialog.hidden).map(dialog => dialog.id) };
 }
+
+test('static demo hides network entry points, ignores room invitations and still runs the AI match', async () => {
+  const f=await fixture('serve',{demoMode:true,search:'?room=ABCDE'});
+  assert.equal(f.element('open-friends').hidden,true);
+  assert.equal(f.element('open-leaderboard').hidden,true);
+  assert.match(f.element('menu-intro').textContent,/人机试玩/);
+  assert.match(f.element('start-ai').textContent,/免费人机试玩/);
+  assert.notEqual(f.visibleDialogs().includes('friends-dialog'),true);
+  f.click('open-friends');f.click('open-leaderboard');await f.click('create-room');await f.click('join-room');
+  assert.equal(f.sockets.length,0);
+  f.click('start-ai');f.draw();
+  assert.equal(f.document.body.dataset.screen,'match');
+  assert.equal(f.view.drawn.phase,'serve');
+  assert.equal(f.element('result-leaderboard').hidden,true);
+});
 
 test('online entry sends a private random player identity and prevents blank display names before connecting', async () => {
   const f = await fixture();
