@@ -57,21 +57,21 @@ test('footsteps follow travel with a cadence limit, not one event per frame', ()
   for (let i = 1; i < times.length; i++) assert.ok(times[i] - times[i - 1] >= .23);
 });
 
-test('actual game acceleration is silent and fast braking produces one grounded squeak', () => {
+test('actual game movement and fast braking never produce shoe friction', () => {
   const s = createMatch(), memory = {}, events = []; collectArenaSounds(s, memory);
   for (let i = 0; i < 16; i++) { stepMatch(s, [{ x: .55, z: 0 }, {}], 1 / 60); events.push(...collectArenaSounds(s, memory)); }
   assert.ok(s.players[0].vx > 2); assert.equal(events.filter(e => e.type === 'squeak').length, 0);
   for (let i = 0; i < 10; i++) { stepMatch(s, [{}, {}], 1 / 60); events.push(...collectArenaSounds(s, memory)); }
-  assert.equal(events.filter(e => e.type === 'squeak' && e.side === 0).length, 1);
+  assert.ok(events.every(e => e.type === 'foot'));
 });
 
-test('sharp turns squeak with a per-player cooldown and low-speed stops stay silent', () => {
+test('sharp turns and stops never produce shoe friction', () => {
   const s = state(), memory = {}; s.players[0].vx = 3; collectArenaSounds(s, memory);
   const turn = (vx, vz, dt = .05) => { advance(s, dt); Object.assign(s.players[0], { vx, vz });
     s.players[0].x += vx * dt; s.players[0].z += vz * dt; return collectArenaSounds(s, memory).filter(e => e.type === 'squeak'); };
-  assert.deepEqual(turn(2.5, 1), [{ type: 'squeak', side: 0 }]); assert.deepEqual(turn(1.5, 1), []);
+  assert.deepEqual(turn(2.5, 1), []); assert.deepEqual(turn(1.5, 1), []);
   for (let i = 0; i < 7; i++) turn(3, 0);
-  assert.deepEqual(turn(2.5, 1), [{ type: 'squeak', side: 0 }]); turn(1, 0, .1); assert.deepEqual(turn(0, 0), []);
+  assert.deepEqual(turn(2.5, 1), []); turn(1, 0, .1); assert.deepEqual(turn(0, 0), []);
 });
 
 test('shoes exclude teleports, airborne motion, score hard stops and pause resumes', () => {
@@ -122,9 +122,9 @@ function audioFixture({ fetchFailure = false, decodeFailure = false, resumeFailu
 
 test('gesture unlock loads local samples once and uses decoded sources without oscillators', async () => {
   const f = audioFixture(); await f.audio.unlock(); await f.audio.unlock(); assert.equal(f.contexts.length, 1);
-  assert.equal(f.requests.length, 8); assert.equal(new Set(f.requests).size, 8);
+  assert.equal(f.requests.length, 6); assert.equal(new Set(f.requests).size, 6);
   assert.ok(f.requests.every(url => url.startsWith(new URL('../src/audio/', import.meta.url).href)));
-  assert.equal(f.contexts[0].decodes, 8);
+  assert.equal(f.contexts[0].decodes, 6);
   const s = state(); f.audio.update(s); advance(s); s.hitId++; f.audio.update(s);
   assert.equal(f.sources.length, 1); assert.equal(f.sources[0].buffer.sample, true); assert.equal(f.sources[0].starts.length, 1);
 });
@@ -179,6 +179,8 @@ test('failed sample fetch/decode falls back to contact noise without blocking a 
     await assert.doesNotReject(() => f.audio.unlock()); const s = state(); f.audio.update(s); advance(s); s.hitId++;
     assert.doesNotThrow(() => f.audio.update(s)); assert.equal(f.sources.length, 1); assert.equal(f.sources[0].buffer.sample, undefined);
     assert.ok(f.sources[0].stops[0] - f.sources[0].starts[0][0] < .2);
+    f.audio.sample('foot', { duration: .1, volume: .07 });
+    assert.equal(f.sources.length, 1, 'unavailable footsteps stay silent instead of making hiss');
     score(s); f.audio.update(s); assert.equal(f.sources.length, 1, 'missing crowds do not become synthetic wind'); }
 });
 

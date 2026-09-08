@@ -4,7 +4,6 @@ import { isExcitingPoint } from './arena-feedback.js';
 export const ARENA_AUDIO_SAMPLES = Object.freeze({
   hit: [new URL('./audio/hit-1.wav', import.meta.url), new URL('./audio/hit-2.wav', import.meta.url)],
   smash: [new URL('./audio/smash-1.wav', import.meta.url)],
-  squeak: [new URL('./audio/squeak-1.wav', import.meta.url), new URL('./audio/squeak-2.wav', import.meta.url)],
   foot: [new URL('./audio/step-1.wav', import.meta.url)],
   applause: [new URL('./audio/applause.wav', import.meta.url)],
   cheer: [new URL('./audio/cheer.wav', import.meta.url)],
@@ -38,7 +37,6 @@ export function collectArenaSounds(state, memory) {
   if (!initialized) {
     memory.travel = state.players.map(() => 0);
     memory.lastFoot = state.players.map(() => -Infinity);
-    memory.lastSqueak = state.players.map(() => -Infinity);
   }
   // A duplicate display frame has no movement. Phase/ID changes at frozen time
   // still enter memory so pause and countdown cannot replay contacts on resume.
@@ -54,15 +52,7 @@ export function collectArenaSounds(state, memory) {
     if (!continuous || !current.grounded || !previous?.grounded || !plausible || serveLock) {
       memory.travel[side] = 0; return current;
     }
-    const loss = before - speed;
-    const cosine = before * speed > .01 ? (previous.vx * current.vx + previous.vz * current.vz) / (before * speed) : 1;
-    const sideways = before > 0 ? Math.abs(previous.vx * current.vz - previous.vz * current.vx) / before / dt : 0;
-    const braking = loss >= Math.max(.08, 12 * dt);
-    const turning = speed >= 1.6 && cosine < .97 && sideways >= 12;
-    if (before >= 2 && (braking || turning) && time - memory.lastSqueak[side] >= .3) {
-      events.push({ type: 'squeak', side }); memory.lastSqueak[side] = time;
-      memory.travel[side] = 0; memory.lastFoot[side] = time;
-    } else if (speed > .45) {
+    if (speed > .45) {
       memory.travel[side] += distance;
       if (memory.travel[side] >= .65 && time - memory.lastFoot[side] >= .24) {
         events.push({ type: 'foot', side }); memory.lastFoot[side] = time;
@@ -204,11 +194,10 @@ export class ArenaAudio {
     if (buffers.length) {
       const buffer = buffers[Math.min(buffers.length - 1, Math.floor(this.random() * buffers.length))];
       this.playBuffer(buffer, { rate: .98 + this.random() * .04, ...options });
-    } else if (this.loaded && options.group !== 'reaction') {
-      // Only unavailable contact/shoe samples use quiet noise. Never fake a crowd
-      // with air noise, and never queue old events while samples are downloading.
-      this.burst(kind === 'foot' ? 900 : kind === 'squeak' ? 2200 : 1800,
-        Math.min(options.duration, .1), options.volume * .4);
+    } else if (this.loaded && (kind === 'hit' || kind === 'smash')) {
+      // Only unavailable impacts use a quiet fallback. Missing footsteps and
+      // crowd samples stay silent instead of adding hiss; never queue old events.
+      this.burst(1800, Math.min(options.duration, .1), options.volume * .4);
     }
   }
 
@@ -240,8 +229,7 @@ export class ArenaAudio {
     if (!visible || !this.enabled || !this.active || suppress) return;
     for (const event of events) {
       if (event.type === 'hit') this.hit(event.shot);
-      if (event.type === 'foot') this.sample('foot', { duration: .12, volume: .1 });
-      if (event.type === 'squeak') this.sample('squeak', { duration: .23, volume: .16 });
+      if (event.type === 'foot') this.sample('foot', { duration: .1, volume: .07 });
       if (event.type === 'score') {
         this.stopVoices('reaction');
         this.sample(event.exciting ? 'cheer' : 'applause', {

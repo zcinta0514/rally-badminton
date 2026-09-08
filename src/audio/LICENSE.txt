@@ -27,19 +27,6 @@ hit-1.wav, hit-2.wav, smash-1.wav
   "smash" describes its game use. The original recordist did not identify
   individual stroke types; this is not claimed as a separate smash recording.
 
-squeak-1.wav, squeak-2.wav
-  Source: "Gnashing basketball" (#0938)
-  Recordist: ThibaudVaerman
-  Publisher: BigSoundBank / LaSonotheque
-  Page: https://bigsoundbank.com/grincements-basket-s0938.html
-  Original: https://bigsoundbank.com/UPLOAD/bwf-en/0938.wav
-  License: CC0 1.0 Universal
-  Recording: Real shoes squeaking indoors, described by the source as the
-  friction heard during indoor basketball or handball. Used as sports-shoe
-  friction; not claimed to have been recorded at a badminton match.
-  Edits: isolated crops 0.252-0.552 s and 0.724-0.984 s; stereo downmix, DC and
-  low-rumble removal, edge fades, peak normalization, 44,100 Hz mono 16-bit PCM.
-
 step-1.wav
   Source: "Man Footsteps on the Wooden Floor" (#0165)
   Recordist: DavidGreck

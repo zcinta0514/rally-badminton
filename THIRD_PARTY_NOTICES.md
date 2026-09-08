@@ -33,7 +33,6 @@ though CC0 does not require attribution. The build includes `src/audio/LICENSE.t
 | Game files | Original recording and recordist | Source |
 | --- | --- | --- |
 | `hit-1.wav`, `hit-2.wav`, `smash-1.wav` | Badminton: racket shuttlecock — Joseph SARDIN | https://bigsoundbank.com/badminton-racket-shuttlecock-s0537.html |
-| `squeak-1.wav`, `squeak-2.wav` | Gnashing basketball (indoor shoe friction) — ThibaudVaerman | https://bigsoundbank.com/grincements-basket-s0938.html |
 | `step-1.wav` | Man Footsteps on the Wooden Floor — DavidGreck | https://bigsoundbank.com/man-footsteps-on-the-wooden-floor-s0165.html |
 | `applause.wav` | Applause #1 — Dorian CLAIR | https://bigsoundbank.com/applause-1-s2363.html |
 | `cheer.wav` | Shouts and Applauses of Teens #1 — DenisChardonnet | https://bigsoundbank.com/shouts-and-applauses-of-teens-1-s0236.html |
@@ -42,6 +41,6 @@ Edits: short isolated crops, mono downmix where needed, DC/low-rumble removal,
 edge fades, peak normalization and PCM16 resampling. The generic wooden-floor
 footstep also has a gentle low-pass filter. No synthetic tones or pitch shifts
 were added. The strongest real badminton take serves as the game's smash sound;
-the source does not label its individual stroke types. The shoe friction and
-generic studio footstep are not claimed to be recordings of a badminton match.
+the source does not label its individual stroke types. The generic studio
+footstep is not claimed to be a recording of a badminton match.
 `scripts/prepare-recorded-audio.py` records exact crops and original hashes.
