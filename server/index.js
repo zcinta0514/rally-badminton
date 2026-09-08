@@ -12,7 +12,7 @@ import { createPwaBuild, validateWebSocketURL } from '../scripts/build-pwa.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const mime={'.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.txt':'text/plain; charset=utf-8','.webmanifest':'application/manifest+json; charset=utf-8'};
 
-export function createServer({port=0,host='127.0.0.1',tls=null,allowedOrigins=[],allowMissingOrigin=true,wsUrl='',leaderboardPath=null,leaderboardOnError}={}){
+export function createServer({port=0,host='127.0.0.1',tls=null,allowedOrigins=[],allowMissingOrigin=true,wsUrl='',peerMode=true,leaderboardPath=null,leaderboardOnError}={}){
   const originSet=new Set(allowedOrigins.map(value=>{
     let url;try{url=new URL(value);}catch{throw new Error('Invalid allowed origin');}
     if(!['http:','https:'].includes(url.protocol)||value!==url.origin)throw new Error('Allowed origin must include only scheme and host (no path or wildcard)');
@@ -66,7 +66,7 @@ export function createServer({port=0,host='127.0.0.1',tls=null,allowedOrigins=[]
   wss.on('connection',socket=>rooms.attach(socket));
   return {server,rooms,leaderboard,
     get url(){const address=server.address();return address?`${tls?'https':'http'}://${host==='0.0.0.0'?'127.0.0.1':host}:${address.port}`:null;},
-    async listen(){build=await createPwaBuild({root,wsUrl});return new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,host,()=>{server.removeListener('error',reject);resolve();});});},
+    async listen(){build=await createPwaBuild({root,wsUrl,peerMode});return new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,host,()=>{server.removeListener('error',reject);resolve();});});},
     async close(){rooms.close();await leaderboard.flush();await new Promise(resolve=>wss.close(()=>resolve()));server.closeAllConnections();await new Promise(resolve=>server.close(()=>resolve()));}
   };
 }
@@ -78,7 +78,7 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
   const tls=keyPath?{key:await readFile(keyPath),cert:await readFile(certPath)}:null;
   const app=createServer({port,host:process.env.HOST||'0.0.0.0',tls,
     allowedOrigins:(process.env.ALLOWED_ORIGINS||'').split(',').map(value=>value.trim()).filter(Boolean),
-    allowMissingOrigin:process.env.ALLOW_MISSING_ORIGIN==='1',wsUrl:process.env.PUBLIC_WS_URL||'',
+    allowMissingOrigin:process.env.ALLOW_MISSING_ORIGIN==='1',wsUrl:process.env.PUBLIC_WS_URL||'',peerMode:process.env.PUBLIC_PEER_MODE!=='0',
     leaderboardPath:path.resolve(process.env.LEADERBOARD_PATH||path.join(root,'data','leaderboard.json'))});
   app.listen().then(()=>{
     console.log(`开拍 RALLY 已启动：${app.url}`);

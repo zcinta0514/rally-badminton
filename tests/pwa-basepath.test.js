@@ -19,6 +19,8 @@ test('project build scopes every resource and hashes the final manifest and runt
   assert.ok(manifest.icons.every(icon=>icon.src.startsWith(basePath+'icons/')));
   const context=vm.createContext({});vm.runInContext(build.assets.get(basePath+'runtime-config.js').toString(),context);
   assert.equal(context.RALLY_CONFIG.demoMode,true);assert.equal(context.RALLY_CONFIG.wsUrl,'');
+  assert.equal(context.RALLY_CONFIG.peerMode,true);
+  assert.ok(build.assets.has(basePath+'vendor/peerjs.min.js'));
   for(const asset of build.inventory)assert.equal(asset.hash,createHash('sha256').update(build.assets.get(asset.url)).digest('hex'));
   const html=build.assets.get(basePath).toString();
   for(const match of html.matchAll(/(?:href|src)="([^"#]+)"/g)){
@@ -42,6 +44,8 @@ test('static export strips project prefix from disk paths and preserves licenses
   assert.deepEqual(await readFile(path.join(outputDir,'src','entry.js')),build.assets.get(build.basePath+'src/entry.js'));
   assert.deepEqual(await readFile(path.join(outputDir,'sw.js')),build.worker);
   assert.match(await readFile(path.join(outputDir,'vendor','three.LICENSE.txt'),'utf8'),/MIT License/);
+  assert.match(await readFile(path.join(outputDir,'vendor','peerjs.LICENSE.txt'),'utf8'),/MIT/);
+  assert.match(await readFile(path.join(outputDir,'vendor','peerjs-dependencies.LICENSE.txt'),'utf8'),/webrtc-adapter/);
   assert.equal((await readdir(outputDir)).includes('rally-badminton'),false);
   assert.equal((await readdir(outputDir)).includes('server'),false);
   assert.equal((await readdir(outputDir)).includes('data'),false);

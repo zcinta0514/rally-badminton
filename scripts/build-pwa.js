@@ -25,9 +25,10 @@ export function validateBasePath(value = '/') {
 
 // A build captures bytes once. The Node server and exported static site both serve
 // this exact asset set, so a worker never caches a mixture while files are edited.
-export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath = '/', demoMode = false } = {}) {
+export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath = '/', demoMode = false, peerMode = true } = {}) {
   basePath = validateBasePath(basePath);
   if (typeof demoMode !== 'boolean' || demoMode && wsUrl) throw new Error('Demo mode requires a boolean flag and no WebSocket endpoint');
+  if (typeof peerMode !== 'boolean') throw new Error('Peer mode requires a boolean flag');
   wsUrl = validateWebSocketURL(wsUrl);
   const assets = new Map();
   const publicURL = url => basePath + url.slice(1);
@@ -36,7 +37,8 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   const manifest = JSON.parse(await readFile(path.join(root, 'manifest.webmanifest'), 'utf8'));
   manifest.id = basePath; manifest.scope = basePath; manifest.start_url = basePath + '?source=homescreen';
   manifest.icons = manifest.icons.map(icon => ({...icon, src:publicURL(icon.src)}));
-  if (demoMode) manifest.description = '人机练习与局域网好友对战入口，缓存后可离线人机。';
+  if (peerMode) manifest.description = '人机练习与双手机好友对打，无需电脑；配对需联网，缓存后可离线人机。';
+  else if (demoMode) manifest.description = '人机练习，缓存后可离线游玩。';
   assets.set(publicURL('/manifest.webmanifest'), Buffer.from(JSON.stringify(manifest, null, 2) + '\n'));
   async function walk(directory) {
     for (const item of (await readdir(path.join(root, directory), { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
@@ -49,7 +51,13 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   await add('/vendor/three.module.js', 'node_modules/three/build/three.module.js');
   await add('/vendor/three.core.js', 'node_modules/three/build/three.core.js');
   await add('/vendor/three.LICENSE.txt', 'node_modules/three/LICENSE');
-  assets.set(publicURL('/runtime-config.js'), Buffer.from(`globalThis.RALLY_CONFIG=Object.freeze(${JSON.stringify({ wsUrl, basePath, demoMode })});\n`));
+  await add('/vendor/peerjs.min.js', 'node_modules/peerjs/dist/peerjs.min.js');
+  await add('/vendor/peerjs.LICENSE.txt', 'node_modules/peerjs/LICENSE');
+  const peerNotices=[];
+  for(const [name,file] of [['@msgpack/msgpack','LICENSE'],['eventemitter3','LICENSE'],['peerjs-js-binarypack','LICENSE'],['webrtc-adapter','LICENSE.md'],['sdp','LICENSE']])
+    peerNotices.push(`${name}\n\n${await readFile(path.join(root,'node_modules',name,file),'utf8')}`);
+  assets.set(publicURL('/vendor/peerjs-dependencies.LICENSE.txt'),Buffer.from(peerNotices.join('\n\n---\n\n')));
+  assets.set(publicURL('/runtime-config.js'), Buffer.from(`globalThis.RALLY_CONFIG=Object.freeze(${JSON.stringify({ wsUrl, basePath, demoMode, peerMode })});\n`));
   const inventory = [...assets].sort(([a], [b]) => a.localeCompare(b)).map(([url, bytes]) => ({ url, hash: digest(bytes) }));
   const template = await readFile(path.join(root, 'scripts/service-worker.js'), 'utf8');
   const version = digest(JSON.stringify(inventory) + template).slice(0, 16);
@@ -72,6 +80,6 @@ export async function exportPwaBuild(options = {}) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  const build = await exportPwaBuild({ wsUrl: process.env.PUBLIC_WS_URL || '', basePath: process.env.PUBLIC_BASE_PATH || '/', demoMode: process.env.PUBLIC_DEMO_MODE === '1' });
+  const build = await exportPwaBuild({ wsUrl: process.env.PUBLIC_WS_URL || '', basePath: process.env.PUBLIC_BASE_PATH || '/', demoMode: process.env.PUBLIC_DEMO_MODE === '1', peerMode: process.env.PUBLIC_PEER_MODE !== '0' });
   console.log(`PWA ${build.version}: ${build.assets.size} local resources exported to dist/`);
 }

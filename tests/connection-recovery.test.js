@@ -32,9 +32,10 @@ class Target {
   }
 }
 
-async function fixture(phase = 'serve', {demoMode=false, search=''} = {}) {
+async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false} = {}) {
   let now = 1000, nextId = 0, frame, controls, view;
-  const timers = new Map(), sockets = [], elements = new Map();
+  const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [];
+  let resolvePeer;
   const element = id => {
     if (!elements.has(id)) {
       const target = Object.assign(new Target(), {
@@ -84,11 +85,20 @@ async function fixture(phase = 'serve', {demoMode=false, search=''} = {}) {
   const context = vm.createContext({
     ...game, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
+    createPeerRecords:()=>({publicId:async()=> 'public123abc',record:()=>({status:'local'}),list:()=>({entries:[],storage:'local'})}),
+    openPeerRoom:async options=>{
+      const session={send:message=>{session.sent.push(message);return true;},close(){session.closed=true;},sent:[],isHost:options.type==='create'};
+      peerCalls.push({options,session});
+      if(pendingPeer)await new Promise(resolve=>{resolvePeer=resolve;});
+      options.onMessage({type:'room',code:'ABCDE',slot:0,sessionId:'test-session',players:[{name:options.name,playerId:options.playerId,connected:true},null]});
+      return session;
+    },
     createPlayerProfile: () => createPlayerProfile({ storage: null, crypto: webcrypto }),
     createLeaderboard: options => createLeaderboard({ ...options, fetchImpl: async () => ({ ok: true, json: async () => ({ entries: [], storage: 'persistent' }) }) }),
-    console, structuredClone, URLSearchParams, document, WebSocket: Socket, CourtView: View, Controls: Input, RALLY_CONFIG:{demoMode},
+    console, structuredClone, URL, URLSearchParams, AbortController, document, WebSocket: Socket, CourtView: View, Controls: Input, RALLY_CONFIG:{demoMode,peerMode},
     performance: { now: () => now }, window: Object.assign(new Target(), { devicePixelRatio: 1 }),
-    location: { pathname: '/', search, origin: 'http://localhost' }, history: { replaceState() {} },
+    location: { pathname: '/rally-badminton/', href:'http://localhost/rally-badminton/'+search, search, origin: 'http://localhost' }, history: { replaceState() {} },
+    navigator:{clipboard:{writeText:async value=>invites.push(value)}},
     ArenaAudio: class { reset() {} unlock() {} update() {} setVisible() {} },
     initPWA: () => ({ setMatchActive() {} }), getWebSocketURL: () => 'ws://localhost/ws',
     bindCameraSettings() {}, ResizeObserver: class { observe() {} },
@@ -100,7 +110,7 @@ async function fixture(phase = 'serve', {demoMode=false, search=''} = {}) {
   assert.equal(typeof frame, 'function', 'the real application must initialize its render loop');
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
-  if(demoMode)return {element,click,draw,controls,view,document,sockets,visibleDialogs:()=>dialogs.filter(dialog=>!dialog.hidden).map(dialog=>dialog.id)};
+  if(demoMode||peerMode)return {element,click,draw,controls,view,document,sockets,peerCalls,invites,resolvePeer:()=>resolvePeer?.(),visibleDialogs:()=>dialogs.filter(dialog=>!dialog.hidden).map(dialog=>dialog.id)};
   element('player-name').value = '球友A';
   const creating = click('create-room'); sockets.at(-1).open(); await creating;
   const room = { type: 'room', code: 'ABCDE', slot: 0, token: 'original-token',
@@ -135,17 +145,61 @@ test('static page explains LAN room codes without pretending to host a room and 
   assert.equal(f.element('result-leaderboard').hidden,true);
 });
 
+test('static peer page opens the real five-code room flow without a game server or private player key', async () => {
+  const f=await fixture('serve',{demoMode:true,peerMode:true,search:'?room=ABCDE'});
+  assert.deepEqual(f.visibleDialogs(),['friends-dialog']);
+  assert.equal(f.element('room-code').value,'ABCDE');
+  f.element('player-name').value='Phone A';
+  await f.click('create-room');
+  assert.equal(f.sockets.length,0);
+  assert.equal(f.peerCalls.length,1);
+  assert.equal(f.peerCalls[0].options.name,'Phone A');
+  assert.equal(f.peerCalls[0].options.playerId,'public123abc');
+  assert.equal('code' in f.peerCalls[0].options,false,'creating never reuses a code from the join input');
+  assert.equal('playerKey' in f.peerCalls[0].options,false);
+  assert.deepEqual(f.visibleDialogs(),['waiting-dialog']);
+  await f.click('copy-invite');
+  assert.equal(f.invites[0],'http://localhost/rally-badminton/?room=ABCDE');
+  f.click('leave-waiting');
+  assert.equal(f.peerCalls[0].session.closed,true);
+});
+
+test('cancelling a pending peer room cannot open a late room over a new AI match', async () => {
+  const f=await fixture('serve',{demoMode:true,peerMode:true,pendingPeer:true});
+  f.element('player-name').value='Phone A';
+  const creating=f.click('create-room');
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(f.peerCalls.length,1);
+  f.click('start-ai');f.draw();
+  assert.equal(f.peerCalls[0].options.signal.aborted,true);
+  f.resolvePeer();await creating;
+  assert.equal(f.document.body.dataset.screen,'match');
+  assert.deepEqual(f.visibleDialogs(),[]);
+  assert.equal(f.peerCalls[0].session.closed,true);
+});
+
 test('online entry sends a private random player identity and prevents blank display names before connecting', async () => {
   const f = await fixture();
   const create = f.socket().sent.find(message => message.type === 'create');
   assert.equal(create.name, '球友A');
   assert.match(create.playerKey, /^[a-f0-9]{64}$/);
+  assert.equal(f.element('create-room').disabled,false);
+  assert.equal(f.element('join-room').disabled,false);
   f.click('leave-game');
   f.element('player-name').value = '   ';
   await f.click('create-room');
   assert.match(f.element('toast').textContent, /昵称/);
   assert.equal(f.element('player-name').focused, true);
   assert.equal(f.document.body.dataset.screen, 'menu');
+});
+
+test('legacy WebSocket creation failure restores both room buttons and shows the connection error', async () => {
+  const f=await fixture();f.click('leave-game');
+  f.element('player-name').value='Again';const creating=f.click('create-room');
+  f.socket().emit('error');await creating;
+  assert.match(f.element('toast').textContent,/无法连接/);
+  assert.equal(f.element('create-room').disabled,false);
+  assert.equal(f.element('join-room').disabled,false);
 });
 
 test('online results wait for server persistence and closing the leaderboard returns to the result without a dialog loop', async () => {

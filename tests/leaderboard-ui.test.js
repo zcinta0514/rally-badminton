@@ -65,3 +65,19 @@ test('a closed or superseded leaderboard ignores late responses', async () => {
   await loading;
   assert.equal(f.ids.get('leaderboard-rows').children.length, 0);
 });
+
+test('peer result and ranking copy disclose local scope, retention and memory-only storage', async () => {
+  assert.match(resultRecordText({ status: 'local' }), /本机好友战绩/);
+  assert.match(resultRecordText({ status: 'local-memory' }), /关闭.*丢失/);
+  for (const storage of ['local', 'local-memory']) {
+    const f = fixture(async () => ({ ok: true, json: async () => ({ entries: [entry], storage }) }));
+    await f.board.load({ selfId: entry.playerId });
+    assert.match(f.ids.get('leaderboard-status').textContent, /本机好友战绩/);
+    assert.match(f.ids.get('leaderboard-storage').textContent, /仅保存本机参加的对局，与服务器榜单独立/);
+    assert.match(f.ids.get('leaderboard-storage').textContent, /500/);
+    if (storage === 'local-memory') assert.match(f.ids.get('leaderboard-storage').textContent, /关闭.*丢失/);
+  }
+  const empty = fixture(async () => ({ ok: true, json: async () => ({ entries: [], storage: 'local' }) }));
+  await empty.board.load();
+  assert.match(empty.ids.get('leaderboard-status').textContent, /本机好友战绩.*暂无/);
+});

@@ -38,6 +38,7 @@ jobs:
         env:
           PUBLIC_BASE_PATH: '/${{ github.event.repository.name }}/'
           PUBLIC_DEMO_MODE: '1'
+          PUBLIC_PEER_MODE: '1'
           PUBLIC_WS_URL: ''
 
       - name: Upload static site

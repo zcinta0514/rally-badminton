@@ -7,15 +7,20 @@ import { bindCameraSettings } from './camera-settings.js';
 import { initPWA, getWebSocketURL } from './pwa.js';
 import { createPlayerProfile, normalizePlayerName } from './player-profile.js';
 import { createLeaderboard, getLeaderboardURL, resultRecordText } from './leaderboard.js';
+import { openPeerRoom } from './peer-network.js';
+import { createPeerRecords } from './peer-records.js';
 import { resolveShotAim, toWorldInput } from './play-input.js';
 import { createMatch, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, ROLES, predictLanding, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
 
 const $=id=>document.getElementById(id);
 const demoMode=globalThis.RALLY_CONFIG?.demoMode===true;
+const peerMode=globalThis.RALLY_CONFIG?.peerMode===true;
+const practiceOnly=demoMode&&!peerMode;
 const names={easy:'入门',medium:'进阶',hard:'高手'};
 const roleNotes={balanced:'均衡的移动、力量与恢复，适合初次上场。',swift:'移动更快、恢复更快；杀球力量稍弱，靠跑位创造机会。',power:'杀球更重、体力上限更高；步速和恢复较慢，要选好时机。'};
 const settings={role:'balanced',difficulty:'easy',target:5,ruleset:'quick'};
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
+let peerSession=null,peerAttempt=null,peerDisconnected=false;
 let pendingShot=null,aim=0,dragAim=null,view,controls,lastFrame=performance.now(),accumulator=0,lastSend=0;
 let toastTimer,helpOpen=false,rematchRequested=false,lastPhase='',lastHit=0,lastPoint=0,connecting=false,reconnecting=false,resultPending=false;
 let reconnectError='';
@@ -29,23 +34,28 @@ const performanceMonitor=new PerformanceMonitor({devicePixelRatio:window.deviceP
 const pwa=initPWA({fullscreenButton:$('fullscreen'),showToast});
 let lastRtt=null,lastDiagnostics=0,appliedQuality='';
 const setText=(id,text)=>{if($(id).textContent!==String(text))$(id).textContent=text;};
-const leaderboard=createLeaderboard({document,getURL:()=>getLeaderboardURL(getWebSocketURL())});
+const peerRecords=peerMode?createPeerRecords():null;
+const leaderboard=createLeaderboard(peerMode?{document,getURL:()=>'',fetchImpl:async()=>({ok:true,json:async()=>peerRecords.list()})}:{document,getURL:()=>getLeaderboardURL(getWebSocketURL())});
 function preparePlayerProfile(){
   playerProfile??=createPlayerProfile();
-  setText('player-profile-note',playerProfile.persistent?'此名称会显示在比分和榜单中。战绩绑定当前浏览器；换设备或清除网站数据后不自动同步。':'浏览器未允许保存身份。本页可正常记分，关闭后将无法接续此身份的战绩。');
+  setText('player-profile-note',playerProfile.persistent?(peerMode?'此名称显示在比分和本机好友榜中；战绩保存在当前浏览器。':'此名称会显示在比分和榜单中。战绩绑定当前浏览器；换设备或清除网站数据后不自动同步。'):'浏览器未允许保存身份。本页可正常记分，关闭后将无法接续此身份的战绩。');
   return playerProfile;
 }
-if(demoMode){
+if(practiceOnly){
   for(const id of ['open-leaderboard','result-leaderboard'])$(id).hidden=true;
   setText('menu-intro','与人机练习，或通过局域网和好友 1V1。');
   setText('open-friends','局域网 1V1 说明 ↗');
 }else try{$('player-name').value=preparePlayerProfile().name;}catch(error){setText('player-profile-note',error.message);}
+if(peerMode){
+  setText('menu-intro','与人机练习，或和好友双手机对打，无需电脑。');
+  setText('leaderboard-title','本机好友榜。');
+}else setText('friends-network-note','同一局域网网址 · 主机电脑需保持运行');
 function dialog(id){
   for(const el of document.querySelectorAll('.dialog'))el.hidden=el.id!==id;
   $('dialog-backdrop').hidden=!id;
 }
 function openLeaderboard(from){
-  if(demoMode)return;
+  if(practiceOnly)return;
   if(from==='result'&&state?.phase!=='over')return;
   if(from==='menu'&&mode!=='menu')return;
   leaderboardReturn=from;dialog('leaderboard-dialog');leaderboard.load({selfId:currentPlayerId});
@@ -109,19 +119,21 @@ function exitToMenu(){
   resultPending=false;
   leaderboardReturn=null;leaderboard.cancel();leaderboardRecord=null;
   if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify({type:'leave'}));
-  netGeneration++;socket?.close();socket=null;room=null;connecting=false;reconnecting=false;reconnectError='';
+  netGeneration++;peerAttempt?.abort();peerAttempt=null;peerSession?.close();peerSession=null;peerDisconnected=false;
+  socket?.close();socket=null;room=null;setRoomBusy(false);reconnecting=false;reconnectError='';
   mode='menu';side=0;state=null;pendingShot=null;helpOpen=false;rematchRequested=false;controls.reset();controls.setEnabled(false);
   arenaAudio.reset();
   playback.reset();lastRtt=null;
   $('countdown').hidden=true;setScreen('menu');dialog(null);history.replaceState(null,'',location.pathname);
 }
 function startAI(){
+  if(peerAttempt||peerSession)exitToMenu();
   playback.reset();lastRtt=null;
   mode='ai';side=0;state=createMatch({target:settings.target,ruleset:settings.ruleset,roles:[settings.role,'balanced'],difficulty:settings.difficulty,seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
 }
 const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},side,dragAim??aim);
-function send(message){if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(message));}
+function send(message){if(peerMode)peerSession?.send(message);else if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(message));}
 function fireShot(request){
   if(!state||!['serve','rally'].includes(state.phase))return;
   const selectedAim=resolveShotAim(request,aim);
@@ -147,7 +159,7 @@ function handleNetwork(message){
     if(!state){mode='waiting';dialog('waiting-dialog');}
   }else if(message.type==='state'){
     if(!playback.receive(message.state,performance.now(),message))return;
-    leaderboardRecord=message.leaderboard||null;
+    leaderboardRecord=peerMode&&message.state.phase==='over'?peerRecords.record({sessionId:message.sessionId||room?.sessionId,matchId:message.matchId,players:room?.players,state:message.state,selfId:currentPlayerId,abandoned:message.abandoned}):message.leaderboard||null;
     const entering=mode!=='online'||(state?.phase==='over'&&message.state.phase!=='over');
     if(reconnecting)lastPhase='';
     state=message.state;mode='online';reconnecting=false;reconnectError='';
@@ -156,8 +168,9 @@ function handleNetwork(message){
     showToast(message.message);connecting=false;helpOpen=false;
     if(reconnecting){reconnectError=message.message;controls.setEnabled(false);showConnectionRecovery();}
   }else if(message.type==='pong'){
-    lastRtt=Math.max(0,Date.now()-message.at);
-    setText('connection',`${lastRtt} ms · 联机`);
+    // Host commands are local to its authority; their turnaround is not peer RTT.
+    lastRtt=peerMode&&peerSession?.isHost?null:Math.max(0,Date.now()-message.at);
+    setText('connection',lastRtt===null?'手机直连':`${lastRtt} ms · ${peerMode?'手机直连':'联机'}`);
   }else if(message.type==='rematch'){
     rematchRequested=message.ready.includes(side);
     if(state?.phase==='over')setText('rematch',rematchRequested?'等待球友同意…':message.ready.length?'球友邀你再战 · 开始 ↗':'再来一局 ↗');
@@ -186,22 +199,54 @@ async function connect(){
   });
 }
 async function roomAction(type){
-  if(demoMode){dialog('lan-dialog');return;}
+  if(practiceOnly){dialog('lan-dialog');return;}
   if(connecting)return;
   const name=normalizePlayerName($('player-name').value);
   if(!name){showToast('先输入你的昵称或常用玩家 ID');$('player-name').focus();return;}
   const code=$('room-code').value.trim().toUpperCase();
   if(type==='join'&&!/^[A-Z2-9]{5}$/.test(code)){showToast('请输入 5 位房间码');return;}
-  connecting=true;setText(type==='create'?'create-room':'join-room','连接中…');
-  try{const profile=preparePlayerProfile();$('player-name').value=profile.saveName(name);preparePlayerProfile();await connect();send({type,name,playerKey:profile.playerKey,role:settings.role,target:settings.target,ruleset:settings.ruleset,code});}
-  catch(error){showToast(error.message);}
-  finally{connecting=false;setText('create-room','创建房间 ＋');setText('join-room','加入 ↗');}
+  setRoomBusy(true,type);
+  let generation=peerMode?++netGeneration:netGeneration;
+  const attempt=peerMode?new AbortController():null;
+  if(attempt){peerAttempt=attempt;peerDisconnected=false;}
+  try{
+    const profile=preparePlayerProfile();$('player-name').value=profile.saveName(name);preparePlayerProfile();
+    const options={type,name,role:settings.role,target:settings.target,ruleset:settings.ruleset,...(type==='join'?{code}:{})};
+    if(peerMode){
+      const playerId=await peerRecords.publicId(profile.playerKey);
+      if(generation!==netGeneration)return;
+      const session=await openPeerRoom({...options,playerId,signal:attempt.signal,
+        onMessage:message=>{if(generation===netGeneration)handleNetwork(message);},
+        onStatus:text=>{if(generation===netGeneration)setText('waiting-status',text);},
+        onClose:error=>{if(generation===netGeneration)peerClosed(error);}});
+      if(generation!==netGeneration){session.close();return;}
+      peerSession=session;peerAttempt=null;
+    }else{const connection=connect();generation=netGeneration;await connection;if(generation!==netGeneration)return;send({...options,playerKey:profile.playerKey});}
+  }catch(error){if(generation===netGeneration&&!attempt?.signal.aborted){showToast(error.message);if(peerMode&&!state){room=null;mode='menu';dialog('friends-dialog');}}}
+  finally{if(generation===netGeneration){peerAttempt=null;setRoomBusy(false);}}
+}
+function setRoomBusy(busy,type){
+  connecting=busy;
+  $('create-room').disabled=busy;$('join-room').disabled=busy;
+  setText('create-room',busy&&type==='create'?'正在创建…':'创建房间 ＋');
+  setText('join-room',busy&&type==='join'?'正在连接…':'加入 ↗');
+}
+function peerClosed(error){
+  peerDisconnected=true;peerSession?.close();peerSession=null;controls.reset();
+  if(!state){exitToMenu();showToast(error?.message||'房间已断开，请重新创建');return;}
+  if(state.phase!=='over'){
+    finishMatch(state,null,error?.message||'手机连接已断开，请重新建房');
+    playback.reset();playback.receive(state,performance.now());
+    leaderboardRecord={status:'excluded',reason:'abandoned'};lastPhase='';
+  }
+  setText('connection','连接已断开');
 }
 function closeHelpOrSetup(){
+  if(peerAttempt){netGeneration++;peerAttempt.abort();peerAttempt=null;setRoomBusy(false);}
   helpOpen=false;if(state?.phase==='paused')dialog('pause-dialog');else dialog(null);
 }
 $('start-ai').addEventListener('click',startAI);
-$('open-friends').addEventListener('click',()=>{dialog(demoMode?'lan-dialog':'friends-dialog');});
+$('open-friends').addEventListener('click',()=>{dialog(practiceOnly?'lan-dialog':'friends-dialog');});
 $('open-leaderboard').addEventListener('click',()=>openLeaderboard('menu'));
 $('result-leaderboard').addEventListener('click',()=>openLeaderboard('result'));
 $('close-leaderboard').addEventListener('click',closeLeaderboard);
@@ -213,6 +258,7 @@ $('pause').addEventListener('click',requestPause);
 $('resume').addEventListener('click',()=>{if(mode==='online')send({type:'resume'});else if(state)resumeMatch(state);});
 for(const id of ['leave-game','back-menu','leave-waiting'])$(id).addEventListener('click',exitToMenu);
 $('rematch').addEventListener('click',()=>{
+  if(peerMode&&peerDisconnected){exitToMenu();dialog('friends-dialog');return;}
   if(mode==='online'){send({type:'rematch'});rematchRequested=true;setText('rematch','等待球友同意…');}
   else startAI();
 });
@@ -223,7 +269,8 @@ $('help').addEventListener('click',()=>{
   helpOpen=true;dialog('help-dialog');
 });
 $('copy-invite').addEventListener('click',async()=>{
-  const invite=`${location.origin}/?room=${room.code}`;
+  if(!room)return;
+  const address=new URL(location.pathname,location.origin);address.searchParams.set('room',room.code);const invite=address.href;
   try{await navigator.clipboard.writeText(invite);showToast('邀请链接已复制');}
   catch{window.prompt('复制链接发给球友：',invite);}
 });
@@ -314,7 +361,7 @@ function updateUI(info,state){
     if(state.phase==='paused'){
       setText('pause-title','休息一下。');
       setText('resume','准备继续 ↗');
-      setText('pause-description',mode==='ai'?'每人每场可暂停一次，最多 30 秒。':'每人每场一次；双方准备后继续，断线球友可在倒计时内重连。');
+      setText('pause-description',mode==='ai'?'每人每场可暂停一次，最多 30 秒。':peerMode?'每人每场一次，最多 30 秒；双方准备后继续，请保持游戏在前台。':'每人每场一次；双方准备后继续，断线球友可在倒计时内重连。');
       dialog(helpOpen?'help-dialog':'pause-dialog');
     }else if(state.phase==='over'){
       setText('result-title',state.winner===null?'本局结束。':state.winner===side?'这一局，你拿下。':'下一局，再争取。');
@@ -331,6 +378,7 @@ function updateUI(info,state){
     setText('pause-time',Math.ceil(state.pause.remaining));
     $('resume').disabled=mode==='online'&&(reconnecting||room?.players.some(p=>!p?.connected));
   }
+  if(peerMode&&peerDisconnected&&state.phase==='over')setText('rematch','重新建房 ↗');
   if(reconnecting)showConnectionRecovery();
 }
 
@@ -397,7 +445,7 @@ try{
   }
   requestAnimationFrame(frame);
   const invited=new URLSearchParams(location.search).get('room');
-  if(invited&&!demoMode){$('room-code').value=invited.toUpperCase().slice(0,5);dialog('friends-dialog');}
+  if(invited&&!practiceOnly){$('room-code').value=invited.toUpperCase().slice(0,5);dialog('friends-dialog');}
 }catch(error){
   console.error(error);$('loading').textContent='球场加载失败：'+error.message+'。请使用支持 WebGL 2 的浏览器后刷新。';
 }
