@@ -44,7 +44,8 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
     for (const item of (await readdir(path.join(root, directory), { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
       const file = `${directory}/${item.name}`;
       if (item.isDirectory()) await walk(file);
-      else if (/\.(js|css|svg|png)$/.test(item.name)) await add('/' + file, file);
+      else if (/\.(js|css|svg|png)$/.test(item.name) ||
+        directory === 'src/audio' && (/\.wav$/.test(item.name) || item.name === 'LICENSE.txt')) await add('/' + file, file);
     }
   }
   for (const dir of ['src', 'shared', 'icons']) await walk(dir);

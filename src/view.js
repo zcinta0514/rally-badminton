@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { fitCourtViewport, getShuttleEdgeHint } from './court-layout.js';
 import { normalizeCameraSettings } from './camera-settings.js';
 import { makeAthlete, updateAthlete } from './athlete.js';
-import { makeArena, makeCourtMaterial } from './arena.js';
+import { makeArena, makeCourtMaterial, resetArenaCrowd, updateArenaCrowd } from './arena.js';
 import { makeNetVisual, updateNetVisual } from './net-visual.js';
 import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
 import { COURT } from '../shared/game.js';
@@ -96,6 +96,8 @@ export class CourtView {
     this.lastStateTime = null;
     this.lastHit = null;
     this.elapsed = 0;
+    this.onVisibilityChange = () => resetArenaCrowd(this.arena);
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
     this.resize();
   }
 
@@ -242,9 +244,14 @@ export class CourtView {
     this.hintDisplayTime = null;
   }
 
+  resetCrowd() {
+    resetArenaCrowd(this.arena);
+  }
+
   setMode(mode) {
     if(this.mode===mode)return;
     this.mode=mode;
+    this.resetCrowd();
     if(mode!=='match')this.edgeIndicator.hidden=true;
     this.resize();
   }
@@ -398,6 +405,7 @@ export class CourtView {
   render(state, side=0, dt=1/60, info={}) {
     if(!state?.players||!state.shuttle)return;
     dt=clamp(Number.isFinite(dt)?dt:1/60,0,.06);
+    updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
     if(this.cameraSide!==side)this.updateCamera(side);
     const reset=!this.initialized||state.pointId!==this.lastPoint||state.time<this.lastStateTime||
       (state.phase==='serve'&&this.lastPhase!=='serve');
@@ -471,6 +479,7 @@ export class CourtView {
     this.renderer.render(this.scene,this.camera);
   }
   dispose() {
+    if (this.onVisibilityChange) globalThis.document?.removeEventListener('visibilitychange', this.onVisibilityChange);
     this.edgeIndicator.remove();
     const geometries = new Set();
     const materials = new Set();

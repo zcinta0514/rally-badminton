@@ -73,9 +73,12 @@ function showConnectionRecovery(){
   dialog('pause-dialog');
 }
 function unlockAudio(){
-  if(sound)arenaAudio.unlock();
+  if(sound&&(!arenaAudio.context||arenaAudio.context.state!=='running'))void arenaAudio.unlock();
 }
-document.addEventListener('pointerdown',unlockAudio,{once:true});
+// Safari can interrupt an already-unlocked device after a background/lock cycle.
+// Retry inside the next real gesture; a running or muted device needs no work.
+document.addEventListener('pointerdown',unlockAudio);
+document.addEventListener('keydown',unlockAudio);
 
 function groupChoice(container,attribute,value){
   for(const button of $(container).querySelectorAll('button')){
@@ -108,7 +111,7 @@ function setScreen(screen){
 function enterMatch(){
   resultPending=false;
   leaderboardReturn=null;leaderboard.cancel();
-  lastPhase='';lastHit=state?.hitId||0;lastPoint=state?.pointId||0;arenaAudio.reset();
+  lastPhase='';lastHit=state?.hitId||0;lastPoint=state?.pointId||0;arenaAudio.reset();view?.resetCrowd();
   rematchRequested=false;helpOpen=false;pendingShot=null;dragAim=null;dragDepth=0;gestureOrigin=null;selectedShot='clear';selectAim(0);accumulator=0;lastFrame=performance.now();
   controls.reset();setScreen('match');dialog(null);unlockAudio();
   const dots=document.querySelectorAll('.player-dot');

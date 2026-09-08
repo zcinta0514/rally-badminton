@@ -1,0 +1,82 @@
+Recorded audio credits and license
+=================================
+
+The WAV recordings in this directory are distributed under CC0 1.0 Universal,
+not the MIT license used for the original game code. The source recording pages
+and the publisher's license page explicitly allow editing, redistribution and
+commercial use without asking permission. Attribution is optional under CC0;
+the credits below are retained to document provenance.
+
+CC0 1.0 Universal:
+https://creativecommons.org/publicdomain/zero/1.0/
+Publisher's license statement:
+https://bigsoundbank.com/licenses.html
+Source and license pages verified on 2026-09-09.
+
+hit-1.wav, hit-2.wav, smash-1.wav
+  Source: "Badminton: racket shuttlecock" (#0537)
+  Recordist: Joseph SARDIN
+  Publisher: BigSoundBank / LaSonotheque
+  Page: https://bigsoundbank.com/badminton-racket-shuttlecock-s0537.html
+  Original: https://bigsoundbank.com/UPLOAD/bwf-en/0537.wav
+  License: CC0 1.0 Universal
+  Recording: Four real racket hits on a badminton shuttlecock, recorded in a
+  studio. The first, third and strongest second takes are used respectively.
+  Edits: crops 0.105-0.395 s, 5.680-5.970 s, and 2.760-3.090 s; DC and low-rumble
+  removal, brief edge fades, peak normalization, 44,100 Hz mono 16-bit PCM.
+  "smash" describes its game use. The original recordist did not identify
+  individual stroke types; this is not claimed as a separate smash recording.
+
+squeak-1.wav, squeak-2.wav
+  Source: "Gnashing basketball" (#0938)
+  Recordist: ThibaudVaerman
+  Publisher: BigSoundBank / LaSonotheque
+  Page: https://bigsoundbank.com/grincements-basket-s0938.html
+  Original: https://bigsoundbank.com/UPLOAD/bwf-en/0938.wav
+  License: CC0 1.0 Universal
+  Recording: Real shoes squeaking indoors, described by the source as the
+  friction heard during indoor basketball or handball. Used as sports-shoe
+  friction; not claimed to have been recorded at a badminton match.
+  Edits: isolated crops 0.252-0.552 s and 0.724-0.984 s; stereo downmix, DC and
+  low-rumble removal, edge fades, peak normalization, 44,100 Hz mono 16-bit PCM.
+
+step-1.wav
+  Source: "Man Footsteps on the Wooden Floor" (#0165)
+  Recordist: DavidGreck
+  Publisher: BigSoundBank / LaSonotheque
+  Page: https://bigsoundbank.com/man-footsteps-on-the-wooden-floor-s0165.html
+  Original: https://bigsoundbank.com/UPLOAD/bwf-en/0165.wav
+  License: CC0 1.0 Universal
+  Recording: Human footsteps on a wooden floor, recorded in a studio. The source
+  does not establish a specific shoe sole material or a badminton venue.
+  Edits: crop 3.530-3.790 s; DC removal, gentle 60 Hz high-pass and 3 kHz low-pass,
+  edge fades, peak normalization, 44,100 Hz mono 16-bit PCM.
+
+applause.wav
+  Source: "Applause #1" (#2363)
+  Recordist: Dorian CLAIR
+  Publisher: BigSoundBank / LaSonotheque
+  Page: https://bigsoundbank.com/applause-1-s2363.html
+  Original: https://bigsoundbank.com/UPLOAD/bwf-en/2363.wav
+  License: CC0 1.0 Universal
+  Recording: Several real people applauding indoors.
+  Edits: crop 0.670-1.470 s (0.80 s short burst); DC and low-rumble removal,
+  40 ms fade-in and 200 ms fade-out, peak normalization,
+  22,050 Hz mono 16-bit PCM.
+
+cheer.wav
+  Source: "Shouts and Applauses of Teens #1" (#0236)
+  Recordist: DenisChardonnet
+  Publisher: BigSoundBank / LaSonotheque
+  Page: https://bigsoundbank.com/shouts-and-applauses-of-teens-1-s0236.html
+  Original: https://bigsoundbank.com/UPLOAD/bwf-en/0236.wav
+  License: CC0 1.0 Universal
+  Recording: Real people shouting "Yeah" and applauding, recorded in a studio.
+  Edits: crop 0.005-1.105 s (1.10 s opening "Yeah" cheer burst); stereo downmix,
+  DC and low-rumble removal, 15 ms fade-in and 230 ms fade-out,
+  peak normalization, 22,050 Hz mono 16-bit PCM.
+
+No added oscillator tones, generated crowd noise, pitch shifting, or unrelated
+impact sounds are present in these files. Processing is reproducible with
+scripts/prepare-recorded-audio.py; original downloads and the processing report
+are kept locally under ignored artifacts/audio-sources/.

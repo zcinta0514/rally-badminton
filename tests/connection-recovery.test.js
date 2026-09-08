@@ -33,7 +33,7 @@ class Target {
 }
 
 async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false} = {}) {
-  let now = 1000, nextId = 0, frame, controls, view;
+  let now = 1000, nextId = 0, frame, controls, view, audio;
   const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [];
   let resolvePeer;
   const element = id => {
@@ -69,8 +69,9 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     close() { if (this.readyState === 3) return; this.readyState = 3; this.emit('close'); }
   }
   class View {
-    constructor() { view = this; this.rallyEnding = false; }
+    constructor() { view = this; this.rallyEnding = false; this.crowdResets = 0; }
     setMode(mode) { this.mode = mode; }
+    resetCrowd() { this.crowdResets++; }
     resize() {}
     setQuality() {}
     getRendererMetrics() { return { pixelRatio: 1, shadows: true, calls: 1 }; }
@@ -99,7 +100,11 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     performance: { now: () => now }, window: Object.assign(new Target(), { devicePixelRatio: 1 }),
     location: { pathname: '/rally-badminton/', href:'http://localhost/rally-badminton/'+search, search, origin: 'http://localhost' }, history: { replaceState() {} },
     navigator:{clipboard:{writeText:async value=>invites.push(value)}},
-    ArenaAudio: class { reset() {} unlock() {} update() {} setVisible() {} },
+    ArenaAudio: class {
+      constructor() { audio = this; this.context = null; this.unlocks = 0; }
+      reset() {} update() {} setVisible() {} setEnabled() {}
+      unlock() { this.unlocks++; this.context = { state: 'running' }; }
+    },
     initPWA: () => ({ setMatchActive() {} }), getWebSocketURL: () => 'ws://localhost/ws',
     bindCameraSettings() {}, ResizeObserver: class { observe() {} },
     requestAnimationFrame(callback) { frame = callback; },
@@ -110,7 +115,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   assert.equal(typeof frame, 'function', 'the real application must initialize its render loop');
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
-  if(demoMode||peerMode)return {element,click,draw,controls,view,document,sockets,peerCalls,invites,resolvePeer:()=>resolvePeer?.(),visibleDialogs:()=>dialogs.filter(dialog=>!dialog.hidden).map(dialog=>dialog.id)};
+  if(demoMode||peerMode)return {element,click,draw,controls,view,audio,document,sockets,peerCalls,invites,resolvePeer:()=>resolvePeer?.(),visibleDialogs:()=>dialogs.filter(dialog=>!dialog.hidden).map(dialog=>dialog.id)};
   element('player-name').value = '球友A';
   const creating = click('create-room'); sockets.at(-1).open(); await creating;
   const room = { type: 'room', code: 'ABCDE', slot: 0, token: 'original-token',
@@ -143,6 +148,25 @@ test('static page explains LAN room codes without pretending to host a room and 
   assert.equal(f.document.body.dataset.screen,'match');
   assert.equal(f.view.drawn.phase,'serve');
   assert.equal(f.element('result-leaderboard').hidden,true);
+});
+
+test('later touch and keyboard gestures recover interrupted audio while mute remains respected', async () => {
+  const f = await fixture('serve', { demoMode: true });
+  f.document.emit('pointerdown'); assert.equal(f.audio.unlocks, 1);
+  f.document.emit('pointerdown'); assert.equal(f.audio.unlocks, 1, 'running audio is not resumed on every touch');
+  f.audio.context.state = 'interrupted'; f.document.emit('pointerdown');
+  assert.equal(f.audio.unlocks, 2, 'the initial one-time unlock must not consume later recovery gestures');
+  f.audio.context.state = 'suspended'; f.document.emit('keydown'); assert.equal(f.audio.unlocks, 3);
+  f.click('sound'); f.audio.context.state = 'interrupted';
+  f.document.emit('pointerdown'); f.document.emit('keydown'); assert.equal(f.audio.unlocks, 3);
+});
+
+test('an AI rematch starts a fresh crowd epoch even when the screen mode remains match', async () => {
+  const f = await fixture('serve', { demoMode: true });
+  f.click('start-ai'); f.draw(); assert.equal(f.view.crowdResets, 1);
+  f.click('rematch'); f.draw();
+  assert.equal(f.view.mode, 'match'); assert.equal(f.view.drawn.pointId, 0);
+  assert.equal(f.view.crowdResets, 2, 'each newly entered match resets consumed crowd point IDs');
 });
 
 test('static peer page opens the real five-code room flow without a game server or private player key', async () => {

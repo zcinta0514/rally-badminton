@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { isExcitingPoint } from './arena-feedback.js';
 
 /** Small repeatable rubber-grain texture; works in Node and needs no image request. */
 export function makeCourtMaterial(color = 0x096247) {
@@ -22,12 +23,13 @@ export function makeCourtMaterial(color = 0x096247) {
   return new THREE.MeshStandardMaterial({ color, map: texture, roughness: .98, metalness: 0 });
 }
 
-/** Static venue kept outside the playable floor; no spectator skeletons or shadows. */
+/** Instanced venue kept outside the playable floor; no spectator skeletons or shadows. */
 export function makeArena(scene) {
   const arena = new THREE.Group();
   arena.name = 'indoor-arena';
   scene.add(arena);
   const batches = new Map();
+  const crowdPeople = [];
   const geometries = {
     box: new THREE.BoxGeometry(1, 1, 1),
     head: new THREE.SphereGeometry(1, 8, 6),
@@ -44,7 +46,9 @@ export function makeArena(scene) {
     transform.updateMatrix();
     const matrix = transform.matrix.clone();
     if (frame) matrix.premultiply(frame);
-    batches.get(key).items.push({ matrix, color: new THREE.Color(color) });
+    const items = batches.get(key).items, item = { matrix, color: new THREE.Color(color), key, index: items.length };
+    items.push(item);
+    return item;
   };
   const box = (color, x, y, z, sx, sy, sz, ry = 0) => place('box', color, x, y, z, sx, sy, sz, ry);
   const metal = 0x35454b, seat = 0x264c58, wall = 0x132733, trim = 0x43706c;
@@ -52,17 +56,22 @@ export function makeArena(scene) {
   const contactShadows = [];
   // Every part uses this same local frame, including knees, shoes and hair.
   // seatY is the actual top surface; footY is the floor or raised footrest top.
-  const seated = ({ x, seatY, z, yaw, shirt, skin, footY = 0, role = 'spectator' }) => {
+  const seated = ({ x, seatY, z, yaw, shirt, skin, footY = 0, role = 'spectator', reacts = false }) => {
     const frame = new THREE.Matrix4().makeRotationY(yaw); frame.setPosition(x, seatY, z);
+    const person = reacts ? { frame, parts: [] } : null;
+    const track = (item, kind, side = 0) => {
+      if (person) person.parts.push({ key: item.key, index: item.index, kind, side, rest: item.matrix.clone(),
+        local: frame.clone().invert().multiply(item.matrix) });
+    };
     const part = (kind, color, px, py, pz, sx, sy, sz, rx = 0, rz = 0) =>
       place(kind, color, px, py, pz, sx, sy, sz, 0, rx, rz, false, frame);
     const foot = footY - seatY;
-    part('box', shirt, 0, .34, .015, .36, .48, .25);
-    part('head', skin, 0, .74, -.005, .126, .155, .126);
-    part('head', 0x253038, 0, .80, .018, .128, .095, .128);
+    track(part('box', shirt, 0, .34, .015, .36, .48, .25), 'torso');
+    track(part('head', skin, 0, .74, -.005, .126, .155, .126), 'head');
+    track(part('head', 0x253038, 0, .80, .018, .128, .095, .128), 'hair');
     for (const side of [-1, 1]) {
       if (role === 'spectator') {
-        part('limb', shirt, side * .205, .29, -.075, .062, .35, .062, -.25, side * -.12);
+        track(part('limb', shirt, side * .205, .29, -.075, .062, .35, .062, -.25, side * -.12), 'arm', side);
       } else {
         part('limb', shirt, side * .222, .32, -.015, .061, .30, .061, -.2, side * .08);
         part('limb', skin, side * .224, .205, -.145, .044, .27, .044, -Math.PI / 2);
@@ -76,6 +85,7 @@ export function makeArena(scene) {
     }
     if (role !== 'spectator') part('box', skin, 0, .726, -.13, .032, .046, .039);
     seatedPeople.push({ role, x, z, seatY, footY, yaw });
+    if (person) crowdPeople.push(person);
   };
   const lowChair = (x, z, yaw) => {
     contactShadows.push({ x, z, sx: .46, sz: .5 });
@@ -112,7 +122,8 @@ export function makeArena(scene) {
         const facing = end < 0 ? Math.PI : 0;
         const skin = [0xc99a76, 0xa47758, 0xddb28e, 0x785748][(column + row) % 4];
         const shirt = [0x607e88, 0x9b7761, 0x42635d, 0x9fa6a3, 0x405771, 0x865959][(column * 3 + row) % 6];
-        seated({ x, seatY: .4475 + level, z, yaw: facing, shirt, skin, footY: level });
+        seated({ x, seatY: .4475 + level, z, yaw: facing, shirt, skin, footY: level,
+          reacts: column === 2 || column === 10 });
       }
     }
     // Courtside barrier fronts are graphic blocks, not tiny unreadable lettering.
@@ -181,6 +192,13 @@ export function makeArena(scene) {
     batch.items.forEach((item, index) => { mesh.setMatrixAt(index, item.matrix); mesh.setColorAt(index, item.color); });
     mesh.instanceMatrix.needsUpdate = true;
     mesh.computeBoundingSphere();
+    const movingParts = crowdPeople.flatMap(person => person.parts).filter(part => part.key === name);
+    if (movingParts.length) {
+      for (const part of movingParts) part.mesh = mesh;
+      mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+      // Arm tips travel under 0.6 m; keep a conservative fixed culling envelope.
+      mesh.boundingSphere.radius += .8;
+    }
     arena.add(mesh);
   }
   // Static furniture receives soft grounding even when adaptive quality disables
@@ -204,5 +222,68 @@ export function makeArena(scene) {
     shadows.setMatrixAt(index, transform.matrix);
   });
   shadows.instanceMatrix.needsUpdate = true; shadows.computeBoundingSphere(); arena.add(shadows);
+  arena.userData.crowd = { people: crowdPeople, meshes: [...new Set(crowdPeople.flatMap(person => person.parts.map(part => part.mesh)))],
+    lastPoint: null, lastTime: null, active: false, elapsed: 0,
+    torso: new THREE.Matrix4(), arm: new THREE.Matrix4(), pose: new THREE.Matrix4(), rotation: new THREE.Matrix4(), translation: new THREE.Matrix4() };
   return arena;
+}
+
+function settleCrowd(crowd) {
+  if (crowd.active) {
+    for (const person of crowd.people) for (const part of person.parts) part.mesh.setMatrixAt(part.index, part.rest);
+    for (const mesh of crowd.meshes) mesh.instanceMatrix.needsUpdate = true;
+  }
+  crowd.active = false; crowd.elapsed = 0;
+}
+
+export function resetArenaCrowd(arena) {
+  const crowd = arena?.userData.crowd;
+  if (!crowd) return;
+  settleCrowd(crowd);
+  crowd.lastPoint = null; crowd.lastTime = null;
+}
+
+// Presentational state only: score snapshots start a reaction once, while frame
+// time lets a final point finish after the authoritative simulation has stopped.
+export function updateArenaCrowd(arena, state, dt, { enabled = true, hidden = false } = {}) {
+  const crowd = arena?.userData.crowd;
+  if (!crowd || !state || !Number.isFinite(state.pointId) || !Number.isFinite(state.time)) return;
+  if (crowd.lastPoint === null) {
+    crowd.lastPoint = state.pointId; crowd.lastTime = state.time;
+    return;
+  }
+  if (state.pointId < crowd.lastPoint || state.time < crowd.lastTime) {
+    settleCrowd(crowd);
+    return;
+  }
+  const newPoint = state.pointId > crowd.lastPoint;
+  const snapshotDelta = state.time - crowd.lastTime;
+  crowd.lastPoint = state.pointId; crowd.lastTime = state.time;
+  if (!enabled || hidden || !['point', 'intermission', 'over'].includes(state.phase)) {
+    settleCrowd(crowd);
+    return;
+  }
+  if (newPoint) {
+    settleCrowd(crowd);
+    const at = state.rallyEnd?.at, age = state.time - at;
+    const fresh = Number.isFinite(at) ? age >= -.02 && age <= .65 : snapshotDelta > 0 && snapshotDelta <= .25;
+    if (fresh && state.rallyEnd?.id === state.pointId && isExcitingPoint(state)) crowd.active = true;
+  }
+  if (!crowd.active) return;
+  crowd.elapsed += THREE.MathUtils.clamp(Number.isFinite(dt) ? dt : 0, 0, .06);
+  if (crowd.elapsed >= 1.08) { settleCrowd(crowd); return; }
+  const { torso, arm, pose, rotation, translation } = crowd;
+  const turnAt = (matrix, x, y, z, angle) => matrix.makeTranslation(x, y, z)
+    .multiply(rotation.makeRotationX(angle)).multiply(translation.makeTranslation(-x, -y, -z));
+  crowd.people.forEach((person, index) => {
+    const progress = THREE.MathUtils.clamp(crowd.elapsed - (index % 4) * .025, 0, 1);
+    const lift = Math.sin(Math.PI * progress) ** 2;
+    turnAt(torso, 0, .10, .015, lift * .12);
+    for (const part of person.parts) {
+      pose.copy(person.frame).multiply(torso);
+      if (part.kind === 'arm') pose.multiply(turnAt(arm, part.side * .205, .46, -.03, lift * 1.25));
+      part.mesh.setMatrixAt(part.index, pose.multiply(part.local));
+    }
+  });
+  for (const mesh of crowd.meshes) mesh.instanceMatrix.needsUpdate = true;
 }
