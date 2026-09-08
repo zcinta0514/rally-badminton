@@ -113,8 +113,8 @@ PUBLIC_PEER_MODE=0 npm start
 Actions 后，推送 `main` 会按工作流执行测试、构建和发布。工作流只上传 `dist/`，
 不上传服务器数据或环境配置。
 
-根目录 `vercel.json` 已提供安装、测试、构建及响应头配置。首次需在现有 Vercel 项目
-连接 GitHub 仓库并选择生产分支 `main`，具体步骤见 [公开网站说明](PUBLIC-WEBSITE.md)。两处产物
+现有 Vercel 项目已连接 GitHub 仓库，生产环境跟踪 `main`；根目录 `vercel.json`
+提供安装、测试、构建及响应头配置，具体流程见 [公开网站说明](PUBLIC-WEBSITE.md)。两处产物
 应对应同一发布提交，分别使用各自路径配置。1.3.0 使用
 [v1.3.0 标签](https://github.com/zcinta0514/rally-badminton/tree/v1.3.0) 作为发布标识。
 
