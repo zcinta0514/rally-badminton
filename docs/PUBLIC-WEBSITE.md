@@ -16,7 +16,7 @@ Vercel 项目的简短生产域名是宣传入口。不要分享带随机字符�
 - 手机声音：保留手势解锁、静音、后台与暂停处理，从后台返回后可通过再次触碰恢复音频。
 - 离线资源：6 个 WAV 及其 CC0 来源许可随游戏缓存，原始下载和处理记录留在本地。
 - 发布配置：Vercel 根路径 `/`；GitHub Pages 子路径 `/rally-badminton/`；均为 `peerMode=true`、`demoMode=false`，`wsUrl` 留空。
-- 自动部署：仓库根目录 `vercel.json` 已定义安装、测试、构建与响应头；现有 Vercel 项目仍需在 Settings → Git 中连接 `zcinta0514/rally-badminton`，生产分支选 `main`。配置文件本身不会建立账号连接。
+- 自动部署：已在 Vercel 连接 `zcinta0514/rally-badminton`，Production 环境跟踪 `main`，主域名保持 `kaipai-rally.vercel.app`。仓库根目录 `vercel.json` 定义安装、测试、构建与响应头。
 - 本地核验：382 项测试通过；浏览器确认 6 个音频均可加载、静音和暂停有效，模拟的音频中断可在手势后恢复，无页面异常。
 - 发布包：各有 51 个缓存资源；Vercel PWA 版本 `a25a31ba4c845323`，Pages PWA 版本 `a9701aac5c6971ae`。两个版本哈希因根路径不同而不同，游戏源码相同。
 
@@ -41,7 +41,9 @@ Vercel 项目的简短生产域名是宣传入口。不要分享带随机字符�
 
 GitHub Pages 由仓库工作流更新。Vercel 的源码构建配置位于根目录 `vercel.json`：执行 `npm ci`、`npm test && npm run build`，只发布 `dist/`，测试失败时不会替换网站。
 
-首次连接须在现有 `kaipai-rally` 项目的 Settings → Git 中选择 `zcinta0514/rally-badminton`，生产分支为 `main`。连接后推送 `main` 会自动触发生产部署；以平台显示的提交与成功部署结果为准，不能只凭配置文件判断自动同步已经启用。
+现有 `kaipai-rally` 项目已连接 `zcinta0514/rally-badminton`，生产分支为 `main`。以后只需把通过审查的正式改动合入并推送 `main`，Vercel 与 GitHub Pages 会分别自动构建，成功后更新原有网址。其他分支生成 Vercel 预览，不会替换正式网址。
+
+每次发布都应核对平台显示的提交与成功部署结果；构建失败时先修复，不能把 GitHub 已提交当作网站已更新。已打开的旧游戏窗口可能继续使用缓存版本，结束对局后关闭全部旧窗口并重新打开即可启用更新。
 
 需要手动发布或恢复时，可从待发布标签建立干净构建目录，安装锁定依赖并构建；更新原有 Vercel 项目，不要从旧工作树覆盖新版：
 
