@@ -1,4 +1,4 @@
-name: Deploy AI demo to GitHub Pages
+name: Deploy browser game to GitHub Pages
 
 "on":
   push:
@@ -33,7 +33,7 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Build AI demo
+      - name: Build browser game
         run: npm run build
         env:
           PUBLIC_BASE_PATH: '/${{ github.event.repository.name }}/'

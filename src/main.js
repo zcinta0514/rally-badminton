@@ -7,6 +7,7 @@ import { bindCameraSettings } from './camera-settings.js';
 import { initPWA, getWebSocketURL } from './pwa.js';
 import { createPlayerProfile, normalizePlayerName } from './player-profile.js';
 import { createLeaderboard, getLeaderboardURL, resultRecordText } from './leaderboard.js';
+import { normalizeLanAddress } from './lan-entry.js';
 import { resolveShotAim, toWorldInput } from './play-input.js';
 import { createMatch, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, ROLES, predictLanding, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
 
@@ -36,9 +37,8 @@ function preparePlayerProfile(){
   return playerProfile;
 }
 if(demoMode){
-  for(const id of ['open-friends','open-leaderboard','result-leaderboard'])$(id).hidden=true;
-  setText('menu-intro','免费人机试玩 · 可离线练习。此入口不含联机和排行榜。');
-  setText('start-ai','免费人机试玩 ↗');
+  for(const id of ['open-leaderboard','result-leaderboard'])$(id).hidden=true;
+  setText('menu-intro','与人机练习，或通过局域网和好友 1V1。');
 }else try{$('player-name').value=preparePlayerProfile().name;}catch(error){setText('player-profile-note',error.message);}
 function dialog(id){
   for(const el of document.querySelectorAll('.dialog'))el.hidden=el.id!==id;
@@ -186,7 +186,7 @@ async function connect(){
   });
 }
 async function roomAction(type){
-  if(demoMode){showToast('此入口仅提供人机试玩');return;}
+  if(demoMode){dialog('lan-dialog');return;}
   if(connecting)return;
   const name=normalizePlayerName($('player-name').value);
   if(!name){showToast('先输入你的昵称或常用玩家 ID');$('player-name').focus();return;}
@@ -201,7 +201,13 @@ function closeHelpOrSetup(){
   helpOpen=false;if(state?.phase==='paused')dialog('pause-dialog');else dialog(null);
 }
 $('start-ai').addEventListener('click',startAI);
-$('open-friends').addEventListener('click',()=>{if(!demoMode)dialog('friends-dialog');});
+$('open-friends').addEventListener('click',()=>{dialog(demoMode?'lan-dialog':'friends-dialog');});
+function openLanGame(){
+  try{location.assign(normalizeLanAddress($('lan-address').value));}
+  catch(error){showToast(error.message);$('lan-address').focus();}
+}
+$('open-lan-game').addEventListener('click',openLanGame);
+$('lan-address').addEventListener('keydown',event=>{if(event.key==='Enter')openLanGame();});
 $('open-leaderboard').addEventListener('click',()=>openLeaderboard('menu'));
 $('result-leaderboard').addEventListener('click',()=>openLeaderboard('result'));
 $('close-leaderboard').addEventListener('click',closeLeaderboard);

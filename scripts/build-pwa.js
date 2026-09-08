@@ -36,7 +36,7 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   const manifest = JSON.parse(await readFile(path.join(root, 'manifest.webmanifest'), 'utf8'));
   manifest.id = basePath; manifest.scope = basePath; manifest.start_url = basePath + '?source=homescreen';
   manifest.icons = manifest.icons.map(icon => ({...icon, src:publicURL(icon.src)}));
-  if (demoMode) manifest.description = '免费人机试玩，缓存后可离线游玩。此入口不提供联机和排行榜。';
+  if (demoMode) manifest.description = '人机练习与局域网好友对战入口，缓存后可离线人机。';
   assets.set(publicURL('/manifest.webmanifest'), Buffer.from(JSON.stringify(manifest, null, 2) + '\n'));
   async function walk(directory) {
     for (const item of (await readdir(path.join(root, directory), { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {

@@ -1,6 +1,6 @@
 {
   "name": "sideline-badminton",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "type": "module",
   "description": "开拍 RALLY：横屏羽毛球，人机练习与好友实时 1V1",
