@@ -35,7 +35,7 @@ class Target {
 
 async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none'} = {}) {
   let now = 1000, nextId = 0, frame, controls, view, audio;
-  const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [];
+  const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [], usageEvents = [];
   let resolvePeer;
   const element = id => {
     if (!elements.has(id)) {
@@ -102,6 +102,11 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   const context = vm.createContext({
     ...game, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
+    createUsageAnalytics:()=>({configured:true,enabled:true,
+      pageView:()=>usageEvents.push(['view']),
+      startMatch:mode=>usageEvents.push(['start',mode]),
+      observeResult:state=>{if(state?.phase==='over')usageEvents.push(['result',state.endReason]);},
+      endMatch:()=>usageEvents.push(['leave']),setEnabled:value=>usageEvents.push(['enabled',value])}),
     createPeerRecords:()=>({publicId:async()=> 'public123abc',record:()=>({status:'local'}),list:()=>({entries:[],storage:'local'})}),
     openPeerRoom:async options=>{
       const session={send:message=>{session.sent.push(message);return true;},close(){session.closed=true;},sent:[],isHost:options.type==='create'};
@@ -135,7 +140,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   assert.equal(typeof frame, 'function', 'the real application must initialize its render loop');
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
-  const common = { element, click, draw, controls, view, audio, document,
+  const common = { element, click, draw, controls, view, audio, document, usageEvents,
     friendModes,chooseFinale:value=>{const button=friendModes.find(item=>item.dataset.finale===value);if(!button.disabled)element('friend-modes').emit('click',{target:button});},
     get now() { return now; }, get liveState() { return vm.runInContext('state', context); },
     visibleDialogs: () => dialogs.filter(dialog => !dialog.hidden).map(dialog => dialog.id) };
@@ -173,6 +178,27 @@ test('static page explains LAN room codes without pretending to host a room and 
   assert.equal(f.document.body.dataset.screen,'match');
   assert.equal(f.view.drawn.phase,'serve');
   assert.equal(f.element('result-leaderboard').hidden,true);
+});
+
+test('usage hooks count actual AI starts and restarts while menu autoplay remains excluded', async () => {
+  const f = await fixture('serve', { peerMode: true });
+  f.draw(1000);f.draw(1000);
+  assert.deepEqual(f.usageEvents, [['view']]);
+  f.click('start-ai');f.draw();
+  assert.deepEqual(f.usageEvents.filter(event=>event[0]==='start'), [['start','ai']]);
+  game.finishMatch(f.liveState,0,'比赛结束','scored');f.draw();
+  assert.ok(f.usageEvents.some(event=>event[0]==='result'&&event[1]==='scored'));
+  f.click('rematch');f.draw();
+  assert.equal(f.usageEvents.filter(event=>event[0]==='start').length,2);
+  f.click('leave-game');
+  assert.ok(f.usageEvents.some(event=>event[0]==='leave'));
+});
+
+test('usage hooks observe accepted friend results before delayed result presentation', async () => {
+  const f=await fixture();
+  assert.deepEqual(f.usageEvents.filter(event=>event[0]==='start'),[['start','online']]);
+  game.finishMatch(f.state,1,'比赛结束','scored');f.snapshot(f.state);
+  assert.ok(f.usageEvents.some(event=>event[0]==='result'&&event[1]==='scored'));
 });
 
 test('later touch and keyboard gestures recover interrupted audio while mute remains respected', async () => {

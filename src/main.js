@@ -2,6 +2,7 @@ import { CourtView } from './view.js';
 import { Controls } from './controls.js';
 import { ArenaAudio } from './arena-audio.js';
 import { MatchFinale } from './match-finale.js';
+import { createUsageAnalytics } from './analytics.js';
 import { NetworkPlayback } from './network-playback.js';
 import { PerformanceMonitor, formatPerformance } from './performance.js';
 import { bindCameraSettings } from './camera-settings.js';
@@ -17,6 +18,14 @@ const $=id=>document.getElementById(id);
 const demoMode=globalThis.RALLY_CONFIG?.demoMode===true;
 const peerMode=globalThis.RALLY_CONFIG?.peerMode===true;
 const practiceOnly=demoMode&&!peerMode;
+const usage=createUsageAnalytics({config:globalThis.RALLY_CONFIG?.analytics});
+usage.pageView();
+const usageToggle=$('usage-enabled');
+if(usageToggle){
+  usageToggle.checked=usage.enabled;usageToggle.disabled=!usage.configured;
+  $('usage-status').textContent=usage.configured?'仅记录访问及开局、完赛参与次数；关闭不影响游戏。':'当前站点未启用使用统计。';
+  usageToggle.addEventListener('change',()=>{usage.setEnabled(usageToggle.checked);usageToggle.checked=usage.enabled;});
+}
 const names={easy:'入门',medium:'进阶',hard:'高手'};
 const roleNotes={balanced:'均衡的移动、力量与恢复，适合初次上场。',swift:'移动更快、恢复更快；杀球力量稍弱，靠跑位创造机会。',power:'杀球更重、体力上限更高；步速和恢复较慢，要选好时机。'};
 const settings={role:'balanced',difficulty:'easy',target:5,ruleset:'quick',finale:'none'};
@@ -133,6 +142,7 @@ function setScreen(screen){
   view?.setMode(screen);
 }
 function enterMatch(){
+  usage.startMatch(mode);
   clearFinale();
   resultPending=false;
   leaderboardReturn=null;leaderboard.cancel();
@@ -144,6 +154,7 @@ function enterMatch(){
   dots[1].style.background=side===1?'#fb7959':'#b5ebc7';
 }
 function exitToMenu(){
+  usage.endMatch();
   clearFinale();finale.reset();
   resultPending=false;
   leaderboardReturn=null;leaderboard.cancel();leaderboardRecord=null;
@@ -195,6 +206,7 @@ function handleNetwork(message){
     if(reconnecting)lastPhase='';
     state=message.state;mode='online';reconnecting=false;reconnectError='';
     if(entering)enterMatch();
+    usage.observeResult(state);
     const wasFinaleBlocking=finale.blocking;
     finale.receive(message,{mode,players:room?.players,finaleMode:room?.rules?.finale});
     if(wasFinaleBlocking&&!finale.blocking)clearFinale();
@@ -460,6 +472,7 @@ try{
             stepMatch(state,[input,aiInput(state,1,settings.difficulty)],1/60);accumulator-=1/60;
           }
         }
+        usage.observeResult(state);
       }else if(mode==='online'){
         if(now-lastSend>1000/30){lastSend=now;if(['serve','rally'].includes(state.phase)&&!reconnecting)send({type:'input',...worldInput(controls.sample())});}
         if(now-pingTime>2000){pingTime=now;send({type:'ping',at:Date.now()});}

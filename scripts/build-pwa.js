@@ -23,13 +23,29 @@ export function validateBasePath(value = '/') {
   return value;
 }
 
+function validateAnalyticsConfig(value) {
+  const publicId = /^[A-Za-z0-9_-]{8,64}$/;
+  if (!value || typeof value !== 'object' || Array.isArray(value) ||
+    Object.keys(value).some(key => !['id', 'ck'].includes(key)) ||
+    !(value.id === '' && value.ck === '' ||
+      typeof value.id === 'string' && typeof value.ck === 'string' && publicId.test(value.id) && publicId.test(value.ck))) {
+    throw new Error('Analytics config must contain only public id and ck identifiers, or both empty');
+  }
+  return { id: value.id, ck: value.ck };
+}
+
 // A build captures bytes once. The Node server and exported static site both serve
 // this exact asset set, so a worker never caches a mixture while files are edited.
-export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath = '/', demoMode = false, peerMode = true } = {}) {
+export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath = '/', demoMode = false, peerMode = true, analytics } = {}) {
   basePath = validateBasePath(basePath);
   if (typeof demoMode !== 'boolean' || demoMode && wsUrl) throw new Error('Demo mode requires a boolean flag and no WebSocket endpoint');
   if (typeof peerMode !== 'boolean') throw new Error('Peer mode requires a boolean flag');
   wsUrl = validateWebSocketURL(wsUrl);
+  if (analytics === undefined) {
+    try { analytics = JSON.parse(await readFile(path.join(root, 'analytics.config.json'), 'utf8')); }
+    catch (error) { if (error.code !== 'ENOENT') throw error; analytics = { id: '', ck: '' }; }
+  }
+  analytics = validateAnalyticsConfig(analytics);
   const assets = new Map();
   const publicURL = url => basePath + url.slice(1);
   const add = async (url, file) => assets.set(publicURL(url), await readFile(path.join(root, file)));
@@ -44,7 +60,7 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
     for (const item of (await readdir(path.join(root, directory), { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
       const file = `${directory}/${item.name}`;
       if (item.isDirectory()) await walk(file);
-      else if (/\.(js|css|svg|png)$/.test(item.name) ||
+      else if (/\.(js|css|html|svg|png)$/.test(item.name) ||
         directory === 'src/audio' && (/\.wav$/.test(item.name) || ['LICENSE.txt','FINALE-VOICE.txt'].includes(item.name))) await add('/' + file, file);
     }
   }
@@ -58,7 +74,7 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   for(const [name,file] of [['@msgpack/msgpack','LICENSE'],['eventemitter3','LICENSE'],['peerjs-js-binarypack','LICENSE'],['webrtc-adapter','LICENSE.md'],['sdp','LICENSE']])
     peerNotices.push(`${name}\n\n${await readFile(path.join(root,'node_modules',name,file),'utf8')}`);
   assets.set(publicURL('/vendor/peerjs-dependencies.LICENSE.txt'),Buffer.from(peerNotices.join('\n\n---\n\n')));
-  assets.set(publicURL('/runtime-config.js'), Buffer.from(`globalThis.RALLY_CONFIG=Object.freeze(${JSON.stringify({ wsUrl, basePath, demoMode, peerMode })});\n`));
+  assets.set(publicURL('/runtime-config.js'), Buffer.from(`globalThis.RALLY_CONFIG=Object.freeze(${JSON.stringify({ wsUrl, basePath, demoMode, peerMode, analytics })});\n`));
   const inventory = [...assets].sort(([a], [b]) => a.localeCompare(b)).map(([url, bytes]) => ({ url, hash: digest(bytes) }));
   const template = await readFile(path.join(root, 'scripts/service-worker.js'), 'utf8');
   const version = digest(JSON.stringify(inventory) + template).slice(0, 16);
