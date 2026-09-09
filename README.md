@@ -2,11 +2,11 @@
 
 A free, open-source 3D badminton game for mobile and desktop browsers.
 
-1.4.0 提供**人机练习＋双手机好友实时 1V1**，支持浮动摇杆、可调视角、本机好友战绩，以及建房时可选的「普通对局／父子局」。两台手机直接打开网页即可建房、输码加入，无需用户电脑运行比赛服务器。项目使用 Three.js 和 PeerJS，可自行运行和修改；原创代码采用 [MIT 许可证](LICENSE)，6 个录制音效采用 [CC0 1.0 Universal](src/audio/LICENSE.txt)，赛后合成语音来源另见 [语音说明](src/audio/FINALE-VOICE.txt)。不需要私人 API Key，也不需要购买服务器。
+1.4.1 提供**人机练习＋双手机好友实时 1V1**，支持浮动摇杆、可调视角、本机好友战绩，以及建房时可选的「普通对局／父子局」。两台手机直接打开网页即可建房、输码加入，无需用户电脑运行比赛服务器。项目使用 Three.js 和 PeerJS，可自行运行和修改；原创代码采用 [MIT 许可证](LICENSE)，6 个录制音效采用 [CC0 1.0 Universal](src/audio/LICENSE.txt)，赛后合成语音来源另见 [语音说明](src/audio/FINALE-VOICE.txt)。不需要私人 API Key，也不需要购买服务器。
 
-**[打开游戏：人机练习 / 好友 1V1 →](https://kaipai-rally.vercel.app/)** · [GitHub Pages 备用入口](https://zcinta0514.github.io/rally-badminton/) · 手机建议横屏。推荐双方连接同一 Wi-Fi 或支持设备互访的同一热点，建房和加入时保持互联网可用。
+**[打开游戏：人机练习 / 好友 1V1 →](https://zcinta0514.github.io/rally-badminton/)** · [Vercel 备用入口](https://kaipai-rally.vercel.app/) · 手机建议横屏。推荐双方连接同一 Wi-Fi 或支持设备互访的同一热点，建房和加入时保持互联网可用。
 
-本版源码以 [v1.4.0 标签](https://github.com/zcinta0514/rally-badminton/tree/v1.4.0) 为发布标识，网站更新与验证方式见 [公开网站说明](docs/PUBLIC-WEBSITE.md)。
+本版源码以 [v1.4.1 标签](https://github.com/zcinta0514/rally-badminton/tree/v1.4.1) 为发布标识，网站更新与验证方式见 [公开网站说明](docs/PUBLIC-WEBSITE.md)。
 
 ![手机横屏比赛画面](docs/images/gameplay.png)
 

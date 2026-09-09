@@ -9,6 +9,8 @@
   --header-height: 72px; --menu-width: 40%;
 }
 * { box-sizing: border-box; }
+/* Keep the responsive type scale stable when iOS rotates the viewport. */
+html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 html,body { margin:0; width:100%; height:100dvh; overflow:hidden; overscroll-behavior:none; }
 body { touch-action:manipulation; -webkit-user-select:none; user-select:none; }
 body[data-screen=match],body[data-screen=match] * { -webkit-touch-callout:none; }
@@ -113,19 +115,24 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   .brand { font-size:19px; gap:7px; }.brand-mark { width:30px; height:30px; border-bottom-width:3px; }
   .brand-mark svg { width:26px; height:26px; }.brand small { font-size:7px; margin-top:4px; }
   .edition { font-size:10px; }.icon-btn { width:32px; height:32px; }
-  .menu-panel { padding:14px 20px calc(9px + env(safe-area-inset-bottom)); }.menu-panel .eyebrow,.intro { display:none; }
-  .menu-panel h1 { font-size:32px; margin:0 0 14px; letter-spacing:-1px; }.menu-panel h1 br { display:none; }
-  .section-label { margin-bottom:8px; font-size:11px; }
-  .role-card { display:grid; grid-template-columns:20px 1fr; gap:0 6px; padding:7px; min-height:44px; }
-  .role-icon { grid-row:span 2; align-self:center; font-size:19px; }
-  .role-card strong { font-size:12px; margin:0 0 2px; }.role-card small { font-size:10px; }.role-card.selected::after { display:none; }
+  .menu-panel { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto minmax(0,1fr) auto; column-gap:8px; padding:10px 16px max(7px,env(safe-area-inset-bottom)); padding-left:max(16px,env(safe-area-inset-left)); }.menu-panel .eyebrow,.intro { display:none; }
+  .menu-heading,.setup { grid-column:1/-1; min-width:0; }
+  .menu-panel h1 { font-size:26px; margin:0 0 8px; letter-spacing:-1px; }.menu-panel h1 br { display:none; }
+  .section-label { margin-bottom:6px; font-size:11px; line-height:1.4; }.section-label b { display:none; }
+  .role-grid { gap:5px; }
+  .role-card { min-width:0; padding:5px; min-height:44px; text-align:center; line-height:1.25; }
+  .role-icon { display:none; }
+  .role-card strong { font-size:12px; margin:0 0 2px; white-space:nowrap; }.role-card small { font-size:10px; white-space:nowrap; }.role-card.selected::after { display:none; }
   .role-note { font-size:10px; margin:6px 0 8px; }
   .setup-row { grid-template-columns:64px minmax(0,1fr); gap:4px; padding:5px 0; }
   .segments button { min-height:29px; font-size:11px; padding:4px 2px; }.field-label { font-size:11px; }
-  .rules-note { font-size:10px; margin:4px 0; }.launch-actions { grid-template-columns:1fr 1fr; padding-top:9px; gap:7px; }
-  .launch-actions .primary-btn,.launch-actions .secondary-btn { min-height:42px; padding:9px 11px; font-size:12px; }
-  .launch-actions .secondary-btn>span { font-size:10px; }.menu-foot { margin-top:7px; font-size:9px; }
-  .menu-tip-desktop { display:none; }.menu-tip-compact { display:inline; }
+  .rules-note { font-size:10px; margin:4px 0; }.launch-actions { grid-template-columns:repeat(2,minmax(0,1fr)); padding:5px 0; gap:6px; }
+  .launch-actions .primary-btn,.launch-actions .secondary-btn { min-width:0; min-height:44px; padding:8px; gap:4px; font-size:12px; line-height:1.25; white-space:nowrap; }
+  .launch-actions .primary-btn>span { font-size:16px; }.launch-actions .secondary-btn>span { font-size:10px; letter-spacing:0; }
+  .menu-panel>.pwa-entry { min-width:0; min-height:26px; padding:4px 0; border:0; font-size:10px; }
+  .menu-panel>.pwa-entry small { display:none; }
+  .menu-foot { margin-top:0; font-size:9px; }
+  .menu-tip-desktop { display:none; }.menu-tip-compact { display:block; flex:0 0 auto; padding-top:4px; color:var(--green); font-size:10px; font-weight:650; line-height:14px; }
   .live-tag { top:15px; left:20px; }.court-poster { bottom:59px; right:20px; }
   .court-poster strong { font-size:24px; margin-top:5px; }.court-poster>span { font-size:8px; }
   .court-strip { min-height:38px; padding:8px 16px; gap:12px; }.court-strip b { font-size:22px; }
@@ -133,7 +140,7 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 }
 @media (max-height:360px) and (orientation:landscape) {
   :root { --header-height:42px; --menu-width:46%; }.edition { display:none; }
-  .menu-panel { padding:10px 14px calc(7px + env(safe-area-inset-bottom)); }.menu-panel h1 { font-size:27px; margin-bottom:10px; }
+  .menu-panel { padding-top:7px; padding-right:14px; padding-left:max(14px,env(safe-area-inset-left)); }.menu-panel h1 { font-size:24px; margin-bottom:6px; }
   .section-label,.role-note { display:none; }.role-grid { margin-bottom:7px; }.court-poster strong { font-size:22px; }
 }
 @media (orientation:portrait) {
