@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { makeAthlete, updateAthlete } from './athlete.js';
+import { upgradeAthlete } from './athlete-import.js';
 import { createMatch, stepMatch } from '../shared/game.js';
 
 document.title = '开拍 · 球员预览';
@@ -14,7 +15,7 @@ document.body.innerHTML = `
    <label>观察方向</label><div class="preview-options" id="angles"><button data-angle="0" aria-pressed="true">正面</button><button data-angle="0.7" aria-pressed="false">侧前方</button><button data-angle="1.5707963" aria-pressed="false">侧面</button><button data-angle="3.1415927" aria-pressed="false">背面</button></div>
    <label>球衣配色</label><div class="preview-options color-options" id="colors"><button data-color="0" aria-pressed="true">珊瑚红</button><button data-color="1" aria-pressed="false">薄荷绿</button></div>
    <button class="preview-play" id="preview-play">暂停动作 Ⅱ</button><label for="pose-time">拖动进度，定格查看</label><input id="pose-time" type="range" min="0" max="1000" value="0" aria-label="动作进度">
-   <small>与比赛使用同款球员模型。</small>
+   <small role="status">球员模型载入中…</small>
   </aside>
  </main>`;
 
@@ -27,7 +28,7 @@ const scene = new THREE.Scene(); scene.background = new THREE.Color(0x172d31);
 scene.add(new THREE.HemisphereLight(0xf3f3e7,0x5f7876,2.2));
 const key = new THREE.DirectionalLight(0xffe8d2,3.0);key.position.set(-3,6,-4);key.castShadow=true;
 key.shadow.mapSize.set(1024,1024); Object.assign(key.shadow.camera,{left:-3,right:3,top:3,bottom:-3,near:.1,far:15});
-key.shadow.bias=-.0003;scene.add(key);
+key.shadow.bias=-.0003;key.shadow.normalBias=.012;scene.add(key);
 const fill = new THREE.DirectionalLight(0xc4e3f3,1.2);fill.position.set(3,2,3);scene.add(fill);
 const floor = new THREE.Mesh(new THREE.CircleGeometry(8,64),new THREE.MeshStandardMaterial({color:0x263f3b,roughness:1}));
 floor.rotation.x=-Math.PI/2;floor.position.y=-.006;floor.receiveShadow=true;scene.add(floor);
@@ -36,6 +37,16 @@ outline.rotation.x=-Math.PI/2;outline.position.y=.003;scene.add(outline);
 const camera = new THREE.PerspectiveCamera(36,1,.05,40);
 const athlete = new THREE.Group();scene.add(athlete);
 let rig=makeAthlete(athlete,0),kind='ready',frames=[],time=0,last=0,index=-1,angle=0,playing=true,reset=true;
+const modelStatus=document.querySelector('.preview-panel > small');
+function upgradePreview(target) {
+ modelStatus.textContent='球员模型载入中…';
+ const report=success=>{
+  if(rig!==target||target.disposed)return;
+  modelStatus.textContent=success?'与比赛使用同款球员模型。':'模型加载失败，正在使用基础球员。';
+ };
+ upgradeAthlete(target).then(report,()=>report(false));
+}
+upgradePreview(rig);
 
 function buildClip(pose) {
  const state=createMatch();state.phase='rally';state.service.active=false;state.time=1;
@@ -61,9 +72,20 @@ document.getElementById('poses').addEventListener('click',event=>{const b=event.
 document.getElementById('angles').addEventListener('click',event=>{const b=event.target.closest('[data-angle]');if(b){angle=Number(b.dataset.angle);pointCamera();pressed('angles','angle',b.dataset.angle);}});
 document.getElementById('colors').addEventListener('click',event=>{
  const b=event.target.closest('[data-color]');if(!b)return;
- const geometries=new Set(),materials=new Set();athlete.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)for(const m of Array.isArray(o.material)?o.material:[o.material])materials.add(m);});
- athlete.clear();rig.skeleton.dispose();for(const g of geometries)g.dispose();for(const m of materials)m.dispose();
- rig=makeAthlete(athlete,Number(b.dataset.color));reset=true;pressed('colors','color',b.dataset.color);
+ rig.disposed=true;
+ const geometries=new Set(),materials=new Set(),textures=new Set(),skeletons=new Set();
+ athlete.traverse(o=>{
+  if(o.isSkinnedMesh&&o.skeleton)skeletons.add(o.skeleton);
+  if(o.geometry)geometries.add(o.geometry);
+  if(o.material)for(const m of Array.isArray(o.material)?o.material:[o.material])materials.add(m);
+ });
+ for(const m of materials)for(const value of Object.values(m))if(value?.isTexture)textures.add(value);
+ athlete.clear();
+ for(const skeleton of skeletons)skeleton.dispose();
+ for(const geometry of geometries)geometry.dispose();
+ for(const material of materials)material.dispose();
+ for(const texture of textures)texture.dispose();
+ rig=makeAthlete(athlete,Number(b.dataset.color));upgradePreview(rig);reset=true;pressed('colors','color',b.dataset.color);
 });
 document.getElementById('preview-play').addEventListener('click',()=>{playing=!playing;document.getElementById('preview-play').textContent=playing?'暂停动作 Ⅱ':'继续动作 ▷';});
 document.getElementById('pose-time').addEventListener('input',event=>{playing=false;time=Number(event.target.value)/1000*(frames.length-1)/120;reset=true;document.getElementById('preview-play').textContent='继续动作 ▷';});

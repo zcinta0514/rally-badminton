@@ -41,17 +41,17 @@ test('production view pauses a visible net ripple and clears it on the next serv
  const previous=globalThis.document;globalThis.document={querySelector:()=>null};
  try{
   const view=makeView();view.makeCourt();
+  const positions=view.netGeometry.attributes.position,rest=positions.array.slice();
   const state=createMatch();Object.assign(state,{phase:'point',time:2,
    rallyEnd:{id:1,kind:'net',at:2,x:0,y:1.15,z:0,vx:1,vy:-4,vz:-10,hitSide:0,winner:1,hitId:2,duration:1.4}});
   view.render(state,0,1/60);state.time=2.07;view.render(state,0,.06);
-  const positions=view.netGeometry.attributes.position;
-  assert.ok(positions.array.some((value,index)=>index%3===2&&Math.abs(value)>.01));
+  assert.ok(positions.array.some((value,index)=>index%3===2&&Math.abs(value-rest[index])>.01),'a ripple moves strands beyond their woven rest positions');
   state.phase='paused';const before=structuredClone(state);view.render(state,0,.02);
   const frozen=positions.array.slice();
   for(let i=0;i<30;i++)view.render(state,0,1/60);
   assert.deepEqual(positions.array,frozen);assert.deepEqual(state,before);
   state.phase='serve';state.rallyEnd=null;view.render(state,0,1/60);
   assert.equal(view.netAtRest,true);
-  assert.ok(positions.array.every((value,index)=>index%3!==2||value===0));
+  assert.deepEqual(positions.array,rest,'a new serve restores the exact original woven net');
  }finally{if(previous===undefined)delete globalThis.document;else globalThis.document=previous;}
 });

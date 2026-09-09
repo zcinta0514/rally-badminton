@@ -27,10 +27,12 @@ export function makeShuttleModel() {
   // A single merged surface contains sixteen separate, slightly folded vanes.
   // The silhouette is scalloped instead of a solid cone, without sixteen draw calls.
   const rows = [
-    { y: -.025, radius: .011, width: .0009 },
-    { y: -.052, radius: .021, width: .0038 },
-    { y: -.074, radius: .030, width: .0054 },
-    { y: -.085, radius: .033, width: .0023 },
+    { y: -.025, radius: .0108, width: .00055 },
+    { y: -.041, radius: .0165, width: .0012 },
+    { y: -.056, radius: .0225, width: .0039 },
+    { y: -.069, radius: .0280, width: .0053 },
+    { y: -.081, radius: .0322, width: .0041 },
+    { y: -.087, radius: .0330, width: .0003 },
   ];
   for (let feather = 0; feather < 16; feather++) {
     const angle = feather / 16 * Math.PI * 2, cos = Math.cos(angle), sin = Math.sin(angle);
@@ -38,10 +40,10 @@ export function makeShuttleModel() {
     for (let row = 0; row < rows.length; row++) {
       const { y, radius, width } = rows[row];
       for (const edge of [-1, 0, 1]) {
-        const ridge = edge === 0 && row > 0 && row < 3 ? .00065 : 0;
+        const ridge = edge === 0 && row > 0 && row < rows.length - 1 ? .00075 : 0;
         positions.push(cos * (radius + ridge) - sin * width * edge,
           y + (edge === 1 ? .0007 : 0), sin * (radius + ridge) + cos * width * edge);
-        const shade = edge === -1 ? .88 : 1;
+        const shade = (edge === -1 ? .85 : edge === 1 ? .95 : 1) * (feather % 2 ? .985 : 1);
         colors.push(shade, shade, shade * .985);
       }
       if (row < rows.length - 1) for (let edge = 0; edge < 2; edge++) {
@@ -53,7 +55,26 @@ export function makeShuttleModel() {
         ribs.push(cos * (radius + .0008), y, sin * (radius + .0008),
           cos * (next.radius + .0008), next.y, sin * (next.radius + .0008));
       }
+      // Fine barbs meet the centre shaft, with a slight diagonal grain. They
+      // share the quill buffer, including the two stitched skirt bindings below.
+      if (row >= 2 && row < rows.length - 1) for (const side of [-1, 1]) {
+        ribs.push(cos * (radius + .00085), y + .002, sin * (radius + .00085),
+          cos * (radius + .0002) - sin * width * side * .86, y - .001,
+          sin * (radius + .0002) + cos * width * side * .86);
+      }
     }
+  }
+  for (const { y, radius } of [{ y: -.035, radius: .0152 }, { y: -.047, radius: .0195 }]) {
+    for (let i = 0; i < 32; i++) {
+      const a = i / 32 * Math.PI * 2, b = (i + 1) / 32 * Math.PI * 2;
+      ribs.push(Math.cos(a) * radius, y, Math.sin(a) * radius,
+        Math.cos(b) * radius, y, Math.sin(b) * radius);
+    }
+  }
+  for (let i = 0; i < 16; i++) for (const side of [-1, 1]) {
+    const a = i / 16 * Math.PI * 2, b = a + side * Math.PI / 32;
+    ribs.push(Math.cos(a) * .0152, -.035, Math.sin(a) * .0152,
+      Math.cos(b) * .0195, -.047, Math.sin(b) * .0195);
   }
   const featherGeometry = new THREE.BufferGeometry();
   featherGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
@@ -61,13 +82,30 @@ export function makeShuttleModel() {
   featherGeometry.setIndex(indices); featherGeometry.computeVertexNormals();
   const feathers = new THREE.Mesh(featherGeometry, white);
   feathers.name = 'sixteen-separated-feather-vanes'; shuttle.add(feathers);
-  const cork = new THREE.Mesh(new THREE.SphereGeometry(.0125, 12, 8),
-    new THREE.MeshStandardMaterial({ color: 0xf5e7c9, roughness: .94, emissive: 0xa89e86, emissiveIntensity: .08 }));
-  cork.name = 'rounded-cork-tip'; cork.position.y = -.0125;
+  // A rounded leading dome and a short straight sleeve read as cork rather
+  // than a bead. The leading pole stays at the authoritative flight origin.
+  const corkGeometry = new THREE.LatheGeometry([
+    [0, 0], [.0054, -.0012], [.0095, -.004], [.012, -.008],
+    [.0125, -.0125], [.0122, -.0205], [.0115, -.024], [0, -.024],
+  ].reverse().map(([x, y]) => new THREE.Vector2(x, y)), 12);
+  const corkColors = [], corkVertices = corkGeometry.attributes.position;
+  for (let i = 0; i < corkVertices.count; i++) {
+    const x = corkVertices.getX(i), y = corkVertices.getY(i), z = corkVertices.getZ(i);
+    const grain = .95 + .05 * Math.sin(x * 1600 + z * 900) * Math.cos(y * 1800);
+    corkColors.push(grain, grain * .97, grain * .9);
+  }
+  corkGeometry.setAttribute('color', new THREE.Float32BufferAttribute(corkColors, 3));
+  const cork = new THREE.Mesh(corkGeometry,
+    new THREE.MeshStandardMaterial({ color: 0xf5e7c9, roughness: .94, emissive: 0xa89e86, emissiveIntensity: .08, vertexColors: true }));
+  cork.name = 'rounded-cork-tip';
   shuttle.add(cork);
-  const collar = new THREE.Mesh(new THREE.CylinderGeometry(.0118, .0109, .004, 16),
+  const collarGeometry = new THREE.LatheGeometry([
+    [.0105, -.0255], [.012, -.0252], [.0123, -.0247],
+    [.0123, -.022], [.0119, -.0215], [.0109, -.0215],
+  ].map(([x, y]) => new THREE.Vector2(x, y)), 16);
+  const collar = new THREE.Mesh(collarGeometry,
     new THREE.MeshStandardMaterial({ color: 0x1d5b51, roughness: .67 }));
-  collar.name = 'cork-binding'; collar.position.y = -.023;
+  collar.name = 'cork-binding';
   shuttle.add(collar);
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(ribs, 3));

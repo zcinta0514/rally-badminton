@@ -26,6 +26,24 @@ test('individual feather detail has a bounded mobile geometry cost and no downlo
  const feathers=ball.getObjectByName('sixteen-separated-feather-vanes');
  assert.ok(feathers.geometry.index.count>0,'feathers have actual surfaces, not only lines');
 });
+
+test('feather lacing and cork detail stay finite and within the same four-draw mobile budget',()=>{
+ const ball=visual.makeShuttleModel(),quills=ball.getObjectByName('feather-quills');
+ const strands=quills.geometry.attributes.position;
+ let circumferential=0;
+ for(let i=0;i<strands.count;i+=2){
+  if(Math.abs(strands.getY(i)-strands.getY(i+1))<1e-7&&Math.hypot(strands.getX(i)-strands.getX(i+1),strands.getZ(i)-strands.getZ(i+1))>.0005)circumferential++;
+ }
+ assert.ok(circumferential>=48,'two lacing rings visibly bind all sixteen feathers');
+ assert.ok(strands.count<=640,'fine lines share one bounded buffer');
+ const cork=ball.getObjectByName('rounded-cork-tip');
+ assert.ok(cork.geometry.attributes.color,'cork shading is baked into vertices without a downloaded texture');
+ ball.traverse(mesh=>{
+  const positions=mesh.geometry?.attributes.position;
+  if(positions)assert.ok([...positions.array].every(Number.isFinite));
+ });
+ assert.equal(ball.children.length,4);
+});
 test('net tail visibly loses flight, drops on the hitting side and rests without changing the event',()=>{
  assert.equal(typeof visual.sampleRallyEnd,'function');
  const e=end(),before=structuredClone(e),start=visual.sampleRallyEnd(e,0),fall=visual.sampleRallyEnd(e,.35),rest=visual.sampleRallyEnd(e,1.35);

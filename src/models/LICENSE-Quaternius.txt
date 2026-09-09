@@ -1,0 +1,63 @@
+This is the standard FREE version of the Universal Base Characters Kit, which only contains 
+a portion of the models . You can buy the SOURCE version which has all the models with rigged .blends,
+and Unity(URP), Unreal Engine and Godot projects
+with custom shaders already set up.
+
+You can get the other version from the website https://quaternius.com
+
+-------------------------------------------------------
+License:
+CC0 1.0 Universal (CC0 1.0) 
+Public Domain Dedication
+https://creativecommons.org/publicdomain/zero/1.0/
+
+------------------------------------------------------
+Models by @Quaternius
+Consider supporting me on Patreon!
+
+https://www.patreon.com/quaternius
+
+-------------------------------------------------------
+Join the Discord Server:
+https://discord.gg/vJqnRUYRfT
+
+-------------------------------------------------------
+RALLY provenance and modification notice (2026-09-10)
+
+The complete original License_Standard.txt is preserved above without changes.
+
+Author: Quaternius
+Package: Universal Base Characters [Standard] (free edition)
+Author page: https://quaternius.com/packs/universalbasecharacters.html
+Author distribution page: https://quaternius.itch.io/universal-base-characters
+License: CC0 1.0 Universal
+License URL: https://creativecommons.org/publicdomain/zero/1.0/
+
+Downloaded archive (local filename): universal-base-standard.zip
+SHA256: fdbf1804c90dfc1ea03e992bff7da2dfd1a79318e13270a660180f9308455f40
+This hash identifies the archive used by this project; it is not an upstream
+published checksum or a statement about future downloads with the same name.
+
+Source files used for the RALLY derivative:
+- Base Characters/Godot - UE/Superhero_Male_FullBody.gltf
+- Hairstyles/Origin at 0/glTF (Godot)/Hair_SimpleParted.gltf
+  and the corresponding binary geometry buffers.
+
+Only the free Standard edition is used. No paid Source or Pro files are included
+or required. The Standard archive contains Superhero male/female bodies; the
+Regular and Teen bodies shown in the full pack's promotion are not present.
+
+RALLY adaptation:
+The character's head, eyebrows, eyes, exposed limbs and parted hair are
+adapted locally in Blender. Body proportions are narrowed and geometry/weights
+are adjusted to the existing RALLY limb lengths and an 18-bone semantic rig.
+The project adds its own sports jersey details, retains its own neck, hands, grip,
+shorts and shoes, and uses flat-colour materials instead of upstream textures.
+The resulting athlete.glb has no external animation clips or texture files.
+Gameplay poses and exact contact timing remain controlled by RALLY game code.
+No AI-generated asset or external asset-processing upload is used in this step.
+
+Upstream asset portions are used under CC0 1.0. Project-authored code and additions
+follow the repository LICENSE where applicable. This notice does not assert
+rights in unrelated packages or paid editions. See docs/CHARACTER-ASSETS.md and
+scripts/prepare-athlete.py for the source record and local preparation workflow.

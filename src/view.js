@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { fitCourtViewport, getShuttleEdgeHint } from './court-layout.js';
 import { normalizeCameraSettings } from './camera-settings.js';
 import { makeAthlete, updateAthlete, applyAthletePose } from './athlete.js';
+import { upgradeAthlete } from './athlete-import.js';
 import { sampleFinalePose } from './finale-pose.js';
 import { makeArena, makeCourtMaterial, resetArenaCrowd, updateArenaCrowd } from './arena.js';
 import { makeNetVisual, updateNetVisual } from './net-visual.js';
@@ -79,6 +80,7 @@ export class CourtView {
     fill.position.set(8, 9, -6); this.scene.add(fill);
     this.makeCourt();
     this.players = [makeAthlete(this.scene, 0), makeAthlete(this.scene, 1)];
+    for (const player of this.players) void upgradeAthlete(player);
     this.mode = 'menu';
     this.makeShuttle();
     this.makeHints();
@@ -513,6 +515,7 @@ export class CourtView {
     this.renderer.render(this.scene,this.camera);
   }
   dispose() {
+    for (const player of this.players || []) player.disposed = true;
     if (this.onVisibilityChange) globalThis.document?.removeEventListener('visibilitychange', this.onVisibilityChange);
     this.edgeIndicator.remove();
     const geometries = new Set();
@@ -525,7 +528,7 @@ export class CourtView {
       if (object.material) for (const mat of Array.isArray(object.material) ? object.material : [object.material]) materials.add(mat);
     });
     for (const mat of materials) {
-      if (mat.map) textures.add(mat.map);
+      for (const value of Object.values(mat)) if (value?.isTexture) textures.add(value);
       mat.dispose();
     }
     for (const geometry of geometries) geometry.dispose();

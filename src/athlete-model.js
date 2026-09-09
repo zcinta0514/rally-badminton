@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { makeAthleteSkin } from './athlete-skin.js';
+import { makeRacket } from './racket-visual.js';
 
 // Original vertex-coloured clothing and accessories. The jersey and limbs use
 // one continuous skin; grip, facial features and shoes retain precise adapters.
@@ -156,15 +157,6 @@ export function makeAthleteModel(root,bones,index) {
     }
     hands[name]=mesh(bones[`${name}Wrist`],join(handParts),`${name}-hand`);
   }
-  const racket=new THREE.Group();racket.name='racket';root.add(racket);
-  const hoop=transform(new THREE.TorusGeometry(.112,.005,7,32),[0,.54,0],[1,1.24,1]);
-  mesh(racket,join([
-    paint(transform(new THREE.CylinderGeometry(.013,.014,.14,8),[0,.07,0]),colors.dark),
-    paint(transform(new THREE.CylinderGeometry(.0035,.0035,.30,8),[0,.28,0]),colors.white),paint(hoop,colors.accent)
-  ]),'racket-frame');
-  const strings=[];
-  for(let i=-3;i<=3;i++){const p=i*.027,e=Math.sqrt(Math.max(0,.107**2-p**2));strings.push(-e,.54+p*1.24,0,e,.54+p*1.24,0,p,.54-e*1.24,0,p,.54+e*1.24,0);}
-  const stringGeometry=new THREE.BufferGeometry();stringGeometry.setAttribute('position',new THREE.Float32BufferAttribute(strings,3));
-  racket.add(new THREE.LineSegments(stringGeometry,new THREE.LineBasicMaterial({color:0xeaf6e8,transparent:true,opacity:.75})));
+  const racket=makeRacket(colors);root.add(racket);
   return {skin,shorts,hems,hands,feet,head,neck,racket};
 }

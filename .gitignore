@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .npm-cache/
+.cache/
 artifacts/
 data/
 releases/

@@ -61,6 +61,7 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
       const file = `${directory}/${item.name}`;
       if (item.isDirectory()) await walk(file);
       else if (/\.(js|css|html|svg|png)$/.test(item.name) ||
+        (directory === 'src/models' || directory.startsWith('src/models/')) && (/\.glb$/i.test(item.name) || /^(LICENSE|NOTICE|ATTRIBUTION)[\w.-]*\.(txt|md)$/i.test(item.name)) ||
         directory === 'src/audio' && (/\.wav$/.test(item.name) || ['LICENSE.txt','FINALE-VOICE.txt'].includes(item.name))) await add('/' + file, file);
     }
   }
@@ -68,6 +69,11 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   await add('/vendor/three.module.js', 'node_modules/three/build/three.module.js');
   await add('/vendor/three.core.js', 'node_modules/three/build/three.core.js');
   await add('/vendor/three.LICENSE.txt', 'node_modules/three/LICENSE');
+  // This is the complete addon graph for our pinned Three version. Keep it
+  // beside the matching core; the model build test checks every relative import.
+  for (const file of ['loaders/GLTFLoader.js', 'utils/SkeletonUtils.js', 'utils/BufferGeometryUtils.js']) {
+    await add('/vendor/three-addons/' + file, 'node_modules/three/examples/jsm/' + file);
+  }
   await add('/vendor/peerjs.min.js', 'node_modules/peerjs/dist/peerjs.min.js');
   await add('/vendor/peerjs.LICENSE.txt', 'node_modules/peerjs/LICENSE');
   const peerNotices=[];
