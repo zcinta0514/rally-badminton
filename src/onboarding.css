@@ -19,7 +19,9 @@
 .onboarding-visual { display:flex; align-items:center; justify-content:center; gap:12px; margin:18px 0; padding:20px 12px; border:1px solid #d8e7dc; border-radius:5px; background:linear-gradient(130deg,#edf7ee,#e4f1e7); }
 .onboarding-visual span { display:block; padding:10px 14px; border:1px solid #afd3bd; border-radius:4px; background:#fff; color:#006e41; font-size:14px; font-weight:800; text-align:center; }
 .onboarding-visual span+span::before { content:'→'; margin-right:10px; color:#6f9580; }
-.onboarding-visual[data-page="0"] span+span::before { content:'或'; }
+.onboarding-visual[data-page="0"] { gap:32px; }
+.onboarding-visual[data-page="0"] span { position:relative; flex:1; min-width:0; }
+.onboarding-visual[data-page="0"] span+span::before { content:'或'; position:absolute; right:100%; top:50%; width:32px; margin:0; transform:translateY(-50%); }
 .onboarding-instructions p { display:grid; grid-template-columns:4.5em minmax(0,1fr); gap:12px; margin:12px 0; font-size:13px; line-height:1.7; }
 .onboarding-instructions strong { color:#008650; }
 .onboarding-keyboard { margin:14px 0 0; padding-top:12px; border-top:1px solid #dbe2dc; color:#64746a; font-size:12px; line-height:1.65; }
