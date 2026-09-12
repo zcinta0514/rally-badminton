@@ -1,0 +1,57 @@
+.onboarding-link { padding:6px 4px; background:transparent; color:var(--green,#008650); font:inherit; font-weight:750; line-height:1.5; white-space:nowrap; border-radius:3px; }
+.onboarding-link:hover { background:#e8ede7; }
+.menu-foot:has(.onboarding-link) { flex-wrap:wrap; }
+.onboarding-settings { margin:18px 0; padding:14px 0; border-top:1px solid var(--line,#dbe2dc); border-bottom:1px solid var(--line,#dbe2dc); }
+.onboarding-settings .onboarding-link { padding:8px 0; font-size:13px; }
+.onboarding-hints-label { display:flex; align-items:center; gap:10px; padding:10px 0 5px; font-size:13px; font-weight:650; cursor:pointer; }
+.onboarding-hints-label input { width:18px; height:18px; margin:0; accent-color:#008650; }
+.onboarding-hints-note { margin:3px 0 0; color:var(--muted,#64746a); font-size:12px; line-height:1.6; }
+.onboarding-dialog { position:fixed; inset:0; margin:auto; width:min(580px,calc(100vw - 32px)); max-height:calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); padding:24px 28px 18px; border:1px solid #dbe2dc; border-top:4px solid #008650; border-radius:8px; color:#122b25; background:#fdfefb; box-shadow:0 24px 80px #0004; overflow:auto; overscroll-behavior:contain; touch-action:pan-y; -webkit-overflow-scrolling:touch; font-family:inherit; }
+.onboarding-dialog::backdrop { background:#09231dcc; }
+.onboarding-dialog[open] { display:flex; flex-direction:column; gap:14px; }
+.onboarding-header { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:12px; }
+.onboarding-progress { color:#008650; font-size:11px; letter-spacing:1px; font-weight:750; }
+.onboarding-header .onboarding-link { min-height:40px; padding:8px; color:#64746a; font-size:12px; }
+.onboarding-content { min-height:0; overflow:auto; overscroll-behavior:contain; touch-action:pan-y; padding:3px 4px 3px 0; scrollbar-width:thin; }
+.onboarding-dialog h2 { margin:0 0 12px; font-size:clamp(23px,3vw,30px); line-height:1.3; letter-spacing:-.7px; }
+.onboarding-dialog h2:focus { outline:none; }
+.onboarding-intro { margin:0; font-size:14px; line-height:1.75; color:#50665c; }
+.onboarding-visual { display:flex; align-items:center; justify-content:center; gap:12px; margin:18px 0; padding:20px 12px; border:1px solid #d8e7dc; border-radius:5px; background:linear-gradient(130deg,#edf7ee,#e4f1e7); }
+.onboarding-visual span { display:block; padding:10px 14px; border:1px solid #afd3bd; border-radius:4px; background:#fff; color:#006e41; font-size:14px; font-weight:800; text-align:center; }
+.onboarding-visual span+span::before { content:'→'; margin-right:10px; color:#6f9580; }
+.onboarding-visual[data-page="0"] span+span::before { content:'或'; }
+.onboarding-instructions p { display:grid; grid-template-columns:4.5em minmax(0,1fr); gap:12px; margin:12px 0; font-size:13px; line-height:1.7; }
+.onboarding-instructions strong { color:#008650; }
+.onboarding-keyboard { margin:14px 0 0; padding-top:12px; border-top:1px solid #dbe2dc; color:#64746a; font-size:12px; line-height:1.65; }
+.onboarding-actions { display:flex; flex:0 0 auto; gap:8px; }
+.onboarding-actions button { flex:1; min-width:0; min-height:44px; justify-content:center; padding:10px 12px; font-size:13px; }
+.onboarding-return-note { flex:0 0 auto; margin:0; color:#64746a; font-size:11px; line-height:1.5; text-align:center; }
+.onboarding-dialog button:focus-visible,.onboarding-link:focus-visible,.onboarding-hints-label input:focus-visible { outline:3px solid #0756b0; outline-offset:2px; }
+/* Static instructions are optional. Live aim, charge, risk, stamina, contact
+   eligibility and all court markers retain their existing behaviour. */
+body[data-operation-hints=off] .joystick-wrap>small,
+body[data-operation-hints=off] .assist-panel>small,
+body[data-operation-hints=off] .shot-btn>small,
+body[data-operation-hints=off] .shot-instruction>span:first-child { display:none; }
+body[data-operation-hints=off] #shot-risk[data-risk=idle],
+body[data-operation-hints=off] .shots-wrap:has(#shot-risk[data-risk=idle]) .aim-heading,
+body[data-operation-hints=off] #assist-status[data-kind=instruction] { visibility:hidden; }
+@media(max-height:500px) and (orientation:landscape) {
+  .onboarding-dialog { width:min(700px,calc(100vw - 40px)); max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); padding:10px 22px; }
+  .onboarding-dialog[open] { gap:7px; }
+  .onboarding-dialog h2 { font-size:24px; margin-bottom:6px; }
+  .onboarding-intro { font-size:12px; }
+  .onboarding-visual { margin:10px 0; padding:10px; }
+  .onboarding-visual span { padding:6px 12px; font-size:12px; }
+  .onboarding-instructions p { margin:8px 0; font-size:12px; }
+  .onboarding-keyboard { margin-top:8px; padding-top:8px; font-size:11px; }
+}
+@media(max-width:420px) {
+  .onboarding-dialog { padding:16px 18px; }
+  .onboarding-visual { gap:6px; padding:14px 6px; }
+  .onboarding-visual span { padding:8px; font-size:12px; }
+  .onboarding-visual span+span::before { margin-right:6px; }
+  .onboarding-instructions p { grid-template-columns:1fr; gap:2px; }
+  .onboarding-actions { flex-wrap:wrap; }
+  .onboarding-actions button { white-space:nowrap; }
+}

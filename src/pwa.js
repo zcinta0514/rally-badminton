@@ -1,3 +1,5 @@
+import { createUpdateClient } from './update-client.js';
+
 export function getWebSocketURL(page = globalThis.location, config = globalThis.RALLY_CONFIG || {}) {
   if (config.demoMode === true) throw new Error('本页可人机练习；好友对打请直接打开主机的局域网游戏网址。');
   const base = new URL(page.href);
@@ -15,7 +17,7 @@ export function displayAction({standalone, fullscreenEnabled, canRequest}) {
   return standalone ? 'standalone' : fullscreenEnabled && canRequest ? 'fullscreen' : 'install';
 }
 
-export function initPWA({ fullscreenButton, showToast = () => {} } = {}) {
+export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate = () => false, onUpdateLock = () => {} } = {}) {
   const demoMode = globalThis.RALLY_CONFIG?.demoMode === true;
   const peerMode = globalThis.RALLY_CONFIG?.peerMode === true;
   let matchActive = false, registration = null, installPrompt = null, cached = false, version = '', failure = false, checking = false;
@@ -35,6 +37,15 @@ export function initPWA({ fullscreenButton, showToast = () => {} } = {}) {
   dialog.innerHTML = '<button type="button" class="pwa-close" aria-label="关闭主屏幕说明">×</button><small class="pwa-eyebrow">开拍 / RALLY</small><h2 id="pwa-title">从主屏幕开拍</h2><p id="pwa-intro"></p><ol id="pwa-steps"></ol><p class="pwa-note">把手机手动横置，并关闭系统竖排方向锁定。独立窗口可去掉普通浏览器地址栏和工具栏；方向锁定、通知与系统手势仍由设备控制。</p><p id="pwa-cache-detail" class="pwa-cache-detail" role="status" aria-live="polite"></p><div class="pwa-actions"><button id="pwa-install" type="button">添加到主屏幕</button><button id="pwa-check" type="button">检查更新</button></div>';
   document.body.append(dialog);
   const detail = dialog.querySelector('#pwa-cache-detail'), nativeInstall = dialog.querySelector('#pwa-install'), checkButton = dialog.querySelector('#pwa-check');
+  let updateState = '', previousInert = false, updateStorage;
+  try { updateStorage = sessionStorage; } catch { /* Auto reload needs a working loop guard. */ }
+  const pageVersion = globalThis.RALLY_CONFIG?.buildId || '';
+  const updater = supported ? createUpdateClient({serviceWorker:navigator.serviceWorker,storage:updateStorage,version:pageVersion,
+    isSafe:context => !matchActive && isSafeToUpdate(context),
+    lock(context) { previousInert=document.body.inert; document.body.inert=true; onUpdateLock(context); showToast('新版已就绪，正在自动更新…'); },
+    unlock() { document.body.inert=previousInert; },
+    onStatus(value) { updateState=value.state; updateUI(); }
+  }) : null;
   const action = () => displayAction({standalone:isStandalone(), fullscreenEnabled:document.fullscreenEnabled, canRequest:typeof document.documentElement.requestFullscreen === 'function'});
   const close = () => { dialog.close(); entry.focus({preventScroll:true}); };
   dialog.querySelector('.pwa-close').addEventListener('click', close);
@@ -46,9 +57,12 @@ export function initPWA({ fullscreenButton, showToast = () => {} } = {}) {
       long = '当前是普通 HTTP 网址，可以在线游玩和添加快捷入口，但不能准备离线缓存。完整离线主屏幕版需要可信的 HTTPS 网址。';
     } else if (!supported) {
       short = '此浏览器未提供离线缓存'; long = '此浏览器未提供离线缓存能力。可继续在线游玩；iPhone 建议用 Safari 打开。';
+    } else if (updateState === 'applying') {
+      short = '新版已备好 · 正在自动更新';
+      long = '正在切换到完整准备好的新版。昵称、战绩和设置会保留。';
     } else if (registration?.waiting) {
-      short = '新版已备好 · 退出后更新';
-      long = '新版资源已下载。请结束比赛，关闭所有开拍浏览器标签页和主屏幕窗口，再重新打开；系统会启用新版。当前比赛不会刷新，单独刷新一个标签页可能仍是旧版。';
+      short = '新版已备好 · 空闲时自动更新';
+      long = '结束对局并返回首页后，游戏会在没有进行中的操作时自动更新。若其他游戏窗口仍在使用，将继续等待；很久未更新时，可关闭所有开拍窗口后重新打开，无需删除主屏幕图标。';
     } else if (cached) {
       short = navigator.onLine ? '离线人机已就绪' : '当前离线 · 可人机开打';
       long = `本机离线资源已备好${version ? '（' + version.slice(0,8) + '）' : ''}。断网后仍可从同一网址或主屏幕进入人机。${peerMode ? '双手机好友对打无需电脑，创建和加入房间时需要联网；比赛时保持两台手机互通。' : demoMode ? '好友对打请直接打开主机的局域网游戏网址。' : '好友对打需要与运行游戏的电脑保持网络连接。'}浏览器清理存储后需重新联网下载。`;
@@ -57,7 +71,7 @@ export function initPWA({ fullscreenButton, showToast = () => {} } = {}) {
     } else {
       short = '正在准备离线人机…'; long = '首次打开需要联网下载完整游戏资源。请等到“离线人机已就绪”再断网。';
     }
-    status.textContent = short; detail.textContent = long;
+    status.textContent = short; detail.textContent = long + (pageVersion ? ` 当前页面版本：${pageVersion.slice(0,8)}。` : '');
     entry.setAttribute('aria-label', `主屏幕安装与更新：${short}`);
     nativeInstall.hidden = !installPrompt || isStandalone();
     checkButton.hidden = !supported; checkButton.disabled = checking || matchActive;
@@ -120,9 +134,16 @@ export function initPWA({ fullscreenButton, showToast = () => {} } = {}) {
     try {
       const {scriptURL, scope} = getPwaRegistrationURLs();
       registration = await navigator.serviceWorker.register(scriptURL, {scope, updateViaCache:'none'});
+      updater?.setRegistration(registration);
       failure = false; watchWorker(registration.installing);
       registration.addEventListener('updatefound', () => { watchWorker(registration.installing); updateUI(); });
       await cacheStatus(); updateUI();
+      try {
+        const key='rally.update.reload.'+pageVersion;
+        if (pageVersion && updateStorage?.getItem(key)) {
+          updateStorage.removeItem(key); showToast('已自动更新到新版，欢迎回来。');
+        }
+      } catch { /* A success notice is optional. */ }
     } catch { failure = true; updateUI(); }
   }
   checkButton.addEventListener('click', async () => {

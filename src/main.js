@@ -7,6 +7,10 @@ import { NetworkPlayback } from './network-playback.js';
 import { PerformanceMonitor, formatPerformance } from './performance.js';
 import { bindCameraSettings } from './camera-settings.js';
 import { initPWA, getWebSocketURL } from './pwa.js';
+import { isUpdateSafe } from './update-client.js';
+import { getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences } from './update-preferences.js';
+import { initOnboarding } from './onboarding.js';
+import { initFeedback } from './feedback.js';
 import { createPlayerProfile, normalizePlayerName } from './player-profile.js';
 import { createLeaderboard, getLeaderboardURL, resultRecordText } from './leaderboard.js';
 import { openPeerRoom } from './peer-network.js';
@@ -28,7 +32,9 @@ if(usageToggle){
 }
 const names={easy:'入门',medium:'进阶',hard:'高手'};
 const roleNotes={balanced:'均衡的移动、力量与恢复，适合初次上场。',swift:'移动更快、恢复更快；杀球力量稍弱，靠跑位创造机会。',power:'杀球更重、体力上限更高；步速和恢复较慢，要选好时机。'};
-const settings={role:'balanced',difficulty:'easy',target:5,ruleset:'quick',finale:'none'};
+const updatePreferencesStorage=getUpdatePreferencesStorage(window);
+const restoredUpdatePreferences=restoreUpdatePreferences(globalThis.RALLY_CONFIG?.buildId,updatePreferencesStorage);
+const settings={role:'balanced',difficulty:'easy',target:5,ruleset:'quick',...restoredUpdatePreferences?.settings,finale:'none'};
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
 let pendingShot=null,aim=0,dragAim=null,view,controls,lastFrame=performance.now(),accumulator=0,lastSend=0;
@@ -37,12 +43,23 @@ let reconnectError='';
 let playerProfile=null,currentPlayerId=null,leaderboardRecord=null,leaderboardReturn=null;
 const arenaAudio=new ArenaAudio();
 const finale=new MatchFinale();
-let sound=true;
+let sound=restoredUpdatePreferences?.sound??true;
 let selectedShot='clear',dragDepth=0,lastShotRequest=null,gestureOrigin=null;
 const showToast=text=>{clearTimeout(toastTimer);$('toast').textContent=text;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,3800);};
 const playback=new NetworkPlayback();
 const performanceMonitor=new PerformanceMonitor({devicePixelRatio:window.devicePixelRatio});
-const pwa=initPWA({fullscreenButton:$('fullscreen'),showToast});
+const pwa=initPWA({fullscreenButton:$('fullscreen'),showToast,onUpdateLock:({version}={})=>{
+    saveUpdatePreferences({version,settings,sound},updatePreferencesStorage);controls?.reset();
+  },
+  isSafeToUpdate:({allowHidden=false}={})=>isUpdateSafe({ready:Boolean(controls&&view)&&$('loading').hidden,visible:allowHidden||!document.hidden,mode,state,room,
+    connection:socket||peerSession||peerAttempt,connecting,reconnecting,pendingResult:resultPending,finale:finale.blocking,
+    overlay:Boolean(document.querySelector('dialog[open], .dialog:not([hidden]), #camera-panel:not([hidden])')),
+    editing:Boolean(document.activeElement?.matches('input, textarea, select, [contenteditable="true"]'))})});
+const onboarding=initOnboarding({showToast,canOpen:()=>Boolean(controls)&&$('loading').hidden&&mode==='menu'&&!room&&!connecting&&!peerSession&&!peerAttempt,
+  onStartPractice:()=>startAI()});
+const feedback=initFeedback({showToast,
+  canOpen:()=>!document.body.inert&&(mode==='menu'&&!room&&!connecting&&!peerSession&&!peerAttempt||state?.phase==='over'&&!resultPending&&!finale.blocking&&!view?.rallyEnding),
+  getContext:()=>({version:globalThis.RALLY_CONFIG?.buildId||'',platform:navigator.userAgentData?.platform||navigator.platform||'',mode:mode==='online'?'好友对打':mode==='ai'?'人机练习':'首页'})});
 let lastRtt=null,lastDiagnostics=0,appliedQuality='';
 const setText=(id,text)=>{if($(id).textContent!==String(text))$(id).textContent=text;};
 const peerRecords=peerMode?createPeerRecords():null;
@@ -118,18 +135,27 @@ function groupChoice(container,attribute,value){
     const selected=button.dataset[attribute]===String(value);button.classList.toggle('selected',selected);button.setAttribute('aria-pressed',String(selected));
   }
 }
+function syncRulesControls(){
+  const standard=settings.ruleset==='standard21';
+  $('targets').setAttribute('aria-disabled',String(standard));
+  for(const choice of $('targets').querySelectorAll('button'))choice.disabled=standard;
+  groupChoice('targets','target',standard?21:settings.target);
+  setText('rules-note',standard?'21 分 · 赢两分，30 封顶 · 三局两胜 · 局间休息 4 秒':'先到目标分获胜 · 对角发球');
+}
+function syncSoundControls(){
+  arenaAudio.setEnabled(sound);$('sound').dataset.muted=String(!sound);
+  $('sound').setAttribute('aria-label',sound?'关闭声音':'开启声音');
+}
+if(restoredUpdatePreferences){
+  for(const [id,attribute] of [['roles','role'],['difficulties','difficulty'],['rulesets','ruleset']])groupChoice(id,attribute,settings[attribute]);
+  setText('role-note',roleNotes[settings.role]);syncRulesControls();syncSoundControls();
+}
 for(const [id,key,attr] of [['roles','role','role'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset'],['friend-modes','finale','finale']]){
   $(id).addEventListener('click',event=>{
     const button=event.target.closest('button');if(!button||button.disabled)return;
     settings[key]=key==='target'?Number(button.dataset[attr]):button.dataset[attr];groupChoice(id,attr,settings[key]);
     if(key==='role')setText('role-note',roleNotes[settings.role]);
-    if(key==='ruleset'){
-      const standard=settings.ruleset==='standard21';
-      $('targets').setAttribute('aria-disabled',String(standard));
-      for(const choice of $('targets').querySelectorAll('button'))choice.disabled=standard;
-      groupChoice('targets','target',standard?21:settings.target);
-      setText('rules-note',standard?'21 分 · 赢两分，30 封顶 · 三局两胜 · 局间休息 4 秒':'先到目标分获胜 · 对角发球');
-    }
+    if(key==='ruleset')syncRulesControls();
   });
 }
 function selectAim(value){aim=value;lastShotRequest=null;}
@@ -165,6 +191,7 @@ function exitToMenu(){
   arenaAudio.reset();
   playback.reset();lastRtt=null;
   $('countdown').hidden=true;setScreen('menu');dialog(null);history.replaceState(null,'',location.pathname);
+  queueMicrotask(()=>onboarding.maybeShow());
 }
 function startAI(){
   if(peerAttempt||peerSession)exitToMenu();
@@ -325,7 +352,7 @@ $('copy-invite').addEventListener('click',async()=>{
   try{await navigator.clipboard.writeText(invite);showToast('邀请链接已复制');}
   catch{window.prompt('复制链接发给球友：',invite);}
 });
-$('sound').addEventListener('click',()=>{sound=!sound;arenaAudio.setEnabled(sound);$('sound').dataset.muted=String(!sound);$('sound').setAttribute('aria-label',sound?'关闭声音':'开启声音');showToast(sound?'声音已开启':'声音已关闭');});
+$('sound').addEventListener('click',()=>{sound=!sound;syncSoundControls();showToast(sound?'声音已开启':'声音已关闭');});
 document.addEventListener('visibilitychange',()=>{
   if(finale.blocking)lastFrame=performance.now();
   arenaAudio.setVisible(!document.hidden);
@@ -400,6 +427,7 @@ function updateUI(info,state){
   const lastShot=state.lastShotInfo;
   if(!info.prepare&&lastShot?.side===side&&state.time-lastShot.at<1.2&&lastShot.quality.risk>.25)guidance='刚才一拍 · '+lastShot.quality.reason.split(' · ')[0];
   setText('assist-status',guidance);
+  $('assist-status').dataset.kind=guidance==='按住击球键，拖动选落点'?'instruction':'live';
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
   $('help').disabled=reconnecting||state.phase==='countdown'||finale.blocking;
   controls.setEnabled(['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting);
@@ -504,6 +532,7 @@ try{
   requestAnimationFrame(frame);
   const invited=new URLSearchParams(location.search).get('room');
   if(invited&&!practiceOnly){$('room-code').value=invited.toUpperCase().slice(0,5);dialog('friends-dialog');}
+  onboarding.maybeShow();
 }catch(error){
   console.error(error);$('loading').textContent='球场加载失败：'+error.message+'。请使用支持 WebGL 2 的浏览器后刷新。';
 }

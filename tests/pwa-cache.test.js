@@ -51,13 +51,13 @@ test('a corrupted resource rejects installation and preserves the previous compl
   assert.equal(f.stores.has(f.build.cachePrefix+'previous'),true);
   assert.equal(f.stores.has(f.build.cachePrefix+f.build.version),false);
 });
-test('new installation preserves old-tab resources until browser activation, then only prunes this app caches', async () => {
+test('new installation and activation preserve old resources for in-flight navigations', async () => {
   const f=await fixture();await f.caches.open(f.build.cachePrefix+'previous');await f.caches.open('other-application');
   await f.event('install');
   assert.equal(f.stores.has(f.build.cachePrefix+'previous'),true);
   assert.deepEqual(f.calls(),{skipCalls:0,claimCalls:0});
   await f.event('activate');
-  assert.equal(f.stores.has(f.build.cachePrefix+'previous'),false);
+  assert.equal(f.stores.has(f.build.cachePrefix+'previous'),true);
   assert.equal(f.stores.has('other-application'),true);
 });
 test('missing cache entries cannot be replaced by newer network code and status reports incomplete', async () => {
@@ -102,7 +102,7 @@ test('old and new versions serve their own runtime bytes while new worker waits'
   const request={method:'GET',url:'https://rally.example/runtime-config.js'};
   assert.equal(await (await old.event('fetch',{request})).text(),old.build.assets.get('/runtime-config.js').toString());
   assert.equal(await (await next.event('fetch',{request})).text(),next.build.assets.get('/runtime-config.js').toString());
-  assert.equal(old.stores.size,2);assert.deepEqual(next.calls(),{skipCalls:0,claimCalls:0});
+  assert.equal([...old.stores.keys()].filter(key=>/[-][a-f0-9]{16}$/.test(key)).length,2);assert.deepEqual(next.calls(),{skipCalls:0,claimCalls:0});
 });
 test('project worker serves offline query navigation and never deletes another project or root cache', async () => {
   const root=await fixture();await root.event('install');
@@ -111,7 +111,7 @@ test('project worker serves offline query navigation and never deletes another p
   const next=await fixture({basePath:'/first/',stores:first.stores});await next.event('install');
   const second=await fixture({basePath:'/second/',stores:first.stores});await second.event('install');
   const oldCount=next.stores.size;await next.event('activate');
-  assert.equal(next.stores.size,oldCount-1,'only the previous version of this same project is removed');
+  assert.equal(next.stores.size,oldCount,'activation retains old resources while late clients may still depend on them');
   assert.ok([...next.stores.keys()].some(key=>oldFirstKeys.has(key)),'the root app remains cached');
   for(const f of [root,next,second]){
     f.setOffline(true);

@@ -10,12 +10,14 @@ import { resolveShotAim, toWorldInput } from '../src/play-input.js';
 import { createPlayerProfile, normalizePlayerName } from '../src/player-profile.js';
 import { createLeaderboard, getLeaderboardURL, resultRecordText } from '../src/leaderboard.js';
 import { MatchFinale } from '../src/match-finale.js';
+import { isUpdateSafe } from '../src/update-client.js';
+import { getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences } from '../src/update-preferences.js';
 
 const source = (await readFile(new URL('../src/main.js', import.meta.url), 'utf8'))
   .replace(/\r\n/g, '\n').replace(/^import .*;\n/gm, '');
 
 // Execute the full production main loop and its event handlers. Only browser,
-// transport, input hardware and GPU/audio boundaries are simulated; match rules,
+// transport, auxiliary UI, input hardware and GPU/audio boundaries are simulated; match rules,
 // playback, UI decisions and the reconnect timer callbacks remain production code.
 class Target {
   constructor() { this.listeners = new Map(); }
@@ -33,16 +35,19 @@ class Target {
   }
 }
 
-async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none'} = {}) {
+async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none', buildId='1111111111111111', sessionStorage=null} = {}) {
   let now = 1000, nextId = 0, frame, controls, view, audio;
+  let pwaOptions, onboardingOptions, feedbackOptions, updateSafeAtInit, onboardingAttempts = 0;
   const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [], usageEvents = [];
   let resolvePeer;
   const element = id => {
     if (!elements.has(id)) {
       const target = Object.assign(new Target(), {
-        id, hidden: false, disabled: false, textContent: '', value: '', dataset: {}, style: {},
-        classList: { toggle() {} }, setAttribute() {}, querySelectorAll() { return []; },
-        children: [], append(...children) { this.children.push(...children); }, replaceChildren(...children) { this.children = children; }, focus() { this.focused = true; },
+        id, tagName: ['player-name','room-code'].includes(id) ? 'INPUT' : 'DIV', hidden: false, disabled: false, textContent: '', value: '', dataset: {}, style: {},
+        attributes: {}, classList: { toggle() {} }, setAttribute(name,value) { this.attributes[name]=String(value); }, querySelectorAll() { return []; },
+        children: [], append(...children) { this.children.push(...children); }, replaceChildren(...children) { this.children = children; },
+        focus() { this.focused = true; document.activeElement = this; },
+        matches(selector) { return selector.split(',').some(part => part.trim() === this.tagName.toLowerCase() || part.trim() === '[contenteditable="true"]' && this.contentEditable === 'true'); },
       });
       elements.set(id, target);
     }
@@ -51,6 +56,13 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   const dialogs = ['lan-dialog', 'friends-dialog', 'waiting-dialog', 'pause-dialog', 'result-dialog', 'help-dialog', 'leaderboard-dialog'].map(id=>{
     const dialog=element(id);dialog.hidden=true;return dialog;
   });
+  const closeButtons = ['close-friends','close-help','close-lan'].map(element);
+  element('camera-panel').hidden = true;
+  const settingGroups = new Map();
+  for (const [id, attribute, values] of [['roles','role',['balanced','swift','power']], ['difficulties','difficulty',['easy','medium','hard']], ['targets','target',[5,11,21]], ['rulesets','ruleset',['quick','standard21']]]) {
+    const choices=values.map((value,index)=>{const button=element(`choice-${attribute}-${value}`);button.dataset[attribute]=String(value);button.closest=selector=>selector==='button'?button:null;button.setAttribute('aria-pressed',String(index===0));return button;});
+    settingGroups.set(id,choices);element(id).querySelectorAll=selector=>selector==='button'?choices:[];
+  }
   const shots = ['clear', 'drop', 'smash'].map(shot => {
     const button = element(shot); button.dataset.shot = shot; return button;
   });
@@ -63,11 +75,21 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   });
   element('friend-modes').querySelectorAll=selector=>selector==='button'?friendModes:[];
   const document = Object.assign(new Target(), {
-    hidden: false, body: { dataset: { screen: 'menu' } }, getElementById: element,
-    createElement: tag => element(`generated-${tag}-${++nextId}`),
-    querySelector: selector => selector === '[data-shot="smash"]' ? element('smash') : null,
+    hidden: false, activeElement: null, body: { dataset: { screen: 'menu' } }, getElementById: element,
+    createElement: tag => Object.assign(element(`generated-${tag}-${++nextId}`), { tagName: tag.toUpperCase() }),
+    querySelector: selector => {
+      for (const part of selector.split(',').map(value => value.trim())) {
+        let found;
+        if (part === '[data-shot="smash"]') found = element('smash');
+        else if (part === 'dialog[open]') found = [...elements.values()].find(node => node.tagName === 'DIALOG' && node.open);
+        else if (part === '.dialog:not([hidden])') found = dialogs.find(node => !node.hidden);
+        else if (part === '#camera-panel:not([hidden])') found = element('camera-panel').hidden ? null : element('camera-panel');
+        if (found) return found;
+      }
+      return null;
+    },
     querySelectorAll: selector => selector === '.dialog' ? dialogs : selector === '.player-dot'
-      ? [element('dot-0'), element('dot-1')] : selector === '[data-shot]' ? shots : [],
+      ? [element('dot-0'), element('dot-1')] : selector === '[data-shot]' ? shots : selector === '[data-close]' ? closeButtons : [],
   });
   class Socket extends Target {
     static OPEN = 1;
@@ -100,7 +122,8 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     sample() { return { x: 0, z: 0, prepare: null, charge: 0 }; }
   }
   const context = vm.createContext({
-    ...game, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput,
+    ...game, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
+    getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
     createUsageAnalytics:()=>({configured:true,enabled:true,
       pageView:()=>usageEvents.push(['view']),
@@ -119,18 +142,22 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     },
     createPlayerProfile: () => createPlayerProfile({ storage: null, crypto: webcrypto }),
     createLeaderboard: options => createLeaderboard({ ...options, fetchImpl: async () => ({ ok: true, json: async () => ({ entries: [], storage: 'persistent' }) }) }),
-    console, structuredClone, URL, URLSearchParams, AbortController, document, WebSocket: Socket, CourtView: View, Controls: Input, RALLY_CONFIG:{demoMode,peerMode},
-    performance: { now: () => now }, window: Object.assign(new Target(), { devicePixelRatio: 1 }),
+    console, structuredClone, URL, URLSearchParams, AbortController, document, WebSocket: Socket, CourtView: View, Controls: Input, RALLY_CONFIG:{demoMode,peerMode,buildId},
+    performance: { now: () => now }, window: Object.assign(new Target(), { devicePixelRatio: 1, sessionStorage }),
     location: { pathname: '/rally-badminton/', href:'http://localhost/rally-badminton/'+search, search, origin: 'http://localhost' }, history: { replaceState() {} },
     navigator:{clipboard:{writeText:async value=>invites.push(value)}},
     ArenaAudio: class {
       constructor() { audio = this; this.context = null; this.unlocks = 0; this.finaleCalls = []; this.stoppedVoices = []; }
-      reset() {} update() {} setVisible() {} setEnabled() {}
+    reset() {} update() {} setVisible() {} setEnabled(value) { this.enabled=value; }
       stopVoices(group) { this.stoppedVoices.push(group); }
       playFinale(key) { this.finaleCalls.push(key); }
       unlock() { this.unlocks++; this.context = { state: 'running' }; }
     },
-    initPWA: () => ({ setMatchActive() {} }), getWebSocketURL: () => 'ws://localhost/ws',
+    initPWA: options => { pwaOptions = options; updateSafeAtInit = options.isSafeToUpdate(); return { setMatchActive() {} }; },
+    // These independently tested UI modules do not replace any match decisions.
+    initOnboarding: options => { onboardingOptions = options; return { maybeShow() { onboardingAttempts++; } }; },
+    initFeedback: options => { feedbackOptions = options; return {}; },
+    getWebSocketURL: () => 'ws://localhost/ws', queueMicrotask,
     bindCameraSettings() {}, ResizeObserver: class { observe() {} },
     requestAnimationFrame(callback) { frame = callback; },
     setTimeout(callback, delay) { timers.set(++nextId, { callback, delay, at: now + delay }); return nextId; },
@@ -141,6 +168,10 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
   const common = { element, click, draw, controls, view, audio, document, usageEvents,
+    pwaOptions, onboardingOptions, feedbackOptions, updateSafeAtInit, get onboardingAttempts() { return onboardingAttempts; },
+    choice:(id,value)=>settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value))),
+    chooseSetting:(id,value)=>{const button=settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value)));if(!button.disabled)element(id).emit('click',{target:button});},
+    get settings() { return vm.runInContext('settings', context); }, get sound() { return vm.runInContext('sound', context); },
     friendModes,chooseFinale:value=>{const button=friendModes.find(item=>item.dataset.finale===value);if(!button.disabled)element('friend-modes').emit('click',{target:button});},
     get now() { return now; }, get liveState() { return vm.runInContext('state', context); },
     visibleDialogs: () => dialogs.filter(dialog => !dialog.hidden).map(dialog => dialog.id) };
@@ -163,6 +194,73 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   }
   return Object.assign(common, { retry, snapshot, room, state, socket: () => sockets.at(-1) });
 }
+
+test('the production update callback permits only a ready and visible lobby', async () => {
+  const f = await fixture('serve', { peerMode: true });
+  const safe = f.pwaOptions.isSafeToUpdate;
+  assert.equal(f.updateSafeAtInit, false, 'the worker must wait until controls, view and loading are ready');
+  assert.equal(safe(), true);
+  f.element('loading').hidden = false; assert.equal(safe(), false);
+  f.element('loading').hidden = true;
+  f.document.hidden = true; assert.equal(safe(), false); assert.equal(safe({allowHidden:true}), true);
+  f.document.hidden = false; assert.equal(safe(), true);
+});
+
+test('the production update callback defers for friend forms, native dialogs, camera settings and text editing', async () => {
+  const f = await fixture('serve', { peerMode: true });
+  const safe = f.pwaOptions.isSafeToUpdate;
+  f.click('open-friends'); assert.deepEqual(f.visibleDialogs(), ['friends-dialog']); assert.equal(safe(), false);
+  f.click('close-friends'); assert.equal(safe(), true);
+  const nativeDialog = f.document.createElement('dialog'); nativeDialog.open = true; assert.equal(safe(), false);
+  nativeDialog.open = false; assert.equal(safe(), true);
+  f.element('camera-panel').hidden = false; assert.equal(safe(), false);
+  f.element('camera-panel').hidden = true;
+  for (const tag of ['input', 'textarea', 'select', 'div']) {
+    const field = f.document.createElement(tag); if (tag === 'div') field.contentEditable = 'true';
+    field.focus(); assert.equal(safe(), false, `${tag} editing must preserve the current page`);
+  }
+  f.document.activeElement = null; assert.equal(safe(), true);
+});
+
+test('the production update callback protects active matches and their result screen until returning to the lobby', async () => {
+  const f = await fixture('serve', { demoMode: true });
+  const safe = f.pwaOptions.isSafeToUpdate;
+  f.click('start-ai'); f.draw(); assert.equal(safe(), false);
+  completeScoredMatch(f.liveState, 1); f.draw(200); f.draw(5000);
+  assert.deepEqual(f.visibleDialogs(), ['result-dialog']); assert.equal(safe(), false);
+  f.element('result-dialog').hidden = true;
+  assert.equal(safe(), false, 'an ended match still owns state even before or between result overlays');
+  f.click('back-menu'); assert.equal(safe(), true);
+  const attempts = f.onboardingAttempts;
+  await Promise.resolve();
+  assert.equal(f.onboardingAttempts, attempts + 1, 'return-to-menu teaching is queued as a real microtask');
+});
+
+test('automatic update transfers selected controls and mute once without preserving the father-son choice', async () => {
+  const values=new Map(), sessionStorage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
+  const f=await fixture('serve',{demoMode:true,sessionStorage});
+  f.chooseSetting('roles','power');f.chooseSetting('difficulties','hard');f.chooseSetting('targets',11);f.chooseSetting('rulesets','standard21');f.chooseFinale('father-son');f.click('sound');
+  assert.equal(values.size,0,'ordinary choices retain the original in-memory behaviour');
+  f.pwaOptions.onUpdateLock({version:'2222222222222222'});
+  assert.equal(values.size,1,'preparation must save a verified transfer before refreshing');
+  const restored=await fixture('serve',{demoMode:true,buildId:'2222222222222222',sessionStorage});
+  assert.deepEqual({...restored.settings},{role:'power',difficulty:'hard',target:11,ruleset:'standard21',finale:'none'});
+  for(const [group,value] of [['roles','power'],['difficulties','hard'],['targets',21],['rulesets','standard21']])assert.equal(restored.choice(group,value).attributes['aria-pressed'],'true');
+  assert.equal(restored.element('targets').attributes['aria-disabled'],'true');assert.equal(restored.choice('targets',11).disabled,true);
+  assert.match(restored.element('role-note').textContent,/杀球更重/);assert.match(restored.element('rules-note').textContent,/三局两胜/);
+  assert.equal(restored.sound,false);assert.equal(restored.audio.enabled,false);assert.equal(restored.element('sound').dataset.muted,'true');assert.equal(restored.element('sound').attributes['aria-label'],'开启声音');
+  assert.equal(restored.document.body.dataset.screen,'menu');assert.equal(restored.liveState,null);assert.equal(restored.audio.unlocks,0);
+  restored.chooseSetting('rulesets','quick');assert.equal(restored.choice('targets',11).disabled,false);assert.equal(restored.choice('targets',11).attributes['aria-pressed'],'true');
+  assert.equal(values.size,0);
+  const ordinary=await fixture('serve',{demoMode:true,buildId:'2222222222222222',sessionStorage});
+  assert.deepEqual({...ordinary.settings},{role:'balanced',difficulty:'easy',target:5,ruleset:'quick',finale:'none'});assert.equal(ordinary.sound,true);
+});
+
+test('the application refuses update preparation when settings cannot be transferred', async () => {
+  const f=await fixture('serve',{demoMode:true});
+  assert.throws(()=>f.pwaOptions.onUpdateLock({version:'2222222222222222'}),/游戏设置/);
+  assert.equal(f.document.body.dataset.screen,'menu');assert.equal(f.liveState,null);
+});
 
 test('static page explains LAN room codes without pretending to host a room and still runs AI', async () => {
   const f=await fixture('serve',{demoMode:true,search:'?room=ABCDE'});

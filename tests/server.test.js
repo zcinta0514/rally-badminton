@@ -45,6 +45,22 @@ test('serves health but never repository metadata or source server',async t=>{
     assert.notEqual((await fetch(app.url+path)).status,200);
   }
 });
+test('index.html query URLs serve the same root HTML and headers for GET and HEAD without widening static access',async t=>{
+  const app=await setup(t);
+  const root=await fetch(app.url+'/?room=ABCDE'), html=await root.text();
+  const alias=await fetch(app.url+'/index.html?room=ABCDE&updated=build-123');
+  assert.equal(alias.status,200);
+  assert.equal(await alias.text(),html);
+  assert.match(alias.headers.get('content-type'),/^text\/html; charset=utf-8$/);
+  for(const name of ['cache-control','etag','content-length'])assert.equal(alias.headers.get(name),root.headers.get(name));
+  assert.equal(alias.headers.get('cache-control'),'no-cache');
+  const head=await fetch(app.url+'/index.html?room=ABCDE',{method:'HEAD'});
+  assert.equal(head.status,200);assert.equal(await head.text(),'');
+  for(const name of ['content-type','content-length','cache-control','etag'])assert.equal(head.headers.get(name),alias.headers.get(name));
+  assert.equal((await fetch(app.url+'/index.html?room=ABCDE',{method:'POST'})).status,405);
+  for(const privatePath of ['/server/index.html','/data/index.html','/.git/index.html','/missing/index.html'])
+    assert.equal((await fetch(app.url+privatePath+'?from=index.html')).status,404);
+});
 test('room joins two players and rejects a third',async t=>{
   const app=await setup(t);const {room}=await pair(t,app);const c=await client(app.url);t.after(()=>c.close());
   c.send({type:'join',code:room.code,name:'第三人',role:'balanced'});
