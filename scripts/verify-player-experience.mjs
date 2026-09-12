@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
 import http from 'node:http';
 import path from 'node:path';
-import { mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises';
-import { randomBytes } from 'node:crypto';
+import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { createServer } from '../server/index.js';
 import { createPwaBuild, projectRoot } from './build-pwa.js';
@@ -11,7 +10,6 @@ const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.RALLY_PLAYWRIGHT_MODULE || 'playwright');
 const output=path.join(projectRoot,'artifacts','player-experience'); await mkdir(output,{recursive:true});
 const testDir=await mkdtemp(path.join(output,'run-'));
-const token=randomBytes(32).toString('hex');
 const report={checks:[],pageErrors:[],consoleErrors:[],requestFailures:[],staticFailures:[],loadFailures:[]};
 // Software WebGL on a shared host can spend tens of seconds rebuilding a court.
 // This allowance is only for browser QA; production coordination stays bounded.
@@ -57,20 +55,6 @@ async function confirmModalFits(page,selector) {
   });
   assert.ok(bounds.left>=-1&&bounds.top>=-1&&bounds.right<=bounds.width+1&&bounds.bottom<=bounds.height+1&&!bounds.overflow,JSON.stringify(bounds));
 }
-async function confirmFeedbackFooter(page) {
-  const buttons=await page.locator('#feedback-dialog footer .feedback-cancel, #feedback-dialog footer .feedback-submit').evaluateAll(elements=>elements.map(el=>{
-    const r=el.getBoundingClientRect();return {text:el.textContent,height:r.height,width:r.width,left:r.left,top:r.top,right:r.right,bottom:r.bottom,viewportWidth:innerWidth,viewportHeight:innerHeight};
-  }));
-  assert.equal(buttons.length,2,'both feedback actions must be in the footer');
-  for(const bounds of buttons)assert.ok(bounds.height>=44&&bounds.width>=44&&bounds.left>=0&&bounds.top>=0&&bounds.right<=bounds.viewportWidth&&bounds.bottom<=bounds.viewportHeight,JSON.stringify(bounds));
-}
-async function confirmFeedbackStatus(page) {
-  const bounds=await page.locator('.feedback-status').evaluate(el=>{
-    const r=el.getBoundingClientRect();return {height:r.height,top:r.top,bottom:r.bottom,viewportHeight:innerHeight};
-  });
-  assert.ok(bounds.height>0&&bounds.top>=0&&bounds.bottom<=bounds.viewportHeight,JSON.stringify(bounds));
-  await confirmFeedbackFooter(page);
-}
 async function readSelectedPreferences(page) {
   return page.evaluate(()=>({role:document.querySelector('#roles [aria-pressed="true"]')?.dataset.role,
     difficulty:document.querySelector('#difficulties [aria-pressed="true"]')?.dataset.difficulty,
@@ -81,8 +65,7 @@ async function readSelectedPreferences(page) {
     muted:document.getElementById('sound').dataset.muted,soundLabel:document.getElementById('sound').getAttribute('aria-label')}));
 }
 try {
-  const feedbackPath=path.join(testDir,'feedback.json');
-  app=createServer({feedbackPath,feedbackAdminToken:token});await app.listen();
+  app=createServer();await app.listen();
   const context=await browser.newContext({viewport:{width:844,height:390},hasTouch:true,isMobile:true,deviceScaleFactor:1});
   const page=await context.newPage();watch(page);await page.goto(app.url);await loaded(page);
   await page.locator('#onboarding-dialog').waitFor({state:'visible'});
@@ -104,54 +87,21 @@ try {
   assert.equal(await page.locator('[data-shot="clear"] small').isVisible(),false);
   await page.locator('#pause').click();await page.locator('#leave-game').click();
   checked('hint preference and normal AI start/pause/return preserve controls');
-  await page.locator('#open-feedback').click();await confirmModalFits(page,'#feedback-dialog');await confirmFeedbackFooter(page);
-  await page.locator('#feedback-form [name="category"]').selectOption('suggestion');
-  await page.locator('#feedback-form [name="content"]').fill('浏览器验收用例：希望击球说明更容易找到。');
-  await page.screenshot({path:path.join(output,'feedback-landscape.png')});
-  await page.setViewportSize({width:667,height:320});await confirmModalFits(page,'#feedback-dialog');await confirmFeedbackFooter(page);
-  await page.screenshot({path:path.join(output,'feedback-landscape-667.png')});
-  await page.setViewportSize({width:844,height:390});await confirmFeedbackFooter(page);
-  checked('feedback footer keeps both 44px actions inside 844×390 and 667×320 viewports');
-  await page.locator('.feedback-submit').click();
-  await page.waitForFunction(()=>document.querySelector('.feedback-status').textContent.includes('提交成功'));
-  await confirmFeedbackStatus(page);await page.setViewportSize({width:667,height:320});
-  await confirmFeedbackStatus(page);await page.screenshot({path:path.join(output,'feedback-success-667.png')});
-  await page.setViewportSize({width:844,height:390});
-  const stored=JSON.parse(await readFile(feedbackPath,'utf8'));assert.equal(stored.items.length,1);
-  const admin=await context.newPage();watch(admin);await admin.setViewportSize({width:1280,height:800});await admin.goto(app.url+'/feedback-admin/');
-  assert.equal((await context.request.get(app.url+'/api/feedback')).status(),401);
-  await admin.locator('#token').fill(token);await admin.locator('#login-form button').click();
-  await admin.locator('#inbox').waitFor({state:'visible'});
-  await admin.locator('#detail select').selectOption('resolved');await admin.getByRole('button',{name:'保存状态'}).click();
-  await admin.waitForFunction(()=>document.querySelector('#notice').textContent.includes('处理状态已保存'));
-  assert.equal(JSON.parse(await readFile(feedbackPath,'utf8')).items[0].status,'resolved');
-  await admin.screenshot({path:path.join(output,'feedback-admin.png')});
-  checked('anonymous submission reaches authenticated private inbox and status persists');
-  await page.bringToFront();await page.locator('.feedback-close').click();await page.locator('#open-feedback').click();
-  await page.locator('#feedback-form [name="content"]').fill('断网草稿：请保留这段内容。');
-  await setOffline(context,true);await page.locator('.feedback-submit').click();
-  await page.waitForFunction(()=>document.querySelector('.feedback-status').textContent.includes('草稿已保留'));
-  await confirmFeedbackStatus(page);
-  await setOffline(context,false);await page.locator('.feedback-close').click();await page.reload();await loaded(page);
+  assert.equal(await page.locator('#open-feedback, #result-feedback, #feedback-dialog').count(),0);
+  await page.reload();await loaded(page);
   assert.equal(await page.locator('#onboarding-dialog').isVisible(),false);
-  await page.locator('#open-feedback').click();assert.equal(await page.locator('[name="content"]').inputValue(),'断网草稿：请保留这段内容。');
   assert.equal(await page.locator('body').getAttribute('data-operation-hints'),'off');
-  checked('failed submission and page reload preserve draft and preferences');
-  await context.close();const oldPort=app.server.address().port;await app.close();
-  app=createServer({port:oldPort,feedbackPath,feedbackAdminToken:token});await app.listen();
-  const persisted=await fetch(app.url+'/api/feedback',{headers:{Authorization:'Bearer '+token}}).then(r=>r.json());
-  assert.equal(persisted.items[0].status,'resolved');checked('private feedback survives a real service restart');
-  await app.close();app=null;
+  checked('feedback entry is absent and onboarding preferences survive reload');
+  await context.close();await app.close();app=null;
 
   const buildA=await createPwaBuild();
-  const buildB=await createPwaBuild({feedbackURL:'/api/feedback'});
-  const buildC=await createPwaBuild({feedbackURL:'/api/feedback',demoMode:true});
+  const buildB=await createPwaBuild({wsUrl:'wss://build-b.example/ws'});
+  const buildC=await createPwaBuild({wsUrl:'wss://build-c.example/ws'});
   let deployed=buildA;
   snapshotServer=http.createServer((req,res)=>{
     const pathname=new URL(req.url,'http://localhost').pathname;
     const basePath=deployed.basePath||'/';
     if(pathname==='/favicon.ico'){res.writeHead(204);res.end();return;}
-    if(pathname==='/feedback-admin/'||pathname===basePath+'feedback-admin/') {res.writeHead(200,{'Content-Type':'text/html'});res.end('<!doctype html><title>Private admin shell</title><p>Private admin</p>');return;}
     const assetPath=pathname===basePath+'index.html'?basePath:pathname;
     const body=assetPath===basePath+'sw.js'?deployed.worker:deployed.assets.get(assetPath);
     if(!body){res.writeHead(404);res.end();return;}
@@ -179,7 +129,6 @@ try {
   const selectedPreferences=await readSelectedPreferences(first);
   assert.equal(selectedPreferences.role,'power');assert.equal(selectedPreferences.difficulty,'hard');assert.equal(selectedPreferences.ruleset,'standard21');assert.equal(selectedPreferences.muted,'true');
   const second=await updateContext.newPage();watch(second);await second.goto(url);await loaded(second);
-  const adminShell=await updateContext.newPage();await adminShell.goto(url+'/feedback-admin/');
   await second.bringToFront();await second.locator('#start-ai').click();
   deployed=buildB;
   await first.evaluate(async()=>{const reg=await navigator.serviceWorker.getRegistration();await reg.update();});
@@ -198,24 +147,22 @@ try {
   await first.locator('#rulesets [data-ruleset="quick"]').click();assert.equal(await first.locator('#targets [data-target="11"]').getAttribute('aria-pressed'),'true');
   await first.locator('#rulesets [data-ruleset="standard21"]').click();
   checked('automatic update preserves non-default role, difficulty, rules, quick-score preference and mute');
-  checked('both idle windows update automatically with analytics iframe and admin page present');
-  await second.close();await adminShell.close();await first.bringToFront();
-  await first.locator('#open-feedback').click();await first.locator('[name="content"]').fill('等待更新时保留的意见草稿');
+  checked('both idle game windows update automatically with an analytics iframe present');
+  await second.close();await first.bringToFront();
+  await first.evaluate(()=>{const input=document.createElement('input');input.id='qa-update-edit';document.body.append(input);input.focus();});
   deployed=buildC;
   await first.evaluate(async()=>{const reg=await navigator.serviceWorker.getRegistration();await reg.update();});
   await first.waitForFunction(async()=>Boolean((await navigator.serviceWorker.getRegistration())?.waiting));
   await new Promise(resolve=>setTimeout(resolve,6500));
   assert.equal(await first.evaluate(()=>RALLY_CONFIG.buildId),buildB.version);
-  assert.equal(await first.locator('[name="content"]').inputValue(),'等待更新时保留的意见草稿');
-  await first.locator('.feedback-close').click();
+  await first.evaluate(()=>document.getElementById('qa-update-edit').remove());
   await first.waitForFunction(expected=>globalThis.RALLY_CONFIG?.buildId===expected,buildC.version,{timeout:browserLoadTimeout});await loaded(first);
   assert.deepEqual(await readSelectedPreferences(first),selectedPreferences);
-  await first.locator('#open-feedback').click();assert.equal(await first.locator('[name="content"]').inputValue(),'等待更新时保留的意见草稿');
-  await first.locator('.feedback-close').click();await first.screenshot({path:path.join(output,'lobby.png')});
-  checked('editing postpones update; automatic switch preserves the saved draft');
+  await first.screenshot({path:path.join(output,'lobby.png')});
+  checked('editing postpones update and the later automatic switch preserves settings');
   report.versions={a:buildA.version,b:buildB.version,c:buildC.version};
   await updateContext.close();
-  const subpathBuild=await createPwaBuild({basePath:'/rally-badminton/',feedbackURL:'/api/feedback'});deployed=subpathBuild;
+  const subpathBuild=await createPwaBuild({basePath:'/rally-badminton/'});deployed=subpathBuild;
   const subpathContext=await browser.newContext({viewport:{width:844,height:390}});
   await subpathContext.addInitScript(()=>localStorage.setItem('rally.onboarding.seen','1'));
   const bookmark=await subpathContext.newPage();watch(bookmark);
@@ -229,7 +176,7 @@ try {
   await setOffline(subpathContext,true);await bookmark.reload();await loaded(bookmark);
   assert.equal(bookmark.url(),bookmarkURL);assert.equal(await bookmark.evaluate(()=>RALLY_CONFIG.buildId),subpathBuild.version);
   const offlineModules=await bookmark.evaluate(async()=>{
-    const modules={'src/onboarding.js':'initOnboarding','src/update-client.js':'createUpdateClient','src/update-preferences.js':'restoreUpdatePreferences','src/feedback.js':'initFeedback'};
+    const modules={'src/onboarding.js':'initOnboarding','src/update-client.js':'createUpdateClient','src/update-preferences.js':'restoreUpdatePreferences'};
     return Promise.all(Object.entries(modules).map(async([file,exportName])=>{
       // A fresh module URL proves the offline worker path, not the document's
       // already instantiated module registry. The cache is keyed by pathname.

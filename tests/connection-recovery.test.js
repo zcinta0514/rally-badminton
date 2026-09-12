@@ -37,7 +37,7 @@ class Target {
 
 async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none', buildId='1111111111111111', sessionStorage=null} = {}) {
   let now = 1000, nextId = 0, frame, controls, view, audio;
-  let pwaOptions, onboardingOptions, feedbackOptions, updateSafeAtInit, onboardingAttempts = 0;
+  let pwaOptions, onboardingOptions, updateSafeAtInit, onboardingAttempts = 0;
   const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [], usageEvents = [];
   let resolvePeer;
   const element = id => {
@@ -156,7 +156,6 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     initPWA: options => { pwaOptions = options; updateSafeAtInit = options.isSafeToUpdate(); return { setMatchActive() {} }; },
     // These independently tested UI modules do not replace any match decisions.
     initOnboarding: options => { onboardingOptions = options; return { maybeShow() { onboardingAttempts++; } }; },
-    initFeedback: options => { feedbackOptions = options; return {}; },
     getWebSocketURL: () => 'ws://localhost/ws', queueMicrotask,
     bindCameraSettings() {}, ResizeObserver: class { observe() {} },
     requestAnimationFrame(callback) { frame = callback; },
@@ -168,7 +167,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
   const common = { element, click, draw, controls, view, audio, document, usageEvents,
-    pwaOptions, onboardingOptions, feedbackOptions, updateSafeAtInit, get onboardingAttempts() { return onboardingAttempts; },
+    pwaOptions, onboardingOptions, updateSafeAtInit, get onboardingAttempts() { return onboardingAttempts; },
     choice:(id,value)=>settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value))),
     chooseSetting:(id,value)=>{const button=settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value)));if(!button.disabled)element(id).emit('click',{target:button});},
     get settings() { return vm.runInContext('settings', context); }, get sound() { return vm.runInContext('sound', context); },

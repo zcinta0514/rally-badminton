@@ -217,13 +217,6 @@ test('a same-scope analytics iframe does not veto top-level window coordination'
   assert.equal(frame.messages.length, 0);
 });
 
-test('a feedback administration window does not participate in game update coordination', async () => {
-  const admin = {...client('admin', {silent: true}), url: origin + basePath + 'feedback-admin/'};
-  const {next} = await updateFixture({windows: [client('a'), admin]});
-  assert.equal((await next.message(request))?.status, 'activating');
-  assert.equal(admin.messages.length, 0);
-});
-
 test('a cached iframe navigation pins its scripts across worker activation and restart', async () => {
   const {old, next, windows} = await updateFixture();
   windows.push({...client('analytics', {silent: true}), frameType: 'nested', url: origin + basePath + 'src/analytics-frame.html'});
@@ -288,13 +281,6 @@ test('maintenance removes expired closed-client metadata along with an unreferen
   await next.message({type: 'CLIENT_VERSION', version: NEXT});
   const metadata = next.stores.get(prefix + 'clients');
   assert.equal(metadata.has(basePath + '__rally_client__/closed'), false);
-  assert.equal(next.stores.has(prefix + ANCIENT), false);
-});
-
-test('an unrelated administration window does not block game cache retirement', async () => {
-  const {next, windows} = await gcFixture();
-  windows.push({...client('admin', {silent: true}), url: origin + basePath + 'feedback-admin/'});
-  await next.message({type: 'CLIENT_VERSION', version: NEXT});
   assert.equal(next.stores.has(prefix + ANCIENT), false);
 });
 

@@ -7,13 +7,12 @@ import { networkInterfaces } from 'node:os';
 import { WebSocketServer } from 'ws';
 import { Rooms } from './rooms.js';
 import { Leaderboard } from './leaderboard.js';
-import { createFeedbackService } from './feedback.js';
 import { createPwaBuild, validateWebSocketURL } from '../scripts/build-pwa.js';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const mime={'.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.wav':'audio/wav','.glb':'model/gltf-binary','.txt':'text/plain; charset=utf-8','.md':'text/plain; charset=utf-8','.webmanifest':'application/manifest+json; charset=utf-8'};
 
-export function createServer({port=0,host='127.0.0.1',tls=null,allowedOrigins=[],allowMissingOrigin=true,wsUrl='',peerMode=true,leaderboardPath=null,leaderboardOnError,assetRoot=root,feedbackPath=null,feedbackAdminToken='',feedbackAllowedOrigins=[],feedbackAdminOrigin='',feedbackURL=''}={}){
+export function createServer({port=0,host='127.0.0.1',tls=null,allowedOrigins=[],allowMissingOrigin=true,wsUrl='',peerMode=true,leaderboardPath=null,leaderboardOnError,assetRoot=root}={}){
   const originSet=new Set(allowedOrigins.map(value=>{
     let url;try{url=new URL(value);}catch{throw new Error('Invalid allowed origin');}
     if(!['http:','https:'].includes(url.protocol)||value!==url.origin)throw new Error('Allowed origin must include only scheme and host (no path or wildcard)');
@@ -21,15 +20,13 @@ export function createServer({port=0,host='127.0.0.1',tls=null,allowedOrigins=[]
   }));
   wsUrl=validateWebSocketURL(wsUrl);
   let build;
-  const feedback=createFeedbackService({filePath:feedbackPath,adminToken:feedbackAdminToken,allowedOrigins:feedbackAllowedOrigins,adminOrigin:feedbackAdminOrigin,tls:Boolean(tls)});
   const leaderboard=new Leaderboard({filePath:leaderboardPath,onError:leaderboardOnError});
   const rooms=new Rooms({leaderboard});
   const handler=async(req,res)=>{
     res.setHeader('X-Content-Type-Options','nosniff');
     res.setHeader('Referrer-Policy','same-origin');
-    let pathname;try{pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);}catch{res.writeHead(400);res.end();return;}
-    if(await feedback.handle(req,res,pathname))return;
     if(req.method!=='GET'&&req.method!=='HEAD'){res.writeHead(405);res.end();return;}
+    let pathname;try{pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);}catch{res.writeHead(400);res.end();return;}
     if(pathname==='/health'){res.writeHead(200,{'Content-Type':'application/json'});res.end(JSON.stringify({ok:true,rooms:rooms.rooms.size}));return;}
     if(pathname==='/api/leaderboard'){
       res.setHeader('Vary','Origin');res.setHeader('Cache-Control','no-store');
@@ -70,8 +67,8 @@ export function createServer({port=0,host='127.0.0.1',tls=null,allowedOrigins=[]
   wss.on('connection',socket=>rooms.attach(socket));
   return {server,rooms,leaderboard,
     get url(){const address=server.address();return address?`${tls?'https':'http'}://${host==='0.0.0.0'?'127.0.0.1':host}:${address.port}`:null;},
-    async listen(){await feedback.load();build=await createPwaBuild({root:assetRoot,wsUrl,peerMode,feedbackURL:feedbackURL||(feedback.enabled?'/api/feedback':'')});return new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,host,()=>{server.removeListener('error',reject);resolve();});});},
-    async close(){rooms.close();await leaderboard.flush();await feedback.flush();await new Promise(resolve=>wss.close(()=>resolve()));server.closeAllConnections();await new Promise(resolve=>server.close(()=>resolve()));}
+    async listen(){build=await createPwaBuild({root:assetRoot,wsUrl,peerMode});return new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,host,()=>{server.removeListener('error',reject);resolve();});});},
+    async close(){rooms.close();await leaderboard.flush();await new Promise(resolve=>wss.close(()=>resolve()));server.closeAllConnections();await new Promise(resolve=>server.close(()=>resolve()));}
   };
 }
 
@@ -83,12 +80,7 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
   const app=createServer({port,host:process.env.HOST||'0.0.0.0',tls,
     allowedOrigins:(process.env.ALLOWED_ORIGINS||'').split(',').map(value=>value.trim()).filter(Boolean),
     allowMissingOrigin:process.env.ALLOW_MISSING_ORIGIN==='1',wsUrl:process.env.PUBLIC_WS_URL||'',peerMode:process.env.PUBLIC_PEER_MODE!=='0',
-    leaderboardPath:path.resolve(process.env.LEADERBOARD_PATH||path.join(root,'data','leaderboard.json')),
-    feedbackPath:process.env.FEEDBACK_ENABLED==='1'?path.resolve(process.env.FEEDBACK_PATH||path.join(root,'data','feedback.json')):null,
-    feedbackAdminToken:process.env.FEEDBACK_ENABLED==='1'?(process.env.FEEDBACK_ADMIN_TOKEN||''):'',
-    feedbackAllowedOrigins:(process.env.FEEDBACK_ALLOWED_ORIGINS||'').split(',').map(value=>value.trim()).filter(Boolean),
-    feedbackAdminOrigin:process.env.FEEDBACK_ADMIN_ORIGIN||'',
-    feedbackURL:process.env.PUBLIC_FEEDBACK_URL||''});
+    leaderboardPath:path.resolve(process.env.LEADERBOARD_PATH||path.join(root,'data','leaderboard.json'))});
   app.listen().then(()=>{
     console.log(`开拍 RALLY 已启动：${app.url}`);
     if(!tls)for(const list of Object.values(networkInterfaces()))for(const address of list||[])if(address.family==='IPv4'&&!address.internal)console.log(`同一局域网手机访问：http://${address.address}:${port}（HTTP 可玩，离线缓存需 HTTPS）`);

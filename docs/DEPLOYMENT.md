@@ -1,6 +1,6 @@
 # 使用与部署指南
 
-1.4.1 默认提供**人机练习＋双手机好友 1V1**。两台手机可直接打开
+1.5.0 默认提供**人机练习＋双手机好友 1V1**。两台手机可直接打开
 [GitHub Pages 宣传主入口](https://zcinta0514.github.io/rally-badminton/) 或
 [Vercel 备用入口](https://kaipai-rally.vercel.app/) 建房和加入，
 无需用户电脑运行比赛服务。推荐双方连接同一 Wi-Fi，或支持设备互访的同一热点；
@@ -134,8 +134,8 @@ PUBLIC_WS_URL=
 
 Vercel 使用相同配置，仅将 `PUBLIC_BASE_PATH` 改为 `/`。两处均设置
 `PUBLIC_PEER_MODE=1`、`PUBLIC_DEMO_MODE=0`，且不填写 `PUBLIC_WS_URL`。
-构建脚本不会清空旧 `dist/`；每套产物都应从干净目录生成，避免混入旧资源或
-错误路径。Vercel 还需将 `deploy/vercel-static.json` 复制为 `dist/vercel.json`。
+构建脚本会重新创建 `dist/`，避免混入旧资源或错误路径。Vercel 还需将
+`deploy/vercel-static.json` 复制为 `dist/vercel.json`。
 
 默认路径是 `/`，子路径须以 `/` 开始和结束。`PUBLIC_PEER_MODE=1` 提供手机直连
 和本机榜；设置为 `0` 才使用旧版 Node 前端。`PUBLIC_DEMO_MODE=1` 是兼容旧版

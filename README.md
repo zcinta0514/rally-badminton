@@ -2,11 +2,11 @@
 
 A free, open-source 3D badminton game for mobile and desktop browsers.
 
-1.4.1 提供**人机练习＋双手机好友实时 1V1**，支持浮动摇杆、可调视角、本机好友战绩，以及建房时可选的「普通对局／父子局」。两台手机直接打开网页即可建房、输码加入，无需用户电脑运行比赛服务器。项目使用 Three.js 和 PeerJS，可自行运行和修改；原创代码采用 [MIT 许可证](LICENSE)，6 个录制音效采用 [CC0 1.0 Universal](src/audio/LICENSE.txt)，赛后合成语音来源另见 [语音说明](src/audio/FINALE-VOICE.txt)。不需要私人 API Key，也不需要购买服务器。
+1.5.0 提供**人机练习＋双手机好友实时 1V1**，支持三步新手教学、可调操作提示、安全自动更新、浮动摇杆、可调视角、本机好友战绩，以及建房时可选的「普通对局／父子局」。两台手机直接打开网页即可建房、输码加入，无需用户电脑运行比赛服务器。项目使用 Three.js 和 PeerJS，可自行运行和修改；原创代码采用 [MIT 许可证](LICENSE)，6 个录制音效采用 [CC0 1.0 Universal](src/audio/LICENSE.txt)，赛后合成语音来源另见 [语音说明](src/audio/FINALE-VOICE.txt)。不需要私人 API Key，也不需要购买服务器。
 
 **[打开游戏：人机练习 / 好友 1V1 →](https://zcinta0514.github.io/rally-badminton/)** · [Vercel 备用入口](https://kaipai-rally.vercel.app/) · 手机建议横屏。推荐双方连接同一 Wi-Fi 或支持设备互访的同一热点，建房和加入时保持互联网可用。
 
-本版源码以 [v1.4.1 标签](https://github.com/zcinta0514/rally-badminton/tree/v1.4.1) 为发布标识，网站更新与验证方式见 [公开网站说明](docs/PUBLIC-WEBSITE.md)。
+本版源码以 [v1.5.0 标签](https://github.com/zcinta0514/rally-badminton/tree/v1.5.0) 为发布标识，网站更新与验证方式见 [公开网站说明](docs/PUBLIC-WEBSITE.md)。
 
 ![手机横屏比赛画面](docs/images/gameplay.png)
 
@@ -52,6 +52,8 @@ npm start
 ## 已有功能
 
 - 三种角色打法、三档人机；5 / 11 / 21 分快赛与简化标准三局赛。
+- 首次进入提供三步玩法教学，可跳过并从帮助中重看；静态操作文字可单独关闭。
+- 新版完整下载后在全部游戏窗口安全空闲时自动切换，保留角色、难度、规则、静音与本机战绩。
 - 房主手机计算真人比赛的移动、触球和得分；同步暂停和再战。直连中断后重新建房。
 - 「父子局」真人好友通过得分正常完赛后，在原球场显示双方填写的昵称／玩家 ID，败者朝胜者跪拜一次，配合“爸爸”气泡和固定中文语音；完整播放约 3 秒后进入结算，不提供跳过。「普通对局」、人机、局间或中途结束不触发，语音遵循静音设置。
 - 左上窄比分栏、浮动摇杆、多指击球、居中镜头与视角设置。

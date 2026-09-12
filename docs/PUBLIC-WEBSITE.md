@@ -15,6 +15,14 @@
 
 该结果是一次大陆移动出口的实测，不代表全国三网或所有手机均稳定。没有修改系统代理或 VPN，也没有彻底排除所有透明转发；真实双手机从公开入口完成对局仍需实机验证。验证记录和素材保存在本地 `artifacts/promo-20260909/`（不随网站公开部署），包括 `link-verification.md` 和结构化证据。两个托管入口继续保留，游戏代码与部署配置没有因此改变。
 
+## 1.5.0 玩家体验与主体视觉升级
+
+- 发布标识：[v1.5.0](https://github.com/zcinta0514/rally-badminton/tree/v1.5.0)，两处生产入口都由同一 `main` 提交构建。
+- 增加三步新手教学、操作文字开关和多窗口安全自动更新。
+- 接入已完成验收的第一批人物、球拍、羽球和球网视觉升级；仍在制作中的完整人物动作重建不进入本版。
+- GitHub Pages 使用 `/rally-badminton/`，Vercel 使用 `/`；两处保持 `peerMode=true`、`demoMode=false` 和空 `wsUrl`。
+- 本地验收覆盖全量自动测试和真实浏览器关键流程，包括多窗口更新延后、设置保留、子路径离线入口及旧版首次迁移。线上状态须以两个平台的实际部署和资源核验为准。
+
 ## 1.4.1 横屏修复
 
 - 基于完整 1.4.0，保留普通对局、父子局、赛后动画及语音；发布标识为 `v1.4.1`。
@@ -82,7 +90,7 @@ npm run build
 Copy-Item -LiteralPath 'deploy/vercel-static.json' -Destination 'dist/vercel.json'
 ```
 
-只发布 `dist/` 内文件，按相对路径上传，二进制文件需保留原字节。构建脚本不清空旧 `dist/`，必须检查没有历史文件混入。Vercel 读取 `dist/vercel.json` 的响应头；`_headers` 是其他静态主机使用的格式。
+只发布 `dist/` 内文件，按相对路径上传，二进制文件需保留原字节。构建脚本会重新创建 `dist/`，避免已删除资源残留。Vercel 读取 `dist/vercel.json` 的响应头；`_headers` 是其他静态主机使用的格式。
 
 GitHub Pages 使用 `/rally-badminton/` 子路径，`PUBLIC_PEER_MODE=1`、`PUBLIC_DEMO_MODE=0`、`PUBLIC_WS_URL` 留空。两处产物应对应同一发布提交及版本标签，不能混用根路径和子路径的 Service Worker 或 manifest。
 

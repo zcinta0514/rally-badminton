@@ -81,7 +81,7 @@ async function cacheReferences() {
   return windows.flatMap((client, index) => {
     const pathname = new URL(client.url).pathname;
     // A pinned document removed from the next inventory is still a live user of
-    // its old version. Unrelated admin pages without game pins are irrelevant.
+    // its old version. Unrelated pages without game pins are irrelevant.
     return records[index] || isGamePath(pathname) || allowedAssets.has(pathname) ? [{client, record: records[index]}] : [];
   });
 }

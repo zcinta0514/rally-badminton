@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -39,6 +39,7 @@ test('unsafe or ambiguous base paths and demo endpoints are rejected before expo
 test('static export strips project prefix from disk paths and preserves licenses', async t => {
   const outputDir=await mkdtemp(path.join(tmpdir(),'rally-pages-'));
   t.after(()=>rm(outputDir,{recursive:true,force:true}));
+  await writeFile(path.join(outputDir,'stale-feedback.js'),'must not survive');
   const build=await exportPwaBuild({basePath:'/rally-badminton/',demoMode:true,outputDir});
   assert.deepEqual(await readFile(path.join(outputDir,'index.html')),build.assets.get(build.basePath));
   assert.deepEqual(await readFile(path.join(outputDir,'src','entry.js')),build.assets.get(build.basePath+'src/entry.js'));
@@ -49,4 +50,5 @@ test('static export strips project prefix from disk paths and preserves licenses
   assert.equal((await readdir(outputDir)).includes('rally-badminton'),false);
   assert.equal((await readdir(outputDir)).includes('server'),false);
   assert.equal((await readdir(outputDir)).includes('data'),false);
+  assert.equal((await readdir(outputDir)).includes('stale-feedback.js'),false);
 });

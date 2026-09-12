@@ -1,4 +1,4 @@
-import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises';
+import { readFile, readdir, mkdir, rm, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -36,16 +36,11 @@ function validateAnalyticsConfig(value) {
 
 // A build captures bytes once. The Node server and exported static site both serve
 // this exact asset set, so a worker never caches a mixture while files are edited.
-export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath = '/', demoMode = false, peerMode = true, analytics, feedbackURL = '' } = {}) {
+export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath = '/', demoMode = false, peerMode = true, analytics } = {}) {
   basePath = validateBasePath(basePath);
   if (typeof demoMode !== 'boolean' || demoMode && wsUrl) throw new Error('Demo mode requires a boolean flag and no WebSocket endpoint');
   if (typeof peerMode !== 'boolean') throw new Error('Peer mode requires a boolean flag');
   wsUrl = validateWebSocketURL(wsUrl);
-  if (feedbackURL !== '' && feedbackURL !== '/api/feedback') {
-    let endpoint; try { endpoint = new URL(feedbackURL); } catch { throw new Error('Invalid feedback URL'); }
-    if (endpoint.protocol !== 'https:' || endpoint.username || endpoint.password || endpoint.search || endpoint.hash)
-      throw new Error('Invalid feedback URL: use HTTPS without credentials, query or fragment');
-  }
   if (analytics === undefined) {
     try { analytics = JSON.parse(await readFile(path.join(root, 'analytics.config.json'), 'utf8')); }
     catch (error) { if (error.code !== 'ENOENT') throw error; analytics = { id: '', ck: '' }; }
@@ -64,9 +59,6 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   async function walk(directory) {
     for (const item of (await readdir(path.join(root, directory), { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
       const file = `${directory}/${item.name}`;
-      // Admin files are served exclusively by the feedback service, never by
-      // the game export or its offline inventory.
-      if (directory === 'src' && item.name.startsWith('feedback-admin.')) continue;
       if (item.isDirectory()) await walk(file);
       else if (/\.(js|css|html|svg|png)$/.test(item.name) ||
         (directory === 'src/models' || directory.startsWith('src/models/')) && (/\.glb$/i.test(item.name) || /^(LICENSE|NOTICE|ATTRIBUTION)[\w.-]*\.(txt|md)$/i.test(item.name)) ||
@@ -88,7 +80,7 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   for(const [name,file] of [['@msgpack/msgpack','LICENSE'],['eventemitter3','LICENSE'],['peerjs-js-binarypack','LICENSE'],['webrtc-adapter','LICENSE.md'],['sdp','LICENSE']])
     peerNotices.push(`${name}\n\n${await readFile(path.join(root,'node_modules',name,file),'utf8')}`);
   assets.set(publicURL('/vendor/peerjs-dependencies.LICENSE.txt'),Buffer.from(peerNotices.join('\n\n---\n\n')));
-  const runtime = {wsUrl,basePath,demoMode,peerMode,analytics,feedbackURL};
+  const runtime = {wsUrl,basePath,demoMode,peerMode,analytics};
   const setRuntime = value => assets.set(publicURL('/runtime-config.js'), Buffer.from(`globalThis.RALLY_CONFIG=Object.freeze(${JSON.stringify(value)});\n`));
   const makeInventory = () => [...assets].sort(([a], [b]) => a.localeCompare(b)).map(([url, bytes]) => ({url,hash:digest(bytes)}));
   setRuntime(runtime);
@@ -105,7 +97,10 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
 
 export async function exportPwaBuild(options = {}) {
   const build = await createPwaBuild(options);
-  const output = options.outputDir ? path.resolve(options.outputDir) : path.resolve(options.root || projectRoot, 'dist');
+  const sourceRoot = path.resolve(options.root || projectRoot);
+  const output = options.outputDir ? path.resolve(options.outputDir) : path.resolve(sourceRoot, 'dist');
+  if (output === sourceRoot || output === path.parse(output).root) throw new Error('Static output must be a dedicated directory');
+  await rm(output, { recursive: true, force: true });
   for (const [url, body] of [...build.assets, [build.basePath + 'sw.js', build.worker]]) {
     const destination = path.join(output, url === build.basePath ? 'index.html' : url.slice(build.basePath.length));
     await mkdir(path.dirname(destination), { recursive: true });
@@ -117,6 +112,6 @@ export async function exportPwaBuild(options = {}) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  const build = await exportPwaBuild({ wsUrl: process.env.PUBLIC_WS_URL || '', basePath: process.env.PUBLIC_BASE_PATH || '/', demoMode: process.env.PUBLIC_DEMO_MODE === '1', peerMode: process.env.PUBLIC_PEER_MODE !== '0', feedbackURL: process.env.PUBLIC_FEEDBACK_URL || '' });
+  const build = await exportPwaBuild({ wsUrl: process.env.PUBLIC_WS_URL || '', basePath: process.env.PUBLIC_BASE_PATH || '/', demoMode: process.env.PUBLIC_DEMO_MODE === '1', peerMode: process.env.PUBLIC_PEER_MODE !== '0' });
   console.log(`PWA ${build.version}: ${build.assets.size} local resources exported to dist/`);
 }

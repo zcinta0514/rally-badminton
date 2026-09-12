@@ -10,7 +10,6 @@ import { initPWA, getWebSocketURL } from './pwa.js';
 import { isUpdateSafe } from './update-client.js';
 import { getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences } from './update-preferences.js';
 import { initOnboarding } from './onboarding.js';
-import { initFeedback } from './feedback.js';
 import { createPlayerProfile, normalizePlayerName } from './player-profile.js';
 import { createLeaderboard, getLeaderboardURL, resultRecordText } from './leaderboard.js';
 import { openPeerRoom } from './peer-network.js';
@@ -57,9 +56,6 @@ const pwa=initPWA({fullscreenButton:$('fullscreen'),showToast,onUpdateLock:({ver
     editing:Boolean(document.activeElement?.matches('input, textarea, select, [contenteditable="true"]'))})});
 const onboarding=initOnboarding({showToast,canOpen:()=>Boolean(controls)&&$('loading').hidden&&mode==='menu'&&!room&&!connecting&&!peerSession&&!peerAttempt,
   onStartPractice:()=>startAI()});
-const feedback=initFeedback({showToast,
-  canOpen:()=>!document.body.inert&&(mode==='menu'&&!room&&!connecting&&!peerSession&&!peerAttempt||state?.phase==='over'&&!resultPending&&!finale.blocking&&!view?.rallyEnding),
-  getContext:()=>({version:globalThis.RALLY_CONFIG?.buildId||'',platform:navigator.userAgentData?.platform||navigator.platform||'',mode:mode==='online'?'好友对打':mode==='ai'?'人机练习':'首页'})});
 let lastRtt=null,lastDiagnostics=0,appliedQuality='';
 const setText=(id,text)=>{if($(id).textContent!==String(text))$(id).textContent=text;};
 const peerRecords=peerMode?createPeerRecords():null;
