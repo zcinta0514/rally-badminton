@@ -66,7 +66,7 @@ test('one isolated frame initializes one page view and removes invitation and re
   assert.doesNotMatch(JSON.stringify(f.messages), /ABCDE|FGHIJ|nickname|secret|"url"|"attributes"/);
 });
 
-test('match events count starts and scored completion once, using four fixed event names', async t => {
+test('match events count starts, scored completion and fixed interruption events without attributes', async t => {
   const f = fixture(t); f.initialize();
   f.analytics.observeResult({ phase: 'over', endReason: 'scored' });
   f.analytics.startMatch('ai');
@@ -80,12 +80,28 @@ test('match events count starts and scored completion once, using four fixed eve
   assert.doesNotMatch(JSON.stringify(f.messages), /秘密昵称|ABCDE|"players"|"room"|"data"|"timestamp"/);
 });
 
-test('all interrupted endings stay excluded even when there is a winner', async t => {
+test('interrupted endings emit one fixed interruption event even when there is a winner', async t => {
   const f = fixture(t); f.initialize();
   for (const endReason of ['quit', 'disconnect', 'pause-timeout', 'pause-limit', 'interrupted', null]) {
     f.analytics.startMatch('ai'); f.analytics.observeResult({ phase: 'over', winner: 0, endReason });
   }
-  await f.analytics.flush(); assert.deepEqual(f.events(), Array(6).fill('ai_start'));
+  await f.analytics.flush(); assert.deepEqual(f.events(), [
+    'ai_start', 'ai_interrupt', 'ai_start', 'ai_interrupt', 'ai_start', 'ai_interrupt',
+    'ai_start', 'ai_interrupt', 'ai_start', 'ai_interrupt', 'ai_start', 'ai_interrupt',
+  ]);
+});
+
+test('explicit exits and quality degradation are bounded to one event per match', async t => {
+  const f = fixture(t); f.initialize();
+  f.analytics.startMatch('ai');
+  assert.equal(f.analytics.markDegraded('performance'), true);
+  assert.equal(f.analytics.markDegraded('performance'), false);
+  assert.equal(f.analytics.markDegraded('network'), true);
+  f.analytics.endMatch('quit');
+  f.analytics.startMatch('online');
+  f.analytics.endMatch();
+  await f.analytics.flush();
+  assert.deepEqual(f.events(), ['ai_start', 'performance_degraded', 'network_degraded', 'ai_interrupt', 'friend_start']);
 });
 
 test('only exact production HTTPS paths with valid public IDs enable collection', async t => {

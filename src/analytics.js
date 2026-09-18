@@ -2,8 +2,12 @@ const QUEUE_KEY = 'rally.usage.queue.v1';
 const DISABLED_KEY = 'rally.usage.disabled.v1';
 const MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
 const MAX_QUEUE = 100;
-const EVENTS = { ai: ['ai_start', 'ai_finish'], online: ['friend_start', 'friend_finish'] };
-const EVENT_NAMES = new Set(Object.values(EVENTS).flat());
+const EVENTS = {
+  ai: { start: 'ai_start', finish: 'ai_finish', interrupt: 'ai_interrupt' },
+  online: { start: 'friend_start', finish: 'friend_finish', interrupt: 'friend_interrupt' },
+  degraded: { network: 'network_degraded', performance: 'performance_degraded' },
+};
+const EVENT_NAMES = new Set(Object.values(EVENTS).flatMap(group => Object.values(group)));
 const PUBLIC_ID = /^[a-z0-9_-]{8,64}$/i;
 const safe = (read, fallback = null) => { try { return read(); } catch { return fallback; } };
 
@@ -146,14 +150,24 @@ export function createUsageAnalytics(options = {}) {
     pageView() { viewed = true; createFrame(); },
     startMatch(mode) {
       match = null;
-      if (Object.hasOwn(EVENTS, mode) && enqueue(EVENTS[mode][0])) match = { mode, finished: false };
+      const events = EVENTS[mode];
+      if (events?.start && enqueue(events.start)) match = { mode, finished: false, degraded: new Set() };
     },
     observeResult(state) {
       if (!match || match.finished || state?.phase !== 'over') return;
       match.finished = true;
-      if (state.endReason === 'scored') enqueue(EVENTS[match.mode][1]);
+      enqueue(state.endReason === 'scored' ? EVENTS[match.mode].finish : EVENTS[match.mode].interrupt);
     },
-    endMatch() { match = null; },
+    endMatch(reason = '') {
+      if (match && !match.finished && reason) enqueue(EVENTS[match.mode].interrupt);
+      match = null;
+    },
+    markDegraded(kind) {
+      const event = EVENTS.degraded?.[kind];
+      if (!match || match.finished || !event || match.degraded.has(kind)) return false;
+      match.degraded.add(kind);
+      return enqueue(event);
+    },
     setEnabled(value) {
       const wasOptedOut = optedOut;
       optedOut = value !== true;

@@ -286,6 +286,7 @@ test('smash eligibility warns about a shallow impossible attack and preserves it
   assert.equal(rules.getShotAvailability(s, 0, {aimDepth: 1}).canSmash, true);
   const shallow = rules.getShotTarget(s, 0, {shot: 'smash', aimDepth: -1});
   assert.equal(shallow.type, 'smash'); assert.match(shallow.quality.reason, /角度|下网/);
+  assert.equal(shallow.quality.reasonCode, 'net-risk');
   assert.equal(rules.getShotAvailability(s, 0, {aimDepth: -1}).canSmash, false);
   assert.ok(shallow.netHeight < rules.COURT.netHeight);
 });
@@ -315,6 +316,7 @@ test('stable safe returns stay reliable and quality previews are deterministic a
     assert.ok(target.netHeight > rules.COURT.netHeight);
     assert.ok(Math.abs(target.x) < rules.COURT.halfWidth && Math.abs(target.z) < rules.COURT.halfLength);
     assert.equal(target.x, target.aimX); assert.equal(target.z, target.aimZ);
+    assert.equal(target.quality.reasonCode, 'stable');
     assert.deepEqual(rules.getShotTarget(s, 0, request), target);
     assert.deepEqual(s, before);
   }

@@ -53,12 +53,14 @@ test('frame loads the official SDK and initializes it only once after a trusted 
 
 test('frame forwards only fixed events without attributes and acknowledges SDK acceptance', () => {
   const f = fixture(); f.receive({ type: 'rally-analytics-init', ...CONFIG }); f.load(); f.codeLoaded();
-  for (const event of ['ai_start', 'friend_start', 'ai_finish', 'friend_finish'])
+  for (const event of ['ai_start', 'friend_start', 'ai_finish', 'friend_finish',
+    'ai_interrupt', 'friend_interrupt', 'network_degraded', 'performance_degraded'])
     f.receive({ type: 'rally-analytics-event', event, requestId: event, data: { nickname: 'secret' } });
   f.receive({ type: 'rally-analytics-event', event: 'nickname=secret', requestId: 'bad' });
   f.receive({ type: 'rally-analytics-event', event: 'ai_start', requestId: 'forged' }, {});
-  assert.deepEqual(f.events, ['ai_start', 'friend_start', 'ai_finish', 'friend_finish']);
-  assert.equal(f.messages.filter(item => item.data.type === 'rally-analytics-ack').length, 4);
+  assert.deepEqual(f.events, ['ai_start', 'friend_start', 'ai_finish', 'friend_finish',
+    'ai_interrupt', 'friend_interrupt', 'network_degraded', 'performance_degraded']);
+  assert.equal(f.messages.filter(item => item.data.type === 'rally-analytics-ack').length, 8);
   assert.doesNotMatch(JSON.stringify(f.messages), /secret|"data":\{"nickname"/);
 });
 

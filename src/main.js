@@ -26,7 +26,7 @@ usage.pageView();
 const usageToggle=$('usage-enabled');
 if(usageToggle){
   usageToggle.checked=usage.enabled;usageToggle.disabled=!usage.configured;
-  $('usage-status').textContent=usage.configured?'仅记录访问及开局、完赛参与次数；关闭不影响游戏。':'当前站点未启用使用统计。';
+  $('usage-status').textContent=usage.configured?'仅记录访问、开局、完赛、中断及体验降级事件；关闭不影响游戏。':'当前站点未启用使用统计。';
   usageToggle.addEventListener('change',()=>{usage.setEnabled(usageToggle.checked);usageToggle.checked=usage.enabled;});
 }
 const names={easy:'入门',medium:'进阶',hard:'高手'};
@@ -35,6 +35,7 @@ const updatePreferencesStorage=getUpdatePreferencesStorage(window);
 const restoredUpdatePreferences=restoreUpdatePreferences(globalThis.RALLY_CONFIG?.buildId,updatePreferencesStorage);
 const settings={role:'balanced',difficulty:'easy',target:5,ruleset:'quick',...restoredUpdatePreferences?.settings,finale:'none'};
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
+let trainingSession=null;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
 let pendingShot=null,aim=0,dragAim=null,view,controls,lastFrame=performance.now(),accumulator=0,lastSend=0;
 let toastTimer,helpOpen=false,rematchRequested=false,lastPhase='',lastHit=0,lastPoint=0,connecting=false,reconnecting=false,resultPending=false;
@@ -56,7 +57,7 @@ const pwa=initPWA({fullscreenButton:$('fullscreen'),showToast,onUpdateLock:({ver
     editing:Boolean(document.activeElement?.matches('input, textarea, select, [contenteditable="true"]'))})});
 const onboarding=initOnboarding({showToast,canOpen:()=>Boolean(controls)&&$('loading').hidden&&mode==='menu'&&!room&&!connecting&&!peerSession&&!peerAttempt,
   onStartPractice:()=>startAI()});
-let lastRtt=null,lastDiagnostics=0,appliedQuality='';
+let lastRtt=null,lastDiagnostics=0,appliedQuality='',peerStats=null,lastPeerStats=0,peerStatsPending=false;
 const setText=(id,text)=>{if($(id).textContent!==String(text))$(id).textContent=text;};
 const peerRecords=peerMode?createPeerRecords():null;
 const leaderboard=createLeaderboard(peerMode?{document,getURL:()=>'',fetchImpl:async()=>({ok:true,json:async()=>peerRecords.list()})}:{document,getURL:()=>getLeaderboardURL(getWebSocketURL())});
@@ -176,7 +177,8 @@ function enterMatch(){
   dots[1].style.background=side===1?'#fb7959':'#b5ebc7';
 }
 function exitToMenu(){
-  usage.endMatch();
+  usage.endMatch('quit');
+  trainingSession=null;
   clearFinale();finale.reset();
   resultPending=false;
   leaderboardReturn=null;leaderboard.cancel();leaderboardRecord=null;
@@ -185,14 +187,23 @@ function exitToMenu(){
   socket?.close();socket=null;room=null;setRoomBusy(false);reconnecting=false;reconnectError='';
   mode='menu';side=0;state=null;pendingShot=null;helpOpen=false;rematchRequested=false;controls.reset();controls.setEnabled(false);
   arenaAudio.reset();
-  playback.reset();lastRtt=null;
+  playback.reset();lastRtt=null;peerStats=null;lastPeerStats=0;peerStatsPending=false;
   $('countdown').hidden=true;setScreen('menu');dialog(null);history.replaceState(null,'',location.pathname);
   queueMicrotask(()=>onboarding.maybeShow());
 }
 function startAI(){
   if(peerAttempt||peerSession)exitToMenu();
+  trainingSession=null;
   playback.reset();lastRtt=null;
   mode='ai';side=0;state=createMatch({target:settings.target,ruleset:settings.ruleset,roles:[settings.role,'balanced'],difficulty:settings.difficulty,seed:Math.floor(Math.random()*0x7fffffff)});
+  enterMatch();
+}
+function startTraining(){
+  if(peerAttempt||peerSession)exitToMenu();
+  playback.reset();lastRtt=null;
+  trainingSession={step:0,startedHit:0,aimed:false,hadMovement:false,movedAfterShot:false,returned:false,
+    start:{x:.85,z:3.8},home:{x:0,z:3.8}};
+  mode='ai';side=0;state=createMatch({target:5,ruleset:'quick',roles:[settings.role,'balanced'],difficulty:'easy',seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
 }
 const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},side,dragAim??aim);
@@ -200,6 +211,8 @@ function send(message){if(peerMode)peerSession?.send(message);else if(socket?.re
 function fireShot(request){
   if(!state||!['serve','rally'].includes(state.phase))return;
   const selectedAim=resolveShotAim(request,aim);
+  if(trainingSession&&trainingSession.step===1&&
+    (Math.abs(selectedAim)>0.15||Math.abs(request.aimDepth??0)>0.15||Number(request.charge)>0.45))trainingSession.aimed=true;
   const input=worldInput({...controls.sample(),...request,aim:selectedAim});dragAim=null;dragDepth=0;
   selectedShot=request.shot;lastShotRequest={shot:request.shot,aim:selectedAim,aimDepth:request.aimDepth??0,charge:request.charge};
   if(mode==='online')send({type:'input',...input});else pendingShot=input;
@@ -310,6 +323,7 @@ function peerClosed(error){
     finishMatch(state,null,error?.message||'手机连接已断开，请重新建房');
     playback.reset();playback.receive(state,performance.now());
     leaderboardRecord={status:'excluded',reason:'abandoned'};lastPhase='';
+    usage.observeResult(state);
   }
   setText('connection','连接已断开');
 }
@@ -318,6 +332,7 @@ function closeHelpOrSetup(){
   helpOpen=false;if(state?.phase==='paused')dialog('pause-dialog');else dialog(null);
 }
 $('start-ai').addEventListener('click',startAI);
+$('start-training')?.addEventListener('click',startTraining);
 $('open-friends').addEventListener('click',()=>{settings.finale='none';groupChoice('friend-modes','finale','none');dialog(practiceOnly?'lan-dialog':'friends-dialog');});
 $('open-leaderboard').addEventListener('click',()=>openLeaderboard('menu'));
 $('result-leaderboard').addEventListener('click',()=>openLeaderboard('result'));
@@ -374,8 +389,31 @@ function shotGuidance(state){
     target:getShotTarget(state,side,request),
     shot,prepare:input.prepare,charge:input.charge,aim:localRequest.aim,aimDepth:localRequest.aimDepth};
 }
+const TRAINING_STEPS=[
+  {title:'到位',text:'向黄色圈移动，进入击球范围后完成一次稳健回球。'},
+  {title:'选线',text:'按住击球键拖动到左、右或深浅方向，再松手完成一次有意图的击球。'},
+  {title:'回位',text:'击球后回到中间位置，等下一拍再出手。'},
+];
+function updateTraining(state){
+  if(!trainingSession)return;
+  const player=state.players[side];
+  if(player&&(Math.hypot(player.vx,player.vz)>.15||Math.hypot(player.x-trainingSession.start.x,player.z-trainingSession.start.z)>.55))trainingSession.hadMovement=true;
+  if(trainingSession.step===2&&player){
+    if(Math.hypot(player.x-trainingSession.home.x,player.z-trainingSession.home.z)>.8)trainingSession.movedAfterShot=true;
+    if(trainingSession.movedAfterShot&&Math.hypot(player.x-trainingSession.home.x,player.z-trainingSession.home.z)<.55)trainingSession.returned=true;
+  }
+  const last=state.lastShotInfo;
+  if(trainingSession.step===0&&trainingSession.hadMovement&&last?.side===side&&last.hitId>trainingSession.startedHit){
+    trainingSession.step=1;trainingSession.startedHit=last.hitId;
+  }else if(trainingSession.step===1&&trainingSession.aimed&&last?.side===side&&last.hitId>trainingSession.startedHit){
+    trainingSession.step=2;trainingSession.startedHit=last.hitId;trainingSession.movedAfterShot=false;trainingSession.returned=false;
+  }else if(trainingSession.step===2&&trainingSession.returned&&last?.side===side&&last.hitId>trainingSession.startedHit){
+    trainingSession.step=3;
+  }
+}
 function updateUI(info,state){
   if(!state)return;
+  updateTraining(state);
   $('result-leaderboard').hidden=mode!=='online';
   $('result-record').hidden=mode!=='online';
   if(mode==='online'&&state.phase==='over')setText('result-record',resultRecordText(leaderboardRecord));
@@ -386,7 +424,9 @@ function updateUI(info,state){
   setText('role-self',ROLES[self.role].label+'型');setText('role-other',ROLES[opponent.role].label+'型');
   setText('score-self',state.score[side]);setText('score-other',state.score[1-side]);
   const matchType=mode==='ai'?'人机练习':room?.rules?.finale==='father-son'?'父子局':'普通对局';
-  setText('match-label',state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[side]}:${state.games[1-side]} · ${matchType}`:`抢 ${state.target} 分 · ${matchType}`);
+  setText('match-label',trainingSession&&trainingSession.step<3
+    ?`训练 ${trainingSession.step+1}/3 · ${TRAINING_STEPS[trainingSession.step].title}`
+    :trainingSession?'训练完成 · 继续实战':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[side]}:${state.games[1-side]} · ${matchType}`:`抢 ${state.target} 分 · ${matchType}`);
   setText('match-message',state.phase==='serve'?(state.server===side?`你发球 · ${state.service?.court==='left'?'左':'右'}发球区 → 对角`:'等待对手对角发球'):relativeMessage(state.message));
   setText('rally',state.phase==='rally'?`${state.rally} 拍回合`:`第 ${state.pointId+1} 分`);
   if(mode==='ai')setText('connection','本地练习');
@@ -422,6 +462,8 @@ function updateUI(info,state){
   else if(info.prepare==='smash'&&info.availability.canHit&&!info.availability.canSmash)guidance=info.target.fallbackReason||qualityReason||info.availability.reason;
   const lastShot=state.lastShotInfo;
   if(!info.prepare&&lastShot?.side===side&&state.time-lastShot.at<1.2&&lastShot.quality.risk>.25)guidance='刚才一拍 · '+lastShot.quality.reason.split(' · ')[0];
+  if(trainingSession&&trainingSession.step<3&&!info.prepare)guidance=`训练 ${trainingSession.step+1}/3 · ${TRAINING_STEPS[trainingSession.step].text}`;
+  if(trainingSession&&trainingSession.step>=3&&!info.prepare)guidance='三步训练完成 · 现在按自己的节奏继续';
   setText('assist-status',guidance);
   $('assist-status').dataset.kind=guidance==='按住击球键，拖动选落点'?'instruction':'live';
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
@@ -519,9 +561,15 @@ try{
       if(qualityKey!==appliedQuality){view.setQuality(stats.quality);appliedQuality=qualityKey;}
       const network=mode==='online'?playback.metrics(now):null;
       const renderer=view.getRendererMetrics();
-      if($('performance-readout'))setText('performance-readout',formatPerformance(stats,network,lastRtt,renderer));
+      if(mode==='online'&&peerSession&&typeof peerSession.getStats==='function'&&now-lastPeerStats>2000&&!peerStatsPending){
+        peerStatsPending=true;lastPeerStats=now;
+        Promise.resolve(peerSession.getStats()).then(value=>{peerStats=value;},()=>{peerStats=null;}).finally(()=>{peerStatsPending=false;});
+      }
+      if(network&&((network.underruns>0)||network.jitterMs>80||network.ageMs>500))usage.markDegraded?.('network');
+      if(stats.quality.shadows===false||stats.quality.pixelRatio<performanceMonitor.maxPixelRatio)usage.markDegraded?.('performance');
+      if($('performance-readout'))setText('performance-readout',formatPerformance(stats,network,lastRtt,renderer,peerStats));
       // Read-only diagnostics for reproducible browser QA and user bug reports.
-      window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer};
+      window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats};
     }
     requestAnimationFrame(frame);
   }

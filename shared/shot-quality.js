@@ -4,7 +4,7 @@ const clamp = value => Math.max(0, Math.min(1, value));
  * client timing claim. A broad neutral zone keeps ordinary mobile returns easy. */
 export function contactQuality({player, ball, role, shot, charge, aim, aimDepth, serving}) {
   const factors = {movement: 0, stretch: 0, lowContact: 0, lateContact: 0, fatigue: 0, linePower: 0};
-  if (serving) return {score: 1, risk: 0, reason: '发球辅助 · 对角发球区', spread: 0, factors};
+  if (serving) return {score: 1, risk: 0, reason: '发球辅助 · 对角发球区', reasonCode: 'serve', spread: 0, factors};
   factors.movement = clamp((Math.hypot(player.vx, player.vz) - 1.15) / (role.speed - 1.15));
   factors.stretch = clamp((Math.hypot(ball.x - player.x, ball.z - player.z) - 0.85) / 0.6);
   const comfortableHeight = shot === 'smash' ? 2.1 : shot === 'clear' ? 0.95 : 0.9;
@@ -20,6 +20,7 @@ export function contactQuality({player, ball, role, shot, charge, aim, aimDepth,
   const ranked = Object.keys(factors).filter(key => factors[key] > 0.12).sort((a, b) => factors[b] * weights[b] - factors[a] * weights[a]);
   const risk = Math.min(0.96, Object.keys(factors).reduce((sum, key) => sum + factors[key] * weights[key], 0));
   return {score: 1 - risk, risk, reason: ranked.slice(0, 2).map(key => labels[key]).join(' · ') || '站稳击球 · 控制稳定',
+    reasonCode: ranked[0] || 'stable',
     spread: risk < 0.02 ? 0 : 0.03 + 1.7 * risk + 0.9 * risk * risk, factors};
 }
 

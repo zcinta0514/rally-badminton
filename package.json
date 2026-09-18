@@ -9,6 +9,7 @@
     "dev": "node server/index.js",
     "build": "node scripts/build-pwa.js",
     "icons": "node scripts/generate-icons.js",
+    "benchmark": "node scripts/benchmark-game.js",
     "test": "node --test tests/*.test.js"
   },
   "engines": {

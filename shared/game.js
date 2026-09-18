@@ -248,6 +248,7 @@ export function getShotTarget(state, side, request = {}) {
     && player.stamina >= 18 * (1 + input.charge * 0.25) && netHeight > COURT.netHeight + 0.02;
   if (!serving && netHeight <= COURT.netHeight) {
     quality.risk = Math.max(quality.risk, 0.8); quality.score = 1 - quality.risk;
+    quality.reasonCode = 'net-risk';
     quality.reason = type === 'smash' ? `下压角度或触点不利，存在下网风险 · ${quality.reason}` : `击球不稳，存在下网风险 · ${quality.reason}`;
   }
   quality.spread = Math.max(quality.spread, Math.hypot(x - aimX, z - aimZ));

@@ -35,7 +35,7 @@ export class PerformanceMonitor {
   }
 }
 
-export function formatPerformance(render,network,rtt,renderer){
+export function formatPerformance(render,network,rtt,renderer,transport){
   const n=(value,digits=1)=>Number.isFinite(value)?value.toFixed(digits):'—';
   const rows=[`画面 ${n(render.fps,0)} FPS · 帧间隔 ${n(render.frameMs)} ms · P95 ${n(render.frameP95)} ms`,
     `CPU 提交 ${n(render.renderMs)} ms · 建议 ${n(render.guidanceMs)} ms · UI ${n(render.uiMs)} ms`,
@@ -44,6 +44,11 @@ export function formatPerformance(render,network,rtt,renderer){
     rows.push(`网络快照 ${n(network.snapshotHz)} /秒 · 间隔 ${n(network.intervalMs)} ms · 抖动 ${n(network.jitterMs)} ms`,
       `RTT ${n(rtt,0)} ms · 播放缓冲 ${n(network.bufferMs,0)} ms · 快照已过 ${n(network.ageMs,0)} ms`);
   }else rows.push('本地人机 · 不使用网络快照');
+  if(transport){
+    const pairs=Array.isArray(transport.candidatePairs)?transport.candidatePairs:[];
+    const transportRtt=pairs.find(pair=>Number.isFinite(pair.currentRoundTripTime))?.currentRoundTripTime;
+    rows.push(`直连通道 ${transport.connected?'已连接':'已断开'} · 信令 ${transport.signalingConnected?'在线':'断开'} · WebRTC RTT ${Number.isFinite(transportRtt)?n(transportRtt*1000,0):'—'} ms`);
+  }
   rows.push('CPU 提交耗时不等于 GPU 耗时；当前设备采样。');
   return rows.join('\n');
 }

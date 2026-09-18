@@ -5,7 +5,8 @@
     location.hostname === 'kaipai-rally.vercel.app' && location.pathname === '/src/analytics-frame.html' ||
     location.hostname === 'zcinta0514.github.io' && location.pathname === '/rally-badminton/src/analytics-frame.html');
   if (!allowed || window.parent === window) return;
-  const events = new Set(['ai_start', 'friend_start', 'ai_finish', 'friend_finish']);
+  const events = new Set(['ai_start', 'friend_start', 'ai_finish', 'friend_finish',
+    'ai_interrupt', 'friend_interrupt', 'network_degraded', 'performance_degraded']);
   const validId = value => typeof value === 'string' && /^[a-z0-9_-]{8,64}$/i.test(value);
   let started = false, initialized = false;
   const send = (type, extra = {}) => { try { parent.postMessage({ type, ...extra }, origin); } catch {} };

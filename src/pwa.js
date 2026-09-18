@@ -36,10 +36,56 @@ export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate
   dialog.id = 'pwa-dialog'; dialog.className = 'pwa-dialog'; dialog.setAttribute('aria-labelledby', 'pwa-title');
   dialog.innerHTML = '<button type="button" class="pwa-close" aria-label="关闭主屏幕说明">×</button><small class="pwa-eyebrow">开拍 / RALLY</small><h2 id="pwa-title">从主屏幕开拍</h2><p id="pwa-intro"></p><ol id="pwa-steps"></ol><p class="pwa-note">把手机手动横置，并关闭系统竖排方向锁定。独立窗口可去掉普通浏览器地址栏和工具栏；方向锁定、通知与系统手势仍由设备控制。</p><p id="pwa-cache-detail" class="pwa-cache-detail" role="status" aria-live="polite"></p><div class="pwa-actions"><button id="pwa-install" type="button">添加到主屏幕</button><button id="pwa-check" type="button">检查更新</button></div>';
   document.body.append(dialog);
+  const releaseNotice = globalThis.RALLY_CONFIG?.releaseNotice;
+  const validReleaseNotice = releaseNotice && typeof releaseNotice.id === 'string' && /^[a-z0-9][a-z0-9._-]{1,64}$/i.test(releaseNotice.id) &&
+    typeof releaseNotice.title === 'string' && typeof releaseNotice.summary === 'string' &&
+    Array.isArray(releaseNotice.items) && releaseNotice.items.length > 0 && releaseNotice.items.every(item => typeof item === 'string');
+  const releaseDialog = document.createElement('dialog');
+  releaseDialog.id = 'release-notice-dialog'; releaseDialog.className = 'release-dialog'; releaseDialog.setAttribute('aria-labelledby', 'release-notice-title');
+  releaseDialog.innerHTML = '<button type="button" class="release-close" aria-label="关闭更新公告">×</button><small class="pwa-eyebrow">开拍 / RALLY · 更新公告</small><h2 id="release-notice-title"></h2><p id="release-notice-summary"></p><ul id="release-notice-items"></ul><button type="button" class="release-dismiss">知道了 ↗</button>';
+  document.body.append(releaseDialog);
   const detail = dialog.querySelector('#pwa-cache-detail'), nativeInstall = dialog.querySelector('#pwa-install'), checkButton = dialog.querySelector('#pwa-check');
-  let updateState = '', previousInert = false, updateStorage;
+  const releaseDismiss = releaseDialog.querySelector('.release-dismiss');
+  let updateState = '', previousInert = false, updateStorage, releasePending = false, releaseTimer = null, releaseFocus = null;
   try { updateStorage = sessionStorage; } catch { /* Auto reload needs a working loop guard. */ }
   const pageVersion = globalThis.RALLY_CONFIG?.buildId || '';
+  function closeReleaseNotice() {
+    if (!releaseDialog.open) return;
+    releaseDialog.close(); releaseFocus?.focus?.({preventScroll:true}); releaseFocus = null;
+  }
+  function releaseNoticeCanOpen() {
+    return releasePending && validReleaseNotice && !matchActive && !document.hidden && document.body?.dataset.screen !== 'match' &&
+      !releaseDialog.open && !document.querySelector('dialog[open]');
+  }
+  function scheduleReleaseNotice() {
+    if (!releasePending || releaseTimer) return;
+    const attempt = () => {
+      releaseTimer = null;
+      if (!releasePending) return;
+      if (!releaseNoticeCanOpen()) { releaseTimer = setTimeout(attempt, 500); return; }
+      releasePending = false;
+      const title = releaseDialog.querySelector('#release-notice-title');
+      const summary = releaseDialog.querySelector('#release-notice-summary');
+      const items = releaseDialog.querySelector('#release-notice-items');
+      title.textContent = releaseNotice.title; summary.textContent = releaseNotice.summary;
+      items.replaceChildren(...releaseNotice.items.slice(0, 5).map(item => { const li = document.createElement('li'); li.textContent = item; return li; }));
+      releaseFocus = document.activeElement;
+      try { releaseDialog.showModal(); releaseDismiss.focus({preventScroll:true}); try { localStorage.setItem('rally.release.notice.' + releaseNotice.id, '1'); } catch {} }
+      catch { releaseFocus = null; showToast('已更新到新版：' + releaseNotice.summary); }
+    };
+    attempt();
+  }
+  function queueReleaseNotice() {
+    if (!validReleaseNotice) return;
+    try {
+      const key = 'rally.release.notice.' + releaseNotice.id;
+      if (localStorage.getItem(key) === '1') return;
+    } catch { /* The automatic-reload marker still limits this to the current update. */ }
+    releasePending = true; scheduleReleaseNotice();
+  }
+  releaseDialog.querySelector('.release-close').addEventListener('click', closeReleaseNotice);
+  releaseDismiss.addEventListener('click', closeReleaseNotice);
+  releaseDialog.addEventListener('cancel', event => { event.preventDefault(); closeReleaseNotice(); });
   const updater = supported ? createUpdateClient({serviceWorker:navigator.serviceWorker,storage:updateStorage,version:pageVersion,
     isSafe:context => !matchActive && isSafeToUpdate(context),
     lock(context) { previousInert=document.body.inert; document.body.inert=true; onUpdateLock(context); showToast('新版已就绪，正在自动更新…'); },
@@ -141,7 +187,7 @@ export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate
       try {
         const key='rally.update.reload.'+pageVersion;
         if (pageVersion && updateStorage?.getItem(key)) {
-          updateStorage.removeItem(key); showToast('已自动更新到新版，欢迎回来。');
+          updateStorage.removeItem(key); showToast('已自动更新到新版，欢迎回来。'); queueReleaseNotice();
         }
       } catch { /* A success notice is optional. */ }
     } catch { failure = true; updateUI(); }
@@ -155,5 +201,6 @@ export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate
   });
   window.addEventListener('online', updateUI); window.addEventListener('offline', updateUI);
   updateUI(); if (supported) register();
-  return {setMatchActive(value) { matchActive = Boolean(value); if(matchActive && dialog.open)dialog.close(); updateUI(); }, openInstall};
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) scheduleReleaseNotice(); });
+  return {setMatchActive(value) { matchActive = Boolean(value); if(matchActive && dialog.open)dialog.close(); updateUI(); if(!matchActive)scheduleReleaseNotice(); }, openInstall};
 }

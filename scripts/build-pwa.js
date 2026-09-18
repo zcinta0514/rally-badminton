@@ -2,6 +2,7 @@ import { readFile, readdir, mkdir, rm, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { RELEASE_NOTICE } from '../src/release-notes.js';
 
 export const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -80,7 +81,7 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   for(const [name,file] of [['@msgpack/msgpack','LICENSE'],['eventemitter3','LICENSE'],['peerjs-js-binarypack','LICENSE'],['webrtc-adapter','LICENSE.md'],['sdp','LICENSE']])
     peerNotices.push(`${name}\n\n${await readFile(path.join(root,'node_modules',name,file),'utf8')}`);
   assets.set(publicURL('/vendor/peerjs-dependencies.LICENSE.txt'),Buffer.from(peerNotices.join('\n\n---\n\n')));
-  const runtime = {wsUrl,basePath,demoMode,peerMode,analytics};
+  const runtime = {wsUrl,basePath,demoMode,peerMode,analytics,releaseNotice:RELEASE_NOTICE};
   const setRuntime = value => assets.set(publicURL('/runtime-config.js'), Buffer.from(`globalThis.RALLY_CONFIG=Object.freeze(${JSON.stringify(value)});\n`));
   const makeInventory = () => [...assets].sort(([a], [b]) => a.localeCompare(b)).map(([url, bytes]) => ({url,hash:digest(bytes)}));
   setRuntime(runtime);

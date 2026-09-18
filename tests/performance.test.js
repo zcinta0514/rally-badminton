@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PerformanceMonitor} from '../src/performance.js';
+import {PerformanceMonitor, formatPerformance} from '../src/performance.js';
 
 function record(monitor,{frameMs=16.67,renderMs=3,count=180,visible=true}={}){
   for(let i=0;i<count;i++)monitor.record({frameMs,renderMs,guidanceMs:.2,uiMs:.3,visible});
@@ -29,4 +29,11 @@ test('long tab-return gaps are excluded and quality has a readable floor',()=>{
   record(monitor,{frameMs:10000,renderMs:2,count:4});assert.equal(monitor.summary().fps,null);
   record(monitor,{frameMs:45,renderMs:22,count:3000});
   assert.equal(monitor.summary().quality.pixelRatio,1);assert.equal(monitor.summary().quality.shadows,false);
+});
+test('diagnostics include direct channel state when transport stats are available',()=>{
+  const text=formatPerformance({fps:60,frameMs:16.7,frameP95:20,renderMs:3,guidanceMs:.2,uiMs:.3,quality:{pixelRatio:1,shadows:true}},
+    {snapshotHz:20,intervalMs:50,jitterMs:4,bufferMs:70,ageMs:12,underruns:0},42,
+    {pixelRatio:1,shadows:true,calls:5},
+    {connected:true,signalingConnected:false,candidatePairs:[{currentRoundTripTime:.043}]});
+  assert.match(text,/直连通道 已连接/);assert.match(text,/信令 断开/);assert.match(text,/WebRTC RTT 43 ms/);
 });

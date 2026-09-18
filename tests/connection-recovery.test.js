@@ -291,6 +291,16 @@ test('usage hooks count actual AI starts and restarts while menu autoplay remain
   assert.ok(f.usageEvents.some(event=>event[0]==='leave'));
 });
 
+test('three-step training starts a local quick match and exposes a guided label', async () => {
+  const f = await fixture();
+  f.click('start-training'); f.draw();
+  assert.equal(f.document.body.dataset.screen, 'match');
+  assert.equal(f.liveState.ruleset, 'quick');
+  assert.match(f.element('match-label').textContent, /训练 1\/3/);
+  assert.match(f.element('assist-status').textContent, /训练 1\/3|黄色圈/);
+  assert.deepEqual(f.usageEvents.at(-1), ['start', 'ai']);
+});
+
 test('usage hooks observe accepted friend results before delayed result presentation', async () => {
   const f=await fixture();
   assert.deepEqual(f.usageEvents.filter(event=>event[0]==='start'),[['start','online']]);
