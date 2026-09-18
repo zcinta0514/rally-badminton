@@ -49,6 +49,30 @@ test('availability uses turn, court, reach, height, cooldown and stamina boundar
   assert.equal(rules.getShotAvailability(impossible, 0).canSmash, false);
 });
 
+ test('beginner assistance widens local reach and timing without changing the opponent side', () => {
+  const standard = incoming({x: 1.55});
+  const assisted = rules.createMatch({playerAssist: 'beginner', assistSide: 0});
+  assisted.phase = 'rally'; assisted.players[0].x = 0; assisted.players[0].z = 3.8;
+  Object.assign(assisted.shuttle, {x: 1.55, y: 1.2, z: 3.8, vx: 0, vy: -0.2, vz: 0, active: true, lastHit: 1});
+  assert.equal(rules.getShotAvailability(standard, 0).canHit, false);
+  assert.equal(rules.getShotAvailability(assisted, 0).canHit, true);
+  assert.equal(rules.getShotAvailability(assisted, 0).assist, 'beginner');
+  assert.equal(rules.getShotAvailability(assisted, 1).assist, 'none');
+  assert.ok(rules.getShotTarget(assisted, 0, {shot: 'clear', charge: 0.8}).quality.risk <
+    rules.getShotTarget(standard, 0, {shot: 'clear', charge: 0.8}).quality.risk);
+});
+
+test('beginner shot input remains buffered longer but still uses the normal contact contract', () => {
+  const standard = incoming({x: 0, y: 1.2});
+  const assisted = rules.createMatch({playerAssist: 'beginner'});
+  assisted.phase = 'rally'; assisted.players[0].x = 0; assisted.players[0].z = 3.8;
+  Object.assign(assisted.shuttle, {x: 0, y: 1.2, z: 3.8, vx: 0, vy: -0.2, vz: 0, active: true, lastHit: 1});
+  rules.stepMatch(standard, [{shot: 'clear'}, {}], frame);
+  rules.stepMatch(assisted, [{shot: 'clear'}, {}], frame);
+  assert.ok(assisted.players[0].pendingShot.remaining > standard.players[0].pendingShot.remaining);
+  assert.ok(assisted.players[0].pendingShot.remaining < 0.6);
+});
+
 test('future interception never advertises immediate smash while ball is unreachable', () => {
   assert.equal(typeof rules.getInterceptAdvice, 'function');
   const s = incoming({x: 1.8, y: 4.5, z: 1.9, vx: -1, vy: 0.5, vz: 2});

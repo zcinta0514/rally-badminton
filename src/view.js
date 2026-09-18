@@ -364,6 +364,9 @@ export class CourtView {
       for (const edge of this.landingHint.countdown.children) edge.geometry.setDrawRange(0, count);
     } else this.hintFlightKey = null;
     const intercept = info?.intercept;
+    const beginnerAssist = info?.availability?.assist === 'beginner';
+    this.interceptHint.group.scale.setScalar(beginnerAssist ? 1.12 : 1);
+    this.interceptHint.circle.material.color.setHex(beginnerAssist ? 0xffe1a1 : 0xffd580);
     const interceptVisible = safeArrival && ['ready', 'approach'].includes(intercept?.status) && onHalf(intercept?.point, sign);
     const interceptKey = `${state.pointId}:${state.hitId}:${side}`;
     if (interceptVisible) {

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { COURT, ROLES, createMatch, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch } from '../shared/game.js';
+import { COURT, ROLES, createMatch, stepMatch, aiInput, getShotTarget, getShotAvailability, pauseMatch, resumeMatch, finishMatch } from '../shared/game.js';
 
 const frame = 1 / 60;
 const advance = (state, seconds, inputs = [{}, {}]) => {
@@ -30,6 +30,44 @@ test('normalizes invalid role/target/input without corrupting state', () => {
   assert.equal(state.players[0].role, 'balanced');
   stepMatch(state, [{ x: Infinity, z: NaN, shot: 'bad', charge: Infinity }, null], frame);
   for (const player of state.players) assert.ok(Number.isFinite(player.x + player.z + player.stamina));
+});
+
+test('roles have distinct movement windows and tactical shot profiles', () => {
+  assert.ok(ROLES.swift.speed > ROLES.balanced.speed);
+  assert.ok(ROLES.swift.acceleration > ROLES.balanced.acceleration);
+  assert.ok(ROLES.swift.reachBonus > ROLES.balanced.reachBonus);
+  assert.ok(ROLES.power.speed < ROLES.balanced.speed);
+  assert.ok(ROLES.power.maxStamina > ROLES.balanced.maxStamina);
+  assert.ok(ROLES.power.shotDepth.clear > ROLES.balanced.shotDepth.clear);
+  assert.ok(ROLES.power.shotSpeed.smash > ROLES.balanced.shotSpeed.smash);
+  assert.ok(ROLES.swift.shotSpeed.drop > ROLES.balanced.shotSpeed.drop);
+
+  const makeIncoming = role => {
+    const state = createMatch({ roles: [role, 'balanced'] });
+    incoming(state, { x: 0, y: 2.6, z: 3.8, vx: 0, vy: 0, vz: 0 });
+    state.players[0].x = 0; state.players[0].z = 3.8;
+    return state;
+  };
+  const balanced = makeIncoming('balanced');
+  const swift = makeIncoming('swift');
+  const power = makeIncoming('power');
+  const balancedClear = getShotTarget(balanced, 0, { shot: 'clear', charge: 0.6, aim: 0, aimDepth: 0.8 });
+  const powerClear = getShotTarget(power, 0, { shot: 'clear', charge: 0.6, aim: 0, aimDepth: 0.8 });
+  const balancedSmash = getShotTarget(balanced, 0, { shot: 'smash', charge: 0.6, aim: 0, aimDepth: 0 });
+  const swiftSmash = getShotTarget(swift, 0, { shot: 'smash', charge: 0.6, aim: 0, aimDepth: 0 });
+  const powerSmash = getShotTarget(power, 0, { shot: 'smash', charge: 0.6, aim: 0, aimDepth: 0 });
+  assert.ok(Math.abs(powerClear.aimZ) > Math.abs(balancedClear.aimZ));
+  assert.ok(Math.hypot(powerSmash.vx, powerSmash.vz) > Math.hypot(balancedSmash.vx, balancedSmash.vz));
+  assert.ok(Math.hypot(swiftSmash.vx, swiftSmash.vz) < Math.hypot(balancedSmash.vx, balancedSmash.vz));
+
+  const edge = role => {
+    const state = createMatch({ roles: [role, 'balanced'] });
+    incoming(state, { x: 1.5, y: 1.8, z: 3.8, vx: 0, vy: -1, vz: 0 });
+    state.players[0].x = 0; state.players[0].z = 3.8;
+    return getShotAvailability(state, 0);
+  };
+  assert.equal(edge('balanced').canHit, false);
+  assert.equal(edge('swift').canHit, true);
 });
 
 test('medium is the canonical difficulty and normal remains an equivalent alias', () => {
@@ -91,6 +129,29 @@ test('hard AI attacks the space opposite its opponent and changes depth with opp
   assert.ok(share(highChances, response => response.aim < -0.6) > 0.8);
   assert.equal(highChances.length, 80, 'reachable returns are attempted; physical quality determines mistakes');
   assert.ok(highChances.every(response => response.inputShot === response.shot), 'shots are performed through the common input contract');
+});
+
+test('hard AI keeps tactical pressure while varying bounded shot plans', () => {
+  const responses = [];
+  for (let index = 1; index <= 180; index++) {
+    const state = createMatch({difficulty: 'hard', seed: Math.imul(index, 2246822519) >>> 0});
+    incoming(state, {y: 2.8, vy: -0.2, vz: 0});
+    state.players[1].x = 1.8; state.players[1].z = -3.5;
+    for (let tick = 0; tick < 60; tick++) {
+      const input = aiInput(state, 0, 'hard');
+      stepMatch(state, [input, {}]);
+      if (state.hitId > 0) {
+        responses.push({shot: state.lastShot, aim: input.aim, aimDepth: input.aimDepth});
+        break;
+      }
+    }
+  }
+  const buckets = responses.map(response => `${response.shot}:${Math.sign(response.aim)}:${Math.round(response.aimDepth * 4)}`);
+  const counts = new Map();
+  for (const bucket of buckets) counts.set(bucket, (counts.get(bucket) || 0) + 1);
+  assert.ok(new Set(responses.map(response => response.shot)).size >= 3);
+  assert.ok(new Set(buckets).size >= 6);
+  assert.ok(Math.max(...counts.values()) / buckets.length < 0.55);
 });
 
 test('movement remains in own court and diagonal input is normalized', () => {

@@ -11,9 +11,19 @@ const median = values => {
 
 export function simulateMatch({ difficulty = 'easy', roles = ['balanced', 'balanced'], seed = 1, target = 5 } = {}) {
   const state = createMatch({ difficulty, roles, seed, target });
-  let steps = 0, maxRally = 0, shots = 0;
+  let steps = 0, maxRally = 0, shots = 0, repeatedPlans = 0;
+  const previousPlans = [null, null];
+  const shotCounts = {clear: 0, drop: 0, smash: 0};
+  const planBuckets = new Set();
   while (state.phase !== 'over' && steps < MAX_STEPS) {
     const inputs = [aiInput(state, 0, difficulty), aiInput(state, 1, difficulty)];
+    inputs.forEach((input, side) => { if (input.shot) {
+      shotCounts[input.shot]++;
+      const plan = `${input.shot}:${Math.sign(input.aim)}:${Math.round((input.aimDepth || 0) * 4)}`;
+      planBuckets.add(plan);
+      if (plan === previousPlans[side]) repeatedPlans++;
+      previousPlans[side] = plan;
+    }});
     stepMatch(state, inputs, STEP);
     steps++;
     maxRally = Math.max(maxRally, state.rally);
@@ -21,7 +31,8 @@ export function simulateMatch({ difficulty = 'easy', roles = ['balanced', 'balan
   }
   return {
     difficulty, seed, winner: state.winner, endReason: state.endReason, phase: state.phase,
-    steps, seconds: steps * STEP, points: state.pointId, maxRally, shots,
+    steps, seconds: steps * STEP, points: state.pointId, maxRally, shots, shotCounts,
+    planCount: planBuckets.size, repeatedPlans,
   };
 }
 

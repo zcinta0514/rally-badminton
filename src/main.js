@@ -30,7 +30,17 @@ if(usageToggle){
   usageToggle.addEventListener('change',()=>{usage.setEnabled(usageToggle.checked);usageToggle.checked=usage.enabled;});
 }
 const names={easy:'入门',medium:'进阶',hard:'高手'};
-const roleNotes={balanced:'均衡的移动、力量与恢复，适合初次上场。',swift:'移动更快、恢复更快；杀球力量稍弱，靠跑位创造机会。',power:'杀球更重、体力上限更高；步速和恢复较慢，要选好时机。'};
+const difficultyNotes={easy:'辅助接球圈更早出现，接球范围和按键时机更宽松。',medium:'保留完整提示，回球速度和判定按标准进行。',hard:'回球更快，线路、深浅与节奏会动态变化。'};
+const roleNotes={
+  balanced:'移动、击球和恢复都在基准线上，没有明显短板。',
+  swift:'抢点更快、接球更远，吊球更利落；杀球较轻且体力上限较低。',
+  power:'杀球更重、高远球更深，体力上限更高；移动和挥拍恢复较慢。',
+};
+const roleGuidance={
+  balanced:{energy:'回位调整，保持攻守平衡',ready:'站稳击球 · 保持攻守平衡',smash:'现在可杀球 · 均衡出手'},
+  swift:{energy:'抢点接球，减少无谓跑动',ready:'已进入抢点范围 · 松开击球',smash:'现在可杀球 · 灵巧型适合抢节奏'},
+  power:{energy:'重击要选高点，出手后及时回位',ready:'进入击球范围 · 为重击找高点',smash:'高点击球 · 现在适合重击'},
+};
 const updatePreferencesStorage=getUpdatePreferencesStorage(window);
 const restoredUpdatePreferences=restoreUpdatePreferences(globalThis.RALLY_CONFIG?.buildId,updatePreferencesStorage);
 const settings={role:'balanced',difficulty:'easy',target:5,ruleset:'quick',...restoredUpdatePreferences?.settings,finale:'none'};
@@ -145,13 +155,14 @@ function syncSoundControls(){
 }
 if(restoredUpdatePreferences){
   for(const [id,attribute] of [['roles','role'],['difficulties','difficulty'],['rulesets','ruleset']])groupChoice(id,attribute,settings[attribute]);
-  setText('role-note',roleNotes[settings.role]);syncRulesControls();syncSoundControls();
+  setText('role-note',roleNotes[settings.role]);setText('difficulty-note',difficultyNotes[settings.difficulty]);syncRulesControls();syncSoundControls();
 }
 for(const [id,key,attr] of [['roles','role','role'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset'],['friend-modes','finale','finale']]){
   $(id).addEventListener('click',event=>{
     const button=event.target.closest('button');if(!button||button.disabled)return;
     settings[key]=key==='target'?Number(button.dataset[attr]):button.dataset[attr];groupChoice(id,attr,settings[key]);
     if(key==='role')setText('role-note',roleNotes[settings.role]);
+    if(key==='difficulty')setText('difficulty-note',difficultyNotes[settings.difficulty]);
     if(key==='ruleset')syncRulesControls();
   });
 }
@@ -195,7 +206,8 @@ function startAI(){
   if(peerAttempt||peerSession)exitToMenu();
   trainingSession=null;
   playback.reset();lastRtt=null;
-  mode='ai';side=0;state=createMatch({target:settings.target,ruleset:settings.ruleset,roles:[settings.role,'balanced'],difficulty:settings.difficulty,seed:Math.floor(Math.random()*0x7fffffff)});
+  mode='ai';side=0;state=createMatch({target:settings.target,ruleset:settings.ruleset,roles:[settings.role,'balanced'],difficulty:settings.difficulty,
+    playerAssist:settings.difficulty==='easy'?'beginner':'none',assistSide:0,seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
 }
 function startTraining(){
@@ -203,7 +215,8 @@ function startTraining(){
   playback.reset();lastRtt=null;
   trainingSession={step:0,startedHit:0,aimed:false,hadMovement:false,movedAfterShot:false,returned:false,
     start:{x:.85,z:3.8},home:{x:0,z:3.8}};
-  mode='ai';side=0;state=createMatch({target:5,ruleset:'quick',roles:[settings.role,'balanced'],difficulty:'easy',seed:Math.floor(Math.random()*0x7fffffff)});
+  mode='ai';side=0;state=createMatch({target:5,ruleset:'quick',roles:[settings.role,'balanced'],difficulty:'easy',
+    playerAssist:'beginner',assistSide:0,seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
 }
 const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},side,dragAim??aim);
@@ -432,7 +445,8 @@ function updateUI(info,state){
   if(mode==='ai')setText('connection','本地练习');
   const energy=Math.round(100*self.stamina/ROLES[self.role].maxStamina);
   setText('energy-value',`${energy}%`);$('energy-fill').style.width=`${energy}%`;$('energy-fill').style.background=energy<25?'#f48d6d':'#d4f084';
-  setText('energy-hint',energy<25?'体力偏低 · 减少强攻':'回位调整，恢复体力');
+  const roleHint=roleGuidance[self.role]||roleGuidance.balanced;
+  setText('energy-hint',energy<25?'体力偏低 · 减少强攻':roleHint.energy);
   const smashButton=document.querySelector('[data-shot="smash"]');
   smashButton.classList.toggle('unavailable',!info.availability.canSmash);
   smashButton.classList.toggle('ready',info.availability.canSmash);
@@ -453,9 +467,12 @@ function updateUI(info,state){
   }
   let guidance='按住击球键，拖动选落点';
   if(state.phase==='serve')guidance=state.server===side?'发球落点限在对角区 · 按住再松开':'准备接发 · 留意来球落点';
-  else if(info.availability.canSmash)guidance='现在可杀球 · 松开「杀球」';
-  else if(info.availability.canHit)guidance='进入击球范围 · 松开击球';
-  else if(info.intercept.status==='approach')guidance=info.intercept.futureCanSmash?'向黄色圈移动 · 准备高点击杀':'向黄色圈移动 · 提前准备挥拍';
+  else if(info.availability.canSmash)guidance=self.role==='power'&&state.shuttle.y<2.4
+    ?'现在可杀球 · 高点威力更大':roleHint.smash;
+  else if(info.availability.canHit)guidance=info.availability.assist==='beginner'?'已进入辅助接球范围 · 松开击球':roleHint.ready;
+  else if(info.intercept.status==='approach')guidance=info.intercept.futureCanSmash
+    ? (info.availability.assist==='beginner'?'向黄色圈移动 · 辅助范围会提前提示':'向黄色圈移动 · 准备高点击杀')
+    : (info.availability.assist==='beginner'?'向黄色圈移动 · 提前准备挥拍':'向黄色圈移动 · 提前准备挥拍');
   else if(info.intercept.status==='out')guidance=info.intercept.reason;
   else if(info.intercept.status==='unreachable')guidance='来球较远 · 尽快移动接球';
   if(info.prepare&&info.availability.canHit&&risk>.25)guidance=qualityReason;

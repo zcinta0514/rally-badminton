@@ -1,6 +1,6 @@
 # 使用与部署指南
 
-1.6.0 默认提供**人机练习＋双手机好友 1V1**。两台手机可直接打开
+1.6.1 默认提供**人机练习＋双手机好友 1V1**。两台手机可直接打开
 [GitHub Pages 宣传主入口](https://zcinta0514.github.io/rally-badminton/) 或
 [Vercel 备用入口](https://kaipai-rally.vercel.app/) 建房和加入，
 无需用户电脑运行比赛服务。推荐双方连接同一 Wi-Fi，或支持设备互访的同一热点；

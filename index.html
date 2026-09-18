@@ -53,12 +53,13 @@
     <div class="setup">
       <div class="setup-fields"><div class="section-label"><b>01</b><span>选个打法，准备上场</span></div>
       <div class="role-grid" id="roles" role="group" aria-label="角色打法">
-        <button data-role="balanced" class="role-card selected" aria-pressed="true"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3"/></svg></span><strong>均衡型</strong><small>攻守兼备</small></button>
-        <button data-role="swift" class="role-card" aria-pressed="false"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h12a3 3 0 1 0-3-3M2 12h18m-16 5h10a3 3 0 1 1-3 3"/></svg></span><strong>灵巧型</strong><small>更快到位</small></button>
-        <button data-role="power" class="role-card" aria-pressed="false"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 2-10 12h7l-1 8L21 9h-8Z"/></svg></span><strong>力量型</strong><small>更强扣杀</small></button>
+        <button data-role="balanced" class="role-card selected" aria-pressed="true"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3"/></svg></span><strong>均衡型</strong><small>攻守均衡 · 无短板</small></button>
+        <button data-role="swift" class="role-card" aria-pressed="false"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h12a3 3 0 1 0-3-3M2 12h18m-16 5h10a3 3 0 1 1-3 3"/></svg></span><strong>灵巧型</strong><small>抢点吊球 · 杀球轻</small></button>
+        <button data-role="power" class="role-card" aria-pressed="false"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 2-10 12h7l-1 8L21 9h-8Z"/></svg></span><strong>力量型</strong><small>高点重击 · 回位慢</small></button>
       </div>
-      <p id="role-note" class="role-note">均衡的移动、力量与恢复，适合初次上场。</p>
+      <p id="role-note" class="role-note">移动、击球和恢复都在基准线上，没有明显短板。</p>
       <div class="setup-row"><span class="field-label">人机难度</span><div id="difficulties" class="segments" role="group" aria-label="人机难度"><button data-difficulty="easy" class="selected" aria-pressed="true">入门</button><button data-difficulty="medium" aria-pressed="false">进阶</button><button data-difficulty="hard" aria-pressed="false">高手</button></div></div>
+      <p id="difficulty-note" class="rules-note">辅助接球圈更早出现，接球范围和按键时机更宽松。</p>
       <div class="setup-row"><span class="field-label">抢分赛</span><div id="targets" class="segments" role="group" aria-label="比赛分制"><button data-target="5" class="selected" aria-pressed="true">5 分</button><button data-target="11" aria-pressed="false">11 分</button><button data-target="21" aria-pressed="false">21 分</button></div></div>
       <div class="setup-row"><span class="field-label">比赛规则</span><div id="rulesets" class="segments" role="group" aria-label="比赛规则"><button data-ruleset="quick" class="selected" aria-pressed="true">单局快赛</button><button data-ruleset="standard21" aria-pressed="false">标准计分</button></div></div>
       <p id="rules-note" class="rules-note">先到目标分获胜 · 对角发球</p></div>
@@ -67,7 +68,7 @@
       <button id="start-training" class="secondary-btn">三步训练 <span aria-hidden="true">↗</span></button>
       <button id="open-friends" class="secondary-btn">好友对打 <span>1V1 ＋</span></button></div>
     </div>
-    <div class="menu-foot"><span class="menu-tip-desktop">手机横屏 · 双手操控</span><button id="open-leaderboard" class="leaderboard-entry" type="button">排行榜 ↗</button><span>正式版 1.6.0</span></div>
+    <div class="menu-foot"><span class="menu-tip-desktop">手机横屏 · 双手操控</span><button id="open-leaderboard" class="leaderboard-entry" type="button">排行榜 ↗</button><span>正式版 1.6.1</span></div>
   </main>
   <aside id="court-caption" class="court-caption"><div class="live-tag"><i></i> LIVE COURT <span>实时演示</span></div><div class="court-poster"><span>PLAY THE NEXT POINT.</span><strong>下一分，<br>由你拿下。</strong></div><div class="court-strip"><b>01</b><span>一块球场 · 随时开打</span><span>MOVE. AIM. RALLY.</span></div></aside>
   <section id="hud" class="hud" hidden aria-label="比赛信息">

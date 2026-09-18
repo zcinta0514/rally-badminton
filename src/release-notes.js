@@ -1,12 +1,12 @@
 // Player-facing release notes are intentionally separate from the build hash.
 // Internal-only changes can produce a new asset version without showing a new notice.
 export const RELEASE_NOTICE = Object.freeze({
-  id: '2026-09-18-player-experience',
-  title: '这次更新了什么',
-  summary: '更容易上手，也更容易看懂一拍是否稳妥。',
+  id: '2026-09-18-ai-difficulty',
+  title: '人机强度更新',
+  summary: '入门更容易上手，高手更难被摸透。',
   items: Object.freeze([
-    '新增「三步训练」：练到位、选线和回位。',
-    '击球稳定性与下网风险提示更清楚，回球判断更直接。',
-    '好友对打增加网络与性能状态提示，连接变差时更容易定位。',
+    '入门档提供更宽松的接球范围、时机和输入缓冲。',
+    '进阶档保持标准节奏，适合从辅助过渡到正常对局。',
+    '高手档会动态改变线路、深浅和出手选择，减少固定套路。',
   ]),
 });
