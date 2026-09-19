@@ -7,6 +7,11 @@
 - 历史二维码：`docs/images/kaipai-rally-qr.png`，本轮社媒宣传不用二维码。
 - 宣传文案：开拍 RALLY｜有空，就开拍。打开链接，手机横屏，直接人机练习；两台手机还可创建房间、邀请球友对打。
 
+## 1.7.0 意见反馈入口
+
+- 发布标识：[v1.7.0](https://github.com/zcinta0514/rally-badminton/tree/v1.7.0)，两处生产入口都由同一 `main` 提交构建。
+- 首页底部可打开意见反馈表单，邮件通过用户本机的 `mailto:` 客户端发送到作者邮箱；页面不提供服务端自动投递确认。
+
 ## 1.6.1 人机强度更新
 
 - 发布标识：[v1.6.1](https://github.com/zcinta0514/rally-badminton/tree/v1.6.1)，两处生产入口都由同一 `main` 提交构建。

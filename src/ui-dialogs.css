@@ -140,7 +140,9 @@
 }
 
 .dialog button:focus-visible,
-.dialog input:focus-visible {
+.dialog input:focus-visible,
+.dialog select:focus-visible,
+.dialog textarea:focus-visible {
   outline: 3px solid var(--blue, #0756b0);
   outline-offset: 3px;
 }
@@ -154,7 +156,9 @@
   line-height: 1.5;
 }
 
-.dialog input {
+.dialog input,
+.dialog select,
+.dialog textarea {
   display: block;
   width: 100%;
   min-width: 0;
@@ -171,9 +175,50 @@
   touch-action: manipulation;
 }
 
+.dialog textarea {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.dialog select {
+  appearance: auto;
+}
+
 .dialog input::placeholder {
   color: #748279;
   opacity: 1;
+}
+
+.dialog textarea::placeholder {
+  color: #748279;
+  opacity: 1;
+}
+
+.dialog .input-label small {
+  color: var(--muted, #64746a);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.dialog .feedback-status {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--blue, #0756b0);
+  background: #edf3f9;
+  color: #31516d;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+#dialog-backdrop .feedback-dialog {
+  flex-basis: 520px;
+  width: 520px;
+}
+
+#feedback-dialog a {
+  color: var(--blue, #0756b0);
+  overflow-wrap: anywhere;
 }
 
 .dialog .divider {

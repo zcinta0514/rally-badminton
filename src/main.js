@@ -14,6 +14,7 @@ import { createPlayerProfile, normalizePlayerName } from './player-profile.js';
 import { createLeaderboard, getLeaderboardURL, resultRecordText } from './leaderboard.js';
 import { openPeerRoom } from './peer-network.js';
 import { createPeerRecords } from './peer-records.js';
+import { initFeedback } from './feedback.js';
 import { resolveShotAim, toWorldInput } from './play-input.js';
 import { createMatch, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, ROLES, predictLanding, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
 
@@ -344,6 +345,7 @@ function closeHelpOrSetup(){
   if(peerAttempt){netGeneration++;peerAttempt.abort();peerAttempt=null;setRoomBusy(false);}
   helpOpen=false;if(state?.phase==='paused')dialog('pause-dialog');else dialog(null);
 }
+initFeedback({recipient:'2228144556@qq.com',canOpen:()=>mode==='menu',openDialog:dialog});
 $('start-ai').addEventListener('click',startAI);
 $('start-training')?.addEventListener('click',startTraining);
 $('open-friends').addEventListener('click',()=>{settings.finale='none';groupChoice('friend-modes','finale','none');dialog(practiceOnly?'lan-dialog':'friends-dialog');});

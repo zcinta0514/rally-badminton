@@ -86,6 +86,7 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 .menu-tip-compact { display:none; }
 .menu-foot { display:flex; justify-content:space-between; gap:8px; flex:0 0 auto; color:var(--muted); font-size:10px; margin-top:16px; line-height:1.5; }
 .menu-foot { align-items:center; }
+.menu-foot-actions { display:flex; align-items:center; gap:4px; min-width:0; }
 .leaderboard-entry { flex:0 0 auto; margin:-5px 0; padding:5px 4px; background:transparent; color:var(--green); font-size:inherit; font-weight:750; line-height:inherit; white-space:nowrap; }
 .leaderboard-entry:hover { background:#e8ede7; }
 .court-caption { position:fixed; inset:var(--header-height) 0 0 var(--menu-width); pointer-events:none; color:white; overflow:hidden; }

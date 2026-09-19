@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0 — 2026-09-19
+
+发布标识：[v1.7.0](https://github.com/zcinta0514/rally-badminton/tree/v1.7.0)。GitHub Pages 与 Vercel 使用同一发布提交。
+
+- 首页底部新增「意见反馈」入口。玩家可选择问题类型，填写具体内容和联系方式，并通过本机邮件客户端发送到作者邮箱。
+- 明确提示 `mailto:` 需要玩家在邮件客户端中确认发送，不伪装成服务端自动投递。
+
 ## 1.6.1 — 2026-09-18
 
 发布标识：[v1.6.1](https://github.com/zcinta0514/rally-badminton/tree/v1.6.1)。本次只调整人机练习体验，不替换人物或比赛资产。

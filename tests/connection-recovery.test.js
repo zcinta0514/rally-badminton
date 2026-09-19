@@ -156,6 +156,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     initPWA: options => { pwaOptions = options; updateSafeAtInit = options.isSafeToUpdate(); return { setMatchActive() {} }; },
     // These independently tested UI modules do not replace any match decisions.
     initOnboarding: options => { onboardingOptions = options; return { maybeShow() { onboardingAttempts++; } }; },
+    initFeedback: () => null,
     getWebSocketURL: () => 'ws://localhost/ws', queueMicrotask,
     bindCameraSettings() {}, ResizeObserver: class { observe() {} },
     requestAnimationFrame(callback) { frame = callback; },
