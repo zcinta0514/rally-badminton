@@ -278,9 +278,9 @@ test('in-court landing wins the rally; out landing loses it; score pause resets 
   assert.deepEqual(outside.score, [0, 1]);
 });
 
-test('target is immediate race-to scoring and finished state remains frozen', () => {
+test('a two-point target win leaves the finished state frozen', () => {
   const state = createMatch({ target: 5 });
-  state.score = [4, 4];
+  state.score = [4, 3];
   incoming(state, { z: -3, y: 0.01, vy: -3, vz: 0, lastHit: 0 });
   stepMatch(state);
   assert.equal(state.phase, 'over');
@@ -345,7 +345,9 @@ test('all AI difficulties play complete matches through the shared input interfa
     assert.equal(state.phase, 'over', difficulty);
     assert.ok(maximumRally >= 3, `${difficulty}: needs real returns, got ${maximumRally}`);
     assert.ok(state.hitId > state.pointId * 1.5, `${difficulty}: too few returns`);
-    assert.ok(state.score.includes(5));
+    const won = state.score[state.winner], lost = state.score[1 - state.winner];
+    assert.ok(won >= 5 && won <= 10);
+    assert.ok(won - lost >= 2 || won === 10);
   }
 });
 

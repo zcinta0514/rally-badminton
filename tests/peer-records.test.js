@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, webcrypto } from 'node:crypto';
 import { createPeerRecords } from '../src/peer-records.js';
+import { createMatch, stepMatch } from '../shared/game.js';
 
 const STORAGE_KEY = 'rally.peer-results.v1';
 const ids = ['a', 'b', 'c', 'd'].map(char => char.repeat(12));
@@ -45,6 +46,39 @@ test('completed device-joined matches persist both players once across reloads a
   assert.equal(JSON.stringify(reloaded.list()).includes('session-1'), false);
   const nextSession = { ...first, sessionId: 'session-2' }; reloaded.record(nextSession);
   assert.equal(reloaded.list().entries[0].matches, 3);
+});
+
+test('real quick deuce results are excluded until the cap and persist extra points only once', () => {
+  for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
+    const local = storage(), records = createPeerRecords({ storage: local });
+    const result = match();
+    result.state = createMatch({ target });
+    result.state.score = [cap - 2, cap - 2];
+    const land = winner => {
+      result.state.phase = 'rally'; result.state.service.active = false;
+      Object.assign(result.state.shuttle, { x: 0, y: 0.01, z: winner === 0 ? -3 : 3,
+        vx: 0, vy: -1, vz: 0, active: true, lastHit: winner });
+      stepMatch(result.state, [{}, {}], 1 / 60);
+      assert.equal(result.state.rallyEnd.kind, 'in');
+      assert.equal(result.state.rallyEnd.winner, winner);
+    };
+    for (const winner of [0, 1]) {
+      land(winner);
+      assert.equal(result.state.phase, 'point');
+      assert.equal(records.record(result).status, 'excluded');
+      assert.deepEqual(records.list().entries, []);
+    }
+    land(0);
+    assert.equal(result.state.phase, 'over');
+    assert.equal(result.state.endReason, 'scored');
+    assert.deepEqual(result.state.score, [cap, cap - 1]);
+    assert.equal(records.record(result).status, 'local');
+    assert.equal(records.record(structuredClone(result)).status, 'local');
+    const reloaded = createPeerRecords({ storage: local });
+    assert.equal(reloaded.record(result).status, 'local');
+    assert.deepEqual(reloaded.list().entries.map(row => [row.matches, row.wins, row.losses, row.points]),
+      [[1, 1, 0, cap], [1, 0, 1, cap - 1]]);
+  }
 });
 
 test('missing or blocked storage retains session totals and truthfully reports memory-only records', () => {

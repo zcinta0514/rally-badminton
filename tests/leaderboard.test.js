@@ -71,6 +71,38 @@ test('room identity is private, stable across matches and client score claims ca
   f.rooms.message(a, {type:'leave'}); f.rooms.remove(room);
   assert.equal(f.app.leaderboard.list().entries[0].matches, 2);
 });
+test('real quick deuce landings save no premature result and count capped extra points once', async t => {
+  const f = await setup(t);
+  let completed = 0, winningPoints = 0, losingPoints = 0;
+  for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
+    const {room} = f.pair(0, 1, {target});
+    room.state.score = [cap - 2, cap - 2];
+    const land = winner => {
+      room.state.phase = 'rally'; room.state.service.active = false;
+      Object.assign(room.state.shuttle, { x: 0, y: 0.01, z: winner === 0 ? -3 : 3,
+        vx: 0, vy: -1, vz: 0, active: true, lastHit: winner });
+      f.advance(50);
+      assert.equal(room.state.rallyEnd.kind, 'in');
+      assert.equal(room.state.rallyEnd.winner, winner);
+    };
+    const before = f.app.leaderboard.list();
+    for (const winner of [0, 1]) {
+      land(winner);
+      assert.equal(room.state.phase, 'point');
+      assert.equal(room.matchEndedAt, null);
+      assert.deepEqual(f.app.leaderboard.list(), before);
+    }
+    land(0);
+    assert.equal(room.state.phase, 'over');
+    assert.equal(room.state.endReason, 'scored');
+    assert.deepEqual(room.state.score, [cap, cap - 1]);
+    for (let repeat = 0; repeat < 3; repeat++) { f.rooms.broadcast(room); f.advance(100); }
+    await f.app.leaderboard.flush(); await new Promise(resolve => setImmediate(resolve));
+    completed++; winningPoints += cap; losingPoints += cap - 1;
+    assert.deepEqual(f.app.leaderboard.list().entries.map(row => [row.matches, row.wins, row.losses, row.points]),
+      [[completed, completed, 0, winningPoints], [completed, 0, completed, losingPoints]]);
+  }
+});
 test('invalid keys are rejected and missing or duplicate identities do not enter the leaderboard', async t => {
   const f = await setup(t), bad = f.add();
   for (const playerKey of ['short', 'A'.repeat(64), {}, 7, 'a'.repeat(65)]) {

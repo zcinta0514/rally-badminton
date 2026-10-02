@@ -66,13 +66,24 @@ function inputOf(input) {
     aim: clamp(finite(source.aim), -1, 1), aimDepth: clamp(finite(source.aimDepth), -1, 1), charge: clamp(finite(source.charge), 0, 1) };
 }
 
+const SCORING_RULES = Object.freeze({
+  5: Object.freeze({ target: 5, winBy: 2, cap: 10 }),
+  11: Object.freeze({ target: 11, winBy: 2, cap: 20 }),
+  21: Object.freeze({ target: 21, winBy: 2, cap: 30 }),
+});
+
+/** Shared by scoring and rule hints; target stays fixed throughout deuce. */
+export function getScoringRules({ ruleset = 'quick', target = 5 } = {}) {
+  return SCORING_RULES[ruleset === 'standard21' ? 21 : [5, 11, 21].includes(target) ? target : 5];
+}
+
 export function createMatch({ target = 5, roles = ['balanced', 'balanced'], difficulty = 'easy', seed = 1, ruleset = 'quick',
   playerAssist = 'none', assistSide = 0 } = {}) {
   ruleset = ruleset === 'standard21' ? 'standard21' : 'quick';
   playerAssist = assistLevelOf(playerAssist);
   assistSide = assistSide === 0 || assistSide === 1 ? assistSide : 0;
   const state = {
-    phase: 'serve', time: 0, timer: 0, target: ruleset === 'standard21' ? 21 : [5, 11, 21].includes(target) ? target : 5,
+    phase: 'serve', time: 0, timer: 0, target: getScoringRules({ ruleset, target }).target,
     ruleset, games: [0, 0], gameNumber: 1, gameScores: [],
     sideChange: { id: 0, at: 0, reason: null, ends: [1, -1] }, _deciderChanged: false,
     score: [0, 0], server: 0, winner: null, endReason: null, message: '你来发球 · 点击任意击球键',
@@ -135,10 +146,12 @@ function awardPoint(state, winner, reason, impact) {
     player.pendingShot = null; player.vx = 0; player.vz = 0;
     if (player.action?.stage === 'prepare' || player.action?.stage === 'windup') player.action = null;
   }
-  // Scoring snapshot: BWF Laws, 26 April 2025, sections 7 and 8. Court coordinates
-  // stay player-relative after changing physical ends; breaks are shortened for play.
-  const wonGame = state.score[winner] >= state.target && (state.ruleset !== 'standard21'
-    || state.score[winner] - state.score[1 - winner] >= 2 || state.score[winner] === 30);
+  // Standard21 retains the 26 April 2025 BWF scoring snapshot (sections 7 and 8).
+  // Quick games also require two clear points, with a cap for each target.
+  // Court coordinates stay player-relative; standard breaks are shortened for play.
+  const scoring = getScoringRules(state);
+  const wonGame = state.score[winner] >= scoring.target
+    && (state.score[winner] - state.score[1 - winner] >= scoring.winBy || state.score[winner] >= scoring.cap);
   if (wonGame && state.ruleset === 'standard21') {
     state.games[winner]++; state.gameScores.push([...state.score]);
     if (state.games[winner] >= 2) finishMatch(state, winner, `${winner === 0 ? '近场' : '远场'}获胜 · 局数 ${state.games[0]} : ${state.games[1]}`, 'scored');

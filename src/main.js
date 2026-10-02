@@ -16,7 +16,7 @@ import { openPeerRoom } from './peer-network.js';
 import { createPeerRecords } from './peer-records.js';
 import { initFeedback } from './feedback.js';
 import { resolveShotAim, toWorldInput } from './play-input.js';
-import { createMatch, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, ROLES, predictLanding, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
+import { createMatch, getScoringRules, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, ROLES, predictLanding, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
 
 const $=id=>document.getElementById(id);
 const demoMode=globalThis.RALLY_CONFIG?.demoMode===true;
@@ -145,10 +145,11 @@ function groupChoice(container,attribute,value){
 }
 function syncRulesControls(){
   const standard=settings.ruleset==='standard21';
+  const rules=getScoringRules(settings);
   $('targets').setAttribute('aria-disabled',String(standard));
   for(const choice of $('targets').querySelectorAll('button'))choice.disabled=standard;
   groupChoice('targets','target',standard?21:settings.target);
-  setText('rules-note',standard?'21 分 · 赢两分，30 封顶 · 三局两胜 · 局间休息 4 秒':'先到目标分获胜 · 对角发球');
+  setText('rules-note',standard?'21 分 · 赢两分，30 封顶 · 三局两胜 · 局间休息 4 秒':`达到 ${rules.target} 分且净胜 ${rules.winBy} 分获胜 · ${rules.cap} 分封顶 · 对角发球`);
 }
 function syncSoundControls(){
   arenaAudio.setEnabled(sound);$('sound').dataset.muted=String(!sound);
@@ -164,7 +165,7 @@ for(const [id,key,attr] of [['roles','role','role'],['difficulties','difficulty'
     settings[key]=key==='target'?Number(button.dataset[attr]):button.dataset[attr];groupChoice(id,attr,settings[key]);
     if(key==='role')setText('role-note',roleNotes[settings.role]);
     if(key==='difficulty')setText('difficulty-note',difficultyNotes[settings.difficulty]);
-    if(key==='ruleset')syncRulesControls();
+    if(key==='ruleset'||key==='target')syncRulesControls();
   });
 }
 function selectAim(value){aim=value;lastShotRequest=null;}
@@ -439,9 +440,14 @@ function updateUI(info,state){
   setText('role-self',ROLES[self.role].label+'型');setText('role-other',ROLES[opponent.role].label+'型');
   setText('score-self',state.score[side]);setText('score-other',state.score[1-side]);
   const matchType=mode==='ai'?'人机练习':room?.rules?.finale==='father-son'?'父子局':'普通对局';
-  setText('match-label',trainingSession&&trainingSession.step<3
+  const matchLabel=trainingSession&&trainingSession.step<3
     ?`训练 ${trainingSession.step+1}/3 · ${TRAINING_STEPS[trainingSession.step].title}`
-    :trainingSession?'训练完成 · 继续实战':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[side]}:${state.games[1-side]} · ${matchType}`:`抢 ${state.target} 分 · ${matchType}`);
+    :trainingSession?'训练完成 · 继续实战':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[side]}:${state.games[1-side]} · ${matchType}`:`${state.target} 分制 · ${matchType}`;
+  const scoring=getScoringRules(state);
+  const scoringPhase=['paused','countdown'].includes(state.phase)?state.pause.previousPhase:state.phase;
+  const extraPoints=['serve','rally','point'].includes(scoringPhase)&&Math.min(...state.score)>=scoring.target-1;
+  const scoringHint=extraPoints?(state.score.every(score=>score===scoring.cap-1)?'下一分获胜':'加球中'):'';
+  setText('match-label',matchLabel+(scoringHint?` · ${scoringHint}`:''));
   setText('match-message',state.phase==='serve'?(state.server===side?`你发球 · ${state.service?.court==='left'?'左':'右'}发球区 → 对角`:'等待对手对角发球'):relativeMessage(state.message));
   setText('rally',state.phase==='rally'?`${state.rally} 拍回合`:`第 ${state.pointId+1} 分`);
   if(mode==='ai')setText('connection','本地练习');

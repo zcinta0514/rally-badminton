@@ -302,6 +302,94 @@ test('three-step training starts a local quick match and exposes a guided label'
   assert.deepEqual(f.usageEvents.at(-1), ['start', 'ai']);
 });
 
+test('quick rule descriptions follow the selected target and survive standard-rule toggles', async () => {
+  const f = await fixture('serve', { demoMode: true });
+  for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
+    f.chooseSetting('targets', target);
+    assert.equal(f.element('rules-note').textContent,
+      `达到 ${target} 分且净胜 2 分获胜 · ${cap} 分封顶 · 对角发球`);
+  }
+  f.chooseSetting('targets', 11);
+  f.chooseSetting('rulesets', 'standard21');
+  assert.match(f.element('rules-note').textContent, /21 分.*30 封顶.*三局两胜/);
+  assert.equal(f.choice('targets', 11).disabled, true);
+  f.chooseSetting('rulesets', 'quick');
+  assert.match(f.element('rules-note').textContent, /达到 11 分.*20 分封顶/);
+  assert.equal(f.choice('targets', 11).disabled, false);
+});
+
+function landScoringShuttle(state, winner) {
+  state.phase = 'rally'; state.service.active = false;
+  Object.assign(state.shuttle, { x: 0, y: 0.01, z: winner === 0 ? -3 : 3,
+    vx: 0, vy: -1, vz: 0, active: true, lastHit: winner });
+  game.stepMatch(state, [{}, {}], 1 / 60);
+}
+
+for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
+  test(`${target}-point quick UI keeps play open after a one-point lead and settles the capped point`, async () => {
+    const f = await fixture('serve', { demoMode: true });
+    f.chooseSetting('targets', target); f.click('start-ai');
+    const state = f.liveState;
+    state.score = [target - 2, target - 2]; f.draw(0);
+    assert.equal(f.element('match-label').textContent, `${target} 分制 · 人机练习`);
+    state.score = [target - 1, target - 1]; f.draw(0);
+    assert.match(f.element('match-label').textContent, /人机练习 · 加球中$/);
+    assert.match(f.element('match-message').textContent, /你发球.*发球区 → 对角/);
+    landScoringShuttle(state, 0); f.draw(0);
+    assert.deepEqual([...state.score], [target, target - 1]);
+    assert.equal(state.phase, 'point');
+    assert.equal(f.element('result-dialog').hidden, true);
+    assert.match(f.element('match-label').textContent, /加球中$/);
+    landScoringShuttle(state, 1); f.draw(0);
+    assert.deepEqual([...state.score], [target, target]);
+    assert.equal(f.element('result-dialog').hidden, true);
+    state.score = [cap - 1, cap - 1]; f.draw(0);
+    assert.match(f.element('match-label').textContent, /下一分获胜$/);
+    landScoringShuttle(state, 0); f.draw(0);
+    assert.equal(state.phase, 'over');
+    assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
+    assert.equal(f.element('result-score').textContent, `${cap} : ${cap - 1}`);
+    assert.doesNotMatch(f.element('match-label').textContent, /加球中|下一分获胜/);
+  });
+}
+
+test('standard HUD retains game counts and hides deuce hints during a completed game break', async () => {
+  const f = await fixture('serve', { demoMode: true });
+  f.chooseSetting('rulesets', 'standard21'); f.click('start-ai');
+  const state = f.liveState;
+  state.score = [20, 20]; state.games = [1, 0]; state.gameNumber = 2; f.draw(0);
+  assert.equal(f.element('match-label').textContent, '第2局 · 1:0 · 人机练习 · 加球中');
+  state.score = [29, 29]; f.draw(0);
+  assert.match(f.element('match-label').textContent, /下一分获胜$/);
+  state.score = [20, 22]; state.games = [1, 1]; state.phase = 'intermission'; state.timer = 4; f.draw(0);
+  assert.equal(f.element('match-label').textContent, '第2局 · 1:1 · 人机练习');
+  f.click('pause'); f.draw(0);
+  assert.deepEqual(f.visibleDialogs(), ['pause-dialog']);
+  assert.doesNotMatch(f.element('match-label').textContent, /加球中|下一分获胜/);
+  f.click('resume'); f.draw(0);
+  assert.equal(state.phase, 'countdown');
+  assert.doesNotMatch(f.element('match-label').textContent, /加球中|下一分获胜/);
+});
+
+test('deuce retains training guidance and the existing pause-timeout decisions', async () => {
+  const training = await fixture('serve', { demoMode: true });
+  training.click('start-training'); training.liveState.score = [4, 4]; training.draw(0);
+  assert.equal(training.element('match-label').textContent, '训练 1/3 · 到位 · 加球中');
+  assert.match(training.element('assist-status').textContent, /训练 1\/3|黄色圈/);
+  for (const [score, winner] of [[[4, 4], null], [[5, 4], 0]]) {
+    const f = await fixture('serve', { demoMode: true });
+    f.click('start-ai'); f.liveState.score = score; f.draw(0);
+    f.click('pause'); f.draw(0);
+    assert.deepEqual(f.visibleDialogs(), ['pause-dialog']);
+    assert.match(f.element('match-label').textContent, /加球中$/);
+    f.draw(30000);
+    assert.equal(f.liveState.endReason, 'pause-timeout');
+    assert.equal(f.liveState.winner, winner);
+    assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
+    assert.doesNotMatch(f.element('match-label').textContent, /加球中|下一分获胜/);
+  }
+});
+
 test('usage hooks observe accepted friend results before delayed result presentation', async () => {
   const f=await fixture();
   assert.deepEqual(f.usageEvents.filter(event=>event[0]==='start'),[['start','online']]);

@@ -25,7 +25,7 @@ body[data-screen=match] .icon-btn { background:#092b31eb; color:#eaf7ed; border-
 body[data-screen=match] .icon-btn:hover { background:#145340; }
 .hud { position:fixed; z-index:4; left:max(16px,env(safe-area-inset-left)); top:max(56px,calc(env(safe-area-inset-top) + 46px)); width:144px; pointer-events:none; }
 .scoreboard { display:grid; gap:3px; padding:6px 9px; color:var(--ink); background:#fffffff0; border-left:2px solid var(--green); border-radius:3px; box-shadow:0 3px 12px #001b2030; }
-.match-label { color:var(--muted); font-size:9px; line-height:1.4; white-space:nowrap; }
+.match-label { min-width:0; color:var(--muted); font-size:9px; line-height:1.4; white-space:normal; }
 .score-player { min-width:0; display:grid; grid-template-columns:4px minmax(0,1fr) auto; align-items:center; gap:7px; font-size:11px; font-weight:700; line-height:1.4; }
 .score-player>span:not(.player-dot) { min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .score-player small { display:none; }

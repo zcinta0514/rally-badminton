@@ -144,7 +144,88 @@ function wsFixture(t, options = {}) {
   };
 }
 
+function landNetworkPoint(fixture, winner) {
+  const previous = [...fixture.state.score];
+  fallingPoint(fixture.state, winner);
+  fixture.advance(50);
+  previous[winner]++;
+  assert.deepEqual(fixture.state.score, previous);
+  assert.equal(fixture.state.rallyEnd.kind, 'in');
+  assert.equal(fixture.state.rallyEnd.winner, winner);
+  assert.deepEqual(fixture.last(), fixture.last('state', 1));
+  assert.deepEqual(fixture.last().state.score, previous);
+}
+
+function assertUnfinished(fixture) {
+  assert.equal(fixture.last().state.phase, 'point');
+  assert.equal(fixture.last().state.winner, null);
+  assert.equal(fixture.last().state.endReason, null);
+  assert.equal(fixture.last().matchEndedAt, null);
+}
+
 for (const [transport, fixture] of [['Peer', peerFixture], ['WS', wsFixture]]) {
+  for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
+    for (const winner of [0, 1]) {
+      test(`${transport} ${target}-point deuce needs a two-point lead for player ${winner}`, t => {
+        const f = fixture(t, { target, finale: 'father-son' });
+        f.state.score = [target - 1, target - 1];
+        landNetworkPoint(f, winner);
+        assertUnfinished(f);
+        landNetworkPoint(f, 1 - winner);
+        assertUnfinished(f);
+        assert.deepEqual(f.state.score, [target, target]);
+        landNetworkPoint(f, winner);
+        assertUnfinished(f);
+        landNetworkPoint(f, winner);
+        assert.equal(f.last().state.phase, 'over');
+        assert.equal(f.last().state.winner, winner);
+        assert.equal(f.last().state.endReason, 'scored');
+        assert.equal(f.state.score[winner], target + 2);
+        assert.equal(f.state.score[1 - winner], target);
+        assert.equal(f.last().matchEndedAt, f.last().serverTime);
+
+        const first = f.last();
+        for (let repeat = 0; repeat < 3; repeat++) {
+          f.receive(winner, { type: 'input', move: 1, shot: 'smash' });
+          f.advance(100); f.broadcast();
+          assert.deepEqual(f.last().state, first.state);
+          assert.equal(f.last().matchEndedAt, first.matchEndedAt);
+          assert.equal(f.last().matchId, first.matchId);
+          assert.deepEqual(f.last(), f.last('state', 1));
+        }
+        f.receive(0, { type: 'rematch' }); f.receive(1, { type: 'rematch' });
+        assert.equal(f.last().matchId, first.matchId + 1);
+        assert.equal(f.last().sessionId, first.sessionId);
+        assert.equal(f.last().matchEndedAt, null);
+        assert.equal(f.last().state.phase, 'serve');
+        assert.equal(f.last().state.target, target);
+        assert.equal(f.last().state.endReason, null);
+        assert.equal(f.last().state.winner, null);
+        assert.deepEqual(f.last().state.score, [0, 0]);
+        assert.deepEqual(f.last(), f.last('state', 1));
+      });
+
+      test(`${transport} ${target}-point repeated deuce stops at cap ${cap} for player ${winner}`, t => {
+        const f = fixture(t, { target });
+        f.state.score = [target - 1, target - 1];
+        for (let tied = target - 1; tied < cap - 1; tied++) {
+          landNetworkPoint(f, winner);
+          assertUnfinished(f);
+          landNetworkPoint(f, 1 - winner);
+          assertUnfinished(f);
+          assert.deepEqual(f.state.score, [tied + 1, tied + 1]);
+        }
+        landNetworkPoint(f, winner);
+        assert.equal(f.last().state.phase, 'over');
+        assert.equal(f.last().state.winner, winner);
+        assert.equal(f.last().state.endReason, 'scored');
+        assert.equal(f.state.score[winner], cap);
+        assert.equal(f.state.score[1 - winner], cap - 1);
+        assert.equal(f.last().matchEndedAt, f.last().serverTime);
+      });
+    }
+  }
+
   test(`${transport} only enables father-son finale for an explicit room-creator choice`, t => {
     for (const finale of [undefined, null, false, true, 1, {}, [], '', 'none', 'father-son', 'father-son ', 'unknown']) {
       const f = fixture(t, { finale });
