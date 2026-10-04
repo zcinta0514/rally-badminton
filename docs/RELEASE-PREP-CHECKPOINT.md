@@ -3,7 +3,7 @@
 2026-10-04 在独立 worktree `.cindy-worktrees/fx-production`（分支 `release/FX-production`）整理并发布本批更新。
 基线为联网核验的正式 main `d15ff7c`（v1.7.1）；Draft PR [#1](https://github.com/zcinta0514/rally-badminton/pull/1) 的 Node 22／24 CI 均通过。
 
-发布决定：用户于 2026-10-04 明确授权递增到 **1.8.0**、合并 main、打标签，并自行完成真机验收；GPU 性能与视听验收结果由用户记录，未完成前不得标为已通过。
+发布结果（2026-10-04 已核验）：PR #1 合并为 `main` 提交 `45a5d86`，标签 `v1.8.0` 指向该提交；GitHub Actions「Tests and build」与「Deploy browser game to GitHub Pages」均成功，Vercel 生产部署完成。线上核验：Pages 实际构建号 `0482fefd67cdc881`、Vercel `4c377c8c35725c4c`，两处首页均显示「正式版 1.8.0」；Chromium／WebKit 实际访问两个线上入口完成开打、体力条、设置项与无报错检查（见 `artifacts/release-prep/live-qa.json`）。
 
 ## 发布范围
 
@@ -43,11 +43,12 @@
 - 线上正式站：`https://zcinta0514.github.io/rally-badminton/` 与 `https://kaipai-rally.vercel.app/`。
 - 本机预览：`http://127.0.0.1:3046/`；同一 Wi-Fi 的手机：`http://192.168.1.103:3046/`（横屏）。
 
-## 发布动作
+## 发布动作（已执行）
 
 1. 版本号：`package.json`、`package-lock.json`、首页「正式版」与本说明同步为 1.8.0。
-2. 合并 main 后由 GitHub Actions Pages 与 Vercel 生产自动部署，随后核验两处线上实际构建号（应为根路径 `4c377c8c35725c4c`、Pages `0482fefd67cdc881`）。
-3. 标签：`v1.8.0` 指向 main 的发布提交。
+2. 合并：PR #1 → `main` 合并提交 `45a5d86`；GitHub Actions Pages 与 Vercel 生产自动部署成功。
+3. 标签：`v1.8.0` 由 annotated tag `2b60f5a` 指向 `45a5d86`。
+4. 线上核验：Pages `0482fefd67cdc881`、Vercel `4c377c8c35725c4c`，均显示「正式版 1.8.0」。
 
 ## 回退步骤
 
