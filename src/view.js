@@ -8,6 +8,7 @@ import { makeArena, makeCourtMaterial, resetArenaCrowd, updateArenaCrowd } from 
 import { makeNetVisual, updateNetVisual } from './net-visual.js';
 import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
 import { COURT } from '../shared/game.js';
+import { StaminaHUD } from './stamina-hud.js';
 
 const COLORS = {
   background: 0x101e29,
@@ -82,6 +83,8 @@ export class CourtView {
     this.players = [makeAthlete(this.scene, 0), makeAthlete(this.scene, 1)];
     for (const player of this.players) void upgradeAthlete(player);
     this.mode = 'menu';
+    this.staminaHUD = new StaminaHUD();
+    this.staminaProjection = new THREE.Vector3();
     this.makeShuttle();
     this.makeHints();
     this.edgeIndicator=document.createElement('div');
@@ -99,7 +102,7 @@ export class CourtView {
     this.lastStateTime = null;
     this.lastHit = null;
     this.elapsed = 0;
-    this.onVisibilityChange = () => resetArenaCrowd(this.arena);
+    this.onVisibilityChange = () => { resetArenaCrowd(this.arena); };
     document.addEventListener('visibilitychange', this.onVisibilityChange);
     this.resize();
   }
@@ -255,6 +258,7 @@ export class CourtView {
     if(this.mode===mode)return;
     this.mode=mode;
     this.resetCrowd();
+    if (mode !== 'match') this.staminaHUD?.hide();
     if(mode!=='match')this.edgeIndicator.hidden=true;
     this.resize();
   }
@@ -265,6 +269,7 @@ export class CourtView {
     this.height=Math.max(1,bounds.height||window.innerHeight);
     this.renderer.setSize(this.width,this.height,false);
     this.hudBounds=document.querySelector('#hud')?.getBoundingClientRect();
+    this.staminaHUD?.refreshObstacles();
     this.updateCamera(this.cameraSide??0);
   }
 
@@ -441,15 +446,15 @@ export class CourtView {
 
   render(state, side=0, dt=1/60, info={}) {
     if(!state?.players||!state.shuttle)return;
-    if(info.finale){this.renderFinale(state,info.finale,side);return;}
+    updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
+    if(info.finale){this.staminaHUD?.hide();this.renderFinale(state,info.finale,side);return;}
     this.clearFinale();
     dt=clamp(Number.isFinite(dt)?dt:1/60,0,.06);
-    updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
     if(this.cameraSide!==side)this.updateCamera(side);
     const reset=!this.initialized||state.pointId!==this.lastPoint||state.time<this.lastStateTime||
       (state.phase==='serve'&&this.lastPhase!=='serve');
     const freeze=['paused','countdown','over'].includes(state.phase);
-    if(reset)this.hudBounds=document.querySelector('#hud')?.getBoundingClientRect();
+    if(reset){this.hudBounds=document.querySelector('#hud')?.getBoundingClientRect();this.staminaHUD?.refreshObstacles();}
     if(!freeze)this.elapsed+=dt;
     const shuttle=state.shuttle;
     const tail=this.endPresentation.update(state,dt);
@@ -515,6 +520,10 @@ export class CourtView {
     for(let i=0;i<this.trailPoints.length;i++)this.trailPoints[i].toArray(this.trailPositions,i*3);
     this.trail.geometry.attributes.position.needsUpdate=true;this.trail.geometry.setDrawRange(0,this.trailPoints.length);
     this.lastPoint=state.pointId;this.lastPhase=state.phase;this.lastStateTime=state.time;this.lastHit=state.hitId;this.initialized=true;
+    this.staminaHUD?.update(state, side, (x, y, z) => {
+      const point = this.staminaProjection.set(x, y, z).project(this.camera);
+      return { x: (point.x + 1) * this.width / 2, y: (1 - point.y) * this.height / 2, depth: point.z };
+    }, { left: 0, right: this.width, top: 0, bottom: this.height }, this.mode === 'match');
     this.renderer.render(this.scene,this.camera);
   }
   dispose() {

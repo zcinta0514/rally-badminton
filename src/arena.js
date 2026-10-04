@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { isExcitingPoint } from './arena-feedback.js';
+import { ArenaFeedbackClock } from './arena-feedback.js';
 
 /** Small repeatable rubber-grain texture; works in Node and needs no image request. */
 export function makeCourtMaterial(color = 0x096247) {
@@ -223,7 +223,7 @@ export function makeArena(scene) {
   });
   shadows.instanceMatrix.needsUpdate = true; shadows.computeBoundingSphere(); arena.add(shadows);
   arena.userData.crowd = { people: crowdPeople, meshes: [...new Set(crowdPeople.flatMap(person => person.parts.map(part => part.mesh)))],
-    lastPoint: null, lastTime: null, active: false, elapsed: 0,
+    clock: new ArenaFeedbackClock(), presentation: null, active: false, elapsed: 0,
     torso: new THREE.Matrix4(), arm: new THREE.Matrix4(), pose: new THREE.Matrix4(), rotation: new THREE.Matrix4(), translation: new THREE.Matrix4() };
   return arena;
 }
@@ -240,7 +240,7 @@ export function resetArenaCrowd(arena) {
   const crowd = arena?.userData.crowd;
   if (!crowd) return;
   settleCrowd(crowd);
-  crowd.lastPoint = null; crowd.lastTime = null;
+  crowd.clock.reset(); crowd.presentation = null;
 }
 
 // Presentational state only: score snapshots start a reaction once, while frame
@@ -248,36 +248,18 @@ export function resetArenaCrowd(arena) {
 export function updateArenaCrowd(arena, state, dt, { enabled = true, hidden = false } = {}) {
   const crowd = arena?.userData.crowd;
   if (!crowd || !state || !Number.isFinite(state.pointId) || !Number.isFinite(state.time)) return;
-  if (crowd.lastPoint === null) {
-    crowd.lastPoint = state.pointId; crowd.lastTime = state.time;
-    return;
-  }
-  if (state.pointId < crowd.lastPoint || state.time < crowd.lastTime) {
-    settleCrowd(crowd);
-    return;
-  }
-  const newPoint = state.pointId > crowd.lastPoint;
-  const snapshotDelta = state.time - crowd.lastTime;
-  crowd.lastPoint = state.pointId; crowd.lastTime = state.time;
-  if (!enabled || hidden || !['point', 'intermission', 'over'].includes(state.phase)) {
-    settleCrowd(crowd);
-    return;
-  }
-  if (newPoint) {
-    settleCrowd(crowd);
-    const at = state.rallyEnd?.at, age = state.time - at;
-    const fresh = Number.isFinite(at) ? age >= -.02 && age <= .65 : snapshotDelta > 0 && snapshotDelta <= .25;
-    if (fresh && state.rallyEnd?.id === state.pointId && isExcitingPoint(state)) crowd.active = true;
-  }
-  if (!crowd.active) return;
-  crowd.elapsed += THREE.MathUtils.clamp(Number.isFinite(dt) ? dt : 0, 0, .06);
-  if (crowd.elapsed >= 1.08) { settleCrowd(crowd); return; }
+  const frame = crowd.clock.step(state, dt, { enabled, hidden }); crowd.presentation = frame;
+  if (!frame.reaction && !frame.tension) { settleCrowd(crowd); return; }
+  crowd.active = true;
+  const reaction = frame.reaction, tension = frame.tension;
+  crowd.elapsed = reaction ? reaction.age : crowd.elapsed + THREE.MathUtils.clamp(dt || 0, 0, .06);
+  const strength = reaction ? { point: .24, highlight: 1, game: 1, match: 1 }[reaction.grade] : tension === 2 ? .18 : .1;
   const { torso, arm, pose, rotation, translation } = crowd;
   const turnAt = (matrix, x, y, z, angle) => matrix.makeTranslation(x, y, z)
     .multiply(rotation.makeRotationX(angle)).multiply(translation.makeTranslation(-x, -y, -z));
   crowd.people.forEach((person, index) => {
-    const progress = THREE.MathUtils.clamp(crowd.elapsed - (index % 4) * .025, 0, 1);
-    const lift = Math.sin(Math.PI * progress) ** 2;
+    const progress = reaction ? THREE.MathUtils.clamp((reaction.age - (index % 4) * .025) / reaction.duration, 0, 1) : 0;
+    const lift = reaction ? Math.sin(Math.PI * progress) ** 2 * strength : strength * (.8 + .2 * Math.sin(crowd.elapsed * 2 + index));
     turnAt(torso, 0, .10, .015, lift * .12);
     for (const part of person.parts) {
       pose.copy(person.frame).multiply(torso);

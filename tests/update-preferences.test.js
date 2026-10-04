@@ -6,6 +6,13 @@ const selection={version:VERSION,settings:{role:'power',difficulty:'hard',target
 function fixture(){const values=new Map();return {values,storage:{getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)}};}
 const load=()=>import('../src/update-preferences.js');
 
+test('an update also restores normalized local mix and light preferences once', async () => {
+  const {saveUpdatePreferences,restoreUpdatePreferences}=await load(); const f=fixture();
+  saveUpdatePreferences({...selection,arena:{master:.25,hits:.8,movement:.1,crowd:.4,environment:0,lights:'soft'}},f.storage);
+  const restored=restoreUpdatePreferences(VERSION,f.storage); assert.equal(restored.arena.master,.25); assert.equal('lights' in restored.arena,false);
+  assert.equal(restoreUpdatePreferences(VERSION,f.storage),null);
+});
+
 test('an update snapshot keeps only match preferences and sound, and restores once for its target build',async()=>{
   const {saveUpdatePreferences,restoreUpdatePreferences}=await load();const f=fixture();
   saveUpdatePreferences({...selection,playerKey:'private',room:'ABCDE'},f.storage);

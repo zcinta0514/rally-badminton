@@ -1,9 +1,9 @@
 import { PeerMatch } from './peer-match.js';
-import { ROLES } from '../shared/game.js';
+import { ROLES, RULES_VERSION } from '../shared/game.js';
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const PREFIX = 'rally-badminton-v2-';
-const VERSION = 1;
+const VERSION = RULES_VERSION;
 const OPEN_TIMEOUT = 20000;
 const HANDSHAKE_TIMEOUT = 12000;
 const MAX_MESSAGE = 65536;
@@ -96,7 +96,7 @@ function validState(message, sessionId) {
   const state = message.state;
   return message.sessionId === sessionId && Number.isSafeInteger(message.seq) && message.seq > 0 &&
     Number.isSafeInteger(message.matchId) && message.matchId > 0 && finite(message.serverTime) && record(state) &&
-    PHASES.has(state.phase) && finite(state.time) && finite(state.timer) &&
+    state.rulesVersion === RULES_VERSION && PHASES.has(state.phase) && finite(state.time) && finite(state.timer) &&
     ['quick', 'standard21'].includes(state.ruleset) && [5, 11, 21].includes(state.target) &&
     scorePair(state.score) && scorePair(state.games) && Array.isArray(state.gameScores) && state.gameScores.every(scorePair) &&
     Number.isInteger(state.gameNumber) && state.gameNumber >= 1 && slot(state.server) && nullableSlot(state.winner) &&
@@ -107,7 +107,7 @@ function validState(message, sessionId) {
     (state.lastShotInfo === null || record(state.lastShotInfo) && finite(state.lastShotInfo.at) && slot(state.lastShotInfo.side) &&
       record(state.lastShotInfo.quality) && typeof state.lastShotInfo.quality.reason === 'string') &&
     Array.isArray(state.players) && state.players.length === 2 && state.players.every(player => record(player) &&
-      ['x', 'z', 'vx', 'vz', 'stamina', 'swing', 'cooldown', 'actionId'].every(key => finite(player[key])) && Object.hasOwn(ROLES, player.role) &&
+      ['x', 'z', 'vx', 'vz', 'stamina', 'staminaRate', 'recoveryWait', 'swing', 'cooldown', 'actionId'].every(key => finite(player[key])) && Object.hasOwn(ROLES, player.role) &&
       (player.action === null || record(player.action) && ['startedAt', 'endsAt'].every(key => finite(player.action[key])))) &&
     record(state.shuttle) && ['x', 'y', 'z', 'vx', 'vy', 'vz'].every(key => finite(state.shuttle[key])) &&
     typeof state.shuttle.active === 'boolean' && nullableSlot(state.shuttle.lastHit) &&

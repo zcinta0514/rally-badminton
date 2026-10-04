@@ -1,3 +1,4 @@
+import { staminaEffects } from './stamina.js';
 const clamp = value => Math.max(0, Math.min(1, value));
 
 /** Control loss comes only from observable simulation state, never an RNG or
@@ -12,9 +13,10 @@ export function contactQuality({player, ball, role, shot, charge, aim, aimDepth,
   // Late means a falling shuttle already low in its usable window. Pressing a
   // key several milliseconds earlier/later is not itself a scoring mechanic.
   factors.lateContact = clamp(((shot === 'smash' ? 2.15 : 1.15) - ball.y) / 0.9) * clamp((-ball.vy - 2) / 6);
-  factors.fatigue = clamp((0.42 - player.stamina / role.maxStamina) / 0.42);
+  const fatigue = staminaEffects(player, role);
+  factors.fatigue = clamp(fatigue.severity * ({ clear: .9, drop: .65, smash: 1.2 }[shot] || 1) * (.75 + charge * .25));
   factors.linePower = clamp((charge - 0.45) / 0.55) * Math.max(clamp((Math.abs(aim) - 0.6) / 0.4), clamp((Math.abs(aimDepth) - 0.55) / 0.45));
-  const weights = {movement: 0.2, stretch: 0.26, lowContact: 0.26, lateContact: 0.16, fatigue: 0.24, linePower: 0.28};
+  const weights = {movement: 0.2, stretch: 0.26, lowContact: 0.26, lateContact: 0.16, fatigue: fatigue.controlWeight, linePower: 0.28};
   const labels = {movement: '跑动中击球，先减速更稳', stretch: '极限够球，提前靠近更稳', lowContact: '触点偏低，提早接球',
     lateContact: '来球已下降到低位', fatigue: '体力偏低，减少大力进攻', linePower: '大力压线，收力或瞄准场内'};
   const ranked = Object.keys(factors).filter(key => factors[key] > 0.12).sort((a, b) => factors[b] * weights[b] - factors[a] * weights[a]);
@@ -35,9 +37,11 @@ export function contactDrift({quality, player, ball, role, aimX, aimDepth, side,
   const signedClamp = value => Math.max(-1, Math.min(1, value));
   const xBias = signedClamp(0.45 * player.vx / role.speed * f.movement
     + 0.5 * signedClamp((ball.x - player.x) / 1.45) * f.stretch
-    + 0.8 * Math.sign(aimX) * f.linePower + 0.1 * Math.sign(ball.vx) * f.lateContact);
+    + 0.8 * Math.sign(aimX) * f.linePower + 0.1 * Math.sign(ball.vx) * f.lateContact
+    + .45 * Math.sign(aimX) * f.fatigue * (.3 + .7 * charge) * clamp((Math.abs(aimX) - .9) / 1.4));
   const depthBias = 0.88 * f.linePower * (0.65 + 0.35 * Math.max(0, aimDepth))
-    - 0.25 * player.vz * end / role.speed * f.movement + 0.15 * f.stretch;
+    - 0.25 * player.vz * end / role.speed * f.movement + 0.15 * f.stretch
+    + .4 * f.fatigue * charge * Math.max(0, aimDepth);
   const weakContact = 0.16 * f.movement + 0.4 * f.stretch + 0.5 * f.lowContact + 0.45 * f.lateContact + 0.45 * f.fatigue;
   return {x: quality.spread * xBias, z: -end * quality.spread * depthBias,
     verticalLoss: ({clear: 2.4, drop: 1.4, smash: 1.05})[shot] * Math.min(1.3, weakContact) * (0.6 + charge * 0.4)};

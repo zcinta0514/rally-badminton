@@ -1,28 +1,34 @@
 import { contactQuality, contactDrift } from './shot-quality.js';
+import { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
+export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
+export const RULES_VERSION = 3;
 
 /** Shared, serializable rules. Coordinates are metres; side 0 plays at positive z. */
 export const COURT = Object.freeze({ halfWidth: 2.59, halfLength: 6.7, netHeight: 1.52 });
 export const ROLES = Object.freeze({
   balanced: Object.freeze({ label: '均衡', speed: 4.6, acceleration: 1, braking: 1, power: 1,
-    maxStamina: 100, recovery: 11, reachBonus: 0, runCost: 1, swingTime: 0.42, dropControl: 1,
+    maxStamina: 100, recovery: 5.4, reachBonus: 0, runCost: 1, swingTime: 0.42, dropControl: 1,
+    fatigue: Object.freeze({ onset: .55, speedFloor: .65, accelerationFloor: .8, controlWeight: .3 }),
     shotSpeed: Object.freeze({ clear: 1, drop: 1, smash: 1 }),
     shotDepth: Object.freeze({ clear: 1, drop: 1, smash: 1 }),
-    shotCost: Object.freeze({ clear: 1, drop: 1, smash: 1 }) }),
+    shotCost: Object.freeze({ serve: 1, clear: 1, drop: 1, smash: 1 }) }),
   swift: Object.freeze({ label: '灵巧', speed: 5.35, acceleration: 1.15, braking: 1.15, power: 0.9,
-    maxStamina: 88, recovery: 13, reachBonus: 0.1, runCost: 1, swingTime: 0.378, dropControl: 0.8,
+    maxStamina: 88, recovery: 6.5, reachBonus: 0.1, runCost: .72, swingTime: 0.378, dropControl: 0.8,
+    fatigue: Object.freeze({ onset: .45, speedFloor: .72, accelerationFloor: .85, controlWeight: .26 }),
     shotSpeed: Object.freeze({ clear: 1, drop: 1.08, smash: 0.97 }),
     shotDepth: Object.freeze({ clear: 0.97, drop: 0.94, smash: 0.97 }),
-    shotCost: Object.freeze({ clear: 0.95, drop: 0.9, smash: 1.1 }) }),
+    shotCost: Object.freeze({ serve: .9, clear: .95, drop: .8, smash: 1.2 }) }),
   power: Object.freeze({ label: '力量', speed: 4.05, acceleration: 0.85, braking: 0.85, power: 1.12,
-    maxStamina: 112, recovery: 8.8, reachBonus: 0, runCost: 1.08, swingTime: 0.47, dropControl: 1,
+    maxStamina: 112, recovery: 3.8, reachBonus: 0, runCost: 1.22, swingTime: 0.47, dropControl: 1,
+    fatigue: Object.freeze({ onset: .6, speedFloor: .6, accelerationFloor: .75, controlWeight: .36 }),
     shotSpeed: Object.freeze({ clear: 1.04, drop: 0.95, smash: 1.08 }),
     shotDepth: Object.freeze({ clear: 1.07, drop: 0.96, smash: 1.06 }),
-    shotCost: Object.freeze({ clear: 1.05, drop: 1, smash: 1.15 }) }),
+    shotCost: Object.freeze({ serve: 1, clear: 1.15, drop: 1.25, smash: .85 }) }),
 });
 
 const TUNING = {
   gravity: 9.81, playerMargin: 0.16, netMargin: 0.54,
-  acceleration: 23, braking: 28, runCost: 8.5,
+  acceleration: 23, braking: 28,
   reach: 1.45, minHitHeight: 0.28, maxHitHeight: 3.25,
   smashHeight: 1.65, shotBuffer: 0.44, swingTime: 0.42,
   pointWait: 1.4, pauseLimit: 30, resumeCountdown: 2,
@@ -43,6 +49,7 @@ const direction = side => side === 0 ? 1 : -1;
 const roleOf = role => Object.hasOwn(ROLES, role) ? role : 'balanced';
 const difficultyOf = value => value === 'normal' ? 'medium' : Object.hasOwn(AI, value) ? value : 'easy';
 const assistLevelOf = value => Object.hasOwn(PLAYER_ASSIST, value) ? value : 'none';
+export const getDifficultyProfile = value => ({ ...AI[difficultyOf(value)] });
 const shotName = shot => ({ clear: '高远球', drop: '吊球', smash: '杀球' })[shot];
 function random(state) {
   state._rng = (Math.imul(state._rng, 1664525) + 1013904223) >>> 0;
@@ -83,6 +90,7 @@ export function createMatch({ target = 5, roles = ['balanced', 'balanced'], diff
   playerAssist = assistLevelOf(playerAssist);
   assistSide = assistSide === 0 || assistSide === 1 ? assistSide : 0;
   const state = {
+    rulesVersion: RULES_VERSION,
     phase: 'serve', time: 0, timer: 0, target: getScoringRules({ ruleset, target }).target,
     ruleset, games: [0, 0], gameNumber: 1, gameScores: [],
     sideChange: { id: 0, at: 0, reason: null, ends: [1, -1] }, _deciderChanged: false,
@@ -91,7 +99,8 @@ export function createMatch({ target = 5, roles = ['balanced', 'balanced'], diff
     players: [0, 1].map(side => {
       const role = roleOf(roles?.[side]);
       return { x: 0, z: direction(side) * 3.8, vx: 0, vz: 0, role,
-        stamina: ROLES[role].maxStamina, swing: 0, lastShot: 'clear', cooldown: 0, pendingShot: null, action: null, actionId: 0 };
+        stamina: ROLES[role].maxStamina, staminaRate: 0, recoveryWait: 0, staminaStatus: 'idle',
+        swing: 0, lastShot: 'clear', cooldown: 0, pendingShot: null, action: null, actionId: 0 };
     }),
     shuttle: { x: 0, y: 1.1, z: 3.4, vx: 0, vy: 0, vz: 0, active: false, lastHit: null },
     pause: { by: null, remaining: TUNING.pauseLimit, used: [0, 0], previousPhase: null },
@@ -121,7 +130,7 @@ function startServe(state) {
   for (let side = 0; side < 2; side++) {
     Object.assign(state.players[side], { x: (side === state.server ? sign : -sign) * 0.85,
       z: direction(side) * 3.8, vx: 0, vz: 0,
-      swing: 0, cooldown: 0, pendingShot: null, action: null });
+      swing: 0, cooldown: 0, pendingShot: null, action: null, recoveryWait: 0, staminaRate: 0, staminaStatus: 'idle' });
   }
   attachServe(state);
 }
@@ -152,6 +161,8 @@ function awardPoint(state, winner, reason, impact) {
   const scoring = getScoringRules(state);
   const wonGame = state.score[winner] >= scoring.target
     && (state.score[winner] - state.score[1 - winner] >= scoring.winBy || state.score[winner] >= scoring.cap);
+  state.rallyEnd.grade = wonGame ? state.ruleset === 'standard21' && state.games[winner] < 1 ? 'game' : 'match'
+    : impact.kind === 'in' && winner === impact.hitSide && (state.lastShot === 'smash' || state.rally >= 8) ? 'highlight' : 'point';
   if (wonGame && state.ruleset === 'standard21') {
     state.games[winner]++; state.gameScores.push([...state.score]);
     if (state.games[winner] >= 2) finishMatch(state, winner, `${winner === 0 ? '近场' : '远场'}获胜 · 局数 ${state.games[0]} : ${state.games[1]}`, 'scored');
@@ -176,6 +187,7 @@ function changeEnds(state, reason) {
 
 export function pauseMatch(state, side) {
   if ((side !== 0 && side !== 1) || !['serve', 'rally', 'point', 'intermission'].includes(state.phase) || state.pause.used[side] >= 1) return false;
+  for (const p of state.players) { p.recoveryWait = 0; p.staminaRate = 0; p.staminaStatus = 'idle'; }
   state.pause.by = side; state.pause.previousPhase = state.phase;
   state.pause.remaining = TUNING.pauseLimit; state.pause.used[side]++;
   state._savedTimer = state.timer; state.phase = 'paused'; state.timer = TUNING.pauseLimit;
@@ -193,22 +205,21 @@ export function resumeMatch(state) {
   return true;
 }
 
-function movePlayer(player, input, side, dt) {
+function movePlayer(player, input, side, dt, state) {
   const role = ROLES[player.role];
   const effort = Math.hypot(input.x, input.z);
-  const fatigue = 0.65 + 0.35 * clamp(player.stamina / (role.maxStamina * 0.4), 0, 1);
-  const targetX = input.x * role.speed * fatigue, targetZ = input.z * role.speed * fatigue;
+  const fatigue = staminaEffects(player, role);
+  const targetX = input.x * role.speed * fatigue.speedScale, targetZ = input.z * role.speed * fatigue.speedScale;
   const dx = targetX - player.vx, dz = targetZ - player.vz, difference = Math.hypot(dx, dz);
-  const change = Math.min(1, (effort > 0.01 ? TUNING.acceleration * role.acceleration : TUNING.braking * role.braking) * dt / (difference || 1));
+  const reversing = player.vx * targetX + player.vz * targetZ < 0;
+  const change = Math.min(1, (effort > 0.01 ? TUNING.acceleration * role.acceleration : TUNING.braking * role.braking) *
+    (effort > .01 && !reversing ? fatigue.accelerationScale : 1) * dt / (difference || 1));
   player.vx += dx * change; player.vz += dz * change;
   const nextX = player.x + player.vx * dt, nextZ = player.z + player.vz * dt;
   player.x = clamp(nextX, -COURT.halfWidth + TUNING.playerMargin, COURT.halfWidth - TUNING.playerMargin);
   player.z = direction(side) * clamp(nextZ * direction(side), TUNING.netMargin, COURT.halfLength - TUNING.playerMargin);
   if (nextX !== player.x) player.vx = 0;
   if (nextZ !== player.z) player.vz = 0;
-  const moving = Math.hypot(player.vx, player.vz) / role.speed;
-  const recovery = effort > 0.15 ? role.recovery * 0.1 : role.recovery;
-  player.stamina = clamp(player.stamina + (recovery - TUNING.runCost * role.runCost * moving) * dt, 0, role.maxStamina);
 }
 
 function flightPoint(ball, time) {
@@ -292,7 +303,7 @@ export function getShotTarget(state, side, request = {}) {
   const netTime = vz ? -ball.z / vz : 0;
   const netHeight = ball.y + vy * netTime - TUNING.gravity * netTime * netTime / 2;
   const smashViable = type === 'smash' && !serving && ball.y >= TUNING.smashHeight
-    && player.stamina >= 18 * (1 + input.charge * 0.25) && netHeight > COURT.netHeight + 0.02;
+    && player.stamina >= shotStaminaCost(role, type, input.charge) && netHeight > COURT.netHeight + 0.02;
   if (!serving && netHeight <= COURT.netHeight) {
     quality.risk = Math.max(quality.risk, 0.8); quality.score = 1 - quality.risk;
     quality.reasonCode = 'net-risk';
@@ -334,7 +345,7 @@ export function getInterceptAdvice(state, side, request = {}) {
   if (!landing || state.phase !== 'rally' || state.shuttle.lastHit === side || !state.players[side]) return { ...base, status: 'inactive' };
   if (landing.event === 'net' || landing.out || landing.serviceFault) return { ...base, status: 'out', reason: landing.event === 'net' ? '来球将触网' : '预计出界，可观察落点' };
   const player = state.players[side], role = ROLES[player.role], assist = assistFor(state, side);
-  const fatigue = 0.65 + 0.35 * clamp(player.stamina / (role.maxStamina * 0.4), 0, 1);
+  const fatigue = staminaEffects(player, role).speedScale;
   let nearest = null;
   for (let time = 0.035; time < landing.time; time += 0.035) {
     const point = flightPoint(state.shuttle, time);
@@ -362,15 +373,16 @@ function playShot(state, side, request, serving = false) {
   ball.vx = target.vx; ball.vy = target.vy; ball.vz = target.vz;
   ball.active = true; ball.lastHit = side;
   if (state.service) state.service.active = serving;
-  const shotCost = ({ clear: 4, drop: 6, smash: 18 })[type] * (role.shotCost?.[type] || 1);
-  player.stamina = Math.max(0, player.stamina - shotCost * (1 + request.charge * 0.25));
+  const staminaBefore = player.stamina;
+  player.stamina = Math.max(0, player.stamina - shotStaminaCost(role, type, request.charge, serving));
   player.swing = role.swingTime; player.cooldown = role.swingTime;
   player.pendingShot = null; player.lastShot = type;
   if (player.action) Object.assign(player.action, { type, stage: 'contact', contact, quality: target.quality,
     contactAt: state.time, endsAt: state.time + role.swingTime, swingTime: role.swingTime });
   state.phase = 'rally'; state.hitId++; state.rally++; state.lastShot = type;
   state.lastShotInfo = {hitId: state.hitId, side, at: state.time, type, requested: target.requested,
-    aimX: target.aimX, aimZ: target.aimZ, x: target.x, z: target.z, quality: target.quality};
+    aimX: target.aimX, aimZ: target.aimZ, x: target.x, z: target.z, quality: target.quality,
+    serving, contact, charge: request.charge, staminaBefore, staminaAfter: player.stamina};
   state.message = target.fallbackReason || `${shotName(type)} · ${state.rally} 拍${target.quality.risk >= 0.16 ? ` · ${target.quality.reason}` : ''}`;
 }
 
@@ -448,6 +460,10 @@ function attemptShot(state, side) {
 }
 
 function stepLive(state, inputs, dt, firstSlice) {
+  const start = state.time, phase = state.phase, hitId = state.hitId, pointId = state.pointId;
+  const previous = state.players.map(p => ({ action: p.action ? { ...p.action } : null, cooldown: p.cooldown }));
+  const speeds = [0, 0];
+  try {
   state.time += dt;
   for (let side = 0; side < 2; side++) {
     const player = state.players[side];
@@ -473,6 +489,7 @@ function stepLive(state, inputs, dt, firstSlice) {
         player.x = sign * clamp(player.x * sign, 0.22, COURT.halfWidth - TUNING.playerMargin);
         player.z = direction(side) * clamp(player.z * direction(side), 2.3, COURT.halfLength - TUNING.playerMargin);
       }
+      speeds[side] = Math.hypot(player.vx, player.vz);
       if (firstSlice && inputs[side].shot && player.pendingShot?.contactAt === undefined) {
         const assist = assistFor(state, side);
         player.pendingShot = { ...inputs[side], remaining: TUNING.shotBuffer + assist.inputBuffer };
@@ -484,7 +501,7 @@ function stepLive(state, inputs, dt, firstSlice) {
         player.action.startedAt = startedAt;
         if (id !== null) { player.action.id = id; player.actionId--; }
       } else if (!inputs[side].prepare && player.action?.stage === 'prepare' && !player.pendingShot) player.action = null;
-    } else player.stamina = Math.min(ROLES[player.role].maxStamina, player.stamina + ROLES[player.role].recovery * dt);
+    }
   }
   if (state.phase === 'point' || state.phase === 'intermission') {
     state.timer = Math.max(0, state.timer - dt);
@@ -507,6 +524,43 @@ function stepLive(state, inputs, dt, firstSlice) {
   integrateShuttle(state, dt);
   if (state.phase === 'rally') for (let side = 0; side < 2; side++) {
     attemptShot(state, side);
+  }
+  } finally {
+    const liveDt = state.pointId !== pointId ? clamp(state.rallyEnd.at - start, 0, dt) : dt;
+    for (let side = 0; side < 2; side++) {
+      const player = state.players[side], role = ROLES[player.role];
+      const moving = speeds[side] / role.speed, effort = Math.max(moving, Math.hypot(inputs[side].x, inputs[side].z));
+      const blockedUntil = Math.max(start + previous[side].cooldown, previous[side].action?.endsAt || start,
+        (previous[side].action?.jump?.landAt || start - .24) + .24);
+      const action = player.action;
+      const blocked = phase !== 'rally' || effort >= .4 || inputs[side].prepare ||
+        ['prepare', 'windup', 'contact', 'followthrough'].includes(action?.stage) ||
+        (action && action.startedAt >= start - 1e-8) || ['prepare', 'windup'].includes(previous[side].action?.stage);
+      let recovery = 0, eligible = 0;
+      if (blocked) player.recoveryWait = 0;
+      else {
+        eligible = Math.max(0, start + liveDt - Math.max(start, blockedUntil));
+        if (eligible < liveDt - 1e-9) player.recoveryWait = 0;
+        const beforeWait = player.recoveryWait || 0;
+        player.recoveryWait = Math.min(.35, beforeWait + eligible);
+        const recovering = Math.max(0, eligible - Math.max(0, .35 - beforeWait));
+        const t = clamp((effort - .1) / .3, 0, 1);
+        recovery = role.recovery * (1 - t * t * (3 - 2 * t)) * recovering;
+      }
+      const drain = ['serve', 'rally'].includes(phase) ? movementStaminaRate(role, speeds[side]) * liveDt : 0;
+      const before = player.stamina;
+      player.stamina = clamp(before + recovery - drain, 0, role.maxStamina);
+      player.staminaRate = liveDt > 0 ? (player.stamina - before) / liveDt : 0;
+      player.staminaStatus = player.staminaRate > .001 ? 'recovering' : player.staminaRate < -.001 ? 'draining' :
+        !blocked && eligible > 0 && player.recoveryWait < .35 ? 'waiting' : 'idle';
+      if (state.hitId !== hitId && state.lastShotInfo?.side === side) {
+        state.lastShotInfo.staminaBefore = clamp(state.lastShotInfo.staminaBefore + recovery - drain, 0, role.maxStamina);
+        state.lastShotInfo.staminaAfter = player.stamina;
+        player.staminaStatus = 'draining';
+      }
+      if (state.lastShotInfo?.side === side && state.time - state.lastShotInfo.at < .18) player.staminaStatus = 'draining';
+      if (state.phase !== 'rally') { player.recoveryWait = 0; player.staminaRate = 0; player.staminaStatus = 'idle'; }
+    }
   }
 }
 
@@ -552,7 +606,7 @@ function smashOpportunity(state, side) {
   const discriminant = ball.vy * ball.vy + 2 * TUNING.gravity * (ball.y - bestHeight);
   const contactTime = discriminant >= 0 ? (ball.vy + Math.sqrt(discriminant)) / TUNING.gravity : -1;
   const contactDepth = (ball.z + ball.vz * contactTime) * direction(side);
-  return { contactTime, highChance: contactTime >= 0 && contactDepth > 0.5 && contactDepth < 6.4 && state.players[side].stamina >= 18 };
+  return { contactTime, highChance: contactTime >= 0 && contactDepth > 0.5 && contactDepth < 6.4 && state.players[side].stamina >= shotStaminaCost(ROLES[state.players[side].role], 'smash') };
 }
 
 function repeatPenalty(history, candidate) {

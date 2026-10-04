@@ -4,7 +4,7 @@ import { WebSocket } from 'ws';
 import { createServer } from '../server/index.js';
 import { EventEmitter } from 'node:events';
 import { Rooms } from '../server/rooms.js';
-import { finishMatch, getShotTarget, predictLanding } from '../shared/game.js';
+import { finishMatch, RULES_VERSION, getShotTarget, predictLanding } from '../shared/game.js';
 
 async function client(url, options = {}) {
   const ws = new WebSocket(url.replace('http','ws') + '/ws', options);
@@ -13,7 +13,7 @@ async function client(url, options = {}) {
   ws.on('message', raw => { const m=JSON.parse(raw); queue.push(m); for(const fn of listeners) fn(); });
   await new Promise((resolve,reject) => { ws.once('open',resolve); ws.once('error',reject); });
   return {
-    ws, send: m => ws.send(JSON.stringify(m)),
+    ws, send: m => ws.send(JSON.stringify({rulesVersion:RULES_VERSION,...m})),
     wait(predicate, timeout=3500) {
       return new Promise((resolve,reject) => {
         const poll=()=>{ const i=queue.findIndex(predicate); if(i>=0){clearTimeout(timer);listeners.delete(poll);resolve(queue.splice(i,1)[0]);} };
@@ -30,9 +30,9 @@ async function setup(t) {
 async function pair(t, app, options = {}) {
   const a=await client(app.url);const b=await client(app.url);
   t.after(()=>{a.close();b.close();});
-  a.send({type:'create',name:'甲',role:'swift',target:5,...options});
+  a.send({rulesVersion:RULES_VERSION,type:'create',name:'甲',role:'swift',target:5,...options});
   const room=await a.wait(m=>m.type==='room');
-  b.send({type:'join',code:room.code,name:'乙',role:'power'});
+  b.send({rulesVersion:RULES_VERSION,type:'join',code:room.code,name:'乙',role:'power'});
   const bRoom = await b.wait(m=>m.type==='room');
   const initialA = (await a.wait(m=>m.type==='state')).state;
   const initialB = (await b.wait(m=>m.type==='state')).state;
@@ -63,21 +63,21 @@ test('index.html query URLs serve the same root HTML and headers for GET and HEA
 });
 test('room joins two players and rejects a third',async t=>{
   const app=await setup(t);const {room}=await pair(t,app);const c=await client(app.url);t.after(()=>c.close());
-  c.send({type:'join',code:room.code,name:'第三人',role:'balanced'});
+  c.send({rulesVersion:RULES_VERSION,type:'join',code:room.code,name:'第三人',role:'balanced'});
   assert.match((await c.wait(m=>m.type==='error')).message,/满|开始/);
 });
 
 test('father-son WebSocket room rejects unsupported guests before starting and accepts an updated retry', async t => {
   const app = await setup(t), host = await client(app.url), guest = await client(app.url);
   t.after(() => { host.close(); guest.close(); });
-  host.send({ type: 'create', name: '甲', finale: 'father-son' });
+  host.send({ rulesVersion: RULES_VERSION, type: 'create', name: '甲', finale: 'father-son' });
   const room = await host.wait(message => message.type === 'room');
   for (const finaleCapability of [undefined, null, false, true, 'none', {}]) {
-    guest.send({ type: 'join', code: room.code, name: '乙',
+    guest.send({ rulesVersion: RULES_VERSION, type: 'join', code: room.code, name: '乙',
       ...(finaleCapability === undefined ? {} : { finaleCapability }) });
     assert.match((await guest.wait(message => message.type === 'error')).message, /更新游戏/);
   }
-  guest.send({ type: 'join', code: room.code, name: '乙', finaleCapability: 'father-son' });
+  guest.send({ rulesVersion: RULES_VERSION, type: 'join', code: room.code, name: '乙', finaleCapability: 'father-son' });
   const joined = await guest.wait(message => message.type === 'room');
   assert.deepEqual(joined.rules, { finale: 'father-son' });
   assert.deepEqual((await host.wait(message => message.type === 'room' && message.players[1])).rules, joined.rules);
@@ -114,7 +114,7 @@ test('pause is shared and positions remain frozen',async t=>{
 test('bad JSON and invalid inputs do not stop the room server',async t=>{
   const app=await setup(t);const a=await client(app.url);t.after(()=>a.close());
   a.ws.send('{broken'); assert.equal((await a.wait(m=>m.type==='error')).type,'error');
-  a.send({type:'create',name:'甲',role:'missing',target:999});
+  a.send({rulesVersion:RULES_VERSION,type:'create',name:'甲',role:'missing',target:999});
   const room=await a.wait(m=>m.type==='room');assert.equal(room.target,5);assert.equal(room.players[0].role,'balanced');
 });
 
@@ -135,10 +135,19 @@ function controlledRoom(t, options = {}) {
   t.after(() => rooms.close());
   const addClient = () => { const socket = new TestSocket(); rooms.attach(socket); return rooms.clients.get(socket); };
   const a = addClient(), b = addClient();
-  rooms.message(a, { type: 'create', target: 5, ...options });
-  rooms.message(b, { type: 'join', code: a.room.code });
+  rooms.message(a, { rulesVersion: RULES_VERSION, type: 'create', target: 5, ...options });
+  rooms.message(b, { rulesVersion: RULES_VERSION, type: 'join', code: a.room.code });
   return { rooms, a, b, room: a.room, addClient, elapse(ms) { time += ms; }, advance(ms) { time += ms; rooms.tick(); } };
 }
+
+test('legacy or mismatched rule clients cannot create or join a new authority', t => {
+  const f = controlledRoom(t);
+  for (const rulesVersion of [undefined, 1, 999]) {
+    const c = f.addClient(); f.rooms.message(c, { type: 'create', rulesVersion });
+    assert.equal(c.room, null); assert.match(c.socket.messages.at(-1).message, /规则.*更新/);
+    f.rooms.message(c, { type: 'join', code: f.room.code, rulesVersion }); assert.equal(c.room, null);
+  }
+});
 
 test('movement packets cannot replace the aim and charge of a queued shot', t => {
   const f = controlledRoom(t);
@@ -288,9 +297,9 @@ test('a real WebSocket client that stops answering ping is frozen within the hea
   const app = await setup(t);
   const a = await client(app.url, { autoPong: false }), b = await client(app.url);
   t.after(() => { a.close(); b.close(); });
-  a.send({ type: 'create' });
+  a.send({ rulesVersion: RULES_VERSION, type: 'create' });
   const room = await a.wait(m => m.type === 'room');
-  b.send({ type: 'join', code: room.code });
+  b.send({ rulesVersion: RULES_VERSION, type: 'join', code: room.code });
   await b.wait(m => m.type === 'state');
   const frozen = await b.wait(m => m.type === 'state' && m.state.phase === 'paused', 7500);
   assert.deepEqual(frozen.state.pause.used, [1, 0]);
@@ -307,7 +316,7 @@ test('token reconnect retains the countdown interruption budget and requires fre
   f.b.socket.terminate();
   const remaining = f.room.state.pause.remaining;
   const replacement = f.addClient();
-  f.rooms.message(replacement, { type: 'resumeSession', token });
+  f.rooms.message(replacement, { rulesVersion: RULES_VERSION, type: 'resumeSession', token });
   assert.equal(replacement.slot, 1);
   assert.equal(f.room.state.phase, 'paused');
   assert.equal(f.room.state.pause.remaining, remaining);
@@ -327,7 +336,7 @@ test('real token reconnect restores only its original player without renewing th
   const paused = await a.wait(m => m.type === 'state' && m.state.phase === 'paused');
   const later = await a.wait(m => m.type === 'state' && m.state.phase === 'paused' && m.state.pause.remaining < paused.state.pause.remaining - 0.15);
   const replacement = await client(app.url); t.after(() => replacement.close());
-  replacement.send({ type: 'resumeSession', token: bRoom.token });
+  replacement.send({ rulesVersion: RULES_VERSION, type: 'resumeSession', token: bRoom.token });
   const restored = await replacement.wait(m => m.type === 'room');
   const state = (await replacement.wait(m => m.type === 'state')).state;
   assert.equal(restored.code, room.code); assert.equal(restored.slot, 1);
@@ -412,7 +421,7 @@ test('disconnect cancels existing readiness and a late close cannot affect the r
   f.rooms.message(f.a, { type: 'resume' });
   oldSocket.terminate();
   const replacement = f.addClient();
-  f.rooms.message(replacement, { type: 'resumeSession', token });
+  f.rooms.message(replacement, { rulesVersion: RULES_VERSION, type: 'resumeSession', token });
   f.rooms.message(replacement, { type: 'resume' });
   assert.equal(f.room.state.phase, 'paused');
   assert.deepEqual([...f.room.resumeReady], [1]);
@@ -460,16 +469,16 @@ test('elapsed paused time is charged before beginning a fresh two-second countdo
 test('a waiting invitation cannot start a match while its host is disconnected', t => {
   const f = controlledRoom(t);
   const host = f.addClient(), guest = f.addClient();
-  f.rooms.message(host, { type: 'create' });
+  f.rooms.message(host, { rulesVersion: RULES_VERSION, type: 'create' });
   const waiting = host.room, token = waiting.players[0].token;
   host.socket.terminate();
-  f.rooms.message(guest, { type: 'join', code: waiting.code });
+  f.rooms.message(guest, { rulesVersion: RULES_VERSION, type: 'join', code: waiting.code });
   assert.equal(guest.room, null);
   assert.equal(waiting.state, null);
   assert.match(guest.socket.messages.at(-1).message, /房主.*离线|房主.*连接/);
   const replacement = f.addClient();
-  f.rooms.message(replacement, { type: 'resumeSession', token });
-  f.rooms.message(guest, { type: 'join', code: waiting.code });
+  f.rooms.message(replacement, { rulesVersion: RULES_VERSION, type: 'resumeSession', token });
+  f.rooms.message(guest, { rulesVersion: RULES_VERSION, type: 'join', code: waiting.code });
   assert.equal(guest.room, waiting);
   assert.equal(waiting.state.phase, 'serve');
 });
@@ -547,7 +556,7 @@ test('a standard-game intermission disconnect freezes its remaining break and re
   assert.equal(f.room.state.pause.previousPhase, 'intermission');
   f.advance(1000);
   const replacement = f.addClient();
-  f.rooms.message(replacement, { type: 'resumeSession', token });
+  f.rooms.message(replacement, { rulesVersion: RULES_VERSION, type: 'resumeSession', token });
   f.rooms.message(f.a, { type: 'resume' });
   f.rooms.message(replacement, { type: 'resume' });
   f.advance(2000);

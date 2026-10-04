@@ -42,7 +42,7 @@ test('availability uses turn, court, reach, height, cooldown and stamina boundar
     const a = rules.getShotAvailability(s, 0);
     assert.equal(a.canHit, false); assert.equal(a.canSmash, false); assert.ok(a.reason);
   }
-  const tired = incoming(); tired.players[0].stamina = 17.9;
+  const tired = incoming(); tired.players[0].stamina = rules.shotStaminaCost(rules.ROLES.balanced, 'smash') - .1;
   assert.equal(rules.getShotAvailability(tired, 0).canSmash, false);
   assert.equal(rules.getShotAvailability(tired, 0).canClear, true);
   const impossible = incoming({y: 1.7, z: 6.3}); impossible.players[0].z = 6;
@@ -228,7 +228,7 @@ test('a fast descending high ball gets anticipation before entering the hit-heig
 });
 
 test('charged smash eligibility and future advice share the actual shot request', () => {
-  const s = incoming(); s.players[0].stamina = 20;
+  const s = incoming(); s.players[0].stamina = 11;
   assert.equal(rules.getShotAvailability(s, 0, {charge: 0}).canSmash, true);
   assert.equal(rules.getShotTarget(s, 0, {shot: 'smash', charge: 1}).type, 'smash');
   assert.equal(rules.getShotAvailability(s, 0, {charge: 1}).canSmash, false);
@@ -236,7 +236,7 @@ test('charged smash eligibility and future advice share the actual shot request'
   const future = rules.getInterceptAdvice(high, 0, {charge: 0});
   assert.equal(future.status, 'approach'); assert.equal(future.canSmash, false);
   assert.equal(future.futureCanSmash, true);
-  high.players[0].stamina = 20;
+  high.players[0].stamina = 11;
   assert.equal(rules.getInterceptAdvice(high, 0, {charge: 1}).futureCanSmash, false);
 });
 

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
-import { createMatch, stepMatch, aiInput } from '../shared/game.js';
+import { createMatch, stepMatch, aiInput, RULES_VERSION } from '../shared/game.js';
 
 import * as api from '../src/peer-network.js';
 const flush = async () => { for (let i=0;i<16;i++) await Promise.resolve(); };
@@ -97,7 +97,7 @@ test('father-son hosts reject a legacy guest before play and remain available fo
     const legacyPeer = bus.peerFactory(); t.after(() => legacyPeer.destroy()); await flush();
     const messages = [], connection = legacyPeer.connect(bus.peers[0].id, { serialization: 'json', reliable: true });
     connection.on('data', message => messages.push(message));
-    connection.on('open', () => connection.send({ type: 'rally-hello', version: 1, profile: options,
+    connection.on('open', () => connection.send({ type: 'rally-hello', version: RULES_VERSION, profile: options,
       ...(finale === undefined ? {} : { finale }) }));
     await flush();
     assert.equal(messages[0].type, 'rally-reject');
@@ -122,7 +122,7 @@ test('ordinary hosts continue accepting legacy guests without finale capability'
   const legacyPeer = bus.peerFactory(); t.after(() => legacyPeer.destroy()); await flush();
   const messages = [], connection = legacyPeer.connect(bus.peers[0].id, { serialization: 'json', reliable: true });
   connection.on('data', message => messages.push(message));
-  connection.on('open', () => connection.send({ type: 'rally-hello', version: 1, profile: options }));
+  connection.on('open', () => connection.send({ type: 'rally-hello', version: RULES_VERSION, profile: options }));
   await flush();
   assert.equal(messages[0].type, 'rally-accept');
   assert.deepEqual(messages.find(message => message.type === 'room').rules, { finale: 'none' });
@@ -138,7 +138,7 @@ test('two peers complete version handshake, propagate a real room and exchange p
   assert.ok(guestMessages.some(m=>m.type==='state'));
   guest.send({type:'ping',at:42});await flush();assert.ok(guestMessages.some(m=>m.type==='pong'&&m.at===42));
   host.send({type:'ping',at:43});assert.ok(hostMessages.some(m=>m.type==='pong'&&m.at===43));
-  assert.ok(bus.sent.some(s=>s.message.type==='rally-hello'&&s.message.version===1));
+  assert.ok(bus.sent.some(s=>s.message.type==='rally-hello'&&s.message.version===RULES_VERSION));
   assert.equal(JSON.stringify(bus.sent).includes('playerKey'),false);
 });
 

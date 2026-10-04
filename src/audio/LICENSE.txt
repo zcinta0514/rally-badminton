@@ -71,3 +71,15 @@ No added oscillator tones, generated crowd noise, pitch shifting, or unrelated
 impact sounds are present in these files. Processing is reproducible with
 scripts/prepare-recorded-audio.py; original downloads and the processing report
 are kept locally under ignored artifacts/audio-sources/.
+
+FX-2 additions (2026-10-04)
+---------------------------
+hit-3 uses the fourth distinct studio badminton impact (8.430-8.750 s).
+step-2/3/4 use distinct footsteps from #0165 at 1.020-1.280,2.860-3.120,
+and 4.760-5.020 seconds. They are general wooden-floor footsteps.
+applause-2/3 use #2363 at 1.65-2.55 and 3.20-4.30 seconds;
+cheer-long uses #0236 at 0.005-3.005 seconds. Same CC0 sources above.
+Processing, hashes and crops: manifest.json and scripts/prepare-arena-audio.py.
+The four badminton impacts do NOT establish four verified takes for each
+specific stroke. Brake, landing, swish, net, shuttle-floor and dedicated
+stadium ambience remain material gaps. The controller leaves those silent.

@@ -82,6 +82,12 @@ function interpolate(a, b, alpha, packetSpanMs) {
   state.players = a.players.map((previous, side) => {
     const next = b.players[side], player = copy(base.players[side]);
     for (const key of ['x', 'z', 'vx', 'vz', 'stamina', 'swing', 'cooldown']) player[key] = mix(previous[key], next[key], motionAlpha);
+    const shot = b.lastShotInfo;
+    if (hitKnown && shot.side === side && Number.isFinite(shot.staminaBefore) && Number.isFinite(shot.staminaAfter)) {
+      player.stamina = !hit
+        ? mix(previous.stamina, shot.staminaBefore, clamp((time - a.time) / Math.max(EPSILON, hitAt - a.time), 0, 1))
+        : mix(shot.staminaAfter, next.stamina, clamp((time - hitAt) / Math.max(EPSILON, b.time - hitAt), 0, 1));
+    }
     player.action = actionAt(previous.action, next.action, time, base === b);
     return player;
   });
