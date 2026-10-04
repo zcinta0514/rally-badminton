@@ -4,7 +4,8 @@ import { readFile } from 'node:fs/promises';
 import { createPwaBuild } from '../scripts/build-pwa.js';
 import { createServer } from '../server/index.js';
 
-const names = ['hit-1', 'hit-2', 'smash-1', 'step-1', 'applause', 'cheer', 'finale-dad'];
+const manifest = JSON.parse(await readFile(new URL('../src/audio/manifest.json', import.meta.url)));
+const names = manifest.files.map(entry => entry.file.replace('.wav', ''));
 
 test('recorded sound and license bytes are cached under root and project subpaths', async () => {
   for (const basePath of ['/', '/rally-badminton/']) {
@@ -22,6 +23,7 @@ test('recorded sound and license bytes are cached under root and project subpath
     }
     assert.ok(size < 650000, `short audio pack stays small: ${size}`);
     assert.ok([...build.assets.keys()].every(url => !url.includes('squeak')), 'removed friction is not shipped or cached');
+    assert.ok(build.assets.has(basePath + 'src/audio/manifest.json'));
     const license = build.assets.get(`${basePath}src/audio/LICENSE.txt`);
     assert.ok(license, 'redistributed recordings include their provenance');
     assert.match(license.toString(), /CC0|Creative Commons Zero/i);
@@ -39,4 +41,12 @@ test('preview server serves real audio with WAV MIME and keeps raw source files 
   assert.ok((await response.arrayBuffer()).byteLength > 1000);
   assert.equal((await fetch(app.url + '/src/audio/LICENSE.txt')).status, 200);
   assert.equal((await fetch(app.url + '/artifacts/audio-sources/0537.wav')).status, 404);
+});
+
+test('every shipped recording has a license, byte count and matching SHA256; material gaps remain explicit', async () => {
+  const {createHash}=await import('node:crypto');
+  for(const entry of manifest.files){const bytes=await readFile(new URL('../src/audio/'+entry.file,import.meta.url));assert.equal(bytes.length,entry.bytes);assert.equal(createHash('sha256').update(bytes).digest('hex'),entry.sha256);assert.ok(entry.license);}
+  const impacts=manifest.files.filter(e=>e.source?.includes('/0537.wav'));
+  assert.equal(impacts.length,4);assert.equal(new Set(impacts.map(e=>e.cropSeconds.join(':'))).size,4);
+  assert.ok(impacts.every(e=>e.strokeVerified===false));assert.equal(manifest.qualityAccepted,false);assert.ok(manifest.gaps.length>0);
 });

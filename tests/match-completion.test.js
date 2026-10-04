@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
-import { createMatch, stepMatch, pauseMatch, finishMatch } from '../shared/game.js';
+import { createMatch, stepMatch, pauseMatch, finishMatch, RULES_VERSION } from '../shared/game.js';
 import { PeerMatch } from '../src/peer-match.js';
 import { Rooms } from '../server/rooms.js';
 
@@ -125,9 +125,9 @@ function wsFixture(t, options = {}) {
   t.after(() => rooms.close());
   const connect = () => { const socket = new Socket(); rooms.attach(socket); return rooms.clients.get(socket); };
   const clients = [connect(), connect()];
-  rooms.message(clients[0], { type: 'create', name: '甲', ...options });
+  rooms.message(clients[0], { rulesVersion: RULES_VERSION, type: 'create', name: '甲', ...options });
   const room = clients[0].room;
-  rooms.message(clients[1], { type: 'join', name: '乙', code: room.code,
+  rooms.message(clients[1], { rulesVersion: RULES_VERSION, type: 'join', name: '乙', code: room.code,
     finale: options.finale === 'father-son' ? 'none' : 'father-son', finaleCapability: 'father-son' });
   return { get state() { return room.state; },
     last(type = 'state', slot = 0) { return clients[slot].socket.messages.findLast(message => message.type === type); },
@@ -138,7 +138,7 @@ function wsFixture(t, options = {}) {
     disconnect(slot) { clients[slot].socket.terminate(); },
     reconnect(slot) {
       const token = room.players[slot].token;
-      clients[slot] = connect(); rooms.message(clients[slot], { type: 'resumeSession', token });
+      clients[slot] = connect(); rooms.message(clients[slot], { rulesVersion: RULES_VERSION, type: 'resumeSession', token });
     },
     expire() { rooms.remove(room); },
   };

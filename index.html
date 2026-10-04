@@ -35,6 +35,7 @@
       <button id="sound" class="icon-btn" aria-label="关闭声音" title="声音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4Z"/><path class="sound-on" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path class="sound-off" d="m16 9 5 6m0-6-5 6"/></svg></button>
       <button id="fullscreen" class="icon-btn" aria-label="全屏" title="全屏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></svg></button>
       <button id="help" class="icon-btn" aria-label="操作说明" title="操作说明"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 8.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16h.01"/></svg></button>
+      <button id="match-settings-toggle" class="match-settings-toggle" aria-expanded="false" aria-controls="match-settings-panel">设置</button>
       <button id="pause" class="icon-btn" hidden aria-label="暂停比赛"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" stroke-width="3"/></svg></button>
     </div>
   </header>
@@ -45,6 +46,16 @@
     <label for="camera-zoom"><span>远近 · 缩放</span><output id="camera-zoom-value" for="camera-zoom">100%</output></label>
     <input id="camera-zoom" type="range" min="85" max="112" value="100" step="1" aria-label="视角远近缩放">
     <details id="performance-details"><summary>性能与网络</summary><output id="performance-readout">采样中…</output></details>
+  </aside>
+  <aside id="match-settings-panel" class="match-settings-panel" hidden aria-label="比赛设置">
+    <div class="arena-settings-heading"><strong>比赛设置</strong><button id="arena-reset">恢复默认</button></div>
+    <details><summary>本场规则 · 只读</summary><p id="match-settings-summary"></p><small>打法、难度与计分在下一场开局前选择。</small></details>
+    <label for="arena-master">总音量</label><div class="arena-volume"><input id="arena-master" data-volume="master" type="range" min="0" max="100" value="60"><output>60%</output></div>
+    <label for="arena-hits">击球</label><div class="arena-volume"><input id="arena-hits" data-volume="hits" type="range" min="0" max="100" value="100"><output>100%</output></div>
+    <label for="arena-movement">移动</label><div class="arena-volume"><input id="arena-movement" data-volume="movement" type="range" min="0" max="100" value="65"><output>65%</output></div>
+    <label for="arena-crowd">观众</label><div class="arena-volume"><input id="arena-crowd" data-volume="crowd" type="range" min="0" max="100" value="50"><output>50%</output></div>
+    <label for="arena-environment">环境</label><div class="arena-volume"><input id="arena-environment" data-volume="environment" type="range" min="0" max="100" value="15"><output>15%</output></div>
+    <small>个人音量即时生效；打开面板不暂停比赛。</small>
   </aside>
   <main id="menu" class="menu-panel">
     <div class="menu-heading"><div class="eyebrow"><span></span> READY FOR THE NEXT POINT</div>
@@ -68,7 +79,7 @@
       <button id="start-training" class="secondary-btn">三步训练 <span aria-hidden="true">↗</span></button>
       <button id="open-friends" class="secondary-btn">好友对打 <span>1V1 ＋</span></button></div>
     </div>
-    <div class="menu-foot"><span class="menu-tip-desktop">手机横屏 · 双手操控</span><span class="menu-foot-actions"><button id="open-leaderboard" class="leaderboard-entry" type="button">排行榜 ↗</button><button id="open-feedback" class="leaderboard-entry" type="button">意见反馈 ↗</button></span><span>正式版 1.7.1</span></div>
+    <div class="menu-foot"><span class="menu-tip-desktop">手机横屏 · 双手操控</span><span class="menu-foot-actions"><button id="open-leaderboard" class="leaderboard-entry" type="button">排行榜 ↗</button><button id="open-feedback" class="leaderboard-entry" type="button">意见反馈 ↗</button></span><span>正式版 1.8.0</span></div>
   </main>
   <aside id="court-caption" class="court-caption"><div class="live-tag"><i></i> LIVE COURT <span>实时演示</span></div><div class="court-poster"><span>PLAY THE NEXT POINT.</span><strong>下一分，<br>由你拿下。</strong></div><div class="court-strip"><b>01</b><span>一块球场 · 随时开打</span><span>MOVE. AIM. RALLY.</span></div></aside>
   <section id="hud" class="hud" hidden aria-label="比赛信息">
@@ -82,7 +93,6 @@
   <section id="game-controls" class="game-controls" hidden aria-label="比赛操作">
     <div class="movement-panel">
     <div class="joystick-wrap"><div id="joystick" class="joystick" aria-hidden="true"><span class="stick-cross"></span><span id="knob"></span></div><small>左侧任意处拖动<span>W A S D</span></small></div>
-    <div class="energy-panel"><div><span id="energy-name">你的体力</span><strong id="energy-value">100%</strong></div><div class="energy-track"><i id="energy-fill"></i></div><small id="energy-hint">回位调整，恢复体力</small></div>
     <div class="assist-panel"><strong id="assist-status">按住击球键，拖动选落点</strong><small><i class="legend-dot landing"></i>预计落点 <i class="legend-dot intercept"></i>接球位置 <i class="legend-dot target"></i>你的目标</small></div>
     </div>
     <div class="shots-wrap"><div class="aim-heading"><b id="aim-value">按住击球键拖动</b></div><div class="shot-buttons"><button data-shot="clear" class="shot-btn"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 18C4 2 20 2 21 18m-5-3 5 3 1-6"/></svg></span><strong>高远</strong><small>J</small></button><button data-shot="drop" class="shot-btn"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10c7-10 12-2 12 10m-4-4 4 4 4-4"/></svg></span><strong>吊球</strong><small>K</small></button><button data-shot="smash" class="shot-btn smash"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 2-10 12h7l-1 8L21 9h-8Z"/></svg></span><strong>杀球</strong><small>L</small></button></div><small class="shot-instruction"><span>↑ 更深 · ↓ 靠网</span><span id="shot-risk" data-risk="idle">左右选线 · 松手击球</span></small></div>

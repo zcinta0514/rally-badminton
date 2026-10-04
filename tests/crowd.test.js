@@ -126,13 +126,13 @@ test('delayed or implausibly future scores are consumed without replaying a full
   }
 });
 
-test('faults and routine short rallies stay quiet while a legal eight-shot rally can trigger', () => {
+test('faults and short rallies get restrained reactions while a legal long rally gets full cheers', () => {
   const arena = makeArena(), before = snapshot(arena), state = live(); update(arena, state);
   for (const kind of ['out', 'net', 'serviceFault']) {
-    point(state); state.rallyEnd.kind = kind; update(arena, state, 30);
+    point(state); state.rallyEnd.kind = kind; update(arena, state, 40);
     assert.deepEqual(snapshot(arena), before);
   }
-  point(state, { lastShot: 'clear', rally: 7 }); update(arena, state, 30);
+  point(state, { lastShot: 'clear', rally: 7 }); update(arena, state, 40);
   assert.deepEqual(snapshot(arena), before);
   point(state, { lastShot: 'clear', rally: 8 }); update(arena, state, 18);
   assert.ok(changed(arena, before).length > 0);
@@ -144,7 +144,7 @@ test('background and disabled presentation clear active reactions and never repl
     startReaction(arena, state, before);
     update(arena, state, 1, options);
     assert.deepEqual(snapshot(arena), before);
-    point(state); update(arena, state, 10, options); update(arena, state, 30);
+    point(state); update(arena, state, 10, options); update(arena, state, 40);
     assert.deepEqual(snapshot(arena), before);
     point(state); update(arena, state, 18);
     assert.ok(changed(arena, before).length > 0, 'subsequent visible scores still react');
@@ -179,7 +179,7 @@ test('next serve, a fresh match, and an explicit reset immediately restore seate
     else arenaApi.resetArenaCrowd(arena);
     assert.deepEqual(snapshot(arena), before);
     if (reset === 'explicit') {
-      update(arena, state, 30); assert.deepEqual(snapshot(arena), before, 'reset re-primes without replay');
+      update(arena, state, 40); assert.deepEqual(snapshot(arena), before, 'reset re-primes without replay');
     }
   }
 });

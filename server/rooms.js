@@ -1,5 +1,5 @@
 import { randomBytes, randomInt } from 'node:crypto';
-import { createMatch, stepMatch, pauseMatch, resumeMatch, finishMatch, ROLES } from '../shared/game.js';
+import { createMatch, stepMatch, pauseMatch, resumeMatch, finishMatch, RULES_VERSION, ROLES } from '../shared/game.js';
 import { cleanName, playerIdentity, validPlayerKey } from './leaderboard.js';
 
 const send=(socket,data)=>{if(socket?.readyState===1)socket.send(JSON.stringify(data));};
@@ -87,6 +87,7 @@ export class Rooms {
     this.tick();
     if(ctx.socket.readyState!==1)return;
     if(m.type==='ping'){send(ctx.socket,{type:'pong',at:m.at});return;}
+    if(['create','join','resumeSession'].includes(m.type)&&m.rulesVersion!==RULES_VERSION)return this.error(ctx,'比赛规则已更新，请双方联网刷新后重新建房');
     if(['create','join'].includes(m.type)&&m.playerKey!==undefined&&!validPlayerKey(m.playerKey))return this.error(ctx,'玩家凭据无效，请刷新后重新进入');
     if(m.type==='create'){
       if(ctx.room)return this.error(ctx,'请先退出当前房间');

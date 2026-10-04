@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { collectArenaSounds, ArenaAudio } from '../src/arena-audio.js';
+import { collectArenaSounds, ArenaAudio, ARENA_AUDIO_SAMPLES } from '../src/arena-audio.js';
 import { createMatch, stepMatch } from '../shared/game.js';
 
 const state = () => ({ time: 1, hitId: 0, pointId: 0, phase: 'rally', lastShot: 'clear', rally: 0,
@@ -110,6 +110,7 @@ function audioFixture({ fetchFailure = false, decodeFailure = false, resumeFailu
       start(...args) { this.starts.push(args); }, stop(at) { this.stops.push(at); } }; sources.push(source); return source; }
     createBuffer(channels, length, rate) { return { duration: length / rate, getChannelData: () => new Float32Array(length) }; }
     createBiquadFilter() { return { ...node(), frequency: param(), Q: param() }; }
+    createStereoPanner() { const panner = { ...node(), pan: param() }; this.lastPanner = panner; return panner; }
     createOscillator() { throw new Error('electronic oscillator must not be used'); }
     async decodeAudioData() { this.decodes++; if (decodeFailure) throw new Error('bad sample'); return { duration: 1.4, sample: true }; }
     async resume() { if (resumeFailure) throw new Error('audio denied'); this.state = 'running'; }
@@ -122,9 +123,9 @@ function audioFixture({ fetchFailure = false, decodeFailure = false, resumeFailu
 
 test('gesture unlock loads local samples once and uses decoded sources without oscillators', async () => {
   const f = audioFixture(); await f.audio.unlock(); await f.audio.unlock(); assert.equal(f.contexts.length, 1);
-  assert.equal(f.requests.length, 7); assert.equal(new Set(f.requests).size, 7);
+  const count = new Set(Object.values(ARENA_AUDIO_SAMPLES).flat().map(String)).size; assert.equal(f.requests.length, count); assert.equal(new Set(f.requests).size, count);
   assert.ok(f.requests.every(url => url.startsWith(new URL('../src/audio/', import.meta.url).href)));
-  assert.equal(f.contexts[0].decodes, 7);
+  assert.equal(f.contexts[0].decodes, count);
   const s = state(); f.audio.update(s); advance(s); s.hitId++; f.audio.update(s);
   assert.equal(f.sources.length, 1); assert.equal(f.sources[0].buffer.sample, true); assert.equal(f.sources[0].starts.length, 1);
 });
@@ -148,7 +149,7 @@ test('visibility, mute, pause, countdown and reset immediately stop and disconne
     if (action === 'paused' || action === 'countdown') { s.phase = action; f.audio.update(s); }
     assert.ok(playing.stops.includes(f.contexts[0].currentTime), `${action}: immediate stop`);
     assert.equal(playing.disconnected, true, `${action}: disconnect source`);
-    assert.ok(f.gains.slice(1).every(g => g.disconnected), `${action}: disconnect envelope`);
+    assert.ok(f.gains.slice(5).every(g => g.disconnected), `${action}: disconnect envelope`);
     if (['hide', 'hiddenUpdate', 'mute'].includes(action)) assert.equal(f.gains[0].gain.value, 0);
   }
 });
@@ -169,7 +170,7 @@ test('single short crowd reactions use quieter applause and stop at the next ser
   for (const exciting of [false, true]) { const f = audioFixture(); await f.audio.unlock(); const s = state(); f.audio.update(s);
     if (exciting) s.lastShot = 'smash'; score(s); f.audio.update(s); f.audio.update(s);
     assert.equal(f.sources.length, 1, 'one human reaction'); const source = f.sources[0];
-    assert.ok(source.stops[0] - source.starts[0][0] <= 1.2); peaks.push(Math.max(...f.gains[1].gain.calls.map(c => c[1])));
+    assert.ok(source.stops[0] - source.starts[0][0] <= 1.2); peaks.push(Math.max(...f.gains.at(-1).gain.calls.map(c => c[1])));
     s.phase = 'serve'; advance(s); f.audio.update(s); assert.equal(source.disconnected, true); assert.equal(f.sources.length, 1); }
   assert.ok(peaks[0] < peaks[1]);
 });
@@ -207,7 +208,7 @@ test('voices are bounded and finished sources release all connected event nodes'
   for (let i = 0; i < 40; i++) f.audio.hit('clear'); assert.ok(f.sources.length >= 12);
   assert.ok(f.sources.filter(s => !s.disconnected).length <= 12);
   for (const source of f.sources) source.onended?.();
-  assert.ok(f.sources.every(s => s.disconnected)); assert.ok(f.gains.slice(1).every(g => g.disconnected));
+  assert.ok(f.sources.every(s => s.disconnected)); assert.ok(f.gains.slice(5).every(g => g.disconnected));
 });
 
 test('finale voice is fixed-rate once per key and is never queued after mute or background', async()=>{
@@ -220,4 +221,33 @@ test('finale voice is fixed-rate once per key and is never queued after mute or 
   assert.equal(f.sources.length,1);
   f.audio.playFinale('room:4');assert.equal(f.sources.length,2);
   f.audio.reset();assert.ok(f.sources.every(source=>source.disconnected));
+});
+
+test('four mix buses apply immediate preferences and hits duck audience without reducing their own bus', async () => {
+  const f = audioFixture(); await f.audio.unlock(); f.audio.update(state());
+  assert.deepEqual(Object.fromEntries(Object.entries(f.audio.buses).map(([k,v])=>[k,v.gain.value])),{hits:1,movement:.65,crowd:.5,environment:.15});
+  f.audio.setPreferences({master:.3,hits:.8,movement:.2,crowd:.4,environment:0});
+  assert.equal(f.gains[0].gain.value,.3); f.audio.hit('smash',{id:15,charge:.8});
+  assert.equal(f.audio.buses.hits.gain.value,.8);
+  assert.ok(f.audio.buses.crowd.gain.calls.some(c=>c[0]==='set'&&Math.abs(c[1]-.14)<1e-8));
+});
+test('event variants are repeatable across reset and never use adjacent identical impact takes', async () => {
+  const f=audioFixture();await f.audio.unlock();f.audio.update(state());
+  f.audio.hit('clear',{id:42});const first=f.sources.at(-1).buffer;
+  f.audio.hit('drop',{id:42});assert.notEqual(f.sources.at(-1).buffer,first);
+  f.audio.reset();f.audio.update(state());f.audio.hit('clear',{id:42});assert.equal(f.sources.at(-1).buffer,first);
+});
+test('camera changes reverse left/right panning; voice priority reserves contacts', async () => {
+  const f=audioFixture();await f.audio.unlock();f.audio.update(state());
+  f.audio.setListener({x:0,z:18});f.audio.hit('clear',{id:1,position:{x:2,z:0}});const front=f.contexts[0].lastPanner.pan.value;
+  f.audio.setListener({x:0,z:-18});f.audio.hit('clear',{id:2,position:{x:2,z:0}});assert.equal(f.contexts[0].lastPanner.pan.value,-front);
+  f.audio.stopVoices();for(let i=0;i<12;i++)f.audio.hit('smash',{id:i});
+  const count=f.sources.length;f.audio.sample('applause',{id:1,duration:.5,volume:.2,bus:'crowd',priority:1});assert.equal(f.sources.length,count);
+  f.audio.hit('clear',{id:30});assert.equal(f.audio.voices.size,12);assert.equal(f.sources.length,count+1);
+});
+test('long-rally tension triggers once at 8 and 12 confirmed strokes, with distinct winning tiers', () => {
+  const s=createMatch(),m={};s.phase='rally';s.shuttle.active=false;collectArenaSounds(s,m);
+  for(const rally of [8,12]){s.time+=.1;s.hitId=rally;s.rally=rally;const events=collectArenaSounds(s,m);assert.equal(events.filter(e=>e.type==='tension').length,1);assert.deepEqual(collectArenaSounds(s,m),[]);}
+  s.time+=.1;s.pointId=1;s.phase='over';s.rallyEnd={id:1,at:s.time,kind:'in',winner:0,hitSide:0,grade:'match'};
+  assert.equal(collectArenaSounds(s,m).find(e=>e.type==='score').grade,'match');
 });

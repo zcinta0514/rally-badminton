@@ -167,8 +167,9 @@ test('movement remains in own court and diagonal input is normalized', () => {
   }
 });
 
-test('continuous running consumes stamina and standing recovers it', () => {
+test('continuous running consumes stamina and standing during a rally recovers it', () => {
   const state = createMatch();
+  state.phase = 'rally'; state.shuttle.active = false;
   advance(state, 0.8, [{ x: 1 }, {}]);
   const tired = state.players[0].stamina;
   assert.ok(tired < ROLES.balanced.maxStamina);

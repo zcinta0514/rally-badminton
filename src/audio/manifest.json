@@ -1,0 +1,201 @@
+{
+  "schema": 1,
+  "date": "2026-10-04",
+  "files": [
+    {
+      "file": "hit-1.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0537.wav",
+      "sourceSha256": "8c367226acc6dd64b26527aa0b1c31146270165f956698d912a95d47cf3a4a2a",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        0.105,
+        0.395
+      ],
+      "processing": "See LICENSE.txt",
+      "sha256": "d125e9a3d6628253f7cb899d09cd6e6c4c8046be767a3a05ab0ed88c337e2904",
+      "bytes": 25622,
+      "strokeVerified": false
+    },
+    {
+      "file": "hit-2.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0537.wav",
+      "sourceSha256": "8c367226acc6dd64b26527aa0b1c31146270165f956698d912a95d47cf3a4a2a",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        5.68,
+        5.97
+      ],
+      "processing": "See LICENSE.txt",
+      "sha256": "d5cd63fdaa957110826f505ac9d9a8d2d9bb8474b341888e5f7fb6ed5cf30813",
+      "bytes": 25622,
+      "strokeVerified": false
+    },
+    {
+      "file": "smash-1.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0537.wav",
+      "sourceSha256": "8c367226acc6dd64b26527aa0b1c31146270165f956698d912a95d47cf3a4a2a",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        2.76,
+        3.09
+      ],
+      "processing": "See LICENSE.txt",
+      "sha256": "f84d5c950f6fed616890e22943cb0b66a372190f274212d61e9d86a2118100bc",
+      "bytes": 29150,
+      "strokeVerified": false
+    },
+    {
+      "file": "step-1.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0165.wav",
+      "sourceSha256": "ed4009d9d94b0aa8d87b2ec6209c72edbe8d1ae45b667f2e9a723d3096addad8",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        3.53,
+        3.79
+      ],
+      "processing": "See LICENSE.txt",
+      "sha256": "738d00f33cd060a0d334e8a36a10f151a3f6d0d93b00e37f0020942b2b67ba67",
+      "bytes": 22976,
+      "strokeVerified": null
+    },
+    {
+      "file": "applause.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/2363.wav",
+      "sourceSha256": "4463eecdc564dbf3bcab063d069e30aae9c115d3d7943d1b6b5ffa1e05699cea",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        0.67,
+        1.47
+      ],
+      "processing": "See LICENSE.txt",
+      "sha256": "a39076d64db34d67eae67dfa0f4f3c84c90f4f0ad0da26888248807068992304",
+      "bytes": 35324,
+      "strokeVerified": null
+    },
+    {
+      "file": "cheer.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0236.wav",
+      "sourceSha256": "13deb4e0731d149f9b2db3feca864e1a71351e4e3a74d797e8b1084f95315556",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        0.005,
+        1.105
+      ],
+      "processing": "See LICENSE.txt",
+      "sha256": "728af5cc2647c2c332784ae940691d16958e9e7791275c3d514bb3daaada9aa1",
+      "bytes": 48554,
+      "strokeVerified": null
+    },
+    {
+      "file": "hit-3.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0537.wav",
+      "sourceSha256": "8c367226acc6dd64b26527aa0b1c31146270165f956698d912a95d47cf3a4a2a",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        8.43,
+        8.75
+      ],
+      "processing": "ffmpeg mono PCM16,75Hz highpass,edge fades; footsteps 3kHz lowpass",
+      "sha256": "b9268e8a8fd02866af5eec0e492a8cf853cda53e4775c944c014ca761507ee25",
+      "bytes": 28512,
+      "strokeVerified": false
+    },
+    {
+      "file": "step-2.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0165.wav",
+      "sourceSha256": "ed4009d9d94b0aa8d87b2ec6209c72edbe8d1ae45b667f2e9a723d3096addad8",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        1.02,
+        1.28
+      ],
+      "processing": "ffmpeg mono PCM16,75Hz highpass,edge fades; footsteps 3kHz lowpass",
+      "sha256": "f26db7780c4facda1e89d77232ab012823f2fd4176cae4c0f7a19227fd78bb8b",
+      "bytes": 23278,
+      "strokeVerified": null
+    },
+    {
+      "file": "step-3.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0165.wav",
+      "sourceSha256": "ed4009d9d94b0aa8d87b2ec6209c72edbe8d1ae45b667f2e9a723d3096addad8",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        2.86,
+        3.12
+      ],
+      "processing": "ffmpeg mono PCM16,75Hz highpass,edge fades; footsteps 3kHz lowpass",
+      "sha256": "61587105d36d03f0cc3dd87b880ffc8045ce225d7f19b6c0f532989eb60ce282",
+      "bytes": 23278,
+      "strokeVerified": null
+    },
+    {
+      "file": "step-4.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0165.wav",
+      "sourceSha256": "ed4009d9d94b0aa8d87b2ec6209c72edbe8d1ae45b667f2e9a723d3096addad8",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        4.76,
+        5.02
+      ],
+      "processing": "ffmpeg mono PCM16,75Hz highpass,edge fades; footsteps 3kHz lowpass",
+      "sha256": "0fb8e2905ad62c146dcfb665ba533c5bf5c3d00fe06956926bb93aebe2611a4b",
+      "bytes": 23278,
+      "strokeVerified": null
+    },
+    {
+      "file": "applause-2.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/2363.wav",
+      "sourceSha256": "4463eecdc564dbf3bcab063d069e30aae9c115d3d7943d1b6b5ffa1e05699cea",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        1.65,
+        2.55
+      ],
+      "processing": "ffmpeg mono PCM16,75Hz highpass,edge fades; footsteps 3kHz lowpass",
+      "sha256": "a47229c1ca303992d93e98de9b2219df1bb24fc21cc5660f3f62abbeaeccf815",
+      "bytes": 40166,
+      "strokeVerified": null
+    },
+    {
+      "file": "applause-3.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/2363.wav",
+      "sourceSha256": "4463eecdc564dbf3bcab063d069e30aae9c115d3d7943d1b6b5ffa1e05699cea",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        3.2,
+        4.3
+      ],
+      "processing": "ffmpeg mono PCM16,75Hz highpass,edge fades; footsteps 3kHz lowpass",
+      "sha256": "48075ed6ac972aefe44dd17f5e9ac49d08daa47db5a3b666c973596adf94739e",
+      "bytes": 48986,
+      "strokeVerified": null
+    },
+    {
+      "file": "cheer-long.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0236.wav",
+      "sourceSha256": "13deb4e0731d149f9b2db3feca864e1a71351e4e3a74d797e8b1084f95315556",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        0.005,
+        3.005
+      ],
+      "processing": "ffmpeg mono PCM16,75Hz highpass,edge fades; footsteps 3kHz lowpass",
+      "sha256": "5249bfe5f4c2b0211b5e3ebe4cf01e00e322093ba11e40509330d351eb134d83",
+      "bytes": 132916,
+      "strokeVerified": null
+    },
+    {
+      "file": "finale-dad.wav",
+      "source": "FINALE-VOICE.txt",
+      "license": "See FINALE-VOICE.txt",
+      "synthetic": true,
+      "sha256": "90f3618a5caba9cf15611ebd3c568b8c5451e50aa65ccbaeaeabe8d16fb9debb",
+      "bytes": 27984
+    }
+  ],
+  "gaps": [
+    "4 verified takes for each serve/clear/drop/smash; current four impacts are generic badminton takes",
+    "Dedicated brake,landing,swish,shuttle-floor,net and stadium-ambient recordings"
+  ],
+  "qualityAccepted": false
+}

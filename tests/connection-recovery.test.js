@@ -4,6 +4,9 @@ import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 import { webcrypto } from 'node:crypto';
 import * as game from '../shared/game.js';
+import {readArenaPreferences} from '../src/arena-preferences.js';
+import {describeRole} from '../src/match-settings.js';
+import {matchPressure} from '../src/arena-feedback.js';
 import { NetworkPlayback } from '../src/network-playback.js';
 import { PerformanceMonitor, formatPerformance } from '../src/performance.js';
 import { resolveShotAim, toWorldInput } from '../src/play-input.js';
@@ -122,7 +125,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     sample() { return { x: 0, z: 0, prepare: null, charge: 0 }; }
   }
   const context = vm.createContext({
-    ...game, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
+    ...game, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
     getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
     createUsageAnalytics:()=>({configured:true,enabled:true,
@@ -148,7 +151,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     navigator:{clipboard:{writeText:async value=>invites.push(value)}},
     ArenaAudio: class {
       constructor() { audio = this; this.context = null; this.unlocks = 0; this.finaleCalls = []; this.stoppedVoices = []; }
-    reset() {} update() {} setVisible() {} setEnabled(value) { this.enabled=value; }
+    reset() {} update() {} setVisible() {} setListener() {} setEnabled(value) { this.enabled=value; }
       stopVoices(group) { this.stoppedVoices.push(group); }
       playFinale(key) { this.finaleCalls.push(key); }
       unlock() { this.unlocks++; this.context = { state: 'running' }; }
@@ -158,7 +161,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     initOnboarding: options => { onboardingOptions = options; return { maybeShow() { onboardingAttempts++; } }; },
     initFeedback: () => null,
     getWebSocketURL: () => 'ws://localhost/ws', queueMicrotask,
-    bindCameraSettings() {}, ResizeObserver: class { observe() {} },
+    bindMatchSettings:()=>({close(){},update(){}}), bindCameraSettings() {}, ResizeObserver: class { observe() {} },
     requestAnimationFrame(callback) { frame = callback; },
     setTimeout(callback, delay) { timers.set(++nextId, { callback, delay, at: now + delay }); return nextId; },
     clearTimeout(id) { timers.delete(id); },
@@ -247,7 +250,7 @@ test('automatic update transfers selected controls and mute once without preserv
   assert.deepEqual({...restored.settings},{role:'power',difficulty:'hard',target:11,ruleset:'standard21',finale:'none'});
   for(const [group,value] of [['roles','power'],['difficulties','hard'],['targets',21],['rulesets','standard21']])assert.equal(restored.choice(group,value).attributes['aria-pressed'],'true');
   assert.equal(restored.element('targets').attributes['aria-disabled'],'true');assert.equal(restored.choice('targets',11).disabled,true);
-  assert.match(restored.element('role-note').textContent,/杀球更重/);assert.match(restored.element('rules-note').textContent,/三局两胜/);
+  assert.match(restored.element('role-note').textContent,/速度 4.05.*体力 112/);assert.match(restored.element('rules-note').textContent,/三局两胜/);
   assert.equal(restored.sound,false);assert.equal(restored.audio.enabled,false);assert.equal(restored.element('sound').dataset.muted,'true');assert.equal(restored.element('sound').attributes['aria-label'],'开启声音');
   assert.equal(restored.document.body.dataset.screen,'menu');assert.equal(restored.liveState,null);assert.equal(restored.audio.unlocks,0);
   restored.chooseSetting('rulesets','quick');assert.equal(restored.choice('targets',11).disabled,false);assert.equal(restored.choice('targets',11).attributes['aria-pressed'],'true');
@@ -339,6 +342,7 @@ for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
     assert.deepEqual([...state.score], [target, target - 1]);
     assert.equal(state.phase, 'point');
     assert.equal(f.element('result-dialog').hidden, true);
+    assert.match(f.element('match-label').textContent, /你的赛点/);
     assert.match(f.element('match-label').textContent, /加球中$/);
     landScoringShuttle(state, 1); f.draw(0);
     assert.deepEqual([...state.score], [target, target]);
@@ -573,7 +577,7 @@ test('sustained disconnect keeps a local exit available and permits offline AI w
 test('an expired recovery token cannot re-enable controls or hide the local exit on subsequent frames', async () => {
   const f = await fixture(); f.socket().close();
   const retry = f.retry(); retry.socket.open(); await retry.result;
-  assert.deepEqual(retry.socket.sent.at(-1), { type: 'resumeSession', token: 'original-token' });
+  assert.deepEqual(retry.socket.sent.at(-1), { type: 'resumeSession', token: 'original-token', rulesVersion: game.RULES_VERSION });
   retry.socket.message({ type: 'error', message: '房间恢复时间已过，请重新约战' });
   for (let i = 0; i < 3; i++) { f.draw(100); assertRecovery(f); }
   assert.match(f.element('pause-description').textContent, /房间恢复时间已过/);

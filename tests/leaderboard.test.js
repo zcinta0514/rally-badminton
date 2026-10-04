@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { createServer } from '../server/index.js';
-import { finishMatch } from '../shared/game.js';
+import { finishMatch, RULES_VERSION } from '../shared/game.js';
 
 const keys = ['a', 'b', 'c', 'd'].map(char => char.repeat(64));
 class Socket extends EventEmitter {
@@ -26,8 +26,8 @@ async function setup(t, options = {}) {
   const add = () => { const socket = new Socket(); app.rooms.attach(socket); return app.rooms.clients.get(socket); };
   const pair = (first = 0, second = 1, extra = {}) => {
     const a = add(), b = add();
-    app.rooms.message(a, {type:'create', name:`球友${first}`, playerKey:keys[first], ...extra});
-    app.rooms.message(b, {type:'join', name:`球友${second}`, code:a.room.code, playerKey:keys[second]});
+    app.rooms.message(a, {rulesVersion: RULES_VERSION, type: 'create', name:`球友${first}`, playerKey:keys[first], ...extra});
+    app.rooms.message(b, {rulesVersion: RULES_VERSION, type: 'join', name:`球友${second}`, code:a.room.code, playerKey:keys[second]});
     return {a, b, room:a.room};
   };
   const end = async (room, score = [5, 2], winner = 0) => {
@@ -106,7 +106,7 @@ test('real quick deuce landings save no premature result and count capped extra 
 test('invalid keys are rejected and missing or duplicate identities do not enter the leaderboard', async t => {
   const f = await setup(t), bad = f.add();
   for (const playerKey of ['short', 'A'.repeat(64), {}, 7, 'a'.repeat(65)]) {
-    f.rooms.message(bad, {type:'create', playerKey});
+    f.rooms.message(bad, {rulesVersion: RULES_VERSION, type: 'create', playerKey});
     assert.equal(bad.room, null);
     assert.equal(bad.socket.messages.at(-1).type, 'error');
   }
