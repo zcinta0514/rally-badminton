@@ -1,7 +1,9 @@
 # RELEASE-FX 发布候选检查点
 
 2026-10-04 在独立 worktree `.cindy-worktrees/fx-production`（分支 `release/FX-production`）整理正式上线候选。
-基线为联网核验的正式 main `d15ff7c`（v1.7.1）。本检查点只记录已核验的证据，版本号与发布授权仍未决定。
+基线为联网核验的正式 main `d15ff7c`（v1.7.1）。本检查点只记录已核验的证据。
+
+发布状态：分支已推送到 `origin/release/FX-production`，Draft PR [#1](https://github.com/zcinta0514/rally-badminton/pull/1) 开放（未合并）；远端 CI「Tests and build」的 Node 22／24 均通过。合并会触发 GitHub Pages 与 Vercel 生产自动部署，因此必须等真机与玩法／视听验收通过；版本号在验收通过、范围冻结后按 1.8.0 递增（本批为较大功能与体验更新）。
 
 ## 发布范围（候选包含）
 
@@ -35,7 +37,13 @@
 2. 专用真实音效素材仍有缺口；本版只发布已核验的录音变体与混音功能。
 3. 三打法实战平衡与用户最终玩法／视听验收未记录。
 4. 版本号未确定。按 WORKFLOW 门槛，功能验收通过、发布范围冻结后，按最新已发布版本与本批实际改动确定；本批属较大功能与体验更新，届时递增次版本位（拟 1.8.0），纯流程文档与内部工具不参与版本递增。
-5. 合并 main、打标签、部署未获授权。合并 main 会触发 GitHub Actions Pages 与 Vercel 生产自动发布。
+5. 合并 main、打标签、部署：验收通过后执行；合并会触发 GitHub Actions Pages 与 Vercel 生产自动发布。
+
+## 验收方式
+
+- 本机预览：`http://127.0.0.1:3046/`；同一 Wi-Fi 的手机：`http://192.168.1.103:3046/`（横屏）。
+- Vercel 分支预览：`https://kaipai-rally-git-release-fx-production-zcinta0514-2158.vercel.app`（受 Vercel 部署保护，需登录 Vercel 账号）。
+- 线上正式站（v1.7.1，用于对比）：`https://zcinta0514.github.io/rally-badminton/`。
 
 ## PR 说明草稿
 
@@ -45,6 +53,6 @@
 
 ## 回退步骤
 
-1. 合并前回退：候选只在本地分支，删除分支或 worktree 即可，不影响 main 与线上。
+1. 合并前回退：候选在远端分支 `release/FX-production` 与 Draft PR #1 中，关闭 PR 即可，不影响 main 与线上。
 2. 合并后回退：在 main 上 `git revert -m 1 <发布合并提交>`（或 revert 该功能提交）并推送，GitHub Actions Pages 与 Vercel 会按 main 自动重建上一状态；也可用标签 `v1.7.1` 对应提交重新部署。
 3. 客户端数据：本批新增的 `rally.arena.v1` 仅保存音量与设置，回退后的旧代码不读取该键，昵称与本机战绩不受影响；协议 3 拒绝旧客户端混用，回退后双方都需刷新页面再重新建房。
