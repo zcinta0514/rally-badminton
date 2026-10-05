@@ -81,7 +81,7 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 .format-choices { flex-wrap:wrap; }.format-choices button { flex:1 0 40%; }
 .training-goals { padding-left:22px; }.training-goals li { margin:20px 0; }.training-goals p { color:var(--muted); font-size:13px; }
 .lobby-players { white-space:pre-line; margin:16px 0; font-size:14px; line-height:1.8; }
-.menu-panel[data-entry="home"] .setup { justify-content:flex-end; }
+.menu-panel[data-entry="home"] .setup { justify-content:center; }
 .menu-panel[data-entry="home"] .menu-tip-compact { display:none; }
 .friend-setup .room-mode-picker { margin-top:12px; }
 .friend-setup input { display:block; width:100%; min-width:0; min-height:44px; padding:10px 12px; border:1px solid #bac9c0; border-radius:4px; background:white; font-size:16px; user-select:text; }
@@ -179,3 +179,27 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   .role-card { padding:11px; }.role-note { margin-bottom:12px; }.launch-actions { padding-top:10px; }.launch-actions .primary-btn { min-height:48px; }
 }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none!important; animation:none!important; } }
+
+/* Three substantial entry cards keep the home balanced with the live court. */
+.menu-panel[data-entry="home"] #home-actions { grid-template-columns:1fr; gap:10px; padding:12px 0; }
+#home-actions button { min-height:clamp(64px,10vh,96px); padding:14px 18px; text-align:left; }
+#home-actions .entry-copy { display:flex; flex-direction:column; gap:5px; font-size:inherit; letter-spacing:0; }
+#home-actions .entry-copy strong { font-size:17px; }
+#home-actions .entry-copy small { font-size:12px; font-weight:400; opacity:.78; }
+@media (orientation:portrait) {
+  .menu-panel[data-entry="home"] .setup { justify-content:flex-start; }
+  .menu-panel[data-entry="home"] #home-actions { padding-top:8px; }
+  #home-actions button { min-height:clamp(76px,13vh,112px); }
+}
+@media (max-height:550px) and (orientation:landscape) {
+  .menu-panel[data-entry="home"] .intro { display:block; margin:0; font-size:11px; }
+  .menu-panel[data-entry="home"] #home-actions { gap:7px; padding:8px 0; }
+  #home-actions button { min-height:56px; padding:8px 12px; }
+  #home-actions .entry-copy { gap:3px; }
+  #home-actions .entry-copy strong { font-size:14px; }
+  #home-actions .entry-copy small { font-size:10px; }
+}
+@media (max-height:360px) and (orientation:landscape) {
+  #home-actions button { min-height:44px; padding:6px 10px; }
+  .menu-panel[data-entry="home"] .intro { display:none; }
+}

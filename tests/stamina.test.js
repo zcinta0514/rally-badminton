@@ -24,7 +24,7 @@ test('recovery waits exactly .35 seconds and is independent of render cadence', 
   const totals = [];
   for (const frame of [1 / 30, 1 / 60, 1 / 120]) {
     const s = rally('balanced'); run(s, .35, undefined, frame); near(s.players[0].stamina, 30);
-    run(s, .65, undefined, frame); near(s.players[0].stamina, 30 + 5.4 * .65); totals.push(s.players[0].stamina);
+    run(s, .65, undefined, frame); near(s.players[0].stamina, 30 + ROLES.balanced.recovery * .65); totals.push(s.players[0].stamina);
   }
   totals.forEach(v => near(v, totals[0]));
 });
@@ -48,13 +48,13 @@ test('V4 jump and .24s landing buffer precede the continuous low-effort wait', (
   const s = rally('balanced'); s.motionProfile = 'v4';
   s.players[0].action = { id: 1, stage: 'recovery', startedAt: -.1, contactAt: -.1, endsAt: .84, jump: { takeoffAt: 0, landAt: .6, height: .4 } };
   run(s, .84); near(s.players[0].stamina, 30); run(s, .35); near(s.players[0].stamina, 30);
-  run(s, .1); near(s.players[0].stamina, 30.54);
+  run(s, .1); near(s.players[0].stamina, 30 + ROLES.balanced.recovery * .1);
 });
 test('the scoring slice only credits eligible time before exact impact', () => {
   const s = rally('balanced'); s.players.forEach(p => { p.recoveryWait = .35; });
   Object.assign(s.shuttle, { x: 0, y: .001, z: -4, vx: 0, vy: -1, vz: 0, active: true, lastHit: 0 });
   stepMatch(s, [{}, {}], 1 / 120);
-  assert.equal(s.phase, 'point'); near(s.players[0].stamina, 30 + 5.4 * s.rallyEnd.at);
+  assert.equal(s.phase, 'point'); near(s.players[0].stamina, 30 + ROLES.balanced.recovery * s.rallyEnd.at);
 });
 test('zero stamina retains movement and serving, with explicit before/after cost anchors', () => {
   const s = createMatch(); s.players[0].stamina = 0; run(s, .1, [{ x: .2 }, {}]);
