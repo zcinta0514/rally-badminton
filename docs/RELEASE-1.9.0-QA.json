@@ -1,0 +1,180 @@
+{
+  "date": "2026-10-05T13:53:39.847Z",
+  "version": "1.9.0",
+  "source": "dcf0a4c982a27b5b1b97dabfb3db7ca6d6e840b4",
+  "tests": {
+    "node22": {
+      "passed": 691,
+      "failed": 0
+    },
+    "node24": {
+      "passed": 691,
+      "failed": 0
+    }
+  },
+  "builds": [
+    {
+      "basePath": "/",
+      "build": "bc91ba3fa312a101",
+      "assets": 85,
+      "config": {
+        "wsUrl": "",
+        "basePath": "/",
+        "demoMode": false,
+        "peerMode": true,
+        "analytics": {
+          "id": "3R9PoDADjOaYOik6",
+          "ck": "3R9PoDADjOaYOik6"
+        },
+        "releaseNotice": {
+          "id": "2026-10-05-coaches-stamina-entry",
+          "title": "陪练、体力与开打入口更新",
+          "summary": "选择自己的陪练，调整节奏恢复体力；好友对打先确认，再开赛。",
+          "items": [
+            "人机准备页可分别选择自己和均衡、灵巧、力量陪练的打法，再选择强度与比赛形式。",
+            "低体力仍有机会杀球；成功高远球和吊球后的低强度调整加快恢复，每分结束到下一次发球获得一次定量恢复。疲劳仍影响速度和稳定性。",
+            "三种打法的体力取舍重新平衡；首页分为人机开打、三步训练、好友对打，设置各自独立。",
+            "好友大厅显示双方打法与比分；双方确认规则后倒数3秒开打，父子局需双方明确同意。请双方更新并重新建房。"
+          ]
+        },
+        "buildId": "bc91ba3fa312a101"
+      }
+    },
+    {
+      "basePath": "/rally-badminton/",
+      "build": "633bc77d0521649d",
+      "assets": 85,
+      "config": {
+        "wsUrl": "",
+        "basePath": "/rally-badminton/",
+        "demoMode": false,
+        "peerMode": true,
+        "analytics": {
+          "id": "3R9PoDADjOaYOik6",
+          "ck": "3R9PoDADjOaYOik6"
+        },
+        "releaseNotice": {
+          "id": "2026-10-05-coaches-stamina-entry",
+          "title": "陪练、体力与开打入口更新",
+          "summary": "选择自己的陪练，调整节奏恢复体力；好友对打先确认，再开赛。",
+          "items": [
+            "人机准备页可分别选择自己和均衡、灵巧、力量陪练的打法，再选择强度与比赛形式。",
+            "低体力仍有机会杀球；成功高远球和吊球后的低强度调整加快恢复，每分结束到下一次发球获得一次定量恢复。疲劳仍影响速度和稳定性。",
+            "三种打法的体力取舍重新平衡；首页分为人机开打、三步训练、好友对打，设置各自独立。",
+            "好友大厅显示双方打法与比分；双方确认规则后倒数3秒开打，父子局需双方明确同意。请双方更新并重新建房。"
+          ]
+        },
+        "buildId": "633bc77d0521649d"
+      }
+    }
+  ],
+  "browser": {
+    "build": "bc91ba3fa312a101",
+    "assets": 85,
+    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/release-1-9",
+    "realPhoneAccepted": false,
+    "testOnlyStateHook": true,
+    "results": [
+      {
+        "engine": "chromium",
+        "code": "624Y7",
+        "transport": "live PeerJS/WebRTC",
+        "roles": [
+          "swift",
+          "power"
+        ],
+        "target": 11,
+        "finale": "father-son",
+        "doubleConsent": true,
+        "countdown": true,
+        "errors": []
+      }
+    ]
+  },
+  "realPhoneAccepted": false,
+  "productionVerified": true,
+  "mergeCommit": "62051d0406d7da18ed5920e15b3caf2b708458bb",
+  "tag": {
+    "name": "v1.9.0",
+    "annotated": "97a69c5a6b1503961d98c4867975e1ee7b70e68d",
+    "target": "62051d0406d7da18ed5920e15b3caf2b708458bb"
+  },
+  "pr": "https://github.com/zcinta0514/rally-badminton/pull/2",
+  "live": {
+    "date": "2026-10-05T13:57:25.171Z",
+    "realPhoneAccepted": false,
+    "serviceWorkers": "blocked in fresh contexts",
+    "results": [
+      {
+        "target": "pages",
+        "engine": "chromium",
+        "url": "https://zcinta0514.github.io/rally-badminton/",
+        "build": "633bc77d0521649d",
+        "assets": 85,
+        "version": "1.9.0",
+        "independentCoach": true,
+        "staminaMeters": 2,
+        "volumeRows": 5,
+        "lightingRows": 0,
+        "errors": [],
+        "failed": []
+      },
+      {
+        "target": "pages",
+        "engine": "webkit",
+        "url": "https://zcinta0514.github.io/rally-badminton/",
+        "build": "633bc77d0521649d",
+        "assets": 85,
+        "version": "1.9.0",
+        "independentCoach": true,
+        "staminaMeters": 2,
+        "volumeRows": 5,
+        "lightingRows": 0,
+        "errors": [],
+        "failed": []
+      },
+      {
+        "target": "vercel",
+        "engine": "chromium",
+        "url": "https://kaipai-rally.vercel.app/",
+        "build": "bc91ba3fa312a101",
+        "assets": 85,
+        "version": "1.9.0",
+        "independentCoach": true,
+        "staminaMeters": 2,
+        "volumeRows": 5,
+        "lightingRows": 0,
+        "errors": [],
+        "failed": []
+      },
+      {
+        "target": "vercel",
+        "engine": "webkit",
+        "url": "https://kaipai-rally.vercel.app/",
+        "build": "bc91ba3fa312a101",
+        "assets": 85,
+        "version": "1.9.0",
+        "independentCoach": true,
+        "staminaMeters": 2,
+        "volumeRows": 5,
+        "lightingRows": 0,
+        "errors": [],
+        "failed": []
+      }
+    ]
+  },
+  "workflows": {
+    "tests": {
+      "run": 37320556524,
+      "conclusion": "success"
+    },
+    "pages": {
+      "run": 37320556766,
+      "conclusion": "success"
+    },
+    "vercel": {
+      "commit": "62051d0406d7da18ed5920e15b3caf2b708458bb",
+      "state": "success"
+    }
+  }
+}
