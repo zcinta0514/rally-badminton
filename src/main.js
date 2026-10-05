@@ -44,7 +44,7 @@ const roleGuidance={
 const updatePreferencesStorage=getUpdatePreferencesStorage(window);
 const restoredUpdatePreferences=restoreUpdatePreferences(globalThis.RALLY_CONFIG?.buildId,updatePreferencesStorage);
 let arenaPreferences=restoredUpdatePreferences?.arena??readArenaPreferences(),matchSettings;
-const settings={role:'balanced',difficulty:'easy',target:5,ruleset:'quick',...restoredUpdatePreferences?.settings,finale:'none'};
+const settings={role:'balanced',coachRole:'balanced',difficulty:'easy',target:5,ruleset:'quick',...restoredUpdatePreferences?.settings,finale:'none'};
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
 let trainingSession=null;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
@@ -156,15 +156,18 @@ function syncSoundControls(){
   $('sound').setAttribute('aria-label',sound?'关闭声音':'开启声音');
 }
 if(restoredUpdatePreferences){
-  for(const [id,attribute] of [['roles','role'],['difficulties','difficulty'],['rulesets','ruleset']])groupChoice(id,attribute,settings[attribute]);
+  for(const [id,attribute] of [['roles','role'],['coach-roles','coachRole'],['difficulties','difficulty'],['rulesets','ruleset']])groupChoice(id,attribute,settings[attribute]);
   syncRulesControls();syncSoundControls();
 }
 setText('role-note',roleNotes[settings.role]);setText('difficulty-note',difficultyNotes[settings.difficulty]);
-for(const [id,key,attr] of [['roles','role','role'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset'],['friend-modes','finale','finale']]){
+function syncCoachNote(){setText('coach-note',ROLES[settings.coachRole].label+'陪练 · '+({balanced:'攻守均衡',swift:'移动快、恢复快，连续杀球耗费较高',power:'重击省力，跑动耗费较高、恢复慢'}[settings.coachRole])+'。仅人机练习；三步训练使用均衡陪练。');}
+syncCoachNote();
+for(const [id,key,attr] of [['roles','role','role'],['coach-roles','coachRole','coachRole'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset'],['friend-modes','finale','finale']]){
   $(id).addEventListener('click',event=>{
     const button=event.target.closest('button');if(!button||button.disabled)return;
     settings[key]=key==='target'?Number(button.dataset[attr]):button.dataset[attr];groupChoice(id,attr,settings[key]);
     if(key==='role')setText('role-note',roleNotes[settings.role]);
+    if(key==='coachRole')syncCoachNote();
     if(key==='difficulty')setText('difficulty-note',difficultyNotes[settings.difficulty]);
     if(key==='ruleset'||key==='target')syncRulesControls();
   });
@@ -210,7 +213,7 @@ function startAI(){
   if(peerAttempt||peerSession)exitToMenu();
   trainingSession=null;
   playback.reset();lastRtt=null;
-  mode='ai';side=0;state=createMatch({target:settings.target,ruleset:settings.ruleset,roles:[settings.role,'balanced'],difficulty:settings.difficulty,
+  mode='ai';side=0;state=createMatch({target:settings.target,ruleset:settings.ruleset,roles:[settings.role,settings.coachRole],difficulty:settings.difficulty,
     playerAssist:settings.difficulty==='easy'?'beginner':'none',assistSide:0,seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
 }

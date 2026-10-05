@@ -9,10 +9,11 @@ export function getUpdatePreferencesStorage(window = globalThis.window) {
 function allowedPreferences(settings, sound, arena) {
   if (!settings || typeof settings !== 'object' || Array.isArray(settings) || typeof sound !== 'boolean' ||
       !['balanced', 'swift', 'power'].includes(settings.role) ||
+      (settings.coachRole !== undefined && !['balanced', 'swift', 'power'].includes(settings.coachRole)) ||
       !['easy', 'medium', 'hard'].includes(settings.difficulty) ||
       ![5, 11, 21].includes(settings.target) ||
       !['quick', 'standard21'].includes(settings.ruleset)) return null;
-  return { settings: { role: settings.role, difficulty: settings.difficulty, target: settings.target, ruleset: settings.ruleset }, sound,
+  return { settings: { role: settings.role, ...(settings.coachRole === undefined ? {} : {coachRole: settings.coachRole}), difficulty: settings.difficulty, target: settings.target, ruleset: settings.ruleset }, sound,
     ...(arena === undefined ? {} : { arena: normalizeArenaPreferences(arena) }) };
 }
 

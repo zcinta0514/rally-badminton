@@ -21,6 +21,16 @@ test('an update snapshot keeps only match preferences and sound, and restores on
   assert.equal(f.values.size,0);assert.equal(restoreUpdatePreferences(VERSION,f.storage),null);
 });
 
+test('independent coach selection survives a safe update and invalid coaches are rejected',async()=>{
+  const {saveUpdatePreferences,restoreUpdatePreferences}=await load();
+  for(const coachRole of ['balanced','swift','power']){
+    const f=fixture();saveUpdatePreferences({...selection,settings:{...selection.settings,coachRole}},f.storage);
+    const restored=restoreUpdatePreferences(VERSION,f.storage);
+    assert.equal(restored.settings.role,'power');assert.equal(restored.settings.coachRole,coachRole);
+  }
+  const f=fixture();assert.throws(()=>saveUpdatePreferences({...selection,settings:{...selection.settings,coachRole:'unknown'}},f.storage));
+});
+
 test('ordinary starts remain unchanged and stale or malformed snapshots are discarded',async()=>{
   const {saveUpdatePreferences,restoreUpdatePreferences}=await load();const f=fixture();
   assert.equal(restoreUpdatePreferences(VERSION,f.storage),null);

@@ -62,7 +62,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   const closeButtons = ['close-friends','close-help','close-lan'].map(element);
   element('camera-panel').hidden = true;
   const settingGroups = new Map();
-  for (const [id, attribute, values] of [['roles','role',['balanced','swift','power']], ['difficulties','difficulty',['easy','medium','hard']], ['targets','target',[5,11,21]], ['rulesets','ruleset',['quick','standard21']]]) {
+  for (const [id, attribute, values] of [['roles','role',['balanced','swift','power']], ['coach-roles','coachRole',['balanced','swift','power']], ['difficulties','difficulty',['easy','medium','hard']], ['targets','target',[5,11,21]], ['rulesets','ruleset',['quick','standard21']]]) {
     const choices=values.map((value,index)=>{const button=element(`choice-${attribute}-${value}`);button.dataset[attribute]=String(value);button.closest=selector=>selector==='button'?button:null;button.setAttribute('aria-pressed',String(index===0));return button;});
     settingGroups.set(id,choices);element(id).querySelectorAll=selector=>selector==='button'?choices:[];
   }
@@ -242,13 +242,13 @@ test('the production update callback protects active matches and their result sc
 test('automatic update transfers selected controls and mute once without preserving the father-son choice', async () => {
   const values=new Map(), sessionStorage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
   const f=await fixture('serve',{demoMode:true,sessionStorage});
-  f.chooseSetting('roles','power');f.chooseSetting('difficulties','hard');f.chooseSetting('targets',11);f.chooseSetting('rulesets','standard21');f.chooseFinale('father-son');f.click('sound');
+  f.chooseSetting('roles','power');f.chooseSetting('coach-roles','swift');f.chooseSetting('difficulties','hard');f.chooseSetting('targets',11);f.chooseSetting('rulesets','standard21');f.chooseFinale('father-son');f.click('sound');
   assert.equal(values.size,0,'ordinary choices retain the original in-memory behaviour');
   f.pwaOptions.onUpdateLock({version:'2222222222222222'});
   assert.equal(values.size,1,'preparation must save a verified transfer before refreshing');
   const restored=await fixture('serve',{demoMode:true,buildId:'2222222222222222',sessionStorage});
-  assert.deepEqual({...restored.settings},{role:'power',difficulty:'hard',target:11,ruleset:'standard21',finale:'none'});
-  for(const [group,value] of [['roles','power'],['difficulties','hard'],['targets',21],['rulesets','standard21']])assert.equal(restored.choice(group,value).attributes['aria-pressed'],'true');
+  assert.deepEqual({...restored.settings},{role:'power',coachRole:'swift',difficulty:'hard',target:11,ruleset:'standard21',finale:'none'});
+  for(const [group,value] of [['roles','power'],['coach-roles','swift'],['difficulties','hard'],['targets',21],['rulesets','standard21']])assert.equal(restored.choice(group,value).attributes['aria-pressed'],'true');
   assert.equal(restored.element('targets').attributes['aria-disabled'],'true');assert.equal(restored.choice('targets',11).disabled,true);
   assert.match(restored.element('role-note').textContent,/速度 4.05.*体力 112/);assert.match(restored.element('rules-note').textContent,/三局两胜/);
   assert.equal(restored.sound,false);assert.equal(restored.audio.enabled,false);assert.equal(restored.element('sound').dataset.muted,'true');assert.equal(restored.element('sound').attributes['aria-label'],'开启声音');
@@ -256,7 +256,19 @@ test('automatic update transfers selected controls and mute once without preserv
   restored.chooseSetting('rulesets','quick');assert.equal(restored.choice('targets',11).disabled,false);assert.equal(restored.choice('targets',11).attributes['aria-pressed'],'true');
   assert.equal(values.size,0);
   const ordinary=await fixture('serve',{demoMode:true,buildId:'2222222222222222',sessionStorage});
-  assert.deepEqual({...ordinary.settings},{role:'balanced',difficulty:'easy',target:5,ruleset:'quick',finale:'none'});assert.equal(ordinary.sound,true);
+  assert.deepEqual({...ordinary.settings},{role:'balanced',coachRole:'balanced',difficulty:'easy',target:5,ruleset:'quick',finale:'none'});assert.equal(ordinary.sound,true);
+});
+
+test('independent player and coach choices create all nine AI lineups and retain simple training', async () => {
+  for(const player of ['balanced','swift','power'])for(const coach of ['balanced','swift','power']){
+    const f=await fixture('serve',{demoMode:true});
+    f.chooseSetting('roles',player);f.chooseSetting('coach-roles',coach);f.click('start-ai');f.draw(0);
+    assert.deepEqual([...f.liveState.players.map(p=>p.role)],[player,coach]);
+    assert.equal(f.element('role-other').textContent,game.ROLES[coach].label+'型');
+    assert.equal(f.settings.role,player);assert.equal(f.settings.coachRole,coach);
+  }
+  const f=await fixture('serve',{demoMode:true});f.chooseSetting('coach-roles','power');f.click('start-training');
+  assert.equal(f.liveState.players[1].role,'balanced');assert.equal(f.settings.coachRole,'power');
 });
 
 test('the application refuses update preparation when settings cannot be transferred', async () => {

@@ -11,14 +11,17 @@
     "releaseTag": "v1.8.0"
   },
   "activeTask": {
-    "title": "AI-1：低体力陪练进攻与恢复修正",
-    "scope": "已实现低体力机会杀球、每分定量恢复与高远球／吊球后的有界调整加成；共同疲劳惩罚保留，候选未上线。",
-    "nextAction": "用户实战体验击球后调整恢复、低体力进攻与三打法平衡；验收后再准备发布。",
-    "blockedBy": [],
+    "title": "AI-1：陪练体力、恢复与三打法检查",
+    "scope": "三种陪练共用恢复机制；新增独立陪练选择、九对阵分布与整体QA。候选未上线，力量型高压资源失衡已查证但未调参。",
+    "nextAction": "用户查看分布并体验三陪练，确定力量型资源平衡目标；必要调整和玩法验收后再准备发布。",
+    "blockedBy": [
+      "力量型高手高压资源平衡未通过：代表场景70.6%回合时间低于10%、24.4%零体力；参数未调整。",
+      "用户玩法／真机验收尚未记录，测试完赛不代表打法平衡通过。"
+    ],
     "documents": [
       "docs/tasks/AI-1.md"
     ],
-    "checkpoint": "docs/AI-1-SHOT-RECOVERY-CHECKPOINT.md"
+    "checkpoint": "docs/AI-1-COACH-CHECKPOINT.md"
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
@@ -26,10 +29,11 @@
   },
   "readNext": [
     "docs/tasks/AI-1.md",
-    "docs/AI-1-SHOT-RECOVERY-CHECKPOINT.md"
+    "docs/AI-1-COACH-CHECKPOINT.md"
   ],
   "links": [
     "docs/tasks/AI-1.md",
+    "docs/AI-1-COACH-CHECKPOINT.md",
     "docs/AI-1-SHOT-RECOVERY-CHECKPOINT.md",
     "docs/AI-1-FIX-CHECKPOINT.md",
     "docs/AI-1-STAMINA-CHECKPOINT.md",
@@ -45,11 +49,11 @@
     "taskFile": "docs/tasks/AI-1.md",
     "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/ai-1-low-stamina",
     "phase": "待验收",
-    "stopReason": "高远球／吊球调整恢复已实现，680项全量测试和两浏览器开打／规则说明通过；待用户实战验收。",
-    "nextAction": "用户实战体验击球后调整恢复、低体力进攻与三打法平衡；验收后再准备发布。",
-    "checkpoint": "docs/AI-1-SHOT-RECOVERY-CHECKPOINT.md",
-    "validation": "680/680测试通过；构建72ed74206743b774；Chromium/WebKit开打、规则说明和服务资源通过；5400固定触点、360场长局均完成。证据 AI-1-SHOT-RECOVERY-QA.json。",
-    "scopeBoundary": "用户授权保留疲劳并修正进攻／恢复，并明确选择高远球／吊球击球后休整加成。本地候选不默认发布，版本号不递增，真机与玩法验收用户自理。"
+    "stopReason": "恢复共享三角色且九对阵入口完成；682项测试、两浏览器18场入口核验、1053场模拟结束；力量型高压资源失衡未调参。",
+    "nextAction": "用户查看分布并体验三陪练，确定力量型资源平衡目标；必要调整和玩法验收后再准备发布。",
+    "checkpoint": "docs/AI-1-COACH-CHECKPOINT.md",
+    "validation": "682/682测试；构建194a0997406c1e75；两浏览器18个入口与资源通过；1053场模拟均结束（一个标准赛案例延长观察）。见AI-1-COACH-QA.json。",
+    "scopeBoundary": "用户授权检查三种陪练恢复／体力，并选择独立陪练打法。本轮新增入口与诊断，未授权发布，不预定版本；角色平衡参数未擅改，不能把已发现失衡标为通过。"
   },
   "publication": "v1.8.0 已上线：Pages 0482fefd67cdc881、Vercel 4c377c8c35725c4c，两处均由 main 提交 45a5d86 构建，标签 v1.8.0。"
 }
