@@ -5,35 +5,39 @@
   "statusVersion": 1,
   "asOf": "2026-10-05",
   "baseline": {
-    "branch": "origin/main",
-    "head": "db8d45310de38a7afec4a7a9639903ddc50c01c8",
+    "branch": "fix/AI-1-low-stamina",
+    "head": "974453b7e9670d7357f59496ee8614501f364546",
     "originMain": "db8d45310de38a7afec4a7a9639903ddc50c01c8",
     "releaseTag": "v1.8.0"
   },
   "activeTask": {
-    "title": "AI-1：陪练体力、恢复与三打法检查",
-    "scope": "三种陪练共用恢复机制；新增独立陪练选择、九对阵分布与整体QA。候选未上线，力量型高压资源失衡已查证但未调参。",
-    "nextAction": "用户查看分布并体验三陪练，确定力量型资源平衡目标；必要调整和玩法验收后再准备发布。",
+    "title": "ENTRY-1 首页分流与模式准备",
+    "scope": "继承 AI-1 体力与三陪练候选；实现三个入口、独立配置和双方规则确认后开赛。未发布。",
+    "nextAction": "用户查看本地入口、准备页和好友双端开打体验；Safari 真机直连待核验。",
     "blockedBy": [
-      "力量型高手高压资源平衡未通过：代表场景70.6%回合时间低于10%、24.4%零体力；参数未调整。",
-      "用户玩法／真机验收尚未记录，测试完赛不代表打法平衡通过。"
+      "Safari 自动化 WebKit 的 PeerJS 直连握手超时，修改前候选同样复现；WebKit WebSocket 双端流程通过，不能代替 Safari 真机直连验收。",
+      "力量型高手高压体力平衡仍未通过；当前导航任务未调整参数。",
+      "用户视觉、玩法及真机验收尚未记录。"
     ],
     "documents": [
-      "docs/tasks/AI-1.md"
+      "docs/tasks/ENTRY-1.md"
     ],
-    "checkpoint": "docs/AI-1-COACH-CHECKPOINT.md"
+    "checkpoint": "docs/ENTRY-1-CHECKPOINT.md"
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
     "releaseState": "v1.8.0 已发布：main 合并提交 45a5d86，标签 v1.8.0；线上 Pages 0482fefd67cdc881／Vercel 4c377c8c35725c4c，均显示正式版 1.8.0。人物工作区预览仍在 3040，未验收人物实验未合并。"
   },
   "readNext": [
-    "docs/tasks/AI-1.md",
-    "docs/AI-1-COACH-CHECKPOINT.md"
+    "docs/tasks/ENTRY-1.md",
+    "docs/ENTRY-1-CHECKPOINT.md"
   ],
   "links": [
-    "docs/tasks/AI-1.md",
+    "docs/tasks/ENTRY-1.md",
+    "docs/ENTRY-1-CHECKPOINT.md",
+    "docs/ENTRY-1-QA.json",
     "docs/AI-1-COACH-CHECKPOINT.md",
+    "docs/tasks/AI-1.md",
     "docs/AI-1-SHOT-RECOVERY-CHECKPOINT.md",
     "docs/AI-1-FIX-CHECKPOINT.md",
     "docs/AI-1-STAMINA-CHECKPOINT.md",
@@ -43,18 +47,20 @@
     "docs/DEPLOYMENT.md"
   ],
   "handoff": {
-    "taskId": "AI-1",
-    "branch": "fix/AI-1-low-stamina",
-    "baselineHead": "db8d45310de38a7afec4a7a9639903ddc50c01c8",
-    "taskFile": "docs/tasks/AI-1.md",
-    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/ai-1-low-stamina",
-    "phase": "待验收",
-    "stopReason": "恢复共享三角色且九对阵入口完成；682项测试、两浏览器18场入口核验、1053场模拟结束；力量型高压资源失衡未调参。",
-    "nextAction": "用户查看分布并体验三陪练，确定力量型资源平衡目标；必要调整和玩法验收后再准备发布。",
-    "checkpoint": "docs/AI-1-COACH-CHECKPOINT.md",
-    "validation": "682/682测试；构建194a0997406c1e75；两浏览器18个入口与资源通过；1053场模拟均结束（一个标准赛案例延长观察）。见AI-1-COACH-QA.json。",
-    "scopeBoundary": "用户授权检查三种陪练恢复／体力，并选择独立陪练打法。本轮新增入口与诊断，未授权发布，不预定版本；角色平衡参数未擅改，不能把已发现失衡标为通过。"
+    "taskId": "ENTRY-1",
+    "branch": "feat/ENTRY-1-navigation",
+    "baselineHead": "974453b7e9670d7357f59496ee8614501f364546",
+    "taskFile": "docs/tasks/ENTRY-1.md",
+    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/entry-1-navigation",
+    "phase": "待用户验收",
+    "stopReason": "入口与开赛确认已实现，候选保留在独立分支；正式线上未改。",
+    "nextAction": "用户查看本地入口、准备页和好友双端开打体验；Safari 真机直连待核验。",
+    "checkpoint": "docs/ENTRY-1-CHECKPOINT.md",
+    "validation": "完整测试 690/690；最终构建与浏览器证据见 ENTRY-1-QA.json。Chromium 直连和 WebKit WebSocket 双端确认／倒数检查，WebKit 直连失败及基线对照明确保留。",
+    "scopeBoundary": "仅本地实现和验收。继承 AI-1 三个候选提交；未授权本批上线，游戏版本保持1.8.0；无事件灯光。"
   },
   "publication": "v1.8.0 已上线：Pages 0482fefd67cdc881、Vercel 4c377c8c35725c4c，两处均由 main 提交 45a5d86 构建，标签 v1.8.0。"
 }
 -->
+
+当前入口候选位于 `feat/ENTRY-1-navigation`，预览端口3051（PeerJS）／3052（WebSocket）。原 P1 目录与3040预览未改。状态与证据不代表已上线。

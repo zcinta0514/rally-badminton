@@ -73,6 +73,25 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 .role-card strong { display:block; font-size:13px; margin:6px 0 3px; }
 .role-card small { display:block; font-size:11px; opacity:.75; }
 .role-note { min-height:32px; margin:10px 0 18px; font-size:11px; line-height:1.6; color:var(--muted); }
+.entry-heading { flex:0 0 auto; margin-bottom:14px; }
+.entry-heading h2 { margin:8px 0; font-size:26px; }
+.entry-heading p { color:var(--muted); font-size:12px; line-height:1.6; }
+.entry-content { flex:1; min-height:0; overflow-y:auto; touch-action:pan-y; padding:0 4px 8px 0; }
+.entry-content .primary-btn { width:100%; margin-top:14px; }
+.format-choices { flex-wrap:wrap; }.format-choices button { flex:1 0 40%; }
+.training-goals { padding-left:22px; }.training-goals li { margin:20px 0; }.training-goals p { color:var(--muted); font-size:13px; }
+.lobby-players { white-space:pre-line; margin:16px 0; font-size:14px; line-height:1.8; }
+.menu-panel[data-entry="home"] .setup { justify-content:flex-end; }
+.menu-panel[data-entry="home"] .menu-tip-compact { display:none; }
+.friend-setup .room-mode-picker { margin-top:12px; }
+.friend-setup input { display:block; width:100%; min-width:0; min-height:44px; padding:10px 12px; border:1px solid #bac9c0; border-radius:4px; background:white; font-size:16px; user-select:text; }
+.friend-setup .input-label { display:block; font-size:12px; margin:14px 0 6px; }
+.friend-setup .join-row { display:grid; grid-template-columns:1fr auto; gap:8px; margin-top:14px; }
+.friend-setup .join-row .secondary-btn { margin:0; }
+.friend-setup .dialog-foot { display:block; margin-top:10px; color:var(--muted); font-size:11px; line-height:1.6; }
+.friend-setup #friend-modes button[aria-pressed="true"] { background:var(--green); color:white; }
+.dialog#waiting-dialog #waiting-rules,.dialog#waiting-dialog #waiting-consent,.dialog#waiting-dialog #waiting-status { display:block; }
+.entry-content #start-training-confirm { position:sticky; bottom:0; }
 .setup-row { display:grid; grid-template-columns:70px minmax(0,1fr); align-items:center; gap:10px; padding:8px 0; border-top:1px solid var(--line); }
 .field-label { font-size:12px; font-weight:650; white-space:nowrap; }
 .segments { display:flex; padding:3px; background:#e8ede7; border-radius:3px; gap:2px; min-width:0; }
@@ -118,7 +137,10 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   .brand-mark svg { width:26px; height:26px; }.brand small { font-size:7px; margin-top:4px; }
   .edition { font-size:10px; }.icon-btn { width:32px; height:32px; }
   .menu-panel { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto minmax(0,1fr) auto; column-gap:8px; padding:10px 16px max(7px,env(safe-area-inset-bottom)); padding-left:max(16px,env(safe-area-inset-left)); }.menu-panel .eyebrow,.intro { display:none; }
-  .menu-heading,.setup { grid-column:1/-1; min-width:0; }
+  .menu-heading,.setup,.menu-panel .entry-heading,.menu-panel>.entry-content { grid-column:1/-1; min-width:0; }
+  .menu-panel .entry-heading { margin-bottom:6px; }
+  .menu-panel .entry-heading h2 { font-size:22px; margin:5px 0; }
+  .menu-panel .entry-heading p { font-size:11px; margin:4px 0; }
   .menu-panel h1 { font-size:26px; margin:0 0 8px; letter-spacing:-1px; }.menu-panel h1 br { display:none; }
   .section-label { margin-bottom:6px; font-size:11px; line-height:1.4; }.section-label b { display:none; }
   .role-grid { gap:5px; }

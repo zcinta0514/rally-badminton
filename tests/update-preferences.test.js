@@ -31,6 +31,15 @@ test('independent coach selection survives a safe update and invalid coaches are
   const f=fixture();assert.throws(()=>saveUpdatePreferences({...selection,settings:{...selection.settings,coachRole:'unknown'}},f.storage));
 });
 
+test('friend preparation survives updates independently from AI settings and never preserves father-son selection',async()=>{
+  const {saveUpdatePreferences,restoreUpdatePreferences}=await load();const f=fixture();
+  saveUpdatePreferences({...selection,settings:{...selection.settings,friendRole:'swift',friendTarget:5,friendRuleset:'quick'}},f.storage);
+  const saved=restoreUpdatePreferences(VERSION,f.storage);
+  assert.equal(saved.settings.role,'power');assert.equal(saved.settings.target,11);assert.equal(saved.settings.ruleset,'standard21');
+  assert.equal(saved.settings.friendRole,'swift');assert.equal(saved.settings.friendTarget,5);assert.equal(saved.settings.friendRuleset,'quick');assert.equal('finale' in saved.settings,false);
+  for(const change of [{friendRole:'unknown'},{friendTarget:7},{friendRuleset:'other'}])assert.throws(()=>saveUpdatePreferences({...selection,settings:{...selection.settings,...change}},fixture().storage));
+});
+
 test('ordinary starts remain unchanged and stale or malformed snapshots are discarded',async()=>{
   const {saveUpdatePreferences,restoreUpdatePreferences}=await load();const f=fixture();
   assert.equal(restoreUpdatePreferences(VERSION,f.storage),null);

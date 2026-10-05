@@ -10,10 +10,17 @@ function allowedPreferences(settings, sound, arena) {
   if (!settings || typeof settings !== 'object' || Array.isArray(settings) || typeof sound !== 'boolean' ||
       !['balanced', 'swift', 'power'].includes(settings.role) ||
       (settings.coachRole !== undefined && !['balanced', 'swift', 'power'].includes(settings.coachRole)) ||
+      (settings.friendRole !== undefined && !['balanced', 'swift', 'power'].includes(settings.friendRole)) ||
+      (settings.friendTarget !== undefined && ![5,11,21].includes(settings.friendTarget)) ||
+      (settings.friendRuleset !== undefined && !['quick','standard21'].includes(settings.friendRuleset)) ||
       !['easy', 'medium', 'hard'].includes(settings.difficulty) ||
       ![5, 11, 21].includes(settings.target) ||
       !['quick', 'standard21'].includes(settings.ruleset)) return null;
-  return { settings: { role: settings.role, ...(settings.coachRole === undefined ? {} : {coachRole: settings.coachRole}), difficulty: settings.difficulty, target: settings.target, ruleset: settings.ruleset }, sound,
+  return { settings: { role: settings.role, ...(settings.coachRole === undefined ? {} : {coachRole: settings.coachRole}),
+    ...(settings.friendRole === undefined ? {} : {friendRole:settings.friendRole}),
+    ...(settings.friendTarget === undefined ? {} : {friendTarget:settings.friendTarget}),
+    ...(settings.friendRuleset === undefined ? {} : {friendRuleset:settings.friendRuleset}),
+    difficulty: settings.difficulty, target: settings.target, ruleset: settings.ruleset }, sound,
     ...(arena === undefined ? {} : { arena: normalizeArenaPreferences(arena) }) };
 }
 

@@ -44,7 +44,8 @@ const roleGuidance={
 const updatePreferencesStorage=getUpdatePreferencesStorage(window);
 const restoredUpdatePreferences=restoreUpdatePreferences(globalThis.RALLY_CONFIG?.buildId,updatePreferencesStorage);
 let arenaPreferences=restoredUpdatePreferences?.arena??readArenaPreferences(),matchSettings;
-const settings={role:'balanced',coachRole:'balanced',difficulty:'easy',target:5,ruleset:'quick',...restoredUpdatePreferences?.settings,finale:'none'};
+const settings={role:'balanced',coachRole:'balanced',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'easy',target:5,ruleset:'quick',...restoredUpdatePreferences?.settings,finale:'none'};
+let entryStage='home',friendAction='create';
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
 let trainingSession=null;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
@@ -62,12 +63,12 @@ const performanceMonitor=new PerformanceMonitor({devicePixelRatio:window.deviceP
 const pwa=initPWA({fullscreenButton:$('fullscreen'),showToast,onUpdateLock:({version}={})=>{
     saveUpdatePreferences({version,settings,sound,arena:arenaPreferences},updatePreferencesStorage);controls?.reset();
   },
-  isSafeToUpdate:({allowHidden=false}={})=>isUpdateSafe({ready:Boolean(controls&&view)&&$('loading').hidden,visible:allowHidden||!document.hidden,mode,state,room,
+  isSafeToUpdate:({allowHidden=false}={})=>entryStage==='home'&&isUpdateSafe({ready:Boolean(controls&&view)&&$('loading').hidden,visible:allowHidden||!document.hidden,mode,state,room,
     connection:socket||peerSession||peerAttempt,connecting,reconnecting,pendingResult:resultPending,finale:finale.blocking,
     overlay:Boolean(document.querySelector('dialog[open], .dialog:not([hidden]), #camera-panel:not([hidden]), #match-settings-panel:not([hidden])')),
     editing:Boolean(document.activeElement?.matches('input, textarea, select, [contenteditable="true"]'))})});
 const onboarding=initOnboarding({showToast,canOpen:()=>Boolean(controls)&&$('loading').hidden&&mode==='menu'&&!room&&!connecting&&!peerSession&&!peerAttempt,
-  onStartPractice:()=>startAI()});
+  onStartPractice:()=>openEntry('ai')});
 let lastRtt=null,lastDiagnostics=0,appliedQuality='',peerStats=null,lastPeerStats=0,peerStatsPending=false;
 const setText=(id,text)=>{if($(id).textContent!==String(text))$(id).textContent=text;};
 const peerRecords=peerMode?createPeerRecords():null;
@@ -87,6 +88,7 @@ if(peerMode){
   setText('leaderboard-title','本机好友榜。');
 }else setText('friends-network-note','同一局域网网址 · 主机电脑需保持运行');
 function dialog(id){
+  if(id==='friends-dialog'){openEntry('friends');return;}
   for(const el of document.querySelectorAll('.dialog'))el.hidden=el.id!==id;
   $('dialog-backdrop').hidden=!id;
 }
@@ -156,13 +158,13 @@ function syncSoundControls(){
   $('sound').setAttribute('aria-label',sound?'关闭声音':'开启声音');
 }
 if(restoredUpdatePreferences){
-  for(const [id,attribute] of [['roles','role'],['coach-roles','coachRole'],['difficulties','difficulty'],['rulesets','ruleset']])groupChoice(id,attribute,settings[attribute]);
+  for(const [id,attribute] of [['roles','role'],['friend-roles','friendRole'],['coach-roles','coachRole'],['difficulties','difficulty'],['rulesets','ruleset']])groupChoice(id,attribute,settings[attribute]);
   syncRulesControls();syncSoundControls();
 }
 setText('role-note',roleNotes[settings.role]);setText('difficulty-note',difficultyNotes[settings.difficulty]);
 function syncCoachNote(){setText('coach-note',ROLES[settings.coachRole].label+'陪练 · '+({balanced:'攻守均衡',swift:'移动快、恢复快，连续杀球耗费较高',power:'重击省力，跑动耗费较高、恢复慢'}[settings.coachRole])+'。仅人机练习；三步训练使用均衡陪练。');}
 syncCoachNote();
-for(const [id,key,attr] of [['roles','role','role'],['coach-roles','coachRole','coachRole'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset'],['friend-modes','finale','finale']]){
+for(const [id,key,attr] of [['roles','role','role'],['friend-roles','friendRole','friendRole'],['coach-roles','coachRole','coachRole'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset'],['friend-modes','finale','finale']]){
   $(id).addEventListener('click',event=>{
     const button=event.target.closest('button');if(!button||button.disabled)return;
     settings[key]=key==='target'?Number(button.dataset[attr]):button.dataset[attr];groupChoice(id,attr,settings[key]);
@@ -170,8 +172,38 @@ for(const [id,key,attr] of [['roles','role','role'],['coach-roles','coachRole','
     if(key==='coachRole')syncCoachNote();
     if(key==='difficulty')setText('difficulty-note',difficultyNotes[settings.difficulty]);
     if(key==='ruleset'||key==='target')syncRulesControls();
+    syncEntrySettings();
   });
 }
+function syncEntrySettings(){
+  groupChoice('ai-formats','format',settings.ruleset+':'+(settings.ruleset==='standard21'?21:settings.target));
+  groupChoice('friend-formats','format',settings.friendRuleset+':'+(settings.friendRuleset==='standard21'?21:settings.friendTarget));
+  const rule=getScoringRules({ruleset:settings.friendRuleset,target:settings.friendTarget});
+  setText('friend-rules-note',settings.friendRuleset==='standard21'?'三局两胜 · 每局21分 · 净胜2分 · 30封顶':rule.target+'分单局 · 净胜2分 · '+rule.cap+'封顶');
+  setText('ai-summary',ROLES[settings.role].label+'型 · '+ROLES[settings.coachRole].label+'陪练 · '+names[settings.difficulty]+' · '+(settings.ruleset==='standard21'?'标准三局':settings.target+'分单局'));
+}
+function setFriendAction(action){
+  friendAction=action==='join'?'join':'create';groupChoice('friend-tabs','action',friendAction);
+  $('friend-create-options').hidden=friendAction!=='create';$('friend-join-options').hidden=friendAction!=='join';
+}
+function openEntry(stage){
+  if(state||room||peerAttempt||connecting)return;
+  entryStage=stage;dialog(null);$('menu').dataset.entry=stage;
+  $('entry-home-heading').hidden=stage!=='home';$('entry-heading').hidden=stage==='home';
+  $('mode-setup').hidden=!['home','ai'].includes(stage);$('ai-setup').hidden=stage!=='ai';
+  $('home-actions').hidden=stage!=='home';$('ai-start-controls').hidden=stage!=='ai';
+  $('training-setup').hidden=stage!=='training';$('friends-dialog').hidden=stage!=='friends';
+  const labels={ai:['人机开打','选择自己、陪练与比赛形式。'],training:['三步训练','先学跑位、选线和回位。'],friends:['好友对打','各自选打法，共同确认规则。'],home:['','']};
+  setText('entry-title',labels[stage][0]);setText('entry-description',labels[stage][1]);syncEntrySettings();
+}
+for(const [id,friend]of [['ai-formats',false],['friend-formats',true]])$(id).addEventListener('click',event=>{
+  const button=event.target.closest('button');if(!button||button.disabled)return;const [ruleset,target]=button.dataset.format.split(':');
+  if(friend){settings.friendRuleset=ruleset;settings.friendTarget=Number(target);}else{settings.ruleset=ruleset;settings.target=Number(target);syncRulesControls();}
+  syncEntrySettings();
+});
+$('friend-tabs').addEventListener('click',event=>{const button=event.target.closest('button');if(button&&!button.disabled)setFriendAction(button.dataset.action);});
+$('entry-back').addEventListener('click',()=>{if(connecting||peerAttempt){exitToMenu();return;}closeHelpOrSetup();openEntry('home');});
+syncEntrySettings();
 function selectAim(value){aim=value;lastShotRequest=null;}
 
 function setScreen(screen){
@@ -207,7 +239,7 @@ function exitToMenu(){
   arenaAudio.reset();
   playback.reset();lastRtt=null;peerStats=null;lastPeerStats=0;peerStatsPending=false;
   $('countdown').hidden=true;setScreen('menu');dialog(null);history.replaceState(null,'',location.pathname);
-  queueMicrotask(()=>onboarding.maybeShow());
+  openEntry('home');queueMicrotask(()=>onboarding.maybeShow());
 }
 function startAI(){
   if(peerAttempt||peerSession)exitToMenu();
@@ -254,7 +286,16 @@ function handleNetwork(message){
     setText('waiting-mode',message.rules?.finale==='father-son'?'父子局 · 赛后互动不可跳过':'普通对局 · 无赛后互动');
     setText('waiting-status',message.players.filter(Boolean).length===2?'● 球友已到，准备开场':'● 房间已创建，等待加入');
     history.replaceState(null,'',`?room=${encodeURIComponent(message.code)}`);
-    if(!state){mode='waiting';dialog('waiting-dialog');}
+    if(!state){mode='waiting';
+      const connected=message.players.filter(p=>p?.connected).length;
+      const ready=message.ready||[];const parent=message.rules?.finale==='father-son';
+      const lineup=message.players.map((p,index)=>p?(p.name+' · '+ROLES[p.role].label+'型 · '+(!p.connected?'已断开':ready.includes(index)?'已准备':'未准备')):'等待球友加入').join('\n');
+      setText('waiting-players',lineup);setText('waiting-rules',(message.ruleset==='standard21'?'标准三局 · 每局21分':message.target+'分单局')+' · '+(parent?'父子局':'普通对局'));
+      setText('waiting-consent',parent?'父子局：败者跪拜叫爸爸，约3秒不可跳过。双方确认并准备后开打。':'确认本房间规则，双方准备后倒数3秒开打。');
+      $('ready-room').disabled=connected!==2||ready.includes(side)||!message.readyRequired;
+      setText('ready-room',connected!==2?'等待球友加入':ready.includes(side)?'已准备，等待球友':parent?'同意父子局并准备':'确认规则并准备');
+      if(connected!==2&&message.players[1])setText('waiting-status','球友已断开，请重新建房');
+      dialog('waiting-dialog');}
   }else if(message.type==='state'){
     if(message.state?.rulesVersion!==RULES_VERSION){showToast('比赛规则已更新，请双方联网刷新后重新建房');controls.setEnabled(false);return;}
     if(!playback.receive(message.state,performance.now(),message))return;
@@ -315,7 +356,7 @@ async function roomAction(type){
   if(attempt){peerAttempt=attempt;peerDisconnected=false;}
   try{
     const profile=preparePlayerProfile();$('player-name').value=profile.saveName(name);preparePlayerProfile();
-    const options={type,name,role:settings.role,target:settings.target,ruleset:settings.ruleset,finaleCapability:'father-son',...(type==='join'?{code}:{finale:settings.finale})};
+    const options={type,name,role:settings.friendRole,target:settings.friendTarget,ruleset:settings.friendRuleset,readyRequired:true,finaleCapability:'father-son',...(type==='join'?{code}:{finale:settings.finale})};
     if(peerMode){
       const playerId=await peerRecords.publicId(profile.playerKey);
       if(generation!==netGeneration)return;
@@ -332,7 +373,7 @@ async function roomAction(type){
 function setRoomBusy(busy,type){
   connecting=busy;
   $('create-room').disabled=busy;$('join-room').disabled=busy;
-  for(const choice of $('friend-modes').querySelectorAll('button'))choice.disabled=busy;
+  for(const id of ['friend-modes','friend-roles','friend-formats','friend-tabs'])for(const choice of $(id).querySelectorAll('button'))choice.disabled=busy;
   setText('create-room',busy&&type==='create'?'正在创建…':'创建房间 ＋');
   setText('join-room',busy&&type==='join'?'正在连接…':'加入 ↗');
 }
@@ -353,14 +394,17 @@ function closeHelpOrSetup(){
   helpOpen=false;if(state?.phase==='paused')dialog('pause-dialog');else dialog(null);
 }
 initFeedback({recipient:'2228144556@qq.com',canOpen:()=>mode==='menu',openDialog:dialog});
-$('start-ai').addEventListener('click',startAI);
-$('start-training')?.addEventListener('click',startTraining);
-$('open-friends').addEventListener('click',()=>{settings.finale='none';groupChoice('friend-modes','finale','none');dialog(practiceOnly?'lan-dialog':'friends-dialog');});
+$('start-ai').addEventListener('click',()=>openEntry('ai'));
+$('start-ai-confirm').addEventListener('click',startAI);
+$('start-training')?.addEventListener('click',()=>openEntry('training'));
+$('start-training-confirm').addEventListener('click',startTraining);
+$('open-friends').addEventListener('click',()=>{settings.finale='none';groupChoice('friend-modes','finale','none');setFriendAction('create');dialog(practiceOnly?'lan-dialog':'friends-dialog');});
 $('open-leaderboard').addEventListener('click',()=>openLeaderboard('menu'));
 $('result-leaderboard').addEventListener('click',()=>openLeaderboard('result'));
 $('close-leaderboard').addEventListener('click',closeLeaderboard);
 $('leaderboard-retry').addEventListener('click',()=>leaderboard.load({selfId:currentPlayerId}));
 $('create-room').addEventListener('click',()=>roomAction('create'));
+$('ready-room').addEventListener('click',()=>{if(room?.readyRequired&&!$('ready-room').disabled)send({type:'ready',target:room.target,ruleset:room.ruleset,finale:room.rules.finale});});
 $('join-room').addEventListener('click',()=>roomAction('join'));
 $('room-code').addEventListener('keydown',event=>{if(event.key==='Enter')roomAction('join');});
 $('pause').addEventListener('click',requestPause);
@@ -609,7 +653,7 @@ try{
   }
   requestAnimationFrame(frame);
   const invited=new URLSearchParams(location.search).get('room');
-  if(invited&&!practiceOnly){$('room-code').value=invited.toUpperCase().slice(0,5);dialog('friends-dialog');}
+  if(invited&&!practiceOnly){$('room-code').value=invited.toUpperCase().slice(0,5);setFriendAction('join');dialog('friends-dialog');}
   onboarding.maybeShow();
 }catch(error){
   console.error(error);$('loading').textContent='球场加载失败：'+error.message+'。请使用支持 WebGL 2 的浏览器后刷新。';
