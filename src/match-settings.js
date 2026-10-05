@@ -1,5 +1,6 @@
 import { ROLES, getScoringRules, getDifficultyProfile, staminaEffects, movementStaminaRate, shotStaminaCost } from '../shared/game.js';
 import { normalizeArenaPreferences, saveArenaPreferences, readArenaPreferences } from './arena-preferences.js';
+import { STAMINA_TUNING } from '../shared/stamina.js';
 
 export function describeRole(role) {
   const r = ROLES[role] || ROLES.balanced;
@@ -17,7 +18,9 @@ export function describeMatch(state, side = 0, mode = 'ai') {
     (state.ruleset === 'standard21' ? '三局两胜 · 每局21分' : '单局快赛 · ' + rule.target + '分') + ' · 净胜' + rule.winBy + '分 · ' + rule.cap + '分封顶',
     mode === 'online' ? '好友对打 · ' + assistance : 'AI 反应 ' + Math.round(ai.reaction * 1000) + 'ms · 节奏 ' + Math.round(ai.pace * 100) + '% · ' + assistance,
     '你的当前最高移动速度 ' + (self.speed * staminaEffects(state.players[side], self).speedScale).toFixed(2) + 'm/s；疲劳时跑动、强攻与压线更容易失误。',
-    '体力只在回合中慢移调整时恢复；发球、分间及暂停均不恢复。',
+    '回合中慢移调整可恢复体力；每分结束进入下一次发球时，你恢复最多 ' +
+      (self.recovery * STAMINA_TUNING.pointRecoverySeconds).toFixed(1) + ' 点，对手恢复最多 ' +
+      (other.recovery * STAMINA_TUNING.pointRecoverySeconds).toFixed(1) + ' 点；等待发球、分间及暂停不会额外恢复。',
   ].join(String.fromCharCode(10));
 }
 

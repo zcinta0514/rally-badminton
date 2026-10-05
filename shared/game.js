@@ -1,7 +1,7 @@
 import { contactQuality, contactDrift } from './shot-quality.js';
-import { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
+import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 3;
+export const RULES_VERSION = 4;
 
 /** Shared, serializable rules. Coordinates are metres; side 0 plays at positive z. */
 export const COURT = Object.freeze({ halfWidth: 2.59, halfLength: 6.7, netHeight: 1.52 });
@@ -119,6 +119,14 @@ function attachServe(state) {
     active: false, lastHit: null });
 }
 function startServe(state) {
+  // Earned once after an actual scored rally, never by waiting to serve.
+  // The bounded allowance is identical for both sides and follows role recovery.
+  if (['point', 'intermission'].includes(state.phase) && state.rallyEnd?.id === state.pointId && state.pointId > 0) {
+    for (const player of state.players) {
+      const role = ROLES[player.role];
+      player.stamina = Math.min(role.maxStamina, player.stamina + role.recovery * STAMINA_TUNING.pointRecoverySeconds);
+    }
+  }
   state.phase = 'serve'; state.timer = 0; state.rally = 0; state._serveAge = 0;
   state.rallyEnd = null;
   state.message = `${state.server === 0 ? '近场' : '远场'}发球 · 点击击球键`;
@@ -606,7 +614,7 @@ function smashOpportunity(state, side) {
   const discriminant = ball.vy * ball.vy + 2 * TUNING.gravity * (ball.y - bestHeight);
   const contactTime = discriminant >= 0 ? (ball.vy + Math.sqrt(discriminant)) / TUNING.gravity : -1;
   const contactDepth = (ball.z + ball.vz * contactTime) * direction(side);
-  return { contactTime, highChance: contactTime >= 0 && contactDepth > 0.5 && contactDepth < 6.4 && state.players[side].stamina >= shotStaminaCost(ROLES[state.players[side].role], 'smash') };
+  return { contactTime, highChance: contactTime >= 0 && contactDepth > 0.5 && contactDepth < 6.4 };
 }
 
 function repeatPenalty(history, candidate) {
@@ -624,7 +632,11 @@ function repeatPenalty(history, candidate) {
 function chooseCandidate(state, side, level, candidates) {
   const history = aiHistoryFor(state, side);
   const temperature = level === 'hard' ? 0.72 : 0.9;
-  const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score - repeatPenalty(history, candidate) }));
+  const player = state.players[side];
+  const reservePressure = clamp(1 - player.stamina / (2 * shotStaminaCost(ROLES[player.role], 'smash')), 0, 1);
+  // Fatigue shifts preference toward economical returns without banning attacks.
+  const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score - repeatPenalty(history, candidate)
+    - reservePressure * (candidate.shot === 'smash' ? 1.2 : candidate.shot === 'clear' ? .3 : 0) }));
   const best = Math.max(...scored.map(candidate => candidate.score));
   const viable = scored.filter(candidate => candidate.score > -5);
   const weighted = viable.map(candidate => ({ candidate, weight: Math.exp((candidate.score - best) / temperature) }));
