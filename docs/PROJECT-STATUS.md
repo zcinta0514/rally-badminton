@@ -5,17 +5,18 @@
   "statusVersion": 1,
   "asOf": "2026-10-05",
   "baseline": {
-    "branch": "fix/BAL-1-coach-home",
-    "head": "fcc609527a5d54aceafb0ba2e5044fa4a094228b",
-    "originMain": "db8d45310de38a7afec4a7a9639903ddc50c01c8",
-    "releaseTag": "v1.8.0"
+    "branch": "main",
+    "head": "62051d0406d7da18ed5920e15b3caf2b708458bb",
+    "originMain": "62051d0406d7da18ed5920e15b3caf2b708458bb",
+    "releaseTag": "v1.9.0"
   },
   "activeTask": {
-    "title": "R-1.9.0 发布体力、三陪练与模式准备更新",
-    "scope": "用户确认1.9.0并授权合并main和标签；包含AI-1、ENTRY-1及BAL-1五个候选提交，不含人物实验。",
-    "nextAction": "版本一致性和发布构建检查后推送PR、合并main、标记v1.9.0并核验部署。",
+    "title": "R-1.9.0 已发布并核验",
+    "scope": "用户确认1.9.0及合并授权；PR#2已合并，标签指向62051d0。Pages和Vercel生产部署成功。",
+    "nextAction": "用户继续真机与实战验收；如有反馈，在实时main基线建立下一修复任务。",
     "blockedBy": [
-      "Safari真机直连未验收；用户自行负责真机及玩法验收，不冒称通过。"
+      "真机与实战未记录；自动化测试不是实体手机验收。",
+      "Safari自动化直连的基线握手失败保留，线上页面开打不等于双手机直连验收。"
     ],
     "documents": [
       "docs/tasks/R-1.9.0.md"
@@ -24,13 +25,14 @@
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "v1.8.0 已发布：main 合并提交 45a5d86，标签 v1.8.0；线上 Pages 0482fefd67cdc881／Vercel 4c377c8c35725c4c，均显示正式版 1.8.0。人物工作区预览仍在 3040，未验收人物实验未合并。"
+    "releaseState": "v1.9.0 已发布：PR#2合并62051d0，标签v1.9.0；Pages 633bc77d0521649d、Vercel bc91ba3fa312a101。人物实验未合并，原P1预览3040未改。"
   },
   "readNext": [
     "docs/tasks/R-1.9.0.md",
     "docs/RELEASE-1.9.0-CHECKPOINT.md"
   ],
   "links": [
+    "docs/RELEASE-1.9.0-QA.json",
     "docs/tasks/R-1.9.0.md",
     "docs/RELEASE-1.9.0-CHECKPOINT.md",
     "docs/tasks/BAL-1.md",
@@ -51,17 +53,19 @@
   ],
   "handoff": {
     "taskId": "R-1.9.0",
-    "branch": "release/R-1.9.0",
-    "baselineHead": "fcc609527a5d54aceafb0ba2e5044fa4a094228b",
+    "branch": "docs/R-1.9.0-result",
+    "baselineHead": "62051d0406d7da18ed5920e15b3caf2b708458bb",
     "taskFile": "docs/tasks/R-1.9.0.md",
-    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/release-1-9",
-    "phase": "发布检查中",
-    "stopReason": "用户明确确认1.9.0与合并授权。",
-    "nextAction": "版本一致性和发布构建检查后推送PR、合并main、标记v1.9.0并核验部署。",
+    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/release-1-9-postcheck",
+    "phase": "已发布",
+    "stopReason": "合并、标签、两处部署及线上浏览器核验完成，发布结果文档待合入。",
+    "nextAction": "用户继续真机与实战验收；如有反馈，在实时main基线建立下一修复任务。",
     "checkpoint": "docs/RELEASE-1.9.0-CHECKPOINT.md",
-    "validation": "691/691测试；1053/1053模拟完成，0超时；Chromium/WebKit四尺寸与三陪练开打通过；最终构建e34b00e5eb76cfeb，85资源逐字节一致。",
-    "scopeBoundary": "已授权发布本批候选并打标签；不包含P1人物实验；真机未测不记为通过。"
+    "validation": "Node22/24各691/691通过；发布直连双端通过；生产资源与页面核验见RELEASE-1.9.0-QA.json。",
+    "scopeBoundary": "用户已授权合并和1.9.0标签；本次仅补发布结果，不新增运行功能或扩大人物范围。用户自理真机验收。"
   },
-  "publication": "v1.8.0 已上线：Pages 0482fefd67cdc881、Vercel 4c377c8c35725c4c，两处均由 main 提交 45a5d86 构建，标签 v1.8.0。"
+  "publication": "v1.9.0 已发布：PR#2合并62051d0，标签v1.9.0；Pages 633bc77d0521649d、Vercel bc91ba3fa312a101。人物实验未合并，原P1预览3040未改。"
 }
 -->
+
+正式1.9.0已上线并核验。3053为旧候选，3055为1.9.0本地预览，3040为独立人物任务。
