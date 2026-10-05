@@ -12,13 +12,13 @@
   },
   "activeTask": {
     "title": "AI-1：低体力陪练进攻与恢复修正",
-    "scope": "已实现机会杀球和每分定量恢复，共同疲劳惩罚保留；本地候选未推送、合并或上线。",
-    "nextAction": "用户实战体验候选，核对低体力攻击与恢复节奏；通过后再准备发布。",
+    "scope": "已实现低体力机会杀球、每分定量恢复与高远球／吊球后的有界调整加成；共同疲劳惩罚保留，候选未上线。",
+    "nextAction": "用户实战体验击球后调整恢复、低体力进攻与三打法平衡；验收后再准备发布。",
     "blockedBy": [],
     "documents": [
       "docs/tasks/AI-1.md"
     ],
-    "checkpoint": "docs/AI-1-FIX-CHECKPOINT.md"
+    "checkpoint": "docs/AI-1-SHOT-RECOVERY-CHECKPOINT.md"
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
@@ -26,10 +26,11 @@
   },
   "readNext": [
     "docs/tasks/AI-1.md",
-    "docs/AI-1-FIX-CHECKPOINT.md"
+    "docs/AI-1-SHOT-RECOVERY-CHECKPOINT.md"
   ],
   "links": [
     "docs/tasks/AI-1.md",
+    "docs/AI-1-SHOT-RECOVERY-CHECKPOINT.md",
     "docs/AI-1-FIX-CHECKPOINT.md",
     "docs/AI-1-STAMINA-CHECKPOINT.md",
     "docs/tasks/RELEASE-FX.md",
@@ -44,11 +45,11 @@
     "taskFile": "docs/tasks/AI-1.md",
     "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/ai-1-low-stamina",
     "phase": "待验收",
-    "stopReason": "功能候选已实现；675项回归通过、构建及两浏览器实际开打通过，用户实战体验未记录。",
-    "nextAction": "用户实战体验候选，核对低体力攻击与恢复节奏；通过后再准备发布。",
-    "checkpoint": "docs/AI-1-FIX-CHECKPOINT.md",
-    "validation": "最终代码：675/675；候选构建6e3de5a55df030c3，Chromium/WebKit开打及规则说明通过。180场真实人机配置完成，360场含两场延长观察均结束。证据 docs/AI-1-FIX-QA.json。",
-    "scopeBoundary": "用户授权按方案修改并保留疲劳惩罚；本次新修改不默认生产发布，版本号不递增。真机与玩法验收用户自理。"
+    "stopReason": "高远球／吊球调整恢复已实现，680项全量测试和两浏览器开打／规则说明通过；待用户实战验收。",
+    "nextAction": "用户实战体验击球后调整恢复、低体力进攻与三打法平衡；验收后再准备发布。",
+    "checkpoint": "docs/AI-1-SHOT-RECOVERY-CHECKPOINT.md",
+    "validation": "680/680测试通过；构建72ed74206743b774；Chromium/WebKit开打、规则说明和服务资源通过；5400固定触点、360场长局均完成。证据 AI-1-SHOT-RECOVERY-QA.json。",
+    "scopeBoundary": "用户授权保留疲劳并修正进攻／恢复，并明确选择高远球／吊球击球后休整加成。本地候选不默认发布，版本号不递增，真机与玩法验收用户自理。"
   },
   "publication": "v1.8.0 已上线：Pages 0482fefd67cdc881、Vercel 4c377c8c35725c4c，两处均由 main 提交 45a5d86 构建，标签 v1.8.0。"
 }

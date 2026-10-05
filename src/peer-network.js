@@ -1,5 +1,6 @@
 import { PeerMatch } from './peer-match.js';
 import { ROLES, RULES_VERSION } from '../shared/game.js';
+import { STAMINA_TUNING } from '../shared/stamina.js';
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const PREFIX = 'rally-badminton-v2-';
@@ -108,6 +109,9 @@ function validState(message, sessionId) {
       record(state.lastShotInfo.quality) && typeof state.lastShotInfo.quality.reason === 'string') &&
     Array.isArray(state.players) && state.players.length === 2 && state.players.every(player => record(player) &&
       ['x', 'z', 'vx', 'vz', 'stamina', 'staminaRate', 'recoveryWait', 'swing', 'cooldown', 'actionId'].every(key => finite(player[key])) && Object.hasOwn(ROLES, player.role) &&
+      (player.shotRecovery === null || record(player.shotRecovery) && Object.hasOwn(STAMINA_TUNING.shotRecovery, player.shotRecovery.type) &&
+        finite(player.shotRecovery.expiresAt) && finite(player.shotRecovery.remaining) && player.shotRecovery.remaining >= 0 &&
+        player.shotRecovery.remaining <= STAMINA_TUNING.shotRecovery[player.shotRecovery.type].budget + 1e-6) &&
       (player.action === null || record(player.action) && ['startedAt', 'endsAt'].every(key => finite(player.action[key])))) &&
     record(state.shuttle) && ['x', 'y', 'z', 'vx', 'vy', 'vz'].every(key => finite(state.shuttle[key])) &&
     typeof state.shuttle.active === 'boolean' && nullableSlot(state.shuttle.lastHit) &&

@@ -4,6 +4,10 @@ const smooth = value => value * value * (3 - 2 * value);
 export const STAMINA_TUNING = Object.freeze({
   runCost: 4.2, chargeCost: .35,
   pointRecoverySeconds: 2,
+  shotRecovery: Object.freeze({
+    clear: Object.freeze({ boost: .4, duration: 2.2, budget: 1.2 }),
+    drop: Object.freeze({ boost: .2, duration: 1.2, budget: .5 }),
+  }),
   shotCost: Object.freeze({ serve: 1.2, clear: 4.2, drop: 2.6, smash: 9 }),
 });
 const DEFAULT_FATIGUE = Object.freeze({ onset: .55, speedFloor: .65, accelerationFloor: .8, controlWeight: .3 });

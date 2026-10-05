@@ -1,7 +1,7 @@
 import { contactQuality, contactDrift } from './shot-quality.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 4;
+export const RULES_VERSION = 5;
 
 /** Shared, serializable rules. Coordinates are metres; side 0 plays at positive z. */
 export const COURT = Object.freeze({ halfWidth: 2.59, halfLength: 6.7, netHeight: 1.52 });
@@ -100,7 +100,7 @@ export function createMatch({ target = 5, roles = ['balanced', 'balanced'], diff
       const role = roleOf(roles?.[side]);
       return { x: 0, z: direction(side) * 3.8, vx: 0, vz: 0, role,
         stamina: ROLES[role].maxStamina, staminaRate: 0, recoveryWait: 0, staminaStatus: 'idle',
-        swing: 0, lastShot: 'clear', cooldown: 0, pendingShot: null, action: null, actionId: 0 };
+        swing: 0, lastShot: 'clear', cooldown: 0, pendingShot: null, action: null, actionId: 0, shotRecovery: null };
     }),
     shuttle: { x: 0, y: 1.1, z: 3.4, vx: 0, vy: 0, vz: 0, active: false, lastHit: null },
     pause: { by: null, remaining: TUNING.pauseLimit, used: [0, 0], previousPhase: null },
@@ -138,7 +138,7 @@ function startServe(state) {
   for (let side = 0; side < 2; side++) {
     Object.assign(state.players[side], { x: (side === state.server ? sign : -sign) * 0.85,
       z: direction(side) * 3.8, vx: 0, vz: 0,
-      swing: 0, cooldown: 0, pendingShot: null, action: null, recoveryWait: 0, staminaRate: 0, staminaStatus: 'idle' });
+      swing: 0, cooldown: 0, pendingShot: null, action: null, recoveryWait: 0, staminaRate: 0, staminaStatus: 'idle', shotRecovery: null });
   }
   attachServe(state);
 }
@@ -148,7 +148,7 @@ export function finishMatch(state, winner, reason = '本局结束', endReason = 
   state.phase = 'over'; state.winner = winner === 0 || winner === 1 ? winner : null;
   state.endReason = endReason; state.message = reason; state.timer = 0; state.shuttle.active = false;
   for (const player of state.players) {
-    player.vx = 0; player.vz = 0; player.pendingShot = null;
+    player.vx = 0; player.vz = 0; player.pendingShot = null; player.shotRecovery = null;
     if (player.action?.stage === 'prepare' || player.action?.stage === 'windup') player.action = null;
   }
   return state;
@@ -160,7 +160,7 @@ function awardPoint(state, winner, reason, impact) {
   state.shuttle.active = false; state.timer = TUNING.pointWait;
   state.message = `${reason} · ${winner === 0 ? '近场' : '远场'}得分`;
   for (const player of state.players) {
-    player.pendingShot = null; player.vx = 0; player.vz = 0;
+    player.pendingShot = null; player.vx = 0; player.vz = 0; player.shotRecovery = null;
     if (player.action?.stage === 'prepare' || player.action?.stage === 'windup') player.action = null;
   }
   // Standard21 retains the 26 April 2025 BWF scoring snapshot (sections 7 and 8).
@@ -201,7 +201,7 @@ export function pauseMatch(state, side) {
   state._savedTimer = state.timer; state.phase = 'paused'; state.timer = TUNING.pauseLimit;
   state.message = '比赛暂停 · 30 秒后按当前比分结算';
   for (const player of state.players) {
-    player.pendingShot = null;
+    player.pendingShot = null; player.shotRecovery = null;
     if (player.action?.stage === 'prepare' || player.action?.stage === 'windup') player.action = null;
   }
   return true;
@@ -385,6 +385,8 @@ function playShot(state, side, request, serving = false) {
   player.stamina = Math.max(0, player.stamina - shotStaminaCost(role, type, request.charge, serving));
   player.swing = role.swingTime; player.cooldown = role.swingTime;
   player.pendingShot = null; player.lastShot = type;
+  const rest = !serving && STAMINA_TUNING.shotRecovery[type];
+  player.shotRecovery = rest ? { type, expiresAt: state.time + rest.duration, remaining: rest.budget } : null;
   if (player.action) Object.assign(player.action, { type, stage: 'contact', contact, quality: target.quality,
     contactAt: state.time, endsAt: state.time + role.swingTime, swingTime: role.swingTime });
   state.phase = 'rally'; state.hitId++; state.rally++; state.lastShot = type;
@@ -554,7 +556,15 @@ function stepLive(state, inputs, dt, firstSlice) {
         const recovering = Math.max(0, eligible - Math.max(0, .35 - beforeWait));
         const t = clamp((effort - .1) / .3, 0, 1);
         recovery = role.recovery * (1 - t * t * (3 - 2 * t)) * recovering;
+        const rest = player.shotRecovery;
+        if (rest && state.shuttle.lastHit === side) {
+          const duration = Math.max(0, Math.min(start + liveDt, rest.expiresAt) - (start + liveDt - recovering));
+          const tuning = STAMINA_TUNING.shotRecovery[rest.type];
+          const extra = Math.min(rest.remaining, role.recovery * tuning.boost * (1 - t * t * (3 - 2 * t)) * duration);
+          recovery += extra; rest.remaining -= extra;
+        }
       }
+      if (player.shotRecovery && (player.shotRecovery.expiresAt <= start + liveDt || state.shuttle.lastHit !== side || phase !== 'rally')) player.shotRecovery = null;
       const drain = ['serve', 'rally'].includes(phase) ? movementStaminaRate(role, speeds[side]) * liveDt : 0;
       const before = player.stamina;
       player.stamina = clamp(before + recovery - drain, 0, role.maxStamina);
