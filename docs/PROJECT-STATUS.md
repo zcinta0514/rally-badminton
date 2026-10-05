@@ -3,53 +3,64 @@
 <!-- project-brief
 {
   "statusVersion": 1,
-  "asOf": "2026-10-04",
+  "asOf": "2026-10-05",
   "baseline": {
-    "branch": "origin/main",
-    "head": "45a5d860e7647b23026efaa1690c6da7b731786f",
-    "originMain": "45a5d860e7647b23026efaa1690c6da7b731786f",
+    "branch": "fix/BAL-1-coach-home",
+    "head": "fcc609527a5d54aceafb0ba2e5044fa4a094228b",
+    "originMain": "db8d45310de38a7afec4a7a9639903ddc50c01c8",
     "releaseTag": "v1.8.0"
   },
   "activeTask": {
-    "title": "RELEASE-FX：正式上线准备",
-    "scope": "从正式主线整理体力、声音、观众与局内设置的发布候选，排除未验收人物实验与已取消的灯效；候选只在本地，未推送、未合并、未打标签。",
-    "nextAction": "用户自行完成真机（iPhone13/Safari、Pixel8/Chrome）与玩法／视听验收并记录结果；后续任务从 main 的 v1.8.0 基线新建分支。",
+    "title": "R-1.9.0 发布体力、三陪练与模式准备更新",
+    "scope": "用户确认1.9.0并授权合并main和标签；包含AI-1、ENTRY-1及BAL-1五个候选提交，不含人物实验。",
+    "nextAction": "版本一致性和发布构建检查后推送PR、合并main、标记v1.9.0并核验部署。",
     "blockedBy": [
-      "iPhone13/Safari 与 Pixel8/Chrome 实体机30分钟／稳定60帧实测由用户自行完成，结果尚未记录。",
-      "三打法实战平衡与用户最终玩法／视听确认未记录。",
-      "专用真实音效素材仍有缺口，本版只发布已核验录音变体与混音功能。"
+      "Safari真机直连未验收；用户自行负责真机及玩法验收，不冒称通过。"
     ],
     "documents": [
-      "docs/tasks/RELEASE-FX.md"
+      "docs/tasks/R-1.9.0.md"
     ],
-    "checkpoint": "docs/RELEASE-PREP-CHECKPOINT.md"
+    "checkpoint": "docs/RELEASE-1.9.0-CHECKPOINT.md"
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
     "releaseState": "v1.8.0 已发布：main 合并提交 45a5d86，标签 v1.8.0；线上 Pages 0482fefd67cdc881／Vercel 4c377c8c35725c4c，均显示正式版 1.8.0。人物工作区预览仍在 3040，未验收人物实验未合并。"
   },
   "readNext": [
-    "docs/tasks/RELEASE-FX.md",
-    "docs/RELEASE-PREP-CHECKPOINT.md"
+    "docs/tasks/R-1.9.0.md",
+    "docs/RELEASE-1.9.0-CHECKPOINT.md"
   ],
   "links": [
+    "docs/tasks/R-1.9.0.md",
+    "docs/RELEASE-1.9.0-CHECKPOINT.md",
+    "docs/tasks/BAL-1.md",
+    "docs/BAL-1-CHECKPOINT.md",
+    "docs/BAL-1-QA.json",
+    "docs/tasks/ENTRY-1.md",
+    "docs/ENTRY-1-CHECKPOINT.md",
+    "docs/ENTRY-1-QA.json",
+    "docs/AI-1-COACH-CHECKPOINT.md",
+    "docs/tasks/AI-1.md",
+    "docs/AI-1-SHOT-RECOVERY-CHECKPOINT.md",
+    "docs/AI-1-FIX-CHECKPOINT.md",
+    "docs/AI-1-STAMINA-CHECKPOINT.md",
     "docs/tasks/RELEASE-FX.md",
     "docs/RELEASE-PREP-CHECKPOINT.md",
     "docs/WORKFLOW.md",
     "docs/DEPLOYMENT.md"
   ],
   "handoff": {
-    "taskId": "RELEASE-FX",
-    "branch": "release/FX-production",
-    "baselineHead": "d15ff7c92d24664c22cdcd21875782da579137c5",
-    "taskFile": "docs/tasks/RELEASE-FX.md",
-    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/fx-production",
-    "phase": "已发布",
-    "stopReason": "v1.8.0 已合并、打标签并部署；线上构建号与首页版本已核验，线上开打与设置检查无报错。真机与视听验收待用户自行完成并记录。",
-    "nextAction": "用户自行完成真机（iPhone13/Safari、Pixel8/Chrome）与玩法／视听验收并记录结果；后续任务从 main 的 v1.8.0 基线新建分支。",
-    "checkpoint": "docs/RELEASE-PREP-CHECKPOINT.md",
-    "validation": "发布后核验：CI／Pages 工作流成功，线上 Pages 0482fefd67cdc881、Vercel 4c377c8c35725c4c；Chromium／WebKit 线上开打与设置检查无报错；发布前回归 672/672（Node 24 与 22）。证据见 docs/RELEASE-PREP-CHECKPOINT.md 与 artifacts/release-prep/。",
-    "scopeBoundary": "用户授权递增 1.8.0、合并 main、打标签；真机与视听验收由用户自行完成。未验收的人物/V4 实验仍不得合入。"
+    "taskId": "R-1.9.0",
+    "branch": "release/R-1.9.0",
+    "baselineHead": "fcc609527a5d54aceafb0ba2e5044fa4a094228b",
+    "taskFile": "docs/tasks/R-1.9.0.md",
+    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/release-1-9",
+    "phase": "发布检查中",
+    "stopReason": "用户明确确认1.9.0与合并授权。",
+    "nextAction": "版本一致性和发布构建检查后推送PR、合并main、标记v1.9.0并核验部署。",
+    "checkpoint": "docs/RELEASE-1.9.0-CHECKPOINT.md",
+    "validation": "691/691测试；1053/1053模拟完成，0超时；Chromium/WebKit四尺寸与三陪练开打通过；最终构建e34b00e5eb76cfeb，85资源逐字节一致。",
+    "scopeBoundary": "已授权发布本批候选并打标签；不包含P1人物实验；真机未测不记为通过。"
   },
   "publication": "v1.8.0 已上线：Pages 0482fefd67cdc881、Vercel 4c377c8c35725c4c，两处均由 main 提交 45a5d86 构建，标签 v1.8.0。"
 }

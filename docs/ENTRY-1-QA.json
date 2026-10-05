@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-05",
+  "task": "ENTRY-1",
+  "branch": "feat/ENTRY-1-navigation",
+  "baseline": "974453b7e9670d7357f59496ee8614501f364546",
+  "remoteMain": "db8d45310de38a7afec4a7a9639903ddc50c01c8",
+  "releaseVersion": "1.8.0",
+  "deployed": false,
+  "tests": {
+    "command": "npm test",
+    "passed": 690,
+    "failed": 0
+  },
+  "build": {
+    "command": "npm run build",
+    "id": "f27b98505ccbb1cd",
+    "resources": 85
+  },
+  "browsers": [
+    {
+      "build": "f27b98505ccbb1cd",
+      "assets": 85,
+      "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/entry-1-navigation",
+      "realPhoneAccepted": false,
+      "testOnlyStateHook": true,
+      "results": [
+        {
+          "engine": "chromium",
+          "code": "6FFP8",
+          "transport": "live PeerJS/WebRTC",
+          "roles": [
+            "swift",
+            "power"
+          ],
+          "target": 11,
+          "finale": "father-son",
+          "doubleConsent": true,
+          "countdown": true,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "build": "8492a164f545bc83",
+      "assets": 85,
+      "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/entry-1-navigation",
+      "realPhoneAccepted": false,
+      "testOnlyStateHook": true,
+      "results": [
+        {
+          "engine": "webkit",
+          "code": "FWUPR",
+          "transport": "live WebSocket",
+          "roles": [
+            "swift",
+            "power"
+          ],
+          "target": 11,
+          "finale": "father-son",
+          "doubleConsent": true,
+          "countdown": true,
+          "errors": []
+        }
+      ]
+    }
+  ],
+  "webkitPeer": {
+    "status": "failed before room handshake completed",
+    "baselineComparison": {
+      "baseline": "974453b",
+      "url": "http://127.0.0.1:3048/",
+      "test": "transport-only registration and guest handshake, original rulesVersion5",
+      "joined": false,
+      "error": "Error: page.evaluate: Error: 手机直连握手超时，请确认双方连接同一 Wi-Fi 或热点后重试",
+      "hostStats": {
+        "sent": 0,
+        "received": 0,
+        "dropped": 0,
+        "isHost": true,
+        "code": "8NJN8",
+        "connected": false,
+        "signalingConnected": true,
+        "bufferedAmount": 0,
+        "candidatePairs": []
+      },
+      "guestRoom": false
+    },
+    "realSafariPhoneAccepted": false
+  },
+  "limitations": [
+    "SW blocked in fresh test contexts; old offline client update unverified",
+    "No physical phone or user visual/gameplay acceptance",
+    "Inherited power role stamina imbalance unresolved"
+  ],
+  "fingerprints": {
+    "index.html": "27d8cb8193c35ad904659ba536666b65f274d93dd34774b3dafa85df3cdf038f",
+    "src/main.js": "1a93be17469024f87e85dcc665c164e1afea239f0229b9b04b8cd1c9b62273a1",
+    "src/style.css": "7c108dcfb899c049dc9bf5b02363e64aa6feb1a28d80fd3042d58f39757d2dd4",
+    "src/peer-match.js": "58b0bbc39c49c3a57ffbb62708129f6e8f7cd280fbfaa9dc4eb87a7ae47c8976",
+    "src/peer-network.js": "ce9370452ad252e6a58ae5bb8644d7c355d48ef13ed2e8fe28ba2b64faee919c",
+    "src/update-preferences.js": "e2932fb783adddf102f84ff7ef9655d50225f81d91adac5c37e21bbe0fe6b136",
+    "shared/game.js": "20e9e2a7acd04fa98df761bb42c874ccd72b730e811c1bb14d74b054ec903e2f",
+    "shared/room-readiness.js": "3bdb6de948f1af6c2ea4796ec6315c4e9767772ea80f73bd07ad7dcaf2e7c480",
+    "server/rooms.js": "3a2a3ce712b84a848a281c55cd8a18d2bcee60ad5058f96f467afd4f9aa937f4"
+  }
+}

@@ -21,13 +21,19 @@ test('healthy reserves have a stable zone; every role loses speed and accelerati
 
 test('the three styles trade movement economy, recovery, control and attack economy without one dominating', () => {
   const { balanced:b, swift:s, power:p } = game.ROLES;
-  const run = r => game.movementStaminaRate(r,r.speed) / r.maxStamina;
+  // Compare the cost of covering equal ground, not seconds at different speeds.
+  const run = r => game.movementStaminaRate(r,r.speed) / r.speed / r.maxStamina;
   const shot = (r,type) => game.shotStaminaCost(r,type) / r.maxStamina;
   assert.ok(run(s) < run(b) && run(b) < run(p));
   assert.ok(s.recovery/s.maxStamina > b.recovery/b.maxStamina && b.recovery/b.maxStamina > p.recovery/p.maxStamina);
   assert.ok(shot(p,'smash') < shot(b,'smash') && shot(b,'smash') < shot(s,'smash'));
-  assert.ok(shot(s,'drop') < shot(b,'drop') && shot(b,'drop') < shot(p,'drop'));
-  assert.ok(shot(b,'clear') < shot(s,'clear') && shot(b,'clear') < shot(p,'clear'));
+  assert.ok(shot(s,'drop') < shot(b,'drop'));
+  assert.ok(shot(b,'clear') < shot(s,'clear'));
+  // Power can conserve energy with control shots, but retains the slowest
+  // movement and strongest fatigue/control penalties; it cannot dominate agility.
+  assert.ok(p.speed < b.speed && b.speed < s.speed);
+  assert.ok(p.fatigue.controlWeight > b.fatigue.controlWeight && b.fatigue.controlWeight > s.fatigue.controlWeight);
+  assert.ok(game.shotStaminaCost(p,'drop') <= game.shotStaminaCost(b,'drop'));
 });
 
 test('routine motion and control shots have smaller costs; full-power repeated attack still spends meaningful reserves', () => {

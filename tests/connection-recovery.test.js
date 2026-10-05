@@ -62,7 +62,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   const closeButtons = ['close-friends','close-help','close-lan'].map(element);
   element('camera-panel').hidden = true;
   const settingGroups = new Map();
-  for (const [id, attribute, values] of [['roles','role',['balanced','swift','power']], ['difficulties','difficulty',['easy','medium','hard']], ['targets','target',[5,11,21]], ['rulesets','ruleset',['quick','standard21']]]) {
+  for (const [id, attribute, values] of [['roles','role',['balanced','swift','power']], ['coach-roles','coachRole',['balanced','swift','power']], ['friend-roles','friendRole',['balanced','swift','power']], ['ai-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-tabs','action',['create','join']], ['difficulties','difficulty',['easy','medium','hard']], ['targets','target',[5,11,21]], ['rulesets','ruleset',['quick','standard21']]]) {
     const choices=values.map((value,index)=>{const button=element(`choice-${attribute}-${value}`);button.dataset[attribute]=String(value);button.closest=selector=>selector==='button'?button:null;button.setAttribute('aria-pressed',String(index===0));return button;});
     settingGroups.set(id,choices);element(id).querySelectorAll=selector=>selector==='button'?choices:[];
   }
@@ -140,7 +140,8 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
       if(pendingPeer)await new Promise(resolve=>{resolvePeer=resolve;});
       options.onMessage({type:'room',code:'ABCDE',slot:0,sessionId:'test-session',
         rules:{finale:options.type==='create'?options.finale:finaleMode},
-        players:[{name:options.name,playerId:options.playerId,connected:true},null]});
+        target:options.target,ruleset:options.ruleset,readyRequired:options.readyRequired,ready:[],
+        players:[{name:options.name,role:options.role,playerId:options.playerId,connected:true},null]});
       return session;
     },
     createPlayerProfile: () => createPlayerProfile({ storage: null, crypto: webcrypto }),
@@ -170,7 +171,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   assert.equal(typeof frame, 'function', 'the real application must initialize its render loop');
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
-  const common = { element, click, draw, controls, view, audio, document, usageEvents,
+  const common = { element, click, startAI(){click('entry-back');click('start-ai');click('start-ai-confirm');}, startTraining(){click('entry-back');click('start-training');click('start-training-confirm');}, draw, controls, view, audio, document, usageEvents,
     pwaOptions, onboardingOptions, updateSafeAtInit, get onboardingAttempts() { return onboardingAttempts; },
     choice:(id,value)=>settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value))),
     chooseSetting:(id,value)=>{const button=settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value)));if(!button.disabled)element(id).emit('click',{target:button});},
@@ -183,7 +184,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   const creating = click('create-room'); sockets.at(-1).open(); await creating;
   const room = { type: 'room', code: 'ABCDE', slot, token: 'original-token', sessionId: 'test-session',
     rules: { finale: finaleMode },
-    players: [{ name: '橙子 ID<007>', playerId: 'player-a', connected: true }, { name: '青柠 ID009', playerId: 'player-b', connected: true }] };
+    players: [{ name: '橙子 ID<007>', role:'balanced',playerId: 'player-a', connected: true }, { name: '青柠 ID009',role:'balanced', playerId: 'player-b', connected: true }] };
   const state = game.createMatch(); if (phase === 'paused') game.pauseMatch(state, 0);
   let seq = 0;
   const snapshot = (state, metadata = {}) => sockets.at(-1).message({ type: 'state', state, seq: ++seq,
@@ -213,7 +214,7 @@ test('the production update callback defers for friend forms, native dialogs, ca
   const f = await fixture('serve', { peerMode: true });
   const safe = f.pwaOptions.isSafeToUpdate;
   f.click('open-friends'); assert.deepEqual(f.visibleDialogs(), ['friends-dialog']); assert.equal(safe(), false);
-  f.click('close-friends'); assert.equal(safe(), true);
+  f.click('entry-back'); assert.equal(safe(), true);
   const nativeDialog = f.document.createElement('dialog'); nativeDialog.open = true; assert.equal(safe(), false);
   nativeDialog.open = false; assert.equal(safe(), true);
   f.element('camera-panel').hidden = false; assert.equal(safe(), false);
@@ -228,7 +229,7 @@ test('the production update callback defers for friend forms, native dialogs, ca
 test('the production update callback protects active matches and their result screen until returning to the lobby', async () => {
   const f = await fixture('serve', { demoMode: true });
   const safe = f.pwaOptions.isSafeToUpdate;
-  f.click('start-ai'); f.draw(); assert.equal(safe(), false);
+  f.startAI(); f.draw(); assert.equal(safe(), false);
   completeScoredMatch(f.liveState, 1); f.draw(200); f.draw(5000);
   assert.deepEqual(f.visibleDialogs(), ['result-dialog']); assert.equal(safe(), false);
   f.element('result-dialog').hidden = true;
@@ -242,13 +243,13 @@ test('the production update callback protects active matches and their result sc
 test('automatic update transfers selected controls and mute once without preserving the father-son choice', async () => {
   const values=new Map(), sessionStorage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
   const f=await fixture('serve',{demoMode:true,sessionStorage});
-  f.chooseSetting('roles','power');f.chooseSetting('difficulties','hard');f.chooseSetting('targets',11);f.chooseSetting('rulesets','standard21');f.chooseFinale('father-son');f.click('sound');
+  f.chooseSetting('roles','power');f.chooseSetting('coach-roles','swift');f.chooseSetting('difficulties','hard');f.chooseSetting('targets',11);f.chooseSetting('rulesets','standard21');f.chooseFinale('father-son');f.click('sound');
   assert.equal(values.size,0,'ordinary choices retain the original in-memory behaviour');
   f.pwaOptions.onUpdateLock({version:'2222222222222222'});
   assert.equal(values.size,1,'preparation must save a verified transfer before refreshing');
   const restored=await fixture('serve',{demoMode:true,buildId:'2222222222222222',sessionStorage});
-  assert.deepEqual({...restored.settings},{role:'power',difficulty:'hard',target:11,ruleset:'standard21',finale:'none'});
-  for(const [group,value] of [['roles','power'],['difficulties','hard'],['targets',21],['rulesets','standard21']])assert.equal(restored.choice(group,value).attributes['aria-pressed'],'true');
+  assert.deepEqual({...restored.settings},{role:'power',coachRole:'swift',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'hard',target:11,ruleset:'standard21',finale:'none'});
+  for(const [group,value] of [['roles','power'],['coach-roles','swift'],['difficulties','hard'],['targets',21],['rulesets','standard21']])assert.equal(restored.choice(group,value).attributes['aria-pressed'],'true');
   assert.equal(restored.element('targets').attributes['aria-disabled'],'true');assert.equal(restored.choice('targets',11).disabled,true);
   assert.match(restored.element('role-note').textContent,/速度 4.05.*体力 112/);assert.match(restored.element('rules-note').textContent,/三局两胜/);
   assert.equal(restored.sound,false);assert.equal(restored.audio.enabled,false);assert.equal(restored.element('sound').dataset.muted,'true');assert.equal(restored.element('sound').attributes['aria-label'],'开启声音');
@@ -256,13 +257,39 @@ test('automatic update transfers selected controls and mute once without preserv
   restored.chooseSetting('rulesets','quick');assert.equal(restored.choice('targets',11).disabled,false);assert.equal(restored.choice('targets',11).attributes['aria-pressed'],'true');
   assert.equal(values.size,0);
   const ordinary=await fixture('serve',{demoMode:true,buildId:'2222222222222222',sessionStorage});
-  assert.deepEqual({...ordinary.settings},{role:'balanced',difficulty:'easy',target:5,ruleset:'quick',finale:'none'});assert.equal(ordinary.sound,true);
+  assert.deepEqual({...ordinary.settings},{role:'balanced',coachRole:'balanced',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'easy',target:5,ruleset:'quick',finale:'none'});assert.equal(ordinary.sound,true);
+});
+
+test('independent player and coach choices create all nine AI lineups and retain simple training', async () => {
+  for(const player of ['balanced','swift','power'])for(const coach of ['balanced','swift','power']){
+    const f=await fixture('serve',{demoMode:true});
+    f.chooseSetting('roles',player);f.chooseSetting('coach-roles',coach);f.startAI();f.draw(0);
+    assert.deepEqual([...f.liveState.players.map(p=>p.role)],[player,coach]);
+    assert.equal(f.element('role-other').textContent,game.ROLES[coach].label+'型');
+    assert.equal(f.settings.role,player);assert.equal(f.settings.coachRole,coach);
+  }
+  const f=await fixture('serve',{demoMode:true});f.chooseSetting('coach-roles','power');f.startTraining();
+  assert.equal(f.liveState.players[1].role,'balanced');assert.equal(f.settings.coachRole,'power');
 });
 
 test('the application refuses update preparation when settings cannot be transferred', async () => {
   const f=await fixture('serve',{demoMode:true});
   assert.throws(()=>f.pwaOptions.onUpdateLock({version:'2222222222222222'}),/游戏设置/);
   assert.equal(f.document.body.dataset.screen,'menu');assert.equal(f.liveState,null);
+});
+
+test('home modes open preparation first, and AI and friend match settings remain independent',async()=>{
+  const f=await fixture('serve',{demoMode:true,peerMode:true});
+  f.click('start-ai');assert.equal(f.liveState,null);assert.equal(f.element('ai-setup').hidden,false);assert.equal(f.element('home-actions').hidden,true);
+  assert.equal(f.pwaOptions.isSafeToUpdate(),false,'editing preparation cannot be interrupted by an automatic reload');
+  f.chooseSetting('roles','power');f.chooseSetting('ai-formats','standard21:21');
+  f.click('entry-back');f.click('open-friends');
+  f.chooseSetting('friend-roles','swift');f.chooseSetting('friend-formats','quick:11');
+  assert.equal(f.settings.role,'power');assert.equal(f.settings.ruleset,'standard21');
+  assert.equal(f.settings.friendRole,'swift');assert.equal(f.settings.friendTarget,11);
+  f.element('player-name').value='A';await f.click('create-room');
+  const options=f.peerCalls[0].options;assert.equal(options.role,'swift');assert.equal(options.target,11);assert.equal(options.readyRequired,true);
+  assert.equal(f.element('ready-room').disabled,true,'single host cannot prepare');
 });
 
 test('static page explains LAN room codes without pretending to host a room and still runs AI', async () => {
@@ -275,7 +302,7 @@ test('static page explains LAN room codes without pretending to host a room and 
   f.click('open-friends');f.click('open-leaderboard');await f.click('create-room');await f.click('join-room');
   assert.deepEqual(f.visibleDialogs(),['lan-dialog']);
   assert.equal(f.sockets.length,0);
-  f.click('start-ai');f.draw();
+  f.startAI();f.draw();
   assert.equal(f.document.body.dataset.screen,'match');
   assert.equal(f.view.drawn.phase,'serve');
   assert.equal(f.element('result-leaderboard').hidden,true);
@@ -285,7 +312,7 @@ test('usage hooks count actual AI starts and restarts while menu autoplay remain
   const f = await fixture('serve', { peerMode: true });
   f.draw(1000);f.draw(1000);
   assert.deepEqual(f.usageEvents, [['view']]);
-  f.click('start-ai');f.draw();
+  f.startAI();f.draw();
   assert.deepEqual(f.usageEvents.filter(event=>event[0]==='start'), [['start','ai']]);
   game.finishMatch(f.liveState,0,'比赛结束','scored');f.draw();
   assert.ok(f.usageEvents.some(event=>event[0]==='result'&&event[1]==='scored'));
@@ -297,7 +324,7 @@ test('usage hooks count actual AI starts and restarts while menu autoplay remain
 
 test('three-step training starts a local quick match and exposes a guided label', async () => {
   const f = await fixture();
-  f.click('start-training'); f.draw();
+  f.startTraining(); f.draw();
   assert.equal(f.document.body.dataset.screen, 'match');
   assert.equal(f.liveState.ruleset, 'quick');
   assert.match(f.element('match-label').textContent, /训练 1\/3/);
@@ -331,7 +358,7 @@ function landScoringShuttle(state, winner) {
 for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
   test(`${target}-point quick UI keeps play open after a one-point lead and settles the capped point`, async () => {
     const f = await fixture('serve', { demoMode: true });
-    f.chooseSetting('targets', target); f.click('start-ai');
+    f.chooseSetting('targets', target); f.startAI();
     const state = f.liveState;
     state.score = [target - 2, target - 2]; f.draw(0);
     assert.equal(f.element('match-label').textContent, `${target} 分制 · 人机练习`);
@@ -359,7 +386,7 @@ for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
 
 test('standard HUD retains game counts and hides deuce hints during a completed game break', async () => {
   const f = await fixture('serve', { demoMode: true });
-  f.chooseSetting('rulesets', 'standard21'); f.click('start-ai');
+  f.chooseSetting('rulesets', 'standard21'); f.startAI();
   const state = f.liveState;
   state.score = [20, 20]; state.games = [1, 0]; state.gameNumber = 2; f.draw(0);
   assert.equal(f.element('match-label').textContent, '第2局 · 1:0 · 人机练习 · 加球中');
@@ -377,12 +404,12 @@ test('standard HUD retains game counts and hides deuce hints during a completed 
 
 test('deuce retains training guidance and the existing pause-timeout decisions', async () => {
   const training = await fixture('serve', { demoMode: true });
-  training.click('start-training'); training.liveState.score = [4, 4]; training.draw(0);
+  training.startTraining(); training.liveState.score = [4, 4]; training.draw(0);
   assert.equal(training.element('match-label').textContent, '训练 1/3 · 到位 · 加球中');
   assert.match(training.element('assist-status').textContent, /训练 1\/3|黄色圈/);
   for (const [score, winner] of [[[4, 4], null], [[5, 4], 0]]) {
     const f = await fixture('serve', { demoMode: true });
-    f.click('start-ai'); f.liveState.score = score; f.draw(0);
+    f.startAI(); f.liveState.score = score; f.draw(0);
     f.click('pause'); f.draw(0);
     assert.deepEqual(f.visibleDialogs(), ['pause-dialog']);
     assert.match(f.element('match-label').textContent, /加球中$/);
@@ -414,7 +441,7 @@ test('later touch and keyboard gestures recover interrupted audio while mute rem
 
 test('an AI rematch starts a fresh crowd epoch even when the screen mode remains match', async () => {
   const f = await fixture('serve', { demoMode: true });
-  f.click('start-ai'); f.draw(); assert.equal(f.view.crowdResets, 1);
+  f.startAI(); f.draw(); assert.equal(f.view.crowdResets, 1);
   f.click('rematch'); f.draw();
   assert.equal(f.view.mode, 'match'); assert.equal(f.view.drawn.pointId, 0);
   assert.equal(f.view.crowdResets, 2, 'each newly entered match resets consumed crowd point IDs');
@@ -490,7 +517,7 @@ test('cancelling a pending peer room cannot open a late room over a new AI match
   const creating=f.click('create-room');
   await new Promise(resolve=>setImmediate(resolve));
   assert.equal(f.peerCalls.length,1);
-  f.click('start-ai');f.draw();
+  f.startAI();f.draw();
   assert.equal(f.peerCalls[0].options.signal.aborted,true);
   f.resolvePeer();await creating;
   assert.equal(f.document.body.dataset.screen,'match');
@@ -563,7 +590,7 @@ test('sustained disconnect keeps a local exit available and permits offline AI w
   f.click('leave-game'); f.draw();
   assert.equal(f.document.body.dataset.screen, 'menu');
   assert.deepEqual(f.visibleDialogs(), []);
-  f.click('start-ai'); f.draw();
+  f.startAI(); f.draw();
   assert.equal(f.controls.enabled, true);
   assert.equal(f.element('connection').textContent, '本地练习');
   const offlineSocket = f.socket(); await f.retry().result;
@@ -785,7 +812,7 @@ test('interrupted, abandoned and unidentified online endings do not run the fina
 
 test('a scored AI match goes directly to results without IDs, bow or voice', async () => {
   const f = await fixture('serve', { demoMode: true });
-  f.click('start-ai'); f.draw();
+  f.startAI(); f.draw();
   completeScoredMatch(f.liveState, 1); f.draw(200); f.draw(5000);
   assert.equal(f.view.drawn.endReason, 'scored');
   assert.deepEqual(f.visibleDialogs(), ['result-dialog']);

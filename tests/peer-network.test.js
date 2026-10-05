@@ -59,11 +59,11 @@ test('create resolves only after registration and delivers the authoritative loc
   assert.equal(messages[0].slot,0);assert.ok(messages[0].sessionId);assert.equal(messages[0].token,null);
 });
 
-async function pair(t, bus=transportBus(), hostOptions={}) {
+async function pair(t, bus=transportBus(), hostOptions={}, guestOptions={}) {
   const hostMessages=[],guestMessages=[],hostCloses=[],guestCloses=[],statuses=[];
   const host=await api.openPeerRoom({...options,...hostOptions,type:'create',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>hostMessages.push(m),onClose:e=>hostCloses.push(e),onStatus:s=>statuses.push(s)});
   t.after(()=>host.close());
-  const guest=await api.openPeerRoom({...options,name:'客人',playerId:'public-guest',type:'join',code:hostMessages[0].code,peerFactory:bus.peerFactory,onMessage:m=>guestMessages.push(m),onClose:e=>guestCloses.push(e)});
+  const guest=await api.openPeerRoom({...options,name:'客人',playerId:'public-guest',...guestOptions,type:'join',code:hostMessages[0].code,peerFactory:bus.peerFactory,onMessage:m=>guestMessages.push(m),onClose:e=>guestCloses.push(e)});
   t.after(()=>guest.close());await flush();
   return {bus,host,guest,hostMessages,guestMessages,hostCloses,guestCloses,statuses};
 }
@@ -76,6 +76,20 @@ test('peer room creation propagates its selected finale to both players', async 
     assert.equal(guest.send({ type: 'settings', finale: 'father-son' }), false);
     assert.equal(bus.sent.some(item => item.message.type === 'settings'), false);
   }
+});
+
+test('the actual peer message codec carries explicit room consent and defers snapshots until both prepare',async t=>{
+  const {host,guest,hostMessages,guestMessages}=await pair(t,transportBus(),{readyRequired:true,finale:'father-son'});
+  assert.equal(guestMessages[0].readyRequired,true);assert.equal(guestMessages.some(m=>m.type==='state'),false);
+  const room=guestMessages[0],ack={type:'ready',target:room.target,ruleset:room.ruleset,finale:'father-son'};
+  assert.equal(host.send(ack),true);await flush();assert.equal(guestMessages.some(m=>m.type==='state'),false);
+  assert.equal(guest.send({...ack,finale:'none'}),true);await flush();assert.equal(hostMessages.some(m=>m.type==='state'),false);
+  assert.equal(guest.send(ack),true);await flush();
+  assert.equal(guestMessages.find(m=>m.type==='state').state.phase,'countdown');
+});
+
+test('a guest requiring explicit confirmation rejects a room that would start on join',async t=>{
+  await assert.rejects(()=>pair(t,transportBus(),{readyRequired:false},{readyRequired:true}),/房间/);
 });
 
 test('peer guest rejects malformed authoritative finale rules', async t => {

@@ -1,5 +1,6 @@
 import { PeerMatch } from './peer-match.js';
 import { ROLES, RULES_VERSION } from '../shared/game.js';
+import { STAMINA_TUNING } from '../shared/stamina.js';
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const PREFIX = 'rally-badminton-v2-';
@@ -64,6 +65,8 @@ function withinLimit(value, maximum) {
 
 function commandOf(message) {
   if (!withinLimit(message, MAX_INPUT) || typeof message.type !== 'string') return null;
+  if (message.type === 'ready') return [5,11,21].includes(message.target) && ['quick','standard21'].includes(message.ruleset) &&
+    ['none','father-son'].includes(message.finale) ? {type:'ready',target:message.target,ruleset:message.ruleset,finale:message.finale} : null;
   if (COMMANDS.has(message.type)) return { type: message.type };
   if (message.type === 'ping') return finite(message.at) ? { type: 'ping', at: message.at } : null;
   if (message.type !== 'input') return null;
@@ -86,6 +89,7 @@ function validRoom(message, code) {
     typeof message.sessionId === 'string' && message.sessionId.length > 0 && message.sessionId.length <= 128 &&
     ['quick', 'standard21'].includes(message.ruleset) && [5, 11, 21].includes(message.target) &&
     (message.rules === undefined || record(message.rules) && ['none', 'father-son'].includes(message.rules.finale)) &&
+    (message.readyRequired === undefined || message.readyRequired === true && Array.isArray(message.ready) && message.ready.length <= 2 && message.ready.every(slot)) &&
     Array.isArray(message.players) && message.players.length === 2 && message.players.every(player => player === null ||
       record(player) && typeof player.name === 'string' && player.name.length <= 64 &&
       Object.hasOwn(ROLES, player.role) && typeof player.connected === 'boolean' &&
@@ -108,6 +112,9 @@ function validState(message, sessionId) {
       record(state.lastShotInfo.quality) && typeof state.lastShotInfo.quality.reason === 'string') &&
     Array.isArray(state.players) && state.players.length === 2 && state.players.every(player => record(player) &&
       ['x', 'z', 'vx', 'vz', 'stamina', 'staminaRate', 'recoveryWait', 'swing', 'cooldown', 'actionId'].every(key => finite(player[key])) && Object.hasOwn(ROLES, player.role) &&
+      (player.shotRecovery === null || record(player.shotRecovery) && Object.hasOwn(STAMINA_TUNING.shotRecovery, player.shotRecovery.type) &&
+        finite(player.shotRecovery.expiresAt) && finite(player.shotRecovery.remaining) && player.shotRecovery.remaining >= 0 &&
+        player.shotRecovery.remaining <= STAMINA_TUNING.shotRecovery[player.shotRecovery.type].budget + 1e-6) &&
       (player.action === null || record(player.action) && ['startedAt', 'endsAt'].every(key => finite(player.action[key])))) &&
     record(state.shuttle) && ['x', 'y', 'z', 'vx', 'vy', 'vz'].every(key => finite(state.shuttle[key])) &&
     typeof state.shuttle.active === 'boolean' && nullableSlot(state.shuttle.lastHit) &&
@@ -144,7 +151,7 @@ async function defaultPeerFactory(signal) {
 }
 
 /** Public cloud performs pairing only; slot 0 runs the authoritative match. */
-export async function openPeerRoom({ type, code, name, role, playerId, target = 5, ruleset = 'quick', finale = 'none',
+export async function openPeerRoom({ type, code, name, role, playerId, target = 5, ruleset = 'quick', finale = 'none', readyRequired = false,
   onMessage = () => {}, onClose = () => {}, onStatus = () => {}, signal, peerFactory } = {}) {
   if (type !== 'create' && type !== 'join') throw new Error('请选择创建房间或加入房间');
   const isHost = type === 'create';
@@ -305,7 +312,7 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
             accepted = true; return;
           }
           if (message.type === 'room') {
-            if (!validRoom(message, roomCode) || sessionId && message.sessionId !== sessionId ||
+            if (!validRoom(message, roomCode) || readyRequired && message.readyRequired !== true || sessionId && message.sessionId !== sessionId ||
               !settled && !message.players.every(player => player?.connected)) { fail(new Error('收到无效房间信息，请退出后重新约战')); return; }
             sessionId = message.sessionId; cancel(handshakeTimer);
             deliver(message); complete(); status('手机直连已建立'); return;
@@ -368,7 +375,7 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
         if (registered || ended) return; registered = true;
         if (isHost) {
           try {
-            match = new PeerMatch({ code: roomCode, host: profile, target, ruleset, finale,
+            match = new PeerMatch({ code: roomCode, host: profile, target, ruleset, finale, readyRequired,
               send: (slot, message) => slot === 0 ? deliver(message) : sendData(connection, message) });
             match.announce();
             if (ended) return;

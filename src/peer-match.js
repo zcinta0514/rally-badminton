@@ -1,11 +1,12 @@
 import { createMatch, stepMatch, pauseMatch, resumeMatch, finishMatch, ROLES } from '../shared/game.js';
+import { confirmsRoomRules, startRoomCountdown } from '../shared/room-readiness.js';
 
 const STEP_MS = 1000 / 60;
 const MAX_CATCHUP_MS = 500;
 const INPUT_TIMEOUT_MS = 250;
 const SHOT_INTERVAL_MS = 100;
 const SHOTS = new Set(['clear', 'drop', 'smash']);
-const MESSAGES = new Set(['input', 'ping', 'pause', 'suspend', 'resume', 'rematch', 'leave']);
+const MESSAGES = new Set(['ready', 'input', 'ping', 'pause', 'suspend', 'resume', 'rematch', 'leave']);
 const clamp = (value, min, max) => Number.isFinite(value) ? Math.max(min, Math.min(max, value)) : 0;
 const validSlot = slot => slot === 0 || slot === 1;
 const scoreWinner = state => state.score[0] === state.score[1] ? null : state.score[0] > state.score[1] ? 0 : 1;
@@ -31,13 +32,14 @@ function newSessionId() {
 /** A browser-hosted authority; the transport owns its clock timer and peer connections. */
 export class PeerMatch {
   constructor({ code, host, target = 5, ruleset = 'quick', finale = 'none', send, now = () => performance.now(),
-    seed = () => Math.floor(Math.random() * 0xffffffff) + 1, sessionId } = {}) {
+    seed = () => Math.floor(Math.random() * 0xffffffff) + 1, sessionId, readyRequired = false } = {}) {
     this.code = typeof code === 'string' ? code.trim().toUpperCase() : '';
     this.sessionId = typeof sessionId === 'string' && sessionId.length > 0 && sessionId.length <= 128 ? sessionId : newSessionId();
     this.ruleset = ruleset === 'standard21' ? 'standard21' : 'quick';
     this.rules = Object.freeze({ finale: finale === 'father-son' ? 'father-son' : 'none' });
     this.target = this.ruleset === 'standard21' ? 21 : [5, 11, 21].includes(target) ? target : 5;
     this.players = [profileOf(host), null];
+    this.readyRequired = readyRequired === true; this.startReady = new Set();
     this.state = null;
     this.abandoned = false;
     this.send = send;
@@ -67,6 +69,7 @@ export class PeerMatch {
     for (let slot = 0; slot < 2; slot++) this.emit(slot, {
       type: 'room', code: this.code, slot, token: null, target: this.target,
       ruleset: this.ruleset, rules: this.rules, players: this.players, sessionId: this.sessionId,
+      ...(this.readyRequired ? { readyRequired: true, ready: [...this.startReady].sort() } : {}),
     });
   }
 
@@ -75,7 +78,7 @@ export class PeerMatch {
     if (!this.players[0]?.connected) throw new Error('房主已离开，房间已结束');
     if (this.players[1] || this.state) throw new Error('房间已满或比赛已开始');
     this.players[1] = profileOf(guest);
-    this.startMatch();
+    if (!this.readyRequired) this.startMatch();
     this.announce();
     this.broadcast();
     return true;
@@ -119,6 +122,14 @@ export class PeerMatch {
       return;
     }
     if (message.type === 'leave') { this.depart(slot, true); return; }
+    if (message.type === 'ready') {
+      if (this.state || !this.readyRequired) return;
+      if (!this.players.every(player => player?.connected)) { this.emit(slot, {type:'error',message:'等待球友加入后再准备'}); return; }
+      if (!confirmsRoomRules(message, this)) { this.emit(slot, {type:'error',message:'请确认本房间的比分和对局类型'}); return; }
+      this.startReady.add(slot); this.announce();
+      if (this.startReady.size === 2) { this.startMatch(); startRoomCountdown(this.state); this.broadcast(); }
+      return;
+    }
     const state = this.state;
     if (!state) return;
     if (message.type === 'input') {
@@ -163,13 +174,14 @@ export class PeerMatch {
       }
       this.rematch.add(slot); this.readiness('rematch', this.rematch);
       if (this.rematch.size === 2) {
-        this.matchId++; this.startMatch();
+        this.matchId++; this.startMatch(); if (this.readyRequired) startRoomCountdown(this.state);
         this.readiness('resumeReady', this.resumeReady); this.broadcast();
       }
     }
   }
 
   freeze(slot) {
+    if (!this.state) { this.startReady.clear(); this.announce(); }
     this.resumeReady.clear(); this.inputs = [{}, {}];
     this.readiness('resumeReady', this.resumeReady);
     const state = this.state;
@@ -187,6 +199,7 @@ export class PeerMatch {
     if (leaving) this.players[slot] = null;
     else this.players[slot].connected = false;
     this.inputs = [{}, {}]; this.resumeReady.clear(); this.rematch.clear();
+    this.startReady.clear();
     if (this.state && this.state.phase !== 'over') {
       this.abandoned = true;
       finishMatch(this.state, null, leaving ? '球友已离开，本局结束' : '球友连接已断开，本局结束，请重新约战', leaving ? 'quit' : 'disconnect');

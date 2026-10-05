@@ -1,9 +1,10 @@
 import { ROLES, getScoringRules, getDifficultyProfile, staminaEffects, movementStaminaRate, shotStaminaCost } from '../shared/game.js';
 import { normalizeArenaPreferences, saveArenaPreferences, readArenaPreferences } from './arena-preferences.js';
+import { STAMINA_TUNING } from '../shared/stamina.js';
 
 export function describeRole(role) {
   const r = ROLES[role] || ROLES.balanced;
-  const style = { balanced: '控球耗费均衡，疲劳反应适中', swift: '跑动省力、恢复快，连续杀球更费体力', power: '杀球省力，跑动更费体力、恢复较慢' }[role] || '控球耗费均衡，疲劳反应适中';
+  const style = { balanced: '控球耗费均衡，疲劳反应适中', swift: '跑动省力、体力回满快，连续杀球更费体力', power: '杀球省力、体力池大，跑动较费力、回满较慢' }[role] || '控球耗费均衡，疲劳反应适中';
   return style + ' · 速度 ' + r.speed + 'm/s（耗尽 ' + (r.speed * r.fatigue.speedFloor).toFixed(2) + 'm/s） · 力量 ' + Math.round(r.power * 100) + '% · 体力 ' + r.maxStamina +
     ' · 慢移恢复最高 ' + r.recovery + '/s · 全速耗费 ' + movementStaminaRate(r, r.speed).toFixed(1) + '/s' +
     ' · 高远/吊球/杀球耗费 ' + ['clear','drop','smash'].map(shot => shotStaminaCost(r,shot).toFixed(1)).join('/') + ' · 满力耗费增加35%';
@@ -17,7 +18,10 @@ export function describeMatch(state, side = 0, mode = 'ai') {
     (state.ruleset === 'standard21' ? '三局两胜 · 每局21分' : '单局快赛 · ' + rule.target + '分') + ' · 净胜' + rule.winBy + '分 · ' + rule.cap + '分封顶',
     mode === 'online' ? '好友对打 · ' + assistance : 'AI 反应 ' + Math.round(ai.reaction * 1000) + 'ms · 节奏 ' + Math.round(ai.pace * 100) + '% · ' + assistance,
     '你的当前最高移动速度 ' + (self.speed * staminaEffects(state.players[side], self).speedScale).toFixed(2) + 'm/s；疲劳时跑动、强攻与压线更容易失误。',
-    '体力只在回合中慢移调整时恢复；发球、分间及暂停均不恢复。',
+    '成功回球后慢移或站稳调整：高远球恢复加快' + Math.round(STAMINA_TUNING.shotRecovery.clear.boost * 100) + '%（额外最多' + STAMINA_TUNING.shotRecovery.clear.budget + '点），吊球加快' + Math.round(STAMINA_TUNING.shotRecovery.drop.boost * 100) + '%（额外最多' + STAMINA_TUNING.shotRecovery.drop.budget + '点）；杀球和发球无加成，跑动／准备击球时不恢复。',
+    '回合中慢移调整可恢复体力；每分结束进入下一次发球时，你恢复最多 ' +
+      (self.recovery * STAMINA_TUNING.pointRecoverySeconds).toFixed(1) + ' 点，对手恢复最多 ' +
+      (other.recovery * STAMINA_TUNING.pointRecoverySeconds).toFixed(1) + ' 点；等待发球、分间及暂停不会额外恢复。',
   ].join(String.fromCharCode(10));
 }
 

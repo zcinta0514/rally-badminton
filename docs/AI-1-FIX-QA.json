@@ -1,0 +1,770 @@
+{
+  "fixture": "stationary reachable descending shuttle; 200 seeds per condition",
+  "rows": [
+    {
+      "difficulty": "easy",
+      "role": "balanced",
+      "ratio": 1,
+      "plans": {
+        "clear": 155,
+        "drop": 35,
+        "smash": 10
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 1
+    },
+    {
+      "difficulty": "easy",
+      "role": "balanced",
+      "ratio": 0.2,
+      "plans": {
+        "clear": 155,
+        "drop": 35,
+        "smash": 10
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.7551840721262209
+    },
+    {
+      "difficulty": "easy",
+      "role": "balanced",
+      "ratio": 0,
+      "plans": {
+        "clear": 155,
+        "drop": 35,
+        "smash": 10
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.65
+    },
+    {
+      "difficulty": "easy",
+      "role": "swift",
+      "ratio": 1,
+      "plans": {
+        "clear": 155,
+        "drop": 35,
+        "smash": 10
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 1
+    },
+    {
+      "difficulty": "easy",
+      "role": "swift",
+      "ratio": 0.2,
+      "plans": {
+        "clear": 155,
+        "drop": 35,
+        "smash": 10
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.8367626886145405
+    },
+    {
+      "difficulty": "easy",
+      "role": "swift",
+      "ratio": 0,
+      "plans": {
+        "clear": 155,
+        "drop": 35,
+        "smash": 10
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.72
+    },
+    {
+      "difficulty": "easy",
+      "role": "power",
+      "ratio": 1,
+      "plans": {
+        "clear": 155,
+        "drop": 35,
+        "smash": 10
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 1
+    },
+    {
+      "difficulty": "easy",
+      "role": "power",
+      "ratio": 0.2,
+      "plans": {
+        "clear": 155,
+        "drop": 35,
+        "smash": 10
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.7037037037037037
+    },
+    {
+      "difficulty": "easy",
+      "role": "power",
+      "ratio": 0,
+      "plans": {
+        "clear": 155,
+        "drop": 35,
+        "smash": 10
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.6
+    },
+    {
+      "difficulty": "medium",
+      "role": "balanced",
+      "ratio": 1,
+      "plans": {
+        "clear": 82,
+        "drop": 65,
+        "smash": 53
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 1
+    },
+    {
+      "difficulty": "medium",
+      "role": "balanced",
+      "ratio": 0.2,
+      "plans": {
+        "clear": 82,
+        "drop": 65,
+        "smash": 53
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.7551840721262209
+    },
+    {
+      "difficulty": "medium",
+      "role": "balanced",
+      "ratio": 0,
+      "plans": {
+        "clear": 85,
+        "drop": 95,
+        "smash": 20
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.65
+    },
+    {
+      "difficulty": "medium",
+      "role": "swift",
+      "ratio": 1,
+      "plans": {
+        "clear": 82,
+        "drop": 65,
+        "smash": 53
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 1
+    },
+    {
+      "difficulty": "medium",
+      "role": "swift",
+      "ratio": 0.2,
+      "plans": {
+        "clear": 84,
+        "drop": 71,
+        "smash": 45
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.8367626886145405
+    },
+    {
+      "difficulty": "medium",
+      "role": "swift",
+      "ratio": 0,
+      "plans": {
+        "clear": 85,
+        "drop": 95,
+        "smash": 20
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.72
+    },
+    {
+      "difficulty": "medium",
+      "role": "power",
+      "ratio": 1,
+      "plans": {
+        "clear": 82,
+        "drop": 65,
+        "smash": 53
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 1
+    },
+    {
+      "difficulty": "medium",
+      "role": "power",
+      "ratio": 0.2,
+      "plans": {
+        "clear": 82,
+        "drop": 65,
+        "smash": 53
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.7037037037037037
+    },
+    {
+      "difficulty": "medium",
+      "role": "power",
+      "ratio": 0,
+      "plans": {
+        "clear": 85,
+        "drop": 95,
+        "smash": 20
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.6
+    },
+    {
+      "difficulty": "hard",
+      "role": "balanced",
+      "ratio": 1,
+      "plans": {
+        "clear": 44,
+        "drop": 39,
+        "smash": 117
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 1
+    },
+    {
+      "difficulty": "hard",
+      "role": "balanced",
+      "ratio": 0.2,
+      "plans": {
+        "clear": 44,
+        "drop": 39,
+        "smash": 117
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.7551840721262209
+    },
+    {
+      "difficulty": "hard",
+      "role": "balanced",
+      "ratio": 0,
+      "plans": {
+        "clear": 65,
+        "drop": 87,
+        "smash": 48
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.65
+    },
+    {
+      "difficulty": "hard",
+      "role": "swift",
+      "ratio": 1,
+      "plans": {
+        "clear": 44,
+        "drop": 39,
+        "smash": 117
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 1
+    },
+    {
+      "difficulty": "hard",
+      "role": "swift",
+      "ratio": 0.2,
+      "plans": {
+        "clear": 50,
+        "drop": 47,
+        "smash": 103
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.8367626886145405
+    },
+    {
+      "difficulty": "hard",
+      "role": "swift",
+      "ratio": 0,
+      "plans": {
+        "clear": 65,
+        "drop": 87,
+        "smash": 48
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.72
+    },
+    {
+      "difficulty": "hard",
+      "role": "power",
+      "ratio": 1,
+      "plans": {
+        "clear": 44,
+        "drop": 39,
+        "smash": 117
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 1
+    },
+    {
+      "difficulty": "hard",
+      "role": "power",
+      "ratio": 0.2,
+      "plans": {
+        "clear": 44,
+        "drop": 39,
+        "smash": 117
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.7037037037037037
+    },
+    {
+      "difficulty": "hard",
+      "role": "power",
+      "ratio": 0,
+      "plans": {
+        "clear": 65,
+        "drop": 87,
+        "smash": 48
+      },
+      "requests": 200,
+      "contacts": 200,
+      "speedScale": 0.6
+    }
+  ],
+  "matchFixture": "20 AI-v-AI 21-point matches per lineup/role/difficulty; practice uses UI roles [player role, balanced] and counts side 1 only; player-seconds; low <10%; not a human-play simulation",
+  "matches": [
+    {
+      "lineup": "same-role",
+      "difficulty": "easy",
+      "role": "balanced",
+      "completed": 20,
+      "rallySeconds": 10491.899999931471,
+      "lowSeconds": 0,
+      "recoveringSeconds": 2648.7666666727823,
+      "above10": {
+        "clear": 2018,
+        "drop": 530,
+        "smash": 166
+      },
+      "low": {
+        "clear": 0,
+        "drop": 0,
+        "smash": 0
+      }
+    },
+    {
+      "lineup": "same-role",
+      "difficulty": "easy",
+      "role": "swift",
+      "completed": 20,
+      "rallySeconds": 11965.866666576689,
+      "lowSeconds": 0,
+      "recoveringSeconds": 2460.966666670391,
+      "above10": {
+        "clear": 2431,
+        "drop": 611,
+        "smash": 202
+      },
+      "low": {
+        "clear": 0,
+        "drop": 0,
+        "smash": 0
+      }
+    },
+    {
+      "lineup": "same-role",
+      "difficulty": "easy",
+      "role": "power",
+      "completed": 20,
+      "rallySeconds": 10177.19999993605,
+      "lowSeconds": 42.18333333333222,
+      "recoveringSeconds": 3128.633333345559,
+      "above10": {
+        "clear": 2054,
+        "drop": 549,
+        "smash": 178
+      },
+      "low": {
+        "clear": 4,
+        "drop": 2,
+        "smash": 1
+      }
+    },
+    {
+      "lineup": "same-role",
+      "difficulty": "medium",
+      "role": "balanced",
+      "completed": 20,
+      "rallySeconds": 12943.1999998958,
+      "lowSeconds": 31.849999999999472,
+      "recoveringSeconds": 3880.8833333551374,
+      "above10": {
+        "clear": 1984,
+        "drop": 1680,
+        "smash": 1370
+      },
+      "low": {
+        "clear": 1,
+        "drop": 5,
+        "smash": 2
+      }
+    },
+    {
+      "lineup": "same-role",
+      "difficulty": "medium",
+      "role": "swift",
+      "completed": 19,
+      "rallySeconds": 14453.733333207152,
+      "lowSeconds": 7.383333333333312,
+      "recoveringSeconds": 3595.9000000181754,
+      "above10": {
+        "clear": 2263,
+        "drop": 1939,
+        "smash": 1610
+      },
+      "low": {
+        "clear": 0,
+        "drop": 1,
+        "smash": 1
+      }
+    },
+    {
+      "lineup": "same-role",
+      "difficulty": "medium",
+      "role": "power",
+      "completed": 20,
+      "rallySeconds": 6948.999999983026,
+      "lowSeconds": 1253.2666666658556,
+      "recoveringSeconds": 1838.6166666653232,
+      "above10": {
+        "clear": 818,
+        "drop": 662,
+        "smash": 584
+      },
+      "low": {
+        "clear": 161,
+        "drop": 189,
+        "smash": 66
+      }
+    },
+    {
+      "lineup": "same-role",
+      "difficulty": "hard",
+      "role": "balanced",
+      "completed": 20,
+      "rallySeconds": 11731.23333324677,
+      "lowSeconds": 2210.266666667199,
+      "recoveringSeconds": 2576.7500000051987,
+      "above10": {
+        "clear": 1547,
+        "drop": 1416,
+        "smash": 847
+      },
+      "low": {
+        "clear": 323,
+        "drop": 342,
+        "smash": 51
+      }
+    },
+    {
+      "lineup": "same-role",
+      "difficulty": "hard",
+      "role": "swift",
+      "completed": 19,
+      "rallySeconds": 17459.799999830077,
+      "lowSeconds": 3074.8833333448747,
+      "recoveringSeconds": 4245.500000022367,
+      "above10": {
+        "clear": 2797,
+        "drop": 2284,
+        "smash": 811
+      },
+      "low": {
+        "clear": 478,
+        "drop": 498,
+        "smash": 42
+      }
+    },
+    {
+      "lineup": "same-role",
+      "difficulty": "hard",
+      "role": "power",
+      "completed": 20,
+      "rallySeconds": 7527.9999999746005,
+      "lowSeconds": 2554.0666666715765,
+      "recoveringSeconds": 1538.8333333322626,
+      "above10": {
+        "clear": 743,
+        "drop": 688,
+        "smash": 612
+      },
+      "low": {
+        "clear": 282,
+        "drop": 306,
+        "smash": 145
+      }
+    },
+    {
+      "lineup": "practice",
+      "difficulty": "easy",
+      "role": "balanced",
+      "completed": 20,
+      "rallySeconds": 5245.950000007809,
+      "lowSeconds": 0,
+      "recoveringSeconds": 1337.9166666657786,
+      "above10": {
+        "clear": 992,
+        "drop": 264,
+        "smash": 97
+      },
+      "low": {
+        "clear": 0,
+        "drop": 0,
+        "smash": 0
+      }
+    },
+    {
+      "lineup": "practice",
+      "difficulty": "easy",
+      "role": "swift",
+      "completed": 20,
+      "rallySeconds": 5349.2500000063055,
+      "lowSeconds": 0,
+      "recoveringSeconds": 1366.0999999990863,
+      "above10": {
+        "clear": 1043,
+        "drop": 260,
+        "smash": 87
+      },
+      "low": {
+        "clear": 0,
+        "drop": 0,
+        "smash": 0
+      }
+    },
+    {
+      "lineup": "practice",
+      "difficulty": "easy",
+      "role": "power",
+      "completed": 20,
+      "rallySeconds": 5182.116666675404,
+      "lowSeconds": 0,
+      "recoveringSeconds": 1305.7833333324745,
+      "above10": {
+        "clear": 1022,
+        "drop": 274,
+        "smash": 92
+      },
+      "low": {
+        "clear": 0,
+        "drop": 0,
+        "smash": 0
+      }
+    },
+    {
+      "lineup": "practice",
+      "difficulty": "medium",
+      "role": "balanced",
+      "completed": 20,
+      "rallySeconds": 6471.599999989973,
+      "lowSeconds": 13.083333333333563,
+      "recoveringSeconds": 1943.5833333318944,
+      "above10": {
+        "clear": 980,
+        "drop": 839,
+        "smash": 685
+      },
+      "low": {
+        "clear": 1,
+        "drop": 3,
+        "smash": 0
+      }
+    },
+    {
+      "lineup": "practice",
+      "difficulty": "medium",
+      "role": "swift",
+      "completed": 20,
+      "rallySeconds": 6560.649999988677,
+      "lowSeconds": 37.2833333333325,
+      "recoveringSeconds": 1974.2999999985332,
+      "above10": {
+        "clear": 997,
+        "drop": 864,
+        "smash": 711
+      },
+      "low": {
+        "clear": 8,
+        "drop": 6,
+        "smash": 2
+      }
+    },
+    {
+      "lineup": "practice",
+      "difficulty": "medium",
+      "role": "power",
+      "completed": 20,
+      "rallySeconds": 3828.9666666878097,
+      "lowSeconds": 0,
+      "recoveringSeconds": 976.0999999994409,
+      "above10": {
+        "clear": 498,
+        "drop": 425,
+        "smash": 353
+      },
+      "low": {
+        "clear": 0,
+        "drop": 0,
+        "smash": 0
+      }
+    },
+    {
+      "lineup": "practice",
+      "difficulty": "hard",
+      "role": "balanced",
+      "completed": 20,
+      "rallySeconds": 5865.616666665458,
+      "lowSeconds": 1320.4333333324612,
+      "recoveringSeconds": 1253.0166666658558,
+      "above10": {
+        "clear": 736,
+        "drop": 670,
+        "smash": 441
+      },
+      "low": {
+        "clear": 201,
+        "drop": 210,
+        "smash": 25
+      }
+    },
+    {
+      "lineup": "practice",
+      "difficulty": "hard",
+      "role": "swift",
+      "completed": 20,
+      "rallySeconds": 5646.816666668642,
+      "lowSeconds": 3011.0333333440617,
+      "recoveringSeconds": 1016.366666666071,
+      "above10": {
+        "clear": 478,
+        "drop": 417,
+        "smash": 341
+      },
+      "low": {
+        "clear": 533,
+        "drop": 566,
+        "smash": 37
+      }
+    },
+    {
+      "lineup": "practice",
+      "difficulty": "hard",
+      "role": "power",
+      "completed": 20,
+      "rallySeconds": 4322.933333354574,
+      "lowSeconds": 105.3999999999953,
+      "recoveringSeconds": 1037.366666666052,
+      "above10": {
+        "clear": 630,
+        "drop": 504,
+        "smash": 356
+      },
+      "low": {
+        "clear": 9,
+        "drop": 8,
+        "smash": 4
+      }
+    }
+  ],
+  "extendedMatches": [
+    {
+      "difficulty": "medium",
+      "seed": 11,
+      "scoreAt600": [
+        25,
+        25
+      ],
+      "phase": "over",
+      "score": [
+        29,
+        30
+      ],
+      "seconds": 733.45,
+      "hitId": 563
+    },
+    {
+      "difficulty": "hard",
+      "seed": 6,
+      "scoreAt600": [
+        17,
+        9
+      ],
+      "phase": "over",
+      "score": [
+        21,
+        9
+      ],
+      "seconds": 665.6,
+      "hitId": 510
+    }
+  ],
+  "browser": {
+    "build": "6e3de5a55df030c3",
+    "assets": 84,
+    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/ai-1-low-stamina",
+    "testOnlyStateHook": true,
+    "realPhoneAccepted": false,
+    "results": [
+      {
+        "engine": "chromium",
+        "actual": {
+          "rules": 4,
+          "hitId": 1,
+          "roles": [
+            "balanced",
+            "balanced"
+          ]
+        },
+        "summary": "你：均衡型 · 体力上限 100；对手：均衡型 · 100\n单局快赛 · 5分 · 净胜2分 · 10分封顶\nAI 反应 300ms · 节奏 81% · 入门接球辅助开启\n你的当前最高移动速度 4.60m/s；疲劳时跑动、强攻与压线更容易失误。\n回合中慢移调整可恢复体力；每分结束进入下一次发球时，你恢复最多 10.8 点，对手恢复最多 10.8 点；等待发球、分间及暂停不会额外恢复。",
+        "errors": [],
+        "serviceWorkers": "blocked in fresh test context"
+      },
+      {
+        "engine": "webkit",
+        "actual": {
+          "rules": 4,
+          "hitId": 1,
+          "roles": [
+            "balanced",
+            "balanced"
+          ]
+        },
+        "summary": "你：均衡型 · 体力上限 100；对手：均衡型 · 100\n单局快赛 · 5分 · 净胜2分 · 10分封顶\nAI 反应 300ms · 节奏 81% · 入门接球辅助开启\n你的当前最高移动速度 4.60m/s；疲劳时跑动、强攻与压线更容易失误。\n回合中慢移调整可恢复体力；每分结束进入下一次发球时，你恢复最多 10.8 点，对手恢复最多 10.8 点；等待发球、分间及暂停不会额外恢复。",
+        "errors": [],
+        "serviceWorkers": "blocked in fresh test context"
+      }
+    ]
+  }
+}
