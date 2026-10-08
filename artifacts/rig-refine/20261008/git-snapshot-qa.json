@@ -1,0 +1,42 @@
+{
+  "commit": "5308ae9636dfb7640b566eb2ff5b38f135455d90",
+  "tests": {
+    "passed": 691,
+    "failed": 0,
+    "scope": "Isolated clean checkout of committed task branch, excluding unrelated local unstaged game experiments."
+  },
+  "build": {
+    "passed": true,
+    "fingerprint": "bc91ba3fa312a101",
+    "matchesReleasedMainBuild": true
+  },
+  "dependencyHashesMatchWorkspace": true,
+  "editableAssets": [
+    {
+      "path": "artifacts/rig-refine/20261008/final/rebuild.blend",
+      "sha256": "c77cf94202253cb37727a72a002a54e568f9dd597b5fc3d4cbdec39bd344a100",
+      "gitBlobMatchesDisk": true
+    },
+    {
+      "path": "artifacts/rig-refine/20261008/authoring-03/rebuild.blend",
+      "sha256": "d69bf75b65691b3f6f78704989e30abc8dc042c14a4270fc8d1cc86bb5a4557f",
+      "gitBlobMatchesDisk": true
+    },
+    {
+      "path": "artifacts/rig-rebuild/20261007/integration/final/rebuild.blend",
+      "sha256": "f3081bc384c2aff262361102757d89b8de4ee546abd124c5be908aedb94336a4",
+      "gitBlobMatchesDisk": true
+    },
+    {
+      "path": "artifacts/rig-rebuild/20261007/integration/author-body-13/rebuild.blend",
+      "sha256": "242d667f71b5da0c431ccab1fd80b1f04b852a864197cd2a788e9ffa90285201",
+      "gitBlobMatchesDisk": true
+    },
+    {
+      "path": "artifacts/racket-rebuild/20261007/racket.blend",
+      "sha256": "8ab297c4ce4475a94dadd48b224175cf75d412e309c44f0c326a5f3fc6412d9f",
+      "gitBlobMatchesDisk": true
+    }
+  ],
+  "productionDeployed": false
+}

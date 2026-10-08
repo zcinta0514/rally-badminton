@@ -90,5 +90,6 @@
   "artifacts/rig-refine/20261008/torso/hips-04/residual-manifest.json",
   "artifacts/rig-refine/20261008/torso/hips-04/envelope.json",
   "artifacts/rig-refine/20261008/sync-files.json",
-  "artifacts/rig-refine/20261008/reference/source.json"
+  "artifacts/rig-refine/20261008/reference/source.json",
+  "artifacts/rig-refine/20261008/git-snapshot-qa.json"
 ]
