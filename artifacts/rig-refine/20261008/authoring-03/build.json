@@ -1,0 +1,5912 @@
+{
+  "source": "artifacts/rig-refine/20261008/lunge/candidate-06/rebuild.blend",
+  "sourceSha256": "0791c815c1f195e9c8386da61e3cdcf8fd0fd8a8b82cae851f83412d94a71591",
+  "nodes": [
+    [
+      480,
+      6,
+      8,
+      5
+    ],
+    [
+      482,
+      7,
+      1,
+      0
+    ],
+    [
+      484,
+      9,
+      -13,
+      -8
+    ],
+    [
+      487,
+      11,
+      -30,
+      -16
+    ],
+    [
+      490,
+      10,
+      -28,
+      -16
+    ],
+    [
+      493,
+      8,
+      -15,
+      -11
+    ],
+    [
+      496,
+      5,
+      -6,
+      -6
+    ],
+    [
+      500,
+      2,
+      0,
+      -1
+    ],
+    [
+      504,
+      0,
+      0,
+      0
+    ],
+    [
+      510,
+      2,
+      -2,
+      -1
+    ],
+    [
+      514,
+      4,
+      -3,
+      -1
+    ],
+    [
+      518,
+      3,
+      0,
+      0
+    ],
+    [
+      521,
+      2,
+      3,
+      1
+    ],
+    [
+      524,
+      1,
+      4,
+      1
+    ],
+    [
+      527,
+      2,
+      1,
+      -1
+    ],
+    [
+      530,
+      2,
+      -2,
+      -1
+    ],
+    [
+      533,
+      1,
+      0,
+      0
+    ],
+    [
+      536,
+      0,
+      0,
+      0
+    ],
+    [
+      540,
+      0,
+      0,
+      0
+    ]
+  ],
+  "changedBones": [
+    "CTRL_spine_01",
+    "CTRL_spine_02",
+    "CTRL_spine_03",
+    "CTRL_neck_01",
+    "CTRL_Head",
+    "CTRL_upperarm_r",
+    "CTRL_upperarm_l"
+  ],
+  "changedChannels": "rotation_quaternion only",
+  "protectedMaxMatrixBasisDifference": 0,
+  "inputMaxControlBoneLengthErrorM": 1.3764963855023016e-05,
+  "maxControlBoneLengthErrorM": 1.3764963855023016e-05,
+  "maxChangedBoneWorldAngularStepDegAt120Hz": 2.072175233797026,
+  "maxHeadWorldRotationTargetErrorDeg": 0,
+  "headTarget": "Only 35 percent of added chest yaw; original world pitch/roll preserved. No head side bank added.",
+  "maximumRightShoulderDisplacementM": 0.11734260511736652,
+  "rows": [
+    {
+      "frame": 0,
+      "sourceFrame": 480.0,
+      "additionalPitchYawBankDeg": [
+        6.000000000000001,
+        8.0,
+        5.0
+      ],
+      "headAdditionalYawDeg": 2.8,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.06890248791483543
+    },
+    {
+      "frame": 1,
+      "sourceFrame": 480.2083333333333,
+      "additionalPitchYawBankDeg": [
+        6.017330970293206,
+        7.878683207947552,
+        4.908360320957994
+      ],
+      "headAdditionalYawDeg": 2.757539122781643,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.06835086175581531
+    },
+    {
+      "frame": 2,
+      "sourceFrame": 480.4166666666667,
+      "additionalPitchYawBankDeg": [
+        6.066309799382721,
+        7.535831404320947,
+        4.650830217236437
+      ],
+      "headAdditionalYawDeg": 2.6375409915123313,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.06680434355423764
+    },
+    {
+      "frame": 3,
+      "sourceFrame": 480.625,
+      "additionalPitchYawBankDeg": [
+        6.142415364583333,
+        7.003092447916668,
+        4.2534930889423075
+      ],
+      "headAdditionalYawDeg": 2.4510823567708333,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.06443248087632207
+    },
+    {
+      "frame": 4,
+      "sourceFrame": 480.8333333333333,
+      "additionalPitchYawBankDeg": [
+        6.241126543209867,
+        6.312114197530933,
+        3.7424323361823877
+      ],
+      "headAdditionalYawDeg": 2.2092399691358264,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.06141235706941663
+    },
+    {
+      "frame": 5,
+      "sourceFrame": 481.0416666666667,
+      "additionalPitchYawBankDeg": [
+        6.357922212577172,
+        5.494544511959798,
+        3.1437313590633336
+      ],
+      "headAdditionalYawDeg": 1.9230905791859292,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.05792988294519833
+    },
+    {
+      "frame": 6,
+      "sourceFrame": 481.25,
+      "additionalPitchYawBankDeg": [
+        6.48828125,
+        4.582031250000001,
+        2.4834735576923075
+      ],
+      "headAdditionalYawDeg": 1.6037109375,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.05417669124961174
+    },
+    {
+      "frame": 7,
+      "sourceFrame": 481.4583333333333,
+      "additionalPitchYawBankDeg": [
+        6.627682532793197,
+        3.6062222704476206,
+        1.7877423321759893
+      ],
+      "headAdditionalYawDeg": 1.262177794656667,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.05034575503147824
+    },
+    {
+      "frame": 8,
+      "sourceFrame": 481.6666666666667,
+      "additionalPitchYawBankDeg": [
+        6.771604938271618,
+        2.5987654320986744,
+        1.0826210826210194
+      ],
+      "headAdditionalYawDeg": 0.9095679012345359,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.04662608516133097
+    },
+    {
+      "frame": 9,
+      "sourceFrame": 481.875,
+      "additionalPitchYawBankDeg": [
+        6.91552734375,
+        1.5913085937500002,
+        0.3941932091346154
+      ],
+      "headAdditionalYawDeg": 0.5569580078124999,
+      "rightArmFollow": 0.2800000000000001,
+      "rightShoulderDisplacementM": 0.043192560827360664
+    },
+    {
+      "frame": 10,
+      "sourceFrame": 482.0833333333333,
+      "additionalPitchYawBankDeg": [
+        7.058451680847501,
+        0.5929403942002449,
+        -0.2652051089550467
+      ],
+      "headAdditionalYawDeg": 0.20752913797008568,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.040119401423622116
+    },
+    {
+      "frame": 11,
+      "sourceFrame": 482.2916666666667,
+      "additionalPitchYawBankDeg": [
+        7.22760683860946,
+        -0.5702954805559426,
+        -0.9977300016363224
+      ],
+      "headAdditionalYawDeg": -0.1996034181945799,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.03701702164202234
+    },
+    {
+      "frame": 12,
+      "sourceFrame": 482.5,
+      "additionalPitchYawBankDeg": [
+        7.423986486486488,
+        -1.9086793286219081,
+        -1.8113305613305617
+      ],
+      "headAdditionalYawDeg": -0.6680377650176679,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.034169604898362634
+    },
+    {
+      "frame": 13,
+      "sourceFrame": 482.7083333333333,
+      "additionalPitchYawBankDeg": [
+        7.640503459188334,
+        -3.381169580463533,
+        -2.6832225855662544
+      ],
+      "headAdditionalYawDeg": -1.1834093531622365,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.03210261345305025
+    },
+    {
+      "frame": 14,
+      "sourceFrame": 482.9166666666667,
+      "additionalPitchYawBankDeg": [
+        7.870070591424778,
+        -4.946724666546844,
+        -3.590621871871955
+      ],
+      "headAdditionalYawDeg": -1.7313536332913952,
+      "rightArmFollow": 0.27999999999999997,
+      "rightShoulderDisplacementM": 0.031330110035989976
+    },
+    {
+      "frame": 15,
+      "sourceFrame": 483.125,
+      "additionalPitchYawBankDeg": [
+        8.105600717905405,
+        -6.564303017336572,
+        -4.510744217775468
+      ],
+      "headAdditionalYawDeg": -2.2975060560678,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.03215427514029272
+    },
+    {
+      "frame": 16,
+      "sourceFrame": 483.3333333333333,
+      "additionalPitchYawBankDeg": [
+        8.340006673339985,
+        -8.192863063298724,
+        -5.4208054208053404
+      ],
+      "headAdditionalYawDeg": -2.867502072154553,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.03451227376812672
+    },
+    {
+      "frame": 17,
+      "sourceFrame": 483.5416666666667,
+      "additionalPitchYawBankDeg": [
+        8.566201292438292,
+        -9.791363234899318,
+        -6.298021278490108
+      ],
+      "headAdditionalYawDeg": -3.4269771322147613,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.03802789090174034
+    },
+    {
+      "frame": 18,
+      "sourceFrame": 483.75,
+      "additionalPitchYawBankDeg": [
+        8.77709740990991,
+        -11.318761962603062,
+        -7.119607588357588
+      ],
+      "headAdditionalYawDeg": -3.961566686911072,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.042208454358891236
+    },
+    {
+      "frame": 19,
+      "sourceFrame": 483.9583333333333,
+      "additionalPitchYawBankDeg": [
+        8.965607860464615,
+        -12.734017676875995,
+        -7.862780147936335
+      ],
+      "headAdditionalYawDeg": -4.456906186906598,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.04658695470833952
+    },
+    {
+      "frame": 20,
+      "sourceFrame": 484.1666666666667,
+      "additionalPitchYawBankDeg": [
+        9.13836985133283,
+        -14.089254727178558,
+        -8.553479405331322
+      ],
+      "headAdditionalYawDeg": -4.931239154512495,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.05107820979173959
+    },
+    {
+      "frame": 21,
+      "sourceFrame": 484.375,
+      "additionalPitchYawBankDeg": [
+        9.318728885135135,
+        -15.541388306095408,
+        -9.274915540540542
+      ],
+      "headAdditionalYawDeg": -5.439485907133393,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.056118245759959454
+    },
+    {
+      "frame": 22,
+      "sourceFrame": 484.5833333333333,
+      "additionalPitchYawBankDeg": [
+        9.504366635153655,
+        -17.065872628534034,
+        -10.01746654061462
+      ],
+      "headAdditionalYawDeg": -5.973055419986912,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.0616202000327977
+    },
+    {
+      "frame": 23,
+      "sourceFrame": 484.7916666666667,
+      "additionalPitchYawBankDeg": [
+        9.692133250148313,
+        -18.63241066976353,
+        -10.768533000593255
+      ],
+      "headAdditionalYawDeg": -6.521343734417235,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.06745856543088666
+    },
+    {
+      "frame": 24,
+      "sourceFrame": 485.0,
+      "additionalPitchYawBankDeg": [
+        9.878878878878878,
+        -20.210705405051694,
+        -11.515515515515514
+      ],
+      "headAdditionalYawDeg": -7.073746891768093,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.07349490910867118
+    },
+    {
+      "frame": 25,
+      "sourceFrame": 485.2083333333333,
+      "additionalPitchYawBankDeg": [
+        10.061453670105273,
+        -21.770459809667617,
+        -12.245814680421097
+      ],
+      "headAdditionalYawDeg": -7.619660933383666,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.07958865896173936
+    },
+    {
+      "frame": 26,
+      "sourceFrame": 485.4166666666667,
+      "additionalPitchYawBankDeg": [
+        10.236707772587417,
+        -23.281376858880346,
+        -12.946831090349672
+      ],
+      "headAdditionalYawDeg": -8.148481900608122,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.0855970405162951
+    },
+    {
+      "frame": 27,
+      "sourceFrame": 485.625,
+      "additionalPitchYawBankDeg": [
+        10.401491335085085,
+        -24.71315952795773,
+        -13.60596534034034
+      ],
+      "headAdditionalYawDeg": -8.649605834785204,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.09137992380431208
+    },
+    {
+      "frame": 28,
+      "sourceFrame": 485.8333333333333,
+      "additionalPitchYawBankDeg": [
+        10.552654506358197,
+        -26.035510792168836,
+        -14.210618025432789
+      ],
+      "headAdditionalYawDeg": -9.112428777259092,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.09679923018177679
+    },
+    {
+      "frame": 29,
+      "sourceFrame": 486.0416666666667,
+      "additionalPitchYawBankDeg": [
+        10.68704743516666,
+        -27.218133626782638,
+        -14.748189740666641
+      ],
+      "headAdditionalYawDeg": -9.526346769373923,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.10171845902911845
+    },
+    {
+      "frame": 30,
+      "sourceFrame": 486.25,
+      "additionalPitchYawBankDeg": [
+        10.80152027027027,
+        -28.23073100706714,
+        -15.20608108108108
+      ],
+      "headAdditionalYawDeg": -9.880755852473497,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.10600639656770683
+    },
+    {
+      "frame": 31,
+      "sourceFrame": 486.4583333333333,
+      "additionalPitchYawBankDeg": [
+        10.892923160428941,
+        -29.04300590829134,
+        -15.571692641715764
+      ],
+      "headAdditionalYawDeg": -10.16505206790197,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.10953220576651235
+    },
+    {
+      "frame": 32,
+      "sourceFrame": 486.6666666666667,
+      "additionalPitchYawBankDeg": [
+        10.958106254402557,
+        -29.624661305724036,
+        -15.832425017610223
+      ],
+      "headAdditionalYawDeg": -10.368631457003412,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.1121675467719846
+    },
+    {
+      "frame": 33,
+      "sourceFrame": 486.875,
+      "additionalPitchYawBankDeg": [
+        10.99391970095095,
+        -29.94540017463356,
+        -15.975678803803804
+      ],
+      "headAdditionalYawDeg": -10.480890061121745,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11378784247211508
+    },
+    {
+      "frame": 34,
+      "sourceFrame": 487.0833333333333,
+      "additionalPitchYawBankDeg": [
+        10.998728280749885,
+        -29.998056698673988,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.499319844535895,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.1143675375599738
+    },
+    {
+      "frame": 35,
+      "sourceFrame": 487.2916666666667,
+      "additionalPitchYawBankDeg": [
+        10.98485903920896,
+        -29.976544638774573,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.491790623571099,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11472469698487077
+    },
+    {
+      "frame": 36,
+      "sourceFrame": 487.5,
+      "additionalPitchYawBankDeg": [
+        10.95679012345679,
+        -29.9320987654321,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.476234567901235,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11506987555339498
+    },
+    {
+      "frame": 37,
+      "sourceFrame": 487.7083333333333,
+      "additionalPitchYawBankDeg": [
+        10.915861125400095,
+        -29.86579075217193,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.453026763260175,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11539980386362257
+    },
+    {
+      "frame": 38,
+      "sourceFrame": 487.9166666666667,
+      "additionalPitchYawBankDeg": [
+        10.863411636945584,
+        -29.77869227251942,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.422542295381795,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.1157131442655497
+    },
+    {
+      "frame": 39,
+      "sourceFrame": 488.125,
+      "additionalPitchYawBankDeg": [
+        10.80078125,
+        -29.671875000000004,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.38515625,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11600526272128735
+    },
+    {
+      "frame": 40,
+      "sourceFrame": 488.3333333333333,
+      "additionalPitchYawBankDeg": [
+        10.729309556470058,
+        -29.546410608139016,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.341243712848655,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11627463114945714
+    },
+    {
+      "frame": 41,
+      "sourceFrame": 488.5416666666667,
+      "additionalPitchYawBankDeg": [
+        10.650336148262452,
+        -29.403370770461805,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.29117976966163,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11651880866640373
+    },
+    {
+      "frame": 42,
+      "sourceFrame": 488.75,
+      "additionalPitchYawBankDeg": [
+        10.565200617283951,
+        -29.24382716049383,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.235339506172838,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11673516503968423
+    },
+    {
+      "frame": 43,
+      "sourceFrame": 488.9583333333333,
+      "additionalPitchYawBankDeg": [
+        10.475242555441254,
+        -29.068851451760423,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.174098008116149,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.116921908445999
+    },
+    {
+      "frame": 44,
+      "sourceFrame": 489.1666666666667,
+      "additionalPitchYawBankDeg": [
+        10.381801554641052,
+        -28.879515317786908,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.107830361225417,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11707665297137003
+    },
+    {
+      "frame": 45,
+      "sourceFrame": 489.375,
+      "additionalPitchYawBankDeg": [
+        10.286217206790123,
+        -28.676890432098762,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -10.036911651234567,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11719771430084877
+    },
+    {
+      "frame": 46,
+      "sourceFrame": 489.5833333333333,
+      "additionalPitchYawBankDeg": [
+        10.189829103795162,
+        -28.46204846822133,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -9.961716963877464,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11728362149728064
+    },
+    {
+      "frame": 47,
+      "sourceFrame": 489.7916666666667,
+      "additionalPitchYawBankDeg": [
+        10.093976837562863,
+        -28.236061099679905,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -9.882621384887967,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11733204500291819
+    },
+    {
+      "frame": 48,
+      "sourceFrame": 490.0,
+      "additionalPitchYawBankDeg": [
+        10.0,
+        -28.0,
+        -16.0
+      ],
+      "headAdditionalYawDeg": -9.799999999999999,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11734260511736652
+    },
+    {
+      "frame": 49,
+      "sourceFrame": 490.2083333333333,
+      "additionalPitchYawBankDeg": [
+        9.902995684727946,
+        -27.659895232546702,
+        -15.953449181241433
+      ],
+      "headAdditionalYawDeg": -9.680963331391347,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.1169027577061401
+    },
+    {
+      "frame": 50,
+      "sourceFrame": 490.4166666666667,
+      "additionalPitchYawBankDeg": [
+        9.797525148605384,
+        -27.13699949598864,
+        -15.8204946844993
+      ],
+      "headAdditionalYawDeg": -9.497949823596024,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11566782106877913
+    },
+    {
+      "frame": 51,
+      "sourceFrame": 490.625,
+      "additionalPitchYawBankDeg": [
+        9.684124228395063,
+        -26.45521841680696,
+        -15.611183449074074
+      ],
+      "headAdditionalYawDeg": -9.259326445882436,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11373642641384277
+    },
+    {
+      "frame": 52,
+      "sourceFrame": 490.8333333333333,
+      "additionalPitchYawBankDeg": [
+        9.563328760859637,
+        -25.63845762148239,
+        -15.335562414266146
+      ],
+      "headAdditionalYawDeg": -8.973460167518837,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.11121000488082476
+    },
+    {
+      "frame": 53,
+      "sourceFrame": 491.0416666666667,
+      "additionalPitchYawBankDeg": [
+        9.435674582761761,
+        -24.710622736495527,
+        -15.003678519375823
+      ],
+      "headAdditionalYawDeg": -8.648717957773435,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.10819091618256092
+    },
+    {
+      "frame": 54,
+      "sourceFrame": 491.25,
+      "additionalPitchYawBankDeg": [
+        9.301697530864198,
+        -23.69561938832772,
+        -14.6255787037037
+      ],
+      "headAdditionalYawDeg": -8.2934667859147,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.10478232836307082
+    },
+    {
+      "frame": 55,
+      "sourceFrame": 491.4583333333333,
+      "additionalPitchYawBankDeg": [
+        9.161933441929596,
+        -22.617353203459594,
+        -14.211309906550108
+      ],
+      "headAdditionalYawDeg": -7.916073621210857,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.10108694109343686
+    },
+    {
+      "frame": 56,
+      "sourceFrame": 491.6666666666667,
+      "additionalPitchYawBankDeg": [
+        9.016918152720608,
+        -21.499729808371683,
+        -13.77091906721532
+      ],
+      "headAdditionalYawDeg": -7.524905432930088,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.0972069687188752
+    },
+    {
+      "frame": 57,
+      "sourceFrame": 491.875,
+      "additionalPitchYawBankDeg": [
+        8.8671875,
+        -20.366654829545453,
+        -13.314453125
+      ],
+      "headAdditionalYawDeg": -7.128329190340907,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.09324216824972037
+    },
+    {
+      "frame": 58,
+      "sourceFrame": 492.0833333333333,
+      "additionalPitchYawBankDeg": [
+        8.713277320530421,
+        -19.24203389346146,
+        -12.85195901920443
+      ],
+      "headAdditionalYawDeg": -6.734711862711511,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.08928924462031744
+    },
+    {
+      "frame": 59,
+      "sourceFrame": 492.2916666666667,
+      "additionalPitchYawBankDeg": [
+        8.555723451074517,
+        -18.149772626600267,
+        -12.393483689128901
+      ],
+      "headAdditionalYawDeg": -6.352420419310093,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.08543859211375252
+    },
+    {
+      "frame": 60,
+      "sourceFrame": 492.5,
+      "additionalPitchYawBankDeg": [
+        8.395061728395063,
+        -17.113776655443324,
+        -11.949074074074074
+      ],
+      "headAdditionalYawDeg": -5.989821829405163,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.08177619049861681
+    },
+    {
+      "frame": 61,
+      "sourceFrame": 492.7083333333333,
+      "additionalPitchYawBankDeg": [
+        8.2318279892547,
+        -16.157951606471176,
+        -11.528777113340231
+      ],
+      "headAdditionalYawDeg": -5.655283062264912,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.07838132427852694
+    },
+    {
+      "frame": 62,
+      "sourceFrame": 492.9166666666667,
+      "additionalPitchYawBankDeg": [
+        8.066558070416079,
+        -15.306203106164457,
+        -11.142639746227678
+      ],
+      "headAdditionalYawDeg": -5.3571710871575595,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.07532469730935373
+    },
+    {
+      "frame": 63,
+      "sourceFrame": 493.125,
+      "additionalPitchYawBankDeg": [
+        7.897276327054795,
+        -14.557551319648095,
+        -10.790527096017252
+      ],
+      "headAdditionalYawDeg": -5.0951429618768325,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.0725893529498073
+    },
+    {
+      "frame": 64,
+      "sourceFrame": 493.3333333333333,
+      "additionalPitchYawBankDeg": [
+        7.71483172670389,
+        -13.824481372868537,
+        -10.436928049307586
+      ],
+      "headAdditionalYawDeg": -4.838568480503988,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.06988417029061256
+    },
+    {
+      "frame": 65,
+      "sourceFrame": 493.5416666666667,
+      "additionalPitchYawBankDeg": [
+        7.520099581959224,
+        -13.099048278483698,
+        -10.078924864822298
+      ],
+      "headAdditionalYawDeg": -4.584666897469294,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.06718490482602305
+    },
+    {
+      "frame": 66,
+      "sourceFrame": 493.75,
+      "additionalPitchYawBankDeg": [
+        7.315111301369863,
+        -12.383797653958943,
+        -9.717893835616438
+      ],
+      "headAdditionalYawDeg": -4.33432917888563,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.06449893746556648
+    },
+    {
+      "frame": 67,
+      "sourceFrame": 493.9583333333333,
+      "additionalPitchYawBankDeg": [
+        7.101898293484715,
+        -11.681275116759052,
+        -9.35521125474476
+      ],
+      "headAdditionalYawDeg": -4.088446290865668,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.061836040762419275
+    },
+    {
+      "frame": 68,
+      "sourceFrame": 494.1666666666667,
+      "additionalPitchYawBankDeg": [
+        6.882491966852677,
+        -10.994026284348802,
+        -8.992253415262008
+      ],
+      "headAdditionalYawDeg": -3.8479091995220807,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.05920578865714965
+    },
+    {
+      "frame": 69,
+      "sourceFrame": 494.375,
+      "additionalPitchYawBankDeg": [
+        6.658923730022832,
+        -10.324596774193548,
+        -8.630396610223237
+      ],
+      "headAdditionalYawDeg": -3.6136088709677416,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.05661639566790278
+    },
+    {
+      "frame": 70,
+      "sourceFrame": 494.5833333333333,
+      "additionalPitchYawBankDeg": [
+        6.433224991544076,
+        -9.675532203758067,
+        -8.271017132683198
+      ],
+      "headAdditionalYawDeg": -3.3864362713153233,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.054076412725502974
+    },
+    {
+      "frame": 71,
+      "sourceFrame": 494.7916666666667,
+      "additionalPitchYawBankDeg": [
+        6.2074271599653095,
+        -9.049378190507168,
+        -7.9154912756966445
+      ],
+      "headAdditionalYawDeg": -3.1672823666775085,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.051594439236143035
+    },
+    {
+      "frame": 72,
+      "sourceFrame": 495.0,
+      "additionalPitchYawBankDeg": [
+        5.983561643835617,
+        -8.448680351906159,
+        -7.56519533231862
+      ],
+      "headAdditionalYawDeg": -2.957038123167155,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.049177961606101016
+    },
+    {
+      "frame": 73,
+      "sourceFrame": 495.2083333333333,
+      "additionalPitchYawBankDeg": [
+        5.763659851703892,
+        -7.875984305419841,
+        -7.22150559560388
+      ],
+      "headAdditionalYawDeg": -2.756594506896944,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.04683522372123447
+    },
+    {
+      "frame": 74,
+      "sourceFrame": 495.4166666666667,
+      "additionalPitchYawBankDeg": [
+        5.549753192119041,
+        -7.33383566851304,
+        -6.885798358607182
+      ],
+      "headAdditionalYawDeg": -2.566842483979564,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.04457309509307022
+    },
+    {
+      "frame": 75,
+      "sourceFrame": 495.625,
+      "additionalPitchYawBankDeg": [
+        5.343873073630137,
+        -6.824780058651026,
+        -6.559449914383562
+      ],
+      "headAdditionalYawDeg": -2.3886730205278592,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.04239786048896614
+    },
+    {
+      "frame": 76,
+      "sourceFrame": 495.8333333333333,
+      "additionalPitchYawBankDeg": [
+        5.148050904786081,
+        -6.351363093298618,
+        -6.243836555987776
+      ],
+      "headAdditionalYawDeg": -2.2229770826545163,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.04031651160190649
+    },
+    {
+      "frame": 77,
+      "sourceFrame": 496.0416666666667,
+      "additionalPitchYawBankDeg": [
+        4.964074261112283,
+        -5.915137943828366,
+        -5.939873222971669
+      ],
+      "headAdditionalYawDeg": -2.0702982803399284,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.03833124324522067
+    },
+    {
+      "frame": 78,
+      "sourceFrame": 496.25,
+      "additionalPitchYawBankDeg": [
+        4.785470622859589,
+        -5.486076108870969,
+        -5.633906116224315
+      ],
+      "headAdditionalYawDeg": -1.9201266381048387,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.036364957562571555
+    },
+    {
+      "frame": 79,
+      "sourceFrame": 496.4583333333333,
+      "additionalPitchYawBankDeg": [
+        4.608667382366598,
+        -5.0515014210909905,
+        -5.320654118301006
+      ],
+      "headAdditionalYawDeg": -1.7680254973818466,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.034393525271011985
+    },
+    {
+      "frame": 80,
+      "sourceFrame": 496.6666666666667,
+      "additionalPitchYawBankDeg": [
+        4.4337899543378825,
+        -4.614695340501753,
+        -5.002304244884124
+      ],
+      "headAdditionalYawDeg": -1.6151433691756134,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.03243680279289484
+    },
+    {
+      "frame": 81,
+      "sourceFrame": 496.875,
+      "additionalPitchYawBankDeg": [
+        4.260963753478167,
+        -4.178939327116936,
+        -4.681043511656321
+      ],
+      "headAdditionalYawDeg": -1.4626287644909275,
+      "rightArmFollow": 0.28,
+      "rightShoulderDisplacementM": 0.03051394379105015
+    },
+    {
+      "frame": 82,
+      "sourceFrame": 497.0833333333333,
+      "additionalPitchYawBankDeg": [
+        4.0903141944920245,
+        -3.74751484094986,
+        -4.359058934299982
+      ],
+      "headAdditionalYawDeg": -1.3116301943324509,
+      "rightArmFollow": 0.27988189720332585,
+      "rightShoulderDisplacementM": 0.028644655171055494
+    },
+    {
+      "frame": 83,
+      "sourceFrame": 497.2916666666667,
+      "additionalPitchYawBankDeg": [
+        3.9219666920840317,
+        -3.323703342013851,
+        -4.038537528497495
+      ],
+      "headAdditionalYawDeg": -1.1632961697048476,
+      "rightArmFollow": 0.27858217592592577,
+      "rightShoulderDisplacementM": 0.026846893837195896
+    },
+    {
+      "frame": 84,
+      "sourceFrame": 497.5,
+      "additionalPitchYawBankDeg": [
+        3.756046660958904,
+        -2.910786290322581,
+        -3.7216663099315075
+      ],
+      "headAdditionalYawDeg": -1.0187752016129032,
+      "rightArmFollow": 0.2759183673469388,
+      "rightShoulderDisplacementM": 0.02513736306540513
+    },
+    {
+      "frame": 85,
+      "sourceFrame": 497.7083333333333,
+      "additionalPitchYawBankDeg": [
+        3.592679515821219,
+        -2.5120451458893727,
+        -3.4106322942844045
+      ],
+      "headAdditionalYawDeg": -0.8792158010612804,
+      "rightArmFollow": 0.27197904856387045,
+      "rightShoulderDisplacementM": 0.023530925219796713
+    },
+    {
+      "frame": 86,
+      "sourceFrame": 497.9166666666667,
+      "additionalPitchYawBankDeg": [
+        3.4319906713755564,
+        -2.1307613687275646,
+        -3.1076224972385784
+      ],
+      "headAdditionalYawDeg": -0.7457664790546475,
+      "rightArmFollow": 0.2668527966742248,
+      "rightShoulderDisplacementM": 0.022039221973652087
+    },
+    {
+      "frame": 87,
+      "sourceFrame": 498.125,
+      "additionalPitchYawBankDeg": [
+        3.2741055423266268,
+        -1.7702164188508065,
+        -2.8148239344766695
+      ],
+      "headAdditionalYawDeg": -0.6195757465977823,
+      "rightArmFollow": 0.2606281887755102,
+      "rightShoulderDisplacementM": 0.020669618609217243
+    },
+    {
+      "frame": 88,
+      "sourceFrame": 498.3333333333333,
+      "additionalPitchYawBankDeg": [
+        3.119149543379009,
+        -1.4336917562724305,
+        -2.534423621681066
+      ],
+      "headAdditionalYawDeg": -0.5017921146953506,
+      "rightArmFollow": 0.25339380196523126,
+      "rightShoulderDisplacementM": 0.019424655543011222
+    },
+    {
+      "frame": 89,
+      "sourceFrame": 498.5416666666667,
+      "additionalPitchYawBankDeg": [
+        2.9672480892372866,
+        -1.1244688410057972,
+        -2.2686085745341726
+      ],
+      "headAdditionalYawDeg": -0.39356409435202905,
+      "rightArmFollow": 0.24523821334089116,
+      "rightShoulderDisplacementM": 0.018301259407385324
+    },
+    {
+      "frame": 90,
+      "sourceFrame": 498.75,
+      "additionalPitchYawBankDeg": [
+        2.8185265946061646,
+        -0.8458291330645161,
+        -2.0195658087186072
+      ],
+      "headAdditionalYawDeg": -0.2960401965725806,
+      "rightArmFollow": 0.23625000000000002,
+      "rightShoulderDisplacementM": 0.017289675598106877
+    },
+    {
+      "frame": 91,
+      "sourceFrame": 498.9583333333333,
+      "additionalPitchYawBankDeg": [
+        2.673110474190224,
+        -0.6010540924619378,
+        -1.789482339916768
+      ],
+      "headAdditionalYawDeg": -0.21036893236167817,
+      "rightArmFollow": 0.22651773904006142,
+      "rightShoulderDisplacementM": 0.016372611227003824
+    },
+    {
+      "frame": 92,
+      "sourceFrame": 499.1666666666667,
+      "additionalPitchYawBankDeg": [
+        2.5311251426940506,
+        -0.3934251792114513,
+        -1.5805451838110751
+      ],
+      "headAdditionalYawDeg": -0.13769881272400794,
+      "rightArmFollow": 0.21613000755857803,
+      "rightShoulderDisplacementM": 0.015527949315759319
+    },
+    {
+      "frame": 93,
+      "sourceFrame": 499.375,
+      "additionalPitchYawBankDeg": [
+        2.392696014822346,
+        -0.2262238533266129,
+        -1.3949413560841182
+      ],
+      "headAdditionalYawDeg": -0.0791783486643145,
+      "rightArmFollow": 0.20517538265306126,
+      "rightShoulderDisplacementM": 0.014729133192632636
+    },
+    {
+      "frame": 94,
+      "sourceFrame": 499.5833333333333,
+      "additionalPitchYawBankDeg": [
+        2.257948505279693,
+        -0.10273157482079845,
+        -1.2348578724183084
+      ],
+      "headAdditionalYawDeg": -0.03595605118727945,
+      "rightArmFollow": 0.1937424414210139,
+      "rightShoulderDisplacementM": 0.013946882609783889
+    },
+    {
+      "frame": 95,
+      "sourceFrame": 499.7916666666667,
+      "additionalPitchYawBankDeg": [
+        2.127008028770679,
+        -0.026229803707433174,
+        -1.1024817484960872
+      ],
+      "headAdditionalYawDeg": -0.009180431297601611,
+      "rightArmFollow": 0.18191976095993845,
+      "rightShoulderDisplacementM": 0.013152003209932157
+    },
+    {
+      "frame": 96,
+      "sourceFrame": 500.0,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        0.0,
+        -1.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16979591836734698,
+      "rightShoulderDisplacementM": 0.012318904508786258
+    },
+    {
+      "frame": 97,
+      "sourceFrame": 500.2083333333333,
+      "additionalPitchYawBankDeg": [
+        1.8719708478009378,
+        0.0,
+        -0.9141457640094599
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.15745949074074186,
+      "rightShoulderDisplacementM": 0.011450571053888546
+    },
+    {
+      "frame": 98,
+      "sourceFrame": 500.4166666666667,
+      "additionalPitchYawBankDeg": [
+        1.7387876157407285,
+        0.0,
+        -0.830382547260795
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.14499905517762549,
+      "rightShoulderDisplacementM": 0.01056834098149292
+    },
+    {
+      "frame": 99,
+      "sourceFrame": 500.625,
+      "additionalPitchYawBankDeg": [
+        1.601806640625,
+        0.0,
+        -0.748992919921875
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.13250318877551018,
+      "rightShoulderDisplacementM": 0.009679052296277859
+    },
+    {
+      "frame": 100,
+      "sourceFrame": 500.8333333333333,
+      "additionalPitchYawBankDeg": [
+        1.462384259259272,
+        0.0,
+        -0.6702594521605009
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.12006046863189836,
+      "rightShoulderDisplacementM": 0.008789134754812744
+    },
+    {
+      "frame": 101,
+      "sourceFrame": 501.0416666666667,
+      "additionalPitchYawBankDeg": [
+        1.3218768084490613,
+        0.0,
+        -0.5944647141444763
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.10775947184429219,
+      "rightShoulderDisplacementM": 0.007904787258452044
+    },
+    {
+      "frame": 102,
+      "sourceFrame": 501.25,
+      "additionalPitchYawBankDeg": [
+        1.181640625,
+        0.0,
+        -0.5218912760416667
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.09568877551020416,
+      "rightShoulderDisplacementM": 0.007033655919595939
+    },
+    {
+      "frame": 103,
+      "sourceFrame": 501.4583333333333,
+      "additionalPitchYawBankDeg": [
+        1.043032045717605,
+        0.0,
+        -0.4528217080198749
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.08393695672713633,
+      "rightShoulderDisplacementM": 0.006182120621024638
+    },
+    {
+      "frame": 104,
+      "sourceFrame": 501.6666666666667,
+      "additionalPitchYawBankDeg": [
+        0.9074074074073951,
+        0.0,
+        -0.38753858024690774
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.07259259259259161,
+      "rightShoulderDisplacementM": 0.0053568028227747415
+    },
+    {
+      "frame": 105,
+      "sourceFrame": 501.875,
+      "additionalPitchYawBankDeg": [
+        0.776123046875,
+        0.0,
+        -0.326324462890625
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.06174426020408161,
+      "rightShoulderDisplacementM": 0.004565030151060324
+    },
+    {
+      "frame": 106,
+      "sourceFrame": 502.0833333333333,
+      "additionalPitchYawBankDeg": [
+        0.6505353009259369,
+        0.0,
+        -0.269461926118832
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.05148053665910902,
+      "rightShoulderDisplacementM": 0.003812953192653172
+    },
+    {
+      "frame": 107,
+      "sourceFrame": 502.2916666666667,
+      "additionalPitchYawBankDeg": [
+        0.5320005063657305,
+        0.0,
+        -0.21723354009933973
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.04188999905517677,
+      "rightShoulderDisplacementM": 0.00310845967696445
+    },
+    {
+      "frame": 108,
+      "sourceFrame": 502.5,
+      "additionalPitchYawBankDeg": [
+        0.421875,
+        0.0,
+        -0.169921875
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.033061224489795885,
+      "rightShoulderDisplacementM": 0.002457733247846598
+    },
+    {
+      "frame": 109,
+      "sourceFrame": 502.7083333333333,
+      "additionalPitchYawBankDeg": [
+        0.32151511863426785,
+        0.0,
+        -0.1278095009886224
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.025082790060469363,
+      "rightShoulderDisplacementM": 0.0018676964169311644
+    },
+    {
+      "frame": 110,
+      "sourceFrame": 502.9166666666667,
+      "additionalPitchYawBankDeg": [
+        0.23227719907406633,
+        0.0,
+        -0.09117898823302152
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.018043272864700807,
+      "rightShoulderDisplacementM": 0.0013461656226716927
+    },
+    {
+      "frame": 111,
+      "sourceFrame": 503.125,
+      "additionalPitchYawBankDeg": [
+        0.155517578125,
+        0.0,
+        -0.06031290690104167
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.01203125,
+      "rightShoulderDisplacementM": 0.0008992540964330107
+    },
+    {
+      "frame": 112,
+      "sourceFrame": 503.3333333333333,
+      "additionalPitchYawBankDeg": [
+        0.09259259259259789,
+        0.0,
+        -0.035493827160495914
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.007135298563870372,
+      "rightShoulderDisplacementM": 0.0005343341018571881
+    },
+    {
+      "frame": 113,
+      "sourceFrame": 503.5416666666667,
+      "additionalPitchYawBankDeg": [
+        0.04485857928240407,
+        0.0,
+        -0.017004319179203975
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.0034439956538167052,
+      "rightShoulderDisplacementM": 0.00025822634249347246
+    },
+    {
+      "frame": 114,
+      "sourceFrame": 503.75,
+      "additionalPitchYawBankDeg": [
+        0.013671875,
+        0.0,
+        -0.005126953125000001
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.0010459183673470207,
+      "rightShoulderDisplacementM": 7.87605692284475e-05
+    },
+    {
+      "frame": 115,
+      "sourceFrame": 503.9583333333333,
+      "additionalPitchYawBankDeg": [
+        0.00038881655092648515,
+        0.0,
+        -0.00014429916570239215
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 2.964380196523564e-05,
+      "rightShoulderDisplacementM": 2.212006987811745e-06
+    },
+    {
+      "frame": 116,
+      "sourceFrame": 504.1666666666667,
+      "additionalPitchYawBankDeg": [
+        0.0027191543395253246,
+        -0.0032700196702649923,
+        -0.0022719478738002373
+      ],
+      "headAdditionalYawDeg": -0.0011445068845927474,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 1.2451095004127849e-05
+    },
+    {
+      "frame": 117,
+      "sourceFrame": 504.375,
+      "additionalPitchYawBankDeg": [
+        0.013553103885135134,
+        -0.016242261202830188,
+        -0.01123046875
+      ],
+      "headAdditionalYawDeg": -0.005684791420990565,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 6.162213019152474e-05
+    },
+    {
+      "frame": 118,
+      "sourceFrame": 504.5833333333333,
+      "additionalPitchYawBankDeg": [
+        0.03228068925406684,
+        -0.03854678239122877,
+        -0.02651856138545787
+      ],
+      "headAdditionalYawDeg": -0.01349137383693007,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.000145549380131213
+    },
+    {
+      "frame": 119,
+      "sourceFrame": 504.7916666666667,
+      "additionalPitchYawBankDeg": [
+        0.05850817904131254,
+        -0.06960541031346569,
+        -0.04763387881515992
+      ],
+      "headAdditionalYawDeg": -0.02436189360971299,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0002621167640104407
+    },
+    {
+      "frame": 120,
+      "sourceFrame": 505.0,
+      "additionalPitchYawBankDeg": [
+        0.09184184184184183,
+        -0.10883997204751923,
+        -0.07407407407407407
+      ],
+      "headAdditionalYawDeg": -0.03809399021663173,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0004082866654453961
+    },
+    {
+      "frame": 121,
+      "sourceFrame": 505.2083333333333,
+      "additionalPitchYawBankDeg": [
+        0.13188794625064487,
+        -0.15567229467139201,
+        -0.10533680019718489
+      ],
+      "headAdditionalYawDeg": -0.0544853031349872,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0005818571474726171
+    },
+    {
+      "frame": 122,
+      "sourceFrame": 505.4166666666667,
+      "additionalPitchYawBankDeg": [
+        0.17825276086271907,
+        -0.209524205263095,
+        -0.14091971021948216
+      ],
+      "headAdditionalYawDeg": -0.07333347184208325,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0007804826648376059
+    },
+    {
+      "frame": 123,
+      "sourceFrame": 505.625,
+      "additionalPitchYawBankDeg": [
+        0.23054255427302303,
+        -0.269817530900594,
+        -0.18032045717592593
+      ],
+      "headAdditionalYawDeg": -0.09443613581520789,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0010015198191581547
+    },
+    {
+      "frame": 124,
+      "sourceFrame": 505.8333333333333,
+      "additionalPitchYawBankDeg": [
+        0.28836359507655257,
+        -0.33597409866189815,
+        -0.22303669410150492
+      ],
+      "headAdditionalYawDeg": -0.11759093453166436,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0012431976053605925
+    },
+    {
+      "frame": 125,
+      "sourceFrame": 506.0416666666667,
+      "additionalPitchYawBankDeg": [
+        0.35132215186830945,
+        -0.407415735625023,
+        -0.2685660740312114
+      ],
+      "headAdditionalYawDeg": -0.14259550746875801,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0015027337691216947
+    },
+    {
+      "frame": 126,
+      "sourceFrame": 506.25,
+      "additionalPitchYawBankDeg": [
+        0.4190244932432432,
+        -0.48356426886792453,
+        -0.31640625
+      ],
+      "headAdditionalYawDeg": -0.16924749410377357,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0017777812086358902
+    },
+    {
+      "frame": 127,
+      "sourceFrame": 506.4583333333333,
+      "additionalPitchYawBankDeg": [
+        0.4910768877963545,
+        -0.5638415254686172,
+        -0.3660548750428624
+      ],
+      "headAdditionalYawDeg": -0.19734453391401602,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.002066426779652052
+    },
+    {
+      "frame": 128,
+      "sourceFrame": 506.6666666666667,
+      "additionalPitchYawBankDeg": [
+        0.5670856041226482,
+        -0.6476693325051195,
+        -0.41700960219479205
+      ],
+      "headAdditionalYawDeg": -0.22668426637679182,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0023659338356182423
+    },
+    {
+      "frame": 129,
+      "sourceFrame": 506.875,
+      "additionalPitchYawBankDeg": [
+        0.646656910817067,
+        -0.7344695170553808,
+        -0.46876808449074076
+      ],
+      "headAdditionalYawDeg": -0.25706433096938325,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0026741504436429385
+    },
+    {
+      "frame": 130,
+      "sourceFrame": 507.0833333333333,
+      "additionalPitchYawBankDeg": [
+        0.7293970764746149,
+        -0.823663906197419,
+        -0.5208279749657017
+      ],
+      "headAdditionalYawDeg": -0.2882823671690966,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0029884201891452362
+    },
+    {
+      "frame": 131,
+      "sourceFrame": 507.2916666666667,
+      "additionalPitchYawBankDeg": [
+        0.8149123696902999,
+        -0.9146743270092547,
+        -0.5726869266546686
+      ],
+      "headAdditionalYawDeg": -0.3201360144532391,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0033067043130300066
+    },
+    {
+      "frame": 132,
+      "sourceFrame": 507.5,
+      "additionalPitchYawBankDeg": [
+        0.9028090590590591,
+        -1.006922606568833,
+        -0.6238425925925927
+      ],
+      "headAdditionalYawDeg": -0.3524229122990915,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0036263277274871174
+    },
+    {
+      "frame": 133,
+      "sourceFrame": 507.7083333333333,
+      "additionalPitchYawBankDeg": [
+        0.9926934131758994,
+        -1.0998305719541746,
+        -0.6737926258144675
+      ],
+      "headAdditionalYawDeg": -0.38494070018396104,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.003944804140011558
+    },
+    {
+      "frame": 134,
+      "sourceFrame": 507.9166666666667,
+      "additionalPitchYawBankDeg": [
+        1.0841717006358293,
+        -1.1928200502432986,
+        -0.7220346793552855
+      ],
+      "headAdditionalYawDeg": -0.4174870175851545,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.004259619137341307
+    },
+    {
+      "frame": 135,
+      "sourceFrame": 508.125,
+      "additionalPitchYawBankDeg": [
+        1.1768501900337838,
+        -1.285312868514151,
+        -0.76806640625
+      ],
+      "headAdditionalYawDeg": -0.4498595039799529,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0045689803487265
+    },
+    {
+      "frame": 136,
+      "sourceFrame": 508.3333333333333,
+      "additionalPitchYawBankDeg": [
+        1.2703351499647706,
+        -1.3767308538447516,
+        -0.8113854595336037
+      ],
+      "headAdditionalYawDeg": -0.481855798845663,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.004868799947117509
+    },
+    {
+      "frame": 137,
+      "sourceFrame": 508.5416666666667,
+      "additionalPitchYawBankDeg": [
+        1.3642328490238005,
+        -1.4664958333131208,
+        -0.851489492241087
+      ],
+      "headAdditionalYawDeg": -0.5132735416595923,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0051584726221012515
+    },
+    {
+      "frame": 138,
+      "sourceFrame": 508.75,
+      "additionalPitchYawBankDeg": [
+        1.458149555805806,
+        -1.5540296339972048,
+        -0.8878761574074076
+      ],
+      "headAdditionalYawDeg": -0.5439103718990217,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.005433958181442647
+    },
+    {
+      "frame": 139,
+      "sourceFrame": 508.9583333333333,
+      "additionalPitchYawBankDeg": [
+        1.551691538905795,
+        -1.6387540829750227,
+        -0.9200431080675556
+      ],
+      "headAdditionalYawDeg": -0.5735639290412579,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.00569406556758603
+    },
+    {
+      "frame": 140,
+      "sourceFrame": 509.1666666666667,
+      "additionalPitchYawBankDeg": [
+        1.6444650669187786,
+        -1.720091007324592,
+        -0.9474879972565177
+      ],
+      "headAdditionalYawDeg": -0.6020318525636073,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.005935556596580516
+    },
+    {
+      "frame": 141,
+      "sourceFrame": 509.375,
+      "additionalPitchYawBankDeg": [
+        1.7360764084396898,
+        -1.7974622341238646,
+        -0.9697084780092593
+      ],
+      "headAdditionalYawDeg": -0.6291117819433526,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.006156407912284702
+    },
+    {
+      "frame": 142,
+      "sourceFrame": 509.5833333333333,
+      "additionalPitchYawBankDeg": [
+        1.8261318320635374,
+        -1.8702895904508574,
+        -0.9862022033607671
+      ],
+      "headAdditionalYawDeg": -0.6546013566578,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.006354813588444653
+    },
+    {
+      "frame": 143,
+      "sourceFrame": 509.7916666666667,
+      "additionalPitchYawBankDeg": [
+        1.9142376063853288,
+        -1.937994903383583,
+        -0.9964668263460228
+      ],
+      "headAdditionalYawDeg": -0.678298216184254,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.006528570323340668
+    },
+    {
+      "frame": 144,
+      "sourceFrame": 510.0,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -2.0,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.7,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.006676336975217075
+    },
+    {
+      "frame": 145,
+      "sourceFrame": 510.2083333333333,
+      "additionalPitchYawBankDeg": [
+        2.091601611376993,
+        -2.0608357576787375,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.721292515187558,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.00683021611988924
+    },
+    {
+      "frame": 146,
+      "sourceFrame": 510.4166666666667,
+      "additionalPitchYawBankDeg": [
+        2.196143409034044,
+        -2.12492800325385,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.7437248011388474,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.007023255073030351
+    },
+    {
+      "frame": 147,
+      "sourceFrame": 510.625,
+      "additionalPitchYawBankDeg": [
+        2.3116092166385136,
+        -2.1915409879864387,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.7670393457952535,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.007255913040390977
+    },
+    {
+      "frame": 148,
+      "sourceFrame": 510.8333333333333,
+      "additionalPitchYawBankDeg": [
+        2.435982857857846,
+        -2.2599389631376594,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.7909786370981807,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.0075270599128533615
+    },
+    {
+      "frame": 149,
+      "sourceFrame": 511.0416666666667,
+      "additionalPitchYawBankDeg": [
+        2.5672481563594967,
+        -2.3293861799686697,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.8152851629890343,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.00783441105918602
+    },
+    {
+      "frame": 150,
+      "sourceFrame": 511.25,
+      "additionalPitchYawBankDeg": [
+        2.7033889358108105,
+        -2.399146889740566,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.8397014114091981,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.008173931661689133
+    },
+    {
+      "frame": 151,
+      "sourceFrame": 511.4583333333333,
+      "additionalPitchYawBankDeg": [
+        2.8423890198792416,
+        -2.4684853437145073,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.8639698703000775,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.008539891199016606
+    },
+    {
+      "frame": 152,
+      "sourceFrame": 511.6666666666667,
+      "additionalPitchYawBankDeg": [
+        2.9822322322322448,
+        -2.536665793151648,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.8878330276030767,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.008925768940556352
+    },
+    {
+      "frame": 153,
+      "sourceFrame": 511.875,
+      "additionalPitchYawBankDeg": [
+        3.1209023965371623,
+        -2.6029524893130898,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.9110333712595814,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.009323586699646409
+    },
+    {
+      "frame": 154,
+      "sourceFrame": 512.0833333333334,
+      "additionalPitchYawBankDeg": [
+        3.256383336461486,
+        -2.666609683460005,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.9333133892110016,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.009726454269541189
+    },
+    {
+      "frame": 155,
+      "sourceFrame": 512.2916666666666,
+      "additionalPitchYawBankDeg": [
+        3.3866588756725244,
+        -2.726901626853479,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.9544155693987175,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.010124674610523462
+    },
+    {
+      "frame": 156,
+      "sourceFrame": 512.5,
+      "additionalPitchYawBankDeg": [
+        3.5097128378378377,
+        -2.783092570754717,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.9740823997641511,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.010510534764291049
+    },
+    {
+      "frame": 157,
+      "sourceFrame": 512.7083333333334,
+      "additionalPitchYawBankDeg": [
+        3.6235290466247703,
+        -2.834446766424821,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.9920563682486874,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.010874887939066864
+    },
+    {
+      "frame": 158,
+      "sourceFrame": 512.9166666666666,
+      "additionalPitchYawBankDeg": [
+        3.7260913257006836,
+        -2.880228465124905,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -1.0080799627937167,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.011208006230432036
+    },
+    {
+      "frame": 159,
+      "sourceFrame": 513.125,
+      "additionalPitchYawBankDeg": [
+        3.8153834987331074,
+        -2.9197019181161554,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -1.0218956713406544,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.011502950505793651
+    },
+    {
+      "frame": 160,
+      "sourceFrame": 513.3333333333334,
+      "additionalPitchYawBankDeg": [
+        3.889389389389401,
+        -2.9521313766596835,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -1.033245981830889,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.01174913489898476
+    },
+    {
+      "frame": 161,
+      "sourceFrame": 513.5416666666666,
+      "additionalPitchYawBankDeg": [
+        3.946092821336953,
+        -2.976781092016615,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -1.0418733822058153,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.011940155622456424
+    },
+    {
+      "frame": 162,
+      "sourceFrame": 513.75,
+      "additionalPitchYawBankDeg": [
+        3.983477618243244,
+        -2.9929153154481134,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -1.0475203604068395,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.01206639190358618
+    },
+    {
+      "frame": 163,
+      "sourceFrame": 513.9583333333334,
+      "additionalPitchYawBankDeg": [
+        3.9995276037756513,
+        -2.9997982982153,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -1.049929404375355,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.012121178914372694
+    },
+    {
+      "frame": 164,
+      "sourceFrame": 514.1666666666666,
+      "additionalPitchYawBankDeg": [
+        3.996850821283614,
+        -2.990552463850842,
+        -0.9968508212836138
+      ],
+      "headAdditionalYawDeg": -1.0466933623477945,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.012127207671394212
+    },
+    {
+      "frame": 165,
+      "sourceFrame": 514.375,
+      "additionalPitchYawBankDeg": [
+        3.9844460683326193,
+        -2.95333820499786,
+        -0.9844460683326199
+      ],
+      "headAdditionalYawDeg": -1.033668371749251,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.012147634998589223
+    },
+    {
+      "frame": 166,
+      "sourceFrame": 514.5833333333334,
+      "additionalPitchYawBankDeg": [
+        3.9633040909595345,
+        -2.8899122728786013,
+        -0.9633040909595337
+      ],
+      "headAdditionalYawDeg": -1.0114692955075104,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.012183664876240497
+    },
+    {
+      "frame": 167,
+      "sourceFrame": 514.7916666666666,
+      "additionalPitchYawBankDeg": [
+        3.934144862468693,
+        -2.8024345874060774,
+        -0.9341448624686925
+      ],
+      "headAdditionalYawDeg": -0.9808521055921271,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.012238024838505324
+    },
+    {
+      "frame": 168,
+      "sourceFrame": 515.0,
+      "additionalPitchYawBankDeg": [
+        3.897688356164384,
+        -2.6930650684931505,
+        -0.8976883561643837
+      ],
+      "headAdditionalYawDeg": -0.9425727739726026,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.012311761272744113
+    },
+    {
+      "frame": 169,
+      "sourceFrame": 515.2083333333334,
+      "additionalPitchYawBankDeg": [
+        3.8546545453509404,
+        -2.5639636360528195,
+        -0.8546545453509398
+      ],
+      "headAdditionalYawDeg": -0.8973872726184868,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.012410781484122066
+    },
+    {
+      "frame": 170,
+      "sourceFrame": 515.4166666666666,
+      "additionalPitchYawBankDeg": [
+        3.8057634033327084,
+        -2.4172902099981255,
+        -0.8057634033327085
+      ],
+      "headAdditionalYawDeg": -0.8460515734993439,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.012535681779027084
+    },
+    {
+      "frame": 171,
+      "sourceFrame": 515.625,
+      "additionalPitchYawBankDeg": [
+        3.7517349034139555,
+        -2.2552047102418666,
+        -0.7517349034139554
+      ],
+      "headAdditionalYawDeg": -0.7893216485846531,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.012690464111830375
+    },
+    {
+      "frame": 172,
+      "sourceFrame": 515.8333333333334,
+      "additionalPitchYawBankDeg": [
+        3.693289018899025,
+        -2.079867056697075,
+        -0.6932890188990251
+      ],
+      "headAdditionalYawDeg": -0.7279534698439764,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.01287382307161099
+    },
+    {
+      "frame": 173,
+      "sourceFrame": 516.0416666666666,
+      "additionalPitchYawBankDeg": [
+        3.631145723092271,
+        -1.8934371692768135,
+        -0.6311457230922712
+      ],
+      "headAdditionalYawDeg": -0.6627030092468846,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.01308929346031939
+    },
+    {
+      "frame": 174,
+      "sourceFrame": 516.25,
+      "additionalPitchYawBankDeg": [
+        3.5660249892979454,
+        -1.6980749678938358,
+        -0.5660249892979452
+      ],
+      "headAdditionalYawDeg": -0.5943262387628424,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.013335381523153394
+    },
+    {
+      "frame": 175,
+      "sourceFrame": 516.4583333333334,
+      "additionalPitchYawBankDeg": [
+        3.498646790820399,
+        -1.495940372461197,
+        -0.49864679082039914
+      ],
+      "headAdditionalYawDeg": -0.5235791303614189,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.01360966715370157
+    },
+    {
+      "frame": 176,
+      "sourceFrame": 516.6666666666666,
+      "additionalPitchYawBankDeg": [
+        3.429731100963991,
+        -1.2891933028919706,
+        -0.42973110096399025
+      ],
+      "headAdditionalYawDeg": -0.4512176560121897,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.013910223088032896
+    },
+    {
+      "frame": 177,
+      "sourceFrame": 516.875,
+      "additionalPitchYawBankDeg": [
+        3.359997893032962,
+        -1.0799936790988869,
+        -0.3599978930329623
+      ],
+      "headAdditionalYawDeg": -0.37799778768461045,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.014233483660768527
+    },
+    {
+      "frame": 178,
+      "sourceFrame": 517.0833333333334,
+      "additionalPitchYawBankDeg": [
+        3.2901671403316715,
+        -0.8705014209950148,
+        -0.2901671403316716
+      ],
+      "headAdditionalYawDeg": -0.30467549734825516,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.014574815517013789
+    },
+    {
+      "frame": 179,
+      "sourceFrame": 517.2916666666666,
+      "additionalPitchYawBankDeg": [
+        3.2209588161644755,
+        -0.6628764484934261,
+        -0.22095881616447535
+      ],
+      "headAdditionalYawDeg": -0.23200675697269912,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.014928297768069691
+    },
+    {
+      "frame": 180,
+      "sourceFrame": 517.5,
+      "additionalPitchYawBankDeg": [
+        3.1530928938356166,
+        -0.4592786815068492,
+        -0.15309289383561642
+      ],
+      "headAdditionalYawDeg": -0.16074753852739723,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.015290022217941679
+    },
+    {
+      "frame": 181,
+      "sourceFrame": 517.7083333333334,
+      "additionalPitchYawBankDeg": [
+        3.0872893466494524,
+        -0.2618680399483574,
+        -0.08728934664945247
+      ],
+      "headAdditionalYawDeg": -0.09165381398192508,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.01565254016728205
+    },
+    {
+      "frame": 182,
+      "sourceFrame": 517.9166666666666,
+      "additionalPitchYawBankDeg": [
+        3.024268147910336,
+        -0.07280444373100788,
+        -0.024268147910335963
+      ],
+      "headAdditionalYawDeg": -0.025481555305852756,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.01601031569289201
+    },
+    {
+      "frame": 183,
+      "sourceFrame": 518.125,
+      "additionalPitchYawBankDeg": [
+        2.9635753583206497,
+        0.11176958476027395,
+        0.03808841482749872
+      ],
+      "headAdditionalYawDeg": 0.039119354666095875,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.016373360661238515
+    },
+    {
+      "frame": 184,
+      "sourceFrame": 518.3333333333334,
+      "additionalPitchYawBankDeg": [
+        2.900915121107905,
+        0.3137155420260826,
+        0.11005881579196011
+      ],
+      "headAdditionalYawDeg": 0.1098004397091289,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.016801445963843194
+    },
+    {
+      "frame": 185,
+      "sourceFrame": 518.5416666666666,
+      "additionalPitchYawBankDeg": [
+        2.8360528150074344,
+        0.5319127676834531,
+        0.19066132679640313
+      ],
+      "headAdditionalYawDeg": 0.18616946868920856,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.017292875840434367
+    },
+    {
+      "frame": 186,
+      "sourceFrame": 518.75,
+      "additionalPitchYawBankDeg": [
+        2.769263698630137,
+        0.762521404109589,
+        0.277611301369863
+      ],
+      "headAdditionalYawDeg": 0.26688249143835613,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.017834971773400342
+    },
+    {
+      "frame": 187,
+      "sourceFrame": 518.9583333333334,
+      "additionalPitchYawBankDeg": [
+        2.7008230305870176,
+        1.0017015936813394,
+        0.36862409304124427
+      ],
+      "headAdditionalYawDeg": 0.3505955577884688,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.018414675186870243
+    },
+    {
+      "frame": 188,
+      "sourceFrame": 519.1666666666666,
+      "additionalPitchYawBankDeg": [
+        2.631006069489086,
+        1.2456134787755349,
+        0.46141505533944227
+      ],
+      "headAdditionalYawDeg": 0.43596471757143723,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.01901758059334957
+    },
+    {
+      "frame": 189,
+      "sourceFrame": 519.375,
+      "additionalPitchYawBankDeg": [
+        2.5600880739472354,
+        1.4904172017694064,
+        0.5536995417935058
+      ],
+      "headAdditionalYawDeg": 0.5216460206192922,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.019627821213052364
+    },
+    {
+      "frame": 190,
+      "sourceFrame": 519.5833333333334,
+      "additionalPitchYawBankDeg": [
+        2.488344302572473,
+        1.7322729050397865,
+        0.6431929059323309
+      ],
+      "headAdditionalYawDeg": 0.6062955167639252,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.020227365707803285
+    },
+    {
+      "frame": 191,
+      "sourceFrame": 519.7916666666666,
+      "additionalPitchYawBankDeg": [
+        2.41605001397581,
+        1.967340730963513,
+        0.7276105012848191
+      ],
+      "headAdditionalYawDeg": 0.6885692558372295,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.02079938578924202
+    },
+    {
+      "frame": 192,
+      "sourceFrame": 520.0,
+      "additionalPitchYawBankDeg": [
+        2.343480466768138,
+        2.191780821917808,
+        0.8046676813800102
+      ],
+      "headAdditionalYawDeg": 0.7671232876712328,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.02132550262618402
+    },
+    {
+      "frame": 193,
+      "sourceFrame": 520.2083333333334,
+      "additionalPitchYawBankDeg": [
+        2.2709109195604653,
+        2.401753320279506,
+        0.8720797997468029
+      ],
+      "headAdditionalYawDeg": 0.8406136620978271,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.021787799626177665
+    },
+    {
+      "frame": 194,
+      "sourceFrame": 520.4166666666666,
+      "additionalPitchYawBankDeg": [
+        2.198616630963803,
+        2.5934183684254704,
+        0.9275622099141164
+      ],
+      "headAdditionalYawDeg": 0.9076964289489146,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.022168017797413207
+    },
+    {
+      "frame": 195,
+      "sourceFrame": 520.625,
+      "additionalPitchYawBankDeg": [
+        2.126872859589041,
+        2.7629361087328768,
+        0.9688302654109588
+      ],
+      "headAdditionalYawDeg": 0.9670276380565068,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.022450133219751853
+    },
+    {
+      "frame": 196,
+      "sourceFrame": 520.8333333333334,
+      "additionalPitchYawBankDeg": [
+        2.05595486404719,
+        2.9064666835785795,
+        0.993599319766243
+      ],
+      "headAdditionalYawDeg": 1.0172633392525028,
+      "rightArmFollow": 0.0,
+      "rightShoulderDisplacementM": 0.022615778531022993
+    },
+    {
+      "frame": 197,
+      "sourceFrame": 521.0416666666666,
+      "additionalPitchYawBankDeg": [
+        1.9859208890603695,
+        3.0208319937414077,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.0572911978094925,
+      "rightArmFollow": 8.310185185170089e-06,
+      "rightShoulderDisplacementM": 0.02265234286044126
+    },
+    {
+      "frame": 198,
+      "sourceFrame": 521.25,
+      "additionalPitchYawBankDeg": [
+        1.9103009259259258,
+        3.1247106481481484,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.093648726851852,
+      "rightArmFollow": 0.00029500000000000007,
+      "rightShoulderDisplacementM": 0.022611395027512093
+    },
+    {
+      "frame": 199,
+      "sourceFrame": 521.4583333333334,
+      "additionalPitchYawBankDeg": [
+        1.8274471664951835,
+        3.2273836698388387,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.1295842844435935,
+      "rightArmFollow": 0.0009775231481483073,
+      "rightShoulderDisplacementM": 0.022527830594878395
+    },
+    {
+      "frame": 200,
+      "sourceFrame": 521.6666666666666,
+      "additionalPitchYawBankDeg": [
+        1.7393689986282743,
+        3.327846364883384,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.1647462277091842,
+      "rightArmFollow": 0.002038518518518292,
+      "rightShoulderDisplacementM": 0.022408030447249996
+    },
+    {
+      "frame": 201,
+      "sourceFrame": 521.875,
+      "additionalPitchYawBankDeg": [
+        1.6480758101851853,
+        3.425094039351852,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.198782913773148,
+      "rightArmFollow": 0.0034606249999999993,
+      "rightShoulderDisplacementM": 0.02225993221983727
+    },
+    {
+      "frame": 202,
+      "sourceFrame": 522.0833333333334,
+      "additionalPitchYawBankDeg": [
+        1.5555769890260462,
+        3.5181219993141455,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.2313426997599508,
+      "rightArmFollow": 0.0052264814814818325,
+      "rightShoulderDisplacementM": 0.022090044220301204
+    },
+    {
+      "frame": 203,
+      "sourceFrame": 522.2916666666666,
+      "additionalPitchYawBankDeg": [
+        1.4638819230109905,
+        3.6059255508401766,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.2620739427940617,
+      "rightArmFollow": 0.007318726851851443,
+      "rightShoulderDisplacementM": 0.02190615832781935
+    },
+    {
+      "frame": 204,
+      "sourceFrame": 522.5,
+      "additionalPitchYawBankDeg": [
+        1.375,
+        3.6875000000000004,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.2906250000000001,
+      "rightArmFollow": 0.00972,
+      "rightShoulderDisplacementM": 0.021714599260261983
+    },
+    {
+      "frame": 205,
+      "sourceFrame": 522.7083333333334,
+      "additionalPitchYawBankDeg": [
+        1.2909406078532086,
+        3.7618406528635244,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.3166442285022333,
+      "rightArmFollow": 0.012412939814815328,
+      "rightShoulderDisplacementM": 0.021523665164030495
+    },
+    {
+      "frame": 206,
+      "sourceFrame": 522.9166666666666,
+      "additionalPitchYawBankDeg": [
+        1.2137131344307401,
+        3.8279428155006747,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.3397799854252361,
+      "rightArmFollow": 0.015380185185184624,
+      "rightShoulderDisplacementM": 0.021339986970482266
+    },
+    {
+      "frame": 207,
+      "sourceFrame": 523.125,
+      "additionalPitchYawBankDeg": [
+        1.1453269675925926,
+        3.8848017939814814,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.3596806278935185,
+      "rightArmFollow": 0.018604375,
+      "rightShoulderDisplacementM": 0.02117065498592159
+    },
+    {
+      "frame": 208,
+      "sourceFrame": 523.3333333333334,
+      "additionalPitchYawBankDeg": [
+        1.0877914951988932,
+        3.931412894375865,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.3759945130315525,
+      "rightArmFollow": 0.02206814814814879,
+      "rightShoulderDisplacementM": 0.021023193796725834
+    },
+    {
+      "frame": 209,
+      "sourceFrame": 523.5416666666666,
+      "additionalPitchYawBankDeg": [
+        1.0431161051097464,
+        3.9667714227537667,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.3883699979638182,
+      "rightArmFollow": 0.025754143518517826,
+      "rightShoulderDisplacementM": 0.020904308034127603
+    },
+    {
+      "frame": 210,
+      "sourceFrame": 523.75,
+      "additionalPitchYawBankDeg": [
+        1.0133101851851851,
+        3.989872685185185,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.3964554398148148,
+      "rightArmFollow": 0.029645000000000005,
+      "rightShoulderDisplacementM": 0.02082260644080366
+    },
+    {
+      "frame": 211,
+      "sourceFrame": 523.9583333333334,
+      "additionalPitchYawBankDeg": [
+        1.0003831232853218,
+        3.999711987740056,
+        1.0
+      ],
+      "headAdditionalYawDeg": 1.3998991957090194,
+      "rightArmFollow": 0.03372335648148223,
+      "rightShoulderDisplacementM": 0.020783874690809768
+    },
+    {
+      "frame": 212,
+      "sourceFrame": 524.1666666666666,
+      "additionalPitchYawBankDeg": [
+        1.0089163237311345,
+        3.9819958847736703,
+        0.9821673525377308
+      ],
+      "headAdditionalYawDeg": 1.3936985596707845,
+      "rightArmFollow": 0.03797185185185106,
+      "rightShoulderDisplacementM": 0.020736664818678866
+    },
+    {
+      "frame": 213,
+      "sourceFrame": 524.375,
+      "additionalPitchYawBankDeg": [
+        1.04296875,
+        3.9121093750000004,
+        0.9140625
+      ],
+      "headAdditionalYawDeg": 1.36923828125,
+      "rightArmFollow": 0.042373125000000005,
+      "rightShoulderDisplacementM": 0.020572098991833324
+    },
+    {
+      "frame": 214,
+      "sourceFrame": 524.5833333333334,
+      "additionalPitchYawBankDeg": [
+        1.0987225651577621,
+        3.795203189300387,
+        0.8025548696844755
+      ],
+      "headAdditionalYawDeg": 1.3283211162551354,
+      "rightArmFollow": 0.04690981481481565,
+      "rightShoulderDisplacementM": 0.02031201788619278
+    },
+    {
+      "frame": 215,
+      "sourceFrame": 524.7916666666666,
+      "additionalPitchYawBankDeg": [
+        1.1721589934842103,
+        3.6373054912551757,
+        0.6556820130315795
+      ],
+      "headAdditionalYawDeg": 1.2730569219393113,
+      "rightArmFollow": 0.05156456018518433,
+      "rightShoulderDisplacementM": 0.01998542483159008
+    },
+    {
+      "frame": 216,
+      "sourceFrame": 525.0,
+      "additionalPitchYawBankDeg": [
+        1.259259259259259,
+        3.4444444444444446,
+        0.4814814814814815
+      ],
+      "headAdditionalYawDeg": 1.2055555555555555,
+      "rightArmFollow": 0.056320000000000016,
+      "rightShoulderDisplacementM": 0.019621398313404363
+    },
+    {
+      "frame": 217,
+      "sourceFrame": 525.2083333333334,
+      "additionalPitchYawBankDeg": [
+        1.3560045867627069,
+        3.222648212448517,
+        0.2879908264745863
+      ],
+      "headAdditionalYawDeg": 1.127926874356981,
+      "rightArmFollow": 0.06115877314814903,
+      "rightShoulderDisplacementM": 0.01924587456416154
+    },
+    {
+      "frame": 218,
+      "sourceFrame": 525.4166666666666,
+      "additionalPitchYawBankDeg": [
+        1.4583762002743295,
+        2.9779449588477824,
+        0.08324759945134086
+      ],
+      "headAdditionalYawDeg": 1.0422807355967239,
+      "rightArmFollow": 0.06606351851851763,
+      "rightShoulderDisplacementM": 0.018878756081477533
+    },
+    {
+      "frame": 219,
+      "sourceFrame": 525.625,
+      "additionalPitchYawBankDeg": [
+        1.562355324074074,
+        2.7163628472222223,
+        -0.12471064814814815
+      ],
+      "headAdditionalYawDeg": 0.9507269965277778,
+      "rightArmFollow": 0.07101687500000002,
+      "rightShoulderDisplacementM": 0.01853286583832282
+    },
+    {
+      "frame": 220,
+      "sourceFrame": 525.8333333333334,
+      "additionalPitchYawBankDeg": [
+        1.663923182441719,
+        2.443930041152213,
+        -0.32784636488343805
+      ],
+      "headAdditionalYawDeg": 0.8553755144032744,
+      "rightArmFollow": 0.07600148148148239,
+      "rightShoulderDisplacementM": 0.01820772358931891
+    },
+    {
+      "frame": 221,
+      "sourceFrame": 526.0416666666666,
+      "additionalPitchYawBankDeg": [
+        1.759060999657048,
+        2.1666747042181576,
+        -0.5181219993140961
+      ],
+      "headAdditionalYawDeg": 0.758336146476355,
+      "rightArmFollow": 0.08099997685185095,
+      "rightShoulderDisplacementM": 0.017893139262044732
+    },
+    {
+      "frame": 222,
+      "sourceFrame": 526.25,
+      "additionalPitchYawBankDeg": [
+        1.8437500000000002,
+        1.890625,
+        -0.6875
+      ],
+      "headAdditionalYawDeg": 0.66171875,
+      "rightArmFollow": 0.08599500000000003,
+      "rightShoulderDisplacementM": 0.017566680869372738
+    },
+    {
+      "frame": 223,
+      "sourceFrame": 526.4583333333334,
+      "additionalPitchYawBankDeg": [
+        1.9139714077503542,
+        1.6218090920781412,
+        -0.8279428155007085
+      ],
+      "headAdditionalYawDeg": 0.5676331822273494,
+      "rightArmFollow": 0.09096918981481572,
+      "rightShoulderDisplacementM": 0.017196794949770743
+    },
+    {
+      "frame": 224,
+      "sourceFrame": 526.6666666666666,
+      "additionalPitchYawBankDeg": [
+        1.9657064471879213,
+        1.3662551440329669,
+        -0.9314128943758422
+      ],
+      "headAdditionalYawDeg": 0.47818930041153834,
+      "rightArmFollow": 0.0959051851851843,
+      "rightShoulderDisplacementM": 0.016745781203289633
+    },
+    {
+      "frame": 225,
+      "sourceFrame": 526.875,
+      "additionalPitchYawBankDeg": [
+        1.9949363425925926,
+        1.1299913194444446,
+        -0.9898726851851851
+      ],
+      "headAdditionalYawDeg": 0.3954969618055556,
+      "rightArmFollow": 0.10078562500000002,
+      "rightShoulderDisplacementM": 0.01617335917512558
+    },
+    {
+      "frame": 226,
+      "sourceFrame": 527.0833333333334,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        0.9144161522633346,
+        -1.0
+      ],
+      "headAdditionalYawDeg": 0.3200456532921671,
+      "rightArmFollow": 0.105593148148149,
+      "rightShoulderDisplacementM": 0.01544663846774193
+    },
+    {
+      "frame": 227,
+      "sourceFrame": 527.2916666666666,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        0.6827337319959289,
+        -1.0
+      ],
+      "headAdditionalYawDeg": 0.2389568061985751,
+      "rightArmFollow": 0.11031039351851768,
+      "rightShoulderDisplacementM": 0.014616691208832324
+    },
+    {
+      "frame": 228,
+      "sourceFrame": 527.5,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        0.4305555555555556,
+        -1.0
+      ],
+      "headAdditionalYawDeg": 0.15069444444444444,
+      "rightArmFollow": 0.11492000000000001,
+      "rightShoulderDisplacementM": 0.01371885500996065
+    },
+    {
+      "frame": 229,
+      "sourceFrame": 527.7083333333334,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        0.16390978652258437,
+        -1.0
+      ],
+      "headAdditionalYawDeg": 0.05736842528290453,
+      "rightArmFollow": 0.11940460648148232,
+      "rightShoulderDisplacementM": 0.012777391805974536
+    },
+    {
+      "frame": 230,
+      "sourceFrame": 527.9166666666666,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -0.11117541152258331,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.038911394032904154,
+      "rightArmFollow": 0.12374685185185108,
+      "rightShoulderDisplacementM": 0.011816773475560559
+    },
+    {
+      "frame": 231,
+      "sourceFrame": 528.125,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -0.388671875,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.13603515625,
+      "rightArmFollow": 0.12792937500000004,
+      "rightShoulderDisplacementM": 0.010861345417123284
+    },
+    {
+      "frame": 232,
+      "sourceFrame": 528.3333333333334,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -0.6625514403292673,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.23189300411524352,
+      "rightArmFollow": 0.13193481481481556,
+      "rightShoulderDisplacementM": 0.009936061992375397
+    },
+    {
+      "frame": 233,
+      "sourceFrame": 528.5416666666666,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -0.9267859439299941,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.32437508037549795,
+      "rightArmFollow": 0.1357458101851845,
+      "rightShoulderDisplacementM": 0.009064323277022526
+    },
+    {
+      "frame": 234,
+      "sourceFrame": 528.75,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -1.1753472222222223,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.41137152777777775,
+      "rightArmFollow": 0.139345,
+      "rightShoulderDisplacementM": 0.008269796828962445
+    },
+    {
+      "frame": 235,
+      "sourceFrame": 528.9583333333334,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -1.402207111625554,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.49077248906894383,
+      "rightArmFollow": 0.1427150231481488,
+      "rightShoulderDisplacementM": 0.007572638523837995
+    },
+    {
+      "frame": 236,
+      "sourceFrame": 529.1666666666666,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -1.6013374485596379,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.5604681069958732,
+      "rightArmFollow": 0.14583851851851798,
+      "rightShoulderDisplacementM": 0.00698939246728971
+    },
+    {
+      "frame": 237,
+      "sourceFrame": 529.375,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -1.7667100694444446,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.6183485243055556,
+      "rightArmFollow": 0.14869812500000001,
+      "rightShoulderDisplacementM": 0.006531148545616318
+    },
+    {
+      "frame": 238,
+      "sourceFrame": 529.5833333333334,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -1.892296810699607,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.6623038837448624,
+      "rightArmFollow": 0.15127648148148193,
+      "rightShoulderDisplacementM": 0.006202784850856859
+    },
+    {
+      "frame": 239,
+      "sourceFrame": 529.7916666666666,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -1.9720695087448463,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.6902243280606962,
+      "rightArmFollow": 0.15355622685185147,
+      "rightShoulderDisplacementM": 0.00600542877355024
+    },
+    {
+      "frame": 240,
+      "sourceFrame": 530.0,
+      "additionalPitchYawBankDeg": [
+        2.0,
+        -2.0,
+        -1.0
+      ],
+      "headAdditionalYawDeg": -0.7,
+      "rightArmFollow": 0.15552,
+      "rightShoulderDisplacementM": 0.005940804062167788
+    },
+    {
+      "frame": 241,
+      "sourceFrame": 530.2083333333334,
+      "additionalPitchYawBankDeg": [
+        1.9906898362482819,
+        -1.9724044067215267,
+        -0.9862022033607634
+      ],
+      "headAdditionalYawDeg": -0.6903415423525343,
+      "rightArmFollow": 0.1571504398148151,
+      "rightShoulderDisplacementM": 0.005911921546404169
+    },
+    {
+      "frame": 242,
+      "sourceFrame": 530.4166666666666,
+      "additionalPitchYawBankDeg": [
+        1.9640989368998691,
+        -1.8949759945130498,
+        -0.9474879972565249
+      ],
+      "headAdditionalYawDeg": -0.6632415980795674,
+      "rightArmFollow": 0.15843018518518498,
+      "rightShoulderDisplacementM": 0.005830033909754904
+    },
+    {
+      "frame": 243,
+      "sourceFrame": 530.625,
+      "additionalPitchYawBankDeg": [
+        1.922236689814815,
+        -1.775752314814815,
+        -0.8878761574074076
+      ],
+      "headAdditionalYawDeg": -0.6215133101851852,
+      "rightArmFollow": 0.159341875,
+      "rightShoulderDisplacementM": 0.005718126027232388
+    },
+    {
+      "frame": 244,
+      "sourceFrame": 530.8333333333334,
+      "additionalPitchYawBankDeg": [
+        1.8671124828532126,
+        -1.622770919067185,
+        -0.8113854595335925
+      ],
+      "headAdditionalYawDeg": -0.5679698216735147,
+      "rightArmFollow": 0.1598681481481482,
+      "rightShoulderDisplacementM": 0.005603807284093715
+    },
+    {
+      "frame": 245,
+      "sourceFrame": 531.0416666666666,
+      "additionalPitchYawBankDeg": [
+        1.8007357038751843,
+        -1.444069358710597,
+        -0.7220346793552985
+      ],
+      "headAdditionalYawDeg": -0.505424275548709,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.005514527294077582
+    },
+    {
+      "frame": 246,
+      "sourceFrame": 531.25,
+      "additionalPitchYawBankDeg": [
+        1.7251157407407407,
+        -1.2476851851851851,
+        -0.6238425925925926
+      ],
+      "headAdditionalYawDeg": -0.4366898148148148,
+      "rightArmFollow": 0.16000000000000003,
+      "rightShoulderDisplacementM": 0.005470926087866735
+    },
+    {
+      "frame": 247,
+      "sourceFrame": 531.4583333333334,
+      "additionalPitchYawBankDeg": [
+        1.6422619813099981,
+        -1.041655949931375,
+        -0.5208279749656874
+      ],
+      "headAdditionalYawDeg": -0.36457958247598116,
+      "rightArmFollow": 0.16000000000000003,
+      "rightShoulderDisplacementM": 0.005482592339907313
+    },
+    {
+      "frame": 248,
+      "sourceFrame": 531.6666666666666,
+      "additionalPitchYawBankDeg": [
+        1.554183813443089,
+        -0.834019204389612,
+        -0.417009602194806
+      ],
+      "headAdditionalYawDeg": -0.29190672153636416,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.005545723488474909
+    },
+    {
+      "frame": 249,
+      "sourceFrame": 531.875,
+      "additionalPitchYawBankDeg": [
+        1.462890625,
+        -0.6328125,
+        -0.31640625
+      ],
+      "headAdditionalYawDeg": -0.22148437499999998,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.005642318306940967
+    },
+    {
+      "frame": 250,
+      "sourceFrame": 532.0833333333334,
+      "additionalPitchYawBankDeg": [
+        1.370391803840861,
+        -0.4460733882029857,
+        -0.22303669410149285
+      ],
+      "headAdditionalYawDeg": -0.156125685871045,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.005743859128844971
+    },
+    {
+      "frame": 251,
+      "sourceFrame": 532.2916666666666,
+      "additionalPitchYawBankDeg": [
+        1.2786967378258054,
+        -0.2818394204389847,
+        -0.14091971021949234
+      ],
+      "headAdditionalYawDeg": -0.09864379715364464,
+      "rightArmFollow": 0.16000000000000003,
+      "rightShoulderDisplacementM": 0.005816349914112123
+    },
+    {
+      "frame": 252,
+      "sourceFrame": 532.5,
+      "additionalPitchYawBankDeg": [
+        1.1898148148148149,
+        -0.14814814814814836,
+        -0.07407407407407418
+      ],
+      "headAdditionalYawDeg": -0.05185185185185192,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.0058237442088650984
+    },
+    {
+      "frame": 253,
+      "sourceFrame": 532.7083333333334,
+      "additionalPitchYawBankDeg": [
+        1.1057554226680235,
+        -0.053037122770905665,
+        -0.026518561385452832
+      ],
+      "headAdditionalYawDeg": -0.018562992969816984,
+      "rightArmFollow": 0.15999999999999998,
+      "rightShoulderDisplacementM": 0.005729849497556378
+    },
+    {
+      "frame": 254,
+      "sourceFrame": 532.9166666666666,
+      "additionalPitchYawBankDeg": [
+        1.0285279492455552,
+        -0.00454389574760361,
+        -0.002271947873801805
+      ],
+      "headAdditionalYawDeg": -0.0015903635116612633,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.005501084686226867
+    },
+    {
+      "frame": 255,
+      "sourceFrame": 533.125,
+      "additionalPitchYawBankDeg": [
+        0.9566695601851852,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.005133306269092933
+    },
+    {
+      "frame": 256,
+      "sourceFrame": 533.3333333333334,
+      "additionalPitchYawBankDeg": [
+        0.8779149519890111,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.15999999999999998,
+      "rightShoulderDisplacementM": 0.0047102796325637205
+    },
+    {
+      "frame": 257,
+      "sourceFrame": 533.5416666666666,
+      "additionalPitchYawBankDeg": [
+        0.7927303026406195,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.004253533121309991
+    },
+    {
+      "frame": 258,
+      "sourceFrame": 533.75,
+      "additionalPitchYawBankDeg": [
+        0.703125,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.003772612077142391
+    },
+    {
+      "frame": 259,
+      "sourceFrame": 533.9583333333334,
+      "additionalPitchYawBankDeg": [
+        0.6111084319272808,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.003278811947775992
+    },
+    {
+      "frame": 260,
+      "sourceFrame": 534.1666666666666,
+      "additionalPitchYawBankDeg": [
+        0.5186899862825955,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16000000000000003,
+      "rightShoulderDisplacementM": 0.0027827347191980347
+    },
+    {
+      "frame": 261,
+      "sourceFrame": 534.375,
+      "additionalPitchYawBankDeg": [
+        0.427879050925926,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.002295626116207586
+    },
+    {
+      "frame": 262,
+      "sourceFrame": 534.5833333333334,
+      "additionalPitchYawBankDeg": [
+        0.34068501371740567,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.0018279614575316457
+    },
+    {
+      "frame": 263,
+      "sourceFrame": 534.7916666666666,
+      "additionalPitchYawBankDeg": [
+        0.25911726251716094,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.0013901060438158688
+    },
+    {
+      "frame": 264,
+      "sourceFrame": 535.0,
+      "additionalPitchYawBankDeg": [
+        0.18518518518518512,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16000000000000003,
+      "rightShoulderDisplacementM": 0.0009936257918377151
+    },
+    {
+      "frame": 265,
+      "sourceFrame": 535.2083333333334,
+      "additionalPitchYawBankDeg": [
+        0.12089816958160783,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.0006488750882913138
+    },
+    {
+      "frame": 266,
+      "sourceFrame": 535.4166666666666,
+      "additionalPitchYawBankDeg": [
+        0.06826560356653777,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.00036618505357870467
+    },
+    {
+      "frame": 267,
+      "sourceFrame": 535.625,
+      "additionalPitchYawBankDeg": [
+        0.029296874999999997,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 0.00015716853105639917
+    },
+    {
+      "frame": 268,
+      "sourceFrame": 535.8333333333334,
+      "additionalPitchYawBankDeg": [
+        0.0060013717421096855,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 3.1979655570913005e-05
+    },
+    {
+      "frame": 269,
+      "sourceFrame": 536.0416666666666,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 3.371747880871523e-07
+    },
+    {
+      "frame": 270,
+      "sourceFrame": 536.25,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 2.384185791015625e-07
+    },
+    {
+      "frame": 271,
+      "sourceFrame": 536.4583333333334,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 272,
+      "sourceFrame": 536.6666666666666,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 2.457562461863554e-07
+    },
+    {
+      "frame": 273,
+      "sourceFrame": 536.875,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 274,
+      "sourceFrame": 537.0833333333334,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 275,
+      "sourceFrame": 537.2916666666666,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 8.429369702178807e-08
+    },
+    {
+      "frame": 276,
+      "sourceFrame": 537.5,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.1920928955078125e-07
+    },
+    {
+      "frame": 277,
+      "sourceFrame": 537.7083333333334,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 6.01977404258375e-07
+    },
+    {
+      "frame": 278,
+      "sourceFrame": 537.9166666666666,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 2.5288109106536417e-07
+    },
+    {
+      "frame": 279,
+      "sourceFrame": 538.125,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16000000000000003,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 280,
+      "sourceFrame": 538.3333333333334,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3657139822709083e-07
+    },
+    {
+      "frame": 281,
+      "sourceFrame": 538.5416666666666,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 6.664001874625056e-08
+    },
+    {
+      "frame": 282,
+      "sourceFrame": 538.75,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.15999999999999998,
+      "rightShoulderDisplacementM": 4.842304232499576e-07
+    },
+    {
+      "frame": 283,
+      "sourceFrame": 538.9583333333334,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.1920928955078125e-07
+    },
+    {
+      "frame": 284,
+      "sourceFrame": 539.1666666666666,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.341104507446289e-07
+    },
+    {
+      "frame": 285,
+      "sourceFrame": 539.375,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.2731557704981462e-07
+    },
+    {
+      "frame": 286,
+      "sourceFrame": 539.5833333333334,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 2.388837865275353e-07
+    },
+    {
+      "frame": 287,
+      "sourceFrame": 539.7916666666666,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4057727354849284e-07
+    },
+    {
+      "frame": 288,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.5840151626966372e-07
+    },
+    {
+      "frame": 289,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 290,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 291,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.7943374184954607e-07
+    },
+    {
+      "frame": 292,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 293,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 294,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 295,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4901161193847656e-07
+    },
+    {
+      "frame": 296,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 6.143906154658885e-08
+    },
+    {
+      "frame": 297,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 298,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 299,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4901161193847656e-07
+    },
+    {
+      "frame": 300,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 301,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 3.6286698764222625e-07
+    },
+    {
+      "frame": 302,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 303,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 304,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 305,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4901161193847656e-07
+    },
+    {
+      "frame": 306,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 307,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 308,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 309,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 310,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 311,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 312,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 313,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4901161193847656e-07
+    },
+    {
+      "frame": 314,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 315,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 316,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 317,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 8.429369702178807e-08
+    },
+    {
+      "frame": 318,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 319,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4901161193847656e-07
+    },
+    {
+      "frame": 320,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 321,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 322,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 323,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 324,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.5840151626966372e-07
+    },
+    {
+      "frame": 325,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.999200562387517e-07
+    },
+    {
+      "frame": 326,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.5840151626966372e-07
+    },
+    {
+      "frame": 327,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.2731557704981462e-07
+    },
+    {
+      "frame": 328,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 6.143906154658885e-08
+    },
+    {
+      "frame": 329,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 330,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 331,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 7.450580596923828e-08
+    },
+    {
+      "frame": 332,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 333,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 334,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.5840151626966372e-07
+    },
+    {
+      "frame": 335,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 336,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 337,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.7943374184954607e-07
+    },
+    {
+      "frame": 338,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 339,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 340,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 341,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 342,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 8.429369702178807e-08
+    },
+    {
+      "frame": 343,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 344,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 345,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.7943374184954607e-07
+    },
+    {
+      "frame": 346,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 347,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 348,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 349,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 350,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 351,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.5840151626966372e-07
+    },
+    {
+      "frame": 352,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 3.2098083538618706e-07
+    },
+    {
+      "frame": 353,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.5840151626966372e-07
+    },
+    {
+      "frame": 354,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.2731557704981462e-07
+    },
+    {
+      "frame": 355,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 6.143906154658885e-08
+    },
+    {
+      "frame": 356,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.999200562387517e-07
+    },
+    {
+      "frame": 357,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 2.9802322387695312e-08
+    },
+    {
+      "frame": 358,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.999200562387517e-07
+    },
+    {
+      "frame": 359,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 6.143906154658885e-08
+    },
+    {
+      "frame": 360,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 2.9802322387695312e-08
+    },
+    {
+      "frame": 361,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 7.450580596923828e-08
+    },
+    {
+      "frame": 362,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 7.450580596923828e-08
+    },
+    {
+      "frame": 363,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 364,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.5840151626966372e-07
+    },
+    {
+      "frame": 365,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 366,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 367,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3328003749250113e-07
+    },
+    {
+      "frame": 368,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 369,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4901161193847656e-07
+    },
+    {
+      "frame": 370,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 371,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.7943374184954607e-07
+    },
+    {
+      "frame": 372,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 373,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 374,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 375,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 376,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 7.450580596923828e-08
+    },
+    {
+      "frame": 377,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 378,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 379,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4901161193847656e-07
+    },
+    {
+      "frame": 380,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 3.6378370570342845e-07
+    },
+    {
+      "frame": 381,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 382,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 383,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.9082797281243946e-07
+    },
+    {
+      "frame": 384,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 385,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 386,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 387,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.2731557704981462e-07
+    },
+    {
+      "frame": 388,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 2.4620758953479386e-07
+    },
+    {
+      "frame": 389,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 390,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 391,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.7943374184954607e-07
+    },
+    {
+      "frame": 392,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 393,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 394,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 395,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 396,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 7.450580596923828e-08
+    },
+    {
+      "frame": 397,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 398,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 399,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.9082797281243946e-07
+    },
+    {
+      "frame": 400,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 8.429369702178807e-08
+    },
+    {
+      "frame": 401,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4901161193847656e-07
+    },
+    {
+      "frame": 402,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 403,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 404,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 405,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 406,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 407,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.5840151626966372e-07
+    },
+    {
+      "frame": 408,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 409,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 410,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.5840151626966372e-07
+    },
+    {
+      "frame": 411,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 412,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 413,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 414,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 415,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 7.450580596923828e-08
+    },
+    {
+      "frame": 416,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 417,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 418,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 419,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 420,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 8.429369702178807e-08
+    },
+    {
+      "frame": 421,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.3657139822709083e-07
+    },
+    {
+      "frame": 422,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 423,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 7.450580596923828e-08
+    },
+    {
+      "frame": 424,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 425,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 426,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 427,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 3.6378370570342845e-07
+    },
+    {
+      "frame": 428,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 429,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 430,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.9082797281243946e-07
+    },
+    {
+      "frame": 431,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 432,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 433,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4057727354849284e-07
+    },
+    {
+      "frame": 434,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 435,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 436,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 437,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.7943374184954607e-07
+    },
+    {
+      "frame": 438,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 439,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 440,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 441,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 442,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 7.450580596923828e-08
+    },
+    {
+      "frame": 443,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 444,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 445,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 446,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 8.429369702178807e-08
+    },
+    {
+      "frame": 447,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4901161193847656e-07
+    },
+    {
+      "frame": 448,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 449,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 450,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 451,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 452,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 453,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 454,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 8.429369702178807e-08
+    },
+    {
+      "frame": 455,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.2731557704981462e-07
+    },
+    {
+      "frame": 456,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.5840151626966372e-07
+    },
+    {
+      "frame": 457,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 458,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 459,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 460,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 461,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 7.450580596923828e-08
+    },
+    {
+      "frame": 462,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 463,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 464,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 465,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.9082797281243946e-07
+    },
+    {
+      "frame": 466,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 467,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 3.6378370570342845e-07
+    },
+    {
+      "frame": 468,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 469,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 7.450580596923828e-08
+    },
+    {
+      "frame": 470,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.470348358154297e-08
+    },
+    {
+      "frame": 471,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 472,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 4.887944301026084e-07
+    },
+    {
+      "frame": 473,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 6.664001874625056e-08
+    },
+    {
+      "frame": 474,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 475,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    },
+    {
+      "frame": 476,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 477,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 478,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4600096599955427e-07
+    },
+    {
+      "frame": 479,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 1.4901161193847656e-07
+    },
+    {
+      "frame": 480,
+      "sourceFrame": 540,
+      "additionalPitchYawBankDeg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "headAdditionalYawDeg": 0.0,
+      "rightArmFollow": 0.16,
+      "rightShoulderDisplacementM": 5.960464477539063e-08
+    }
+  ],
+  "scope": "Manual source-video-informed upper-body adjustment. Root, legs, wrist/finger channels, racket parent/socket, mesh rest, weights and shape keys unchanged. New surface and video fidelity QA remains required."
+}

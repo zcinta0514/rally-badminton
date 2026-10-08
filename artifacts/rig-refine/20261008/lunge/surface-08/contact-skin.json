@@ -1,0 +1,2675 @@
+{
+  "maxAdditionalFromCompressionSeedM": 0.012,
+  "posteriorCompressionFraction": 0.32,
+  "prefix": "Oct08Lower_",
+  "modifiableRestZRange": [
+    0.035,
+    0.85
+  ],
+  "sourceSupportContractUnchanged": true,
+  "upperSurfaceAndSolesPinned": true,
+  "solver": "Contact separation2mm, joint edge bounds, rest-transported outward normals and signed triangle area barriers; warm-started in rest space",
+  "rows": [
+    {
+      "frame": 133.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 133.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 134.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 134.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 135.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 135.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 136.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 136.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 137.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 137.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 138.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 138.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43996060983193297,
+      "maxEdgeRatio": 1.740009859299934,
+      "maxDisplacementM": 0.00026875008137753947
+    },
+    {
+      "frame": 139.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399508495127552,
+      "maxEdgeRatio": 1.7400119519481076,
+      "maxDisplacementM": 0.0003309441253350757
+    },
+    {
+      "frame": 139.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399388224867228,
+      "maxEdgeRatio": 1.7401215321166796,
+      "maxDisplacementM": 0.0003847264387891603
+    },
+    {
+      "frame": 140.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43992740751186943,
+      "maxEdgeRatio": 1.7402534588513532,
+      "maxDisplacementM": 0.000442856147117493
+    },
+    {
+      "frame": 140.5,
+      "initialPairs": 6,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43992088886292613,
+      "maxEdgeRatio": 1.7402899181902127,
+      "maxDisplacementM": 0.0010277983076292805
+    },
+    {
+      "frame": 141.0,
+      "initialPairs": 8,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43991465165752697,
+      "maxEdgeRatio": 1.74032651354863,
+      "maxDisplacementM": 0.001102384816420307
+    },
+    {
+      "frame": 141.5,
+      "initialPairs": 6,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43991256641836185,
+      "maxEdgeRatio": 1.740362939344695,
+      "maxDisplacementM": 0.0010458843275691033
+    },
+    {
+      "frame": 142.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43991083086355903,
+      "maxEdgeRatio": 1.7403990114897636,
+      "maxDisplacementM": 0.0007087812461117595
+    },
+    {
+      "frame": 142.5,
+      "initialPairs": 8,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399008677754661,
+      "maxEdgeRatio": 1.7404393746128706,
+      "maxDisplacementM": 0.0010887328560320955
+    },
+    {
+      "frame": 143.0,
+      "initialPairs": 15,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43990331434596097,
+      "maxEdgeRatio": 1.7406400495376304,
+      "maxDisplacementM": 0.0015191503858497772
+    },
+    {
+      "frame": 143.5,
+      "initialPairs": 19,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399088951836569,
+      "maxEdgeRatio": 1.740739647975275,
+      "maxDisplacementM": 0.0016159662066218344
+    },
+    {
+      "frame": 144.0,
+      "initialPairs": 19,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43991484811656545,
+      "maxEdgeRatio": 1.7408164635253114,
+      "maxDisplacementM": 0.001734690671457711
+    },
+    {
+      "frame": 144.5,
+      "initialPairs": 25,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.4399935359693909,
+      "maxEdgeRatio": 1.7403301281980978,
+      "maxDisplacementM": 0.002301641546309663
+    },
+    {
+      "frame": 145.0,
+      "initialPairs": 25,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.43999295295941243,
+      "maxEdgeRatio": 1.7403511699344698,
+      "maxDisplacementM": 0.002398746410338406
+    },
+    {
+      "frame": 145.5,
+      "initialPairs": 25,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.4399919320486545,
+      "maxEdgeRatio": 1.7403754751066094,
+      "maxDisplacementM": 0.002399500930641024
+    },
+    {
+      "frame": 146.0,
+      "initialPairs": 25,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.43999186606543284,
+      "maxEdgeRatio": 1.7403908750489678,
+      "maxDisplacementM": 0.002399801224407149
+    },
+    {
+      "frame": 146.5,
+      "initialPairs": 29,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.4399898341952382,
+      "maxEdgeRatio": 1.740416463561434,
+      "maxDisplacementM": 0.002399922376740323
+    },
+    {
+      "frame": 147.0,
+      "initialPairs": 33,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.43998773211826275,
+      "maxEdgeRatio": 1.7404321501417919,
+      "maxDisplacementM": 0.0030624948261729888
+    },
+    {
+      "frame": 147.5,
+      "initialPairs": 35,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.4399859145178842,
+      "maxEdgeRatio": 1.7404423570142609,
+      "maxDisplacementM": 0.0023959925375347693
+    },
+    {
+      "frame": 148.0,
+      "initialPairs": 39,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.439982629442559,
+      "maxEdgeRatio": 1.7404640680164198,
+      "maxDisplacementM": 0.0023983651544987336
+    },
+    {
+      "frame": 148.5,
+      "initialPairs": 41,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.439977858144846,
+      "maxEdgeRatio": 1.7404768944403428,
+      "maxDisplacementM": 0.003124434629280025
+    },
+    {
+      "frame": 149.0,
+      "initialPairs": 41,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.43999454541234895,
+      "maxEdgeRatio": 1.7401795233231148,
+      "maxDisplacementM": 0.003562019158904715
+    },
+    {
+      "frame": 149.5,
+      "initialPairs": 37,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.43996145324075303,
+      "maxEdgeRatio": 1.7404734261035926,
+      "maxDisplacementM": 0.003199575904082762
+    },
+    {
+      "frame": 150.0,
+      "initialPairs": 35,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.439910849068659,
+      "maxEdgeRatio": 1.740452615572486,
+      "maxDisplacementM": 0.002999357679943197
+    },
+    {
+      "frame": 150.5,
+      "initialPairs": 39,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.4397998134453176,
+      "maxEdgeRatio": 1.7404470958054254,
+      "maxDisplacementM": 0.0029764197398152014
+    },
+    {
+      "frame": 151.0,
+      "initialPairs": 40,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.4391582725807622,
+      "maxEdgeRatio": 1.74186169937903,
+      "maxDisplacementM": 0.0026430496657228165
+    },
+    {
+      "frame": 151.5,
+      "initialPairs": 42,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.4387599445105773,
+      "maxEdgeRatio": 1.7427522322886362,
+      "maxDisplacementM": 0.0032169250931820543
+    },
+    {
+      "frame": 152.0,
+      "initialPairs": 51,
+      "finalPairs": 0,
+      "iterations": 10,
+      "minEdgeRatio": 0.4386027367017352,
+      "maxEdgeRatio": 1.7431010373210571,
+      "maxDisplacementM": 0.0035098558162717417
+    },
+    {
+      "frame": 152.5,
+      "initialPairs": 51,
+      "finalPairs": 0,
+      "iterations": 10,
+      "minEdgeRatio": 0.43848077352730624,
+      "maxEdgeRatio": 1.7433728501208496,
+      "maxDisplacementM": 0.004327282603162444
+    },
+    {
+      "frame": 153.0,
+      "initialPairs": 56,
+      "finalPairs": 0,
+      "iterations": 11,
+      "minEdgeRatio": 0.438481696391134,
+      "maxEdgeRatio": 1.7433722611270235,
+      "maxDisplacementM": 0.004908209222112976
+    },
+    {
+      "frame": 153.5,
+      "initialPairs": 63,
+      "finalPairs": 0,
+      "iterations": 12,
+      "minEdgeRatio": 0.4387397403078742,
+      "maxEdgeRatio": 1.7427958204405978,
+      "maxDisplacementM": 0.0053596560310720555
+    },
+    {
+      "frame": 154.0,
+      "initialPairs": 63,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.4386886601336113,
+      "maxEdgeRatio": 1.7429104948144056,
+      "maxDisplacementM": 0.005485430347006591
+    },
+    {
+      "frame": 154.5,
+      "initialPairs": 67,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.4385896584713732,
+      "maxEdgeRatio": 1.743129661490275,
+      "maxDisplacementM": 0.00587156856806659
+    },
+    {
+      "frame": 155.0,
+      "initialPairs": 67,
+      "finalPairs": 0,
+      "iterations": 12,
+      "minEdgeRatio": 0.4388661775800717,
+      "maxEdgeRatio": 1.742744582677798,
+      "maxDisplacementM": 0.006907980251960588
+    },
+    {
+      "frame": 155.5,
+      "initialPairs": 76,
+      "finalPairs": 0,
+      "iterations": 11,
+      "minEdgeRatio": 0.43890891856119874,
+      "maxEdgeRatio": 1.7425867020740005,
+      "maxDisplacementM": 0.00812964950266007
+    },
+    {
+      "frame": 156.0,
+      "initialPairs": 78,
+      "finalPairs": 0,
+      "iterations": 12,
+      "minEdgeRatio": 0.4391106470474196,
+      "maxEdgeRatio": 1.7421070812237225,
+      "maxDisplacementM": 0.00996555261634831
+    },
+    {
+      "frame": 156.5,
+      "initialPairs": 80,
+      "finalPairs": 0,
+      "iterations": 11,
+      "minEdgeRatio": 0.43902467250287275,
+      "maxEdgeRatio": 1.7423079593348885,
+      "maxDisplacementM": 0.009610588807553073
+    },
+    {
+      "frame": 157.0,
+      "initialPairs": 87,
+      "finalPairs": 0,
+      "iterations": 10,
+      "minEdgeRatio": 0.43945951836086283,
+      "maxEdgeRatio": 1.7412783766382958,
+      "maxDisplacementM": 0.011048869504890821
+    },
+    {
+      "frame": 157.5,
+      "initialPairs": 97,
+      "finalPairs": 0,
+      "iterations": 10,
+      "minEdgeRatio": 0.43952019437906303,
+      "maxEdgeRatio": 1.7411363595281188,
+      "maxDisplacementM": 0.010498870217855795
+    },
+    {
+      "frame": 158.0,
+      "initialPairs": 85,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.43979936476968684,
+      "maxEdgeRatio": 1.7400051541185095,
+      "maxDisplacementM": 0.012000000000000103
+    },
+    {
+      "frame": 158.5,
+      "initialPairs": 90,
+      "finalPairs": 0,
+      "iterations": 15,
+      "minEdgeRatio": 0.43999101264023854,
+      "maxEdgeRatio": 1.7400051820951294,
+      "maxDisplacementM": 0.012000000000000089
+    },
+    {
+      "frame": 159.0,
+      "initialPairs": 86,
+      "finalPairs": 0,
+      "iterations": 18,
+      "minEdgeRatio": 0.4399834520759723,
+      "maxEdgeRatio": 1.740005060923147,
+      "maxDisplacementM": 0.01201814728297715
+    },
+    {
+      "frame": 159.5,
+      "initialPairs": 88,
+      "finalPairs": 0,
+      "iterations": 17,
+      "minEdgeRatio": 0.4399945254061892,
+      "maxEdgeRatio": 1.7400050816897032,
+      "maxDisplacementM": 0.012404718631866148
+    },
+    {
+      "frame": 160.0,
+      "initialPairs": 95,
+      "finalPairs": 0,
+      "iterations": 17,
+      "minEdgeRatio": 0.4399929514412594,
+      "maxEdgeRatio": 1.740005101402362,
+      "maxDisplacementM": 0.013266471504927295
+    },
+    {
+      "frame": 160.5,
+      "initialPairs": 91,
+      "finalPairs": 0,
+      "iterations": 16,
+      "minEdgeRatio": 0.43999226836367195,
+      "maxEdgeRatio": 1.740005135168979,
+      "maxDisplacementM": 0.01439721054492261
+    },
+    {
+      "frame": 161.0,
+      "initialPairs": 90,
+      "finalPairs": 0,
+      "iterations": 15,
+      "minEdgeRatio": 0.439671464806876,
+      "maxEdgeRatio": 1.7400050258714101,
+      "maxDisplacementM": 0.01527650246840092
+    },
+    {
+      "frame": 161.5,
+      "initialPairs": 92,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.43999199802948047,
+      "maxEdgeRatio": 1.740005067714179,
+      "maxDisplacementM": 0.015968308528474695
+    },
+    {
+      "frame": 162.0,
+      "initialPairs": 95,
+      "finalPairs": 0,
+      "iterations": 12,
+      "minEdgeRatio": 0.4390511252118744,
+      "maxEdgeRatio": 1.7422355878403155,
+      "maxDisplacementM": 0.016824975296408595
+    },
+    {
+      "frame": 162.5,
+      "initialPairs": 95,
+      "finalPairs": 0,
+      "iterations": 11,
+      "minEdgeRatio": 0.4392181951010646,
+      "maxEdgeRatio": 1.74184028836212,
+      "maxDisplacementM": 0.017711273576187035
+    },
+    {
+      "frame": 163.0,
+      "initialPairs": 98,
+      "finalPairs": 0,
+      "iterations": 14,
+      "minEdgeRatio": 0.4388899109794146,
+      "maxEdgeRatio": 1.74261439551627,
+      "maxDisplacementM": 0.01808534146632605
+    },
+    {
+      "frame": 163.5,
+      "initialPairs": 102,
+      "finalPairs": 0,
+      "iterations": 15,
+      "minEdgeRatio": 0.43899191495276324,
+      "maxEdgeRatio": 1.7423770000861862,
+      "maxDisplacementM": 0.020583413748460577
+    },
+    {
+      "frame": 164.0,
+      "initialPairs": 105,
+      "finalPairs": 0,
+      "iterations": 16,
+      "minEdgeRatio": 0.43893847639473493,
+      "maxEdgeRatio": 1.742504307756666,
+      "maxDisplacementM": 0.024096195510759123
+    },
+    {
+      "frame": 164.5,
+      "initialPairs": 114,
+      "finalPairs": 0,
+      "iterations": 17,
+      "minEdgeRatio": 0.43896409647464174,
+      "maxEdgeRatio": 1.7424468029050924,
+      "maxDisplacementM": 0.027127301128860887
+    },
+    {
+      "frame": 165.0,
+      "initialPairs": 118,
+      "finalPairs": 0,
+      "iterations": 15,
+      "minEdgeRatio": 0.4389268501429224,
+      "maxEdgeRatio": 1.7425458447071576,
+      "maxDisplacementM": 0.02976353120886434
+    },
+    {
+      "frame": 165.5,
+      "initialPairs": 121,
+      "finalPairs": 0,
+      "iterations": 15,
+      "minEdgeRatio": 0.4389416926305763,
+      "maxEdgeRatio": 1.7425110561998838,
+      "maxDisplacementM": 0.03170348166918855
+    },
+    {
+      "frame": 166.0,
+      "initialPairs": 118,
+      "finalPairs": 0,
+      "iterations": 14,
+      "minEdgeRatio": 0.4388781329368022,
+      "maxEdgeRatio": 1.7426624419143772,
+      "maxDisplacementM": 0.033119873579037264
+    },
+    {
+      "frame": 166.5,
+      "initialPairs": 119,
+      "finalPairs": 0,
+      "iterations": 15,
+      "minEdgeRatio": 0.4390688572117844,
+      "maxEdgeRatio": 1.7422140119283662,
+      "maxDisplacementM": 0.03384983162662124
+    },
+    {
+      "frame": 167.0,
+      "initialPairs": 118,
+      "finalPairs": 0,
+      "iterations": 14,
+      "minEdgeRatio": 0.43889412461489413,
+      "maxEdgeRatio": 1.7426282181914459,
+      "maxDisplacementM": 0.03406058146241753
+    },
+    {
+      "frame": 167.5,
+      "initialPairs": 126,
+      "finalPairs": 0,
+      "iterations": 14,
+      "minEdgeRatio": 0.43899295848596837,
+      "maxEdgeRatio": 1.7423950776690982,
+      "maxDisplacementM": 0.03406056197926914
+    },
+    {
+      "frame": 168.0,
+      "initialPairs": 124,
+      "finalPairs": 0,
+      "iterations": 14,
+      "minEdgeRatio": 0.4390915420047092,
+      "maxEdgeRatio": 1.7421620131615765,
+      "maxDisplacementM": 0.034060566779501915
+    },
+    {
+      "frame": 168.5,
+      "initialPairs": 126,
+      "finalPairs": 0,
+      "iterations": 14,
+      "minEdgeRatio": 0.43914284399561015,
+      "maxEdgeRatio": 1.7420399375916813,
+      "maxDisplacementM": 0.03406058838433082
+    },
+    {
+      "frame": 169.0,
+      "initialPairs": 124,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.43901589390329854,
+      "maxEdgeRatio": 1.7423409856895167,
+      "maxDisplacementM": 0.03406057902481248
+    },
+    {
+      "frame": 169.5,
+      "initialPairs": 126,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.4391338292021633,
+      "maxEdgeRatio": 1.742060888118403,
+      "maxDisplacementM": 0.034060569377216486
+    },
+    {
+      "frame": 170.0,
+      "initialPairs": 126,
+      "finalPairs": 0,
+      "iterations": 12,
+      "minEdgeRatio": 0.43917949278059326,
+      "maxEdgeRatio": 1.7419533944238244,
+      "maxDisplacementM": 0.03406057007952797
+    },
+    {
+      "frame": 170.5,
+      "initialPairs": 128,
+      "finalPairs": 0,
+      "iterations": 11,
+      "minEdgeRatio": 0.4391431637952684,
+      "maxEdgeRatio": 1.7420390698201027,
+      "maxDisplacementM": 0.03406057345233568
+    },
+    {
+      "frame": 171.0,
+      "initialPairs": 128,
+      "finalPairs": 0,
+      "iterations": 11,
+      "minEdgeRatio": 0.43895647535078297,
+      "maxEdgeRatio": 1.7424803779767533,
+      "maxDisplacementM": 0.034060581384703734
+    },
+    {
+      "frame": 171.5,
+      "initialPairs": 128,
+      "finalPairs": 0,
+      "iterations": 10,
+      "minEdgeRatio": 0.4390610854809338,
+      "maxEdgeRatio": 1.7422337169700752,
+      "maxDisplacementM": 0.03406057794320165
+    },
+    {
+      "frame": 172.0,
+      "initialPairs": 130,
+      "finalPairs": 0,
+      "iterations": 9,
+      "minEdgeRatio": 0.43919946225627643,
+      "maxEdgeRatio": 1.7419074339963647,
+      "maxDisplacementM": 0.03406057751099383
+    },
+    {
+      "frame": 172.5,
+      "initialPairs": 130,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.43921937971107494,
+      "maxEdgeRatio": 1.7418643004291647,
+      "maxDisplacementM": 0.03444644025772195
+    },
+    {
+      "frame": 173.0,
+      "initialPairs": 130,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.43933473130579137,
+      "maxEdgeRatio": 1.7416027986261189,
+      "maxDisplacementM": 0.034542567952590426
+    },
+    {
+      "frame": 173.5,
+      "initialPairs": 130,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.439737042420538,
+      "maxEdgeRatio": 1.740823858160435,
+      "maxDisplacementM": 0.034696662127810196
+    },
+    {
+      "frame": 174.0,
+      "initialPairs": 130,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.43973501007158483,
+      "maxEdgeRatio": 1.7408240180743082,
+      "maxDisplacementM": 0.03475657438549834
+    },
+    {
+      "frame": 174.5,
+      "initialPairs": 130,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.4397366599857952,
+      "maxEdgeRatio": 1.7405895276635546,
+      "maxDisplacementM": 0.035411338833745226
+    },
+    {
+      "frame": 175.0,
+      "initialPairs": 132,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.4397613597364287,
+      "maxEdgeRatio": 1.7406294117055205,
+      "maxDisplacementM": 0.03553338844961616
+    },
+    {
+      "frame": 175.5,
+      "initialPairs": 134,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.43995528420465135,
+      "maxEdgeRatio": 1.7402406834923225,
+      "maxDisplacementM": 0.03557615492474502
+    },
+    {
+      "frame": 176.0,
+      "initialPairs": 136,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.43977960049168047,
+      "maxEdgeRatio": 1.7412319940917838,
+      "maxDisplacementM": 0.03563302647437812
+    },
+    {
+      "frame": 176.5,
+      "initialPairs": 135,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.43989895583148714,
+      "maxEdgeRatio": 1.7407668094371576,
+      "maxDisplacementM": 0.03574825325243964
+    },
+    {
+      "frame": 177.0,
+      "initialPairs": 135,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.43990229790205204,
+      "maxEdgeRatio": 1.7409066215310307,
+      "maxDisplacementM": 0.03580133611312931
+    },
+    {
+      "frame": 177.5,
+      "initialPairs": 133,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.4399245623943782,
+      "maxEdgeRatio": 1.7410269372642344,
+      "maxDisplacementM": 0.03581129774543492
+    },
+    {
+      "frame": 178.0,
+      "initialPairs": 131,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.439931899948042,
+      "maxEdgeRatio": 1.7411471837705652,
+      "maxDisplacementM": 0.03581356276280652
+    },
+    {
+      "frame": 178.5,
+      "initialPairs": 131,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.43993106746377375,
+      "maxEdgeRatio": 1.7412265577971724,
+      "maxDisplacementM": 0.03578289075338353
+    },
+    {
+      "frame": 179.0,
+      "initialPairs": 130,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.43994901210890586,
+      "maxEdgeRatio": 1.740663809917065,
+      "maxDisplacementM": 0.035712638634890076
+    },
+    {
+      "frame": 179.5,
+      "initialPairs": 129,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.4399538678021518,
+      "maxEdgeRatio": 1.740681527592924,
+      "maxDisplacementM": 0.03546781874322765
+    },
+    {
+      "frame": 180.0,
+      "initialPairs": 129,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.43997785545299534,
+      "maxEdgeRatio": 1.7406990373500457,
+      "maxDisplacementM": 0.03479386020020923
+    },
+    {
+      "frame": 180.5,
+      "initialPairs": 129,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.43996202968480025,
+      "maxEdgeRatio": 1.7406978695312754,
+      "maxDisplacementM": 0.03448678123952221
+    },
+    {
+      "frame": 181.0,
+      "initialPairs": 127,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.4399578816193909,
+      "maxEdgeRatio": 1.7406964851904196,
+      "maxDisplacementM": 0.03406057061609648
+    },
+    {
+      "frame": 181.5,
+      "initialPairs": 127,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.43996072455332025,
+      "maxEdgeRatio": 1.7406806622066215,
+      "maxDisplacementM": 0.034060573473901255
+    },
+    {
+      "frame": 182.0,
+      "initialPairs": 130,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.43996634014235964,
+      "maxEdgeRatio": 1.7406647673364377,
+      "maxDisplacementM": 0.034060582902385596
+    },
+    {
+      "frame": 182.5,
+      "initialPairs": 127,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.43997456360562315,
+      "maxEdgeRatio": 1.7406398130075458,
+      "maxDisplacementM": 0.03406056735097306
+    },
+    {
+      "frame": 183.0,
+      "initialPairs": 121,
+      "finalPairs": 0,
+      "iterations": 9,
+      "minEdgeRatio": 0.4399900144203663,
+      "maxEdgeRatio": 1.7403123412488655,
+      "maxDisplacementM": 0.03406058415569243
+    },
+    {
+      "frame": 183.5,
+      "initialPairs": 115,
+      "finalPairs": 0,
+      "iterations": 10,
+      "minEdgeRatio": 0.4399385220491387,
+      "maxEdgeRatio": 1.7401536476292405,
+      "maxDisplacementM": 0.0340605799294441
+    },
+    {
+      "frame": 184.0,
+      "initialPairs": 113,
+      "finalPairs": 0,
+      "iterations": 11,
+      "minEdgeRatio": 0.4399938701934999,
+      "maxEdgeRatio": 1.7400754381863988,
+      "maxDisplacementM": 0.034060573487934925
+    },
+    {
+      "frame": 184.5,
+      "initialPairs": 113,
+      "finalPairs": 0,
+      "iterations": 12,
+      "minEdgeRatio": 0.4399946119870242,
+      "maxEdgeRatio": 1.7400376562221678,
+      "maxDisplacementM": 0.03406058081523062
+    },
+    {
+      "frame": 185.0,
+      "initialPairs": 109,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.4399922591182162,
+      "maxEdgeRatio": 1.7400191009460058,
+      "maxDisplacementM": 0.034060571989179264
+    },
+    {
+      "frame": 185.5,
+      "initialPairs": 101,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.43999359080395267,
+      "maxEdgeRatio": 1.7400185910796717,
+      "maxDisplacementM": 0.03406056856956101
+    },
+    {
+      "frame": 186.0,
+      "initialPairs": 100,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.43999492918615585,
+      "maxEdgeRatio": 1.7400180620812682,
+      "maxDisplacementM": 0.033875938759177465
+    },
+    {
+      "frame": 186.5,
+      "initialPairs": 102,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.4399939701472764,
+      "maxEdgeRatio": 1.7400179754949345,
+      "maxDisplacementM": 0.033312198943862406
+    },
+    {
+      "frame": 187.0,
+      "initialPairs": 97,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.4399940059515577,
+      "maxEdgeRatio": 1.7400173377477288,
+      "maxDisplacementM": 0.0324064697199561
+    },
+    {
+      "frame": 187.5,
+      "initialPairs": 93,
+      "finalPairs": 0,
+      "iterations": 11,
+      "minEdgeRatio": 0.43999215801388525,
+      "maxEdgeRatio": 1.7400603959252317,
+      "maxDisplacementM": 0.03127409901793505
+    },
+    {
+      "frame": 188.0,
+      "initialPairs": 88,
+      "finalPairs": 0,
+      "iterations": 10,
+      "minEdgeRatio": 0.43999764531412294,
+      "maxEdgeRatio": 1.7401142450059701,
+      "maxDisplacementM": 0.029902766940226488
+    },
+    {
+      "frame": 188.5,
+      "initialPairs": 88,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.4399947931790597,
+      "maxEdgeRatio": 1.740427587930919,
+      "maxDisplacementM": 0.02814511376793431
+    },
+    {
+      "frame": 189.0,
+      "initialPairs": 84,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.4399951277121763,
+      "maxEdgeRatio": 1.7408111624157587,
+      "maxDisplacementM": 0.026175621719999972
+    },
+    {
+      "frame": 189.5,
+      "initialPairs": 91,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.4399955669681563,
+      "maxEdgeRatio": 1.740852245731766,
+      "maxDisplacementM": 0.023848532997891102
+    },
+    {
+      "frame": 190.0,
+      "initialPairs": 76,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.43999659553396586,
+      "maxEdgeRatio": 1.7408913412884894,
+      "maxDisplacementM": 0.021376140297348727
+    },
+    {
+      "frame": 190.5,
+      "initialPairs": 76,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.43999612679227335,
+      "maxEdgeRatio": 1.7408460185275394,
+      "maxDisplacementM": 0.01865186608126907
+    },
+    {
+      "frame": 191.0,
+      "initialPairs": 56,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.4399958362608529,
+      "maxEdgeRatio": 1.740798578105307,
+      "maxDisplacementM": 0.0158894760765464
+    },
+    {
+      "frame": 191.5,
+      "initialPairs": 56,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.4399958420477025,
+      "maxEdgeRatio": 1.740743519981691,
+      "maxDisplacementM": 0.013040885694690025
+    },
+    {
+      "frame": 192.0,
+      "initialPairs": 50,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.439996016818352,
+      "maxEdgeRatio": 1.7406862705692754,
+      "maxDisplacementM": 0.010294634845918828
+    },
+    {
+      "frame": 192.5,
+      "initialPairs": 50,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.4399963984519313,
+      "maxEdgeRatio": 1.7412256732389289,
+      "maxDisplacementM": 0.007800034186332665
+    },
+    {
+      "frame": 193.0,
+      "initialPairs": 50,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.4399948947653938,
+      "maxEdgeRatio": 1.7410978082853363,
+      "maxDisplacementM": 0.0066693188209078925
+    },
+    {
+      "frame": 193.5,
+      "initialPairs": 55,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.43999598121247746,
+      "maxEdgeRatio": 1.740939430625565,
+      "maxDisplacementM": 0.004947125444110181
+    },
+    {
+      "frame": 194.0,
+      "initialPairs": 66,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.43999550521330877,
+      "maxEdgeRatio": 1.7407779124500709,
+      "maxDisplacementM": 0.003504528775006046
+    },
+    {
+      "frame": 194.5,
+      "initialPairs": 51,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.4399961601326047,
+      "maxEdgeRatio": 1.7405955219928044,
+      "maxDisplacementM": 0.003387046393724889
+    },
+    {
+      "frame": 195.0,
+      "initialPairs": 53,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.4399981517074879,
+      "maxEdgeRatio": 1.7404117744747725,
+      "maxDisplacementM": 0.003056928434642522
+    },
+    {
+      "frame": 195.5,
+      "initialPairs": 37,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.4399973437891211,
+      "maxEdgeRatio": 1.7404201547742346,
+      "maxDisplacementM": 0.0026554112599915594
+    },
+    {
+      "frame": 196.0,
+      "initialPairs": 35,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.4399975523588821,
+      "maxEdgeRatio": 1.7402231232301268,
+      "maxDisplacementM": 0.0022726439087691545
+    },
+    {
+      "frame": 196.5,
+      "initialPairs": 21,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399871216536848,
+      "maxEdgeRatio": 1.7405827460090444,
+      "maxDisplacementM": 0.0018943601152860727
+    },
+    {
+      "frame": 197.0,
+      "initialPairs": 9,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43998409967993185,
+      "maxEdgeRatio": 1.740553121841155,
+      "maxDisplacementM": 0.001879854596790624
+    },
+    {
+      "frame": 197.5,
+      "initialPairs": 9,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399860963990599,
+      "maxEdgeRatio": 1.7405784223793073,
+      "maxDisplacementM": 0.0018537563950273234
+    },
+    {
+      "frame": 198.0,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399890652824083,
+      "maxEdgeRatio": 1.7405750359489238,
+      "maxDisplacementM": 0.0013912820854617525
+    },
+    {
+      "frame": 198.5,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399922963957842,
+      "maxEdgeRatio": 1.7405923923617992,
+      "maxDisplacementM": 0.0013713032452808379
+    },
+    {
+      "frame": 199.0,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399941122053889,
+      "maxEdgeRatio": 1.740612377659934,
+      "maxDisplacementM": 0.0014021697717949662
+    },
+    {
+      "frame": 199.5,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999418068132057,
+      "maxEdgeRatio": 1.7404448229766103,
+      "maxDisplacementM": 0.0013983519767977956
+    },
+    {
+      "frame": 200.0,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399952154991421,
+      "maxEdgeRatio": 1.7400464458771485,
+      "maxDisplacementM": 0.0014271931747503776
+    },
+    {
+      "frame": 200.5,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999405291946553,
+      "maxEdgeRatio": 1.7400504265434493,
+      "maxDisplacementM": 0.0014864017535019558
+    },
+    {
+      "frame": 201.0,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399942125589938,
+      "maxEdgeRatio": 1.7400549281343078,
+      "maxDisplacementM": 0.0015727308854888
+    },
+    {
+      "frame": 201.5,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999328944669175,
+      "maxEdgeRatio": 1.740060527432051,
+      "maxDisplacementM": 0.0016589438589867376
+    },
+    {
+      "frame": 202.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999244038925245,
+      "maxEdgeRatio": 1.740066669042712,
+      "maxDisplacementM": 0.0018363219343349826
+    },
+    {
+      "frame": 202.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999447820584087,
+      "maxEdgeRatio": 1.7400738329127923,
+      "maxDisplacementM": 0.0019350983706504059
+    },
+    {
+      "frame": 203.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399944532806998,
+      "maxEdgeRatio": 1.7400815692079854,
+      "maxDisplacementM": 0.0020057614369085267
+    },
+    {
+      "frame": 203.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999509596717723,
+      "maxEdgeRatio": 1.7400843761242586,
+      "maxDisplacementM": 0.002070997462324152
+    },
+    {
+      "frame": 204.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399945334447273,
+      "maxEdgeRatio": 1.740087615883039,
+      "maxDisplacementM": 0.0021139622563728323
+    },
+    {
+      "frame": 204.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399939975636103,
+      "maxEdgeRatio": 1.7400837066487416,
+      "maxDisplacementM": 0.002150534700573907
+    },
+    {
+      "frame": 205.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999346607410894,
+      "maxEdgeRatio": 1.740080094793389,
+      "maxDisplacementM": 0.0022328917761626015
+    },
+    {
+      "frame": 205.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999293983566745,
+      "maxEdgeRatio": 1.7400719898349613,
+      "maxDisplacementM": 0.002301088853282096
+    },
+    {
+      "frame": 206.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999374072703895,
+      "maxEdgeRatio": 1.7400602240793912,
+      "maxDisplacementM": 0.002381536599827936
+    },
+    {
+      "frame": 206.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399680108441787,
+      "maxEdgeRatio": 1.7400390494078959,
+      "maxDisplacementM": 0.0024797296323683616
+    },
+    {
+      "frame": 207.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43993857028725,
+      "maxEdgeRatio": 1.7400040407874904,
+      "maxDisplacementM": 0.0025669281439911606
+    },
+    {
+      "frame": 207.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399488257190759,
+      "maxEdgeRatio": 1.740004236393064,
+      "maxDisplacementM": 0.0026313858120918616
+    },
+    {
+      "frame": 208.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399597546834882,
+      "maxEdgeRatio": 1.740004439247127,
+      "maxDisplacementM": 0.0027267476921838023
+    },
+    {
+      "frame": 208.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399499634601975,
+      "maxEdgeRatio": 1.740004598377907,
+      "maxDisplacementM": 0.0027569966033954307
+    },
+    {
+      "frame": 209.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999325351356683,
+      "maxEdgeRatio": 1.740004762525293,
+      "maxDisplacementM": 0.0028104989276329945
+    },
+    {
+      "frame": 209.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399924402158931,
+      "maxEdgeRatio": 1.7400048698277215,
+      "maxDisplacementM": 0.0028145518103388557
+    },
+    {
+      "frame": 210.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399949018825992,
+      "maxEdgeRatio": 1.7400049798414374,
+      "maxDisplacementM": 0.002815485837577058
+    },
+    {
+      "frame": 210.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399929440488062,
+      "maxEdgeRatio": 1.7400050187314566,
+      "maxDisplacementM": 0.0028084414659878282
+    },
+    {
+      "frame": 211.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399946572505049,
+      "maxEdgeRatio": 1.7400050580864088,
+      "maxDisplacementM": 0.0027798389226810203
+    },
+    {
+      "frame": 211.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999477225918593,
+      "maxEdgeRatio": 1.7400050365127653,
+      "maxDisplacementM": 0.0027454938909577792
+    },
+    {
+      "frame": 212.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399948895449871,
+      "maxEdgeRatio": 1.7400050154211808,
+      "maxDisplacementM": 0.0027007453796606307
+    },
+    {
+      "frame": 212.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399948696921544,
+      "maxEdgeRatio": 1.7400049712179806,
+      "maxDisplacementM": 0.00255120640909969
+    },
+    {
+      "frame": 213.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399948507139796,
+      "maxEdgeRatio": 1.7400049282592212,
+      "maxDisplacementM": 0.0024434781270465376
+    },
+    {
+      "frame": 213.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399946914913243,
+      "maxEdgeRatio": 1.74000485991146,
+      "maxDisplacementM": 0.002226797390025517
+    },
+    {
+      "frame": 214.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999457010793913,
+      "maxEdgeRatio": 1.7400047943513866,
+      "maxDisplacementM": 0.00220920463615202
+    },
+    {
+      "frame": 214.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399947300721288,
+      "maxEdgeRatio": 1.7400047029452461,
+      "maxDisplacementM": 0.0021441216451163194
+    },
+    {
+      "frame": 215.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43998280972210374,
+      "maxEdgeRatio": 1.7400046131855627,
+      "maxDisplacementM": 0.0020756148136013438
+    },
+    {
+      "frame": 215.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43997499702018983,
+      "maxEdgeRatio": 1.7400044960852705,
+      "maxDisplacementM": 0.002033369198383194
+    },
+    {
+      "frame": 216.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43996714813916843,
+      "maxEdgeRatio": 1.740004380144339,
+      "maxDisplacementM": 0.0019753141861114506
+    },
+    {
+      "frame": 216.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43996257690462515,
+      "maxEdgeRatio": 1.7400042286800554,
+      "maxDisplacementM": 0.0018189277801555354
+    },
+    {
+      "frame": 217.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399569549904984,
+      "maxEdgeRatio": 1.740004078327462,
+      "maxDisplacementM": 0.0016551640811906774
+    },
+    {
+      "frame": 217.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43995566537100855,
+      "maxEdgeRatio": 1.7400036961197856,
+      "maxDisplacementM": 0.0014369330291508497
+    },
+    {
+      "frame": 218.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43983148595531707,
+      "maxEdgeRatio": 1.7400033140639626,
+      "maxDisplacementM": 0.0014430192652631797
+    },
+    {
+      "frame": 218.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4394637186256348,
+      "maxEdgeRatio": 1.7400045850942376,
+      "maxDisplacementM": 0.001508065173257877
+    },
+    {
+      "frame": 219.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43911365656234974,
+      "maxEdgeRatio": 1.7400036457918628,
+      "maxDisplacementM": 0.0015149034972430113
+    },
+    {
+      "frame": 219.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43871965725083695,
+      "maxEdgeRatio": 1.7400041388829584,
+      "maxDisplacementM": 0.0015197564643029129
+    },
+    {
+      "frame": 220.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4383514680231814,
+      "maxEdgeRatio": 1.7400036579508384,
+      "maxDisplacementM": 0.0014779841686887731
+    },
+    {
+      "frame": 220.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4381289349047526,
+      "maxEdgeRatio": 1.7400044228813407,
+      "maxDisplacementM": 0.001424417650248055
+    },
+    {
+      "frame": 221.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4379353523299717,
+      "maxEdgeRatio": 1.7269646263384373,
+      "maxDisplacementM": 0.0012548656390846886
+    },
+    {
+      "frame": 221.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43772274601129824,
+      "maxEdgeRatio": 1.7131592698566183,
+      "maxDisplacementM": 0.0009798333137140197
+    },
+    {
+      "frame": 222.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4375452245819584,
+      "maxEdgeRatio": 1.6992803948401194,
+      "maxDisplacementM": 0.0008831856670938732
+    },
+    {
+      "frame": 222.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43744271448488914,
+      "maxEdgeRatio": 1.685347947881356,
+      "maxDisplacementM": 0.0008073899515488856
+    },
+    {
+      "frame": 223.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 5,
+      "minEdgeRatio": 0.43866761538300714,
+      "maxEdgeRatio": 1.671332595813874,
+      "maxDisplacementM": 0.0008889644717781438
+    },
+    {
+      "frame": 223.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4374661146877151,
+      "maxEdgeRatio": 1.6580250038011504,
+      "maxDisplacementM": 0.0008000020050269889
+    },
+    {
+      "frame": 224.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43759267217955256,
+      "maxEdgeRatio": 1.6446390224686604,
+      "maxDisplacementM": 0.0007600450871939976
+    },
+    {
+      "frame": 224.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43772224365361145,
+      "maxEdgeRatio": 1.6328018006925749,
+      "maxDisplacementM": 0.0007191365904531533
+    },
+    {
+      "frame": 225.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4378957709143631,
+      "maxEdgeRatio": 1.6209208135591113,
+      "maxDisplacementM": 0.0006643503079575875
+    },
+    {
+      "frame": 225.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4381446252555491,
+      "maxEdgeRatio": 1.611549806102777,
+      "maxDisplacementM": 0.0005857816486172411
+    },
+    {
+      "frame": 226.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43843470562762726,
+      "maxEdgeRatio": 1.6021483873461901,
+      "maxDisplacementM": 0.0004941970460475141
+    },
+    {
+      "frame": 226.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 3,
+      "minEdgeRatio": 0.4377673905970099,
+      "maxEdgeRatio": 1.5969089145832978,
+      "maxDisplacementM": 0.00030593767423488504
+    },
+    {
+      "frame": 227.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 3,
+      "minEdgeRatio": 0.43866925974348225,
+      "maxEdgeRatio": 1.5916531329509362,
+      "maxDisplacementM": 0.0001823532493163831
+    },
+    {
+      "frame": 227.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 3,
+      "minEdgeRatio": 0.43968682761183947,
+      "maxEdgeRatio": 1.5913744364580418,
+      "maxDisplacementM": 4.291446230572394e-05
+    },
+    {
+      "frame": 228.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 3,
+      "minEdgeRatio": 0.44286427439503595,
+      "maxEdgeRatio": 1.591089109584106,
+      "maxDisplacementM": 0.0
+    },
+    {
+      "frame": 228.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 229.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 229.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 230.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 230.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 231.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399974289815415,
+      "maxEdgeRatio": 1.6515599506438916,
+      "maxDisplacementM": 0.0002564082695777433
+    },
+    {
+      "frame": 231.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999690386573126,
+      "maxEdgeRatio": 1.6646768375383947,
+      "maxDisplacementM": 0.0003822254381747214
+    },
+    {
+      "frame": 232.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399970602840402,
+      "maxEdgeRatio": 1.6777159969856466,
+      "maxDisplacementM": 0.000509768901781772
+    },
+    {
+      "frame": 232.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399969124624182,
+      "maxEdgeRatio": 1.6887491286192222,
+      "maxDisplacementM": 0.0006382860717270792
+    },
+    {
+      "frame": 233.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399967466747315,
+      "maxEdgeRatio": 1.6997405705998112,
+      "maxDisplacementM": 0.000767804558281686
+    },
+    {
+      "frame": 233.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999707791359394,
+      "maxEdgeRatio": 1.708614667784797,
+      "maxDisplacementM": 0.0008927108408168616
+    },
+    {
+      "frame": 234.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399970622618487,
+      "maxEdgeRatio": 1.717449947216829,
+      "maxDisplacementM": 0.0010181003868470308
+    },
+    {
+      "frame": 234.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999650970950455,
+      "maxEdgeRatio": 1.7240733853783285,
+      "maxDisplacementM": 0.0011334503354345441
+    },
+    {
+      "frame": 235.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399972916829433,
+      "maxEdgeRatio": 1.7306684151200389,
+      "maxDisplacementM": 0.001248726612605209
+    },
+    {
+      "frame": 235.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399967346117572,
+      "maxEdgeRatio": 1.7354180266634427,
+      "maxDisplacementM": 0.0013474253408386951
+    },
+    {
+      "frame": 236.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399970785700769,
+      "maxEdgeRatio": 1.7400042136873377,
+      "maxDisplacementM": 0.001446160331324101
+    },
+    {
+      "frame": 236.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.439997071045458,
+      "maxEdgeRatio": 1.7400051184457321,
+      "maxDisplacementM": 0.0015216810854193654
+    },
+    {
+      "frame": 237.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399971073605369,
+      "maxEdgeRatio": 1.7400036104154304,
+      "maxDisplacementM": 0.0015971018865928014
+    },
+    {
+      "frame": 237.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399968496667207,
+      "maxEdgeRatio": 1.7400049059278226,
+      "maxDisplacementM": 0.0016454837819745054
+    },
+    {
+      "frame": 238.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399965916865002,
+      "maxEdgeRatio": 1.7400037220379518,
+      "maxDisplacementM": 0.0016937998444784947
+    },
+    {
+      "frame": 238.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999706383186565,
+      "maxEdgeRatio": 1.7400042004644969,
+      "maxDisplacementM": 0.0017115993611652779
+    },
+    {
+      "frame": 239.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399970347056656,
+      "maxEdgeRatio": 1.740004671180671,
+      "maxDisplacementM": 0.0017294283473942669
+    },
+    {
+      "frame": 239.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399970637099434,
+      "maxEdgeRatio": 1.7400048088890891,
+      "maxDisplacementM": 0.0017128275788005354
+    },
+    {
+      "frame": 240.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399970314014782,
+      "maxEdgeRatio": 1.740004944249524,
+      "maxDisplacementM": 0.0016960671430540203
+    },
+    {
+      "frame": 240.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399958008272163,
+      "maxEdgeRatio": 1.7400049483410174,
+      "maxDisplacementM": 0.0016668629047161447
+    },
+    {
+      "frame": 241.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999470139406094,
+      "maxEdgeRatio": 1.7400049523513919,
+      "maxDisplacementM": 0.0016376400976419252
+    },
+    {
+      "frame": 241.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399948631701711,
+      "maxEdgeRatio": 1.740005023534271,
+      "maxDisplacementM": 0.0016191449355920707
+    },
+    {
+      "frame": 242.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.439993795055934,
+      "maxEdgeRatio": 1.740005090541403,
+      "maxDisplacementM": 0.001600746908397019
+    },
+    {
+      "frame": 242.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.439994447275195,
+      "maxEdgeRatio": 1.7400052162220725,
+      "maxDisplacementM": 0.0015908415091959174
+    },
+    {
+      "frame": 243.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999400920880405,
+      "maxEdgeRatio": 1.740003203882403,
+      "maxDisplacementM": 0.00158095954236263
+    },
+    {
+      "frame": 243.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999460572201077,
+      "maxEdgeRatio": 1.7400033036695728,
+      "maxDisplacementM": 0.001577577282852877
+    },
+    {
+      "frame": 244.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399928390566766,
+      "maxEdgeRatio": 1.7400034028496658,
+      "maxDisplacementM": 0.0015740994858567
+    },
+    {
+      "frame": 244.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999457580501944,
+      "maxEdgeRatio": 1.7400035170439958,
+      "maxDisplacementM": 0.0015752302252473314
+    },
+    {
+      "frame": 245.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999347227410385,
+      "maxEdgeRatio": 1.740003630921437,
+      "maxDisplacementM": 0.0015762499848027494
+    },
+    {
+      "frame": 245.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399949660491752,
+      "maxEdgeRatio": 1.7400037514516127,
+      "maxDisplacementM": 0.0015798789930915073
+    },
+    {
+      "frame": 246.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999444633329354,
+      "maxEdgeRatio": 1.7400038714670578,
+      "maxDisplacementM": 0.0015835020691352532
+    },
+    {
+      "frame": 246.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999306234861096,
+      "maxEdgeRatio": 1.7400039890958399,
+      "maxDisplacementM": 0.0015879562896906315
+    },
+    {
+      "frame": 247.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999526210909684,
+      "maxEdgeRatio": 1.7400041070532821,
+      "maxDisplacementM": 0.0015923597695606125
+    },
+    {
+      "frame": 247.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999432958465834,
+      "maxEdgeRatio": 1.7400042153142607,
+      "maxDisplacementM": 0.001596135533209255
+    },
+    {
+      "frame": 248.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999347057567595,
+      "maxEdgeRatio": 1.740004323866091,
+      "maxDisplacementM": 0.0016136060868506376
+    },
+    {
+      "frame": 248.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999306991271403,
+      "maxEdgeRatio": 1.7400044211254428,
+      "maxDisplacementM": 0.0016565317187972775
+    },
+    {
+      "frame": 249.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999272031285025,
+      "maxEdgeRatio": 1.7400045160713018,
+      "maxDisplacementM": 0.0016991714853704127
+    },
+    {
+      "frame": 249.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999250401862605,
+      "maxEdgeRatio": 1.7400045916285392,
+      "maxDisplacementM": 0.0017397606155534692
+    },
+    {
+      "frame": 250.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999539632245704,
+      "maxEdgeRatio": 1.7400046663234536,
+      "maxDisplacementM": 0.0017800073451293696
+    },
+    {
+      "frame": 250.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399945623065879,
+      "maxEdgeRatio": 1.7400047193857178,
+      "maxDisplacementM": 0.0018178364153028875
+    },
+    {
+      "frame": 251.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999394384230933,
+      "maxEdgeRatio": 1.7400047711054907,
+      "maxDisplacementM": 0.001855228633169786
+    },
+    {
+      "frame": 251.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399936132548084,
+      "maxEdgeRatio": 1.7400048010037679,
+      "maxDisplacementM": 0.0018900610675667083
+    },
+    {
+      "frame": 252.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399933554656646,
+      "maxEdgeRatio": 1.7400048304234088,
+      "maxDisplacementM": 0.0019244785187526633
+    },
+    {
+      "frame": 252.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399933467926188,
+      "maxEdgeRatio": 1.740004829270253,
+      "maxDisplacementM": 0.0019561081907548006
+    },
+    {
+      "frame": 253.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399933826243614,
+      "maxEdgeRatio": 1.74000483053121,
+      "maxDisplacementM": 0.0019874049085646496
+    },
+    {
+      "frame": 253.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.439992629512258,
+      "maxEdgeRatio": 1.740004801864086,
+      "maxDisplacementM": 0.002046493223398329
+    },
+    {
+      "frame": 254.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399950716583612,
+      "maxEdgeRatio": 1.7400047738881814,
+      "maxDisplacementM": 0.0021847644813610184
+    },
+    {
+      "frame": 254.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999518397431875,
+      "maxEdgeRatio": 1.7400046238048246,
+      "maxDisplacementM": 0.0021835934025806595
+    },
+    {
+      "frame": 255.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.439995173086732,
+      "maxEdgeRatio": 1.740004476620444,
+      "maxDisplacementM": 0.002175345913032204
+    },
+    {
+      "frame": 255.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999482735165835,
+      "maxEdgeRatio": 1.7400038467599195,
+      "maxDisplacementM": 0.0022885082431410597
+    },
+    {
+      "frame": 256.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399945718889192,
+      "maxEdgeRatio": 1.7400032131479957,
+      "maxDisplacementM": 0.0023922457891010305
+    },
+    {
+      "frame": 256.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.439994426653628,
+      "maxEdgeRatio": 1.740003427506801,
+      "maxDisplacementM": 0.0023883957657696822
+    },
+    {
+      "frame": 257.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399943590563943,
+      "maxEdgeRatio": 1.7400041585572994,
+      "maxDisplacementM": 0.0023819870755984944
+    },
+    {
+      "frame": 257.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999447114144963,
+      "maxEdgeRatio": 1.7400042514650844,
+      "maxDisplacementM": 0.0023515488975056455
+    },
+    {
+      "frame": 258.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999462087638236,
+      "maxEdgeRatio": 1.74000446689638,
+      "maxDisplacementM": 0.002339049048815586
+    },
+    {
+      "frame": 258.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399894271128084,
+      "maxEdgeRatio": 1.740003657645183,
+      "maxDisplacementM": 0.002433234555362193
+    },
+    {
+      "frame": 259.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399684717995903,
+      "maxEdgeRatio": 1.7400047001933325,
+      "maxDisplacementM": 0.002515664294601311
+    },
+    {
+      "frame": 259.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399533535836965,
+      "maxEdgeRatio": 1.74000414807929,
+      "maxDisplacementM": 0.0024756011855964735
+    },
+    {
+      "frame": 260.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399348925308878,
+      "maxEdgeRatio": 1.7400040574976952,
+      "maxDisplacementM": 0.0024560144841334714
+    },
+    {
+      "frame": 260.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4398921776358667,
+      "maxEdgeRatio": 1.7400649520654183,
+      "maxDisplacementM": 0.0024992027296964372
+    },
+    {
+      "frame": 261.0,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.4390976028306316,
+      "maxEdgeRatio": 1.7421477556710159,
+      "maxDisplacementM": 0.0027870546978384205
+    },
+    {
+      "frame": 261.5,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 12,
+      "minEdgeRatio": 0.43890475810698426,
+      "maxEdgeRatio": 1.7424580015987945,
+      "maxDisplacementM": 0.002888548547160276
+    },
+    {
+      "frame": 262.0,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 15,
+      "minEdgeRatio": 0.4387759216183281,
+      "maxEdgeRatio": 1.7428055560326974,
+      "maxDisplacementM": 0.0030372243954621954
+    },
+    {
+      "frame": 262.5,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 16,
+      "minEdgeRatio": 0.43885297088353437,
+      "maxEdgeRatio": 1.7426280899882876,
+      "maxDisplacementM": 0.003071186603251085
+    },
+    {
+      "frame": 263.0,
+      "initialPairs": 4,
+      "finalPairs": 0,
+      "iterations": 17,
+      "minEdgeRatio": 0.4388322476337095,
+      "maxEdgeRatio": 1.7426718420378413,
+      "maxDisplacementM": 0.0030884772015869685
+    },
+    {
+      "frame": 263.5,
+      "initialPairs": 2,
+      "finalPairs": 0,
+      "iterations": 17,
+      "minEdgeRatio": 0.4386189826921087,
+      "maxEdgeRatio": 1.7431401202686523,
+      "maxDisplacementM": 0.003121329369953353
+    },
+    {
+      "frame": 264.0,
+      "initialPairs": 2,
+      "finalPairs": 0,
+      "iterations": 18,
+      "minEdgeRatio": 0.43876066829688865,
+      "maxEdgeRatio": 1.7427998746205953,
+      "maxDisplacementM": 0.0030384231414415782
+    },
+    {
+      "frame": 264.5,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 17,
+      "minEdgeRatio": 0.43872122687240095,
+      "maxEdgeRatio": 1.7428682216612124,
+      "maxDisplacementM": 0.0026378114986373865
+    },
+    {
+      "frame": 265.0,
+      "initialPairs": 1,
+      "finalPairs": 0,
+      "iterations": 15,
+      "minEdgeRatio": 0.4387042036331922,
+      "maxEdgeRatio": 1.7428967034586333,
+      "maxDisplacementM": 0.002664574346271899
+    },
+    {
+      "frame": 265.5,
+      "initialPairs": 3,
+      "finalPairs": 0,
+      "iterations": 13,
+      "minEdgeRatio": 0.438543329177274,
+      "maxEdgeRatio": 1.7432488784138316,
+      "maxDisplacementM": 0.0026849164305333146
+    },
+    {
+      "frame": 266.0,
+      "initialPairs": 5,
+      "finalPairs": 0,
+      "iterations": 10,
+      "minEdgeRatio": 0.43869617885644385,
+      "maxEdgeRatio": 1.7429080228767087,
+      "maxDisplacementM": 0.002430693511208521
+    },
+    {
+      "frame": 266.5,
+      "initialPairs": 5,
+      "finalPairs": 0,
+      "iterations": 9,
+      "minEdgeRatio": 0.438499897859739,
+      "maxEdgeRatio": 1.7433471294109097,
+      "maxDisplacementM": 0.0024594928222552007
+    },
+    {
+      "frame": 267.0,
+      "initialPairs": 7,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.43850497305706787,
+      "maxEdgeRatio": 1.7433408123826035,
+      "maxDisplacementM": 0.002544175136153835
+    },
+    {
+      "frame": 267.5,
+      "initialPairs": 7,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.4385720770314414,
+      "maxEdgeRatio": 1.743190412833655,
+      "maxDisplacementM": 0.002440339390459247
+    },
+    {
+      "frame": 268.0,
+      "initialPairs": 7,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.4386549295400551,
+      "maxEdgeRatio": 1.7430063875335502,
+      "maxDisplacementM": 0.002398143915622638
+    },
+    {
+      "frame": 268.5,
+      "initialPairs": 6,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.438617994610958,
+      "maxEdgeRatio": 1.7430889929221987,
+      "maxDisplacementM": 0.0023088973111453598
+    },
+    {
+      "frame": 269.0,
+      "initialPairs": 6,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.4386377633168686,
+      "maxEdgeRatio": 1.7430428485996863,
+      "maxDisplacementM": 0.002249987420059623
+    },
+    {
+      "frame": 269.5,
+      "initialPairs": 5,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.4387352639904878,
+      "maxEdgeRatio": 1.7428187954515462,
+      "maxDisplacementM": 0.002260166076627461
+    },
+    {
+      "frame": 270.0,
+      "initialPairs": 5,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.4387449485184916,
+      "maxEdgeRatio": 1.7427953034594315,
+      "maxDisplacementM": 0.0022325844198545553
+    },
+    {
+      "frame": 270.5,
+      "initialPairs": 5,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.43851123689859595,
+      "maxEdgeRatio": 1.7433169806785465,
+      "maxDisplacementM": 0.0019695243590228512
+    },
+    {
+      "frame": 271.0,
+      "initialPairs": 4,
+      "finalPairs": 0,
+      "iterations": 8,
+      "minEdgeRatio": 0.4387579606551701,
+      "maxEdgeRatio": 1.7427628728371305,
+      "maxDisplacementM": 0.0018733073000674885
+    },
+    {
+      "frame": 271.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.43882438532165297,
+      "maxEdgeRatio": 1.7426146215801843,
+      "maxDisplacementM": 0.00197360684511148
+    },
+    {
+      "frame": 272.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 7,
+      "minEdgeRatio": 0.4387869428945501,
+      "maxEdgeRatio": 1.7427015007918534,
+      "maxDisplacementM": 0.001830934393613074
+    },
+    {
+      "frame": 272.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.4387493208056599,
+      "maxEdgeRatio": 1.7428079859544825,
+      "maxDisplacementM": 0.001613404037504199
+    },
+    {
+      "frame": 273.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 6,
+      "minEdgeRatio": 0.4390027995398279,
+      "maxEdgeRatio": 1.7422456771123924,
+      "maxDisplacementM": 0.0014162881384570073
+    },
+    {
+      "frame": 273.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4392380954137967,
+      "maxEdgeRatio": 1.7418467199576435,
+      "maxDisplacementM": 0.0011166521910159367
+    },
+    {
+      "frame": 274.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999326277583434,
+      "maxEdgeRatio": 1.7400057790461543,
+      "maxDisplacementM": 0.0008975327419494285
+    },
+    {
+      "frame": 274.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399633348795099,
+      "maxEdgeRatio": 1.740005246317768,
+      "maxDisplacementM": 0.0005877390476468945
+    },
+    {
+      "frame": 275.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43994195586540696,
+      "maxEdgeRatio": 1.7400048028016437,
+      "maxDisplacementM": 0.0005008068675888669
+    },
+    {
+      "frame": 275.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399411732985744,
+      "maxEdgeRatio": 1.7400044162997483,
+      "maxDisplacementM": 0.00046122924069595564
+    },
+    {
+      "frame": 276.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399513916813694,
+      "maxEdgeRatio": 1.740004165168204,
+      "maxDisplacementM": 0.0004506813599814416
+    },
+    {
+      "frame": 276.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399600536636601,
+      "maxEdgeRatio": 1.7400055341344798,
+      "maxDisplacementM": 0.00046067264239040766
+    },
+    {
+      "frame": 277.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399707384570297,
+      "maxEdgeRatio": 1.7400042315587283,
+      "maxDisplacementM": 0.0004297054556419531
+    },
+    {
+      "frame": 277.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399797853127355,
+      "maxEdgeRatio": 1.7379477257074463,
+      "maxDisplacementM": 0.00041309143493430085
+    },
+    {
+      "frame": 278.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999649229955357,
+      "maxEdgeRatio": 1.7365297322892732,
+      "maxDisplacementM": 0.0003525372384565884
+    },
+    {
+      "frame": 278.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.4399974131302222,
+      "maxEdgeRatio": 1.7360096038912436,
+      "maxDisplacementM": 0.00026571369457781106
+    },
+    {
+      "frame": 279.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.43999784971700245,
+      "maxEdgeRatio": 1.7367497003883767,
+      "maxDisplacementM": 0.00022160973435718294
+    },
+    {
+      "frame": 279.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 4,
+      "minEdgeRatio": 0.439997351232068,
+      "maxEdgeRatio": 1.737254245421388,
+      "maxDisplacementM": 0.00021207881961479233
+    },
+    {
+      "frame": 280.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 3,
+      "minEdgeRatio": 0.43999742803636416,
+      "maxEdgeRatio": 1.737943224463003,
+      "maxDisplacementM": 0.00015902311878014547
+    },
+    {
+      "frame": 280.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 3,
+      "minEdgeRatio": 0.4399970272829526,
+      "maxEdgeRatio": 1.7377703473532258,
+      "maxDisplacementM": 8.850862962578043e-05
+    },
+    {
+      "frame": 281.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "iterations": 3,
+      "minEdgeRatio": 0.4403337855796436,
+      "maxEdgeRatio": 1.738588322622867,
+      "maxDisplacementM": 0.0
+    },
+    {
+      "frame": 281.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 282.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 282.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 283.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 283.5,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    },
+    {
+      "frame": 284.0,
+      "initialPairs": 0,
+      "finalPairs": 0,
+      "maxDisplacementM": 0
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-08",
+  "candidateImages": "artifacts/rig-refine/20261008/lunge/candidate-06/pairs",
+  "viewedSourceFrames": [513,515,517,519,523,525,530,535],
+  "closeupsViewed": ["0517-left.png", "0517-back.png", "0525-left.png", "0530-three.png"],
+  "sampledReviewOnly": true,
+  "professionalFidelity": "not_passed",
+  "result": "Recovery support-leg extension is visibly more distinct than candidate 04 at 525 and 530, with less persistent wide-squat silhouette at 535. Suitable for torso integration, not full match reconstruction acceptance.",
+  "jointDirectionObservation": "Rear knee and ankle direction at 517 side/back views reads as ordinary rear-leg flexion plus heel lift. No explicit reverse-joint direction seen in these four closeups. This observation does not prove complete joint safety or exact source foot yaw.",
+  "remaining": [
+    "Rear-knee DQ surface shows a large fold/dent in closeup; this is unfinished skin deformation, not a finished result.",
+    "Racket head overlaps the front-leg projection in 530-three; depth intersection cannot be decided from this image. Final body/racket collision QA required.",
+    "Recovery still does not fully recreate source alternating-step/loading rhythm.",
+    "Full 61-frame integrated sequence and normal-speed continuity pending."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "name": "Two samples preserve position and unnormalized morph normals",
+      "passed": true
+    },
+    {
+      "name": "Three active samples are rejected rather than truncated",
+      "passed": true
+    },
+    {
+      "name": "Missing normals are rejected",
+      "passed": true
+    },
+    {
+      "name": "Nonfinite original weights are rejected",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,1484 @@
+{
+  "input": "artifacts/rig-refine/20261008/lunge/candidate-06/rebuild.blend",
+  "baseline": "artifacts/rig-rebuild/20261007/integration/author-body-13/rebuild.blend",
+  "sampleHz": 240,
+  "samples": 961,
+  "edited": [
+    "CTRL_foot_r",
+    "CTRL_foot_l",
+    "CTRL_ball_l",
+    "IK_knee_pole_r",
+    "CTRL_thigh_r",
+    "IK_ankle_target_r",
+    "CTRL_ball_r",
+    "CTRL_thigh_l",
+    "CTRL_calf_l",
+    "CTRL_calf_r",
+    "IK_ankle_target_l",
+    "CTRL_root",
+    "IK_knee_pole_l"
+  ],
+  "restVertexMaxDifferenceM": 0.0,
+  "limitsUnchanged": true,
+  "maxProtectedBasisDifference": 0,
+  "maxOutsideIntervalBasisDifference": 1.1920928955078125e-06,
+  "maxOutsideIntervalSoleSurfaceDifferenceM": 3.455106338226914e-07,
+  "maxBoneLengthErrorM": 1.3764963855023016e-05,
+  "constraintViolations": [],
+  "angles": {
+    "CTRL_calf_l": {
+      "min": [
+        -131.8863356650673,
+        -3.415094992117375e-06,
+        -5.549528700635361e-06
+      ],
+      "max": [
+        -31.665337558258564,
+        5.976417152205154e-06,
+        5.976417559316153e-06
+      ]
+    },
+    "CTRL_foot_l": {
+      "min": [
+        -21.463785796947736,
+        -19.533651177130295,
+        -29.54067744333187
+      ],
+      "max": [
+        54.51150070925082,
+        12.840196417885677,
+        24.286434895989085
+      ]
+    },
+    "CTRL_ball_l": {
+      "min": [
+        -1.393592572029853e-05,
+        -0.0178056611684619,
+        -3.4910797360349605e-05
+      ],
+      "max": [
+        30.00000424992064,
+        7.66993377123097e-06,
+        0.21828061289808232
+      ]
+    }
+  },
+  "maxHalfFrameRotation": {
+    "CTRL_upperarm_l": {
+      "deg": 0.7922836943097905,
+      "frame": 38.5,
+      "sourceFrame": 488.0208333333333
+    },
+    "CTRL_thigh_l": {
+      "deg": 4.523836631653607,
+      "frame": 35.5,
+      "sourceFrame": 487.3958333333333
+    },
+    "CTRL_lowerarm_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_hand_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_index_02_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_middle_03_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_ring_01_l": {
+      "deg": 0.5410394011982498,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_thumb_02_l": {
+      "deg": 0.5410394011982498,
+      "frame": 82.0,
+      "sourceFrame": 497.0833333333333
+    },
+    "CTRL_calf_l": {
+      "deg": 3.72450172752113,
+      "frame": 32.0,
+      "sourceFrame": 486.6666666666667
+    },
+    "CTRL_hand_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_index_01_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_index_02_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_index_03_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_index_04_leaf_r": {
+      "deg": 4.391770228296355,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_middle_01_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_middle_02_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_middle_03_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_middle_04_leaf_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_pinky_01_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_pinky_02_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_pinky_03_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_pinky_04_leaf_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_ring_01_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_ring_02_r": {
+      "deg": 4.391770228296355,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_ring_03_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_ring_04_leaf_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_thumb_01_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_thumb_02_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_thumb_03_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_thumb_04_leaf_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_thigh_r": {
+      "deg": 4.547311564944117,
+      "frame": 51.5,
+      "sourceFrame": 490.7291666666667
+    },
+    "CTRL_index_01_l": {
+      "deg": 0.5395908141248253,
+      "frame": 82.0,
+      "sourceFrame": 497.0833333333333
+    },
+    "CTRL_pinky_03_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_pinky_04_leaf_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_thumb_04_leaf_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_calf_r": {
+      "deg": 3.7381382001990606,
+      "frame": 247.5,
+      "sourceFrame": 531.5625
+    },
+    "CTRL_index_03_l": {
+      "deg": 0.5410394011982498,
+      "frame": 82.0,
+      "sourceFrame": 497.0833333333333
+    },
+    "CTRL_index_04_leaf_l": {
+      "deg": 0.5410394011982498,
+      "frame": 82.0,
+      "sourceFrame": 497.0833333333333
+    },
+    "CTRL_middle_01_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_middle_02_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_middle_04_leaf_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_pinky_01_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_pinky_02_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_ring_02_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_ring_03_l": {
+      "deg": 0.5395908141248253,
+      "frame": 82.0,
+      "sourceFrame": 497.0833333333333
+    },
+    "CTRL_ring_04_leaf_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_thumb_01_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_thumb_03_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_spine_03": {
+      "deg": 0.34717880899643905,
+      "frame": 176.5,
+      "sourceFrame": 516.7708333333334
+    },
+    "CTRL_neck_01": {
+      "deg": 0.3449170292053863,
+      "frame": 176.5,
+      "sourceFrame": 516.7708333333334
+    },
+    "CTRL_clavicle_l": {
+      "deg": 0.34717880899643905,
+      "frame": 176.5,
+      "sourceFrame": 516.7708333333334
+    },
+    "CTRL_lowerarm_r": {
+      "deg": 1.2366791737643863,
+      "frame": 186.5,
+      "sourceFrame": 518.8541666666666
+    },
+    "CTRL_pelvis": {
+      "deg": 0.3449170292053863,
+      "frame": 177.0,
+      "sourceFrame": 516.875
+    },
+    "CTRL_clavicle_r": {
+      "deg": 0.3449170292053863,
+      "frame": 175.5,
+      "sourceFrame": 516.5625
+    },
+    "CTRL_spine_01": {
+      "deg": 0.3449170292053863,
+      "frame": 177.0,
+      "sourceFrame": 516.875
+    },
+    "CTRL_spine_02": {
+      "deg": 0.3449170292053863,
+      "frame": 175.5,
+      "sourceFrame": 516.5625
+    },
+    "CTRL_Head": {
+      "deg": 0.3449170292053863,
+      "frame": 176.0,
+      "sourceFrame": 516.6666666666666
+    },
+    "CTRL_root": {
+      "deg": 0.3449170292053863,
+      "frame": 177.0,
+      "sourceFrame": 516.875
+    },
+    "CTRL_upperarm_r": {
+      "deg": 0.5203925931109475,
+      "frame": 198.5,
+      "sourceFrame": 521.3541666666666
+    },
+    "CTRL_foot_l": {
+      "deg": 2.626866422237986,
+      "frame": 36.0,
+      "sourceFrame": 487.5
+    },
+    "CTRL_ball_l": {
+      "deg": 2.626866422237986,
+      "frame": 36.0,
+      "sourceFrame": 487.5
+    },
+    "CTRL_ball_leaf_l": {
+      "deg": 2.626866422237986,
+      "frame": 36.0,
+      "sourceFrame": 487.5
+    },
+    "CTRL_foot_r": {
+      "deg": 1.0347542359064796,
+      "frame": 59.5,
+      "sourceFrame": 492.3958333333333
+    },
+    "CTRL_ball_r": {
+      "deg": 1.0347542359064796,
+      "frame": 59.5,
+      "sourceFrame": 492.3958333333333
+    },
+    "CTRL_ball_leaf_r": {
+      "deg": 1.0347542359064796,
+      "frame": 59.5,
+      "sourceFrame": 492.3958333333333
+    }
+  },
+  "baselineMaxHalfFrameRotation": {
+    "CTRL_upperarm_l": {
+      "deg": 0.7922836943097905,
+      "frame": 38.5,
+      "sourceFrame": 488.0208333333333
+    },
+    "CTRL_thigh_l": {
+      "deg": 4.523836631653607,
+      "frame": 35.5,
+      "sourceFrame": 487.3958333333333
+    },
+    "CTRL_lowerarm_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_hand_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_index_02_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_middle_03_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_ring_01_l": {
+      "deg": 0.5410394011982498,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_thumb_02_l": {
+      "deg": 0.5410394011982498,
+      "frame": 82.0,
+      "sourceFrame": 497.0833333333333
+    },
+    "CTRL_calf_l": {
+      "deg": 3.72450172752113,
+      "frame": 32.0,
+      "sourceFrame": 486.6666666666667
+    },
+    "CTRL_hand_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_index_01_r": {
+      "deg": 4.391770228296355,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_index_02_r": {
+      "deg": 4.391770228296355,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_index_03_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_index_04_leaf_r": {
+      "deg": 4.391770228296355,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_middle_01_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_middle_02_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_middle_03_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_middle_04_leaf_r": {
+      "deg": 4.391770228296355,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_pinky_01_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_pinky_02_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_pinky_03_r": {
+      "deg": 4.391770228296355,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_pinky_04_leaf_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_ring_01_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_ring_02_r": {
+      "deg": 4.391770228296355,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_ring_03_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_ring_04_leaf_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_thumb_01_r": {
+      "deg": 4.391770228296355,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_thumb_02_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_thumb_03_r": {
+      "deg": 4.391413777799046,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_thumb_04_leaf_r": {
+      "deg": 4.391591789604289,
+      "frame": 165.5,
+      "sourceFrame": 514.4791666666666
+    },
+    "CTRL_thigh_r": {
+      "deg": 4.547311564944117,
+      "frame": 51.5,
+      "sourceFrame": 490.7291666666667
+    },
+    "CTRL_index_01_l": {
+      "deg": 0.5395908141248253,
+      "frame": 82.0,
+      "sourceFrame": 497.0833333333333
+    },
+    "CTRL_pinky_03_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_pinky_04_leaf_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_thumb_04_leaf_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_calf_r": {
+      "deg": 2.4344796301125906,
+      "frame": 31.5,
+      "sourceFrame": 486.5625
+    },
+    "CTRL_index_03_l": {
+      "deg": 0.5410394011982498,
+      "frame": 82.0,
+      "sourceFrame": 497.0833333333333
+    },
+    "CTRL_index_04_leaf_l": {
+      "deg": 0.5410394011982498,
+      "frame": 82.0,
+      "sourceFrame": 497.0833333333333
+    },
+    "CTRL_middle_01_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_middle_02_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_middle_04_leaf_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_pinky_01_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_pinky_02_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_ring_02_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_ring_03_l": {
+      "deg": 0.5395908141248253,
+      "frame": 82.0,
+      "sourceFrame": 497.0833333333333
+    },
+    "CTRL_ring_04_leaf_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_thumb_01_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_thumb_03_l": {
+      "deg": 0.5395908141248253,
+      "frame": 81.5,
+      "sourceFrame": 496.9791666666667
+    },
+    "CTRL_spine_03": {
+      "deg": 0.34717880899643905,
+      "frame": 176.5,
+      "sourceFrame": 516.7708333333334
+    },
+    "CTRL_neck_01": {
+      "deg": 0.3449170292053863,
+      "frame": 177.0,
+      "sourceFrame": 516.875
+    },
+    "CTRL_clavicle_l": {
+      "deg": 0.34717880899643905,
+      "frame": 176.5,
+      "sourceFrame": 516.7708333333334
+    },
+    "CTRL_lowerarm_r": {
+      "deg": 1.2373119267579644,
+      "frame": 186.5,
+      "sourceFrame": 518.8541666666666
+    },
+    "CTRL_pelvis": {
+      "deg": 0.3449170292053863,
+      "frame": 177.0,
+      "sourceFrame": 516.875
+    },
+    "CTRL_clavicle_r": {
+      "deg": 0.3449170292053863,
+      "frame": 175.5,
+      "sourceFrame": 516.5625
+    },
+    "CTRL_spine_01": {
+      "deg": 0.3449170292053863,
+      "frame": 177.0,
+      "sourceFrame": 516.875
+    },
+    "CTRL_spine_02": {
+      "deg": 0.3449170292053863,
+      "frame": 175.5,
+      "sourceFrame": 516.5625
+    },
+    "CTRL_Head": {
+      "deg": 0.3449170292053863,
+      "frame": 176.0,
+      "sourceFrame": 516.6666666666666
+    },
+    "CTRL_root": {
+      "deg": 0.34264033505595065,
+      "frame": 175.5,
+      "sourceFrame": 516.5625
+    },
+    "CTRL_upperarm_r": {
+      "deg": 0.5203925931109475,
+      "frame": 199.0,
+      "sourceFrame": 521.4583333333334
+    },
+    "CTRL_foot_l": {
+      "deg": 2.626866422237986,
+      "frame": 36.0,
+      "sourceFrame": 487.5
+    },
+    "CTRL_ball_l": {
+      "deg": 2.626866422237986,
+      "frame": 36.0,
+      "sourceFrame": 487.5
+    },
+    "CTRL_ball_leaf_l": {
+      "deg": 2.626866422237986,
+      "frame": 36.0,
+      "sourceFrame": 487.5
+    },
+    "CTRL_foot_r": {
+      "deg": 1.0347542359064796,
+      "frame": 59.5,
+      "sourceFrame": 492.3958333333333
+    },
+    "CTRL_ball_r": {
+      "deg": 1.0347542359064796,
+      "frame": 59.5,
+      "sourceFrame": 492.3958333333333
+    },
+    "CTRL_ball_leaf_r": {
+      "deg": 1.0347542359064796,
+      "frame": 59.5,
+      "sourceFrame": 492.3958333333333
+    }
+  },
+  "floorZ": -0.013,
+  "support": [
+    {
+      "side": "r",
+      "originalWindow": [
+        0,
+        24
+      ],
+      "sourceWindow": [
+        480.0,
+        485.0
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 4.065590129405328e-05,
+          "minimumZRange": [
+            -0.013036727905273438,
+            -0.01299959048628807
+          ],
+          "vertexZRange": [
+            -0.013036727905273438,
+            0.008471890352666378
+          ],
+          "baselineMaximumDriftM": 4.065590129405328e-05,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 4.059329442200165e-05,
+          "minimumZRange": [
+            -0.013036727905273438,
+            -0.01299959048628807
+          ],
+          "vertexZRange": [
+            -0.013036727905273438,
+            0.008471890352666378
+          ],
+          "baselineMaximumDriftM": 4.059329442200165e-05,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 3.9936873383807786e-05,
+          "minimumZRange": [
+            -0.010941047221422195,
+            -0.010904105380177498
+          ],
+          "vertexZRange": [
+            -0.010941047221422195,
+            0.008471890352666378
+          ],
+          "baselineMaximumDriftM": 3.9936873383807786e-05,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 4.065590129405328e-05,
+          "minimumZRange": [
+            -0.009956815280020237,
+            -0.009918667376041412
+          ],
+          "vertexZRange": [
+            -0.009956815280020237,
+            0.0052710771560668945
+          ],
+          "baselineMaximumDriftM": 4.065590129405328e-05,
+          "maximumDifferenceFromBaselineM": 0.0
+        }
+      }
+    },
+    {
+      "side": "r",
+      "originalWindow": [
+        33.6,
+        52.8
+      ],
+      "sourceWindow": [
+        487.0,
+        491.0
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 0.001597339577411402,
+          "minimumZRange": [
+            -0.012450535781681538,
+            -0.01100916787981987
+          ],
+          "vertexZRange": [
+            -0.012450535781681538,
+            0.010462307371199131
+          ],
+          "baselineMaximumDriftM": 0.001597339577411402,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 0.001597339577411402,
+          "minimumZRange": [
+            -0.012450535781681538,
+            -0.01100916787981987
+          ],
+          "vertexZRange": [
+            -0.012450535781681538,
+            0.010462307371199131
+          ],
+          "baselineMaximumDriftM": 0.001597339577411402,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 0.0015963837827445624,
+          "minimumZRange": [
+            -0.010355631820857525,
+            -0.008913693018257618
+          ],
+          "vertexZRange": [
+            -0.010355631820857525,
+            0.010462307371199131
+          ],
+          "baselineMaximumDriftM": 0.0015963837827445624,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 0.0015972521552360393,
+          "minimumZRange": [
+            -0.009366864338517189,
+            -0.007928228005766869
+          ],
+          "vertexZRange": [
+            -0.009366864338517189,
+            0.007261514663696289
+          ],
+          "baselineMaximumDriftM": 0.0015972521552360393,
+          "maximumDifferenceFromBaselineM": 0.0
+        }
+      }
+    },
+    {
+      "side": "r",
+      "originalWindow": [
+        105.6,
+        120
+      ],
+      "sourceWindow": [
+        502.0,
+        505.0
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 0.00021396379885240416,
+          "minimumZRange": [
+            -0.011220314539968967,
+            -0.011009126901626587
+          ],
+          "vertexZRange": [
+            -0.011220314539968967,
+            0.010462353006005287
+          ],
+          "baselineMaximumDriftM": 0.00021396379885240416,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 0.00021393120532450265,
+          "minimumZRange": [
+            -0.011220314539968967,
+            -0.011009126901626587
+          ],
+          "vertexZRange": [
+            -0.011220314539968967,
+            0.010462353006005287
+          ],
+          "baselineMaximumDriftM": 0.00021393120532450265,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 0.000212784223149024,
+          "minimumZRange": [
+            -0.009124550968408585,
+            -0.008913647383451462
+          ],
+          "vertexZRange": [
+            -0.009124550968408585,
+            0.010462353006005287
+          ],
+          "baselineMaximumDriftM": 0.000212784223149024,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 0.00021372945088281618,
+          "minimumZRange": [
+            -0.008140971884131432,
+            -0.007928199134767056
+          ],
+          "vertexZRange": [
+            -0.008140971884131432,
+            0.00726154912263155
+          ],
+          "baselineMaximumDriftM": 0.00021372945088281618,
+          "maximumDifferenceFromBaselineM": 0.0
+        }
+      }
+    },
+    {
+      "side": "r",
+      "originalWindow": [
+        160,
+        192
+      ],
+      "sourceWindow": [
+        513.3333333333334,
+        520.0
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 0.00010888898739127103,
+          "minimumZRange": [
+            -0.013065936975181103,
+            -0.012997450307011604
+          ],
+          "vertexZRange": [
+            -0.013065936975181103,
+            0.00847491342574358
+          ],
+          "baselineMaximumDriftM": 7.417850316755372e-05,
+          "maximumDifferenceFromBaselineM": 8.102818117562505e-05
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 0.00010888898739127103,
+          "minimumZRange": [
+            -0.013065936975181103,
+            -0.012997450307011604
+          ],
+          "vertexZRange": [
+            -0.013065936975181103,
+            0.00847491342574358
+          ],
+          "baselineMaximumDriftM": 7.40185970332714e-05,
+          "maximumDifferenceFromBaselineM": 8.102818117562505e-05
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 0.00010737609007803811,
+          "minimumZRange": [
+            -0.010970736853778362,
+            -0.010901401750743389
+          ],
+          "vertexZRange": [
+            -0.010970736853778362,
+            0.00847491342574358
+          ],
+          "baselineMaximumDriftM": 7.3622211709103e-05,
+          "maximumDifferenceFromBaselineM": 7.991991137579752e-05
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 0.00010245248717681446,
+          "minimumZRange": [
+            -0.00998363085091114,
+            -0.009916817769408226
+          ],
+          "vertexZRange": [
+            -0.00998363085091114,
+            0.0052728913724422455
+          ],
+          "baselineMaximumDriftM": 7.417850316755372e-05,
+          "maximumDifferenceFromBaselineM": 7.598673262093836e-05
+        }
+      }
+    },
+    {
+      "side": "r",
+      "originalWindow": [
+        236,
+        254
+      ],
+      "sourceWindow": [
+        529.1666666666666,
+        532.9166666666666
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 0.00015990574820301442,
+          "minimumZRange": [
+            -0.013088488020002842,
+            -0.012999328784644604
+          ],
+          "vertexZRange": [
+            -0.013088488020002842,
+            0.008472173474729061
+          ],
+          "baselineMaximumDriftM": 6.30462240806125e-06,
+          "maximumDifferenceFromBaselineM": 0.00016010820214692307
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 0.00015990574820301442,
+          "minimumZRange": [
+            -0.013088488020002842,
+            -0.012999328784644604
+          ],
+          "vertexZRange": [
+            -0.013088488020002842,
+            0.008472173474729061
+          ],
+          "baselineMaximumDriftM": 6.224908325148919e-06,
+          "maximumDifferenceFromBaselineM": 0.00016010820214692307
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 0.00015990574820301442,
+          "minimumZRange": [
+            -0.010992182418704033,
+            -0.010903825052082539
+          ],
+          "vertexZRange": [
+            -0.010992182418704033,
+            0.008472173474729061
+          ],
+          "baselineMaximumDriftM": 6.159626414477816e-06,
+          "maximumDifferenceFromBaselineM": 0.00016010820214692307
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 0.000156918351303973,
+          "minimumZRange": [
+            -0.010012372396886349,
+            -0.00991843268275261
+          ],
+          "vertexZRange": [
+            -0.010012372396886349,
+            0.005271321162581444
+          ],
+          "baselineMaximumDriftM": 6.293997370816304e-06,
+          "maximumDifferenceFromBaselineM": 0.00015684815061828573
+        }
+      }
+    },
+    {
+      "side": "r",
+      "originalWindow": [
+        288,
+        480
+      ],
+      "sourceWindow": [
+        540.0,
+        580.0
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 5.352821058305721e-07,
+          "minimumZRange": [
+            -0.013000020757317543,
+            -0.012999585829675198
+          ],
+          "vertexZRange": [
+            -0.013000020757317543,
+            0.008471875451505184
+          ],
+          "baselineMaximumDriftM": 5.352821058305721e-07,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 5.352821058305721e-07,
+          "minimumZRange": [
+            -0.013000020757317543,
+            -0.012999585829675198
+          ],
+          "vertexZRange": [
+            -0.013000020757317543,
+            0.008471875451505184
+          ],
+          "baselineMaximumDriftM": 5.352821058305721e-07,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 5.24801923539581e-07,
+          "minimumZRange": [
+            -0.010904550552368164,
+            -0.010904120281338692
+          ],
+          "vertexZRange": [
+            -0.010904550552368164,
+            0.008471875451505184
+          ],
+          "baselineMaximumDriftM": 5.24801923539581e-07,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 4.960357822971876e-07,
+          "minimumZRange": [
+            -0.009919065982103348,
+            -0.009918591007590294
+          ],
+          "vertexZRange": [
+            -0.009919065982103348,
+            0.005271129310131073
+          ],
+          "baselineMaximumDriftM": 4.960357822971876e-07,
+          "maximumDifferenceFromBaselineM": 0.0
+        }
+      }
+    },
+    {
+      "side": "l",
+      "originalWindow": [
+        0,
+        24
+      ],
+      "sourceWindow": [
+        480.0,
+        485.0
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 3.2976833751006546e-05,
+          "minimumZRange": [
+            -0.013013394549489021,
+            -0.012999584898352623
+          ],
+          "vertexZRange": [
+            -0.013013394549489021,
+            0.008471869863569736
+          ],
+          "baselineMaximumDriftM": 3.2976833751006546e-05,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 3.2976833751006546e-05,
+          "minimumZRange": [
+            -0.013013394549489021,
+            -0.012999584898352623
+          ],
+          "vertexZRange": [
+            -0.013013394549489021,
+            0.008471869863569736
+          ],
+          "baselineMaximumDriftM": 3.2976833751006546e-05,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 3.287180666747814e-05,
+          "minimumZRange": [
+            -0.010918370448052883,
+            -0.010904120281338692
+          ],
+          "vertexZRange": [
+            -0.010918370448052883,
+            0.008471869863569736
+          ],
+          "baselineMaximumDriftM": 3.287180666747814e-05,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 3.2204636605780236e-05,
+          "minimumZRange": [
+            -0.009931406006217003,
+            -0.0099186385050416
+          ],
+          "vertexZRange": [
+            -0.009931406006217003,
+            0.005271122790873051
+          ],
+          "baselineMaximumDriftM": 3.2204636605780236e-05,
+          "maximumDifferenceFromBaselineM": 0.0
+        }
+      }
+    },
+    {
+      "side": "l",
+      "originalWindow": [
+        76.8,
+        96
+      ],
+      "sourceWindow": [
+        496.0,
+        500.0
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 0.00041274906000242,
+          "minimumZRange": [
+            -0.01148834265768528,
+            -0.011009236797690392
+          ],
+          "vertexZRange": [
+            -0.01148834265768528,
+            0.010462241247296333
+          ],
+          "baselineMaximumDriftM": 0.00041274906000242,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 0.00041274906000242,
+          "minimumZRange": [
+            -0.01148834265768528,
+            -0.011009236797690392
+          ],
+          "vertexZRange": [
+            -0.01148834265768528,
+            0.010462241247296333
+          ],
+          "baselineMaximumDriftM": 0.00041274906000242,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 0.00041255169565388865,
+          "minimumZRange": [
+            -0.009392807260155678,
+            -0.008913758210837841
+          ],
+          "vertexZRange": [
+            -0.009392807260155678,
+            0.010462241247296333
+          ],
+          "baselineMaximumDriftM": 0.00041255169565388865,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 0.0004119243949594091,
+          "minimumZRange": [
+            -0.008406397886574268,
+            -0.007928344421088696
+          ],
+          "vertexZRange": [
+            -0.008406397886574268,
+            0.007261436432600021
+          ],
+          "baselineMaximumDriftM": 0.0004119243949594091,
+          "maximumDifferenceFromBaselineM": 0.0
+        }
+      }
+    },
+    {
+      "side": "l",
+      "originalWindow": [
+        174,
+        182
+      ],
+      "sourceWindow": [
+        516.25,
+        517.9166666666666
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 0.00011582403344412695,
+          "minimumZRange": [
+            -0.01303878240287304,
+            -0.012998435646295547
+          ],
+          "vertexZRange": [
+            -0.01303878240287304,
+            0.09519599378108978
+          ],
+          "baselineMaximumDriftM": 2.5948582125541597e-05,
+          "maximumDifferenceFromBaselineM": 0.12795965069761608
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 0.00011582403344412695,
+          "minimumZRange": [
+            -0.01303878240287304,
+            -0.012998435646295547
+          ],
+          "vertexZRange": [
+            -0.01303878240287304,
+            0.008473008871078491
+          ],
+          "baselineMaximumDriftM": 2.5948582125541597e-05,
+          "maximumDifferenceFromBaselineM": 0.05138468949081744
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 0.00011582403344412695,
+          "minimumZRange": [
+            -0.01094493456184864,
+            -0.010902986861765385
+          ],
+          "vertexZRange": [
+            -0.01094493456184864,
+            0.008473008871078491
+          ],
+          "baselineMaximumDriftM": 2.5948582125541597e-05,
+          "maximumDifferenceFromBaselineM": 0.05051641556150672
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 0.0001125117764109729,
+          "minimumZRange": [
+            0.04502638429403305,
+            0.04506779462099075
+          ],
+          "vertexZRange": [
+            0.04502638429403305,
+            0.09519599378108978
+          ],
+          "baselineMaximumDriftM": 2.441601784667466e-05,
+          "maximumDifferenceFromBaselineM": 0.12795965069761608
+        }
+      }
+    },
+    {
+      "side": "l",
+      "originalWindow": [
+        232,
+        254
+      ],
+      "sourceWindow": [
+        528.3333333333334,
+        532.9166666666666
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 4.301795451791148e-05,
+          "minimumZRange": [
+            -0.013032962568104267,
+            -0.012999147176742554
+          ],
+          "vertexZRange": [
+            -0.013032962568104267,
+            0.008472313173115253
+          ],
+          "baselineMaximumDriftM": 2.099264030312707e-05,
+          "maximumDifferenceFromBaselineM": 2.5581545423631594e-05
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 4.258025914784676e-05,
+          "minimumZRange": [
+            -0.013032962568104267,
+            -0.012999147176742554
+          ],
+          "vertexZRange": [
+            -0.013032962568104267,
+            0.008472313173115253
+          ],
+          "baselineMaximumDriftM": 1.899067122926995e-05,
+          "maximumDifferenceFromBaselineM": 2.5581545423631594e-05
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 4.035889893060335e-05,
+          "minimumZRange": [
+            -0.010937148705124855,
+            -0.010903681628406048
+          ],
+          "vertexZRange": [
+            -0.010937148705124855,
+            0.008472313173115253
+          ],
+          "baselineMaximumDriftM": 1.8095853953864045e-05,
+          "maximumDifferenceFromBaselineM": 2.455271037228314e-05
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 4.301795451791148e-05,
+          "minimumZRange": [
+            -0.00995427556335926,
+            -0.009918197989463806
+          ],
+          "vertexZRange": [
+            -0.00995427556335926,
+            0.005271557252854109
+          ],
+          "baselineMaximumDriftM": 2.099264030312707e-05,
+          "maximumDifferenceFromBaselineM": 2.4325344687659266e-05
+        }
+      }
+    },
+    {
+      "side": "l",
+      "originalWindow": [
+        288,
+        480
+      ],
+      "sourceWindow": [
+        540.0,
+        580.0
+      ],
+      "regions": {
+        "whole": {
+          "vertices": 150,
+          "maximumDriftM": 4.669893222108492e-07,
+          "minimumZRange": [
+            -0.01300015952438116,
+            -0.012999627739191055
+          ],
+          "vertexZRange": [
+            -0.01300015952438116,
+            0.008471830748021603
+          ],
+          "baselineMaximumDriftM": 4.669893222108492e-07,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "forefoot": {
+          "vertices": 89,
+          "maximumDriftM": 4.669893222108492e-07,
+          "minimumZRange": [
+            -0.01300015952438116,
+            -0.012999627739191055
+          ],
+          "vertexZRange": [
+            -0.01300015952438116,
+            0.008471830748021603
+          ],
+          "baselineMaximumDriftM": 4.669893222108492e-07,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "toes": {
+          "vertices": 20,
+          "maximumDriftM": 4.669893222108492e-07,
+          "minimumZRange": [
+            -0.010904706083238125,
+            -0.010904164053499699
+          ],
+          "vertexZRange": [
+            -0.010904706083238125,
+            0.008471830748021603
+          ],
+          "baselineMaximumDriftM": 4.669893222108492e-07,
+          "maximumDifferenceFromBaselineM": 0.0
+        },
+        "heel": {
+          "vertices": 42,
+          "maximumDriftM": 4.122322928527052e-07,
+          "minimumZRange": [
+            -0.009919177740812302,
+            -0.00991868693381548
+          ],
+          "vertexZRange": [
+            -0.009919177740812302,
+            0.005271077621728182
+          ],
+          "baselineMaximumDriftM": 4.122322928527052e-07,
+          "maximumDifferenceFromBaselineM": 0.0
+        }
+      }
+    }
+  ],
+  "allOriginalWindowsPreserved": true,
+  "limits": "Forefoot includes metatarsal pad (restY<-.025m); distal toes restY<-.105m. All selected mesh vertices reported, original full-sole metric retained. This is DQ authoring input, not solved/exported surface."
+}

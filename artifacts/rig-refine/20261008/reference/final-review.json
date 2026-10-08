@@ -1,0 +1,73 @@
+{
+  "reviewDate": "2026-10-09",
+  "productionDirectoryDate": "2026-10-08",
+  "reviewKind": "independent_visual_review_of_all_consecutive_still_frames",
+  "sourceVideo": "artifacts/match-reference/20261006/match15/2_18_14.mp4",
+  "sourceFps": 25,
+  "candidateBlend": "artifacts/rig-refine/20261008/final/rebuild.blend",
+  "candidateBlendSha256": "c77cf94202253cb37727a72a002a54e568f9dd597b5fc3d4cbdec39bd344a100",
+  "candidateBlendHashReadFromDisk": true,
+  "candidateImages": "artifacts/rig-refine/20261008/review-final/pairs",
+  "viewedRange": [480,540],
+  "viewedUniqueFrameCount": 61,
+  "allFramesIndividuallyOpened": true,
+  "viewingBatches": [[480,487],[488,495],[496,503],[504,511],[512,519],[520,527],[528,535],[536,540]],
+  "authoringFrameFormula": "(sourceFrame - 480) * 4.8",
+  "motionTimeRangeSeconds": [0,2.4],
+  "result": "improved_not_passed",
+  "professionalFidelity": "not_passed",
+  "normalSpeedVideoActuallyViewedThisAudit": false,
+  "userNaturalnessAcceptance": "not_received",
+  "machineQaNotUsedAsVisualAcceptance": true,
+  "findings": [
+    {
+      "topic": "rear_knee_loading",
+      "range": [513,519],
+      "assessment": "visible_improvement",
+      "improvement": "Rear knee drops and rear calf folds visibly at 514-517; rising resumes by 519 rather than retaining deepest pose through retreat.",
+      "remaining": "Pelvis/front-knee/rear-shoe relationship and entry timing still differ. Exact rear-foot yaw is not measurable from this source."
+    },
+    {
+      "topic": "running_torso_turn_and_lean",
+      "range": [480,495],
+      "assessment": "visible_improvement",
+      "improvement": "Chest side-facing/lean is visible at 485-491 and turns back toward play around 493-496.",
+      "remaining": "Initial loading remains weak and relatively upright. At 487 source trailing leg is already folded whereas candidate remains wider; full-body timing is not aligned."
+    },
+    {
+      "topic": "recovery_weight_transfer",
+      "range": [521,535],
+      "assessment": "visible_improvement",
+      "improvement": "Support leg extends more clearly near 525-530 and sustained deep-squat retreat is reduced.",
+      "remaining": "Candidate retains similar two-leg projection too long compared with source alternating support, foot withdrawal and replant rhythm."
+    },
+    {
+      "topic": "entry_stride",
+      "range": [507,513],
+      "assessment": "remaining_difference",
+      "remaining": "Source shows more distinct long reaching step followed by flexion under load; candidate reaches a flexed-knee silhouette earlier."
+    },
+    {
+      "topic": "racket_preparation_and_recovery",
+      "range": [500,521],
+      "assessment": "preparation_improvement_retained_recovery_not_fully_aligned",
+      "improvement": "Earlier racket raise remains visible at 500-508.",
+      "remaining": "At 514-521 source hand/racket recovers downward closer to front knee while candidate stays more outward/higher. Exact wrist roll/finger detail unresolved."
+    },
+    {
+      "topic": "ready_stance",
+      "range": [536,540],
+      "assessment": "remaining_difference",
+      "remaining": "Split stance is readable, but candidate torso stays more vertical than source hip-folded preparation."
+    }
+  ],
+  "jointDirectionVisualObservation": "No unambiguous reverse knee/elbow or one-frame joint flip observed at this distant image scale across these 61 frames. Not a closeup joint-surface, wrist, finger or sole-contact acceptance.",
+  "limitations": [
+    "Single-camera distant footage with motion blur, net and clothing occlusion",
+    "Approximate comparison camera and different character proportions",
+    "No pixel residual converted into unique measured 3D anatomy or contact force",
+    "No final closeup images reviewed in this audit; earlier candidate closeups remain separately scoped",
+    "No normal-speed playback or user acceptance claimed",
+    "Frames 541 onward are next shot and excluded"
+  ]
+}

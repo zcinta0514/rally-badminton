@@ -1,0 +1,699 @@
+{
+  "source": "artifacts/rig-refine/20261008/torso/surface-01/rebuild.blend",
+  "sampleHz": 240,
+  "samples": 961,
+  "bodyIntersectionRows": [],
+  "racketMeshCoverage": [
+    "RacketBatch_Racket_StringIvory",
+    "RacketBatch_Racket_GripRubber",
+    "RacketBatch_Racket_Carbon",
+    "Racket_Grommets",
+    "Racket_GripWrapSeam",
+    "Racket_Frame",
+    "Racket_Ferrule",
+    "Racket_ButtBadge"
+  ],
+  "racketCoverageRequired": true,
+  "racketIntersectionRows": [],
+  "regions": {
+    "shoulder_l": {
+      "min": 0.3899620234872869,
+      "max": 1.7649123226034913,
+      "severeEdges": 0
+    },
+    "shoulder_r": {
+      "min": 0.4114724389777112,
+      "max": 1.764588210756362,
+      "severeEdges": 0
+    },
+    "elbow_l": {
+      "min": 0.5591695444881681,
+      "max": 1.597576788319259,
+      "severeEdges": 0
+    },
+    "elbow_r": {
+      "min": 0.4398956370927643,
+      "max": 1.7415098987806794,
+      "severeEdges": 0
+    },
+    "wrist_l": {
+      "min": 0.92514178014907,
+      "max": 1.1104238305350944,
+      "severeEdges": 0
+    },
+    "wrist_r": {
+      "min": 0.6034684707204379,
+      "max": 1.4641601237673194,
+      "severeEdges": 0
+    },
+    "hip_l": {
+      "min": 0.436535275852446,
+      "max": 1.7648605871470866,
+      "severeEdges": 0
+    },
+    "hip_r": {
+      "min": 0.38997898677118814,
+      "max": 1.7649242510043748,
+      "severeEdges": 0
+    },
+    "knee_l": {
+      "min": 0.37647359010319936,
+      "max": 1.7460566512507072,
+      "severeEdges": 0
+    },
+    "knee_r": {
+      "min": 0.43279591345289314,
+      "max": 1.7443028011491457,
+      "severeEdges": 0
+    },
+    "ankle_l": {
+      "min": 0.4129364322326297,
+      "max": 1.7244756178491671,
+      "severeEdges": 0
+    },
+    "ankle_r": {
+      "min": 0.437146745678902,
+      "max": 1.7400114555426167,
+      "severeEdges": 0
+    }
+  },
+  "directionViolations": [],
+  "maxSeamGapM": 0,
+  "maxBoneLengthErrorM": 5.933415166414768e-07,
+  "maxHalfFrameRotation": {
+    "CTRL_spine_02": {
+      "frame": 15.5,
+      "degrees": 0.8467230767591424
+    },
+    "CTRL_spine_03": {
+      "frame": 15.5,
+      "degrees": 1.0362659488688737
+    },
+    "CTRL_clavicle_l": {
+      "frame": 15.5,
+      "degrees": 1.035510359191941
+    },
+    "CTRL_clavicle_r": {
+      "frame": 16.0,
+      "degrees": 1.0362659488688737
+    },
+    "CTRL_lowerarm_l": {
+      "frame": 23.5,
+      "degrees": 0.7230721601504347
+    },
+    "CTRL_index_01_l": {
+      "frame": 23.5,
+      "degrees": 0.7241537846385298
+    },
+    "CTRL_middle_03_l": {
+      "frame": 23.5,
+      "degrees": 0.7241537846385298
+    },
+    "CTRL_middle_04_leaf_l": {
+      "frame": 23.5,
+      "degrees": 0.7241537846385298
+    },
+    "CTRL_pinky_01_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_pinky_03_l": {
+      "frame": 24.0,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_pinky_04_leaf_l": {
+      "frame": 24.0,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_ring_03_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_ring_04_leaf_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_thumb_01_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_thumb_02_l": {
+      "frame": 24.0,
+      "degrees": 0.7241537846385298
+    },
+    "CTRL_thumb_03_l": {
+      "frame": 23.5,
+      "degrees": 0.7230721601504347
+    },
+    "CTRL_thumb_04_leaf_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_index_02_r": {
+      "frame": 165.5,
+      "degrees": 4.391591789604289
+    },
+    "CTRL_middle_04_leaf_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_pinky_02_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_ring_01_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_ring_02_r": {
+      "frame": 165.5,
+      "degrees": 4.391591789604289
+    },
+    "CTRL_thumb_01_r": {
+      "frame": 165.5,
+      "degrees": 4.391591789604289
+    },
+    "CTRL_ring_02_l": {
+      "frame": 23.5,
+      "degrees": 0.7241537846385298
+    },
+    "CTRL_hand_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_index_01_r": {
+      "frame": 165.5,
+      "degrees": 4.391770228296355
+    },
+    "CTRL_ring_03_r": {
+      "frame": 165.5,
+      "degrees": 4.391591789604289
+    },
+    "CTRL_ring_04_leaf_r": {
+      "frame": 165.5,
+      "degrees": 4.391591789604289
+    },
+    "CTRL_thumb_02_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_thumb_04_leaf_r": {
+      "frame": 165.5,
+      "degrees": 4.391591789604289
+    },
+    "CTRL_spine_01": {
+      "frame": 15.5,
+      "degrees": 0.515860762596644
+    },
+    "CTRL_Head": {
+      "frame": 23.5,
+      "degrees": 0.4111684500919084
+    },
+    "CTRL_upperarm_l": {
+      "frame": 38.5,
+      "degrees": 0.7972078338145465
+    },
+    "CTRL_upperarm_r": {
+      "frame": 198.5,
+      "degrees": 0.5218944343155569
+    },
+    "CTRL_thigh_l": {
+      "frame": 36.0,
+      "degrees": 4.524009520816972
+    },
+    "CTRL_thigh_r": {
+      "frame": 52.0,
+      "degrees": 4.547483600333837
+    },
+    "CTRL_hand_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_index_02_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_index_03_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_index_04_leaf_l": {
+      "frame": 23.5,
+      "degrees": 0.7241537846385298
+    },
+    "CTRL_middle_01_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_middle_02_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_pinky_02_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_ring_01_l": {
+      "frame": 23.5,
+      "degrees": 0.725233808301038
+    },
+    "CTRL_calf_l": {
+      "frame": 32.0,
+      "degrees": 3.72450172752113
+    },
+    "CTRL_lowerarm_r": {
+      "frame": 186.5,
+      "degrees": 1.2366791737643863
+    },
+    "CTRL_index_03_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_index_04_leaf_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_middle_01_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_middle_02_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_middle_03_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_pinky_01_r": {
+      "frame": 165.5,
+      "degrees": 4.391770228296355
+    },
+    "CTRL_pinky_03_r": {
+      "frame": 165.5,
+      "degrees": 4.391591789604289
+    },
+    "CTRL_pinky_04_leaf_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_thumb_03_r": {
+      "frame": 165.5,
+      "degrees": 4.391413777799046
+    },
+    "CTRL_calf_r": {
+      "frame": 31.5,
+      "degrees": 2.434158184334777
+    },
+    "CTRL_neck_01": {
+      "frame": 177.0,
+      "degrees": 0.3669079171357266
+    },
+    "CTRL_root": {
+      "frame": 176.5,
+      "degrees": 0.3449170292053863
+    },
+    "CTRL_pelvis": {
+      "frame": 175.5,
+      "degrees": 0.34264033505595065
+    },
+    "CTRL_foot_l": {
+      "frame": 36.0,
+      "degrees": 2.6265684552354442
+    },
+    "CTRL_ball_l": {
+      "frame": 36.0,
+      "degrees": 2.626866422237986
+    },
+    "CTRL_ball_leaf_l": {
+      "frame": 36.0,
+      "degrees": 2.626866422237986
+    },
+    "CTRL_foot_r": {
+      "frame": 60.0,
+      "degrees": 1.0347542359064796
+    },
+    "CTRL_ball_r": {
+      "frame": 59.5,
+      "degrees": 1.0347542359064796
+    },
+    "CTRL_ball_leaf_r": {
+      "frame": 59.5,
+      "degrees": 1.0347542359064796
+    }
+  },
+  "support": [
+    {
+      "side": "r",
+      "frames": [
+        0,
+        24
+      ],
+      "maximumDriftM": 4.0660196602665904e-05,
+      "soleMinZRange": [
+        -0.01303679496049881,
+        -0.012999486178159714
+      ],
+      "floorGapRangeM": [
+        -3.679496049881041e-05,
+        5.138218402856581e-07
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        33.6,
+        52.8
+      ],
+      "maximumDriftM": 0.0014202891427571506,
+      "soleMinZRange": [
+        -0.012450775131583214,
+        -0.01100944820791483
+      ],
+      "floorGapRangeM": [
+        0.0005492248684167856,
+        0.00199055179208517
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        105.6,
+        120
+      ],
+      "maximumDriftM": 0.00016807389134955325,
+      "soleMinZRange": [
+        -0.011220504529774189,
+        -0.011009396985173225
+      ],
+      "floorGapRangeM": [
+        0.0017794954702258104,
+        0.001990603014826774
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        160,
+        192
+      ],
+      "maximumDriftM": 7.396755198063166e-05,
+      "soleMinZRange": [
+        -0.013062615878880024,
+        -0.01299878116697073
+      ],
+      "floorGapRangeM": [
+        -6.261587888002455e-05,
+        1.2188330292695754e-06
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        236,
+        254
+      ],
+      "maximumDriftM": 6.658641705212422e-06,
+      "soleMinZRange": [
+        -0.013004060834646225,
+        -0.0129993986338377
+      ],
+      "floorGapRangeM": [
+        -4.060834646225572e-06,
+        6.013661622995131e-07
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        288,
+        480
+      ],
+      "maximumDriftM": 6.367985781950917e-07,
+      "soleMinZRange": [
+        -0.013000141829252243,
+        -0.012999769300222397
+      ],
+      "floorGapRangeM": [
+        -1.4182925224363874e-07,
+        2.3069977760255267e-07
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        0,
+        24
+      ],
+      "maximumDriftM": 3.3355243522166816e-05,
+      "soleMinZRange": [
+        -0.013013571500778198,
+        -0.012999668717384338
+      ],
+      "floorGapRangeM": [
+        -1.3571500778198839e-05,
+        3.3128261566102435e-07
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        76.8,
+        96
+      ],
+      "maximumDriftM": 0.0003963501690188203,
+      "soleMinZRange": [
+        -0.01148848608136177,
+        -0.011009353213012218
+      ],
+      "floorGapRangeM": [
+        0.0015115139186382288,
+        0.001990646786987781
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        174,
+        182
+      ],
+      "maximumDriftM": 2.5807411763027482e-05,
+      "soleMinZRange": [
+        -0.01301633846014738,
+        -0.012999257072806358
+      ],
+      "floorGapRangeM": [
+        -1.6338460147381426e-05,
+        7.429271936410659e-07
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        232,
+        254
+      ],
+      "maximumDriftM": 2.1074351280830123e-05,
+      "soleMinZRange": [
+        -0.013017823919653893,
+        -0.012999724596738815
+      ],
+      "floorGapRangeM": [
+        -1.7823919653893114e-05,
+        2.7540326118409564e-07
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        288,
+        480
+      ],
+      "maximumDriftM": 4.322483184704326e-07,
+      "soleMinZRange": [
+        -0.01300013717263937,
+        -0.01299973763525486
+      ],
+      "floorGapRangeM": [
+        -1.3717263937056134e-07,
+        2.6236474513947894e-07
+      ]
+    }
+  ],
+  "legacySupportComparison": [
+    {
+      "side": "r",
+      "frames": [
+        0,
+        24
+      ],
+      "maximumDriftM": 4.0660196602665904e-05,
+      "soleMinZRange": [
+        -0.01303679496049881,
+        -0.012999486178159714
+      ],
+      "floorGapRangeM": [
+        -3.679496049881041e-05,
+        5.138218402856581e-07
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        82,
+        96
+      ],
+      "maximumDriftM": 0.5493688902095737,
+      "soleMinZRange": [
+        0.0751008540391922,
+        0.17941948771476746
+      ],
+      "floorGapRangeM": [
+        0.0881008540391922,
+        0.19241948771476747
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        160,
+        192
+      ],
+      "maximumDriftM": 7.396755198063166e-05,
+      "soleMinZRange": [
+        -0.013062615878880024,
+        -0.01299878116697073
+      ],
+      "floorGapRangeM": [
+        -6.261587888002455e-05,
+        1.2188330292695754e-06
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        236,
+        254
+      ],
+      "maximumDriftM": 6.658641705212422e-06,
+      "soleMinZRange": [
+        -0.013004060834646225,
+        -0.0129993986338377
+      ],
+      "floorGapRangeM": [
+        -4.060834646225572e-06,
+        6.013661622995131e-07
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        288,
+        480
+      ],
+      "maximumDriftM": 6.367985781950917e-07,
+      "soleMinZRange": [
+        -0.013000141829252243,
+        -0.012999769300222397
+      ],
+      "floorGapRangeM": [
+        -1.4182925224363874e-07,
+        2.3069977760255267e-07
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        0,
+        24
+      ],
+      "maximumDriftM": 3.3355243522166816e-05,
+      "soleMinZRange": [
+        -0.013013571500778198,
+        -0.012999668717384338
+      ],
+      "floorGapRangeM": [
+        -1.3571500778198839e-05,
+        3.3128261566102435e-07
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        88,
+        100
+      ],
+      "maximumDriftM": 0.08753970026972367,
+      "soleMinZRange": [
+        -0.01148848608136177,
+        0.0034601748920977116
+      ],
+      "floorGapRangeM": [
+        0.0015115139186382288,
+        0.01646017489209771
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        174,
+        182
+      ],
+      "maximumDriftM": 2.5807411763027482e-05,
+      "soleMinZRange": [
+        -0.01301633846014738,
+        -0.012999257072806358
+      ],
+      "floorGapRangeM": [
+        -1.6338460147381426e-05,
+        7.429271936410659e-07
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        232,
+        254
+      ],
+      "maximumDriftM": 2.1074351280830123e-05,
+      "soleMinZRange": [
+        -0.013017823919653893,
+        -0.012999724596738815
+      ],
+      "floorGapRangeM": [
+        -1.7823919653893114e-05,
+        2.7540326118409564e-07
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        288,
+        480
+      ],
+      "maximumDriftM": 4.322483184704326e-07,
+      "soleMinZRange": [
+        -0.01300013717263937,
+        -0.01299973763525486
+      ],
+      "floorGapRangeM": [
+        -1.3717263937056134e-07,
+        2.6236474513947894e-07
+      ]
+    }
+  ],
+  "supportContract": "artifacts/rig-rebuild/20261007/integration/final/source-contact-contract.json",
+  "courtFloorZ": -0.013,
+  "limits": "Original 1.8/0.35 surface screen, geometric hinge checks. Does not establish professional motion fidelity.",
+  "gates": {
+    "body": true,
+    "racket": true,
+    "edges": true,
+    "directions": true,
+    "seams": true,
+    "boneLengths": true,
+    "supportDrift": true,
+    "supportFloor": true
+  },
+  "passed": true
+}

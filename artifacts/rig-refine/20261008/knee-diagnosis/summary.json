@@ -1,0 +1,53 @@
+{
+  "preferredCandidate": "lunge/surface-06",
+  "scope": "four static frames only; no continuous gate claimed",
+  "rows": {
+    "combined-02": {
+      "sha256": "5fb8f7792064654c26ddada7474fbebde1a87e7a090f5317efecc9d2c53ba92b",
+      "frames": [
+        170,
+        174,
+        178,
+        182
+      ],
+      "lowerPairs": [
+        126,
+        130,
+        131,
+        130
+      ]
+    },
+    "lunge/surface-05": {
+      "sha256": "38e35663e780e957936ccc2177d4739da4623212c4f0f5d87276c6494073c1bc",
+      "frames": [
+        170,
+        174,
+        178,
+        182
+      ],
+      "lowerPairs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "frame174MinScatterProductRetention": 0.6746149198956778
+    },
+    "lunge/surface-06": {
+      "sha256": "c6e4bd6a4641c26540b6fbbec69ec955ded7bcdcfa92d24b86960e171dddbb7b",
+      "frames": [
+        170,
+        174,
+        178,
+        182
+      ],
+      "lowerPairs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "frame174MinScatterProductRetention": 0.7540149466834921
+    }
+  }
+}

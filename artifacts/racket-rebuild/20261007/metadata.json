@@ -1,0 +1,683 @@
+{
+  "task": "P1-3B",
+  "created": "2026-10-07",
+  "source": "Original procedural authored geometry, no third-party mesh",
+  "dimensionsAre": "Authored construction values; not claimed manufacturer measurement",
+  "config": {
+    "total_length": 0.675,
+    "butt_z": -0.08,
+    "head_tip": 0.595,
+    "head_width": 0.23,
+    "head_height": 0.278,
+    "frame_radial_radius": 0.0045,
+    "frame_face_radius": 0.0055,
+    "grip_bottom": -0.074,
+    "grip_top": 0.069,
+    "grip_circumradius": 0.01355,
+    "shaft_radius": 0.0034,
+    "shaft_start": 0.099,
+    "shaft_end": 0.331,
+    "mains": 20,
+    "crosses": 22,
+    "main_pitch": 0.0095,
+    "cross_pitch": 0.01025,
+    "string_radius": 0.00032,
+    "weave_height": 0.00039,
+    "frame_segments": 128,
+    "frame_sides": 12
+  },
+  "boundsM": {
+    "min": [
+      -0.11510347574949265,
+      -0.013858192600309849,
+      -0.07999999821186066
+    ],
+    "max": [
+      0.11510347574949265,
+      0.013858192600309849,
+      0.5950794219970703
+    ]
+  },
+  "interfaces": {
+    "root": "Racket_GripCenter",
+    "axis": "+Z",
+    "faceNormal": "+Y",
+    "width": "+X",
+    "contactPoint": "Racket_ContactPoint",
+    "contactLocalM": [
+      0,
+      0,
+      0.46799999999999997
+    ],
+    "faceNormalLocal": [
+      0,
+      1,
+      0
+    ],
+    "normalMarker": "Racket_FaceNormal",
+    "butt": "Racket_ButtEnd",
+    "frontColor": "teal",
+    "backColor": "graphite"
+  },
+  "grip": {
+    "acrossFlatsM": 0.02503713533105587,
+    "perimeterM": 0.08296576813675147,
+    "effectiveLengthM": 0.143,
+    "handSpanRecommendationM": 0.082,
+    "buttBeyondPinkyRecommendationM": 0.025,
+    "nominalGripEmbedIntoPalmM": 0,
+    "softTissueCompressionAllowanceM": [
+      0,
+      0.0015
+    ],
+    "handBone": "DEF_hand_r",
+    "boneLocalInitialMatrix": [
+      [
+        -0.17715302109718323,
+        0.0,
+        0.9841833710670471,
+        0.0
+      ],
+      [
+        0.9841833710670471,
+        0.0,
+        0.17715302109718323,
+        0.11299999803304672
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.035999998450279236
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "matrixStatus": "Initial orientation/position proposal only, no completed body-contact fit",
+    "installation": "Parent root via CHILD_OF DEF_hand_r or evaluate hand.matrix_world @ this matrix; bone parenting is tail-relative and needs inverse correction",
+    "fingerGuidance": "Long axis crosses four digits from pinky to index, slightly diagonal; maintain visible index separation; wrap middle/ring/pinky independently; thumb needs opposition toward handle, not generic three-joint curl. Validate actual mesh distances through motion.",
+    "detectedCurrentProblem": "match-23 thumb endpoint remains ~90mm away from grip region; grip is not currently closed"
+  },
+  "geometry": {
+    "objects": [
+      {
+        "name": "Racket_Frame",
+        "vertices": 1536,
+        "triangles": 3072,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.726368252808649e-05
+      },
+      {
+        "name": "Racket_Grip",
+        "vertices": 40,
+        "triangles": 76,
+        "nonManifoldEdges": 0,
+        "signedVolume": 7.216445194233876e-05
+      },
+      {
+        "name": "Racket_ButtCap",
+        "vertices": 32,
+        "triangles": 60,
+        "nonManifoldEdges": 0,
+        "signedVolume": 6.703145814095424e-06
+      },
+      {
+        "name": "Racket_ButtBadge",
+        "vertices": 32,
+        "triangles": 60,
+        "nonManifoldEdges": 0,
+        "signedVolume": 7.14164601810938e-08
+      },
+      {
+        "name": "Racket_Cone",
+        "vertices": 80,
+        "triangles": 156,
+        "nonManifoldEdges": 0,
+        "signedVolume": 1.0057034343162287e-05
+      },
+      {
+        "name": "Racket_Ferrule",
+        "vertices": 48,
+        "triangles": 92,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.829211964335596e-07
+      },
+      {
+        "name": "Racket_Shaft",
+        "vertices": 80,
+        "triangles": 156,
+        "nonManifoldEdges": 0,
+        "signedVolume": 7.68299501725109e-06
+      },
+      {
+        "name": "Racket_TJoint",
+        "vertices": 80,
+        "triangles": 156,
+        "nonManifoldEdges": 0,
+        "signedVolume": 1.550827926906235e-06
+      },
+      {
+        "name": "Racket_TWings",
+        "vertices": 48,
+        "triangles": 88,
+        "nonManifoldEdges": 0,
+        "signedVolume": 1.6176692834716354e-06
+      },
+      {
+        "name": "Racket_GripWrapSeam",
+        "vertices": 1092,
+        "triangles": 2180,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.327907187786444e-08
+      },
+      {
+        "name": "Racket_GripFinishTape",
+        "vertices": 48,
+        "triangles": 92,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.932618290113004e-06
+      },
+      {
+        "name": "Racket_Main_01",
+        "vertices": 208,
+        "triangles": 412,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.1865893605103395e-08
+      },
+      {
+        "name": "Racket_Main_02",
+        "vertices": 232,
+        "triangles": 460,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.7694718808751496e-08
+      },
+      {
+        "name": "Racket_Main_03",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.220755055496872e-08
+      },
+      {
+        "name": "Racket_Main_04",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.579455891876551e-08
+      },
+      {
+        "name": "Racket_Main_05",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.865108732909918e-08
+      },
+      {
+        "name": "Racket_Main_06",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.09090691556177e-08
+      },
+      {
+        "name": "Racket_Main_07",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.264564673681495e-08
+      },
+      {
+        "name": "Racket_Main_08",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.3911635439956363e-08
+      },
+      {
+        "name": "Racket_Main_09",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.473897286695841e-08
+      },
+      {
+        "name": "Racket_Main_10",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.514813437994758e-08
+      },
+      {
+        "name": "Racket_Main_11",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.514813437994762e-08
+      },
+      {
+        "name": "Racket_Main_12",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.473897286695834e-08
+      },
+      {
+        "name": "Racket_Main_13",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.3911635439956377e-08
+      },
+      {
+        "name": "Racket_Main_14",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.264564673681492e-08
+      },
+      {
+        "name": "Racket_Main_15",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 5.0909069155617735e-08
+      },
+      {
+        "name": "Racket_Main_16",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.865108732909918e-08
+      },
+      {
+        "name": "Racket_Main_17",
+        "vertices": 280,
+        "triangles": 556,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.57945589187655e-08
+      },
+      {
+        "name": "Racket_Main_18",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.220755055496873e-08
+      },
+      {
+        "name": "Racket_Main_19",
+        "vertices": 232,
+        "triangles": 460,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.769471880875148e-08
+      },
+      {
+        "name": "Racket_Main_20",
+        "vertices": 208,
+        "triangles": 412,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.186589360510341e-08
+      },
+      {
+        "name": "Racket_Cross_01",
+        "vertices": 184,
+        "triangles": 364,
+        "nonManifoldEdges": 0,
+        "signedVolume": 2.7216816792650953e-08
+      },
+      {
+        "name": "Racket_Cross_02",
+        "vertices": 208,
+        "triangles": 412,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.1304369445877126e-08
+      },
+      {
+        "name": "Racket_Cross_03",
+        "vertices": 232,
+        "triangles": 460,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.457474556714679e-08
+      },
+      {
+        "name": "Racket_Cross_04",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.724380511774179e-08
+      },
+      {
+        "name": "Racket_Cross_05",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.942181931456842e-08
+      },
+      {
+        "name": "Racket_Cross_06",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.119705388733241e-08
+      },
+      {
+        "name": "Racket_Cross_07",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.261987019891756e-08
+      },
+      {
+        "name": "Racket_Cross_08",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.3724736110121177e-08
+      },
+      {
+        "name": "Racket_Cross_09",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.453536214511017e-08
+      },
+      {
+        "name": "Racket_Cross_10",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.5067661772794677e-08
+      },
+      {
+        "name": "Racket_Cross_11",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.533146512227007e-08
+      },
+      {
+        "name": "Racket_Cross_12",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.5331464724309725e-08
+      },
+      {
+        "name": "Racket_Cross_13",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.5067661772794624e-08
+      },
+      {
+        "name": "Racket_Cross_14",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.453536233827105e-08
+      },
+      {
+        "name": "Racket_Cross_15",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.372473611012184e-08
+      },
+      {
+        "name": "Racket_Cross_16",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.2623839638261676e-08
+      },
+      {
+        "name": "Racket_Cross_17",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 4.120089081141656e-08
+      },
+      {
+        "name": "Racket_Cross_18",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.9425490838696444e-08
+      },
+      {
+        "name": "Racket_Cross_19",
+        "vertices": 256,
+        "triangles": 508,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.724727385250087e-08
+      },
+      {
+        "name": "Racket_Cross_20",
+        "vertices": 232,
+        "triangles": 460,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.457796571667639e-08
+      },
+      {
+        "name": "Racket_Cross_21",
+        "vertices": 208,
+        "triangles": 412,
+        "nonManifoldEdges": 0,
+        "signedVolume": 3.130728500603533e-08
+      },
+      {
+        "name": "Racket_Cross_22",
+        "vertices": 184,
+        "triangles": 364,
+        "nonManifoldEdges": 0,
+        "signedVolume": 2.7219351654982553e-08
+      },
+      {
+        "name": "Racket_Grommets",
+        "vertices": 2688,
+        "triangles": 5376,
+        "nonManifoldEdges": 0,
+        "signedVolume": 2.4130645442438302e-06
+      }
+    ],
+    "triangles": 32708,
+    "vertices": 16460,
+    "watertightComponentChecksPassed": true,
+    "strings": {
+      "mains": 20,
+      "crosses": 22,
+      "crossings": 416,
+      "minCrossingSurfaceGapM": 0.00013999999999999993,
+      "endpointAnchor": "At ellipse centerline; each string passes through hollow grommet into hoop",
+      "tensionSimulation": false
+    },
+    "connections": {
+      "gripToConeOverlapM": 0.004,
+      "coneToShaftOverlapM": 0.005,
+      "shaftToTOverlapM": 0.021,
+      "tToRim": "Overlapping assembled rigid parts; no visual gap. Not a welded manufacturing mesh."
+    }
+  },
+  "limits": [
+    "Static prop geometry QA only; body/racket intersections require integrated animation audit",
+    "Racket face and contact marker are geometric interfaces, not measured impact dynamics",
+    "No professional match grip acceptance claimed"
+  ],
+  "runtime": {
+    "meshes": [
+      {
+        "name": "Racket_Frame",
+        "triangles": 1474,
+        "rally_asset_role": "racket",
+        "racket_part": "frame"
+      },
+      {
+        "name": "RacketBatch_Racket_GripRubber",
+        "triangles": 228,
+        "rally_asset_role": "racket",
+        "racket_part": "grip"
+      },
+      {
+        "name": "Racket_ButtBadge",
+        "triangles": 60,
+        "rally_asset_role": "racket",
+        "racket_part": "grip"
+      },
+      {
+        "name": "RacketBatch_Racket_Carbon",
+        "triangles": 556,
+        "rally_asset_role": "racket",
+        "racket_part": "shaft-and-T"
+      },
+      {
+        "name": "Racket_Ferrule",
+        "triangles": 92,
+        "rally_asset_role": "racket",
+        "racket_part": "shaft"
+      },
+      {
+        "name": "Racket_GripWrapSeam",
+        "triangles": 2180,
+        "rally_asset_role": "racket",
+        "racket_part": "grip"
+      },
+      {
+        "name": "Racket_Grommets",
+        "triangles": 3494,
+        "rally_asset_role": "racket",
+        "racket_part": "grommets"
+      },
+      {
+        "name": "RacketBatch_Racket_StringIvory",
+        "triangles": 7160,
+        "rally_asset_role": "racket",
+        "racket_part": "strings"
+      }
+    ],
+    "triangles": 15244,
+    "staticLOD": true,
+    "renderAsset": "racket.glb"
+  },
+  "meshNodeNames": {
+    "editable": [
+      "Racket_Frame",
+      "Racket_Grip",
+      "Racket_ButtCap",
+      "Racket_ButtBadge",
+      "Racket_Cone",
+      "Racket_Ferrule",
+      "Racket_Shaft",
+      "Racket_TJoint",
+      "Racket_TWings",
+      "Racket_GripWrapSeam",
+      "Racket_GripFinishTape",
+      "Racket_Main_01",
+      "Racket_Main_02",
+      "Racket_Main_03",
+      "Racket_Main_04",
+      "Racket_Main_05",
+      "Racket_Main_06",
+      "Racket_Main_07",
+      "Racket_Main_08",
+      "Racket_Main_09",
+      "Racket_Main_10",
+      "Racket_Main_11",
+      "Racket_Main_12",
+      "Racket_Main_13",
+      "Racket_Main_14",
+      "Racket_Main_15",
+      "Racket_Main_16",
+      "Racket_Main_17",
+      "Racket_Main_18",
+      "Racket_Main_19",
+      "Racket_Main_20",
+      "Racket_Cross_01",
+      "Racket_Cross_02",
+      "Racket_Cross_03",
+      "Racket_Cross_04",
+      "Racket_Cross_05",
+      "Racket_Cross_06",
+      "Racket_Cross_07",
+      "Racket_Cross_08",
+      "Racket_Cross_09",
+      "Racket_Cross_10",
+      "Racket_Cross_11",
+      "Racket_Cross_12",
+      "Racket_Cross_13",
+      "Racket_Cross_14",
+      "Racket_Cross_15",
+      "Racket_Cross_16",
+      "Racket_Cross_17",
+      "Racket_Cross_18",
+      "Racket_Cross_19",
+      "Racket_Cross_20",
+      "Racket_Cross_21",
+      "Racket_Cross_22",
+      "Racket_Grommets"
+    ],
+    "runtime": [
+      "Racket_Frame",
+      "RacketBatch_Racket_GripRubber",
+      "Racket_ButtBadge",
+      "RacketBatch_Racket_Carbon",
+      "Racket_Ferrule",
+      "Racket_GripWrapSeam",
+      "Racket_Grommets",
+      "RacketBatch_Racket_StringIvory"
+    ]
+  },
+  "collisionInterface": {
+    "allMeshSelection": "obj.get(\"rally_asset_role\") == \"racket\"",
+    "allowlistWarning": "Do not filter only V4_Racket prefix. Check every exported racket mesh. Grip/body intentional contact needs distance/penetration rules distinct from free racket parts.",
+    "gripCapsuleLocal": {
+      "a": [
+        0,
+        0,
+        -0.074
+      ],
+      "b": [
+        0,
+        0,
+        0.069
+      ],
+      "radiusM": 0.01355
+    },
+    "shaftCapsuleLocal": {
+      "a": [
+        0,
+        0,
+        0.099
+      ],
+      "b": [
+        0,
+        0,
+        0.331
+      ],
+      "radiusM": 0.00345
+    },
+    "stringBedEllipse": {
+      "center": [
+        0,
+        0,
+        0.45599999999999996
+      ],
+      "halfWidth": 0.1105,
+      "halfHeight": 0.1345,
+      "normal": [
+        0,
+        1,
+        0
+      ]
+    },
+    "surfaceEnvelopeM": 0.00071
+  },
+  "sha256": {
+    "racket.blend": "8ab297c4ce4475a94dadd48b224175cf75d412e309c44f0c326a5f3fc6412d9f",
+    "racket.glb": "00700725ef5f2de8e6c14f5a6e1a015061901a9fc0e9cd3505f1eb033189ae42",
+    "racket-runtime.blend": "5e3624a03a23729a0f7dd3ddd1d004f762c1f0ec86f9eefd1cdd88356f65b069",
+    "racket-runtime.glb": "e2db2be7b41c5879ab5ad94514203509fedbc0a4d5baec40a0d1a959db58ac1f"
+  }
+}

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>新骨架与球拍 · 比赛逐帧对照</title>
+  <style>
+    :root{color-scheme:dark;font:14px/1.55 system-ui,sans-serif;color:#e9f1ed;background:#17282b}
+    *{box-sizing:border-box}body{margin:0;min-width:280px}header{padding:12px 14px 9px}h1{font-size:18px;line-height:1.3;margin:0 0 7px}
+    p{margin:5px 0}.muted,small{color:#bfd0ca}small{display:block;font-size:12px}a{color:#c0e8d7;text-underline-offset:3px}
+    .controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:9px 0}.controls>*{margin:0}button,select{font:inherit;border:1px solid #64827a;border-radius:5px;background:#2b504c;color:#f4f7f2;padding:6px 9px;min-height:35px}button:disabled,select:disabled{opacity:.5}button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #e9d89c;outline-offset:2px}
+    .timeline{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;max-width:1000px}input[type=range]{width:100%;min-width:60px;accent-color:#aacfbf}.timeline output{font-variant-numeric:tabular-nums;white-space:nowrap;font-size:12px}.repeat{white-space:nowrap;font-size:12px}
+    #status{min-height:22px;color:#f0ddb1}#qa{white-space:pre-line}.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 12px 12px}.panel{min-width:0;background:#1e3336;border:1px solid #46615a;border-radius:6px;overflow:hidden}.panelhead{padding:7px 10px;display:flex;justify-content:space-between;gap:8px;font-size:12px;background:#213b3c}.panelhead b{font-size:13px}#reference-wrap{display:flex;align-items:center;justify-content:center;min-height:240px;background:#15242a}#reference{display:block;width:100%;height:auto}#stage{position:relative;min-height:420px;height:clamp(420px,61vh,680px)}#stage canvas{display:block;touch-action:none}#view-label{position:absolute;top:9px;left:9px;max-width:calc(100% - 18px);padding:3px 6px;background:#182a2ddd;border-radius:4px;font-size:12px;pointer-events:none}#source-note{padding:7px 10px}.footnote{padding:0 14px 14px;font-size:12px;color:#bfd0ca}details{margin-top:6px}summary{cursor:pointer}
+    @media(max-width:760px){header{padding:10px}h1{font-size:17px}.compare{grid-template-columns:1fr;padding:6px 10px 10px;gap:8px}#reference-wrap{min-height:0}#stage{height:430px;min-height:350px}.controls{gap:5px}.timeline{gap:6px}.footnote{padding:0 10px 12px}}
+  </style>
+  <script type="importmap">{"imports":{"three":"/vendor/three.module.js","three/addons/":"/vendor/addons/"}}</script>
+</head>
+<body>
+<header>
+  <h1>新骨架与球拍 · 比赛逐帧对照</h1>
+  <p class="muted">同一原片时间，对照引拍、随挥、步法和关节配合。</p>
+  <div class="controls">
+    <button id="play" disabled>暂停</button><button id="restart" disabled>重新播放</button>
+    <button id="prev" disabled aria-label="原片前一帧">−1 帧</button><button id="next" disabled aria-label="原片后一帧">+1 帧</button>
+    <select id="speed" aria-label="播放速度"><option value="1">1× 正常速度</option><option value="0.5">0.5× 半速</option><option value="0.25">0.25× 慢速</option></select>
+    <label class="repeat"><input id="repeat" type="checkbox" checked>结束后重新播放</label>
+  </div>
+  <div class="timeline"><label for="time">进度</label><input id="time" type="range" min="0" max="2.4" step="0.001" value="0" disabled><output id="readout">0.00 / 2.40 秒</output></div>
+  <div class="controls">
+    <select id="view" aria-label="模型视角"><option value="front">正面跟随</option><option value="three">斜前跟随</option><option value="side">侧面跟随</option><option value="back">背面跟随</option><option value="wrist">握拍与手腕</option><option value="hip">髋部与膝盖</option><option value="feet">双脚接地</option><option value="broadcast" disabled>原片近似镜位</option></select>
+    <button id="prep" disabled>引拍 504</button><button id="release" disabled>收拍 517</button><button id="return" disabled>回位 530</button>
+  </div>
+  <p id="status" role="status" aria-live="polite">正在加载新骨架、球拍和 61 张原片帧…</p>
+  <small>本轮检查姿势与握拍。球路未重新标定；球拍建模与握持检查不代表触球仿真通过。</small>
+</header>
+<main class="compare">
+  <section class="panel" aria-label="比赛原片">
+    <div class="panelhead"><b>比赛原片 · 远端球员</b><span id="source-frame">480 / 540 帧</span></div>
+    <div id="reference-wrap"><canvas id="reference" width="650" height="300" aria-label="当前比赛原片帧"></canvas></div>
+    <small id="source-note">2020 全英男单决赛 · 原片 25 fps · 480–540 帧</small>
+  </section>
+  <section class="panel" aria-label="新骨架和球拍模型">
+    <div class="panelhead"><b>新骨架与球拍</b><span id="build-label">待载入</span></div>
+    <div id="stage"><span id="view-label">拖动旋转，滚轮／双指缩放</span></div>
+  </section>
+</main>
+<div class="footnote">
+  <p>只对照原片 480–540 帧（2.4 秒）。结束后短暂停在本段末帧，再从开头重播；这不是无缝循环。541 帧起属于下一拍。</p>
+  <p><a id="before-link" href="/?version=baseline">本轮修改前对照</a> <a id="video-link" href="/normal-speed-comparison.mp4" target="_blank">正常速度录像</a> · <a href="/match-authoring.blend">当前动作文件</a></p>
+  <details><summary>当前核查范围与限制</summary><p id="qa">正在读取本轮检查说明。</p><p id="camera-note">原片近似镜位来自地板角点拟合，不是实测摄影机。遮挡部位、精确手腕旋转和手指细节仍需独立审查。</p></details>
+</div>
+<script type="module" onerror="document.getElementById('status').textContent='预览脚本加载失败，请核对本地服务后重新载入。'">
+import * as T from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+import { prepare as prepareMorphStream } from '/runtime-morph-stream.js';
+const $ = id => document.getElementById(id);
+const FIRST = 480, LAST = 540, FPS = 25, DURATION = (LAST - FIRST) / FPS, GROUND = -.013;
+const errors = [], hashes = { model: '', config: '', camera: '', referenceFrames: {} }, refs = new Map();
+let config, model, mixer, action, bodyStream, ready = false, elapsed = 0, playing = true, endPause = 0, last = performance.now(), rendered = 0;
+let cameraData, referenceCamera, activeSourceFrame = FIRST, dims = { w: 640, h: 460 };
+window.addEventListener('error', event => errors.push(event.message));
+window.addEventListener('unhandledrejection', event => errors.push(String(event.reason)));
+const scene = new T.Scene(); scene.background = new T.Color('#22383a');
+scene.add(new T.HemisphereLight(0xeafff9, 0x50615a, 2.2));
+const key = new T.DirectionalLight(0xfffcf3, 2.7); key.position.set(2, 7, 4); key.castShadow=true; key.shadow.mapSize.set(2048,2048); Object.assign(key.shadow.camera,{left:-5,right:5,top:5,bottom:-5,near:.1,far:20});key.shadow.bias=-.00001;key.shadow.normalBias=.001; scene.add(key);
+const ground = new T.Mesh(new T.PlaneGeometry(30, 18), new T.MeshStandardMaterial({ color: 0x31554b, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2; ground.position.set(5, GROUND, 0); ground.receiveShadow=true; scene.add(ground);
+const courtPoints = [];
+for (const z of [-3.05, 3.05, -2.59, 2.59]) courtPoints.push(-1.7, GROUND + .0005, z, 11.7, GROUND + .0005, z);
+for (const x of [-1.7, 3.02, 6.98, 11.7]) courtPoints.push(x, GROUND + .0005, -3.05, x, GROUND + .0005, 3.05);
+courtPoints.push(-1.7, GROUND + .0005, 0, 3.02, GROUND + .0005, 0, 6.98, GROUND + .0005, 0, 11.7, GROUND + .0005, 0);
+const courtGeometry = new T.BufferGeometry(); courtGeometry.setAttribute('position', new T.Float32BufferAttribute(courtPoints, 3));
+scene.add(new T.LineSegments(courtGeometry, new T.LineBasicMaterial({ color: 0xc3d6c8, transparent: true, opacity: .65 })));
+const renderer = new T.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1)); $('stage').append(renderer.domElement);
+const camera = new T.PerspectiveCamera(34, 1, .015, 160);
+const controls = new OrbitControls(camera, renderer.domElement); controls.target.set(1, .95, 0); camera.position.set(7, 2.1, 0); controls.enableDamping = false; controls.minDistance = .25; controls.maxDistance = 30;
+
+const viewSettings = {
+  front: { direction: [1, .15, 0], radius: 1.15, label: '正面跟随 · 可拖动旋转' },
+  three: { direction: [1, .3, 1], radius: 1.15, label: '斜前跟随 · 可拖动旋转' },
+  side: { direction: [0, .12, 1], radius: 1.15, label: '侧面跟随 · 可拖动旋转' },
+  back: { direction: [-1, .15, 0], radius: 1.15, label: '背面跟随 · 可拖动旋转' },
+  wrist: { direction: [1, .4, 1], radius: .32, label: '握拍与手腕 · 可拖动旋转' },
+  hip: { direction: [1, .2, 1], radius: .58, label: '髋部与膝盖 · 可拖动旋转' },
+  feet: { direction: [1, .35, 1], radius: .62, label: '双脚接地 · 地面 −0.013 m' }
+};
+function world(names) {
+  for (const name of names) { const obj = model?.scene.getObjectByName(name); if (obj) return obj.getWorldPosition(new T.Vector3()); }
+  return null;
+}
+function joint(name) { return world(['CTRL_' + name, name, 'DEF_' + name]); }
+function focusPoint() {
+  const pelvis = joint('pelvis') ?? new T.Vector3(1, .9, 0), view = $('view').value;
+  if (view === 'wrist') return joint('hand_r') ?? pelvis;
+  if (view === 'hip') return pelvis.clone().lerp(joint('calf_r') ?? pelvis, .4);
+  if (view === 'feet') { const a = joint('foot_r'), b = joint('foot_l'); return a && b ? a.add(b).multiplyScalar(.5) : new T.Vector3(pelvis.x, .15, pelvis.z); }
+  return new T.Vector3(pelvis.x, 1.03, pelvis.z);
+}
+function refit(resetDirection = false) {
+  const setting = viewSettings[$('view').value] ?? viewSettings.front;
+  const direction = resetDirection ? new T.Vector3(...setting.direction).normalize() : camera.position.clone().sub(controls.target).normalize();
+  controls.target.copy(focusPoint());
+  const tangent = Math.tan(T.MathUtils.degToRad(camera.fov / 2));
+  const distance = Math.max(setting.radius * 1.1 / tangent, setting.radius * 1.05 / (tangent * camera.aspect));
+  camera.position.copy(controls.target).addScaledVector(direction, distance); controls.update();
+}
+function resize() {
+  // A hidden host webview may have a 1 px viewport. Keep a usable capture size without pretending it is a visible FPS measurement.
+  const hidden = innerWidth < 100 || innerHeight < 100;
+  dims = { w: hidden ? 680 : Math.max(260, $('stage').clientWidth), h: hidden ? 480 : Math.max(350, $('stage').clientHeight) };
+  renderer.setSize(dims.w, dims.h); camera.aspect = dims.w / dims.h; camera.updateProjectionMatrix(); refit(); render();
+}
+function buildReferenceCamera(data) {
+  const p = data?.nativeToImageProjection, crop = data?.crop ?? [240, 130, 650, 300];
+  if (!Array.isArray(p) || p.length !== 3 || p.some(r => r.length !== 4 || r.some(v => !Number.isFinite(v)))) throw Error('原片镜位数据格式不正确');
+  // Native Blender [x,y,z] -> glTF world [x,z,-y]. Make the source crop's clip matrix directly, preserving perspective.
+  const rows = p.map(r => [r[0], r[2], -r[1], r[3]]), [cx, cy, cw, ch] = crop;
+  const x = rows[0].map((v,i) => 2 * v / cw - (1 + 2 * cx / cw) * rows[2][i]);
+  const y = rows[1].map((v,i) => (1 + 2 * cy / ch) * rows[2][i] - 2 * v / ch);
+  const near = .01, far = 200, depthA = (far + near) / (far - near), depthB = -2 * far * near / (far - near);
+  const z = rows[2].map((v,i) => depthA * v + (i === 3 ? depthB : 0));
+  const c = new T.Camera(); c.projectionMatrix.set(...x, ...y, ...z, ...rows[2]); c.projectionMatrixInverse.copy(c.projectionMatrix).invert();
+  c.matrixAutoUpdate = false; c.matrix.identity(); c.matrixWorld.identity(); c.matrixWorldInverse.identity(); return c;
+}
+function render() {
+  if ($('view').value === 'broadcast' && referenceCamera) {
+    const crop = cameraData.crop ?? [240, 130, 650, 300], ratio = crop[2] / crop[3];
+    const w = Math.min(dims.w, dims.h * ratio), h = w / ratio, x = (dims.w - w) / 2, y = (dims.h - h) / 2;
+    renderer.setScissorTest(false); renderer.setViewport(0, 0, dims.w, dims.h); renderer.clear();
+    renderer.setViewport(x, y, w, h); renderer.setScissor(x, y, w, h); renderer.setScissorTest(true); renderer.render(scene, referenceCamera); renderer.setScissorTest(false);
+  } else { renderer.setViewport(0, 0, dims.w, dims.h); renderer.setScissorTest(false); renderer.render(scene, camera); }
+  rendered++;
+}
+function phase() {
+  if (elapsed < .8) return '交替迈步上网';
+  if (elapsed < 1.16) return '提前引拍，继续跨步';
+  if (elapsed < 1.52) return '落脚、接球附近与缓冲';
+  if (elapsed < 1.8) return '紧凑随挥与收拍';
+  if (elapsed < DURATION) return '分步回撤与分腿准备';
+  return $('repeat').checked && playing ? '本段结束 · 短暂停顿后重新播放（非无缝循环）' : '本段结束 · 下一拍未包含';
+}
+function pose() {
+  if (!ready) return;
+  action.enabled = true; action.paused = false; mixer.setTime(elapsed); bodyStream.update(elapsed); model.scene.updateMatrixWorld(true);
+  if ($('view').value !== 'broadcast') { const target = focusPoint(); camera.position.add(target.clone().sub(controls.target)); controls.target.copy(target); controls.update(); }
+  activeSourceFrame = T.MathUtils.clamp(FIRST + Math.round(elapsed * FPS), FIRST, LAST);
+  $('reference').getContext('2d').drawImage(refs.get(activeSourceFrame), 0, 0, 650, 300);
+  $('source-frame').textContent = activeSourceFrame + ' / 540 帧'; $('time').value = elapsed; $('readout').textContent = elapsed.toFixed(2) + ' / 2.40 秒';
+  $('source-note').textContent = config.referenceAvailable === false ? '此恢复包未附比赛转播画面；本地提供原片后可逐帧对照。' : (config.sourceLabel ?? '2020 全英男单决赛 · 远端球员') + ' · 原片 ' + (activeSourceFrame / FPS).toFixed(2) + ' 秒 · 25 fps';
+  $('status').textContent = phase();
+}
+function sample(t) {
+  if (!Number.isFinite(Number(t))) throw Error('采样时间必须是有限数字');
+  elapsed = T.MathUtils.clamp(Number(t), 0, DURATION); playing = false; endPause = 0; $('play').textContent = '播放'; pose(); render();
+  return { time: elapsed, sourceFrame: activeSourceFrame, speed: Number($('speed').value), wrist: joint('hand_r')?.toArray(), pelvis: joint('pelvis')?.toArray() };
+}
+function setPlaying(value) {
+  if (!ready) return false;
+  if (value && elapsed >= DURATION) { elapsed = 0; endPause = 0; }
+  playing = Boolean(value); last = performance.now(); $('play').textContent = playing ? '暂停' : '播放'; pose(); render(); return playing;
+}
+function restart() { if (!ready) return; elapsed = 0; endPause = 0; setPlaying(true); }
+function chooseView(name) {
+  if (name === 'broadcast' && !referenceCamera) return;
+  if (name !== 'broadcast' && !viewSettings[name]) return;
+  $('view').value = name; controls.enabled = name !== 'broadcast';
+  $('view-label').textContent = name === 'broadcast' ? '原片近似镜位 · 同一裁剪比例，非实测摄影机' : viewSettings[name].label;
+  if (name !== 'broadcast') refit(true); pose(); render();
+}
+async function digest(bytes) { return [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(v => v.toString(16).padStart(2, '0')).join(''); }
+async function read(url) {
+  const response = await fetch(url, { cache: 'no-store' }); if (!response.ok) throw Error(url + ' 返回 HTTP ' + response.status);
+  const bytes = await response.arrayBuffer(); return { bytes, hash: await digest(bytes) };
+}
+async function referenceFrame(frame) {
+  if (config.referenceAvailable === false) {
+    const c = document.createElement('canvas'); c.width=650; c.height=300;
+    const ctx=c.getContext('2d'); ctx.fillStyle='#17282b'; ctx.fillRect(0,0,650,300); ctx.fillStyle='#bfd0ca';ctx.font='22px sans-serif';ctx.fillText('本地参考画面未配置',190,140);ctx.font='16px sans-serif';ctx.fillText('模型可独立预览；原片帧号 '+frame,195,180);refs.set(frame,c);return;
+  }
+  const prefix = config.sourceFramesPrefix.replace(/\/$/, ''), url = prefix + '/' + String(frame).padStart(4, '0') + '.jpg';
+  const result = await read(url); hashes.referenceFrames[frame] = result.hash;
+  const objectURL = URL.createObjectURL(new Blob([result.bytes], { type: 'image/jpeg' })), img = new Image();
+  try { await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = () => reject(Error('参考帧解码失败：' + frame)); img.src = objectURL; }); }
+  finally { URL.revokeObjectURL(objectURL); }
+  refs.set(frame, img);
+}
+function safeLink(id, input, fallback) {
+  const url = new URL(input ?? fallback, location.href); if (!['http:', 'https:'].includes(url.protocol)) throw Error('对照链接协议不受支持'); $(id).href = url.href;
+}
+async function load() {
+  const rawConfig = await read(new URLSearchParams(location.search).get('version')==='baseline'?'/baseline-config.json':'/review-config.json'); hashes.config = rawConfig.hash; config = JSON.parse(new TextDecoder().decode(rawConfig.bytes));
+  if (typeof config.modelURL !== 'string' || typeof config.sourceFramesPrefix !== 'string') throw Error('review-config.json 缺少 modelURL 或 sourceFramesPrefix');
+  if(config.beforeRebuildURL)safeLink('before-link',config.beforeRebuildURL,'/');else $('before-link').hidden=true;
+  if(config.videoAvailable===false)$('video-link').hidden=true;
+  $('qa').textContent = Array.isArray(config.qaNotes) ? config.qaNotes.join('\n') : (config.qaNotes ?? '本轮姿势和握拍仍需逐帧审查。网格与支撑检查不能替代职业动作一致性验收。');
+  $('build-label').textContent = config.buildLabel ?? '本轮候选';
+  if (config.cameraNote) $('camera-note').textContent = config.cameraNote;
+  const cameraJob = (async () => {
+    if (config.cameraURL) { const c = await read(config.cameraURL); hashes.camera = c.hash; cameraData = JSON.parse(new TextDecoder().decode(c.bytes)); }
+    else if (config.camera) { cameraData = config.camera; }
+    if (cameraData) { referenceCamera = buildReferenceCamera(cameraData); document.querySelector('option[value="broadcast"]').disabled = false; }
+  })();
+  const [asset] = await Promise.all([read(config.modelURL), Promise.all(Array.from({ length: LAST - FIRST + 1 }, (_, i) => referenceFrame(FIRST + i))), cameraJob]);
+  hashes.model = asset.hash;
+  if (config.expectedModelHash && config.expectedModelHash !== asset.hash) throw Error('模型指纹与本轮配置不一致，请重启预览服务后重载');
+  model = await new GLTFLoader().parseAsync(asset.bytes, new URL('.', new URL(config.modelURL, location.href)).href);
+  model.scene.traverse(obj => { if (obj.isMesh) { obj.frustumCulled = false; obj.castShadow=true;obj.receiveShadow=true; if (obj.name === 'SuperHero_Male') obj.material = new T.MeshStandardMaterial({ color: 0x92b1b0, roughness: .78 }); } });
+  bodyStream=prepareMorphStream(model); scene.add(model.scene); if (model.animations.length !== 1) throw Error('模型应包含一个完整动作片段，实际为 ' + model.animations.length);
+  if (model.animations[0].duration < DURATION - .001) throw Error('动作片段不足 2.4 秒，无法覆盖原片 480–540 帧');
+  mixer = new T.AnimationMixer(model.scene); action = mixer.clipAction(bodyStream.clip); action.setLoop(T.LoopOnce, 1); action.clampWhenFinished = true; action.play();
+  ready = true; for (const id of ['play','restart','prev','next','time','prep','release','return']) $(id).disabled = false;
+  last = performance.now(); pose(); refit(true); resize();
+}
+$('play').onclick = () => setPlaying(!playing); $('restart').onclick = restart;
+$('prev').onclick = () => sample((Math.max(FIRST, activeSourceFrame - 1) - FIRST) / FPS);
+$('next').onclick = () => sample((Math.min(LAST, activeSourceFrame + 1) - FIRST) / FPS);
+$('time').oninput = () => sample(Number($('time').value)); $('view').onchange = () => chooseView($('view').value);
+for (const [id, frame] of [['prep',504],['release',517],['return',530]]) $(id).onclick = () => sample((frame - FIRST) / FPS);
+$('speed').onchange = () => { last = performance.now(); }; $('repeat').onchange = () => { pose(); render(); };
+controls.addEventListener('change', render);
+function draw(now) {
+  const dt = Math.max(0,(now-last)/1000); last=now;
+  if (ready && playing) {
+    const speed=Number($('speed').value);
+    if ($('repeat').checked) {
+      const phase=(elapsed/speed+endPause+dt)%(DURATION/speed+.65);
+      if(phase<=DURATION/speed){elapsed=phase*speed;endPause=0;}else{elapsed=DURATION;endPause=phase-DURATION/speed;}
+    } else {elapsed=Math.min(DURATION,elapsed+dt*speed);if(elapsed>=DURATION){playing=false;$('play').textContent='播放';}}
+    pose();
+  }
+  render();
+}
+function tick(now){draw(now);requestAnimationFrame(tick);}
+setInterval(()=>{if(performance.now()-last>120)draw(performance.now());},50);
+window.matchReview = {
+  errors,
+  get hashes() { return structuredClone(hashes); }, get hash() { return hashes.model; }, get ready() { return ready; },
+  get time() { return elapsed; }, get duration() { return DURATION; }, get playing() { return playing; }, get speed() { return Number($('speed').value); },
+  get sourceFrame() { return activeSourceFrame; }, get referenceFramesLoaded() { return Object.keys(hashes.referenceFrames).length; }, get rendered() { return rendered; },
+  get runtimeStreaming(){return Boolean(bodyStream);}, get repeat() { return $('repeat').checked; }, get ground() { return GROUND; }, get view() { return $('view').value; },
+  sample, play: () => setPlaying(true), pause: () => setPlaying(false), restart, setView: chooseView,
+  setSpeed(value) { if (![1,.5,.25].includes(Number(value))) throw Error('速度必须为 1、0.5 或 0.25'); $('speed').value = String(Number(value)); last = performance.now(); return Number(value); },
+  capture() { render(); return renderer.domElement.toDataURL('image/jpeg', .85); },
+  captureComparison() {
+    render(); const out = document.createElement('canvas'); out.width = 1280; out.height = 560; const ctx = out.getContext('2d'); ctx.fillStyle = '#17282b'; ctx.fillRect(0,0,out.width,out.height);
+    ctx.fillStyle = '#e9f1ed'; ctx.font = '20px sans-serif'; ctx.fillText('原片 ' + activeSourceFrame + ' / 540',16,30); ctx.fillText('重建候选 · ' + elapsed.toFixed(2) + ' s',656,30);
+    ctx.drawImage($('reference'),0,130,640,640*300/650); const scale = Math.min(640/renderer.domElement.width,510/renderer.domElement.height), w = renderer.domElement.width*scale, h = renderer.domElement.height*scale;
+    ctx.drawImage(renderer.domElement,640+(640-w)/2,45+(510-h)/2,w,h); return out.toDataURL('image/jpeg',.88);
+  }
+};
+window.addEventListener('resize', resize); resize(); requestAnimationFrame(tick);
+try { await load(); } catch (error) { ready = false; playing = false; errors.push(error.message); $('status').textContent = '加载失败：' + error.message + '。请核对服务资源后重新载入。'; $('play').textContent = '加载失败'; }
+</script>
+</body>
+</html>

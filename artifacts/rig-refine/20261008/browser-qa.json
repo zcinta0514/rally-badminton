@@ -1,0 +1,387 @@
+{
+  "assets": {
+    "/": "b15574cee6d79525da2c279308d4137001d4c98bbc68c7fb95797887a6621fb8",
+    "/runtime-morph-stream.js": "9cad3fc031551bdb27297b08a8520704e297fef9b495f32215645ce988a3bd69"
+  },
+  "determinism": {
+    "again": "e5b73f9957b8f25748c48f781629a611e948c38cd2df6a8d0de297294e5fb351",
+    "first": "e5b73f9957b8f25748c48f781629a611e948c38cd2df6a8d0de297294e5fb351",
+    "passed": true
+  },
+  "errors": [],
+  "hashes": {
+    "camera": "752b0b7e5e5f9bdf5db13c4634472cf57a8de8be14af6d0ff9271ea54b60fba9",
+    "config": "cfa0fe36f8f3b3a7dd8bdde52867e755c2f88e34c7f03341aef0bf91183f3f5f",
+    "model": "5a1cb6a58c66d845c09f9175b59c8b385af48bf6fd6623ca8ac7877f8bddf4f0",
+    "referenceFrames": {
+      "480": "9fb29e80bc14a70632b4b1d786452c3618c496bb9e9dc8798bd6c0f4d65a4abe",
+      "481": "a9bfd2bb717b28ccb13d1f4a09c465ea511626cad99d5b00bfb540d0054ad60f",
+      "482": "c179841ac13db547f427fd25472e4bb097513b403957e7e6714c8e835a5ac61d",
+      "483": "b7799e69c6f8b16f97346f275bc015bb326072d2b25cd24494bec2d556202a83",
+      "484": "c937908d2944de4053713fe84e74cbb89259497a601d7ab155bde99881e1af41",
+      "485": "c0abd6f3495ff10cf76a148b0b51ec14b2451ad6e4be499dd0648212d84064ca",
+      "486": "37f0ee8f95f6f060b735ea2bbe89e41d5aea49179eb70a5f87e67760c13b08ff",
+      "487": "1098d057e11cd8108e5f0c9bdba9b4fa228a53037a397fcc844def56774477ce",
+      "488": "ea146b6a092cbc347a9a3644ca8ddea74089ab1555e87bd9bde242807ad607dd",
+      "489": "2145a89dd85bb60921aab23fdb901faedd9b9abbb08f2fd2e7b4c113315532e9",
+      "490": "5528905d13f3f4235011300dc5627688555fd66fcf5789a683d0eff56a3620fb",
+      "491": "2b2144dfab4697babe0c16d26ef8ca831bc56985b1c0933bccb762e18dda1299",
+      "492": "980b58e5088b5b5666b176aac85e1fb8a784ad6f564662d5bbc268814b777527",
+      "493": "15b54fdd4143f985057ae03d85cd28eaf33370f84993d4c8fa730c8402c716fb",
+      "494": "18a06923aa576869be476f5efce365151a86fc3caebd6f34c1a6e91eb934f9b4",
+      "495": "f1395fdbc9a2b4ae6a6cedf14c2839b237eebd0dd4035a0da6c62dd872555f3d",
+      "496": "a0a70004234161ef3733ead9eb829f9f19ca8508eb07a3998187267f299d4586",
+      "497": "f51ff1b80a8a0d34cbf2347754fc0eb2e4181c8d7db067057ce0e534779a455e",
+      "498": "0f314812b2c69838d643182eef8dc3b55824616f37ea78169c5ab4f8d94130e5",
+      "499": "5ee26c191439c994cda8040d5eebc625dd5ea78f874cc54235bfb4872ee4f687",
+      "500": "f654a587d08537599cace6da7c2750a14eb6eea42ea1aa65d906b5086b9829ab",
+      "501": "399f4e12c003f70c47163c255a13811dc5fe14aadb03a3dd3ffe8a79ebe4243d",
+      "502": "8d446511e836a723d194477f833217b82fd612fe5b12b7c9ce0a2fbc880d7ccb",
+      "503": "48c36e653632850936df0ffd6451db2eed0dee450c89047df60515406014b0bd",
+      "504": "86ec771ca67b29b321de9568495f2ccf984b03cfc47080c782adad3d54c663b8",
+      "505": "3d3196b947ca458050cac5b690a1daed6d642e2208e24f1617a81fafd3e7693c",
+      "506": "cf1ef191cd2886c270801fb7a68af9bdbbb058d760eee8edcc23feed223a7bb1",
+      "507": "0dc15648b821c5e36a3012caa53028a6f3b9e2bf16e857d1ee1ca4782a2e8eef",
+      "508": "c372a07241b4a8fd2196c1d0882307eaf26d2a5a7738309d929e54629873b4b7",
+      "509": "7d3ddcfd5ea4567225bde24f60b983a4756538c6ba2a185b668993295eecbd3f",
+      "510": "94494e353cc4a05d800f1fea989613e405e955fbd53763f36de9ad37784e544f",
+      "511": "665075c258bfd695181a4f8d23d9daf7e6ad8b0c67c41d089cd248a242375f0c",
+      "512": "2af66bb298b673ab71e41feb975ec6c208a95933b6a6cec1844452ec34b9767f",
+      "513": "5d4088d1804c84676e572c8b23d86ef551bb94dd7bdab37f97ec6dd5e34bca7f",
+      "514": "1c7a516381e6807f81b31bdaba1ebd4af3cee1c03073d3056e7125ae71663cc7",
+      "515": "7f6b52d70a7e6da2aad1c1465a44a939deb90f3e5c06bca8ced780ad086174fb",
+      "516": "8e7590b34c116f5e95e72bce63efc7747fd6c15453255c96fdf2ded4a7a4a1e6",
+      "517": "1791004de73e8d1f8d0bccc56661db64b4f03d946abbed6c8b28724988a83100",
+      "518": "00465a0972739d2f91cc655ea0bc3bdae83f6a2ee57d4e6d5fe7c320b5868def",
+      "519": "0b0b4c891aa868a54f68358c8b5200e78cbb35a1fa06422f7d27498725c88192",
+      "520": "d0e5b7f54b627d1d4b1866bb576a643afb183ecbe7302251294da894316e05d3",
+      "521": "ebeae82463d6f6e7ca8c0964bccb8333e639f447e384aef06caec4e97e540e7e",
+      "522": "f36d428152b3b893ebcc3cb38ce9d2ce05da299388c4d0fd0e5590ddce1570d6",
+      "523": "5f42c8ed8b5ed3384383549e7fa9f1bf96138b8348ccbe5168b2bbf1ac124800",
+      "524": "7188cf77a9964501bd857693364ed921f8d5bfa179768291a37442fad0cc7401",
+      "525": "56c7bde8bf9e9f315dafa3588483e51c466db94e0b85406a68bf180ef97f7a19",
+      "526": "e930af61e63f169321d8b377e748cee0657180f41fbd109aa3d15923257f60ee",
+      "527": "65bcee1c599dc10712dd5875358dcbe0c666db73126b46ff5ac9df4e2bdd86fc",
+      "528": "c5900398f0b62f0f9fdc82469c6ba69c9afc119ab5e537df35f0609139159588",
+      "529": "5d3325e3559075983667bfc7c841d8b4bb588324d459a780cc183f4f34e52ec5",
+      "530": "25615489115f3a685edb4a95d7f5f7b5335638875f48851160df94e998fe3663",
+      "531": "470aa57e3853b720e068d53297625ee9eacc81aa599f7fd832e37c925cdb52f1",
+      "532": "634b10882cdd159b7471f19f38c337623bbae7ab2511fcfa76d9b0e5edfb0372",
+      "533": "73f92570b8d9c8a9f1204be20153456259734063b3ceeabbab46ed0dbc572600",
+      "534": "aa463e6ba609929a06174f0bc8acabcee0c249dd5605362d5bb26fcef6f2e1cd",
+      "535": "9f59b813852149bad2493f743ad2a270c47413aa29dcda323a575830c1bb3a9f",
+      "536": "145e9df306afdafd220c701e5ad62f75568ffbd8a51b1c73c9eb14b38e2289c0",
+      "537": "2c80c9e32f8b4e42d0c054672fe6c13ebfdf0e580cac00baa85889c5a0324967",
+      "538": "d5fcabee83023efc81217562bc442b9f09e56f2af8580938e45c4cb079c07a03",
+      "539": "cfb0f655cad39fc635e97e45e4be68218612654a658dc42c7492f93e0cac52ba",
+      "540": "2bdabcd5185c38a2a13800d1e928ce19b58ddbbcb68d83deb508fbf98fcae17e"
+    }
+  },
+  "ready": true,
+  "referenceFramesLoaded": 61,
+  "rows": [
+    {
+      "actual": 480,
+      "wanted": 480
+    },
+    {
+      "actual": 481,
+      "wanted": 481
+    },
+    {
+      "actual": 482,
+      "wanted": 482
+    },
+    {
+      "actual": 483,
+      "wanted": 483
+    },
+    {
+      "actual": 484,
+      "wanted": 484
+    },
+    {
+      "actual": 485,
+      "wanted": 485
+    },
+    {
+      "actual": 486,
+      "wanted": 486
+    },
+    {
+      "actual": 487,
+      "wanted": 487
+    },
+    {
+      "actual": 488,
+      "wanted": 488
+    },
+    {
+      "actual": 489,
+      "wanted": 489
+    },
+    {
+      "actual": 490,
+      "wanted": 490
+    },
+    {
+      "actual": 491,
+      "wanted": 491
+    },
+    {
+      "actual": 492,
+      "wanted": 492
+    },
+    {
+      "actual": 493,
+      "wanted": 493
+    },
+    {
+      "actual": 494,
+      "wanted": 494
+    },
+    {
+      "actual": 495,
+      "wanted": 495
+    },
+    {
+      "actual": 496,
+      "wanted": 496
+    },
+    {
+      "actual": 497,
+      "wanted": 497
+    },
+    {
+      "actual": 498,
+      "wanted": 498
+    },
+    {
+      "actual": 499,
+      "wanted": 499
+    },
+    {
+      "actual": 500,
+      "wanted": 500
+    },
+    {
+      "actual": 501,
+      "wanted": 501
+    },
+    {
+      "actual": 502,
+      "wanted": 502
+    },
+    {
+      "actual": 503,
+      "wanted": 503
+    },
+    {
+      "actual": 504,
+      "wanted": 504
+    },
+    {
+      "actual": 505,
+      "wanted": 505
+    },
+    {
+      "actual": 506,
+      "wanted": 506
+    },
+    {
+      "actual": 507,
+      "wanted": 507
+    },
+    {
+      "actual": 508,
+      "wanted": 508
+    },
+    {
+      "actual": 509,
+      "wanted": 509
+    },
+    {
+      "actual": 510,
+      "wanted": 510
+    },
+    {
+      "actual": 511,
+      "wanted": 511
+    },
+    {
+      "actual": 512,
+      "wanted": 512
+    },
+    {
+      "actual": 513,
+      "wanted": 513
+    },
+    {
+      "actual": 514,
+      "wanted": 514
+    },
+    {
+      "actual": 515,
+      "wanted": 515
+    },
+    {
+      "actual": 516,
+      "wanted": 516
+    },
+    {
+      "actual": 517,
+      "wanted": 517
+    },
+    {
+      "actual": 518,
+      "wanted": 518
+    },
+    {
+      "actual": 519,
+      "wanted": 519
+    },
+    {
+      "actual": 520,
+      "wanted": 520
+    },
+    {
+      "actual": 521,
+      "wanted": 521
+    },
+    {
+      "actual": 522,
+      "wanted": 522
+    },
+    {
+      "actual": 523,
+      "wanted": 523
+    },
+    {
+      "actual": 524,
+      "wanted": 524
+    },
+    {
+      "actual": 525,
+      "wanted": 525
+    },
+    {
+      "actual": 526,
+      "wanted": 526
+    },
+    {
+      "actual": 527,
+      "wanted": 527
+    },
+    {
+      "actual": 528,
+      "wanted": 528
+    },
+    {
+      "actual": 529,
+      "wanted": 529
+    },
+    {
+      "actual": 530,
+      "wanted": 530
+    },
+    {
+      "actual": 531,
+      "wanted": 531
+    },
+    {
+      "actual": 532,
+      "wanted": 532
+    },
+    {
+      "actual": 533,
+      "wanted": 533
+    },
+    {
+      "actual": 534,
+      "wanted": 534
+    },
+    {
+      "actual": 535,
+      "wanted": 535
+    },
+    {
+      "actual": 536,
+      "wanted": 536
+    },
+    {
+      "actual": 537,
+      "wanted": 537
+    },
+    {
+      "actual": 538,
+      "wanted": 538
+    },
+    {
+      "actual": 539,
+      "wanted": 539
+    },
+    {
+      "actual": 540,
+      "wanted": 540
+    }
+  ],
+  "runtimeStreaming": true,
+  "viewport": [
+    1,
+    1
+  ],
+  "views": [
+    {
+      "actual": "front",
+      "wanted": "front"
+    },
+    {
+      "actual": "three",
+      "wanted": "three"
+    },
+    {
+      "actual": "side",
+      "wanted": "side"
+    },
+    {
+      "actual": "back",
+      "wanted": "back"
+    },
+    {
+      "actual": "wrist",
+      "wanted": "wrist"
+    },
+    {
+      "actual": "hip",
+      "wanted": "hip"
+    },
+    {
+      "actual": "feet",
+      "wanted": "feet"
+    },
+    {
+      "actual": "broadcast",
+      "wanted": "broadcast"
+    }
+  ],
+  "schema": "rally-sidebar-review-v1",
+  "verifiedAt": "2026-10-08T16:06:08.940Z",
+  "backend": "rsb-webview",
+  "targetId": "t_muzq5udr_bqjvp2fd",
+  "url": "http://127.0.0.1:3040/?review=load-transfer-ready",
+  "loadedResourceVerification": "passed",
+  "visiblePlayback": {
+    "status": "not_verified",
+    "reason": "Final page viewport is 1x1; API sampling and enabled 1x clock do not establish visible playback FPS or user naturalness."
+  },
+  "uiPointer": {
+    "status": "not_attempted_at_1x1",
+    "reason": "No reliable visible pointer target at this viewport. Controls' sampling API verified."
+  },
+  "finalControls": {
+    "speed": 1,
+    "view": "front",
+    "playing": true
+  },
+  "verifiedLoadedResourceCount": 66
+}

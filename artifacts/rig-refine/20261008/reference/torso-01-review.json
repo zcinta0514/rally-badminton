@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-08",
+  "candidateImages": "artifacts/rig-refine/20261008/torso/render-01/triples",
+  "viewedSourceFrames": [480,484,487,490,493,496,514,527],
+  "sampledReviewOnly": true,
+  "professionalFidelity": "not_passed",
+  "result": "Visible improvement of the specific running-torso lean/turn near 487-490 and turn-back near 493-496. Retain for lower-body integration and consecutive-frame review; not a full-sequence acceptance.",
+  "remaining": [
+    "Head remains relatively camera-facing; small yaw follow is plausible, but gaze cannot be proven from blurred single-camera footage.",
+    "Frame 487 source already folds the trailing leg whereas candidate remains wide-legged; pelvis/chest separation cannot be judged independently of this step timing mismatch.",
+    "Frame 514 sinking and frame 527 recovery loading remain mismatched in this torso-only candidate."
+  ],
+  "recommendation": "Do not add root yaw solely to compensate a step-timing mismatch. Integrate lower-body candidate first, preserve world-space support and re-evaluate knee poles before any pelvis/root turning change.",
+  "notTested": ["normal-speed viewing", "closeup surface", "collision", "new full 61-frame sequence"]
+}

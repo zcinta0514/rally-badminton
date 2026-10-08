@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-07",
+  "stringPairIntersectionCount": 0,
+  "stringIntersections": [],
+  "runtimeStringComponentCount": 42,
+  "runtimeStringIntersections": [],
+  "runtimeTopology": [
+    {
+      "name": "Racket_ButtBadge",
+      "boundaryEdgesAfterUVSplitWeld": 0,
+      "wireEdges": 0,
+      "negativeVolume": false
+    },
+    {
+      "name": "Racket_Ferrule",
+      "boundaryEdgesAfterUVSplitWeld": 0,
+      "wireEdges": 0,
+      "negativeVolume": false
+    },
+    {
+      "name": "Racket_Frame",
+      "boundaryEdgesAfterUVSplitWeld": 0,
+      "wireEdges": 0,
+      "negativeVolume": false
+    },
+    {
+      "name": "Racket_GripWrapSeam",
+      "boundaryEdgesAfterUVSplitWeld": 0,
+      "wireEdges": 0,
+      "negativeVolume": false
+    },
+    {
+      "name": "Racket_Grommets",
+      "boundaryEdgesAfterUVSplitWeld": 0,
+      "wireEdges": 0,
+      "negativeVolume": false
+    },
+    {
+      "name": "RacketBatch_Racket_Carbon",
+      "boundaryEdgesAfterUVSplitWeld": 0,
+      "wireEdges": 0,
+      "negativeVolume": false
+    },
+    {
+      "name": "RacketBatch_Racket_GripRubber",
+      "boundaryEdgesAfterUVSplitWeld": 0,
+      "wireEdges": 0,
+      "negativeVolume": false
+    },
+    {
+      "name": "RacketBatch_Racket_StringIvory",
+      "boundaryEdgesAfterUVSplitWeld": 0,
+      "wireEdges": 0,
+      "negativeVolume": false
+    }
+  ],
+  "lodErrorM": {
+    "frame": {
+      "maxDistanceM": 0.00010409955575596541,
+      "sampledSourceVertices": 1536,
+      "verticesOverPoint5Mm": 0
+    },
+    "string": {
+      "maxDistanceM": 6.583878712262958e-05,
+      "sampledSourceVertices": 10656,
+      "verticesOverPoint5Mm": 0
+    },
+    "grommet": {
+      "maxDistanceM": 0.0001592001790413633,
+      "sampledSourceVertices": 2688,
+      "verticesOverPoint5Mm": 0
+    }
+  },
+  "maxMarkerRoundTripErrorM": 0.0,
+  "fullSourceIsEditable": true,
+  "runtimeFile": "racket-runtime.glb",
+  "limits": "No hand/body collision included; model is an assembled prop with intentional frame/shaft/T/grommet joins. Source-to-LOD errors are static geometric comparisons, not impact measurements."
+}

@@ -1,0 +1,17 @@
+{
+  "modelURL": "/match-rebuild.glb",
+  "sourceFramesPrefix": "/reference-frames",
+  "expectedModelHash": "5a1cb6a58c66d845c09f9175b59c8b385af48bf6fd6623ca8ac7877f8bddf4f0",
+  "buildLabel": "承重、躯干与回撤修正",
+  "sourceLabel": "2020 全英男单决赛 · 远端球员",
+  "cameraURL": "/reference-camera.json",
+  "beforeRebuildURL": "/?version=baseline",
+  "qaNotes": [
+    "已调整后膝下沉与承重、跑动时的胸廓前倾和转向、回撤伸腿与换重。",
+    "整段 480 Hz、1921 个采样姿态：身体与全部球拍网格未检测到穿插，原关节方向和支撑门槛通过。",
+    "支撑窗口最大漂移约 1.42 mm。膝后仍有低多边形褶痕，表面修形仅针对这段动作。",
+    "后脚朝向等遮挡部分属于三维制作推断；与原片完全一致及用户自然度验收仍未完成。",
+    "新球路尚未重新校准，不沿用上一轮触球物理结论。"
+  ],
+  "cameraNote": "原片近似镜位来自地板角点拟合；不是实测镜头或运动员三维姿态。"
+}

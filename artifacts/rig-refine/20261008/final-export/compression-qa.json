@@ -1,0 +1,10 @@
+{
+  "samples": 961,
+  "sourceSampleHz": 240,
+  "surfaceKeys": 961,
+  "preservesIndependentHalfFrameCorrectives": true,
+  "maxErrorM": 9.684608464999152e-07,
+  "maxErrorFrame": 186.5,
+  "thresholdM": 2e-06,
+  "passed": true
+}
