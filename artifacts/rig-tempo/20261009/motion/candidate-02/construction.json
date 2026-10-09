@@ -1,0 +1,578 @@
+{
+  "input": "artifacts/rig-refine/20261008/final/rebuild.blend",
+  "inputSHA256": "c77cf94202253cb37727a72a002a54e568f9dd597b5fc3d4cbdec39bd344a100",
+  "outputSHA256": "59e419778e08f2d3a68aad80a4c8cb26c0b28afc48894d4d4f38055aa9cd6e3f",
+  "scopeSourceFrames": [
+    485,
+    491
+  ],
+  "maxAdvanceSourceFrames": 1.6,
+  "clock": "Common monotone piecewise-linear approximation of smooth compact phase shift; all active bone and shape curves share the same union-knot partition.",
+  "actions": [
+    "Reference_Lift_Trailing_Forefoot",
+    "Sphere.005_Retopology.004Action"
+  ],
+  "curves": 2642,
+  "knots": 120,
+  "minimumLocalSpeed": 0.400504307473991,
+  "maximumLocalSpeed": 2.1999415284438375,
+  "newModelTimes": [
+    24.0,
+    24.236272783991048,
+    24.450787918928377,
+    24.64934205536418,
+    24.835579952308947,
+    25.011970840333632,
+    25.180279968478303,
+    25.341821807066374,
+    25.497607052599093,
+    25.648433271961395,
+    25.79494353951648,
+    25.937665884160815,
+    26.07704070721578,
+    26.213440373989336,
+    26.34718354995595,
+    26.478545910756274,
+    26.60776829040082,
+    26.735062981821315,
+    26.860618680303965,
+    26.984604413853695,
+    27.00922647136869,
+    27.107172706358874,
+    27.22846215226216,
+    27.34859953464619,
+    27.467701585492264,
+    27.585876463033088,
+    27.70322500374847,
+    27.81984179373839,
+    27.935816094653667,
+    28.05123265217565,
+    28.166172409585464,
+    28.28071314480787,
+    28.394930046137205,
+    28.508896239425127,
+    28.622683277666667,
+    28.73636160254351,
+    28.850000986485156,
+    28.963670963130554,
+    29.07744125367539,
+    29.191382196449865,
+    29.237022302960654,
+    29.305565187182054,
+    29.42006313776743,
+    29.534950962008004,
+    29.650306097741534,
+    29.766209076109263,
+    29.882744150492748,
+    30.0,
+    30.118070525458215,
+    30.23705575989395,
+    30.357062920756263,
+    30.478207638090176,
+    30.60061540209675,
+    30.72442328588062,
+    30.849782015924802,
+    30.97685848576584,
+    31.105838840182543,
+    31.236932302074337,
+    31.370375978458853,
+    31.5064409757289,
+    31.645440293764914,
+    31.787739180766685,
+    31.933768962061706,
+    32.08404588859629,
+    32.239197434824106,
+    32.39999999999999,
+    32.567434713910856,
+    32.742773264473,
+    32.92771621458189,
+    33.12462933521165,
+    33.3369790994922,
+    33.570221235251594,
+    33.599999999999994,
+    33.82308637684433,
+    34.084419712836606,
+    34.35466196090553,
+    34.6344821162526,
+    34.9246197543968,
+    35.22589305230596,
+    35.53920718165064,
+    35.865562662228356,
+    36.206062935289154,
+    36.56191989551752,
+    36.934455310256084,
+    37.32509482519821,
+    37.73534945272375,
+    38.16677692911189,
+    38.620912130072256,
+    39.09915232732166,
+    39.60258096740971,
+    40.13171627102554,
+    40.686184242875214,
+    41.26434686575675,
+    41.86296741799586,
+    42.47704999280788,
+    43.10000542446437,
+    43.72421843624636,
+    44.341921398749975,
+    44.946116666729225,
+    45.531261432820614,
+    46.09356067536321,
+    46.630896045380695,
+    47.142529941983994,
+    47.62873381983792,
+    48.09044141909983,
+    48.52897214882617,
+    48.94583194587008,
+    49.34258064826534,
+    49.720749655628,
+    50.0817947283912,
+    50.427072003478884,
+    50.75782865483448,
+    51.075202372734964,
+    51.38022585410219,
+    51.67383389171927,
+    51.95687157886604,
+    52.230102747322675,
+    52.49421813807953,
+    52.74984304129842,
+    52.8
+  ],
+  "oldModelTimes": [
+    24.0,
+    24.25,
+    24.5,
+    24.75,
+    25.0,
+    25.25,
+    25.5,
+    25.75,
+    26.0,
+    26.25,
+    26.5,
+    26.75,
+    27.0,
+    27.25,
+    27.5,
+    27.75,
+    28.0,
+    28.25,
+    28.5,
+    28.75,
+    28.799999237060547,
+    29.0,
+    29.25,
+    29.5,
+    29.75,
+    30.0,
+    30.25,
+    30.5,
+    30.75,
+    31.0,
+    31.25,
+    31.5,
+    31.75,
+    32.0,
+    32.25,
+    32.5,
+    32.75,
+    33.0,
+    33.25,
+    33.5,
+    33.6,
+    33.75,
+    34.0,
+    34.25,
+    34.5,
+    34.75,
+    35.0,
+    35.25,
+    35.5,
+    35.75,
+    36.0,
+    36.25,
+    36.5,
+    36.75,
+    37.0,
+    37.25,
+    37.5,
+    37.75,
+    38.0,
+    38.25,
+    38.5,
+    38.75,
+    39.0,
+    39.25,
+    39.5,
+    39.75,
+    40.0,
+    40.25,
+    40.5,
+    40.75,
+    41.0,
+    41.25,
+    41.28,
+    41.5,
+    41.75,
+    42.0,
+    42.25,
+    42.5,
+    42.75,
+    43.0,
+    43.25,
+    43.5,
+    43.75,
+    44.0,
+    44.25,
+    44.5,
+    44.75,
+    45.0,
+    45.25,
+    45.5,
+    45.75,
+    46.0,
+    46.25,
+    46.5,
+    46.75,
+    47.0,
+    47.25,
+    47.5,
+    47.75,
+    48.0,
+    48.25,
+    48.5,
+    48.75,
+    49.0,
+    49.25,
+    49.5,
+    49.75,
+    50.0,
+    50.25,
+    50.5,
+    50.75,
+    51.0,
+    51.25,
+    51.5,
+    51.75,
+    52.0,
+    52.25,
+    52.5,
+    52.75,
+    52.8
+  ],
+  "sourceRows": [
+    {
+      "sourceFrame": 480,
+      "oldSourcePhase": 480.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 481,
+      "oldSourcePhase": 481.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 482,
+      "oldSourcePhase": 482.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 483,
+      "oldSourcePhase": 483.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 484,
+      "oldSourcePhase": 484.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 485,
+      "oldSourcePhase": 485.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 486,
+      "oldSourcePhase": 486.8000001569517,
+      "advanceSourceFrames": 0.8000001569516968
+    },
+    {
+      "sourceFrame": 487,
+      "oldSourcePhase": 488.6,
+      "advanceSourceFrames": 1.6000000000000014
+    },
+    {
+      "sourceFrame": 488,
+      "oldSourcePhase": 489.349664284813,
+      "advanceSourceFrames": 1.3496642848129852
+    },
+    {
+      "sourceFrame": 489,
+      "oldSourcePhase": 489.8000100537971,
+      "advanceSourceFrames": 0.8000100537970949
+    },
+    {
+      "sourceFrame": 490,
+      "oldSourcePhase": 490.2502143425428,
+      "advanceSourceFrames": 0.2502143425428131
+    },
+    {
+      "sourceFrame": 491,
+      "oldSourcePhase": 491.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 492,
+      "oldSourcePhase": 492.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 493,
+      "oldSourcePhase": 493.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 494,
+      "oldSourcePhase": 494.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 495,
+      "oldSourcePhase": 495.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 496,
+      "oldSourcePhase": 496.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 497,
+      "oldSourcePhase": 497.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 498,
+      "oldSourcePhase": 498.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 499,
+      "oldSourcePhase": 499.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 500,
+      "oldSourcePhase": 500.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 501,
+      "oldSourcePhase": 501.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 502,
+      "oldSourcePhase": 502.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 503,
+      "oldSourcePhase": 503.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 504,
+      "oldSourcePhase": 504.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 505,
+      "oldSourcePhase": 505.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 506,
+      "oldSourcePhase": 506.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 507,
+      "oldSourcePhase": 507.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 508,
+      "oldSourcePhase": 508.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 509,
+      "oldSourcePhase": 509.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 510,
+      "oldSourcePhase": 510.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 511,
+      "oldSourcePhase": 511.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 512,
+      "oldSourcePhase": 512.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 513,
+      "oldSourcePhase": 513.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 514,
+      "oldSourcePhase": 514.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 515,
+      "oldSourcePhase": 515.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 516,
+      "oldSourcePhase": 516.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 517,
+      "oldSourcePhase": 517.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 518,
+      "oldSourcePhase": 518.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 519,
+      "oldSourcePhase": 519.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 520,
+      "oldSourcePhase": 520.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 521,
+      "oldSourcePhase": 521.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 522,
+      "oldSourcePhase": 522.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 523,
+      "oldSourcePhase": 523.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 524,
+      "oldSourcePhase": 524.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 525,
+      "oldSourcePhase": 525.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 526,
+      "oldSourcePhase": 526.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 527,
+      "oldSourcePhase": 527.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 528,
+      "oldSourcePhase": 528.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 529,
+      "oldSourcePhase": 529.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 530,
+      "oldSourcePhase": 530.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 531,
+      "oldSourcePhase": 531.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 532,
+      "oldSourcePhase": 532.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 533,
+      "oldSourcePhase": 533.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 534,
+      "oldSourcePhase": 534.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 535,
+      "oldSourcePhase": 535.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 536,
+      "oldSourcePhase": 536.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 537,
+      "oldSourcePhase": 537.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 538,
+      "oldSourcePhase": 538.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 539,
+      "oldSourcePhase": 539.0,
+      "advanceSourceFrames": 0.0
+    },
+    {
+      "sourceFrame": 540,
+      "oldSourcePhase": 540.0,
+      "advanceSourceFrames": 0.0
+    }
+  ],
+  "contactRangeUnchanged": true,
+  "supportWindowsUnchanged": true,
+  "surfaceTopologyWeightsAndKeyPositionsChanged": false,
+  "limits": [
+    "Only timing is changed, not initial 480..484 load amplitude or 507..540 pose residuals.",
+    "Single-view phase inference, not motion capture or measured 3D.",
+    "No user naturalness/professional-fidelity approval inferred."
+  ]
+}

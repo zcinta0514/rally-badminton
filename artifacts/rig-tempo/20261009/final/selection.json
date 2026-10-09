@@ -1,0 +1,13 @@
+{
+  "input": "artifacts/rig-tempo/20261009/motion/final-01/rebuild.blend",
+  "sha256": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+  "geometryQAStatus": "passed_240_and_480Hz",
+  "exportDoesNotImplyAcceptance": true,
+  "sourceAndFrozenCopyIdentical": true,
+  "checks": {
+    "final-qa.json": "bdd6725dc5f6dd7d3edf4f8a4ac663697bb86897be2d08469925c54628ab7f33",
+    "dense-qa.json": "d2f24182a1d329ec3297d049c11ef04684e7ec3f09beba761fbbe17fe84dc0d3",
+    "finger-full-qa.json": "5ed4595d450b4e1a219be7302746f230774456ce349709937d95d154835e0a5f",
+    "preservation.json": "7b8fd45be3020f2099b0eb23fe1945ba3e95d29a9ca9ebb202f1fceea2345d3c"
+  }
+}

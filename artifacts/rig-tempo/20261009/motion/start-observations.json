@@ -1,0 +1,70 @@
+{
+  "source": "2020 All England match15/2_18_14.mp4 crop650x300",
+  "frontShoe": [
+    420,
+    139
+  ],
+  "uncertaintyPixels": [
+    5,
+    7
+  ],
+  "description": "Blurred visible knee bend and shoe silhouettes, not measured anatomical markers.",
+  "rows": [
+    {
+      "sourceFrame": 487,
+      "rearKnee": [
+        468,
+        110
+      ],
+      "rearShoe": [
+        486,
+        114
+      ]
+    },
+    {
+      "sourceFrame": 488,
+      "rearKnee": [
+        456,
+        115
+      ],
+      "rearShoe": [
+        476,
+        114
+      ]
+    },
+    {
+      "sourceFrame": 489,
+      "rearKnee": [
+        449,
+        119
+      ],
+      "rearShoe": [
+        466,
+        116
+      ]
+    },
+    {
+      "sourceFrame": 490,
+      "rearKnee": [
+        442,
+        121
+      ],
+      "rearShoe": [
+        456,
+        123
+      ]
+    },
+    {
+      "sourceFrame": 491,
+      "rearKnee": [
+        426,
+        125
+      ],
+      "rearShoe": [
+        440,
+        134
+      ],
+      "confidence": "low due crossed-leg occlusion; guide only"
+    }
+  ]
+}

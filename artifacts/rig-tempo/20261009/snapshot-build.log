@@ -1,0 +1,5 @@
+
+> sideline-badminton@1.9.0 build
+> node scripts/build-pwa.js
+
+PWA bc91ba3fa312a101: 85 local resources exported to dist/

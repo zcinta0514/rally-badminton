@@ -1,0 +1,191 @@
+{
+  "source": "artifacts/match-reference/20261006/match15/2_18_14.mp4",
+  "sourceFps": 25,
+  "modelFps": 120,
+  "frameMapping": "modelFrame = (sourceFrame - 480) * 120 / 25",
+  "scope": "Only source486..508 lower-limb reauthoring; preceding initial support and all later windows retained. Source footage ends audited sequence at540; model288..480 is an authored final hold, not additional observed footage.",
+  "windows": {
+    "r": [
+      [
+        0,
+        24
+      ],
+      [
+        33.6,
+        52.8
+      ],
+      [
+        105.6,
+        120
+      ],
+      [
+        160,
+        192
+      ],
+      [
+        236,
+        254
+      ],
+      [
+        288,
+        480
+      ]
+    ],
+    "l": [
+      [
+        0,
+        24
+      ],
+      [
+        76.8,
+        96
+      ],
+      [
+        174,
+        182
+      ],
+      [
+        232,
+        254
+      ],
+      [
+        288,
+        480
+      ]
+    ]
+  },
+  "legacyWindows": {
+    "r": [
+      [
+        0,
+        24
+      ],
+      [
+        82,
+        96
+      ],
+      [
+        160,
+        192
+      ],
+      [
+        236,
+        254
+      ],
+      [
+        288,
+        480
+      ]
+    ],
+    "l": [
+      [
+        0,
+        24
+      ],
+      [
+        88,
+        100
+      ],
+      [
+        174,
+        182
+      ],
+      [
+        232,
+        254
+      ],
+      [
+        288,
+        480
+      ]
+    ]
+  },
+  "thresholds": {
+    "maximumDriftM": 0.003,
+    "floorZ": -0.013,
+    "supportSoleGapMinM": -0.001,
+    "supportSoleGapMaxM": 0.005
+  },
+  "sourceEvidence": [
+    {
+      "sourceFrames": [
+        487,
+        491
+      ],
+      "observed": "Image-left dark-sole shoe stays near crop(419,140); other rear shoe folds up and inward (488 approx474,114;490 approx451,123). This is single support, not two feet drifting together.",
+      "newModelSupport": {
+        "side": "r",
+        "frames": [
+          33.6,
+          52.8
+        ]
+      },
+      "sideAssignmentConfidence": "moderate, inferred from consistent leg tracking and held racket side; far-camera shoes are not reliable color identity tags",
+      "timingUncertaintySourceFrames": 1
+    },
+    {
+      "sourceFrames": [
+        496,
+        500
+      ],
+      "observed": "Next supporting shoe remains near crop(374,171). Opposite foot passes behind/around it and swings to screen left; source499–501 clearly widens the moving stride.",
+      "newModelSupport": {
+        "side": "l",
+        "frames": [
+          76.8,
+          96
+        ]
+      },
+      "sideAssignmentConfidence": "moderate; crossed-leg occlusion around492–495 prevents unique proof",
+      "timingUncertaintySourceFrames": 1
+    },
+    {
+      "sourceFrames": [
+        502,
+        505
+      ],
+      "observed": "Forward screen-left foot lands around crop(302,203) and remains while rear foot gathers. Model follows phase and direction, not exact 3D or calibrated pixel fit.",
+      "newModelSupport": {
+        "side": "r",
+        "frames": [
+          105.6,
+          120
+        ]
+      },
+      "sideAssignmentConfidence": "moderate",
+      "timingUncertaintySourceFrames": 1
+    }
+  ],
+  "legacyCorrections": [
+    {
+      "side": "r",
+      "modelFrames": [
+        82,
+        96
+      ],
+      "sourceFrames": [
+        497.083333,
+        500
+      ],
+      "whyIncorrect": "This interval assumed right foot stationary while the real opposite shoe is sweeping from behind the planted shoe toward the next forward landing. Combined with old L88..100 it forced double support where footage shows one planted foot. Old drift retained in control-qa.json; intentionally no longer a pass gate."
+    },
+    {
+      "side": "l",
+      "modelFrames": [
+        88,
+        100
+      ],
+      "sourceFrames": [
+        498.333333,
+        500.833333
+      ],
+      "whyIncorrect": "Real support begins earlier around496 and releases by500–501; old interval began late and overlapped incorrect R support. Replaced with conservative visible496..500, retaining old interval drift comparison."
+    }
+  ],
+  "unresolved": [
+    "The world-space foot positions and anatomical side remain manually inferred from one camera, not measured motion capture.",
+    "Source507–508 rear-foot gather is constrained to rejoin the existing downstream pose at508; exact next contact/rolling sole requires the downstream lunge integration and visual re-review.",
+    "No frame windows were removed to hide residual slip: legacy metrics remain present; accepted early windows preserve3mm/floor gates.",
+    "Footage at480–485 has been explicitly left unchanged by this task and is not re-certified as exact full two-foot physical contact."
+  ]
+}

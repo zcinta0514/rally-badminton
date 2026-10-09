@@ -1,0 +1,37 @@
+{
+  "nativeToImageProjection": [
+    [
+      -552.8143241598732,
+      4211.342560055407,
+      -185.33775893364842,
+      29517.27717174678
+    ],
+    [
+      995.1182683139386,
+      1.5000626549354948e-12,
+      -4107.888118108741,
+      15031.320816341655
+    ],
+    [
+      -0.9483053818837164,
+      9.58970267177777e-16,
+      -0.3173591762562514,
+      50.49577053911
+    ]
+  ],
+  "width": 1280,
+  "height": 720,
+  "crop": [
+    240,
+    130,
+    650,
+    300
+  ],
+  "focalPixels": 4211.3425600554065,
+  "principalPoint": [
+    584.0,
+    360.0
+  ],
+  "method": "Manual court-corner homography plus square-pixel camera assumption. Only an approximate comparison camera, not measured lens calibration.",
+  "source": "artifacts/match-reference/20261006/court-homography.json"
+}

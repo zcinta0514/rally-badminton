@@ -1,0 +1,198 @@
+{
+  "task": "P1-3B",
+  "asOf": "2026-10-09",
+  "phase": "final_candidate_verified_pending_user_visual_acceptance",
+  "baseline": "d920bab635647e9a6950726f855349d4f7c6ecd6",
+  "originMain": "dcf053230b3612058aac3f09d2cc2713cfcf8ea6",
+  "branch": "wip/P1-3-capture",
+  "previousCheckpoint": "artifacts/rig-refine/20261008/checkpoint.json",
+  "finalSource": "final/rebuild.blend",
+  "sourceSHA256": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+  "editableProducerSource": "motion/final-01/rebuild.blend",
+  "exportedGLB": "final-export/clear.glb",
+  "glbSHA256": "bee8c9d6d7287153ec7e21f23daa8a0050f47191a2296a92d94e05a02e4f6c7c",
+  "flight": "flight/final/flight.json",
+  "flightSHA256": "2c439672eb53549e0a1b665c281882f74454503848edfd32ec40275fb85bd44f",
+  "parametersSHA256": "2925b18516b9e423e8fc4c6b72c0b0705e83d8e0215ab6c3aab1f6b18c2dc4ce",
+  "sourceVideoFrames": [
+    480,
+    540
+  ],
+  "sourceVideoFps": 25,
+  "authoringFps": 120,
+  "durationSeconds": 4,
+  "referenceDurationSeconds": 2.4,
+  "modifiedSourceRanges": {
+    "start": [
+      485,
+      495
+    ],
+    "contact": [
+      508,
+      518
+    ]
+  },
+  "geometry": {
+    "qa240": "final/final-qa.json",
+    "qa480": "final/dense-qa.json",
+    "samples240": 961,
+    "samples480": 1921,
+    "gates": {
+      "body": true,
+      "racket": true,
+      "edges": true,
+      "directions": true,
+      "seams": true,
+      "boneLengths": true,
+      "supportDrift": true,
+      "supportFloor": true
+    },
+    "bodyIntersectionPoses": 0,
+    "racketIntersectionPoses": 0,
+    "maximumSupportDriftM": 0.0014640173018118086,
+    "fingers": "final/finger-full-qa.json",
+    "preservation": "final/preservation.json"
+  },
+  "surfaceDisclosure": {
+    "ankleAdditionalMaxM": 0.001,
+    "leftLegVolumeRecodingMaximumDifferenceM": 0.078758664,
+    "subsequentLocalResidualMaxM": 0.00424219,
+    "description": "7-influence DQ to preserved 4-influence LBS volume recoding is distinct from subsequent bounded local residuals; not a universal anatomy or arbitrary-pose pass."
+  },
+  "encoding": {
+    "exportBoneSamplingHz": 480,
+    "surfaceSamples": 961,
+    "surfaceSamplingHz": 240,
+    "compressionMaximumM": 9.684608464999152e-07,
+    "compressionThresholdM": 2e-06,
+    "maximumSurfaceErrorM": 7.31730304218181e-06,
+    "exportThresholdM": 1e-05,
+    "exportQA": "final-export/export-parity.json",
+    "cpuParity": "final-export/runtime-parity.json",
+    "runtimeDense": "runtime-dense/runtime-surface-qa.json",
+    "runtimeDenseSamples": 1921,
+    "runtimeDenseGates": {
+      "body": true,
+      "racket": true,
+      "edges": true,
+      "seams": true,
+      "supportDrift": true,
+      "supportFloor": true
+    },
+    "maximumExportSplitGapM": 1.4304561155287565e-07
+  },
+  "flightQA": {
+    "source": "flight/final/source-qa.json",
+    "sourceSamples": 1686,
+    "sourceSampleHz": 480,
+    "contactDenseHz": 4800,
+    "glb": "flight/final/glb-contact-qa.json",
+    "display": "flight/final/display-qa.json",
+    "displaySamples": 721,
+    "hitSourceFrame": 513.3333333333333,
+    "sourceGates": {
+      "correctSource": true,
+      "contactActualStrings": true,
+      "noCorkBodyIntersection": true,
+      "noCorkFrameOrShaftIntersection": true,
+      "noStringPenetration": true,
+      "noSecondStringContact": true,
+      "noPassThroughStringBed": true,
+      "restitutionAndFlight": true
+    },
+    "glbGates": {
+      "sourceAndGLBHashes": true,
+      "export240HzMarkerParity": true,
+      "export240HzContactPointParity": true,
+      "interpolatedMarkerBound": true,
+      "interpolatedContactPointBound": true,
+      "actualGLBStringContact": true,
+      "noDenseGLBStringPenetration": true,
+      "actualGLBOutgoingVelocityConsistent": true,
+      "actualGLBFlightOverNet": true,
+      "actualGLBLandingInsideSingles": true,
+      "actualGLBFlightMatchesSource": true,
+      "seekIndependentAndFinite": true,
+      "ballisticGates": true
+    },
+    "displayGates": {
+      "seekIndependent": true,
+      "noInstantFlip": true,
+      "skirtDoesNotCrossFiniteBed": true,
+      "continuousAngularSampling": true,
+      "hiddenAfterOpponent": true,
+      "extrapolationShowsShuttle": true,
+      "hiddenBeforeFeed": true,
+      "netTopMatchesPhysics": true
+    },
+    "parameters": "flight/parameters.json",
+    "referenceResidual": "flight/final/report.md"
+  },
+  "referenceReview": "review/final-review.json",
+  "browserVisualReview": "review/browser-visual-review.md",
+  "specificStartPhaseResult": "targeted_visible_phase_issues_resolved",
+  "professionalFidelity": "improved_not_passed",
+  "userNaturalnessAcceptance": "not_received",
+  "preview": {
+    "server": "serve.mjs",
+    "url": "http://127.0.0.1:3040/",
+    "defaultSpeed": 1,
+    "browserQA": "browser-qa.json",
+    "resourcesVerified": 79,
+    "sourceFrames": 61,
+    "views": 10,
+    "headlessViewport": [
+      1440,
+      1080
+    ],
+    "headlessPlayback": {
+      "wallSeconds": 1.0607000000029803,
+      "advanced": 1.0000000000000004,
+      "renders": 36
+    },
+    "sidebarQA": "sidebar-qa.json",
+    "sidebarVerification": "passed_66_loaded_hashes_with_no_service_worker",
+    "visibleSidebarPlaybackVerified": false,
+    "normalSpeedRecording": "normal-speed-comparison.mp4",
+    "recordingScope": "61 deterministic actual WebGL frames at 25fps, equal comparison crop scale; not a wall-clock FPS measurement",
+    "sidebarViewport": [
+      1,
+      1
+    ],
+    "sidebarLoadedHashes": 66
+  },
+  "runtimeRegression": {
+    "tests": 825,
+    "passed": 824,
+    "failed": 1,
+    "failure": "tests/v4-court-motion.test.js:95 live support error 0.011391154335168342",
+    "preexisting": true,
+    "buildID": "f3686de3bb8a7401"
+  },
+  "remaining": [
+    "Whole-sequence professional fidelity: initial loading, long-stride loading, low racket recovery, alternating return and final ready hinge.",
+    "Contact projection remains20—27px low; bounded flight fit touches restitution .98 and prior feed-height boundary, not measured or unique physical parameters.",
+    "User normal-speed naturalness and target-phone performance acceptance.",
+    "Preexisting uncommitted V4 live support failure remains unresolved."
+  ],
+  "publication": {
+    "formalAssetReplaced": false,
+    "versionBumped": false,
+    "merged": false,
+    "productionChanged": false,
+    "pullRequest": "https://github.com/zcinta0514/rally-badminton/pull/4",
+    "draft": true,
+    "gitHubSync": "ready_to_push"
+  },
+  "selectionManifest": "sync-files.json",
+  "rawBroadcastPublished": false,
+  "writersStopped": true,
+  "gitSnapshotQA": "git-snapshot-qa.json",
+  "gitSnapshot": {
+    "tests": 691,
+    "passed": 691,
+    "failed": 0,
+    "buildID": "bc91ba3fa312a101",
+    "testedTree": "dc2475515370571f00cad3e2f09beabcf3675830"
+  }
+}

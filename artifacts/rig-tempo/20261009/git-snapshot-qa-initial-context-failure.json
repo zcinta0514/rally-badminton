@@ -1,0 +1,16 @@
+{
+  "tree": "dc2475515370571f00cad3e2f09beabcf3675830",
+  "snapshot": "/var/folders/lf/8fsjs52958d2hyz271jmcm440000gn/T/rally-start-flight-qa-kx9h1ame",
+  "preexistingModifiedFilesUnchanged": true,
+  "commands": {
+    "test": {
+      "exitCode": 1,
+      "log": "snapshot-test.log"
+    },
+    "build": {
+      "exitCode": 0,
+      "log": "snapshot-build.log"
+    }
+  },
+  "passed": false
+}

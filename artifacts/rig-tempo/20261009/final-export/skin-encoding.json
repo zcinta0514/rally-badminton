@@ -1,0 +1,43 @@
+{
+  "method": "Preserve every positive source weight; process-local exporter method override only",
+  "vendorDefaultDiscardThreshold": 0.0001,
+  "effectiveDiscardThreshold": 0,
+  "maxPositiveInfluences": 4,
+  "sourceWeightsModified": false,
+  "quantizationCompensationM": 0,
+  "affectedVertices": 6,
+  "preservedSmallWeights": [
+    {
+      "vertex": 847,
+      "group": "DEF_thigh_l_twist_2",
+      "weight": 8.902428089641035e-05
+    },
+    {
+      "vertex": 854,
+      "group": "DEF_ball_l",
+      "weight": 8.584645001974422e-06
+    },
+    {
+      "vertex": 1145,
+      "group": "DEF_calf_l",
+      "weight": 6.318975647445768e-05
+    },
+    {
+      "vertex": 1163,
+      "group": "DEF_foot_l",
+      "weight": 5.968339564788039e-07
+    },
+    {
+      "vertex": 2401,
+      "group": "DEF_thigh_r_twist_2",
+      "weight": 8.91770250746049e-05
+    },
+    {
+      "vertex": 2699,
+      "group": "DEF_calf_r",
+      "weight": 6.318946543615311e-05
+    }
+  ],
+  "vendorModule": "/Users/xindong/Documents/\u5f00\u62cdrally/artifacts/tools/blender-5.2.2-macos-arm64/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/blender/exp/primitive_extract.py",
+  "vendorModuleSHA256": "55e14cbe849b0c4ec5545c85a1aae3d8c2c7d65eade67de43eb1a43b05738684"
+}

@@ -1,0 +1,219 @@
+{
+  "schema": "rally-runtime-surface-qa-v1",
+  "checkerSHA256": "fd9b94a00a6d9979301d41218538cf898722fff45cab7e0aadbee530d1d62cc1",
+  "samplerSHA256": "adca8d02502d64e2b57a25f50a06fb4d177fa9103ac4cf9688217a51bfcf390d",
+  "sourceSHA256": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+  "glbSHA256": "bee8c9d6d7287153ec7e21f23daa8a0050f47191a2296a92d94e05a02e4f6c7c",
+  "sampleHz": 480,
+  "samples": 1921,
+  "gates": {
+    "body": true,
+    "racket": true,
+    "edges": true,
+    "seams": true,
+    "supportDrift": true,
+    "supportFloor": true
+  },
+  "passed": true,
+  "bodyIntersectionRows": [],
+  "racketIntersectionRows": [],
+  "regions": {
+    "shoulder_l": {
+      "min": 0.38963487850785294,
+      "max": 1.7648895188291653,
+      "severeEdges": 0
+    },
+    "shoulder_r": {
+      "min": 0.4114814904617558,
+      "max": 1.7645668984880447,
+      "severeEdges": 0
+    },
+    "elbow_l": {
+      "min": 0.5591610433474824,
+      "max": 1.5975752936677832,
+      "severeEdges": 0
+    },
+    "elbow_r": {
+      "min": 0.4398897203931714,
+      "max": 1.7414957460282472,
+      "severeEdges": 0
+    },
+    "wrist_l": {
+      "min": 0.9250991986506435,
+      "max": 1.1104210008036473,
+      "severeEdges": 0
+    },
+    "wrist_r": {
+      "min": 0.47872647689209774,
+      "max": 1.4641601795659824,
+      "severeEdges": 0
+    },
+    "hip_l": {
+      "min": 0.3898504892954086,
+      "max": 1.7647210083100795,
+      "severeEdges": 0
+    },
+    "hip_r": {
+      "min": 0.3886127418958179,
+      "max": 1.7907210937572529,
+      "severeEdges": 0
+    },
+    "knee_l": {
+      "min": 0.3897665852026756,
+      "max": 1.7600525072544928,
+      "severeEdges": 0
+    },
+    "knee_r": {
+      "min": 0.4331637483373568,
+      "max": 1.7443019542726508,
+      "severeEdges": 0
+    },
+    "ankle_l": {
+      "min": 0.4355474831610648,
+      "max": 1.7397114808000405,
+      "severeEdges": 0
+    },
+    "ankle_r": {
+      "min": 0.43418305579787986,
+      "max": 1.7400102187301312,
+      "severeEdges": 0
+    }
+  },
+  "support": [
+    {
+      "side": "r",
+      "frames": [
+        0,
+        24
+      ],
+      "maximumDriftM": 4.062580560084129e-05,
+      "floorGapRangeM": [
+        -3.7086464464665056e-05,
+        4.793629050248854e-07
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        33.6,
+        52.8
+      ],
+      "maximumDriftM": 0.001430576028470203,
+      "floorGapRangeM": [
+        0.000609251402318477,
+        0.001968613557517528
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        105.6,
+        120
+      ],
+      "maximumDriftM": 0.0008480658319084305,
+      "floorGapRangeM": [
+        0.0017793641537427896,
+        0.0019906505122780794
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        160,
+        192
+      ],
+      "maximumDriftM": 0.0001079639342993179,
+      "floorGapRangeM": [
+        -6.640170514583647e-05,
+        2.319656312465071e-06
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        236,
+        254
+      ],
+      "maximumDriftM": 0.00015967134382120988,
+      "floorGapRangeM": [
+        -8.680884540081084e-05,
+        2.419307827948927e-06
+      ]
+    },
+    {
+      "side": "r",
+      "frames": [
+        288,
+        480
+      ],
+      "maximumDriftM": 8.351471289580519e-07,
+      "floorGapRangeM": [
+        -2.5731325149595807e-07,
+        5.352422595018141e-07
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        0,
+        24
+      ],
+      "maximumDriftM": 3.254081607244225e-05,
+      "floorGapRangeM": [
+        -1.3860210776329637e-05,
+        6.656274199479811e-07
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        76.8,
+        96
+      ],
+      "maximumDriftM": 0.0004128849977260079,
+      "floorGapRangeM": [
+        0.0015116089135408396,
+        0.0019907818287611
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        174,
+        182
+      ],
+      "maximumDriftM": 0.0001149574595051797,
+      "floorGapRangeM": [
+        -3.787250071764052e-05,
+        1.383677124976515e-06
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        232,
+        254
+      ],
+      "maximumDriftM": 4.272560465384515e-05,
+      "floorGapRangeM": [
+        -3.1605631113052965e-05,
+        2.179957926272749e-06
+      ]
+    },
+    {
+      "side": "l",
+      "frames": [
+        288,
+        480
+      ],
+      "maximumDriftM": 9.57421802364819e-07,
+      "floorGapRangeM": [
+        -2.899095416074998e-07,
+        4.495605826371901e-07
+      ]
+    }
+  ],
+  "maximumSeamGapM": 0,
+  "maximumExportSplitGapM": 1.4304561155287565e-07,
+  "limits": "Actual CPU streamed geometry in GLTFLoader at export knots and midpoints. Same body/racket, 0.35\u20141.8 edge, 3mm support and floor gates. Source bone-direction checks are reported separately; not a professional or user visual acceptance."
+}

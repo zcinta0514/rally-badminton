@@ -1,0 +1,84 @@
+{
+  "reviewDate": "2026-10-09",
+  "reviewKind": "independent_visual_review_of_all_consecutive_final_still_frames",
+  "sourceVideo": "artifacts/match-reference/20261006/match15/2_18_14.mp4",
+  "sourceFps": 25,
+  "candidateBlend": "artifacts/rig-tempo/20261009/motion/final-01/rebuild.blend",
+  "candidateBlendSha256": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+  "candidateBlendHashReadFromDisk": true,
+  "candidateImages": "artifacts/rig-tempo/20261009/motion/render-final-01/pairs",
+  "viewedRange": [480, 540],
+  "viewedUniqueFrameCount": 61,
+  "allFramesIndividuallyOpened": true,
+  "viewingBatches": [[480,487],[488,495],[496,503],[504,511],[512,519],[520,527],[528,535],[536,540]],
+  "sourceTimeRangeSeconds": [0, 2.4],
+  "authoringFrameFormula": "(sourceFrame - 480) * 4.8",
+  "specificStartPhaseResult": "targeted_visible_phase_issues_resolved_and_retained_after_integration",
+  "contactPoseIntegrationResult": "no_new_unambiguous_distant_view_joint_flip_or_body_racket_penetration_observed",
+  "professionalFidelity": "not_passed",
+  "normalSpeedVideoActuallyViewedThisAudit": false,
+  "userNaturalnessAcceptance": "not_received",
+  "machineQaNotUsedAsVisualAcceptance": true,
+  "candidateShuttleVisibleInTheseRenders": false,
+  "flightAcceptanceFromThese61Frames": false,
+  "findings": [
+    {
+      "topic": "initial_loading",
+      "range": [480,484],
+      "status": "remaining_existing_difference",
+      "observation": "原片持续降重与髋折，候选初始宽腿姿势变化偏弱；不能由后续起步修正推定这几帧也已还原。"
+    },
+    {
+      "topic": "starting_trailing_leg_phase",
+      "range": [485,496],
+      "status": "targeted_visible_phase_issues_resolved",
+      "observation": "487后膝折起、后鞋离地；487—489保留后大腿后伸且后鞋明显高于支撑鞋，小腿和鞋持续可读；490逐渐回收、491靠拢，492—495进入下一步。旧滞后、中间候选过早交叉、后鞋完全遮挡、低抬鞋和集中抢收均未在最终图中复现。"
+    },
+    {
+      "topic": "approach_and_preparation",
+      "range": [497,508],
+      "status": "continuous_appearance_with_existing_difference",
+      "observation": "连续上网和举拍可读；原片前腿伸出与身体跟进仍更明显。未在本尺度看见整帧反膝或关节翻面。"
+    },
+    {
+      "topic": "new_contact_forearm_wrist_and_racket",
+      "range": [508,518],
+      "status": "no_new_unambiguous_distant_view_anomaly",
+      "observation": "新前臂与手腕配合使拍面经历准备、伸出和收回；连续整帧中未看见明确反肘、整条手臂翻面或球拍穿过身体。",
+      "limit": "远景不能验收手腕解剖轴转、手指握力、亚帧触球或细部表面；本组候选图未渲染球。"
+    },
+    {
+      "topic": "long_stride_loading",
+      "range": [507,513],
+      "status": "remaining_existing_difference",
+      "observation": "原片有更清楚的伸长步后屈膝承重过程，候选在接近阶段更早形成屈膝轮廓。"
+    },
+    {
+      "topic": "low_racket_recovery",
+      "range": [514,521],
+      "status": "remaining_existing_difference",
+      "observation": "原片手拍向前膝附近向下回收；候选仍偏外、偏高，未因新接触拍面自动解决。后膝低位弓步改善保留。"
+    },
+    {
+      "topic": "retreat_weight_transfer",
+      "range": [523,534],
+      "status": "remaining_existing_difference",
+      "observation": "原片交替支撑与前脚回收更明确，候选双腿轮廓保持较规整的时间较长；此前支撑腿伸展改善保留。"
+    },
+    {
+      "topic": "ready_stance_lean",
+      "range": [536,540],
+      "status": "remaining_existing_difference",
+      "observation": "候选回到分腿准备姿态，但上身更直，原片髋折与迎球准备前倾仍更明显。"
+    }
+  ],
+  "limits": [
+    "单目远景、服装和球网遮挡、运动模糊及近似比较镜位",
+    "未将本次膝髋轴与踝控制拟合称为实测3D关节角",
+    "只有整帧远景连续观察，不是近景手腕/手指/关节表面或毫米足底接触验收",
+    "没有看正常速度视频，没有用户自然度验收",
+    "球路另依最终flight和实际浏览器检查，不能套用旧contact02投影报告作为新文件通过",
+    "541之后下一拍不属于此候选动作覆盖",
+    "原比赛素材和派生截图仅本地审查，不公开上传"
+  ]
+}

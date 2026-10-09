@@ -1,0 +1,18 @@
+{
+  "modelURL": "/match-rebuild.glb",
+  "sourceFramesPrefix": "/reference-frames",
+  "expectedModelHash": "bee8c9d6d7287153ec7e21f23daa8a0050f47191a2296a92d94e05a02e4f6c7c",
+  "buildLabel": "起步节拍与触球球路校准",
+  "sourceLabel": "2020全英男单决赛 · 远端球员",
+  "cameraURL": "/reference-camera.json",
+  "beforeRebuildURL": "/?version=baseline",
+  "qaNotes": [
+    "已修正起步后大腿、小腿与踝部的先后关系，连续接入下一步；触球前臂与手腕同步调整。",
+    "源模型整段240Hz/961与480Hz/1921姿态：身体、全部8件球拍、关节方向和支撑原门槛通过。",
+    "球头接触当前真实线网；出射由实际拍向和线床速度产生，来去过网与未截击界内落点分别核验。",
+    "原片只有25fps单目画面；来球、阻力及恢复系数为本片段制作假设。有界拟合触及参数边界，不能当实测物理常量。",
+    "触球前段的投影仍偏低，其他既有姿态差异保留；整段专业一致性与用户正常速度验收未通过。",
+    "羽裙采用可重复采样的短暂翻转表现；羽裙气动力与球线弹性未实测。"
+  ],
+  "cameraNote": "原片近似镜位由地板角点拟合，不是实测镜头或运动员三维姿态。"
+}
