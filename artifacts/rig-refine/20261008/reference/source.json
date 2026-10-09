@@ -1,0 +1,13 @@
+{
+  "description": "2020 All England Open Final: Viktor Axelsen vs Chou Tien Chen; far-court player in the selected rally",
+  "dataset": "TrackNetV2 Shuttlecock Trajectory Dataset",
+  "documentation": "https://hackmd.io/Nf8Rh1NrSrqNUzmO0sQKZw",
+  "relativeLocalVideo": "artifacts/match-reference/20261006/match15/2_18_14.mp4",
+  "sha256": "e76277c477ebf887de15778585d07fc27dbfb0df926220ad40e499afba900112",
+  "actualFrameRate": 25,
+  "dimensions": [1280,720],
+  "reviewFrameRange": [480,540],
+  "crop": [240,130,650,300],
+  "rawBroadcastIncludedInGit": false,
+  "scope": "Single-camera visual reference, not measured 3D motion or impact. Access to the dataset does not establish redistribution rights to broadcast footage."
+}

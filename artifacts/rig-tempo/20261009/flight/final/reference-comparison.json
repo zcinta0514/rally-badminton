@@ -1,0 +1,250 @@
+{
+  "schema": "rally-final-flight-reference-comparison-v1",
+  "sourceSHA256": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+  "glbSHA256": "bee8c9d6d7287153ec7e21f23daa8a0050f47191a2296a92d94e05a02e4f6c7c",
+  "selectedFlightSHA256": "2c439672eb53549e0a1b665c281882f74454503848edfd32ec40275fb85bd44f",
+  "authoringParametersSHA256": "2925b18516b9e423e8fc4c6b72c0b0705e83d8e0215ab6c3aab1f6b18c2dc4ce",
+  "allCandidatesRecomputedForFinalSource": true,
+  "rows": [
+    {
+      "sourceFrame": 488,
+      "observedPixel": null,
+      "observedBox": [
+        414,
+        453,
+        430,
+        490
+      ],
+      "uncertaintyPx": null,
+      "candidates": {
+        "initial": {
+          "projectedPixel": [
+            362.09608097746127,
+            593.6784187499246
+          ],
+          "errorPx": 115.94494954237109
+        },
+        "singleFeedPoint": {
+          "projectedPixel": [
+            425.00306276565067,
+            488.98871076535744
+          ],
+          "errorPx": 0.0
+        },
+        "bounded": {
+          "projectedPixel": [
+            399.96081799844,
+            472.1320694323314
+          ],
+          "errorPx": 14.039182001559993
+        }
+      }
+    },
+    {
+      "sourceFrame": 500,
+      "observedPixel": [
+        395,
+        234
+      ],
+      "observedBox": null,
+      "uncertaintyPx": 3,
+      "candidates": {
+        "initial": {
+          "projectedPixel": [
+            384.2893695421337,
+            265.966978424266
+          ],
+          "errorPx": 33.71357759690392
+        },
+        "singleFeedPoint": {
+          "projectedPixel": [
+            405.8557692709241,
+            250.79583632578397
+          ],
+          "errorPx": 19.99869606614552
+        },
+        "bounded": {
+          "projectedPixel": [
+            396.26721200213495,
+            236.96972160512468
+          ],
+          "errorPx": 3.228788111706799
+        }
+      }
+    },
+    {
+      "sourceFrame": 506,
+      "observedPixel": [
+        393,
+        223
+      ],
+      "observedBox": null,
+      "uncertaintyPx": 3,
+      "candidates": {
+        "initial": {
+          "projectedPixel": [
+            390.5940168405074,
+            247.79152748711226
+          ],
+          "errorPx": 24.908002531475802
+        },
+        "singleFeedPoint": {
+          "projectedPixel": [
+            400.79736188444804,
+            240.4092136944493
+          ],
+          "errorPx": 19.075627743695467
+        },
+        "bounded": {
+          "projectedPixel": [
+            396.16512342806124,
+            234.1599525941118
+          ],
+          "errorPx": 11.600109836449157
+        }
+      }
+    },
+    {
+      "sourceFrame": 513,
+      "observedPixel": [
+        397,
+        264
+      ],
+      "observedBox": null,
+      "uncertaintyPx": 4,
+      "candidates": {
+        "initial": {
+          "projectedPixel": [
+            396.6459713971906,
+            285.0762629390983
+          ],
+          "errorPx": 21.079236127754132
+        },
+        "singleFeedPoint": {
+          "projectedPixel": [
+            397.0384598091846,
+            284.7413006680734
+          ],
+          "errorPx": 20.74133632532736
+        },
+        "bounded": {
+          "projectedPixel": [
+            396.85803001266214,
+            284.54474373162634
+          ],
+          "errorPx": 20.545234252144816
+        }
+      }
+    },
+    {
+      "sourceFrame": 514,
+      "observedPixel": [
+        397,
+        257
+      ],
+      "observedBox": null,
+      "uncertaintyPx": 6,
+      "candidates": {
+        "initial": {
+          "projectedPixel": [
+            396.9860586590604,
+            276.5268852929948
+          ],
+          "errorPx": 19.526890269747597
+        },
+        "singleFeedPoint": {
+          "projectedPixel": [
+            396.2316220012558,
+            277.1164144561044
+          ],
+          "errorPx": 20.13108380884447
+        },
+        "bounded": {
+          "projectedPixel": [
+            396.542248063276,
+            276.02448086237047
+          ],
+          "errorPx": 19.02998709716522
+        }
+      }
+    },
+    {
+      "sourceFrame": 522,
+      "observedPixel": [
+        398,
+        203
+      ],
+      "observedBox": null,
+      "uncertaintyPx": 3,
+      "candidates": {
+        "initial": {
+          "projectedPixel": [
+            398.2694430469086,
+            214.13917193475837
+          ],
+          "errorPx": 11.142430208335874
+        },
+        "singleFeedPoint": {
+          "projectedPixel": [
+            390.87667514869804,
+            220.75510913792291
+          ],
+          "errorPx": 19.130751617140657
+        },
+        "bounded": {
+          "projectedPixel": [
+            393.97148765433167,
+            211.74093441764867
+          ],
+          "errorPx": 9.624595898677375
+        }
+      }
+    },
+    {
+      "sourceFrame": 536,
+      "observedPixel": [
+        404,
+        326
+      ],
+      "observedBox": null,
+      "uncertaintyPx": 6,
+      "candidates": {
+        "initial": {
+          "projectedPixel": [
+            402.39713870676786,
+            329.356296463603
+          ],
+          "errorPx": 3.7193938050353887
+        },
+        "singleFeedPoint": {
+          "projectedPixel": [
+            387.77867044911136,
+            343.2148025159477
+          ],
+          "errorPx": 23.65334982748983
+        },
+        "bounded": {
+          "projectedPixel": [
+            393.9471425324445,
+            327.14952634295094
+          ],
+          "errorPx": 10.118367164524347
+        }
+      }
+    }
+  ],
+  "professionalFlightFidelity": "improved_not_passed",
+  "fitReport": "../contact-02/bounded-fit.json",
+  "sourceReports": {
+    "initial": "reference-initial.json",
+    "singleFeedPoint": "reference-single-point.json",
+    "bounded": "reference-residual.json"
+  },
+  "limits": [
+    "These per-sequence parameters are authored monocular inferences, not measured shuttle or string restitution.",
+    "The bounded fit reaches restitution0.98 and feed-height1m assumptions. This can reflect the fixed low contact geometry, approximate camera and simplified drag/impact model; it does not establish a unique real-world solution.",
+    "The real string contact remains20\u201427px below the observed ball in the approximate source-camera view. It was not detached from the racket to hide that residual.",
+    "Source488 is a broad blurred region, not a known exact centre; even the selected fit remains about14px outside that region horizontally.",
+    "Professional-video flight fidelity remains improved_not_passed. Contact, net and export checks remain independent."
+  ]
+}

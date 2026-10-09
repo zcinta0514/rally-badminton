@@ -1,0 +1,375 @@
+{
+  "schema": "rally-bounded-flight-fit-v1",
+  "sourceSHA256": "e9330f5607223c46056bdc9ad0c7c4fd00ad4cbcbc7d79f66b986babc3d11a1c",
+  "racket": "artifacts/rig-tempo/20261009/flight/contact-02/racket.json",
+  "randomSeed": 20261009,
+  "parameters": [
+    "incomingVx",
+    "incomingVy",
+    "incomingVz",
+    "restitution"
+  ],
+  "bounds": {
+    "min": [
+      -5.0,
+      -5.4,
+      -0.4,
+      0.65
+    ],
+    "max": [
+      -2.0,
+      -3.1,
+      0.7,
+      0.98
+    ]
+  },
+  "fixed": {
+    "contactTime": 1.3333333333333304,
+    "contactPoint": [
+      2.1743953227996826,
+      0.8073704242706299,
+      2.147425413131714
+    ],
+    "faceNormal": [
+      0.800818920135498,
+      0.5979427099227905,
+      -0.03396529331803322
+    ],
+    "racketVelocity": [
+      8.846855163574219,
+      0.9674549102783203,
+      -0.0492095947265625
+    ],
+    "quadraticDrag": 0.18,
+    "gravity": 9.81,
+    "feedTime": 0.32
+  },
+  "observations": [
+    {
+      "sourceFrame": 500,
+      "pixel": [
+        395,
+        234
+      ],
+      "sigmaPx": 3
+    },
+    {
+      "sourceFrame": 506,
+      "pixel": [
+        393,
+        223
+      ],
+      "sigmaPx": 3
+    },
+    {
+      "sourceFrame": 522,
+      "pixel": [
+        398,
+        203
+      ],
+      "sigmaPx": 3
+    },
+    {
+      "sourceFrame": 536,
+      "pixel": [
+        404,
+        326
+      ],
+      "sigmaPx": 6
+    }
+  ],
+  "feedConstraint": {
+    "sourceFrame": 488,
+    "pixelBox": [
+      414,
+      453,
+      430,
+      490
+    ],
+    "outsidePenaltySigmaPx": 8,
+    "heightAssumptionM": [
+      0.05,
+      1
+    ]
+  },
+  "objective": "Sum of squared2D residual/sigma at500,506,522,536. Source488 contributes only distance outside its broad box. Source513\u2014514 contact residual is explicitly excluded because contact geometry is frozen.",
+  "optimizer": "Deterministic bounded population refinement:5002 initial plus7x1824, RK4 120Hz for search, chosen and comparison candidates independently re-evaluated at480Hz.",
+  "history": [
+    {
+      "round": 0,
+      "candidates": 5002,
+      "physicalPasses": 253,
+      "bestWeightedSquaredError": 53.81176571586628,
+      "bestParameters": [
+        -3.4925594925706833,
+        -4.305745460864706,
+        0.1830194718691296,
+        0.9143250776397809
+      ]
+    },
+    {
+      "round": 1,
+      "candidates": 1824,
+      "physicalPasses": 784,
+      "bestWeightedSquaredError": 34.88315755580318,
+      "bestParameters": [
+        -3.519438700335677,
+        -4.333885502581202,
+        0.1289225784091868,
+        0.98
+      ]
+    },
+    {
+      "round": 2,
+      "candidates": 1824,
+      "physicalPasses": 1147,
+      "bestWeightedSquaredError": 33.55664671742841,
+      "bestParameters": [
+        -3.4703604426505956,
+        -4.348577998664024,
+        0.15221774846860014,
+        0.98
+      ]
+    },
+    {
+      "round": 3,
+      "candidates": 1824,
+      "physicalPasses": 1124,
+      "bestWeightedSquaredError": 32.739953344455195,
+      "bestParameters": [
+        -3.5934140943068527,
+        -4.3335913844014,
+        0.17021260072913336,
+        0.98
+      ]
+    },
+    {
+      "round": 4,
+      "candidates": 1824,
+      "physicalPasses": 1048,
+      "bestWeightedSquaredError": 32.739953344455195,
+      "bestParameters": [
+        -3.5934140943068527,
+        -4.3335913844014,
+        0.17021260072913336,
+        0.98
+      ]
+    },
+    {
+      "round": 5,
+      "candidates": 1824,
+      "physicalPasses": 1087,
+      "bestWeightedSquaredError": 32.35303672153173,
+      "bestParameters": [
+        -3.5608813432023663,
+        -4.339461552311355,
+        0.16644687008490477,
+        0.9798584706995144
+      ]
+    },
+    {
+      "round": 6,
+      "candidates": 1824,
+      "physicalPasses": 1043,
+      "bestWeightedSquaredError": 32.325937713005715,
+      "bestParameters": [
+        -3.5733609305549487,
+        -4.338437342107164,
+        0.16880790501721438,
+        0.98
+      ]
+    },
+    {
+      "round": 7,
+      "candidates": 1824,
+      "physicalPasses": 995,
+      "bestWeightedSquaredError": 32.32425981854273,
+      "bestParameters": [
+        -3.5695359274674754,
+        -4.338731434775277,
+        0.16719010307018053,
+        0.98
+      ]
+    }
+  ],
+  "selectedIncomingMps": [
+    -3.5695359274674754,
+    -4.338731434775277,
+    0.16719010307018053
+  ],
+  "selectedRestitution": 0.98,
+  "comparisons": [
+    {
+      "name": "bounded-fit",
+      "parameters": [
+        -3.5695359274674754,
+        -4.338731434775277,
+        0.16719010307018053,
+        0.98
+      ],
+      "weightedSquaredError": 32.32425462710534,
+      "physicalGatesPassed": true,
+      "feedPoint": [
+        8.847298571808539,
+        0.9994603586189937,
+        1.834879635571584
+      ],
+      "feedPixel": [
+        399.9608179984404,
+        472.13206943233155
+      ],
+      "projectedPixels": {
+        "500": [
+          396.26721200213495,
+          236.96972160512507
+        ],
+        "506": [
+          396.16511944315624,
+          234.1596878701932
+        ],
+        "522": [
+          393.9714772918512,
+          211.74044462350352
+        ],
+        "536": [
+          393.9471386892643,
+          327.1493249174816
+        ]
+      },
+      "outgoingMps": [
+        17.239250668804644,
+        11.19844174474293,
+        -0.7153771322483288
+      ],
+      "landing": [
+        11.166201444023912,
+        0.0,
+        1.7742924620357383
+      ],
+      "nextOpponentContact": [
+        9.344136314078854,
+        2.5891436751697534,
+        1.849902693157237
+      ],
+      "incomingNetY": 2.1851799126395424,
+      "outgoingNetY": 2.438239794174001
+    },
+    {
+      "name": "initial",
+      "parameters": [
+        -4.0,
+        -4.0,
+        0.0,
+        0.8
+      ],
+      "weightedSquaredError": 419.4506005163996,
+      "physicalGatesPassed": true,
+      "feedPoint": [
+        10.35231994288817,
+        0.3018489977297934,
+        2.147425413131714
+      ],
+      "feedPixel": [
+        362.096080977461,
+        593.678418749926
+      ],
+      "projectedPixels": {
+        "500": [
+          384.28936954213367,
+          265.96697842426687
+        ],
+        "506": [
+          390.5940208810779,
+          247.79124510326213
+        ],
+        "522": [
+          398.2694399578723,
+          214.13868841349444
+        ],
+        "536": [
+          402.39713695002723,
+          329.3560965599431
+        ]
+      },
+      "outgoingMps": [
+        15.113844431093685,
+        10.271620773191797,
+        -0.8106793136549613
+      ],
+      "landing": [
+        10.497796638115393,
+        0.0,
+        1.7009732019594823
+      ],
+      "nextOpponentContact": [
+        8.834190245736893,
+        2.3994259505316986,
+        1.7902060437102436
+      ],
+      "incomingNetY": 1.9530690451270738,
+      "outgoingNetY": 2.4602881361288818
+    },
+    {
+      "name": "single-feed-point",
+      "parameters": [
+        -3.15477714,
+        -4.03456317,
+        0.29916652,
+        0.9
+      ],
+      "weightedSquaredError": 141.07281513676713,
+      "physicalGatesPassed": true,
+      "feedPoint": [
+        7.500000008591255,
+        0.32400000235889104,
+        1.6424000024480419
+      ],
+      "feedPixel": [
+        425.0030627656506,
+        488.98871076535835
+      ],
+      "projectedPixels": {
+        "500": [
+          405.85576927092393,
+          250.79583632578465
+        ],
+        "506": [
+          400.79735281565974,
+          240.40893776731676
+        ],
+        "522": [
+          390.87665965517647,
+          220.7546357523852
+        ],
+        "536": [
+          387.7786650997911,
+          343.214606810774
+        ]
+      },
+      "outgoingMps": [
+        16.03795790524199,
+        10.295962389811134,
+        -0.5148587970799721
+      ],
+      "landing": [
+        10.749741024164694,
+        0.0,
+        1.8721352422486346
+      ],
+      "nextOpponentContact": [
+        9.087875343985814,
+        2.3382725905583284,
+        1.9254853115068733
+      ],
+      "incomingNetY": 1.780330171998781,
+      "outgoingNetY": 2.3855919511460977
+    }
+  ],
+  "limits": [
+    "All3D feed velocities, restitution and drag are authored inferences; no calibrated motion capture or measured collision data.",
+    "A broad low-feed height assumption is used. The488 centre is not known; no centre pixel is forced.",
+    "All contact geometry and source/GLB tolerances remain fixed. Changing physics parameters does not relax geometric checks.",
+    "The best result in this bounded search is not a proof of a unique or globally optimal physical reconstruction.",
+    "The real model contact remains below the observed match ball. That residual is retained rather than moving the shuttle off the strings."
+  ]
+}

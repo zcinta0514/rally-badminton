@@ -1,0 +1,14 @@
+{
+  "incomingMps": [
+    -3.154777136830932,
+    -4.034563168909872,
+    0.2991665216322607
+  ],
+  "targetFeedPoint": [
+    7.5,
+    0.324,
+    1.6424
+  ],
+  "feedTime": 0.32,
+  "kind": "coarse approximate-camera inference; not measured"
+}

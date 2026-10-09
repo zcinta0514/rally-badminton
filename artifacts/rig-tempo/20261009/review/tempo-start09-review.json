@@ -1,0 +1,32 @@
+{
+  "reviewDate": "2026-10-09",
+  "candidateImages": "artifacts/rig-tempo/20261009/motion/render-start-09/pairs",
+  "viewedRange": [485, 496],
+  "viewedUniqueFrameCount": 12,
+  "allFramesIndividuallyOpened": true,
+  "batches": [[485, 490], [491, 496]],
+  "reviewKind": "independent_consecutive_still_frame_review",
+  "specificStartPhaseIssues": "visually_resolved_in_this_sequence",
+  "wholeProfessionalMotionAcceptance": "not_passed",
+  "normalSpeedActuallyViewed": false,
+  "userNaturalnessAcceptance": "not_received",
+  "findings": [
+    {
+      "range": [487, 489],
+      "observation": "后鞋抬高且明显高于支撑鞋，后小腿与后鞋持续可见；大腿保持后伸后逐渐回收，未再过早交叉。",
+      "resolvedEarlierFailures": ["旧基线487仍宽腿的收腿滞后", "start05小腿与鞋折入大腿投影的截肢轮廓", "start07后鞋低抬且脚尖下垂"]
+    },
+    {
+      "range": [490, 495],
+      "observation": "490逐步收回，491靠拢，492—495转入下一步；未再观察到489→490的集中抢收，没有可见整帧关节跳翻。"
+    }
+  ],
+  "recommendation": "可冻结这段相位并进入表面QA及最终接触球路整合；最终整合必须再复核。",
+  "remainingScope": [
+    "480—484既有降重和髋折不足不在本次12张修正通过结论内",
+    "不将近似镜位、体型差异或单目粗点拟合称为实测3D姿态",
+    "膝髋轴向与踝控制是制作拟合假设",
+    "半帧/高频变形、毫米足底支撑及骨长由独立机器QA核验",
+    "最终完整61帧及正常速度观感待整合后复核"
+  ]
+}

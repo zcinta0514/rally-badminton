@@ -1,0 +1,310 @@
+{
+  "source": "artifacts/rig-tempo/20261009/motion/candidate-02/rebuild.blend",
+  "failureModelFrame": 38.5,
+  "initialPairs": [
+    [
+      4458,
+      5258
+    ]
+  ],
+  "key": "Oct09Tempo_AnkleContinuousMargin",
+  "keyframes": [
+    [
+      0,
+      0
+    ],
+    [
+      37.5,
+      0
+    ],
+    [
+      38,
+      1
+    ],
+    [
+      39,
+      1
+    ],
+    [
+      39.5,
+      0
+    ],
+    [
+      480,
+      0
+    ]
+  ],
+  "maxAdditionalWorldDisplacementM": 0.0010000000435589735,
+  "changedVertexIndices": [
+    2304,
+    2648,
+    2649,
+    2650
+  ],
+  "solesPinnedBelowRestZ": 0.03,
+  "envelopeQAHz": 1920,
+  "envelopeQA": [
+    {
+      "frame": 37.0,
+      "pairs": 0
+    },
+    {
+      "frame": 37.0625,
+      "pairs": 0
+    },
+    {
+      "frame": 37.125,
+      "pairs": 0
+    },
+    {
+      "frame": 37.1875,
+      "pairs": 0
+    },
+    {
+      "frame": 37.25,
+      "pairs": 0
+    },
+    {
+      "frame": 37.3125,
+      "pairs": 0
+    },
+    {
+      "frame": 37.375,
+      "pairs": 0
+    },
+    {
+      "frame": 37.4375,
+      "pairs": 0
+    },
+    {
+      "frame": 37.5,
+      "pairs": 0
+    },
+    {
+      "frame": 37.5625,
+      "pairs": 0
+    },
+    {
+      "frame": 37.625,
+      "pairs": 0
+    },
+    {
+      "frame": 37.6875,
+      "pairs": 0
+    },
+    {
+      "frame": 37.75,
+      "pairs": 0
+    },
+    {
+      "frame": 37.8125,
+      "pairs": 0
+    },
+    {
+      "frame": 37.875,
+      "pairs": 0
+    },
+    {
+      "frame": 37.9375,
+      "pairs": 0
+    },
+    {
+      "frame": 38.0,
+      "pairs": 0
+    },
+    {
+      "frame": 38.0625,
+      "pairs": 0
+    },
+    {
+      "frame": 38.125,
+      "pairs": 0
+    },
+    {
+      "frame": 38.1875,
+      "pairs": 0
+    },
+    {
+      "frame": 38.25,
+      "pairs": 0
+    },
+    {
+      "frame": 38.3125,
+      "pairs": 0
+    },
+    {
+      "frame": 38.375,
+      "pairs": 0
+    },
+    {
+      "frame": 38.4375,
+      "pairs": 0
+    },
+    {
+      "frame": 38.5,
+      "pairs": 0
+    },
+    {
+      "frame": 38.5625,
+      "pairs": 0
+    },
+    {
+      "frame": 38.625,
+      "pairs": 0
+    },
+    {
+      "frame": 38.6875,
+      "pairs": 0
+    },
+    {
+      "frame": 38.75,
+      "pairs": 0
+    },
+    {
+      "frame": 38.8125,
+      "pairs": 0
+    },
+    {
+      "frame": 38.875,
+      "pairs": 0
+    },
+    {
+      "frame": 38.9375,
+      "pairs": 0
+    },
+    {
+      "frame": 39.0,
+      "pairs": 0
+    },
+    {
+      "frame": 39.0625,
+      "pairs": 0
+    },
+    {
+      "frame": 39.125,
+      "pairs": 0
+    },
+    {
+      "frame": 39.1875,
+      "pairs": 0
+    },
+    {
+      "frame": 39.25,
+      "pairs": 0
+    },
+    {
+      "frame": 39.3125,
+      "pairs": 0
+    },
+    {
+      "frame": 39.375,
+      "pairs": 0
+    },
+    {
+      "frame": 39.4375,
+      "pairs": 0
+    },
+    {
+      "frame": 39.5,
+      "pairs": 0
+    },
+    {
+      "frame": 39.5625,
+      "pairs": 0
+    },
+    {
+      "frame": 39.625,
+      "pairs": 0
+    },
+    {
+      "frame": 39.6875,
+      "pairs": 0
+    },
+    {
+      "frame": 39.75,
+      "pairs": 0
+    },
+    {
+      "frame": 39.8125,
+      "pairs": 0
+    },
+    {
+      "frame": 39.875,
+      "pairs": 0
+    },
+    {
+      "frame": 39.9375,
+      "pairs": 0
+    },
+    {
+      "frame": 40.0,
+      "pairs": 0
+    },
+    {
+      "frame": 40.0625,
+      "pairs": 0
+    },
+    {
+      "frame": 40.125,
+      "pairs": 0
+    },
+    {
+      "frame": 40.1875,
+      "pairs": 0
+    },
+    {
+      "frame": 40.25,
+      "pairs": 0
+    },
+    {
+      "frame": 40.3125,
+      "pairs": 0
+    },
+    {
+      "frame": 40.375,
+      "pairs": 0
+    },
+    {
+      "frame": 40.4375,
+      "pairs": 0
+    },
+    {
+      "frame": 40.5,
+      "pairs": 0
+    },
+    {
+      "frame": 40.5625,
+      "pairs": 0
+    },
+    {
+      "frame": 40.625,
+      "pairs": 0
+    },
+    {
+      "frame": 40.6875,
+      "pairs": 0
+    },
+    {
+      "frame": 40.75,
+      "pairs": 0
+    },
+    {
+      "frame": 40.8125,
+      "pairs": 0
+    },
+    {
+      "frame": 40.875,
+      "pairs": 0
+    },
+    {
+      "frame": 40.9375,
+      "pairs": 0
+    },
+    {
+      "frame": 41.0,
+      "pairs": 0
+    }
+  ],
+  "passed": true,
+  "scope": "A local ankle surface interpolation margin; no timing, support window, bone curve or threshold altered."
+}

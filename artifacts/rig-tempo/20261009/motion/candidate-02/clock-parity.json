@@ -1,0 +1,1432 @@
+{
+  "source": "artifacts/rig-refine/20261008/final/rebuild.blend",
+  "candidate": "artifacts/rig-tempo/20261009/motion/candidate-02/rebuild.blend",
+  "sourceSHA256": "c77cf94202253cb37727a72a002a54e568f9dd597b5fc3d4cbdec39bd344a100",
+  "candidateSHA256": "59e419778e08f2d3a68aad80a4c8cb26c0b28afc48894d4d4f38055aa9cd6e3f",
+  "samples": 177,
+  "maxSurfaceErrorM": 1.4853400938960447e-06,
+  "maxUneditedSurfaceErrorM": 0.0,
+  "surfaceThresholdM": 1e-05,
+  "maxPoseMatrixDifference": 1.430511474609375e-06,
+  "maxShapeValueDifference": 5.602836608886719e-06,
+  "rows": [
+    {
+      "frame": 0.0,
+      "sourceFrame": 480.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 4.8,
+      "sourceFrame": 481.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 9.6,
+      "sourceFrame": 482.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 14.399999999999999,
+      "sourceFrame": 483.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 19.2,
+      "sourceFrame": 484.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 24.0,
+      "sourceFrame": 485.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 24.25,
+      "sourceFrame": 485.0520833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.020267174757939e-06,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 1.9073486328125e-06
+    },
+    {
+      "frame": 24.5,
+      "sourceFrame": 485.1041666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.830249847454215e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 1.0728836059570312e-06
+    },
+    {
+      "frame": 24.75,
+      "sourceFrame": 485.15625,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.2171612892545544e-06,
+      "maxPoseMatrixDifference": 9.5367431640625e-07,
+      "maxShapeValueDifference": 1.2516975402832031e-06
+    },
+    {
+      "frame": 25.0,
+      "sourceFrame": 485.2083333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.215700987241932e-06,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 2.980232238769531e-07
+    },
+    {
+      "frame": 25.25,
+      "sourceFrame": 485.2604166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0811303345690402e-06,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 2.9206275939941406e-06
+    },
+    {
+      "frame": 25.5,
+      "sourceFrame": 485.3125,
+      "editedClock": true,
+      "maxSurfaceErrorM": 6.419616707723741e-07,
+      "maxPoseMatrixDifference": 4.079192876815796e-07,
+      "maxShapeValueDifference": 7.329508662223816e-07
+    },
+    {
+      "frame": 25.75,
+      "sourceFrame": 485.3645833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.47574167289018e-06,
+      "maxPoseMatrixDifference": 1.1324882507324219e-06,
+      "maxShapeValueDifference": 2.384185791015625e-06
+    },
+    {
+      "frame": 26.0,
+      "sourceFrame": 485.4166666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.156639275394211e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 2.5033950805664062e-06
+    },
+    {
+      "frame": 26.25,
+      "sourceFrame": 485.46875,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.353957258653706e-06,
+      "maxPoseMatrixDifference": 8.940696716308594e-07,
+      "maxShapeValueDifference": 3.2186508178710938e-06
+    },
+    {
+      "frame": 26.5,
+      "sourceFrame": 485.5208333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.2402923134973534e-06,
+      "maxPoseMatrixDifference": 8.642673492431641e-07,
+      "maxShapeValueDifference": 5.662441253662109e-07
+    },
+    {
+      "frame": 26.75,
+      "sourceFrame": 485.5729166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.338120956459263e-06,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 8.940696716308594e-07
+    },
+    {
+      "frame": 27.0,
+      "sourceFrame": 485.625,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.107108180961277e-07,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 2.384185791015625e-06
+    },
+    {
+      "frame": 27.25,
+      "sourceFrame": 485.6770833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0062422165950616e-06,
+      "maxPoseMatrixDifference": 8.940696716308594e-07,
+      "maxShapeValueDifference": 2.384185791015625e-07
+    },
+    {
+      "frame": 27.5,
+      "sourceFrame": 485.7291666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.2460079765538498e-06,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 3.2186508178710938e-06
+    },
+    {
+      "frame": 27.75,
+      "sourceFrame": 485.78125,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.940696716308594e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 2.7418136596679688e-06
+    },
+    {
+      "frame": 28.0,
+      "sourceFrame": 485.8333333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.616943535090066e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 9.834766387939453e-07
+    },
+    {
+      "frame": 28.25,
+      "sourceFrame": 485.8854166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0062422165950616e-06,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 1.9073486328125e-06
+    },
+    {
+      "frame": 28.5,
+      "sourceFrame": 485.9375,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.830249847454215e-07,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 3.337860107421875e-06
+    },
+    {
+      "frame": 28.75,
+      "sourceFrame": 485.9895833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.372687385590661e-07,
+      "maxPoseMatrixDifference": 9.5367431640625e-07,
+      "maxShapeValueDifference": 8.344650268554688e-07
+    },
+    {
+      "frame": 28.799999999999997,
+      "sourceFrame": 486.0,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.215700987241932e-06,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 8.344650268554688e-07
+    },
+    {
+      "frame": 29.0,
+      "sourceFrame": 486.0416666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.280541890531661e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 1.341104507446289e-06
+    },
+    {
+      "frame": 29.25,
+      "sourceFrame": 486.09375,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.348554137908192e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 7.152557373046875e-07
+    },
+    {
+      "frame": 29.5,
+      "sourceFrame": 486.1458333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.555351461101412e-07,
+      "maxPoseMatrixDifference": 5.364418029785156e-07,
+      "maxShapeValueDifference": 4.76837158203125e-07
+    },
+    {
+      "frame": 29.75,
+      "sourceFrame": 486.1979166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.344650268554688e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 5.960464477539062e-07
+    },
+    {
+      "frame": 30.0,
+      "sourceFrame": 486.25,
+      "editedClock": true,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 30.25,
+      "sourceFrame": 486.3020833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.244581521619624e-06,
+      "maxPoseMatrixDifference": 1.1920928955078125e-06,
+      "maxShapeValueDifference": 2.2649765014648438e-06
+    },
+    {
+      "frame": 30.5,
+      "sourceFrame": 486.3541666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.3447420802925203e-06,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 8.940696716308594e-07
+    },
+    {
+      "frame": 30.75,
+      "sourceFrame": 486.40625,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.780312456283709e-07,
+      "maxPoseMatrixDifference": 6.705522537231445e-07,
+      "maxShapeValueDifference": 3.337860107421875e-06
+    },
+    {
+      "frame": 31.0,
+      "sourceFrame": 486.4583333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1935820814669602e-06,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 4.172325134277344e-06
+    },
+    {
+      "frame": 31.25,
+      "sourceFrame": 486.5104166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.534086384341927e-07,
+      "maxPoseMatrixDifference": 5.364418029785156e-07,
+      "maxShapeValueDifference": 3.874301910400391e-06
+    },
+    {
+      "frame": 31.5,
+      "sourceFrame": 486.5625,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.848303581391754e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 2.9802322387695312e-06
+    },
+    {
+      "frame": 31.75,
+      "sourceFrame": 486.6145833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.2894456179609261e-06,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 1.4603137969970703e-06
+    },
+    {
+      "frame": 32.0,
+      "sourceFrame": 486.6666666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.400392070349542e-06,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 3.7103891372680664e-06
+    },
+    {
+      "frame": 32.25,
+      "sourceFrame": 486.71875,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.610960183499514e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 1.1324882507324219e-06
+    },
+    {
+      "frame": 32.5,
+      "sourceFrame": 486.7708333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0728836059570312e-06,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 2.8014183044433594e-06
+    },
+    {
+      "frame": 32.75,
+      "sourceFrame": 486.8229166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0679050008755277e-06,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 5.4836273193359375e-06
+    },
+    {
+      "frame": 33.0,
+      "sourceFrame": 486.875,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.020267174757939e-06,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 2.86102294921875e-06
+    },
+    {
+      "frame": 33.25,
+      "sourceFrame": 486.9270833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1980385328675377e-06,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 1.6093254089355469e-06
+    },
+    {
+      "frame": 33.5,
+      "sourceFrame": 486.9791666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0272078478106311e-06,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 3.2186508178710938e-06
+    },
+    {
+      "frame": 33.6,
+      "sourceFrame": 487.0,
+      "editedClock": true,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 33.75,
+      "sourceFrame": 487.03125,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1246181883879427e-06,
+      "maxPoseMatrixDifference": 8.642673492431641e-07,
+      "maxShapeValueDifference": 2.682209014892578e-07
+    },
+    {
+      "frame": 34.0,
+      "sourceFrame": 487.0833333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.19428389362545e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 2.0563602447509766e-06
+    },
+    {
+      "frame": 34.25,
+      "sourceFrame": 487.1354166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1980385328675377e-06,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 4.887580871582031e-06
+    },
+    {
+      "frame": 34.5,
+      "sourceFrame": 487.1875,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.684608464999152e-07,
+      "maxPoseMatrixDifference": 5.364418029785156e-07,
+      "maxShapeValueDifference": 7.152557373046875e-07
+    },
+    {
+      "frame": 34.75,
+      "sourceFrame": 487.2395833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.19428389362545e-07,
+      "maxPoseMatrixDifference": 1.0728836059570312e-06,
+      "maxShapeValueDifference": 2.0265579223632812e-06
+    },
+    {
+      "frame": 35.0,
+      "sourceFrame": 487.2916666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.973764735866494e-07,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 5.364418029785156e-07
+    },
+    {
+      "frame": 35.25,
+      "sourceFrame": 487.34375,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.344650268554688e-07,
+      "maxPoseMatrixDifference": 1.430511474609375e-06,
+      "maxShapeValueDifference": 7.152557373046875e-07
+    },
+    {
+      "frame": 35.5,
+      "sourceFrame": 487.3958333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 6.529361695112778e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 5.960464477539062e-07
+    },
+    {
+      "frame": 35.75,
+      "sourceFrame": 487.4479166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.085167387873254e-07,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 2.5033950805664062e-06
+    },
+    {
+      "frame": 36.0,
+      "sourceFrame": 487.5,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.991559156322605e-07,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 1.4901161193847656e-06
+    },
+    {
+      "frame": 36.25,
+      "sourceFrame": 487.5520833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0460572704544214e-06,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 2.205371856689453e-06
+    },
+    {
+      "frame": 36.5,
+      "sourceFrame": 487.6041666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1680077279964342e-06,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 3.2782554626464844e-06
+    },
+    {
+      "frame": 36.75,
+      "sourceFrame": 487.65625,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.725644944200349e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 1.817941665649414e-06
+    },
+    {
+      "frame": 37.0,
+      "sourceFrame": 487.7083333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 3.816559456248789e-07,
+      "maxPoseMatrixDifference": 3.5762786865234375e-07,
+      "maxShapeValueDifference": 3.8743019104003906e-07
+    },
+    {
+      "frame": 37.25,
+      "sourceFrame": 487.7604166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1387451395119905e-06,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 4.172325134277344e-06
+    },
+    {
+      "frame": 37.5,
+      "sourceFrame": 487.8125,
+      "editedClock": true,
+      "maxSurfaceErrorM": 3.816559456248789e-07,
+      "maxPoseMatrixDifference": 3.5762786865234375e-07,
+      "maxShapeValueDifference": 1.3113021850585938e-06
+    },
+    {
+      "frame": 37.75,
+      "sourceFrame": 487.8645833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.348554137908192e-07,
+      "maxPoseMatrixDifference": 9.238719940185547e-07,
+      "maxShapeValueDifference": 5.602836608886719e-06
+    },
+    {
+      "frame": 38.0,
+      "sourceFrame": 487.9166666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.2345501886134136e-06,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 2.3245811462402344e-06
+    },
+    {
+      "frame": 38.25,
+      "sourceFrame": 487.96875,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.780312456283709e-07,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 2.1457672119140625e-06
+    },
+    {
+      "frame": 38.4,
+      "sourceFrame": 488.0,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.760057959973257e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 3.874301910400391e-06
+    },
+    {
+      "frame": 38.5,
+      "sourceFrame": 488.0208333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.839767001846972e-07,
+      "maxPoseMatrixDifference": 6.258487701416016e-07,
+      "maxShapeValueDifference": 2.5331974029541016e-06
+    },
+    {
+      "frame": 38.75,
+      "sourceFrame": 488.0729166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 3.5886748369909214e-07,
+      "maxPoseMatrixDifference": 5.364418029785156e-07,
+      "maxShapeValueDifference": 1.3262033462524414e-06
+    },
+    {
+      "frame": 39.0,
+      "sourceFrame": 488.125,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.329602624475079e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 2.2649765014648438e-06
+    },
+    {
+      "frame": 39.25,
+      "sourceFrame": 488.1770833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.610960183499514e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 2.384185791015625e-06
+    },
+    {
+      "frame": 39.5,
+      "sourceFrame": 488.2291666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.991559156322605e-07,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 7.152557373046875e-07
+    },
+    {
+      "frame": 39.75,
+      "sourceFrame": 488.28125,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.032382731180714e-06,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 3.6954879760742188e-06
+    },
+    {
+      "frame": 40.0,
+      "sourceFrame": 488.3333333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.996802249550068e-07,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 1.2218952178955078e-06
+    },
+    {
+      "frame": 40.25,
+      "sourceFrame": 488.3854166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.4660804124175124e-06,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 3.337860107421875e-06
+    },
+    {
+      "frame": 40.5,
+      "sourceFrame": 488.4375,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1449678368746367e-06,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 2.294778823852539e-06
+    },
+    {
+      "frame": 40.75,
+      "sourceFrame": 488.4895833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.000103992546499e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 2.4028122425079346e-06
+    },
+    {
+      "frame": 41.0,
+      "sourceFrame": 488.5416666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.678567277527473e-07,
+      "maxPoseMatrixDifference": 1.0132789611816406e-06,
+      "maxShapeValueDifference": 2.2649765014648438e-06
+    },
+    {
+      "frame": 41.25,
+      "sourceFrame": 488.59375,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.4853400938960447e-06,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 2.0563602447509766e-06
+    },
+    {
+      "frame": 41.5,
+      "sourceFrame": 488.6458333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.2839233415447482e-06,
+      "maxPoseMatrixDifference": 1.0132789611816406e-06,
+      "maxShapeValueDifference": 1.0728836059570312e-06
+    },
+    {
+      "frame": 41.75,
+      "sourceFrame": 488.6979166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.085167387873254e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 4.4405460357666016e-06
+    },
+    {
+      "frame": 42.0,
+      "sourceFrame": 488.75,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.228781230931777e-06,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 1.989305019378662e-06
+    },
+    {
+      "frame": 42.25,
+      "sourceFrame": 488.8020833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.952251472548446e-07,
+      "maxPoseMatrixDifference": 1.0132789611816406e-06,
+      "maxShapeValueDifference": 2.1457672119140625e-06
+    },
+    {
+      "frame": 42.5,
+      "sourceFrame": 488.8541666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.780312456283709e-07,
+      "maxPoseMatrixDifference": 8.344650268554688e-07,
+      "maxShapeValueDifference": 2.2649765014648438e-06
+    },
+    {
+      "frame": 42.75,
+      "sourceFrame": 488.90625,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.830249847454215e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 1.9669532775878906e-06
+    },
+    {
+      "frame": 43.0,
+      "sourceFrame": 488.9583333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.902267292640298e-07,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 1.3709068298339844e-06
+    },
+    {
+      "frame": 43.199999999999996,
+      "sourceFrame": 489.0,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.616943535090066e-07,
+      "maxPoseMatrixDifference": 8.940696716308594e-07,
+      "maxShapeValueDifference": 3.0472874641418457e-06
+    },
+    {
+      "frame": 43.25,
+      "sourceFrame": 489.0104166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.562981570034933e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 1.5497207641601562e-06
+    },
+    {
+      "frame": 43.5,
+      "sourceFrame": 489.0625,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.775888602052168e-07,
+      "maxPoseMatrixDifference": 5.364418029785156e-07,
+      "maxShapeValueDifference": 1.5497207641601562e-06
+    },
+    {
+      "frame": 43.75,
+      "sourceFrame": 489.1145833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.178009232289937e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 1.043081283569336e-06
+    },
+    {
+      "frame": 44.0,
+      "sourceFrame": 489.1666666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.018984822674817e-07,
+      "maxPoseMatrixDifference": 5.364418029785156e-07,
+      "maxShapeValueDifference": 1.7881393432617188e-06
+    },
+    {
+      "frame": 44.25,
+      "sourceFrame": 489.21875,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1801117583050329e-06,
+      "maxPoseMatrixDifference": 1.0132789611816406e-06,
+      "maxShapeValueDifference": 2.5033950805664062e-06
+    },
+    {
+      "frame": 44.5,
+      "sourceFrame": 489.2708333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.348554137908192e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 4.76837158203125e-06
+    },
+    {
+      "frame": 44.75,
+      "sourceFrame": 489.3229166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.629425061585611e-07,
+      "maxPoseMatrixDifference": 8.940696716308594e-07,
+      "maxShapeValueDifference": 4.0531158447265625e-06
+    },
+    {
+      "frame": 45.0,
+      "sourceFrame": 489.375,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0679050008755277e-06,
+      "maxPoseMatrixDifference": 7.450580596923828e-07,
+      "maxShapeValueDifference": 1.2516975402832031e-06
+    },
+    {
+      "frame": 45.25,
+      "sourceFrame": 489.4270833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0716411230781795e-06,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 1.6689300537109375e-06
+    },
+    {
+      "frame": 45.5,
+      "sourceFrame": 489.4791666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.678567277527473e-07,
+      "maxPoseMatrixDifference": 5.364418029785156e-07,
+      "maxShapeValueDifference": 2.086162567138672e-06
+    },
+    {
+      "frame": 45.75,
+      "sourceFrame": 489.53125,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.902267292640298e-07,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 4.172325134277344e-07
+    },
+    {
+      "frame": 46.0,
+      "sourceFrame": 489.5833333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.396741894478117e-07,
+      "maxPoseMatrixDifference": 9.5367431640625e-07,
+      "maxShapeValueDifference": 2.771615982055664e-06
+    },
+    {
+      "frame": 46.25,
+      "sourceFrame": 489.6354166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.4105033357380905e-06,
+      "maxPoseMatrixDifference": 6.258487701416016e-07,
+      "maxShapeValueDifference": 1.2218952178955078e-06
+    },
+    {
+      "frame": 46.5,
+      "sourceFrame": 489.6875,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.085167387873254e-07,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 1.4901161193847656e-06
+    },
+    {
+      "frame": 46.75,
+      "sourceFrame": 489.7395833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0728836059570312e-06,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 8.568167686462402e-07
+    },
+    {
+      "frame": 47.0,
+      "sourceFrame": 489.7916666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1496127558938211e-06,
+      "maxPoseMatrixDifference": 6.854534149169922e-07,
+      "maxShapeValueDifference": 1.4603137969970703e-06
+    },
+    {
+      "frame": 47.25,
+      "sourceFrame": 489.84375,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.596304119739507e-07,
+      "maxPoseMatrixDifference": 8.940696716308594e-07,
+      "maxShapeValueDifference": 1.0728836059570312e-06
+    },
+    {
+      "frame": 47.5,
+      "sourceFrame": 489.8958333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.539457464619588e-07,
+      "maxPoseMatrixDifference": 1.0132789611816406e-06,
+      "maxShapeValueDifference": 1.6093254089355469e-06
+    },
+    {
+      "frame": 47.75,
+      "sourceFrame": 489.9479166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 6.22290760809812e-07,
+      "maxPoseMatrixDifference": 3.5762786865234375e-07,
+      "maxShapeValueDifference": 2.16066837310791e-06
+    },
+    {
+      "frame": 48.0,
+      "sourceFrame": 490.0,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0990553447357282e-06,
+      "maxPoseMatrixDifference": 8.940696716308594e-07,
+      "maxShapeValueDifference": 5.0067901611328125e-06
+    },
+    {
+      "frame": 48.25,
+      "sourceFrame": 490.0520833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.913063792795988e-07,
+      "maxPoseMatrixDifference": 5.364418029785156e-07,
+      "maxShapeValueDifference": 5.960464477539063e-08
+    },
+    {
+      "frame": 48.5,
+      "sourceFrame": 490.1041666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0925711858167266e-06,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 1.4603137969970703e-06
+    },
+    {
+      "frame": 48.75,
+      "sourceFrame": 490.15625,
+      "editedClock": true,
+      "maxSurfaceErrorM": 6.697238997889826e-07,
+      "maxPoseMatrixDifference": 8.940696716308594e-07,
+      "maxShapeValueDifference": 3.159046173095703e-06
+    },
+    {
+      "frame": 49.0,
+      "sourceFrame": 490.2083333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 4.0535540904806387e-07,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 1.8775463104248047e-06
+    },
+    {
+      "frame": 49.25,
+      "sourceFrame": 490.2604166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.386548845782055e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 4.0531158447265625e-06
+    },
+    {
+      "frame": 49.5,
+      "sourceFrame": 490.3125,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.176018427813442e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 5.4836273193359375e-06
+    },
+    {
+      "frame": 49.75,
+      "sourceFrame": 490.3645833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1546236650830815e-06,
+      "maxPoseMatrixDifference": 1.1920928955078125e-06,
+      "maxShapeValueDifference": 4.410743713378906e-06
+    },
+    {
+      "frame": 50.0,
+      "sourceFrame": 490.4166666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.126196600657176e-06,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 1.1026859283447266e-06
+    },
+    {
+      "frame": 50.25,
+      "sourceFrame": 490.46875,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0254770835688861e-06,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 2.7418136596679688e-06
+    },
+    {
+      "frame": 50.5,
+      "sourceFrame": 490.5208333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.562981570034933e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 1.3709068298339844e-06
+    },
+    {
+      "frame": 50.75,
+      "sourceFrame": 490.5729166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 2.7314279645418166e-07,
+      "maxPoseMatrixDifference": 1.4210854715202004e-14,
+      "maxShapeValueDifference": 1.1920928955078125e-07
+    },
+    {
+      "frame": 51.0,
+      "sourceFrame": 490.625,
+      "editedClock": true,
+      "maxSurfaceErrorM": 8.19428389362545e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 4.76837158203125e-07
+    },
+    {
+      "frame": 51.25,
+      "sourceFrame": 490.6770833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.748603820800781e-07,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 1.2218952178955078e-06
+    },
+    {
+      "frame": 51.5,
+      "sourceFrame": 490.7291666666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 9.866324280051499e-07,
+      "maxPoseMatrixDifference": 7.152557373046875e-07,
+      "maxShapeValueDifference": 3.993511199951172e-06
+    },
+    {
+      "frame": 51.75,
+      "sourceFrame": 490.78125,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.468440584028761e-07,
+      "maxPoseMatrixDifference": 7.748603820800781e-07,
+      "maxShapeValueDifference": 2.9802322387695312e-06
+    },
+    {
+      "frame": 52.0,
+      "sourceFrame": 490.8333333333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 5.623090941939713e-07,
+      "maxPoseMatrixDifference": 5.960464477539062e-07,
+      "maxShapeValueDifference": 2.2649765014648438e-06
+    },
+    {
+      "frame": 52.25,
+      "sourceFrame": 490.8854166666667,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.1055014724130278e-06,
+      "maxPoseMatrixDifference": 6.556510925292969e-07,
+      "maxShapeValueDifference": 1.9669532775878906e-06
+    },
+    {
+      "frame": 52.5,
+      "sourceFrame": 490.9375,
+      "editedClock": true,
+      "maxSurfaceErrorM": 1.0460572704544214e-06,
+      "maxPoseMatrixDifference": 4.76837158203125e-07,
+      "maxShapeValueDifference": 4.827976226806641e-06
+    },
+    {
+      "frame": 52.75,
+      "sourceFrame": 490.9895833333333,
+      "editedClock": true,
+      "maxSurfaceErrorM": 7.90744969929552e-07,
+      "maxPoseMatrixDifference": 8.940696716308594e-07,
+      "maxShapeValueDifference": 9.834766387939453e-07
+    },
+    {
+      "frame": 52.8,
+      "sourceFrame": 491.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 53.0,
+      "sourceFrame": 491.0416666666667,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 57.599999999999994,
+      "sourceFrame": 492.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 62.4,
+      "sourceFrame": 493.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 67.2,
+      "sourceFrame": 494.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 72.0,
+      "sourceFrame": 495.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 76.8,
+      "sourceFrame": 496.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 81.6,
+      "sourceFrame": 497.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 86.39999999999999,
+      "sourceFrame": 498.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 91.2,
+      "sourceFrame": 499.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 96.0,
+      "sourceFrame": 500.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 100.8,
+      "sourceFrame": 501.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 105.6,
+      "sourceFrame": 502.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 110.39999999999999,
+      "sourceFrame": 503.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 115.19999999999999,
+      "sourceFrame": 504.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 120.0,
+      "sourceFrame": 505.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 124.8,
+      "sourceFrame": 506.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 129.6,
+      "sourceFrame": 507.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 134.4,
+      "sourceFrame": 508.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 139.2,
+      "sourceFrame": 509.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 144.0,
+      "sourceFrame": 510.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 148.79999999999998,
+      "sourceFrame": 511.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 153.6,
+      "sourceFrame": 512.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 158.4,
+      "sourceFrame": 513.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 163.2,
+      "sourceFrame": 514.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 168.0,
+      "sourceFrame": 515.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 172.79999999999998,
+      "sourceFrame": 516.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 177.6,
+      "sourceFrame": 517.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 182.4,
+      "sourceFrame": 518.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 187.2,
+      "sourceFrame": 519.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 192.0,
+      "sourceFrame": 520.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 196.79999999999998,
+      "sourceFrame": 521.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 201.6,
+      "sourceFrame": 522.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 206.4,
+      "sourceFrame": 523.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 211.2,
+      "sourceFrame": 524.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 216.0,
+      "sourceFrame": 525.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 220.79999999999998,
+      "sourceFrame": 526.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 225.6,
+      "sourceFrame": 527.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 230.39999999999998,
+      "sourceFrame": 528.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 235.2,
+      "sourceFrame": 529.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 240.0,
+      "sourceFrame": 530.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 244.79999999999998,
+      "sourceFrame": 531.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 249.6,
+      "sourceFrame": 532.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 254.39999999999998,
+      "sourceFrame": 533.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 259.2,
+      "sourceFrame": 534.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 264.0,
+      "sourceFrame": 535.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 268.8,
+      "sourceFrame": 536.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 273.59999999999997,
+      "sourceFrame": 537.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 278.4,
+      "sourceFrame": 538.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 283.2,
+      "sourceFrame": 539.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 288.0,
+      "sourceFrame": 540.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    },
+    {
+      "frame": 480,
+      "sourceFrame": 580.0,
+      "editedClock": false,
+      "maxSurfaceErrorM": 0.0,
+      "maxPoseMatrixDifference": 0.0,
+      "maxShapeValueDifference": 0.0
+    }
+  ],
+  "scope": "Matches final evaluated body/whole-rig/surface keys to original at the common mapped time. All 61 source-frame samples plus dense early timing samples; does not establish professional fidelity.",
+  "passed": true
+}

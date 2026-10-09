@@ -1,0 +1,3027 @@
+{
+  "schema": "rally-flight-display-qa-v1",
+  "flightSHA256": "ab0c9a8347fd27053c632378536816452f3838491a0b07bb9700aa5adaa19bf5",
+  "glbSHA256": "fe14499420c2a559fee014153820400da4b003037acf83e1d3db8b0054333bcb",
+  "displayModuleSHA256": "c036fefdaa21e386c7c62cda3031f4aae8cfde416efce2920dcbd7833a9899ce",
+  "runtimeModuleSHA256": "5467dbdc6f6640fb842409d1c4419d3c63b5db672ac3d0ab89b060ef6a7108b7",
+  "samples": 721,
+  "sampleHz": 4800,
+  "windowSeconds": [
+    -0.05,
+    0.1
+  ],
+  "rewindError": 0,
+  "impactOrientationJumpRad": 0.0000011087104819857188,
+  "minimumSkirtVertexSignedBedDistanceM": -0.748158024496757,
+  "maxAngularStepRad": 0.015411020924405853,
+  "tapeTopY": 1.5370000000000001,
+  "physicalNetTopY": 1.5370000000000001,
+  "gates": {
+    "seekIndependent": true,
+    "noInstantFlip": true,
+    "skirtDoesNotCrossBed": false,
+    "continuousAngularSampling": true,
+    "hiddenAfterOpponent": true,
+    "extrapolationShowsShuttle": true,
+    "hiddenBeforeFeed": true,
+    "netTopMatchesPhysics": true
+  },
+  "passed": false,
+  "keyStates": [
+    {
+      "time": 1.3133333333333304,
+      "position": [
+        2.2465116119374744,
+        0.8930517193849281,
+        2.1440476267586432
+      ],
+      "quaternion": [
+        -0.016296464823846925,
+        0,
+        -0.34793217786937797,
+        0.9373780586493994
+      ],
+      "visible": true
+    },
+    {
+      "time": 1.3333323333333305,
+      "position": [
+        2.1743988923374156,
+        0.8073747629993542,
+        2.1474252459415264
+      ],
+      "quaternion": [
+        -0.015800606482394522,
+        0,
+        -0.337345521528913,
+        0.9412482881467432
+      ],
+      "visible": true
+    },
+    {
+      "time": 1.3333333333333304,
+      "position": [
+        2.1743953227996826,
+        0.8073704242706299,
+        2.147425413131714
+      ],
+      "quaternion": [
+        -0.01580058205102944,
+        0,
+        -0.33734499991528966,
+        0.9412484755042113
+      ],
+      "visible": true
+    },
+    {
+      "time": 1.3413333333333304,
+      "position": [
+        2.310307625755891,
+        0.8953467818193149,
+        2.1417854607118545
+      ],
+      "quaternion": [
+        -0.01580058205102944,
+        0,
+        -0.33734499991528966,
+        0.9412484755042113
+      ],
+      "visible": true
+    },
+    {
+      "time": 1.3573333333333304,
+      "position": [
+        2.570810066845924,
+        1.062130367489497,
+        2.130975391711124
+      ],
+      "quaternion": [
+        -0.004681670828146701,
+        0,
+        -0.072846005227055,
+        0.9973322121944705
+      ],
+      "visible": true
+    },
+    {
+      "time": 1.3983333333333303,
+      "position": [
+        3.179037422269358,
+        1.4406516660038975,
+        2.105735783004398
+      ],
+      "quaternion": [
+        0.03613677895907675,
+        0,
+        0.8708287737415749,
+        0.49025644312972344
+      ],
+      "visible": true
+    },
+    {
+      "time": 1.4233333333333305,
+      "position": [
+        3.5148810582268832,
+        1.6419091873948428,
+        2.0917992806708074
+      ],
+      "quaternion": [
+        0.035999418568324934,
+        0,
+        0.8675186452774224,
+        0.496100233782215
+      ],
+      "visible": true
+    }
+  ],
+  "rows": [
+    {
+      "time": 1.2833333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5733373595797526
+    },
+    {
+      "time": 1.2835416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5716157458444281
+    },
+    {
+      "time": 1.283749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5698939145246634
+    },
+    {
+      "time": 1.2839583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5681718668368504
+    },
+    {
+      "time": 1.2841666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5664496039973952
+    },
+    {
+      "time": 1.284374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5647271272227047
+    },
+    {
+      "time": 1.2845833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5630044377291773
+    },
+    {
+      "time": 1.2847916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5612815367332279
+    },
+    {
+      "time": 1.284999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5595584254512566
+    },
+    {
+      "time": 1.2852083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5578351050996683
+    },
+    {
+      "time": 1.2854166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5561115768948628
+    },
+    {
+      "time": 1.2856249999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5543880195803812
+    },
+    {
+      "time": 1.2858333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5526642580825208
+    },
+    {
+      "time": 1.2860416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5509402935684473
+    },
+    {
+      "time": 1.286249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5492161272525755
+    },
+    {
+      "time": 1.2864583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5474917603493245
+    },
+    {
+      "time": 1.2866666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5457671940730977
+    },
+    {
+      "time": 1.286874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5440424296382884
+    },
+    {
+      "time": 1.2870833333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5423174682592807
+    },
+    {
+      "time": 1.2872916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5405923111504514
+    },
+    {
+      "time": 1.287499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5388669595261558
+    },
+    {
+      "time": 1.2877083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5370016779184833
+    },
+    {
+      "time": 1.2879166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.535135264598477
+    },
+    {
+      "time": 1.288124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5332677394610866
+    },
+    {
+      "time": 1.2883333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5313991064631628
+    },
+    {
+      "time": 1.2885416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5295293695638872
+    },
+    {
+      "time": 1.288749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5276585327247675
+    },
+    {
+      "time": 1.2889583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5257865999096172
+    },
+    {
+      "time": 1.2891666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5239135750845533
+    },
+    {
+      "time": 1.289374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5220394622179841
+    },
+    {
+      "time": 1.2895833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5201642636295183
+    },
+    {
+      "time": 1.2897916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5182884519548043
+    },
+    {
+      "time": 1.289999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5164115625069471
+    },
+    {
+      "time": 1.2902083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5145335992568427
+    },
+    {
+      "time": 1.2904166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5126545661776691
+    },
+    {
+      "time": 1.290624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.510774467244845
+    },
+    {
+      "time": 1.2908333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5088933064360277
+    },
+    {
+      "time": 1.2910416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5070110877310962
+    },
+    {
+      "time": 1.2912499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5051278151121448
+    },
+    {
+      "time": 1.2914583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5032434925634648
+    },
+    {
+      "time": 1.2916666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.5013581045742425
+    },
+    {
+      "time": 1.291874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4993538858023398
+    },
+    {
+      "time": 1.2920833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.49734735037980327
+    },
+    {
+      "time": 1.2922916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4953385077143942
+    },
+    {
+      "time": 1.292499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.49332736722576337
+    },
+    {
+      "time": 1.2927083333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4913139383454057
+    },
+    {
+      "time": 1.2929166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4892982305165775
+    },
+    {
+      "time": 1.293124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.48728025319420687
+    },
+    {
+      "time": 1.2933333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4852600158448358
+    },
+    {
+      "time": 1.2935416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4832375279465407
+    },
+    {
+      "time": 1.293749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.48121279898884833
+    },
+    {
+      "time": 1.2939583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4791864056633084
+    },
+    {
+      "time": 1.2941666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.477157784359026
+    },
+    {
+      "time": 1.294374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.47512694192769883
+    },
+    {
+      "time": 1.2945833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4730938878842369
+    },
+    {
+      "time": 1.2947916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4710586317549081
+    },
+    {
+      "time": 1.294999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.46902118307726487
+    },
+    {
+      "time": 1.2952083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4669815514000679
+    },
+    {
+      "time": 1.2954166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4649397462832087
+    },
+    {
+      "time": 1.2956249999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4628957772976369
+    },
+    {
+      "time": 1.2958333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.460849654025282
+    },
+    {
+      "time": 1.2960416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.45870640758606185
+    },
+    {
+      "time": 1.296249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4565602420481184
+    },
+    {
+      "time": 1.2964583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.45441125722333703
+    },
+    {
+      "time": 1.2966666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.45225946714684134
+    },
+    {
+      "time": 1.2968749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4501048858751751
+    },
+    {
+      "time": 1.2970833333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.44794752748614736
+    },
+    {
+      "time": 1.2972916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.44578740607866585
+    },
+    {
+      "time": 1.297499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4436245357725544
+    },
+    {
+      "time": 1.2977083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.44145893070840253
+    },
+    {
+      "time": 1.2979166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.43929052616042524
+    },
+    {
+      "time": 1.298124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.43712047722948966
+    },
+    {
+      "time": 1.2983333333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4349477206679607
+    },
+    {
+      "time": 1.2985416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.43277227066288737
+    },
+    {
+      "time": 1.298749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.43059414142191427
+    },
+    {
+      "time": 1.2989583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.42841334717308815
+    },
+    {
+      "time": 1.2991666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.42622990216471435
+    },
+    {
+      "time": 1.299374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.424043820665171
+    },
+    {
+      "time": 1.2995833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.42185511696274686
+    },
+    {
+      "time": 1.2997916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.41966380536546855
+    },
+    {
+      "time": 1.299999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4174698836177562
+    },
+    {
+      "time": 1.3002083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4152037560529242
+    },
+    {
+      "time": 1.3004166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4129340946885525
+    },
+    {
+      "time": 1.300624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.41066092054704006
+    },
+    {
+      "time": 1.3008333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4083842546895438
+    },
+    {
+      "time": 1.3010416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4061041182156093
+    },
+    {
+      "time": 1.3012499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.40382053226279213
+    },
+    {
+      "time": 1.3014583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.4015335180063153
+    },
+    {
+      "time": 1.3016666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3992430966586735
+    },
+    {
+      "time": 1.301874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3969492894692783
+    },
+    {
+      "time": 1.3020833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3946521177240904
+    },
+    {
+      "time": 1.3022916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3923525373082962
+    },
+    {
+      "time": 1.302499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3900496106820039
+    },
+    {
+      "time": 1.3027083333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3877433589899212
+    },
+    {
+      "time": 1.3029166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.38543380359397844
+    },
+    {
+      "time": 1.303124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3831209658923289
+    },
+    {
+      "time": 1.3033333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3808048673190028
+    },
+    {
+      "time": 1.3035416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3784855293435052
+    },
+    {
+      "time": 1.303749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.37616297347046823
+    },
+    {
+      "time": 1.3039583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.37383722123925434
+    },
+    {
+      "time": 1.3041666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3715082942236006
+    },
+    {
+      "time": 1.304374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.36914290467916194
+    },
+    {
+      "time": 1.3045833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.36677415187146756
+    },
+    {
+      "time": 1.3047916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.36440206108370027
+    },
+    {
+      "time": 1.304999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3620266560690509
+    },
+    {
+      "time": 1.3052083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3596479606204959
+    },
+    {
+      "time": 1.3054166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3572659985703357
+    },
+    {
+      "time": 1.305624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3548799685249584
+    },
+    {
+      "time": 1.3058333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.35248709689288565
+    },
+    {
+      "time": 1.3060416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3500910288544066
+    },
+    {
+      "time": 1.306249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.34769178842359577
+    },
+    {
+      "time": 1.3064583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3452902696000328
+    },
+    {
+      "time": 1.3066666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3428855988446707
+    },
+    {
+      "time": 1.3068749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3404778002152935
+    },
+    {
+      "time": 1.3070833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3380668978073106
+    },
+    {
+      "time": 1.3072916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.33565291575328915
+    },
+    {
+      "time": 1.307499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3332358782225134
+    },
+    {
+      "time": 1.3077083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3308158094205088
+    },
+    {
+      "time": 1.3079166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.32839273358858817
+    },
+    {
+      "time": 1.308124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3259666750033932
+    },
+    {
+      "time": 1.3083333333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3235376567649062
+    },
+    {
+      "time": 1.3085416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3211009229512778
+    },
+    {
+      "time": 1.308749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3186607909121484
+    },
+    {
+      "time": 1.3089583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3162172891242225
+    },
+    {
+      "time": 1.3091666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.31377044611109584
+    },
+    {
+      "time": 1.309374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.31132029044262893
+    },
+    {
+      "time": 1.3095833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3088668507343102
+    },
+    {
+      "time": 1.3097916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3064101556466125
+    },
+    {
+      "time": 1.309999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.3039502338843677
+    },
+    {
+      "time": 1.3102083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.30148711419610497
+    },
+    {
+      "time": 1.3104166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.29902082537342584
+    },
+    {
+      "time": 1.310624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.29655257629331455
+    },
+    {
+      "time": 1.3108333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2940811826999349
+    },
+    {
+      "time": 1.3110416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2916066728795285
+    },
+    {
+      "time": 1.3112499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.28912907569891816
+    },
+    {
+      "time": 1.3114583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.28664842006752683
+    },
+    {
+      "time": 1.3116666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.28416473493673056
+    },
+    {
+      "time": 1.311874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.28167804929923906
+    },
+    {
+      "time": 1.3120833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2791883921884217
+    },
+    {
+      "time": 1.3122916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2766957926776785
+    },
+    {
+      "time": 1.3124999999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.27420027987978773
+    },
+    {
+      "time": 1.3127083333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.27174893027204766
+    },
+    {
+      "time": 1.3129166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2692948923169561
+    },
+    {
+      "time": 1.313124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.26683819275374043
+    },
+    {
+      "time": 1.3133333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2643788577758241
+    },
+    {
+      "time": 1.3135416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.26191691360915914
+    },
+    {
+      "time": 1.313749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2594523865117045
+    },
+    {
+      "time": 1.3139583333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.25698530277289916
+    },
+    {
+      "time": 1.3141666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.25451568871315067
+    },
+    {
+      "time": 1.314374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2520435706832961
+    },
+    {
+      "time": 1.3145833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.24956897527896696
+    },
+    {
+      "time": 1.3147916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.24709332243779117
+    },
+    {
+      "time": 1.314999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.24461521614222134
+    },
+    {
+      "time": 1.3152083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2421346827865708
+    },
+    {
+      "time": 1.3154166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2396517487951771
+    },
+    {
+      "time": 1.315624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.23716644062187164
+    },
+    {
+      "time": 1.3158333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.23467878474944895
+    },
+    {
+      "time": 1.3160416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.23218880768915484
+    },
+    {
+      "time": 1.316249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.22969653598014508
+    },
+    {
+      "time": 1.3164583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.22720199618896808
+    },
+    {
+      "time": 1.3166666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.22470521490903025
+    },
+    {
+      "time": 1.3168749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2222118194803024
+    },
+    {
+      "time": 1.3170833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2197143789779715
+    },
+    {
+      "time": 1.3172916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.21720627702194847
+    },
+    {
+      "time": 1.317499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.21469525746665957
+    },
+    {
+      "time": 1.3177083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.21218135450787717
+    },
+    {
+      "time": 1.3179166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.20966460238519333
+    },
+    {
+      "time": 1.318124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.20714503538118179
+    },
+    {
+      "time": 1.3183333333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.2046226878205111
+    },
+    {
+      "time": 1.3185416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.20209759406910016
+    },
+    {
+      "time": 1.318749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.19956978853323123
+    },
+    {
+      "time": 1.3189583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.19704320456798988
+    },
+    {
+      "time": 1.3191666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.19451394398448135
+    },
+    {
+      "time": 1.319374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1919820385180478
+    },
+    {
+      "time": 1.3195833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.18944752252977948
+    },
+    {
+      "time": 1.3197916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.18691043042051245
+    },
+    {
+      "time": 1.319999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.18437079662997669
+    },
+    {
+      "time": 1.3202083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.18182865563592962
+    },
+    {
+      "time": 1.3204166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.179284041953287
+    },
+    {
+      "time": 1.320624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.17673699013325914
+    },
+    {
+      "time": 1.3208333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.17418754263079966
+    },
+    {
+      "time": 1.3210416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.17177911927771014
+    },
+    {
+      "time": 1.3212499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.16936868732178956
+    },
+    {
+      "time": 1.3214583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.16695627246261277
+    },
+    {
+      "time": 1.3216666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.16454190042232397
+    },
+    {
+      "time": 1.321874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.16212559694514883
+    },
+    {
+      "time": 1.3220833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.15970738779692975
+    },
+    {
+      "time": 1.3222916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.15728729876462375
+    },
+    {
+      "time": 1.3224999999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.15486535565583293
+    },
+    {
+      "time": 1.3227083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.15244158429830845
+    },
+    {
+      "time": 1.3229166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.15001600737908694
+    },
+    {
+      "time": 1.323124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14759209511960475
+    },
+    {
+      "time": 1.3233333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14516382223234886
+    },
+    {
+      "time": 1.3235416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14272788337137227
+    },
+    {
+      "time": 1.323749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1402902210945166
+    },
+    {
+      "time": 1.3239583333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13785086127152588
+    },
+    {
+      "time": 1.3241666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13540982979093077
+    },
+    {
+      "time": 1.324374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13296715255954655
+    },
+    {
+      "time": 1.3245833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13052285550201154
+    },
+    {
+      "time": 1.3247916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1280769645603027
+    },
+    {
+      "time": 1.324999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1256295056932235
+    },
+    {
+      "time": 1.3252083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12300539244143936
+    },
+    {
+      "time": 1.3254166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12037716130194814
+    },
+    {
+      "time": 1.325624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11774492039869804
+    },
+    {
+      "time": 1.3258333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11510873391536375
+    },
+    {
+      "time": 1.3260416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11246866615477845
+    },
+    {
+      "time": 1.326249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1098247815358174
+    },
+    {
+      "time": 1.3264583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10717714459030536
+    },
+    {
+      "time": 1.3266666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10452581995989756
+    },
+    {
+      "time": 1.3268749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10187087239296662
+    },
+    {
+      "time": 1.3270833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09921236674148004
+    },
+    {
+      "time": 1.3272916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09656384573265803
+    },
+    {
+      "time": 1.327499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09391181382486899
+    },
+    {
+      "time": 1.3277083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09125633455627835
+    },
+    {
+      "time": 1.3279166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08859747260217393
+    },
+    {
+      "time": 1.3281249999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08593529274031367
+    },
+    {
+      "time": 1.3283333333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08326985984781435
+    },
+    {
+      "time": 1.3285416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08060123889801332
+    },
+    {
+      "time": 1.328749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07792110635670124
+    },
+    {
+      "time": 1.3289583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07523560936796198
+    },
+    {
+      "time": 1.3291666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07254713197510633
+    },
+    {
+      "time": 1.329374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07007102974631269
+    },
+    {
+      "time": 1.3295833333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.06759221118100918
+    },
+    {
+      "time": 1.3297916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0651107248875138
+    },
+    {
+      "time": 1.329999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.06262661953995215
+    },
+    {
+      "time": 1.3302083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0601399438764248
+    },
+    {
+      "time": 1.3304166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.057650746697134034
+    },
+    {
+      "time": 1.330624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.05515907686254524
+    },
+    {
+      "time": 1.3308333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.052664983291515415
+    },
+    {
+      "time": 1.3310416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.05016851495943822
+    },
+    {
+      "time": 1.331249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.04766972340541956
+    },
+    {
+      "time": 1.3314583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.04517958500609108
+    },
+    {
+      "time": 1.3316666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.04268715913453895
+    },
+    {
+      "time": 1.331874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.04019249471748658
+    },
+    {
+      "time": 1.3320833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.03769564073748271
+    },
+    {
+      "time": 1.3322916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.03519664623104794
+    },
+    {
+      "time": 1.3324999999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0326955602867905
+    },
+    {
+      "time": 1.3327083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.030192432043548337
+    },
+    {
+      "time": 1.3329166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.027687310688506907
+    },
+    {
+      "time": 1.333124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0251802454553289
+    },
+    {
+      "time": 1.3333333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.02267128562227986
+    },
+    {
+      "time": 1.3335416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.025086029984664682
+    },
+    {
+      "time": 1.333749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.027494002922697398
+    },
+    {
+      "time": 1.3339583333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.02989523147252115
+    },
+    {
+      "time": 1.3341666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.032289551389955755
+    },
+    {
+      "time": 1.334374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.034676798948261665
+    },
+    {
+      "time": 1.3345833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.03705681095231102
+    },
+    {
+      "time": 1.3347916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.03942942475269396
+    },
+    {
+      "time": 1.334999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.04179447825975283
+    },
+    {
+      "time": 1.3352083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.04415180995753515
+    },
+    {
+      "time": 1.3354166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0465012589176744
+    },
+    {
+      "time": 1.335624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.04886622214492322
+    },
+    {
+      "time": 1.3358333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.05122291083802964
+    },
+    {
+      "time": 1.3360416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.05357106464847195
+    },
+    {
+      "time": 1.336249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.055910523291674986
+    },
+    {
+      "time": 1.3364583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.05824112709210163
+    },
+    {
+      "time": 1.3366666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.060562716997106844
+    },
+    {
+      "time": 1.3368749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.06287088812717516
+    },
+    {
+      "time": 1.3370833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.06516480353190743
+    },
+    {
+      "time": 1.3372916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.06744922286026571
+    },
+    {
+      "time": 1.337499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.06972395478638416
+    },
+    {
+      "time": 1.3377083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07168114881956553
+    },
+    {
+      "time": 1.3379166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07362748996079
+    },
+    {
+      "time": 1.3381249999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07556278250942539
+    },
+    {
+      "time": 1.3383333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07748683171461007
+    },
+    {
+      "time": 1.3385416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07939944379709724
+    },
+    {
+      "time": 1.338749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08130042597092857
+    },
+    {
+      "time": 1.3389583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08318958646494723
+    },
+    {
+      "time": 1.3391666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08506673454414071
+    },
+    {
+      "time": 1.339374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08693168053078938
+    },
+    {
+      "time": 1.3395833333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0887842416364601
+    },
+    {
+      "time": 1.3397916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09065362365803672
+    },
+    {
+      "time": 1.339999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09250998214733298
+    },
+    {
+      "time": 1.3402083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09435312906354232
+    },
+    {
+      "time": 1.3404166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09618287745645343
+    },
+    {
+      "time": 1.340624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09799904148740562
+    },
+    {
+      "time": 1.3408333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09980143645008374
+    },
+    {
+      "time": 1.3410416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10158987879110168
+    },
+    {
+      "time": 1.341249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10336418613039078
+    },
+    {
+      "time": 1.3414583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10512363927216395
+    },
+    {
+      "time": 1.3416666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1068658487697226
+    },
+    {
+      "time": 1.341874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10829369042834153
+    },
+    {
+      "time": 1.3420833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10970198597118387
+    },
+    {
+      "time": 1.3422916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1110905437690035
+    },
+    {
+      "time": 1.3424999999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11245912860166252
+    },
+    {
+      "time": 1.3427083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11380750692726449
+    },
+    {
+      "time": 1.3429166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11513544699435624
+    },
+    {
+      "time": 1.343124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11644271895432443
+    },
+    {
+      "time": 1.3433333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11772909497388227
+    },
+    {
+      "time": 1.3435416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11899434934752855
+    },
+    {
+      "time": 1.3437499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1202382586098562
+    },
+    {
+      "time": 1.3439583333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12149311858145752
+    },
+    {
+      "time": 1.3441666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12272578094345328
+    },
+    {
+      "time": 1.344374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12393602710130978
+    },
+    {
+      "time": 1.3445833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1251236378549932
+    },
+    {
+      "time": 1.3447916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12628839670354047
+    },
+    {
+      "time": 1.344999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.127430089957682
+    },
+    {
+      "time": 1.3452083333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12854850685155622
+    },
+    {
+      "time": 1.3454166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12964343965341277
+    },
+    {
+      "time": 1.345624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13071468377516282
+    },
+    {
+      "time": 1.3458333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13176201449243607
+    },
+    {
+      "time": 1.3460416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13263125665861872
+    },
+    {
+      "time": 1.346249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13347470892376728
+    },
+    {
+      "time": 1.3464583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13429215949637124
+    },
+    {
+      "time": 1.3466666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13508340063124838
+    },
+    {
+      "time": 1.346874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13584822874027921
+    },
+    {
+      "time": 1.3470833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13658644450099583
+    },
+    {
+      "time": 1.3472916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13729785296280644
+    },
+    {
+      "time": 1.347499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1379822636508243
+    },
+    {
+      "time": 1.3477083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1386394906670963
+    },
+    {
+      "time": 1.3479166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13926935278912567
+    },
+    {
+      "time": 1.3481249999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1399069824473817
+    },
+    {
+      "time": 1.3483333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1405163920932041
+    },
+    {
+      "time": 1.3485416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14109739745781805
+    },
+    {
+      "time": 1.348749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14164982873758444
+    },
+    {
+      "time": 1.3489583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1421735211829608
+    },
+    {
+      "time": 1.3491666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14266831518332643
+    },
+    {
+      "time": 1.349374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1431340563482599
+    },
+    {
+      "time": 1.3495833333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14357059558519739
+    },
+    {
+      "time": 1.3497916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14397778917330928
+    },
+    {
+      "time": 1.349999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14435549883350587
+    },
+    {
+      "time": 1.3502083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14479141474507376
+    },
+    {
+      "time": 1.3504166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14519928558391065
+    },
+    {
+      "time": 1.350624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14557907839052903
+    },
+    {
+      "time": 1.3508333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14593067208267255
+    },
+    {
+      "time": 1.3510416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14625395087225315
+    },
+    {
+      "time": 1.351249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14654880431586076
+    },
+    {
+      "time": 1.3514583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1468151273609792
+    },
+    {
+      "time": 1.3516666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14705282038782636
+    },
+    {
+      "time": 1.351874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1472617892467588
+    },
+    {
+      "time": 1.3520833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1474418352959221
+    },
+    {
+      "time": 1.3522916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14760825028132446
+    },
+    {
+      "time": 1.352499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14774509427267055
+    },
+    {
+      "time": 1.3527083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14785228747582632
+    },
+    {
+      "time": 1.3529166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14792975565654579
+    },
+    {
+      "time": 1.353124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14797743015407644
+    },
+    {
+      "time": 1.3533333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14799524788989107
+    },
+    {
+      "time": 1.3535416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14798315137143112
+    },
+    {
+      "time": 1.3537499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1479410886908909
+    },
+    {
+      "time": 1.3539583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14786901351897186
+    },
+    {
+      "time": 1.3541666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14776700643994684
+    },
+    {
+      "time": 1.354374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14762635872429147
+    },
+    {
+      "time": 1.3545833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14745489662550368
+    },
+    {
+      "time": 1.3547916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14725258787208564
+    },
+    {
+      "time": 1.354999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14701940566785268
+    },
+    {
+      "time": 1.3552083333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14675532865974203
+    },
+    {
+      "time": 1.3554166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14646034090056545
+    },
+    {
+      "time": 1.355624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14613443180672717
+    },
+    {
+      "time": 1.3558333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1457775961109539
+    },
+    {
+      "time": 1.3560416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14538983381005893
+    },
+    {
+      "time": 1.356249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14497115010781036
+    },
+    {
+      "time": 1.3564583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1443625692576737
+    },
+    {
+      "time": 1.3566666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14295863403244832
+    },
+    {
+      "time": 1.356874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14151902756381754
+    },
+    {
+      "time": 1.3570833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.14004416676793258
+    },
+    {
+      "time": 1.3572916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13853448229724702
+    },
+    {
+      "time": 1.357499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13699041818875232
+    },
+    {
+      "time": 1.3577083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13541243149162635
+    },
+    {
+      "time": 1.3579166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13380099187464006
+    },
+    {
+      "time": 1.3581249999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13215658121368298
+    },
+    {
+      "time": 1.3583333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.13047969315992652
+    },
+    {
+      "time": 1.3585416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12897503944508604
+    },
+    {
+      "time": 1.358749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1274410362334397
+    },
+    {
+      "time": 1.3589583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12587826596616292
+    },
+    {
+      "time": 1.3591666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12428723318773582
+    },
+    {
+      "time": 1.3593749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12266845126741804
+    },
+    {
+      "time": 1.3595833333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.12102244191590486
+    },
+    {
+      "time": 1.3597916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11934973468728255
+    },
+    {
+      "time": 1.359999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11765086646693666
+    },
+    {
+      "time": 1.3602083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11592638094611381
+    },
+    {
+      "time": 1.3604166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11417682691027188
+    },
+    {
+      "time": 1.360624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11238697529954673
+    },
+    {
+      "time": 1.3608333333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.11057235819734017
+    },
+    {
+      "time": 1.3610416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1087335356282922
+    },
+    {
+      "time": 1.361249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.1068710717500023
+    },
+    {
+      "time": 1.3614583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10498553426362994
+    },
+    {
+      "time": 1.3616666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10307749381642509
+    },
+    {
+      "time": 1.361874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.10114752339708358
+    },
+    {
+      "time": 1.3620833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09919619772484348
+    },
+    {
+      "time": 1.3622916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09722409263323764
+    },
+    {
+      "time": 1.362499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09523172803746024
+    },
+    {
+      "time": 1.3627083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0934144284000657
+    },
+    {
+      "time": 1.3629166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.09157846485716356
+    },
+    {
+      "time": 1.363124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0897243827336425
+    },
+    {
+      "time": 1.3633333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08785272528735852
+    },
+    {
+      "time": 1.3635416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08596403310979256
+    },
+    {
+      "time": 1.3637499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08405884352781869
+    },
+    {
+      "time": 1.3639583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0821376900076626
+    },
+    {
+      "time": 1.3641666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.08018915752854752
+    },
+    {
+      "time": 1.364374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0781700215706427
+    },
+    {
+      "time": 1.3645833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07613471137156705
+    },
+    {
+      "time": 1.3647916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07406915529056118
+    },
+    {
+      "time": 1.364999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.07198775514341013
+    },
+    {
+      "time": 1.3652083333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.06989099056987641
+    },
+    {
+      "time": 1.3654166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.06777936235421823
+    },
+    {
+      "time": 1.365624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.06565336450953757
+    },
+    {
+      "time": 1.3658333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.06351348373148995
+    },
+    {
+      "time": 1.3660416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.061360198861272724
+    },
+    {
+      "time": 1.366249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.05919398035894016
+    },
+    {
+      "time": 1.3664583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.057015289787743756
+    },
+    {
+      "time": 1.3666666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.05482457931051474
+    },
+    {
+      "time": 1.366874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.05249074913027764
+    },
+    {
+      "time": 1.3670833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.05014520368477336
+    },
+    {
+      "time": 1.3672916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.047788417667649546
+    },
+    {
+      "time": 1.367499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.04542081783422117
+    },
+    {
+      "time": 1.3677083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.043042819245619285
+    },
+    {
+      "time": 1.3679166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.040654824837812645
+    },
+    {
+      "time": 1.368124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.03825722500819727
+    },
+    {
+      "time": 1.3683333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0358503972204981
+    },
+    {
+      "time": 1.3685416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.03343470562862981
+    },
+    {
+      "time": 1.368749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.031010499155387936
+    },
+    {
+      "time": 1.3689583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.02856403543400482
+    },
+    {
+      "time": 1.3691666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": 0.026108894776560823
+    },
+    {
+      "time": 1.3693749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": 0.023645380103605243
+    },
+    {
+      "time": 1.3695833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.021173779531714274
+    },
+    {
+      "time": 1.3697916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.018694366120662664
+    },
+    {
+      "time": 1.369999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.016207397643018928
+    },
+    {
+      "time": 1.3702083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": 0.013713116376511292
+    },
+    {
+      "time": 1.3704166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": 0.011211748919427528
+    },
+    {
+      "time": 1.370624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.008703506029351465
+    },
+    {
+      "time": 1.3708333333333305,
+      "minimumSkirtVertexSignedBedDistanceM": 0.006188712756875922
+    },
+    {
+      "time": 1.3710416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": 0.004155768610915531
+    },
+    {
+      "time": 1.371249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": 0.0021177109260248766
+    },
+    {
+      "time": 1.3714583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": 0.00007464830962040925
+    },
+    {
+      "time": 1.3716666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.0020832076836642954
+    },
+    {
+      "time": 1.371874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.004294677912215258
+    },
+    {
+      "time": 1.3720833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.006512007907953046
+    },
+    {
+      "time": 1.3722916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.008735074865776668
+    },
+    {
+      "time": 1.372499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.010963770890510732
+    },
+    {
+      "time": 1.3727083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.013198003006072129
+    },
+    {
+      "time": 1.3729166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.015437693143832087
+    },
+    {
+      "time": 1.373124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.017693524893329038
+    },
+    {
+      "time": 1.3733333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.019955311659452427
+    },
+    {
+      "time": 1.3735416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.022223021640406668
+    },
+    {
+      "time": 1.3737499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.024496639253654653
+    },
+    {
+      "time": 1.3739583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.026776163429740887
+    },
+    {
+      "time": 1.3741666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.029061607480502447
+    },
+    {
+      "time": 1.374374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.031352998947961314
+    },
+    {
+      "time": 1.3745833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.033650379434296995
+    },
+    {
+      "time": 1.3747916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.035953804413279694
+    },
+    {
+      "time": 1.3749999999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.038263343023609384
+    },
+    {
+      "time": 1.3752083333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.040230928327946155
+    },
+    {
+      "time": 1.3754166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.04237907315759247
+    },
+    {
+      "time": 1.375624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.04454479399510447
+    },
+    {
+      "time": 1.3758333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.04671543531279217
+    },
+    {
+      "time": 1.3760416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.04889105779304295
+    },
+    {
+      "time": 1.376249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.051071734717983125
+    },
+    {
+      "time": 1.3764583333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.05325755174676551
+    },
+    {
+      "time": 1.3766666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.055448606678295306
+    },
+    {
+      "time": 1.376874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.05764500919975735
+    },
+    {
+      "time": 1.3770833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.05984688181519962
+    },
+    {
+      "time": 1.3772916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.06206241584026548
+    },
+    {
+      "time": 1.377499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.06428417407951521
+    },
+    {
+      "time": 1.3777083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.06651231363319482
+    },
+    {
+      "time": 1.3779166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.06874700202172969
+    },
+    {
+      "time": 1.378124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.07098841686111794
+    },
+    {
+      "time": 1.3783333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.07323674552818508
+    },
+    {
+      "time": 1.3785416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.07549218481626639
+    },
+    {
+      "time": 1.378749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.07792420413475354
+    },
+    {
+      "time": 1.3789583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.08036805289910315
+    },
+    {
+      "time": 1.3791666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.08281827066792485
+    },
+    {
+      "time": 1.3793749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.08525628323207035
+    },
+    {
+      "time": 1.3795833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.0877013361254572
+    },
+    {
+      "time": 1.3797916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.09015375301050657
+    },
+    {
+      "time": 1.379999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.09261373331702033
+    },
+    {
+      "time": 1.3802083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.09508148483622764
+    },
+    {
+      "time": 1.3804166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.09755722335508653
+    },
+    {
+      "time": 1.380624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.10004117228487039
+    },
+    {
+      "time": 1.3808333333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.10253356228466687
+    },
+    {
+      "time": 1.3810416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.10503463088047457
+    },
+    {
+      "time": 1.381249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.10754462208060453
+    },
+    {
+      "time": 1.3814583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.1100717193519476
+    },
+    {
+      "time": 1.3816666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.11260877291223206
+    },
+    {
+      "time": 1.381874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.11515600959157238
+    },
+    {
+      "time": 1.3820833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.11771369799582579
+    },
+    {
+      "time": 1.3822916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.1202821112332636
+    },
+    {
+      "time": 1.382499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.12286152652048887
+    },
+    {
+      "time": 1.3827083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.12545222478912088
+    },
+    {
+      "time": 1.3829166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.1280544902937564
+    },
+    {
+      "time": 1.383124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.13066861022189874
+    },
+    {
+      "time": 1.3833333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.13336247446425903
+    },
+    {
+      "time": 1.3835416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.13573510031005048
+    },
+    {
+      "time": 1.383749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.13811758600590265
+    },
+    {
+      "time": 1.3839583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.14051022646278996
+    },
+    {
+      "time": 1.3841666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.14291331930342693
+    },
+    {
+      "time": 1.384374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.1453271645044487
+    },
+    {
+      "time": 1.3845833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.14775206404233074
+    },
+    {
+      "time": 1.3847916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.15018832154348255
+    },
+    {
+      "time": 1.3849999999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.15263624193905725
+    },
+    {
+      "time": 1.3852083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.15509613112486897
+    },
+    {
+      "time": 1.3854166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.15756833213223315
+    },
+    {
+      "time": 1.385624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.16006000503745887
+    },
+    {
+      "time": 1.3858333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.1625649399700156
+    },
+    {
+      "time": 1.3860416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.16508344539097533
+    },
+    {
+      "time": 1.386249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.16761582910146142
+    },
+    {
+      "time": 1.3864583333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.1701623979409772
+    },
+    {
+      "time": 1.3866666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.17272345749350654
+    },
+    {
+      "time": 1.386874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.1752993118016402
+    },
+    {
+      "time": 1.3870833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.17789026308909633
+    },
+    {
+      "time": 1.3872916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.1804966114917786
+    },
+    {
+      "time": 1.387499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.18311865479779085
+    },
+    {
+      "time": 1.3877083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.18574855483210675
+    },
+    {
+      "time": 1.3879166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.18839511300089393
+    },
+    {
+      "time": 1.388124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.1910586230277462
+    },
+    {
+      "time": 1.3883333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.19373937341266928
+    },
+    {
+      "time": 1.3885416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.19643764912436296
+    },
+    {
+      "time": 1.388749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.1991537313974954
+    },
+    {
+      "time": 1.3889583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.20188789753977154
+    },
+    {
+      "time": 1.3891666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.20464042074914546
+    },
+    {
+      "time": 1.3893749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2074115699409781
+    },
+    {
+      "time": 1.3895833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.21020160958543718
+    },
+    {
+      "time": 1.3897916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.21301784986755765
+    },
+    {
+      "time": 1.389999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.21585387864779979
+    },
+    {
+      "time": 1.3902083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.21870994758813672
+    },
+    {
+      "time": 1.3904166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.22158630385318395
+    },
+    {
+      "time": 1.3906249999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.22448318947358278
+    },
+    {
+      "time": 1.3908333333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.22740084124282572
+    },
+    {
+      "time": 1.3910416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.23033949062383613
+    },
+    {
+      "time": 1.391249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.23329936366540102
+    },
+    {
+      "time": 1.3914583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2362806809281438
+    },
+    {
+      "time": 1.3916666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.23928355515329353
+    },
+    {
+      "time": 1.391874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.241390504100163
+    },
+    {
+      "time": 1.3920833333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.24351691652735746
+    },
+    {
+      "time": 1.3922916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.24566300903628865
+    },
+    {
+      "time": 1.392499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.24782899324943022
+    },
+    {
+      "time": 1.3927083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2500150757958812
+    },
+    {
+      "time": 1.3929166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.25222145830306475
+    },
+    {
+      "time": 1.393124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.25444833739451256
+    },
+    {
+      "time": 1.3933333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.25669590469336423
+    },
+    {
+      "time": 1.3935416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.25896434683131464
+    },
+    {
+      "time": 1.393749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2612538636202452
+    },
+    {
+      "time": 1.3939583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2635697340948059
+    },
+    {
+      "time": 1.3941666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.26590718387759044
+    },
+    {
+      "time": 1.394374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2682663807348144
+    },
+    {
+      "time": 1.3945833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.27064748754811396
+    },
+    {
+      "time": 1.3947916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2730506623498272
+    },
+    {
+      "time": 1.3949999999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2754760583614746
+    },
+    {
+      "time": 1.3952083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.27792382403524307
+    },
+    {
+      "time": 1.3954166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.28039410309802004
+    },
+    {
+      "time": 1.395624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.28288703459767967
+    },
+    {
+      "time": 1.3958333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2854027529511426
+    },
+    {
+      "time": 1.3960416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2879187310630559
+    },
+    {
+      "time": 1.396249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2904578369473725
+    },
+    {
+      "time": 1.3964583333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2930201970072974
+    },
+    {
+      "time": 1.3966666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.2956059288910382
+    },
+    {
+      "time": 1.396874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.29821514587318193
+    },
+    {
+      "time": 1.3970833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.30084795690463895
+    },
+    {
+      "time": 1.3972916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.30350446666158615
+    },
+    {
+      "time": 1.397499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3061847755929048
+    },
+    {
+      "time": 1.3977083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.30888897996576314
+    },
+    {
+      "time": 1.3979166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.31161717190878474
+    },
+    {
+      "time": 1.398124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.31437431269262606
+    },
+    {
+      "time": 1.3983333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3171557878237583
+    },
+    {
+      "time": 1.3985416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3199565008961034
+    },
+    {
+      "time": 1.398749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3227712603505055
+    },
+    {
+      "time": 1.3989583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3256000046813204
+    },
+    {
+      "time": 1.3991666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3284426720122955
+    },
+    {
+      "time": 1.399374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.33129920009916125
+    },
+    {
+      "time": 1.3995833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3341695263322476
+    },
+    {
+      "time": 1.3997916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3370535877391228
+    },
+    {
+      "time": 1.399999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3399512398026331
+    },
+    {
+      "time": 1.4002083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3421521519890632
+    },
+    {
+      "time": 1.4004166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.34436457568195533
+    },
+    {
+      "time": 1.4006249999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.34658847879851096
+    },
+    {
+      "time": 1.4008333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3488238290842783
+    },
+    {
+      "time": 1.4010416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.35107059411400104
+    },
+    {
+      "time": 1.401249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.35332874129239156
+    },
+    {
+      "time": 1.4014583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.35559823785496264
+    },
+    {
+      "time": 1.4016666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.35787905086879146
+    },
+    {
+      "time": 1.401874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3601711472334125
+    },
+    {
+      "time": 1.4020833333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3624744930097371
+    },
+    {
+      "time": 1.4022916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.36478656827624134
+    },
+    {
+      "time": 1.402499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3671098832482483
+    },
+    {
+      "time": 1.4027083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3694444045913926
+    },
+    {
+      "time": 1.4029166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3717900988058964
+    },
+    {
+      "time": 1.403124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.37414693222743506
+    },
+    {
+      "time": 1.4033333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.37651487102794545
+    },
+    {
+      "time": 1.4035416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.37889388121648326
+    },
+    {
+      "time": 1.403749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3812839286400164
+    },
+    {
+      "time": 1.4039583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.38368497898432685
+    },
+    {
+      "time": 1.4041666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3860969977748099
+    },
+    {
+      "time": 1.404374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.38847506317074937
+    },
+    {
+      "time": 1.4045833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.39086392863296865
+    },
+    {
+      "time": 1.4047916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3932635675415925
+    },
+    {
+      "time": 1.4049999999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3956739462814016
+    },
+    {
+      "time": 1.4052083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.3980950310858284
+    },
+    {
+      "time": 1.4054166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4005267880377479
+    },
+    {
+      "time": 1.405624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4029691830702927
+    },
+    {
+      "time": 1.4058333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.405422181967655
+    },
+    {
+      "time": 1.4060416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4078857503658997
+    },
+    {
+      "time": 1.4062499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4103598537538039
+    },
+    {
+      "time": 1.4064583333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4128417673955221
+    },
+    {
+      "time": 1.4066666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.41533421441445983
+    },
+    {
+      "time": 1.406874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.41783714600131944
+    },
+    {
+      "time": 1.4070833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4203505274667356
+    },
+    {
+      "time": 1.4072916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4228743239761107
+    },
+    {
+      "time": 1.407499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.42540850055048707
+    },
+    {
+      "time": 1.4077083333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4279530220673471
+    },
+    {
+      "time": 1.4079166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4305078532614568
+    },
+    {
+      "time": 1.408124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.433072958725665
+    },
+    {
+      "time": 1.4083333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.43564828443373516
+    },
+    {
+      "time": 1.4085416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4381127066016387
+    },
+    {
+      "time": 1.408749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.44058724511424424
+    },
+    {
+      "time": 1.4089583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4430718692140073
+    },
+    {
+      "time": 1.4091666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4455665480291744
+    },
+    {
+      "time": 1.409374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.44807125057450103
+    },
+    {
+      "time": 1.4095833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4505859457518481
+    },
+    {
+      "time": 1.4097916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4531106023508724
+    },
+    {
+      "time": 1.409999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4556451890496881
+    },
+    {
+      "time": 1.4102083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.45818967441550046
+    },
+    {
+      "time": 1.4104166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4607440269053483
+    },
+    {
+      "time": 1.4106249999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.46329519895179994
+    },
+    {
+      "time": 1.4108333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4658561724287197
+    },
+    {
+      "time": 1.4110416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4684269326652315
+    },
+    {
+      "time": 1.411249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.47100744816320034
+    },
+    {
+      "time": 1.4114583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.47359768731668495
+    },
+    {
+      "time": 1.4116666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4761976184126595
+    },
+    {
+      "time": 1.411874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.47880720963158263
+    },
+    {
+      "time": 1.4120833333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.48142642904817373
+    },
+    {
+      "time": 1.4122916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.48405524463198396
+    },
+    {
+      "time": 1.412499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.48669362424814655
+    },
+    {
+      "time": 1.4127083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4892686270978004
+    },
+    {
+      "time": 1.4129166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.491852943973629
+    },
+    {
+      "time": 1.413124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4944465523838808
+    },
+    {
+      "time": 1.4133333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.4970494214061628
+    },
+    {
+      "time": 1.4135416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.49966152002250863
+    },
+    {
+      "time": 1.413749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5022828171200652
+    },
+    {
+      "time": 1.4139583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5049132814916649
+    },
+    {
+      "time": 1.4141666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5075528818364762
+    },
+    {
+      "time": 1.414374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5102015867606524
+    },
+    {
+      "time": 1.4145833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.512859364249616
+    },
+    {
+      "time": 1.4147916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5155123406304924
+    },
+    {
+      "time": 1.414999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.518174338752532
+    },
+    {
+      "time": 1.4152083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5208453273176836
+    },
+    {
+      "time": 1.4154166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5235252749370816
+    },
+    {
+      "time": 1.415624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5262141501316481
+    },
+    {
+      "time": 1.4158333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5289119213327595
+    },
+    {
+      "time": 1.4160416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5316185568828445
+    },
+    {
+      "time": 1.4162499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5343340250360094
+    },
+    {
+      "time": 1.4164583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5370582939587174
+    },
+    {
+      "time": 1.4166666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5397912980968146
+    },
+    {
+      "time": 1.416874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5423566257430016
+    },
+    {
+      "time": 1.4170833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5449304412001161
+    },
+    {
+      "time": 1.4172916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5475127174705066
+    },
+    {
+      "time": 1.417499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.550103427487787
+    },
+    {
+      "time": 1.4177083333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5527025441172322
+    },
+    {
+      "time": 1.4179166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5553100401563316
+    },
+    {
+      "time": 1.418124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5579258883352871
+    },
+    {
+      "time": 1.4183333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5605500613174468
+    },
+    {
+      "time": 1.4185416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5631825316998113
+    },
+    {
+      "time": 1.418749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5658232720135739
+    },
+    {
+      "time": 1.4189583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.568451322611305
+    },
+    {
+      "time": 1.4191666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.571087570464605
+    },
+    {
+      "time": 1.419374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5737319931990132
+    },
+    {
+      "time": 1.4195833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5763845635850633
+    },
+    {
+      "time": 1.4197916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5790452543293835
+    },
+    {
+      "time": 1.419999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.581714038075196
+    },
+    {
+      "time": 1.4202083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5843908874027485
+    },
+    {
+      "time": 1.4204166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5870757748298506
+    },
+    {
+      "time": 1.4206249999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5897686728123718
+    },
+    {
+      "time": 1.4208333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5924695537446861
+    },
+    {
+      "time": 1.4210416666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5950796740425476
+    },
+    {
+      "time": 1.421249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.5976974849985153
+    },
+    {
+      "time": 1.4214583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6003229579055701
+    },
+    {
+      "time": 1.4216666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6029560665797045
+    },
+    {
+      "time": 1.4218749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6055967847827504
+    },
+    {
+      "time": 1.4220833333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6082450862227702
+    },
+    {
+      "time": 1.4222916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6109009445545381
+    },
+    {
+      "time": 1.422499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6135643333799705
+    },
+    {
+      "time": 1.4227083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6162352262485707
+    },
+    {
+      "time": 1.4229166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6189135950360577
+    },
+    {
+      "time": 1.423124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6215781514677161
+    },
+    {
+      "time": 1.4233333333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6242501178173695
+    },
+    {
+      "time": 1.4235416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6269294678939257
+    },
+    {
+      "time": 1.423749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6296161754555336
+    },
+    {
+      "time": 1.4239583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6323102142100682
+    },
+    {
+      "time": 1.4241666666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.635011557815565
+    },
+    {
+      "time": 1.424374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6377201798806067
+    },
+    {
+      "time": 1.4245833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6404360539648308
+    },
+    {
+      "time": 1.4247916666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6431591535793397
+    },
+    {
+      "time": 1.424999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6458894102433557
+    },
+    {
+      "time": 1.4252083333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6484057262467502
+    },
+    {
+      "time": 1.4254166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6509288411861646
+    },
+    {
+      "time": 1.425624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6534587333543738
+    },
+    {
+      "time": 1.4258333333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6559953810077449
+    },
+    {
+      "time": 1.4260416666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6585387623665244
+    },
+    {
+      "time": 1.4262499999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6610888556152261
+    },
+    {
+      "time": 1.4264583333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6636456389028885
+    },
+    {
+      "time": 1.4266666666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6662090903434399
+    },
+    {
+      "time": 1.426874999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6687791880159892
+    },
+    {
+      "time": 1.4270833333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6713559099651185
+    },
+    {
+      "time": 1.4272916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6739145850680806
+    },
+    {
+      "time": 1.427499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6764798067007544
+    },
+    {
+      "time": 1.4277083333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6790515579458424
+    },
+    {
+      "time": 1.4279166666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6816298171528717
+    },
+    {
+      "time": 1.428124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.684214562638112
+    },
+    {
+      "time": 1.4283333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6868057726848715
+    },
+    {
+      "time": 1.4285416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6894034255438055
+    },
+    {
+      "time": 1.428749999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6920074994332475
+    },
+    {
+      "time": 1.4289583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6946179725395281
+    },
+    {
+      "time": 1.4291666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6972348230172236
+    },
+    {
+      "time": 1.429374999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.6997370363856226
+    },
+    {
+      "time": 1.4295833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7022452978842832
+    },
+    {
+      "time": 1.4297916666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7047595845512661
+    },
+    {
+      "time": 1.429999999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7072798759542189
+    },
+    {
+      "time": 1.4302083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7098061516342383
+    },
+    {
+      "time": 1.4304166666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7123383911060743
+    },
+    {
+      "time": 1.430624999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7148765738584701
+    },
+    {
+      "time": 1.4308333333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7174206793544259
+    },
+    {
+      "time": 1.4310416666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7199706870314495
+    },
+    {
+      "time": 1.431249999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7225265735008539
+    },
+    {
+      "time": 1.4314583333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7250638328344663
+    },
+    {
+      "time": 1.4316666666666638,
+      "minimumSkirtVertexSignedBedDistanceM": -0.727606902239184
+    },
+    {
+      "time": 1.4318749999999971,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7301557614484084
+    },
+    {
+      "time": 1.4320833333333303,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7327103901710712
+    },
+    {
+      "time": 1.4322916666666636,
+      "minimumSkirtVertexSignedBedDistanceM": -0.735270768091938
+    },
+    {
+      "time": 1.432499999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.737836874871824
+    },
+    {
+      "time": 1.4327083333333304,
+      "minimumSkirtVertexSignedBedDistanceM": -0.740408690147941
+    },
+    {
+      "time": 1.4329166666666637,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7429861935341238
+    },
+    {
+      "time": 1.433124999999997,
+      "minimumSkirtVertexSignedBedDistanceM": -0.7455693646211159
+    },
+    {
+      "time": 1.4333333333333305,
+      "minimumSkirtVertexSignedBedDistanceM": -0.748158024496757
+    }
+  ],
+  "limits": [
+    "The8—65ms feather flip is an authored visual response, not measured shuttle rotational dynamics.",
+    "This checks every rendered skirt triangle against the moving infinite bed plane through its vertices; no full feather/body aerodynamic or collision certification."
+  ]
+}

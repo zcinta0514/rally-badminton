@@ -1,0 +1,39 @@
+{
+  "base": "artifacts/rig-refine/20261008/torso/hips-02/rebuild.blend",
+  "quarterDiagnosticOnly": "artifacts/rig-refine/20261008/torso/hips-03/rebuild.blend",
+  "diagnosticKeysUsed": [
+    "Oct08HipResidual_397.5",
+    "Oct08HipResidual_398.5"
+  ],
+  "finalKey": "Oct08HipResidual_RecoveryEnvelope",
+  "keyframes": [
+    [
+      0,
+      0
+    ],
+    [
+      198,
+      0
+    ],
+    [
+      198.5,
+      1
+    ],
+    [
+      199.5,
+      1
+    ],
+    [
+      200,
+      0
+    ],
+    [
+      480,
+      0
+    ]
+  ],
+  "maximumRestResidualM": 0.0014823756706730431,
+  "outsideZSplitDelta": 0.0,
+  "quarterKeysCopied": false,
+  "gateStatus": "pending independent audit"
+}

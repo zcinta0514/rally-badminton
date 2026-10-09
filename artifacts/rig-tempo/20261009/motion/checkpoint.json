@@ -1,0 +1,70 @@
+{
+  "task": "P1-3B",
+  "date": "2026-10-09",
+  "source": "final-01/rebuild.blend",
+  "sourceSHA256": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+  "baselineSHA256": "c77cf94202253cb37727a72a002a54e568f9dd597b5fc3d4cbdec39bd344a100",
+  "sourceVideoFps": 25,
+  "authoringFps": 120,
+  "startScopeSourceFrames": [
+    485,
+    495
+  ],
+  "contactScopeSourceFrames": [
+    508,
+    518
+  ],
+  "contactSourceFrame": 513.3333333333334,
+  "contactModelFrame": 160,
+  "geometry": {
+    "qa240": "final-01/final-qa.json",
+    "qa480": "final-01/dense-qa.json",
+    "sampleCount240": 961,
+    "sampleCount480": 1921,
+    "gates": {
+      "body": true,
+      "racket": true,
+      "edges": true,
+      "directions": true,
+      "seams": true,
+      "boneLengths": true,
+      "supportDrift": true,
+      "supportFloor": true
+    },
+    "bodyIntersectionPoses": 0,
+    "racketIntersectionRows": 0,
+    "maximumSupportDriftM": 0.0014640173018118086,
+    "maximumBoneLengthErrorM": 4.527995239089755e-06,
+    "fingers": "final-01/finger-full-qa.json",
+    "fingerSamples": 961,
+    "fingerPassed": true
+  },
+  "preservation": "final-01/preservation.json",
+  "surfaceDisclosure": {
+    "ankleAdditiveWorldMaxM": 0.0010000000435589735,
+    "fullWeightVolumeReplacementMaxM": 0.07875866403857287,
+    "leftLegAdditionalResidualMaxM": 0.004242190076060612,
+    "allNewSurfaceKeysOn240HzGrid": true,
+    "scope": "Local sequence only; volume encoding replacement and corrective residual must not be conflated.",
+    "newSurfaceEnvelopeModelFrames": [
+      24,
+      72.5
+    ]
+  },
+  "referenceFrames": "render-final-01/pairs/0480.jpg..0540.jpg",
+  "specifiedStartPhase": "Visible lag, thigh/calf sequencing, relative shoe lift and gradual gather resolved in independent source-frame review; final combined review recorded separately.",
+  "professionalFullSequence": "not_passed",
+  "userNaturalnessAcceptance": "not_received",
+  "remaining": [
+    "480-484 initial load amplitude",
+    "507-513 stride/loading details",
+    "514-521 recovery height",
+    "523-534 retreat weight transfer",
+    "User 1x naturalness acceptance"
+  ],
+  "exportAndFlight": "Final actual GLB and flight checks are separate root-owned artifacts; source gates do not establish export/flight pass.",
+  "reproduce": "rebuild-motion.sh",
+  "productionChanged": false,
+  "versionBumped": false,
+  "finalRelativeShoeSilhouette": "final-01/start-silhouette.json"
+}

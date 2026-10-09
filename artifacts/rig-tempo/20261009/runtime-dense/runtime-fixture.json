@@ -1,0 +1,7793 @@
+{
+  "schema": "rally-runtime-dense-v1",
+  "samplerSHA256": "adca8d02502d64e2b57a25f50a06fb4d177fa9103ac4cf9688217a51bfcf390d",
+  "sampleHz": 480,
+  "samples": 1921,
+  "source": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/final/rebuild.blend",
+  "sourceSHA256": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+  "glbSHA256": "bee8c9d6d7287153ec7e21f23daa8a0050f47191a2296a92d94e05a02e4f6c7c",
+  "bodyVertices": 6285,
+  "bodyFile": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/runtime-dense/body-world-480.f32",
+  "bodySHA256": "dfab981673887239f44caf5d18a26f77131f196fbae64f011cacb0a540a744b3",
+  "racketFile": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/runtime-dense/racket-world-480.f32",
+  "racketSHA256": "5927b840f67e385a941440a1cf0fc60e3dc54e35a6c383de32ba9df002d00dab",
+  "rackets": [
+    {
+      "name": "RacketBatch_Racket_Carbon",
+      "vertexCount": 288,
+      "local": {
+        "file": "racket-00-local.f32",
+        "count": 864,
+        "bytes": 3456,
+        "sha256": "0d432db90008c01fefaab330dffe7a67c9eba2559aac16a54d9ff143a330078a"
+      },
+      "localFile": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/final-export/racket-00-local.f32"
+    },
+    {
+      "name": "RacketBatch_Racket_GripRubber",
+      "vertexCount": 120,
+      "local": {
+        "file": "racket-01-local.f32",
+        "count": 360,
+        "bytes": 1440,
+        "sha256": "1cfedc825e97b6193f1538c45d1214ff2645f4931f37801c180d6d5e13f87fbe"
+      },
+      "localFile": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/final-export/racket-01-local.f32"
+    },
+    {
+      "name": "RacketBatch_Racket_StringIvory",
+      "vertexCount": 3664,
+      "local": {
+        "file": "racket-02-local.f32",
+        "count": 10992,
+        "bytes": 43968,
+        "sha256": "2f6a05d94ab597ca7b9b450c53afcd83b1b07852735481151fc593f6c830c44c"
+      },
+      "localFile": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/final-export/racket-02-local.f32"
+    },
+    {
+      "name": "Racket_ButtBadge",
+      "vertexCount": 32,
+      "local": {
+        "file": "racket-03-local.f32",
+        "count": 96,
+        "bytes": 384,
+        "sha256": "09d31527f4b61703ba7ab8a5be35933b80304069265e59b561b416fa0897e04b"
+      },
+      "localFile": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/final-export/racket-03-local.f32"
+    },
+    {
+      "name": "Racket_Ferrule",
+      "vertexCount": 48,
+      "local": {
+        "file": "racket-04-local.f32",
+        "count": 144,
+        "bytes": 576,
+        "sha256": "3557d47f19d3cf9b8f8a2850c5308f9209a098d5b285831c4ff0e05b81118a57"
+      },
+      "localFile": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/final-export/racket-04-local.f32"
+    },
+    {
+      "name": "Racket_Frame",
+      "vertexCount": 737,
+      "local": {
+        "file": "racket-05-local.f32",
+        "count": 2211,
+        "bytes": 8844,
+        "sha256": "d36692b4bced423cc7f81192736668853522881a63a074645cbe9898eabee511"
+      },
+      "localFile": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/final-export/racket-05-local.f32"
+    },
+    {
+      "name": "Racket_GripWrapSeam",
+      "vertexCount": 1092,
+      "local": {
+        "file": "racket-06-local.f32",
+        "count": 3276,
+        "bytes": 13104,
+        "sha256": "ebc8dcdb667b4a77f76b575b2a650f57d35fe64551f3de6e48ea4743d2526b80"
+      },
+      "localFile": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/final-export/racket-06-local.f32"
+    },
+    {
+      "name": "Racket_Grommets",
+      "vertexCount": 1747,
+      "local": {
+        "file": "racket-07-local.f32",
+        "count": 5241,
+        "bytes": 20964,
+        "sha256": "9118fe341a7c3ef09bc4d6b7968785782affed62a5fe062f182dfcd411dc56f0"
+      },
+      "localFile": "/Users/xindong/Documents/开拍rally/artifacts/rig-tempo/20261009/final-export/racket-07-local.f32"
+    }
+  ],
+  "maximumExportSplitGapM": 1.4304561155287565e-7,
+  "splitComparisonPassed": true,
+  "splitRows": [
+    {
+      "time": 0,
+      "maximumSplitGapM": 1.287862978532885e-7
+    },
+    {
+      "time": 0.0020833333333333333,
+      "maximumSplitGapM": 1.3222469858924238e-7
+    },
+    {
+      "time": 0.004166666666666667,
+      "maximumSplitGapM": 1.3044744062838784e-7
+    },
+    {
+      "time": 0.00625,
+      "maximumSplitGapM": 1.3256981414002467e-7
+    },
+    {
+      "time": 0.008333333333333333,
+      "maximumSplitGapM": 1.2754379492618594e-7
+    },
+    {
+      "time": 0.010416666666666666,
+      "maximumSplitGapM": 1.269554737206776e-7
+    },
+    {
+      "time": 0.0125,
+      "maximumSplitGapM": 1.3462831449002744e-7
+    },
+    {
+      "time": 0.014583333333333334,
+      "maximumSplitGapM": 1.3383978449541154e-7
+    },
+    {
+      "time": 0.016666666666666666,
+      "maximumSplitGapM": 1.3023177992784893e-7
+    },
+    {
+      "time": 0.01875,
+      "maximumSplitGapM": 1.2988360249523537e-7
+    },
+    {
+      "time": 0.020833333333333332,
+      "maximumSplitGapM": 1.2773451298442993e-7
+    },
+    {
+      "time": 0.022916666666666665,
+      "maximumSplitGapM": 1.303216214186064e-7
+    },
+    {
+      "time": 0.025,
+      "maximumSplitGapM": 1.2905122386990654e-7
+    },
+    {
+      "time": 0.027083333333333334,
+      "maximumSplitGapM": 1.273610214850625e-7
+    },
+    {
+      "time": 0.029166666666666667,
+      "maximumSplitGapM": 1.3229582306649436e-7
+    },
+    {
+      "time": 0.03125,
+      "maximumSplitGapM": 1.2720692182565507e-7
+    },
+    {
+      "time": 0.03333333333333333,
+      "maximumSplitGapM": 1.2753399373107296e-7
+    },
+    {
+      "time": 0.035416666666666666,
+      "maximumSplitGapM": 1.2584147429747558e-7
+    },
+    {
+      "time": 0.0375,
+      "maximumSplitGapM": 1.3026657944533738e-7
+    },
+    {
+      "time": 0.03958333333333333,
+      "maximumSplitGapM": 1.310363393798274e-7
+    },
+    {
+      "time": 0.041666666666666664,
+      "maximumSplitGapM": 1.2400992035905127e-7
+    },
+    {
+      "time": 0.04375,
+      "maximumSplitGapM": 1.2865615598550332e-7
+    },
+    {
+      "time": 0.04583333333333333,
+      "maximumSplitGapM": 1.3398899237499966e-7
+    },
+    {
+      "time": 0.04791666666666667,
+      "maximumSplitGapM": 1.2612223568780365e-7
+    },
+    {
+      "time": 0.05,
+      "maximumSplitGapM": 1.3221276460078465e-7
+    },
+    {
+      "time": 0.052083333333333336,
+      "maximumSplitGapM": 1.3327620075258421e-7
+    },
+    {
+      "time": 0.05416666666666667,
+      "maximumSplitGapM": 1.3007892660795467e-7
+    },
+    {
+      "time": 0.05625,
+      "maximumSplitGapM": 1.334267923373215e-7
+    },
+    {
+      "time": 0.058333333333333334,
+      "maximumSplitGapM": 1.2409334639492298e-7
+    },
+    {
+      "time": 0.06041666666666667,
+      "maximumSplitGapM": 1.2793670049527574e-7
+    },
+    {
+      "time": 0.0625,
+      "maximumSplitGapM": 1.3516668798827475e-7
+    },
+    {
+      "time": 0.06458333333333334,
+      "maximumSplitGapM": 1.27290849196228e-7
+    },
+    {
+      "time": 0.06666666666666667,
+      "maximumSplitGapM": 1.3002961649701817e-7
+    },
+    {
+      "time": 0.06875,
+      "maximumSplitGapM": 1.2776680611644527e-7
+    },
+    {
+      "time": 0.07083333333333333,
+      "maximumSplitGapM": 1.2382731127034722e-7
+    },
+    {
+      "time": 0.07291666666666667,
+      "maximumSplitGapM": 1.3101594496998396e-7
+    },
+    {
+      "time": 0.075,
+      "maximumSplitGapM": 1.3357957796088295e-7
+    },
+    {
+      "time": 0.07708333333333334,
+      "maximumSplitGapM": 1.2754118278935214e-7
+    },
+    {
+      "time": 0.07916666666666666,
+      "maximumSplitGapM": 1.331253457428341e-7
+    },
+    {
+      "time": 0.08125,
+      "maximumSplitGapM": 1.3012670271263806e-7
+    },
+    {
+      "time": 0.08333333333333333,
+      "maximumSplitGapM": 1.2627198055580265e-7
+    },
+    {
+      "time": 0.08541666666666667,
+      "maximumSplitGapM": 1.3418196710283474e-7
+    },
+    {
+      "time": 0.0875,
+      "maximumSplitGapM": 1.2770293583495814e-7
+    },
+    {
+      "time": 0.08958333333333333,
+      "maximumSplitGapM": 1.287442138971502e-7
+    },
+    {
+      "time": 0.09166666666666666,
+      "maximumSplitGapM": 1.2892126377510994e-7
+    },
+    {
+      "time": 0.09375,
+      "maximumSplitGapM": 1.208525185957441e-7
+    },
+    {
+      "time": 0.09583333333333334,
+      "maximumSplitGapM": 1.2921588044396467e-7
+    },
+    {
+      "time": 0.09791666666666667,
+      "maximumSplitGapM": 1.3142341944508575e-7
+    },
+    {
+      "time": 0.1,
+      "maximumSplitGapM": 1.276720476898904e-7
+    },
+    {
+      "time": 0.10208333333333333,
+      "maximumSplitGapM": 1.2806085941148306e-7
+    },
+    {
+      "time": 0.10416666666666667,
+      "maximumSplitGapM": 1.237757117297034e-7
+    },
+    {
+      "time": 0.10625,
+      "maximumSplitGapM": 1.2979744283188582e-7
+    },
+    {
+      "time": 0.10833333333333334,
+      "maximumSplitGapM": 1.26015622703538e-7
+    },
+    {
+      "time": 0.11041666666666666,
+      "maximumSplitGapM": 1.2967817582308233e-7
+    },
+    {
+      "time": 0.1125,
+      "maximumSplitGapM": 1.2345141658149885e-7
+    },
+    {
+      "time": 0.11458333333333333,
+      "maximumSplitGapM": 1.2763353063288963e-7
+    },
+    {
+      "time": 0.11666666666666667,
+      "maximumSplitGapM": 1.213638795606147e-7
+    },
+    {
+      "time": 0.11875,
+      "maximumSplitGapM": 1.2249792654312198e-7
+    },
+    {
+      "time": 0.12083333333333333,
+      "maximumSplitGapM": 1.3035101796425083e-7
+    },
+    {
+      "time": 0.12291666666666666,
+      "maximumSplitGapM": 1.2611712661909704e-7
+    },
+    {
+      "time": 0.125,
+      "maximumSplitGapM": 1.2000832140263669e-7
+    },
+    {
+      "time": 0.12708333333333333,
+      "maximumSplitGapM": 1.3280867627520031e-7
+    },
+    {
+      "time": 0.12916666666666668,
+      "maximumSplitGapM": 1.2093191459780482e-7
+    },
+    {
+      "time": 0.13125,
+      "maximumSplitGapM": 1.2797580541399708e-7
+    },
+    {
+      "time": 0.13333333333333333,
+      "maximumSplitGapM": 1.147521866771432e-7
+    },
+    {
+      "time": 0.13541666666666666,
+      "maximumSplitGapM": 1.2859152439718612e-7
+    },
+    {
+      "time": 0.1375,
+      "maximumSplitGapM": 1.216039827759633e-7
+    },
+    {
+      "time": 0.13958333333333334,
+      "maximumSplitGapM": 1.238852987390431e-7
+    },
+    {
+      "time": 0.14166666666666666,
+      "maximumSplitGapM": 1.2468224854686277e-7
+    },
+    {
+      "time": 0.14375,
+      "maximumSplitGapM": 1.239388742076995e-7
+    },
+    {
+      "time": 0.14583333333333334,
+      "maximumSplitGapM": 1.267374444839845e-7
+    },
+    {
+      "time": 0.14791666666666667,
+      "maximumSplitGapM": 1.2935014657204262e-7
+    },
+    {
+      "time": 0.15,
+      "maximumSplitGapM": 1.2992420992933444e-7
+    },
+    {
+      "time": 0.15208333333333332,
+      "maximumSplitGapM": 1.214528438403956e-7
+    },
+    {
+      "time": 0.15416666666666667,
+      "maximumSplitGapM": 1.2735626401733686e-7
+    },
+    {
+      "time": 0.15625,
+      "maximumSplitGapM": 1.2745082787908584e-7
+    },
+    {
+      "time": 0.15833333333333333,
+      "maximumSplitGapM": 1.2641455987272938e-7
+    },
+    {
+      "time": 0.16041666666666668,
+      "maximumSplitGapM": 1.2637604718012397e-7
+    },
+    {
+      "time": 0.1625,
+      "maximumSplitGapM": 1.2323923217006005e-7
+    },
+    {
+      "time": 0.16458333333333333,
+      "maximumSplitGapM": 1.2843262558002017e-7
+    },
+    {
+      "time": 0.16666666666666666,
+      "maximumSplitGapM": 1.1729698789344906e-7
+    },
+    {
+      "time": 0.16875,
+      "maximumSplitGapM": 1.2430418151209295e-7
+    },
+    {
+      "time": 0.17083333333333334,
+      "maximumSplitGapM": 1.1995596735587187e-7
+    },
+    {
+      "time": 0.17291666666666666,
+      "maximumSplitGapM": 1.2584302976351372e-7
+    },
+    {
+      "time": 0.175,
+      "maximumSplitGapM": 1.2581426275472066e-7
+    },
+    {
+      "time": 0.17708333333333334,
+      "maximumSplitGapM": 1.192590748425842e-7
+    },
+    {
+      "time": 0.17916666666666667,
+      "maximumSplitGapM": 1.2452309236511914e-7
+    },
+    {
+      "time": 0.18125,
+      "maximumSplitGapM": 1.2836951278035492e-7
+    },
+    {
+      "time": 0.18333333333333332,
+      "maximumSplitGapM": 1.1914946792587016e-7
+    },
+    {
+      "time": 0.18541666666666667,
+      "maximumSplitGapM": 1.2658703029378464e-7
+    },
+    {
+      "time": 0.1875,
+      "maximumSplitGapM": 1.232095531124538e-7
+    },
+    {
+      "time": 0.18958333333333333,
+      "maximumSplitGapM": 1.2122741732113182e-7
+    },
+    {
+      "time": 0.19166666666666668,
+      "maximumSplitGapM": 1.3015700373137428e-7
+    },
+    {
+      "time": 0.19375,
+      "maximumSplitGapM": 1.2233371361696348e-7
+    },
+    {
+      "time": 0.19583333333333333,
+      "maximumSplitGapM": 1.245238203218659e-7
+    },
+    {
+      "time": 0.19791666666666666,
+      "maximumSplitGapM": 1.2099841843426036e-7
+    },
+    {
+      "time": 0.2,
+      "maximumSplitGapM": 1.2208441742901496e-7
+    },
+    {
+      "time": 0.20208333333333334,
+      "maximumSplitGapM": 1.248777738881794e-7
+    },
+    {
+      "time": 0.20416666666666666,
+      "maximumSplitGapM": 1.2361358285466464e-7
+    },
+    {
+      "time": 0.20625,
+      "maximumSplitGapM": 1.296912538867358e-7
+    },
+    {
+      "time": 0.20833333333333334,
+      "maximumSplitGapM": 1.2650902817267127e-7
+    },
+    {
+      "time": 0.21041666666666667,
+      "maximumSplitGapM": 1.215188347806138e-7
+    },
+    {
+      "time": 0.2125,
+      "maximumSplitGapM": 1.1760372330672424e-7
+    },
+    {
+      "time": 0.21458333333333332,
+      "maximumSplitGapM": 1.2979712814508242e-7
+    },
+    {
+      "time": 0.21666666666666667,
+      "maximumSplitGapM": 1.2733245176604833e-7
+    },
+    {
+      "time": 0.21875,
+      "maximumSplitGapM": 1.257007749354294e-7
+    },
+    {
+      "time": 0.22083333333333333,
+      "maximumSplitGapM": 1.3116883669953663e-7
+    },
+    {
+      "time": 0.22291666666666668,
+      "maximumSplitGapM": 1.1662741940192366e-7
+    },
+    {
+      "time": 0.225,
+      "maximumSplitGapM": 1.309094421034908e-7
+    },
+    {
+      "time": 0.22708333333333333,
+      "maximumSplitGapM": 1.254066784817152e-7
+    },
+    {
+      "time": 0.22916666666666666,
+      "maximumSplitGapM": 1.1774381699296737e-7
+    },
+    {
+      "time": 0.23125,
+      "maximumSplitGapM": 1.2800391917252212e-7
+    },
+    {
+      "time": 0.23333333333333334,
+      "maximumSplitGapM": 1.0682080150084762e-7
+    },
+    {
+      "time": 0.23541666666666666,
+      "maximumSplitGapM": 1.2368615486660837e-7
+    },
+    {
+      "time": 0.2375,
+      "maximumSplitGapM": 1.2090728644156682e-7
+    },
+    {
+      "time": 0.23958333333333334,
+      "maximumSplitGapM": 1.0552648415848325e-7
+    },
+    {
+      "time": 0.24166666666666667,
+      "maximumSplitGapM": 1.1424246134026738e-7
+    },
+    {
+      "time": 0.24375,
+      "maximumSplitGapM": 1.1243423130257367e-7
+    },
+    {
+      "time": 0.24583333333333332,
+      "maximumSplitGapM": 1.189310289008675e-7
+    },
+    {
+      "time": 0.24791666666666667,
+      "maximumSplitGapM": 9.149707964735238e-8
+    },
+    {
+      "time": 0.25,
+      "maximumSplitGapM": 9.663277906167677e-8
+    },
+    {
+      "time": 0.2520833333333333,
+      "maximumSplitGapM": 9.290590657000581e-8
+    },
+    {
+      "time": 0.25416666666666665,
+      "maximumSplitGapM": 8.558596635379026e-8
+    },
+    {
+      "time": 0.25625,
+      "maximumSplitGapM": 9.390618245809669e-8
+    },
+    {
+      "time": 0.25833333333333336,
+      "maximumSplitGapM": 8.818148002752823e-8
+    },
+    {
+      "time": 0.2604166666666667,
+      "maximumSplitGapM": 9.671089041701667e-8
+    },
+    {
+      "time": 0.2625,
+      "maximumSplitGapM": 9.612940660996135e-8
+    },
+    {
+      "time": 0.26458333333333334,
+      "maximumSplitGapM": 9.432076429655165e-8
+    },
+    {
+      "time": 0.26666666666666666,
+      "maximumSplitGapM": 9.092791882477694e-8
+    },
+    {
+      "time": 0.26875,
+      "maximumSplitGapM": 9.405767618086669e-8
+    },
+    {
+      "time": 0.2708333333333333,
+      "maximumSplitGapM": 9.527040558570775e-8
+    },
+    {
+      "time": 0.27291666666666664,
+      "maximumSplitGapM": 9.336246216573292e-8
+    },
+    {
+      "time": 0.275,
+      "maximumSplitGapM": 9.022855543491555e-8
+    },
+    {
+      "time": 0.27708333333333335,
+      "maximumSplitGapM": 8.952098810000646e-8
+    },
+    {
+      "time": 0.2791666666666667,
+      "maximumSplitGapM": 9.474484426332122e-8
+    },
+    {
+      "time": 0.28125,
+      "maximumSplitGapM": 9.371728278614828e-8
+    },
+    {
+      "time": 0.2833333333333333,
+      "maximumSplitGapM": 8.911781887571959e-8
+    },
+    {
+      "time": 0.28541666666666665,
+      "maximumSplitGapM": 9.264593254588597e-8
+    },
+    {
+      "time": 0.2875,
+      "maximumSplitGapM": 8.917443861438276e-8
+    },
+    {
+      "time": 0.28958333333333336,
+      "maximumSplitGapM": 9.038148597260835e-8
+    },
+    {
+      "time": 0.2916666666666667,
+      "maximumSplitGapM": 9.046322394696024e-8
+    },
+    {
+      "time": 0.29375,
+      "maximumSplitGapM": 9.466057982942915e-8
+    },
+    {
+      "time": 0.29583333333333334,
+      "maximumSplitGapM": 9.0516712967491e-8
+    },
+    {
+      "time": 0.29791666666666666,
+      "maximumSplitGapM": 9.7238544341665e-8
+    },
+    {
+      "time": 0.3,
+      "maximumSplitGapM": 9.543439846080106e-8
+    },
+    {
+      "time": 0.3020833333333333,
+      "maximumSplitGapM": 9.394241127659192e-8
+    },
+    {
+      "time": 0.30416666666666664,
+      "maximumSplitGapM": 9.623918884110054e-8
+    },
+    {
+      "time": 0.30625,
+      "maximumSplitGapM": 9.09964433438723e-8
+    },
+    {
+      "time": 0.30833333333333335,
+      "maximumSplitGapM": 8.537030252310543e-8
+    },
+    {
+      "time": 0.3104166666666667,
+      "maximumSplitGapM": 9.131093346575753e-8
+    },
+    {
+      "time": 0.3125,
+      "maximumSplitGapM": 9.044011332711123e-8
+    },
+    {
+      "time": 0.3145833333333333,
+      "maximumSplitGapM": 8.679328844157927e-8
+    },
+    {
+      "time": 0.31666666666666665,
+      "maximumSplitGapM": 9.198018902202432e-8
+    },
+    {
+      "time": 0.31875,
+      "maximumSplitGapM": 9.029178684678114e-8
+    },
+    {
+      "time": 0.32083333333333336,
+      "maximumSplitGapM": 9.343726902312106e-8
+    },
+    {
+      "time": 0.3229166666666667,
+      "maximumSplitGapM": 9.120161456216748e-8
+    },
+    {
+      "time": 0.325,
+      "maximumSplitGapM": 8.952388966055713e-8
+    },
+    {
+      "time": 0.32708333333333334,
+      "maximumSplitGapM": 9.379718960721328e-8
+    },
+    {
+      "time": 0.32916666666666666,
+      "maximumSplitGapM": 9.40470024137364e-8
+    },
+    {
+      "time": 0.33125,
+      "maximumSplitGapM": 8.441849614859782e-8
+    },
+    {
+      "time": 0.3333333333333333,
+      "maximumSplitGapM": 8.919296586587947e-8
+    },
+    {
+      "time": 0.33541666666666664,
+      "maximumSplitGapM": 8.847613707295423e-8
+    },
+    {
+      "time": 0.3375,
+      "maximumSplitGapM": 9.286694266793328e-8
+    },
+    {
+      "time": 0.33958333333333335,
+      "maximumSplitGapM": 8.494753215357987e-8
+    },
+    {
+      "time": 0.3416666666666667,
+      "maximumSplitGapM": 8.596601413990733e-8
+    },
+    {
+      "time": 0.34375,
+      "maximumSplitGapM": 9.383662863723585e-8
+    },
+    {
+      "time": 0.3458333333333333,
+      "maximumSplitGapM": 8.527430858752108e-8
+    },
+    {
+      "time": 0.34791666666666665,
+      "maximumSplitGapM": 9.23225685584714e-8
+    },
+    {
+      "time": 0.35,
+      "maximumSplitGapM": 8.63469714867815e-8
+    },
+    {
+      "time": 0.35208333333333336,
+      "maximumSplitGapM": 8.400837091978597e-8
+    },
+    {
+      "time": 0.3541666666666667,
+      "maximumSplitGapM": 9.262888811176836e-8
+    },
+    {
+      "time": 0.35625,
+      "maximumSplitGapM": 8.318950809071372e-8
+    },
+    {
+      "time": 0.35833333333333334,
+      "maximumSplitGapM": 8.91107330465391e-8
+    },
+    {
+      "time": 0.36041666666666666,
+      "maximumSplitGapM": 9.259195888510976e-8
+    },
+    {
+      "time": 0.3625,
+      "maximumSplitGapM": 9.402386326214994e-8
+    },
+    {
+      "time": 0.3645833333333333,
+      "maximumSplitGapM": 8.65298072821129e-8
+    },
+    {
+      "time": 0.36666666666666664,
+      "maximumSplitGapM": 9.239360908240107e-8
+    },
+    {
+      "time": 0.36875,
+      "maximumSplitGapM": 8.847240027032353e-8
+    },
+    {
+      "time": 0.37083333333333335,
+      "maximumSplitGapM": 9.004035729855381e-8
+    },
+    {
+      "time": 0.3729166666666667,
+      "maximumSplitGapM": 9.511669621444506e-8
+    },
+    {
+      "time": 0.375,
+      "maximumSplitGapM": 9.045734033305897e-8
+    },
+    {
+      "time": 0.3770833333333333,
+      "maximumSplitGapM": 8.543977637100572e-8
+    },
+    {
+      "time": 0.37916666666666665,
+      "maximumSplitGapM": 8.611922892111676e-8
+    },
+    {
+      "time": 0.38125,
+      "maximumSplitGapM": 8.70138951472584e-8
+    },
+    {
+      "time": 0.38333333333333336,
+      "maximumSplitGapM": 8.60596334448108e-8
+    },
+    {
+      "time": 0.3854166666666667,
+      "maximumSplitGapM": 9.492664214551387e-8
+    },
+    {
+      "time": 0.3875,
+      "maximumSplitGapM": 9.443259032301053e-8
+    },
+    {
+      "time": 0.38958333333333334,
+      "maximumSplitGapM": 8.637249401265954e-8
+    },
+    {
+      "time": 0.39166666666666666,
+      "maximumSplitGapM": 9.711545339795204e-8
+    },
+    {
+      "time": 0.39375,
+      "maximumSplitGapM": 8.582775763042756e-8
+    },
+    {
+      "time": 0.3958333333333333,
+      "maximumSplitGapM": 8.590192510824232e-8
+    },
+    {
+      "time": 0.39791666666666664,
+      "maximumSplitGapM": 8.832301004308442e-8
+    },
+    {
+      "time": 0.4,
+      "maximumSplitGapM": 8.565614901363278e-8
+    },
+    {
+      "time": 0.40208333333333335,
+      "maximumSplitGapM": 8.49918375133356e-8
+    },
+    {
+      "time": 0.4041666666666667,
+      "maximumSplitGapM": 8.406810906732311e-8
+    },
+    {
+      "time": 0.40625,
+      "maximumSplitGapM": 8.896690266681417e-8
+    },
+    {
+      "time": 0.4083333333333333,
+      "maximumSplitGapM": 8.715366440284786e-8
+    },
+    {
+      "time": 0.41041666666666665,
+      "maximumSplitGapM": 8.356856779996329e-8
+    },
+    {
+      "time": 0.4125,
+      "maximumSplitGapM": 8.780042712346857e-8
+    },
+    {
+      "time": 0.41458333333333336,
+      "maximumSplitGapM": 9.076523031199232e-8
+    },
+    {
+      "time": 0.4166666666666667,
+      "maximumSplitGapM": 8.79737570416398e-8
+    },
+    {
+      "time": 0.41875,
+      "maximumSplitGapM": 8.205437713252841e-8
+    },
+    {
+      "time": 0.42083333333333334,
+      "maximumSplitGapM": 9.068513516484131e-8
+    },
+    {
+      "time": 0.42291666666666666,
+      "maximumSplitGapM": 8.713381753518307e-8
+    },
+    {
+      "time": 0.425,
+      "maximumSplitGapM": 8.660010582531966e-8
+    },
+    {
+      "time": 0.4270833333333333,
+      "maximumSplitGapM": 8.977845934706948e-8
+    },
+    {
+      "time": 0.42916666666666664,
+      "maximumSplitGapM": 8.599560485812322e-8
+    },
+    {
+      "time": 0.43125,
+      "maximumSplitGapM": 9.214622479929217e-8
+    },
+    {
+      "time": 0.43333333333333335,
+      "maximumSplitGapM": 8.339906903266563e-8
+    },
+    {
+      "time": 0.4354166666666667,
+      "maximumSplitGapM": 8.323377110532919e-8
+    },
+    {
+      "time": 0.4375,
+      "maximumSplitGapM": 8.535720575886279e-8
+    },
+    {
+      "time": 0.4395833333333333,
+      "maximumSplitGapM": 8.300629342116837e-8
+    },
+    {
+      "time": 0.44166666666666665,
+      "maximumSplitGapM": 8.314040098613259e-8
+    },
+    {
+      "time": 0.44375,
+      "maximumSplitGapM": 8.268277824354254e-8
+    },
+    {
+      "time": 0.44583333333333336,
+      "maximumSplitGapM": 8.369526384224819e-8
+    },
+    {
+      "time": 0.4479166666666667,
+      "maximumSplitGapM": 8.96123098211774e-8
+    },
+    {
+      "time": 0.45,
+      "maximumSplitGapM": 8.07745100462583e-8
+    },
+    {
+      "time": 0.45208333333333334,
+      "maximumSplitGapM": 9.851652824999095e-8
+    },
+    {
+      "time": 0.45416666666666666,
+      "maximumSplitGapM": 8.156385765623784e-8
+    },
+    {
+      "time": 0.45625,
+      "maximumSplitGapM": 8.296309393096706e-8
+    },
+    {
+      "time": 0.4583333333333333,
+      "maximumSplitGapM": 7.792720910726047e-8
+    },
+    {
+      "time": 0.46041666666666664,
+      "maximumSplitGapM": 8.511446615847382e-8
+    },
+    {
+      "time": 0.4625,
+      "maximumSplitGapM": 8.329380099938943e-8
+    },
+    {
+      "time": 0.46458333333333335,
+      "maximumSplitGapM": 8.307710740744023e-8
+    },
+    {
+      "time": 0.4666666666666667,
+      "maximumSplitGapM": 8.41043522584795e-8
+    },
+    {
+      "time": 0.46875,
+      "maximumSplitGapM": 8.36110578649352e-8
+    },
+    {
+      "time": 0.4708333333333333,
+      "maximumSplitGapM": 7.839490595085341e-8
+    },
+    {
+      "time": 0.47291666666666665,
+      "maximumSplitGapM": 8.24424342341458e-8
+    },
+    {
+      "time": 0.475,
+      "maximumSplitGapM": 7.399950678012007e-8
+    },
+    {
+      "time": 0.47708333333333336,
+      "maximumSplitGapM": 7.735294785825188e-8
+    },
+    {
+      "time": 0.4791666666666667,
+      "maximumSplitGapM": 8.077388509068181e-8
+    },
+    {
+      "time": 0.48125,
+      "maximumSplitGapM": 7.363258094394399e-8
+    },
+    {
+      "time": 0.48333333333333334,
+      "maximumSplitGapM": 7.89314472562464e-8
+    },
+    {
+      "time": 0.48541666666666666,
+      "maximumSplitGapM": 7.808487837762134e-8
+    },
+    {
+      "time": 0.4875,
+      "maximumSplitGapM": 7.099433684521446e-8
+    },
+    {
+      "time": 0.4895833333333333,
+      "maximumSplitGapM": 7.991164335007797e-8
+    },
+    {
+      "time": 0.49166666666666664,
+      "maximumSplitGapM": 7.106329614231426e-8
+    },
+    {
+      "time": 0.49375,
+      "maximumSplitGapM": 7.70046092177004e-8
+    },
+    {
+      "time": 0.49583333333333335,
+      "maximumSplitGapM": 7.822604303909825e-8
+    },
+    {
+      "time": 0.4979166666666667,
+      "maximumSplitGapM": 8.03899722856555e-8
+    },
+    {
+      "time": 0.5,
+      "maximumSplitGapM": 7.667129453275794e-8
+    },
+    {
+      "time": 0.5020833333333333,
+      "maximumSplitGapM": 8.009171969966667e-8
+    },
+    {
+      "time": 0.5041666666666667,
+      "maximumSplitGapM": 8.029649507818975e-8
+    },
+    {
+      "time": 0.50625,
+      "maximumSplitGapM": 7.433539207234353e-8
+    },
+    {
+      "time": 0.5083333333333333,
+      "maximumSplitGapM": 7.759942286012907e-8
+    },
+    {
+      "time": 0.5104166666666666,
+      "maximumSplitGapM": 7.778486727031824e-8
+    },
+    {
+      "time": 0.5125,
+      "maximumSplitGapM": 7.144803831975114e-8
+    },
+    {
+      "time": 0.5145833333333333,
+      "maximumSplitGapM": 8.050741864619003e-8
+    },
+    {
+      "time": 0.5166666666666667,
+      "maximumSplitGapM": 6.913441816123619e-8
+    },
+    {
+      "time": 0.51875,
+      "maximumSplitGapM": 7.433677257982406e-8
+    },
+    {
+      "time": 0.5208333333333334,
+      "maximumSplitGapM": 7.46414212429243e-8
+    },
+    {
+      "time": 0.5229166666666667,
+      "maximumSplitGapM": 8.134327355431835e-8
+    },
+    {
+      "time": 0.525,
+      "maximumSplitGapM": 7.677638171879194e-8
+    },
+    {
+      "time": 0.5270833333333333,
+      "maximumSplitGapM": 6.955920259036719e-8
+    },
+    {
+      "time": 0.5291666666666667,
+      "maximumSplitGapM": 8.322361389769713e-8
+    },
+    {
+      "time": 0.53125,
+      "maximumSplitGapM": 7.943565063647932e-8
+    },
+    {
+      "time": 0.5333333333333333,
+      "maximumSplitGapM": 7.05456457875528e-8
+    },
+    {
+      "time": 0.5354166666666667,
+      "maximumSplitGapM": 8.126939725411646e-8
+    },
+    {
+      "time": 0.5375,
+      "maximumSplitGapM": 8.163085154573642e-8
+    },
+    {
+      "time": 0.5395833333333333,
+      "maximumSplitGapM": 7.32658883044452e-8
+    },
+    {
+      "time": 0.5416666666666666,
+      "maximumSplitGapM": 7.075148977052126e-8
+    },
+    {
+      "time": 0.54375,
+      "maximumSplitGapM": 6.866317640079033e-8
+    },
+    {
+      "time": 0.5458333333333333,
+      "maximumSplitGapM": 6.859016715581796e-8
+    },
+    {
+      "time": 0.5479166666666667,
+      "maximumSplitGapM": 6.924063078211842e-8
+    },
+    {
+      "time": 0.55,
+      "maximumSplitGapM": 6.683810672552027e-8
+    },
+    {
+      "time": 0.5520833333333334,
+      "maximumSplitGapM": 6.691137261036895e-8
+    },
+    {
+      "time": 0.5541666666666667,
+      "maximumSplitGapM": 6.926636969708899e-8
+    },
+    {
+      "time": 0.55625,
+      "maximumSplitGapM": 7.932878669833447e-8
+    },
+    {
+      "time": 0.5583333333333333,
+      "maximumSplitGapM": 7.476965147239724e-8
+    },
+    {
+      "time": 0.5604166666666667,
+      "maximumSplitGapM": 6.516903125987524e-8
+    },
+    {
+      "time": 0.5625,
+      "maximumSplitGapM": 6.661635151495233e-8
+    },
+    {
+      "time": 0.5645833333333333,
+      "maximumSplitGapM": 7.090329180045465e-8
+    },
+    {
+      "time": 0.5666666666666667,
+      "maximumSplitGapM": 6.689999177781812e-8
+    },
+    {
+      "time": 0.56875,
+      "maximumSplitGapM": 7.510670915815978e-8
+    },
+    {
+      "time": 0.5708333333333333,
+      "maximumSplitGapM": 7.077760871315704e-8
+    },
+    {
+      "time": 0.5729166666666666,
+      "maximumSplitGapM": 6.766064318583217e-8
+    },
+    {
+      "time": 0.575,
+      "maximumSplitGapM": 7.358279242697078e-8
+    },
+    {
+      "time": 0.5770833333333333,
+      "maximumSplitGapM": 6.614060123740324e-8
+    },
+    {
+      "time": 0.5791666666666667,
+      "maximumSplitGapM": 6.619748489725377e-8
+    },
+    {
+      "time": 0.58125,
+      "maximumSplitGapM": 6.727022380680815e-8
+    },
+    {
+      "time": 0.5833333333333334,
+      "maximumSplitGapM": 6.633348644153538e-8
+    },
+    {
+      "time": 0.5854166666666667,
+      "maximumSplitGapM": 6.493790565308545e-8
+    },
+    {
+      "time": 0.5875,
+      "maximumSplitGapM": 6.567379916465447e-8
+    },
+    {
+      "time": 0.5895833333333333,
+      "maximumSplitGapM": 6.449976621493941e-8
+    },
+    {
+      "time": 0.5916666666666667,
+      "maximumSplitGapM": 6.641017362248058e-8
+    },
+    {
+      "time": 0.59375,
+      "maximumSplitGapM": 6.70222394112849e-8
+    },
+    {
+      "time": 0.5958333333333333,
+      "maximumSplitGapM": 6.68223783603182e-8
+    },
+    {
+      "time": 0.5979166666666667,
+      "maximumSplitGapM": 6.448761175358729e-8
+    },
+    {
+      "time": 0.6,
+      "maximumSplitGapM": 6.526607262777415e-8
+    },
+    {
+      "time": 0.6020833333333333,
+      "maximumSplitGapM": 6.547211408338648e-8
+    },
+    {
+      "time": 0.6041666666666666,
+      "maximumSplitGapM": 6.576857798717071e-8
+    },
+    {
+      "time": 0.60625,
+      "maximumSplitGapM": 6.438205822897467e-8
+    },
+    {
+      "time": 0.6083333333333333,
+      "maximumSplitGapM": 6.532992787486688e-8
+    },
+    {
+      "time": 0.6104166666666667,
+      "maximumSplitGapM": 6.491136041886747e-8
+    },
+    {
+      "time": 0.6125,
+      "maximumSplitGapM": 6.54391628662684e-8
+    },
+    {
+      "time": 0.6145833333333334,
+      "maximumSplitGapM": 6.349417926685802e-8
+    },
+    {
+      "time": 0.6166666666666667,
+      "maximumSplitGapM": 6.39837978434911e-8
+    },
+    {
+      "time": 0.61875,
+      "maximumSplitGapM": 6.335099757995439e-8
+    },
+    {
+      "time": 0.6208333333333333,
+      "maximumSplitGapM": 6.553600489194654e-8
+    },
+    {
+      "time": 0.6229166666666667,
+      "maximumSplitGapM": 6.405328319608329e-8
+    },
+    {
+      "time": 0.625,
+      "maximumSplitGapM": 6.097926342801149e-8
+    },
+    {
+      "time": 0.6270833333333333,
+      "maximumSplitGapM": 6.11574871743383e-8
+    },
+    {
+      "time": 0.6291666666666667,
+      "maximumSplitGapM": 6.120224500581932e-8
+    },
+    {
+      "time": 0.63125,
+      "maximumSplitGapM": 6.11718212248211e-8
+    },
+    {
+      "time": 0.6333333333333333,
+      "maximumSplitGapM": 6.09134714973067e-8
+    },
+    {
+      "time": 0.6354166666666666,
+      "maximumSplitGapM": 6.244756545532656e-8
+    },
+    {
+      "time": 0.6375,
+      "maximumSplitGapM": 6.078765974442855e-8
+    },
+    {
+      "time": 0.6395833333333333,
+      "maximumSplitGapM": 6.025155160383117e-8
+    },
+    {
+      "time": 0.6416666666666667,
+      "maximumSplitGapM": 6.087886230327161e-8
+    },
+    {
+      "time": 0.64375,
+      "maximumSplitGapM": 6.381474332157882e-8
+    },
+    {
+      "time": 0.6458333333333334,
+      "maximumSplitGapM": 6.045579075476272e-8
+    },
+    {
+      "time": 0.6479166666666667,
+      "maximumSplitGapM": 6.283500610387777e-8
+    },
+    {
+      "time": 0.65,
+      "maximumSplitGapM": 6.199888513350639e-8
+    },
+    {
+      "time": 0.6520833333333333,
+      "maximumSplitGapM": 5.979583422954606e-8
+    },
+    {
+      "time": 0.6541666666666667,
+      "maximumSplitGapM": 5.985565192289567e-8
+    },
+    {
+      "time": 0.65625,
+      "maximumSplitGapM": 6.478124130465e-8
+    },
+    {
+      "time": 0.6583333333333333,
+      "maximumSplitGapM": 6.114181004489079e-8
+    },
+    {
+      "time": 0.6604166666666667,
+      "maximumSplitGapM": 6.082097111201766e-8
+    },
+    {
+      "time": 0.6625,
+      "maximumSplitGapM": 6.012847350265172e-8
+    },
+    {
+      "time": 0.6645833333333333,
+      "maximumSplitGapM": 5.963245341593033e-8
+    },
+    {
+      "time": 0.6666666666666666,
+      "maximumSplitGapM": 6.074464233108345e-8
+    },
+    {
+      "time": 0.66875,
+      "maximumSplitGapM": 6.014194875905507e-8
+    },
+    {
+      "time": 0.6708333333333333,
+      "maximumSplitGapM": 6.388624964915038e-8
+    },
+    {
+      "time": 0.6729166666666667,
+      "maximumSplitGapM": 5.992844298186077e-8
+    },
+    {
+      "time": 0.675,
+      "maximumSplitGapM": 6.022308864183056e-8
+    },
+    {
+      "time": 0.6770833333333334,
+      "maximumSplitGapM": 6.096734220026087e-8
+    },
+    {
+      "time": 0.6791666666666667,
+      "maximumSplitGapM": 5.9270994894103786e-8
+    },
+    {
+      "time": 0.68125,
+      "maximumSplitGapM": 6.062755807934149e-8
+    },
+    {
+      "time": 0.6833333333333333,
+      "maximumSplitGapM": 6.464959722874582e-8
+    },
+    {
+      "time": 0.6854166666666667,
+      "maximumSplitGapM": 6.096830313300255e-8
+    },
+    {
+      "time": 0.6875,
+      "maximumSplitGapM": 6.462056721693714e-8
+    },
+    {
+      "time": 0.6895833333333333,
+      "maximumSplitGapM": 5.963761954904571e-8
+    },
+    {
+      "time": 0.6916666666666667,
+      "maximumSplitGapM": 6.049644036026169e-8
+    },
+    {
+      "time": 0.69375,
+      "maximumSplitGapM": 6.526164764413982e-8
+    },
+    {
+      "time": 0.6958333333333333,
+      "maximumSplitGapM": 6.089377385095717e-8
+    },
+    {
+      "time": 0.6979166666666666,
+      "maximumSplitGapM": 5.964159493866204e-8
+    },
+    {
+      "time": 0.7,
+      "maximumSplitGapM": 6.086216265419827e-8
+    },
+    {
+      "time": 0.7020833333333333,
+      "maximumSplitGapM": 6.000115276290928e-8
+    },
+    {
+      "time": 0.7041666666666667,
+      "maximumSplitGapM": 6.03537077977066e-8
+    },
+    {
+      "time": 0.70625,
+      "maximumSplitGapM": 6.058136389358212e-8
+    },
+    {
+      "time": 0.7083333333333334,
+      "maximumSplitGapM": 5.966859252702539e-8
+    },
+    {
+      "time": 0.7104166666666667,
+      "maximumSplitGapM": 6.069563616319685e-8
+    },
+    {
+      "time": 0.7125,
+      "maximumSplitGapM": 5.975494171354873e-8
+    },
+    {
+      "time": 0.7145833333333333,
+      "maximumSplitGapM": 5.973045321041048e-8
+    },
+    {
+      "time": 0.7166666666666667,
+      "maximumSplitGapM": 5.977523629109574e-8
+    },
+    {
+      "time": 0.71875,
+      "maximumSplitGapM": 5.989460145312809e-8
+    },
+    {
+      "time": 0.7208333333333333,
+      "maximumSplitGapM": 6.285314896219406e-8
+    },
+    {
+      "time": 0.7229166666666667,
+      "maximumSplitGapM": 6.105532874636481e-8
+    },
+    {
+      "time": 0.725,
+      "maximumSplitGapM": 6.046015673091076e-8
+    },
+    {
+      "time": 0.7270833333333333,
+      "maximumSplitGapM": 6.059784361502191e-8
+    },
+    {
+      "time": 0.7291666666666666,
+      "maximumSplitGapM": 6.03638192972572e-8
+    },
+    {
+      "time": 0.73125,
+      "maximumSplitGapM": 6.241458254994225e-8
+    },
+    {
+      "time": 0.7333333333333333,
+      "maximumSplitGapM": 6.121517554707105e-8
+    },
+    {
+      "time": 0.7354166666666667,
+      "maximumSplitGapM": 6.131807178213623e-8
+    },
+    {
+      "time": 0.7375,
+      "maximumSplitGapM": 6.127935830754357e-8
+    },
+    {
+      "time": 0.7395833333333334,
+      "maximumSplitGapM": 6.106357165476797e-8
+    },
+    {
+      "time": 0.7416666666666667,
+      "maximumSplitGapM": 6.02865830666097e-8
+    },
+    {
+      "time": 0.74375,
+      "maximumSplitGapM": 5.9669952269552e-8
+    },
+    {
+      "time": 0.7458333333333333,
+      "maximumSplitGapM": 6.008868537563735e-8
+    },
+    {
+      "time": 0.7479166666666667,
+      "maximumSplitGapM": 6.062588938827185e-8
+    },
+    {
+      "time": 0.75,
+      "maximumSplitGapM": 6.447912546559672e-8
+    },
+    {
+      "time": 0.7520833333333333,
+      "maximumSplitGapM": 6.094113851158208e-8
+    },
+    {
+      "time": 0.7541666666666667,
+      "maximumSplitGapM": 6.026054557060372e-8
+    },
+    {
+      "time": 0.75625,
+      "maximumSplitGapM": 5.960401106140614e-8
+    },
+    {
+      "time": 0.7583333333333333,
+      "maximumSplitGapM": 6.172907470306912e-8
+    },
+    {
+      "time": 0.7604166666666666,
+      "maximumSplitGapM": 6.095988289827483e-8
+    },
+    {
+      "time": 0.7625,
+      "maximumSplitGapM": 6.091345800456771e-8
+    },
+    {
+      "time": 0.7645833333333333,
+      "maximumSplitGapM": 6.536293539771613e-8
+    },
+    {
+      "time": 0.7666666666666667,
+      "maximumSplitGapM": 6.171021808230836e-8
+    },
+    {
+      "time": 0.76875,
+      "maximumSplitGapM": 6.271344961384042e-8
+    },
+    {
+      "time": 0.7708333333333334,
+      "maximumSplitGapM": 6.217748094326441e-8
+    },
+    {
+      "time": 0.7729166666666667,
+      "maximumSplitGapM": 6.244630066276291e-8
+    },
+    {
+      "time": 0.775,
+      "maximumSplitGapM": 6.247081313708618e-8
+    },
+    {
+      "time": 0.7770833333333333,
+      "maximumSplitGapM": 6.151342808127402e-8
+    },
+    {
+      "time": 0.7791666666666667,
+      "maximumSplitGapM": 6.466982580540322e-8
+    },
+    {
+      "time": 0.78125,
+      "maximumSplitGapM": 6.399444083865566e-8
+    },
+    {
+      "time": 0.7833333333333333,
+      "maximumSplitGapM": 6.448144141570194e-8
+    },
+    {
+      "time": 0.7854166666666667,
+      "maximumSplitGapM": 6.642766677880001e-8
+    },
+    {
+      "time": 0.7875,
+      "maximumSplitGapM": 6.442812376959458e-8
+    },
+    {
+      "time": 0.7895833333333333,
+      "maximumSplitGapM": 6.513862908361362e-8
+    },
+    {
+      "time": 0.7916666666666666,
+      "maximumSplitGapM": 6.344665767245406e-8
+    },
+    {
+      "time": 0.79375,
+      "maximumSplitGapM": 6.493032267159185e-8
+    },
+    {
+      "time": 0.7958333333333333,
+      "maximumSplitGapM": 6.616438663172324e-8
+    },
+    {
+      "time": 0.7979166666666667,
+      "maximumSplitGapM": 6.257430190993816e-8
+    },
+    {
+      "time": 0.8,
+      "maximumSplitGapM": 6.467422437226008e-8
+    },
+    {
+      "time": 0.8020833333333334,
+      "maximumSplitGapM": 6.445678063329567e-8
+    },
+    {
+      "time": 0.8041666666666667,
+      "maximumSplitGapM": 6.429703167728789e-8
+    },
+    {
+      "time": 0.80625,
+      "maximumSplitGapM": 6.537291466038894e-8
+    },
+    {
+      "time": 0.8083333333333333,
+      "maximumSplitGapM": 6.324587032326764e-8
+    },
+    {
+      "time": 0.8104166666666667,
+      "maximumSplitGapM": 6.440064923581583e-8
+    },
+    {
+      "time": 0.8125,
+      "maximumSplitGapM": 6.639764305894599e-8
+    },
+    {
+      "time": 0.8145833333333333,
+      "maximumSplitGapM": 6.646531565258732e-8
+    },
+    {
+      "time": 0.8166666666666667,
+      "maximumSplitGapM": 6.403884343605989e-8
+    },
+    {
+      "time": 0.81875,
+      "maximumSplitGapM": 6.487529512620458e-8
+    },
+    {
+      "time": 0.8208333333333333,
+      "maximumSplitGapM": 6.521220632456097e-8
+    },
+    {
+      "time": 0.8229166666666666,
+      "maximumSplitGapM": 6.565376992558273e-8
+    },
+    {
+      "time": 0.825,
+      "maximumSplitGapM": 6.529881721675613e-8
+    },
+    {
+      "time": 0.8270833333333333,
+      "maximumSplitGapM": 6.445418921589935e-8
+    },
+    {
+      "time": 0.8291666666666667,
+      "maximumSplitGapM": 6.572843492407933e-8
+    },
+    {
+      "time": 0.83125,
+      "maximumSplitGapM": 6.442056875096492e-8
+    },
+    {
+      "time": 0.8333333333333334,
+      "maximumSplitGapM": 6.455667786015596e-8
+    },
+    {
+      "time": 0.8354166666666667,
+      "maximumSplitGapM": 6.575677114475559e-8
+    },
+    {
+      "time": 0.8375,
+      "maximumSplitGapM": 6.494259371007828e-8
+    },
+    {
+      "time": 0.8395833333333333,
+      "maximumSplitGapM": 6.71204465310305e-8
+    },
+    {
+      "time": 0.8416666666666667,
+      "maximumSplitGapM": 6.572455590568477e-8
+    },
+    {
+      "time": 0.84375,
+      "maximumSplitGapM": 6.683338026263285e-8
+    },
+    {
+      "time": 0.8458333333333333,
+      "maximumSplitGapM": 6.544269420538868e-8
+    },
+    {
+      "time": 0.8479166666666667,
+      "maximumSplitGapM": 6.679145055058088e-8
+    },
+    {
+      "time": 0.85,
+      "maximumSplitGapM": 6.605622596628823e-8
+    },
+    {
+      "time": 0.8520833333333333,
+      "maximumSplitGapM": 6.703196108073258e-8
+    },
+    {
+      "time": 0.8541666666666666,
+      "maximumSplitGapM": 6.43336044822829e-8
+    },
+    {
+      "time": 0.85625,
+      "maximumSplitGapM": 6.687557712193408e-8
+    },
+    {
+      "time": 0.8583333333333333,
+      "maximumSplitGapM": 7.137374048286227e-8
+    },
+    {
+      "time": 0.8604166666666667,
+      "maximumSplitGapM": 8.038697687712616e-8
+    },
+    {
+      "time": 0.8625,
+      "maximumSplitGapM": 7.930896444643499e-8
+    },
+    {
+      "time": 0.8645833333333334,
+      "maximumSplitGapM": 7.681765466096818e-8
+    },
+    {
+      "time": 0.8666666666666667,
+      "maximumSplitGapM": 8.469093470611533e-8
+    },
+    {
+      "time": 0.86875,
+      "maximumSplitGapM": 8.321301841043563e-8
+    },
+    {
+      "time": 0.8708333333333333,
+      "maximumSplitGapM": 8.206843200796397e-8
+    },
+    {
+      "time": 0.8729166666666667,
+      "maximumSplitGapM": 7.937363333547069e-8
+    },
+    {
+      "time": 0.875,
+      "maximumSplitGapM": 8.196450878349508e-8
+    },
+    {
+      "time": 0.8770833333333333,
+      "maximumSplitGapM": 8.175397668388049e-8
+    },
+    {
+      "time": 0.8791666666666667,
+      "maximumSplitGapM": 8.322709092921505e-8
+    },
+    {
+      "time": 0.88125,
+      "maximumSplitGapM": 8.325341182032749e-8
+    },
+    {
+      "time": 0.8833333333333333,
+      "maximumSplitGapM": 8.238084524837135e-8
+    },
+    {
+      "time": 0.8854166666666666,
+      "maximumSplitGapM": 8.363666427616249e-8
+    },
+    {
+      "time": 0.8875,
+      "maximumSplitGapM": 8.125517553716242e-8
+    },
+    {
+      "time": 0.8895833333333333,
+      "maximumSplitGapM": 8.270950476268552e-8
+    },
+    {
+      "time": 0.8916666666666667,
+      "maximumSplitGapM": 8.841733321335911e-8
+    },
+    {
+      "time": 0.89375,
+      "maximumSplitGapM": 8.657621390557998e-8
+    },
+    {
+      "time": 0.8958333333333334,
+      "maximumSplitGapM": 7.979781191398716e-8
+    },
+    {
+      "time": 0.8979166666666667,
+      "maximumSplitGapM": 8.189669877489979e-8
+    },
+    {
+      "time": 0.9,
+      "maximumSplitGapM": 8.303560987272135e-8
+    },
+    {
+      "time": 0.9020833333333333,
+      "maximumSplitGapM": 8.284992225422663e-8
+    },
+    {
+      "time": 0.9041666666666667,
+      "maximumSplitGapM": 8.207440570508616e-8
+    },
+    {
+      "time": 0.90625,
+      "maximumSplitGapM": 8.463445098128897e-8
+    },
+    {
+      "time": 0.9083333333333333,
+      "maximumSplitGapM": 8.48339896210352e-8
+    },
+    {
+      "time": 0.9104166666666667,
+      "maximumSplitGapM": 8.347899754919147e-8
+    },
+    {
+      "time": 0.9125,
+      "maximumSplitGapM": 8.423398965659228e-8
+    },
+    {
+      "time": 0.9145833333333333,
+      "maximumSplitGapM": 8.127690545533e-8
+    },
+    {
+      "time": 0.9166666666666666,
+      "maximumSplitGapM": 8.534562272662788e-8
+    },
+    {
+      "time": 0.91875,
+      "maximumSplitGapM": 8.189836649185832e-8
+    },
+    {
+      "time": 0.9208333333333333,
+      "maximumSplitGapM": 8.24140205275519e-8
+    },
+    {
+      "time": 0.9229166666666667,
+      "maximumSplitGapM": 8.347189210824122e-8
+    },
+    {
+      "time": 0.925,
+      "maximumSplitGapM": 8.270354036730785e-8
+    },
+    {
+      "time": 0.9270833333333334,
+      "maximumSplitGapM": 8.244865201864738e-8
+    },
+    {
+      "time": 0.9291666666666667,
+      "maximumSplitGapM": 8.10945547420606e-8
+    },
+    {
+      "time": 0.93125,
+      "maximumSplitGapM": 8.472257543806737e-8
+    },
+    {
+      "time": 0.9333333333333333,
+      "maximumSplitGapM": 8.681154727782058e-8
+    },
+    {
+      "time": 0.9354166666666667,
+      "maximumSplitGapM": 8.761212365194518e-8
+    },
+    {
+      "time": 0.9375,
+      "maximumSplitGapM": 8.174693819066486e-8
+    },
+    {
+      "time": 0.9395833333333333,
+      "maximumSplitGapM": 8.609823563331141e-8
+    },
+    {
+      "time": 0.9416666666666667,
+      "maximumSplitGapM": 7.872103461552686e-8
+    },
+    {
+      "time": 0.94375,
+      "maximumSplitGapM": 8.428701912721358e-8
+    },
+    {
+      "time": 0.9458333333333333,
+      "maximumSplitGapM": 7.855168241787158e-8
+    },
+    {
+      "time": 0.9479166666666666,
+      "maximumSplitGapM": 8.827250256473528e-8
+    },
+    {
+      "time": 0.95,
+      "maximumSplitGapM": 7.831244327130788e-8
+    },
+    {
+      "time": 0.9520833333333333,
+      "maximumSplitGapM": 8.44784041561267e-8
+    },
+    {
+      "time": 0.9541666666666667,
+      "maximumSplitGapM": 8.346875403790754e-8
+    },
+    {
+      "time": 0.95625,
+      "maximumSplitGapM": 8.211624584072235e-8
+    },
+    {
+      "time": 0.9583333333333334,
+      "maximumSplitGapM": 8.567433605605203e-8
+    },
+    {
+      "time": 0.9604166666666667,
+      "maximumSplitGapM": 8.53134821450848e-8
+    },
+    {
+      "time": 0.9625,
+      "maximumSplitGapM": 8.389865141954036e-8
+    },
+    {
+      "time": 0.9645833333333333,
+      "maximumSplitGapM": 8.614908612147896e-8
+    },
+    {
+      "time": 0.9666666666666667,
+      "maximumSplitGapM": 8.431204893289297e-8
+    },
+    {
+      "time": 0.96875,
+      "maximumSplitGapM": 8.221530235853761e-8
+    },
+    {
+      "time": 0.9708333333333333,
+      "maximumSplitGapM": 8.254273324221095e-8
+    },
+    {
+      "time": 0.9729166666666667,
+      "maximumSplitGapM": 8.370394511475343e-8
+    },
+    {
+      "time": 0.975,
+      "maximumSplitGapM": 8.454113083007091e-8
+    },
+    {
+      "time": 0.9770833333333333,
+      "maximumSplitGapM": 8.278940508318859e-8
+    },
+    {
+      "time": 0.9791666666666666,
+      "maximumSplitGapM": 8.280848338145588e-8
+    },
+    {
+      "time": 0.98125,
+      "maximumSplitGapM": 8.523017933553712e-8
+    },
+    {
+      "time": 0.9833333333333333,
+      "maximumSplitGapM": 7.873274096541535e-8
+    },
+    {
+      "time": 0.9854166666666667,
+      "maximumSplitGapM": 8.24485670695797e-8
+    },
+    {
+      "time": 0.9875,
+      "maximumSplitGapM": 8.517425555877376e-8
+    },
+    {
+      "time": 0.9895833333333334,
+      "maximumSplitGapM": 8.436025453872122e-8
+    },
+    {
+      "time": 0.9916666666666667,
+      "maximumSplitGapM": 8.05086867100717e-8
+    },
+    {
+      "time": 0.99375,
+      "maximumSplitGapM": 8.073818503863262e-8
+    },
+    {
+      "time": 0.9958333333333333,
+      "maximumSplitGapM": 8.210114520816977e-8
+    },
+    {
+      "time": 0.9979166666666667,
+      "maximumSplitGapM": 8.347440295442004e-8
+    },
+    {
+      "time": 1,
+      "maximumSplitGapM": 8.18267002310028e-8
+    },
+    {
+      "time": 1.0020833333333334,
+      "maximumSplitGapM": 8.42124997802314e-8
+    },
+    {
+      "time": 1.0041666666666667,
+      "maximumSplitGapM": 8.198838572887065e-8
+    },
+    {
+      "time": 1.00625,
+      "maximumSplitGapM": 8.269172202090978e-8
+    },
+    {
+      "time": 1.0083333333333333,
+      "maximumSplitGapM": 8.142719248380349e-8
+    },
+    {
+      "time": 1.0104166666666667,
+      "maximumSplitGapM": 8.554875286649739e-8
+    },
+    {
+      "time": 1.0125,
+      "maximumSplitGapM": 8.318234146877026e-8
+    },
+    {
+      "time": 1.0145833333333334,
+      "maximumSplitGapM": 8.248591638397434e-8
+    },
+    {
+      "time": 1.0166666666666666,
+      "maximumSplitGapM": 8.633529033903071e-8
+    },
+    {
+      "time": 1.01875,
+      "maximumSplitGapM": 8.365812838116434e-8
+    },
+    {
+      "time": 1.0208333333333333,
+      "maximumSplitGapM": 8.689881162455267e-8
+    },
+    {
+      "time": 1.0229166666666667,
+      "maximumSplitGapM": 8.320312369097593e-8
+    },
+    {
+      "time": 1.025,
+      "maximumSplitGapM": 8.267688511704664e-8
+    },
+    {
+      "time": 1.0270833333333333,
+      "maximumSplitGapM": 8.302390532069119e-8
+    },
+    {
+      "time": 1.0291666666666666,
+      "maximumSplitGapM": 7.696456206709531e-8
+    },
+    {
+      "time": 1.03125,
+      "maximumSplitGapM": 8.438084122910207e-8
+    },
+    {
+      "time": 1.0333333333333334,
+      "maximumSplitGapM": 8.930440310638886e-8
+    },
+    {
+      "time": 1.0354166666666667,
+      "maximumSplitGapM": 9.552945046945491e-8
+    },
+    {
+      "time": 1.0375,
+      "maximumSplitGapM": 9.843491076900738e-8
+    },
+    {
+      "time": 1.0395833333333333,
+      "maximumSplitGapM": 9.243487497321601e-8
+    },
+    {
+      "time": 1.0416666666666667,
+      "maximumSplitGapM": 8.994827240118344e-8
+    },
+    {
+      "time": 1.04375,
+      "maximumSplitGapM": 9.594434015870293e-8
+    },
+    {
+      "time": 1.0458333333333334,
+      "maximumSplitGapM": 9.25379867607393e-8
+    },
+    {
+      "time": 1.0479166666666666,
+      "maximumSplitGapM": 9.097880297335573e-8
+    },
+    {
+      "time": 1.05,
+      "maximumSplitGapM": 9.17237747205855e-8
+    },
+    {
+      "time": 1.0520833333333333,
+      "maximumSplitGapM": 9.785404658584379e-8
+    },
+    {
+      "time": 1.0541666666666667,
+      "maximumSplitGapM": 9.793202989019468e-8
+    },
+    {
+      "time": 1.05625,
+      "maximumSplitGapM": 9.760122098632587e-8
+    },
+    {
+      "time": 1.0583333333333333,
+      "maximumSplitGapM": 9.34268633682583e-8
+    },
+    {
+      "time": 1.0604166666666666,
+      "maximumSplitGapM": 9.653779209100124e-8
+    },
+    {
+      "time": 1.0625,
+      "maximumSplitGapM": 1.0076351162846867e-7
+    },
+    {
+      "time": 1.0645833333333334,
+      "maximumSplitGapM": 9.196618351684434e-8
+    },
+    {
+      "time": 1.0666666666666667,
+      "maximumSplitGapM": 9.931734628985387e-8
+    },
+    {
+      "time": 1.06875,
+      "maximumSplitGapM": 9.148727246577448e-8
+    },
+    {
+      "time": 1.0708333333333333,
+      "maximumSplitGapM": 9.257967524136704e-8
+    },
+    {
+      "time": 1.0729166666666667,
+      "maximumSplitGapM": 8.744857501634421e-8
+    },
+    {
+      "time": 1.075,
+      "maximumSplitGapM": 9.414851890571073e-8
+    },
+    {
+      "time": 1.0770833333333334,
+      "maximumSplitGapM": 9.697263460433167e-8
+    },
+    {
+      "time": 1.0791666666666666,
+      "maximumSplitGapM": 9.301013714285678e-8
+    },
+    {
+      "time": 1.08125,
+      "maximumSplitGapM": 8.989334252235086e-8
+    },
+    {
+      "time": 1.0833333333333333,
+      "maximumSplitGapM": 9.004598589825234e-8
+    },
+    {
+      "time": 1.0854166666666667,
+      "maximumSplitGapM": 9.311631567220363e-8
+    },
+    {
+      "time": 1.0875,
+      "maximumSplitGapM": 9.880541465534034e-8
+    },
+    {
+      "time": 1.0895833333333333,
+      "maximumSplitGapM": 9.840315623850256e-8
+    },
+    {
+      "time": 1.0916666666666666,
+      "maximumSplitGapM": 9.594065202993704e-8
+    },
+    {
+      "time": 1.09375,
+      "maximumSplitGapM": 9.117966456456894e-8
+    },
+    {
+      "time": 1.0958333333333334,
+      "maximumSplitGapM": 1.0012791312375053e-7
+    },
+    {
+      "time": 1.0979166666666667,
+      "maximumSplitGapM": 9.600611724648221e-8
+    },
+    {
+      "time": 1.1,
+      "maximumSplitGapM": 9.19105698949015e-8
+    },
+    {
+      "time": 1.1020833333333333,
+      "maximumSplitGapM": 9.207161646531104e-8
+    },
+    {
+      "time": 1.1041666666666667,
+      "maximumSplitGapM": 9.591188043118376e-8
+    },
+    {
+      "time": 1.10625,
+      "maximumSplitGapM": 8.766710545447151e-8
+    },
+    {
+      "time": 1.1083333333333334,
+      "maximumSplitGapM": 9.327431153889985e-8
+    },
+    {
+      "time": 1.1104166666666666,
+      "maximumSplitGapM": 8.967006712538721e-8
+    },
+    {
+      "time": 1.1125,
+      "maximumSplitGapM": 9.778452016329714e-8
+    },
+    {
+      "time": 1.1145833333333333,
+      "maximumSplitGapM": 9.431958291509377e-8
+    },
+    {
+      "time": 1.1166666666666667,
+      "maximumSplitGapM": 9.684997351611305e-8
+    },
+    {
+      "time": 1.11875,
+      "maximumSplitGapM": 8.982692620846557e-8
+    },
+    {
+      "time": 1.1208333333333333,
+      "maximumSplitGapM": 9.647970770634649e-8
+    },
+    {
+      "time": 1.1229166666666666,
+      "maximumSplitGapM": 9.928242798433219e-8
+    },
+    {
+      "time": 1.125,
+      "maximumSplitGapM": 9.379860100452026e-8
+    },
+    {
+      "time": 1.1270833333333334,
+      "maximumSplitGapM": 8.990008774259749e-8
+    },
+    {
+      "time": 1.1291666666666667,
+      "maximumSplitGapM": 9.394669174438485e-8
+    },
+    {
+      "time": 1.13125,
+      "maximumSplitGapM": 9.797326525373593e-8
+    },
+    {
+      "time": 1.1333333333333333,
+      "maximumSplitGapM": 9.342887112768476e-8
+    },
+    {
+      "time": 1.1354166666666667,
+      "maximumSplitGapM": 9.254213779630155e-8
+    },
+    {
+      "time": 1.1375,
+      "maximumSplitGapM": 9.52938500546749e-8
+    },
+    {
+      "time": 1.1395833333333334,
+      "maximumSplitGapM": 9.039346325028493e-8
+    },
+    {
+      "time": 1.1416666666666666,
+      "maximumSplitGapM": 9.358250347204328e-8
+    },
+    {
+      "time": 1.14375,
+      "maximumSplitGapM": 9.544123656541404e-8
+    },
+    {
+      "time": 1.1458333333333333,
+      "maximumSplitGapM": 9.607424104736017e-8
+    },
+    {
+      "time": 1.1479166666666667,
+      "maximumSplitGapM": 1.0062790610561297e-7
+    },
+    {
+      "time": 1.15,
+      "maximumSplitGapM": 9.922373396741126e-8
+    },
+    {
+      "time": 1.1520833333333333,
+      "maximumSplitGapM": 9.517000133923127e-8
+    },
+    {
+      "time": 1.1541666666666666,
+      "maximumSplitGapM": 9.213457360136679e-8
+    },
+    {
+      "time": 1.15625,
+      "maximumSplitGapM": 9.158712869299029e-8
+    },
+    {
+      "time": 1.1583333333333334,
+      "maximumSplitGapM": 9.144900487958466e-8
+    },
+    {
+      "time": 1.1604166666666667,
+      "maximumSplitGapM": 1.0041063828877244e-7
+    },
+    {
+      "time": 1.1625,
+      "maximumSplitGapM": 8.978127404314819e-8
+    },
+    {
+      "time": 1.1645833333333333,
+      "maximumSplitGapM": 9.61932773926204e-8
+    },
+    {
+      "time": 1.1666666666666667,
+      "maximumSplitGapM": 9.333255286403062e-8
+    },
+    {
+      "time": 1.16875,
+      "maximumSplitGapM": 9.903199205372109e-8
+    },
+    {
+      "time": 1.1708333333333334,
+      "maximumSplitGapM": 9.199731589218075e-8
+    },
+    {
+      "time": 1.1729166666666666,
+      "maximumSplitGapM": 9.532585282720148e-8
+    },
+    {
+      "time": 1.175,
+      "maximumSplitGapM": 9.093601929333733e-8
+    },
+    {
+      "time": 1.1770833333333333,
+      "maximumSplitGapM": 9.053142507590552e-8
+    },
+    {
+      "time": 1.1791666666666667,
+      "maximumSplitGapM": 9.146981730404028e-8
+    },
+    {
+      "time": 1.18125,
+      "maximumSplitGapM": 9.104551385955392e-8
+    },
+    {
+      "time": 1.1833333333333333,
+      "maximumSplitGapM": 9.332200439824643e-8
+    },
+    {
+      "time": 1.1854166666666666,
+      "maximumSplitGapM": 9.420863996253867e-8
+    },
+    {
+      "time": 1.1875,
+      "maximumSplitGapM": 9.469719093494011e-8
+    },
+    {
+      "time": 1.1895833333333334,
+      "maximumSplitGapM": 8.671310474834561e-8
+    },
+    {
+      "time": 1.1916666666666667,
+      "maximumSplitGapM": 9.574703728172913e-8
+    },
+    {
+      "time": 1.19375,
+      "maximumSplitGapM": 9.634902115547023e-8
+    },
+    {
+      "time": 1.1958333333333333,
+      "maximumSplitGapM": 9.214989578979974e-8
+    },
+    {
+      "time": 1.1979166666666667,
+      "maximumSplitGapM": 9.454485937847806e-8
+    },
+    {
+      "time": 1.2,
+      "maximumSplitGapM": 9.322758293079644e-8
+    },
+    {
+      "time": 1.2020833333333334,
+      "maximumSplitGapM": 9.616151870456456e-8
+    },
+    {
+      "time": 1.2041666666666666,
+      "maximumSplitGapM": 9.747289399463194e-8
+    },
+    {
+      "time": 1.20625,
+      "maximumSplitGapM": 8.863199586700265e-8
+    },
+    {
+      "time": 1.2083333333333333,
+      "maximumSplitGapM": 8.704050264886146e-8
+    },
+    {
+      "time": 1.2104166666666667,
+      "maximumSplitGapM": 1.202476888897165e-7
+    },
+    {
+      "time": 1.2125,
+      "maximumSplitGapM": 9.857099664960744e-8
+    },
+    {
+      "time": 1.2145833333333333,
+      "maximumSplitGapM": 1.280645910924995e-7
+    },
+    {
+      "time": 1.2166666666666666,
+      "maximumSplitGapM": 1.1061767416925015e-7
+    },
+    {
+      "time": 1.21875,
+      "maximumSplitGapM": 1.2443777004817286e-7
+    },
+    {
+      "time": 1.2208333333333334,
+      "maximumSplitGapM": 1.1523922699584842e-7
+    },
+    {
+      "time": 1.2229166666666667,
+      "maximumSplitGapM": 9.347602398009666e-8
+    },
+    {
+      "time": 1.225,
+      "maximumSplitGapM": 1.2117555953325985e-7
+    },
+    {
+      "time": 1.2270833333333333,
+      "maximumSplitGapM": 1.2882723976586293e-7
+    },
+    {
+      "time": 1.2291666666666667,
+      "maximumSplitGapM": 1.2945315248386112e-7
+    },
+    {
+      "time": 1.23125,
+      "maximumSplitGapM": 1.1852757122193074e-7
+    },
+    {
+      "time": 1.2333333333333334,
+      "maximumSplitGapM": 1.2210179789779092e-7
+    },
+    {
+      "time": 1.2354166666666666,
+      "maximumSplitGapM": 1.1312824857847974e-7
+    },
+    {
+      "time": 1.2375,
+      "maximumSplitGapM": 1.205164703494496e-7
+    },
+    {
+      "time": 1.2395833333333333,
+      "maximumSplitGapM": 1.2736828110412906e-7
+    },
+    {
+      "time": 1.2416666666666667,
+      "maximumSplitGapM": 1.1732140812319579e-7
+    },
+    {
+      "time": 1.24375,
+      "maximumSplitGapM": 1.2823477049538367e-7
+    },
+    {
+      "time": 1.2458333333333333,
+      "maximumSplitGapM": 1.3216088371693802e-7
+    },
+    {
+      "time": 1.2479166666666666,
+      "maximumSplitGapM": 1.2650427173442151e-7
+    },
+    {
+      "time": 1.25,
+      "maximumSplitGapM": 1.2633757227350367e-7
+    },
+    {
+      "time": 1.2520833333333334,
+      "maximumSplitGapM": 1.2159810765950358e-7
+    },
+    {
+      "time": 1.2541666666666667,
+      "maximumSplitGapM": 1.1077656477938688e-7
+    },
+    {
+      "time": 1.25625,
+      "maximumSplitGapM": 1.229988903290542e-7
+    },
+    {
+      "time": 1.2583333333333333,
+      "maximumSplitGapM": 1.199922864042243e-7
+    },
+    {
+      "time": 1.2604166666666667,
+      "maximumSplitGapM": 1.2887390203291603e-7
+    },
+    {
+      "time": 1.2625,
+      "maximumSplitGapM": 1.2539953122336724e-7
+    },
+    {
+      "time": 1.2645833333333334,
+      "maximumSplitGapM": 1.2858623343592827e-7
+    },
+    {
+      "time": 1.2666666666666666,
+      "maximumSplitGapM": 1.2922079563473183e-7
+    },
+    {
+      "time": 1.26875,
+      "maximumSplitGapM": 1.2337728486729504e-7
+    },
+    {
+      "time": 1.2708333333333333,
+      "maximumSplitGapM": 1.2920591005420658e-7
+    },
+    {
+      "time": 1.2729166666666667,
+      "maximumSplitGapM": 1.262114548913683e-7
+    },
+    {
+      "time": 1.275,
+      "maximumSplitGapM": 1.3249481386988791e-7
+    },
+    {
+      "time": 1.2770833333333333,
+      "maximumSplitGapM": 1.291306820571413e-7
+    },
+    {
+      "time": 1.2791666666666666,
+      "maximumSplitGapM": 1.3099381169945015e-7
+    },
+    {
+      "time": 1.28125,
+      "maximumSplitGapM": 1.2879394287516213e-7
+    },
+    {
+      "time": 1.2833333333333334,
+      "maximumSplitGapM": 1.3778539636785065e-7
+    },
+    {
+      "time": 1.2854166666666667,
+      "maximumSplitGapM": 1.2813514540321473e-7
+    },
+    {
+      "time": 1.2875,
+      "maximumSplitGapM": 1.2945444277112035e-7
+    },
+    {
+      "time": 1.2895833333333333,
+      "maximumSplitGapM": 1.3047213920385474e-7
+    },
+    {
+      "time": 1.2916666666666667,
+      "maximumSplitGapM": 1.2784088574436246e-7
+    },
+    {
+      "time": 1.29375,
+      "maximumSplitGapM": 1.325721321921564e-7
+    },
+    {
+      "time": 1.2958333333333334,
+      "maximumSplitGapM": 1.2945409884046916e-7
+    },
+    {
+      "time": 1.2979166666666666,
+      "maximumSplitGapM": 1.3389913115277613e-7
+    },
+    {
+      "time": 1.3,
+      "maximumSplitGapM": 1.3724896496909282e-7
+    },
+    {
+      "time": 1.3020833333333333,
+      "maximumSplitGapM": 1.3469124541775717e-7
+    },
+    {
+      "time": 1.3041666666666667,
+      "maximumSplitGapM": 1.349728419119875e-7
+    },
+    {
+      "time": 1.30625,
+      "maximumSplitGapM": 1.3604675186905853e-7
+    },
+    {
+      "time": 1.3083333333333333,
+      "maximumSplitGapM": 1.3721940036308486e-7
+    },
+    {
+      "time": 1.3104166666666666,
+      "maximumSplitGapM": 1.3276614254822969e-7
+    },
+    {
+      "time": 1.3125,
+      "maximumSplitGapM": 1.3704298450835e-7
+    },
+    {
+      "time": 1.3145833333333334,
+      "maximumSplitGapM": 1.285234139246247e-7
+    },
+    {
+      "time": 1.3166666666666667,
+      "maximumSplitGapM": 1.3314361885055105e-7
+    },
+    {
+      "time": 1.31875,
+      "maximumSplitGapM": 1.3672937721245365e-7
+    },
+    {
+      "time": 1.3208333333333333,
+      "maximumSplitGapM": 1.324013752865585e-7
+    },
+    {
+      "time": 1.3229166666666667,
+      "maximumSplitGapM": 1.4119973523470937e-7
+    },
+    {
+      "time": 1.325,
+      "maximumSplitGapM": 1.3495395315186048e-7
+    },
+    {
+      "time": 1.3270833333333334,
+      "maximumSplitGapM": 1.347424493602263e-7
+    },
+    {
+      "time": 1.3291666666666666,
+      "maximumSplitGapM": 1.341052579961395e-7
+    },
+    {
+      "time": 1.33125,
+      "maximumSplitGapM": 1.3604683779003022e-7
+    },
+    {
+      "time": 1.3333333333333333,
+      "maximumSplitGapM": 1.3537296327065442e-7
+    },
+    {
+      "time": 1.3354166666666667,
+      "maximumSplitGapM": 1.324894701634068e-7
+    },
+    {
+      "time": 1.3375,
+      "maximumSplitGapM": 1.3355985964911957e-7
+    },
+    {
+      "time": 1.3395833333333333,
+      "maximumSplitGapM": 1.3265405709987523e-7
+    },
+    {
+      "time": 1.3416666666666666,
+      "maximumSplitGapM": 1.36852489953235e-7
+    },
+    {
+      "time": 1.34375,
+      "maximumSplitGapM": 1.3310517192390017e-7
+    },
+    {
+      "time": 1.3458333333333334,
+      "maximumSplitGapM": 1.3180394370560432e-7
+    },
+    {
+      "time": 1.3479166666666667,
+      "maximumSplitGapM": 1.419433133007981e-7
+    },
+    {
+      "time": 1.35,
+      "maximumSplitGapM": 1.4050191116202265e-7
+    },
+    {
+      "time": 1.3520833333333333,
+      "maximumSplitGapM": 1.3679402398025125e-7
+    },
+    {
+      "time": 1.3541666666666667,
+      "maximumSplitGapM": 1.4304561155287565e-7
+    },
+    {
+      "time": 1.35625,
+      "maximumSplitGapM": 1.332756415567799e-7
+    },
+    {
+      "time": 1.3583333333333334,
+      "maximumSplitGapM": 1.337812542508996e-7
+    },
+    {
+      "time": 1.3604166666666666,
+      "maximumSplitGapM": 1.3691480259627766e-7
+    },
+    {
+      "time": 1.3625,
+      "maximumSplitGapM": 1.293630937507529e-7
+    },
+    {
+      "time": 1.3645833333333333,
+      "maximumSplitGapM": 1.3336945716381305e-7
+    },
+    {
+      "time": 1.3666666666666667,
+      "maximumSplitGapM": 1.337231080108501e-7
+    },
+    {
+      "time": 1.36875,
+      "maximumSplitGapM": 1.3438081507891852e-7
+    },
+    {
+      "time": 1.3708333333333333,
+      "maximumSplitGapM": 1.3989081262184474e-7
+    },
+    {
+      "time": 1.3729166666666666,
+      "maximumSplitGapM": 1.3473059837549303e-7
+    },
+    {
+      "time": 1.375,
+      "maximumSplitGapM": 1.3142965365760013e-7
+    },
+    {
+      "time": 1.3770833333333334,
+      "maximumSplitGapM": 1.3738509661945683e-7
+    },
+    {
+      "time": 1.3791666666666667,
+      "maximumSplitGapM": 1.408024190083847e-7
+    },
+    {
+      "time": 1.38125,
+      "maximumSplitGapM": 1.3943568793376646e-7
+    },
+    {
+      "time": 1.3833333333333333,
+      "maximumSplitGapM": 1.3496851514692918e-7
+    },
+    {
+      "time": 1.3854166666666667,
+      "maximumSplitGapM": 1.38822457384773e-7
+    },
+    {
+      "time": 1.3875,
+      "maximumSplitGapM": 1.3701637536417266e-7
+    },
+    {
+      "time": 1.3895833333333334,
+      "maximumSplitGapM": 1.389808726379861e-7
+    },
+    {
+      "time": 1.3916666666666666,
+      "maximumSplitGapM": 1.3128848815258176e-7
+    },
+    {
+      "time": 1.39375,
+      "maximumSplitGapM": 1.3067471779696332e-7
+    },
+    {
+      "time": 1.3958333333333333,
+      "maximumSplitGapM": 1.3109977243406907e-7
+    },
+    {
+      "time": 1.3979166666666667,
+      "maximumSplitGapM": 1.3239082417822913e-7
+    },
+    {
+      "time": 1.4,
+      "maximumSplitGapM": 1.313644605752727e-7
+    },
+    {
+      "time": 1.4020833333333333,
+      "maximumSplitGapM": 1.3964494187389824e-7
+    },
+    {
+      "time": 1.4041666666666666,
+      "maximumSplitGapM": 1.285807291672613e-7
+    },
+    {
+      "time": 1.40625,
+      "maximumSplitGapM": 1.3202669763074423e-7
+    },
+    {
+      "time": 1.4083333333333334,
+      "maximumSplitGapM": 1.329996004028998e-7
+    },
+    {
+      "time": 1.4104166666666667,
+      "maximumSplitGapM": 1.3320291878395792e-7
+    },
+    {
+      "time": 1.4125,
+      "maximumSplitGapM": 1.356361888011617e-7
+    },
+    {
+      "time": 1.4145833333333333,
+      "maximumSplitGapM": 1.3294150429898013e-7
+    },
+    {
+      "time": 1.4166666666666667,
+      "maximumSplitGapM": 1.3317289942885138e-7
+    },
+    {
+      "time": 1.41875,
+      "maximumSplitGapM": 1.3656961875132852e-7
+    },
+    {
+      "time": 1.4208333333333334,
+      "maximumSplitGapM": 1.3933664010560115e-7
+    },
+    {
+      "time": 1.4229166666666666,
+      "maximumSplitGapM": 1.3261020173337305e-7
+    },
+    {
+      "time": 1.425,
+      "maximumSplitGapM": 1.345294272644511e-7
+    },
+    {
+      "time": 1.4270833333333333,
+      "maximumSplitGapM": 1.345873019297757e-7
+    },
+    {
+      "time": 1.4291666666666667,
+      "maximumSplitGapM": 1.3021807748058913e-7
+    },
+    {
+      "time": 1.43125,
+      "maximumSplitGapM": 1.3203352868473655e-7
+    },
+    {
+      "time": 1.4333333333333333,
+      "maximumSplitGapM": 1.341267481819052e-7
+    },
+    {
+      "time": 1.4354166666666666,
+      "maximumSplitGapM": 1.3346077162941067e-7
+    },
+    {
+      "time": 1.4375,
+      "maximumSplitGapM": 1.3447050480582587e-7
+    },
+    {
+      "time": 1.4395833333333334,
+      "maximumSplitGapM": 1.2966764953092556e-7
+    },
+    {
+      "time": 1.4416666666666667,
+      "maximumSplitGapM": 1.3574278455159528e-7
+    },
+    {
+      "time": 1.44375,
+      "maximumSplitGapM": 1.3585755742952986e-7
+    },
+    {
+      "time": 1.4458333333333333,
+      "maximumSplitGapM": 1.3452330855153258e-7
+    },
+    {
+      "time": 1.4479166666666667,
+      "maximumSplitGapM": 1.3207851086970246e-7
+    },
+    {
+      "time": 1.45,
+      "maximumSplitGapM": 1.344470401834725e-7
+    },
+    {
+      "time": 1.4520833333333334,
+      "maximumSplitGapM": 1.3982626327674589e-7
+    },
+    {
+      "time": 1.4541666666666666,
+      "maximumSplitGapM": 1.373657128164596e-7
+    },
+    {
+      "time": 1.45625,
+      "maximumSplitGapM": 1.3325699188256543e-7
+    },
+    {
+      "time": 1.4583333333333333,
+      "maximumSplitGapM": 1.334732184205997e-7
+    },
+    {
+      "time": 1.4604166666666667,
+      "maximumSplitGapM": 1.324207230399655e-7
+    },
+    {
+      "time": 1.4625,
+      "maximumSplitGapM": 1.376384216209506e-7
+    },
+    {
+      "time": 1.4645833333333333,
+      "maximumSplitGapM": 1.3478642402345207e-7
+    },
+    {
+      "time": 1.4666666666666666,
+      "maximumSplitGapM": 1.3183306471299163e-7
+    },
+    {
+      "time": 1.46875,
+      "maximumSplitGapM": 1.331522660321464e-7
+    },
+    {
+      "time": 1.4708333333333334,
+      "maximumSplitGapM": 1.42875804993925e-7
+    },
+    {
+      "time": 1.4729166666666667,
+      "maximumSplitGapM": 1.3274467421997453e-7
+    },
+    {
+      "time": 1.475,
+      "maximumSplitGapM": 1.332164722872199e-7
+    },
+    {
+      "time": 1.4770833333333333,
+      "maximumSplitGapM": 1.3658734440178265e-7
+    },
+    {
+      "time": 1.4791666666666667,
+      "maximumSplitGapM": 1.308548030590728e-7
+    },
+    {
+      "time": 1.48125,
+      "maximumSplitGapM": 1.3343286208351473e-7
+    },
+    {
+      "time": 1.4833333333333334,
+      "maximumSplitGapM": 1.3249707300930336e-7
+    },
+    {
+      "time": 1.4854166666666666,
+      "maximumSplitGapM": 1.336935225471656e-7
+    },
+    {
+      "time": 1.4875,
+      "maximumSplitGapM": 1.361244061785675e-7
+    },
+    {
+      "time": 1.4895833333333333,
+      "maximumSplitGapM": 1.349827508873387e-7
+    },
+    {
+      "time": 1.4916666666666667,
+      "maximumSplitGapM": 1.4046774866967227e-7
+    },
+    {
+      "time": 1.49375,
+      "maximumSplitGapM": 1.4234743389445936e-7
+    },
+    {
+      "time": 1.4958333333333333,
+      "maximumSplitGapM": 1.3789887697882938e-7
+    },
+    {
+      "time": 1.4979166666666666,
+      "maximumSplitGapM": 1.4000855207869586e-7
+    },
+    {
+      "time": 1.5,
+      "maximumSplitGapM": 1.385747574061774e-7
+    },
+    {
+      "time": 1.5020833333333334,
+      "maximumSplitGapM": 1.3411043804740264e-7
+    },
+    {
+      "time": 1.5041666666666667,
+      "maximumSplitGapM": 1.3990703252086596e-7
+    },
+    {
+      "time": 1.50625,
+      "maximumSplitGapM": 1.3029310612048017e-7
+    },
+    {
+      "time": 1.5083333333333333,
+      "maximumSplitGapM": 1.3448271983629457e-7
+    },
+    {
+      "time": 1.5104166666666667,
+      "maximumSplitGapM": 1.344907434036533e-7
+    },
+    {
+      "time": 1.5125,
+      "maximumSplitGapM": 1.3655646804537013e-7
+    },
+    {
+      "time": 1.5145833333333334,
+      "maximumSplitGapM": 1.380853582624067e-7
+    },
+    {
+      "time": 1.5166666666666666,
+      "maximumSplitGapM": 1.3264759024520535e-7
+    },
+    {
+      "time": 1.51875,
+      "maximumSplitGapM": 1.282962325618647e-7
+    },
+    {
+      "time": 1.5208333333333333,
+      "maximumSplitGapM": 1.358844754678123e-7
+    },
+    {
+      "time": 1.5229166666666667,
+      "maximumSplitGapM": 1.3465238741854405e-7
+    },
+    {
+      "time": 1.525,
+      "maximumSplitGapM": 1.342989731950092e-7
+    },
+    {
+      "time": 1.5270833333333333,
+      "maximumSplitGapM": 1.338619351362014e-7
+    },
+    {
+      "time": 1.5291666666666666,
+      "maximumSplitGapM": 1.3319042749507096e-7
+    },
+    {
+      "time": 1.53125,
+      "maximumSplitGapM": 1.409293977423609e-7
+    },
+    {
+      "time": 1.5333333333333334,
+      "maximumSplitGapM": 1.3511481541732603e-7
+    },
+    {
+      "time": 1.5354166666666667,
+      "maximumSplitGapM": 1.3235336658781733e-7
+    },
+    {
+      "time": 1.5375,
+      "maximumSplitGapM": 1.4017167810906792e-7
+    },
+    {
+      "time": 1.5395833333333333,
+      "maximumSplitGapM": 1.3782547141039365e-7
+    },
+    {
+      "time": 1.5416666666666667,
+      "maximumSplitGapM": 1.3100370908072455e-7
+    },
+    {
+      "time": 1.54375,
+      "maximumSplitGapM": 1.3665141982114628e-7
+    },
+    {
+      "time": 1.5458333333333334,
+      "maximumSplitGapM": 1.3374127619295718e-7
+    },
+    {
+      "time": 1.5479166666666666,
+      "maximumSplitGapM": 1.3565923883953724e-7
+    },
+    {
+      "time": 1.55,
+      "maximumSplitGapM": 1.3296003822841532e-7
+    },
+    {
+      "time": 1.5520833333333333,
+      "maximumSplitGapM": 1.3692410720503616e-7
+    },
+    {
+      "time": 1.5541666666666667,
+      "maximumSplitGapM": 1.3818595793431302e-7
+    },
+    {
+      "time": 1.55625,
+      "maximumSplitGapM": 1.3330565842953456e-7
+    },
+    {
+      "time": 1.5583333333333333,
+      "maximumSplitGapM": 1.3718490269579475e-7
+    },
+    {
+      "time": 1.5604166666666666,
+      "maximumSplitGapM": 1.3124337235970554e-7
+    },
+    {
+      "time": 1.5625,
+      "maximumSplitGapM": 1.3537882523482663e-7
+    },
+    {
+      "time": 1.5645833333333334,
+      "maximumSplitGapM": 1.3390765701183947e-7
+    },
+    {
+      "time": 1.5666666666666667,
+      "maximumSplitGapM": 1.3131287582739828e-7
+    },
+    {
+      "time": 1.56875,
+      "maximumSplitGapM": 1.325086294675735e-7
+    },
+    {
+      "time": 1.5708333333333333,
+      "maximumSplitGapM": 1.361616481779114e-7
+    },
+    {
+      "time": 1.5729166666666667,
+      "maximumSplitGapM": 1.3902540524770626e-7
+    },
+    {
+      "time": 1.575,
+      "maximumSplitGapM": 1.297598692722618e-7
+    },
+    {
+      "time": 1.5770833333333334,
+      "maximumSplitGapM": 1.4241562225518498e-7
+    },
+    {
+      "time": 1.5791666666666666,
+      "maximumSplitGapM": 1.3055397304234508e-7
+    },
+    {
+      "time": 1.58125,
+      "maximumSplitGapM": 1.3431251559494896e-7
+    },
+    {
+      "time": 1.5833333333333333,
+      "maximumSplitGapM": 1.310268522503009e-7
+    },
+    {
+      "time": 1.5854166666666667,
+      "maximumSplitGapM": 1.2850445220989733e-7
+    },
+    {
+      "time": 1.5875,
+      "maximumSplitGapM": 1.3256496172212027e-7
+    },
+    {
+      "time": 1.5895833333333333,
+      "maximumSplitGapM": 1.3228955306831198e-7
+    },
+    {
+      "time": 1.5916666666666666,
+      "maximumSplitGapM": 1.3085550221354197e-7
+    },
+    {
+      "time": 1.59375,
+      "maximumSplitGapM": 1.354472841582586e-7
+    },
+    {
+      "time": 1.5958333333333334,
+      "maximumSplitGapM": 1.327811286444599e-7
+    },
+    {
+      "time": 1.5979166666666667,
+      "maximumSplitGapM": 1.3147869040934603e-7
+    },
+    {
+      "time": 1.6,
+      "maximumSplitGapM": 1.3198420544219077e-7
+    },
+    {
+      "time": 1.6020833333333333,
+      "maximumSplitGapM": 1.332269989255099e-7
+    },
+    {
+      "time": 1.6041666666666667,
+      "maximumSplitGapM": 1.3336515931002642e-7
+    },
+    {
+      "time": 1.60625,
+      "maximumSplitGapM": 1.295574377463876e-7
+    },
+    {
+      "time": 1.6083333333333334,
+      "maximumSplitGapM": 1.3093254939862366e-7
+    },
+    {
+      "time": 1.6104166666666666,
+      "maximumSplitGapM": 1.3246624455760997e-7
+    },
+    {
+      "time": 1.6125,
+      "maximumSplitGapM": 1.3207229476123375e-7
+    },
+    {
+      "time": 1.6145833333333333,
+      "maximumSplitGapM": 1.3290846652066428e-7
+    },
+    {
+      "time": 1.6166666666666667,
+      "maximumSplitGapM": 1.3256919389207253e-7
+    },
+    {
+      "time": 1.61875,
+      "maximumSplitGapM": 1.3221262751128978e-7
+    },
+    {
+      "time": 1.6208333333333333,
+      "maximumSplitGapM": 1.3175231678639305e-7
+    },
+    {
+      "time": 1.6229166666666666,
+      "maximumSplitGapM": 1.2807064218739819e-7
+    },
+    {
+      "time": 1.625,
+      "maximumSplitGapM": 1.3428635768331436e-7
+    },
+    {
+      "time": 1.6270833333333334,
+      "maximumSplitGapM": 1.3075002567452382e-7
+    },
+    {
+      "time": 1.6291666666666667,
+      "maximumSplitGapM": 1.2987778044704995e-7
+    },
+    {
+      "time": 1.63125,
+      "maximumSplitGapM": 1.3087772209662617e-7
+    },
+    {
+      "time": 1.6333333333333333,
+      "maximumSplitGapM": 1.328649245438451e-7
+    },
+    {
+      "time": 1.6354166666666667,
+      "maximumSplitGapM": 1.3147064102842147e-7
+    },
+    {
+      "time": 1.6375,
+      "maximumSplitGapM": 1.329878072879119e-7
+    },
+    {
+      "time": 1.6395833333333334,
+      "maximumSplitGapM": 1.327548682989589e-7
+    },
+    {
+      "time": 1.6416666666666666,
+      "maximumSplitGapM": 1.3276300455567997e-7
+    },
+    {
+      "time": 1.64375,
+      "maximumSplitGapM": 1.298653391080148e-7
+    },
+    {
+      "time": 1.6458333333333333,
+      "maximumSplitGapM": 1.2730752506782575e-7
+    },
+    {
+      "time": 1.6479166666666667,
+      "maximumSplitGapM": 1.3187927719123072e-7
+    },
+    {
+      "time": 1.65,
+      "maximumSplitGapM": 1.3044569290693323e-7
+    },
+    {
+      "time": 1.6520833333333333,
+      "maximumSplitGapM": 1.3008359271839746e-7
+    },
+    {
+      "time": 1.6541666666666666,
+      "maximumSplitGapM": 1.3137014370555333e-7
+    },
+    {
+      "time": 1.65625,
+      "maximumSplitGapM": 1.2732461228626138e-7
+    },
+    {
+      "time": 1.6583333333333334,
+      "maximumSplitGapM": 1.298375440854961e-7
+    },
+    {
+      "time": 1.6604166666666667,
+      "maximumSplitGapM": 1.3261056669948964e-7
+    },
+    {
+      "time": 1.6625,
+      "maximumSplitGapM": 1.295045729585355e-7
+    },
+    {
+      "time": 1.6645833333333333,
+      "maximumSplitGapM": 1.3175184649152755e-7
+    },
+    {
+      "time": 1.6666666666666667,
+      "maximumSplitGapM": 1.278828670354425e-7
+    },
+    {
+      "time": 1.66875,
+      "maximumSplitGapM": 1.3083790630046916e-7
+    },
+    {
+      "time": 1.6708333333333334,
+      "maximumSplitGapM": 1.329122554286504e-7
+    },
+    {
+      "time": 1.6729166666666666,
+      "maximumSplitGapM": 1.2789352415667279e-7
+    },
+    {
+      "time": 1.675,
+      "maximumSplitGapM": 1.2961612029678518e-7
+    },
+    {
+      "time": 1.6770833333333333,
+      "maximumSplitGapM": 1.296776503768007e-7
+    },
+    {
+      "time": 1.6791666666666667,
+      "maximumSplitGapM": 1.2864875927309237e-7
+    },
+    {
+      "time": 1.68125,
+      "maximumSplitGapM": 1.3521313686772972e-7
+    },
+    {
+      "time": 1.6833333333333333,
+      "maximumSplitGapM": 1.3251885961632077e-7
+    },
+    {
+      "time": 1.6854166666666666,
+      "maximumSplitGapM": 1.297983060458297e-7
+    },
+    {
+      "time": 1.6875,
+      "maximumSplitGapM": 1.2964414224591654e-7
+    },
+    {
+      "time": 1.6895833333333334,
+      "maximumSplitGapM": 1.308308412093974e-7
+    },
+    {
+      "time": 1.6916666666666667,
+      "maximumSplitGapM": 1.2682798109298253e-7
+    },
+    {
+      "time": 1.69375,
+      "maximumSplitGapM": 1.3187911640253802e-7
+    },
+    {
+      "time": 1.6958333333333333,
+      "maximumSplitGapM": 1.2989436509749454e-7
+    },
+    {
+      "time": 1.6979166666666667,
+      "maximumSplitGapM": 1.277377317337636e-7
+    },
+    {
+      "time": 1.7,
+      "maximumSplitGapM": 1.2566041481745844e-7
+    },
+    {
+      "time": 1.7020833333333334,
+      "maximumSplitGapM": 1.2701381890133054e-7
+    },
+    {
+      "time": 1.7041666666666666,
+      "maximumSplitGapM": 1.2135106513087928e-7
+    },
+    {
+      "time": 1.70625,
+      "maximumSplitGapM": 1.3119389654448736e-7
+    },
+    {
+      "time": 1.7083333333333333,
+      "maximumSplitGapM": 1.304000339452179e-7
+    },
+    {
+      "time": 1.7104166666666667,
+      "maximumSplitGapM": 1.2096579856011568e-7
+    },
+    {
+      "time": 1.7125,
+      "maximumSplitGapM": 1.2205101891564875e-7
+    },
+    {
+      "time": 1.7145833333333333,
+      "maximumSplitGapM": 1.246292640731853e-7
+    },
+    {
+      "time": 1.7166666666666666,
+      "maximumSplitGapM": 1.2485720987908934e-7
+    },
+    {
+      "time": 1.71875,
+      "maximumSplitGapM": 1.260488181870713e-7
+    },
+    {
+      "time": 1.7208333333333334,
+      "maximumSplitGapM": 1.2973228080099657e-7
+    },
+    {
+      "time": 1.7229166666666667,
+      "maximumSplitGapM": 1.2258007258079292e-7
+    },
+    {
+      "time": 1.725,
+      "maximumSplitGapM": 1.2903067490774035e-7
+    },
+    {
+      "time": 1.7270833333333333,
+      "maximumSplitGapM": 1.3005895728421636e-7
+    },
+    {
+      "time": 1.7291666666666667,
+      "maximumSplitGapM": 1.2135308891792727e-7
+    },
+    {
+      "time": 1.73125,
+      "maximumSplitGapM": 1.2570782596750563e-7
+    },
+    {
+      "time": 1.7333333333333334,
+      "maximumSplitGapM": 1.177722731930096e-7
+    },
+    {
+      "time": 1.7354166666666666,
+      "maximumSplitGapM": 1.2709536259511408e-7
+    },
+    {
+      "time": 1.7375,
+      "maximumSplitGapM": 1.1963072312199108e-7
+    },
+    {
+      "time": 1.7395833333333333,
+      "maximumSplitGapM": 1.2582126651439748e-7
+    },
+    {
+      "time": 1.7416666666666667,
+      "maximumSplitGapM": 1.2868396318819374e-7
+    },
+    {
+      "time": 1.74375,
+      "maximumSplitGapM": 1.2337921553385254e-7
+    },
+    {
+      "time": 1.7458333333333333,
+      "maximumSplitGapM": 1.2631477372294167e-7
+    },
+    {
+      "time": 1.7479166666666666,
+      "maximumSplitGapM": 1.1852775387004414e-7
+    },
+    {
+      "time": 1.75,
+      "maximumSplitGapM": 1.2310397774350047e-7
+    },
+    {
+      "time": 1.7520833333333334,
+      "maximumSplitGapM": 1.2610027087383368e-7
+    },
+    {
+      "time": 1.7541666666666667,
+      "maximumSplitGapM": 1.2061602834203015e-7
+    },
+    {
+      "time": 1.75625,
+      "maximumSplitGapM": 1.308947804866674e-7
+    },
+    {
+      "time": 1.7583333333333333,
+      "maximumSplitGapM": 1.282131017311725e-7
+    },
+    {
+      "time": 1.7604166666666667,
+      "maximumSplitGapM": 1.2728426860602577e-7
+    },
+    {
+      "time": 1.7625,
+      "maximumSplitGapM": 1.1985696429858088e-7
+    },
+    {
+      "time": 1.7645833333333334,
+      "maximumSplitGapM": 1.273760063648398e-7
+    },
+    {
+      "time": 1.7666666666666666,
+      "maximumSplitGapM": 1.2710789141191972e-7
+    },
+    {
+      "time": 1.76875,
+      "maximumSplitGapM": 1.2305745486268884e-7
+    },
+    {
+      "time": 1.7708333333333333,
+      "maximumSplitGapM": 1.2980395107198234e-7
+    },
+    {
+      "time": 1.7729166666666667,
+      "maximumSplitGapM": 1.2365262855654088e-7
+    },
+    {
+      "time": 1.775,
+      "maximumSplitGapM": 1.2339812622815985e-7
+    },
+    {
+      "time": 1.7770833333333333,
+      "maximumSplitGapM": 1.1643637791327863e-7
+    },
+    {
+      "time": 1.7791666666666666,
+      "maximumSplitGapM": 1.2408253842349165e-7
+    },
+    {
+      "time": 1.78125,
+      "maximumSplitGapM": 1.1936456524675184e-7
+    },
+    {
+      "time": 1.7833333333333334,
+      "maximumSplitGapM": 1.202194261697331e-7
+    },
+    {
+      "time": 1.7854166666666667,
+      "maximumSplitGapM": 1.1837000360751457e-7
+    },
+    {
+      "time": 1.7875,
+      "maximumSplitGapM": 1.1740952410901035e-7
+    },
+    {
+      "time": 1.7895833333333333,
+      "maximumSplitGapM": 1.253796329841675e-7
+    },
+    {
+      "time": 1.7916666666666667,
+      "maximumSplitGapM": 1.2135915421426768e-7
+    },
+    {
+      "time": 1.79375,
+      "maximumSplitGapM": 1.183450570676938e-7
+    },
+    {
+      "time": 1.7958333333333334,
+      "maximumSplitGapM": 1.280452549080888e-7
+    },
+    {
+      "time": 1.7979166666666666,
+      "maximumSplitGapM": 1.209825702001441e-7
+    },
+    {
+      "time": 1.8,
+      "maximumSplitGapM": 1.288193612434999e-7
+    },
+    {
+      "time": 1.8020833333333333,
+      "maximumSplitGapM": 1.1727724159097064e-7
+    },
+    {
+      "time": 1.8041666666666667,
+      "maximumSplitGapM": 1.2343520511744628e-7
+    },
+    {
+      "time": 1.80625,
+      "maximumSplitGapM": 1.2133606312477768e-7
+    },
+    {
+      "time": 1.8083333333333333,
+      "maximumSplitGapM": 1.228914326242891e-7
+    },
+    {
+      "time": 1.8104166666666666,
+      "maximumSplitGapM": 1.2536790438727944e-7
+    },
+    {
+      "time": 1.8125,
+      "maximumSplitGapM": 1.160369863666108e-7
+    },
+    {
+      "time": 1.8145833333333334,
+      "maximumSplitGapM": 1.2105322995238606e-7
+    },
+    {
+      "time": 1.8166666666666667,
+      "maximumSplitGapM": 1.1642396195986433e-7
+    },
+    {
+      "time": 1.81875,
+      "maximumSplitGapM": 1.2221730732289125e-7
+    },
+    {
+      "time": 1.8208333333333333,
+      "maximumSplitGapM": 1.1820781222449689e-7
+    },
+    {
+      "time": 1.8229166666666667,
+      "maximumSplitGapM": 1.2839689137640046e-7
+    },
+    {
+      "time": 1.825,
+      "maximumSplitGapM": 1.1497659804032338e-7
+    },
+    {
+      "time": 1.8270833333333334,
+      "maximumSplitGapM": 1.2492959088164921e-7
+    },
+    {
+      "time": 1.8291666666666666,
+      "maximumSplitGapM": 1.0309080879791045e-7
+    },
+    {
+      "time": 1.83125,
+      "maximumSplitGapM": 1.2489542312484427e-7
+    },
+    {
+      "time": 1.8333333333333333,
+      "maximumSplitGapM": 1.1055515221486654e-7
+    },
+    {
+      "time": 1.8354166666666667,
+      "maximumSplitGapM": 1.1606082298841024e-7
+    },
+    {
+      "time": 1.8375,
+      "maximumSplitGapM": 1.2573226905294427e-7
+    },
+    {
+      "time": 1.8395833333333333,
+      "maximumSplitGapM": 1.1894824867884259e-7
+    },
+    {
+      "time": 1.8416666666666666,
+      "maximumSplitGapM": 1.2951077659516803e-7
+    },
+    {
+      "time": 1.84375,
+      "maximumSplitGapM": 1.1294538928902783e-7
+    },
+    {
+      "time": 1.8458333333333334,
+      "maximumSplitGapM": 1.1108151613018673e-7
+    },
+    {
+      "time": 1.8479166666666667,
+      "maximumSplitGapM": 1.2029109151819717e-7
+    },
+    {
+      "time": 1.85,
+      "maximumSplitGapM": 1.1151399551523048e-7
+    },
+    {
+      "time": 1.8520833333333333,
+      "maximumSplitGapM": 1.0917394581568618e-7
+    },
+    {
+      "time": 1.8541666666666667,
+      "maximumSplitGapM": 1.2462896380347615e-7
+    },
+    {
+      "time": 1.85625,
+      "maximumSplitGapM": 1.1258529130832649e-7
+    },
+    {
+      "time": 1.8583333333333334,
+      "maximumSplitGapM": 1.0993999593090964e-7
+    },
+    {
+      "time": 1.8604166666666666,
+      "maximumSplitGapM": 1.1260410886793219e-7
+    },
+    {
+      "time": 1.8625,
+      "maximumSplitGapM": 1.2642911275886625e-7
+    },
+    {
+      "time": 1.8645833333333333,
+      "maximumSplitGapM": 1.1083883334526919e-7
+    },
+    {
+      "time": 1.8666666666666667,
+      "maximumSplitGapM": 1.1277413444425406e-7
+    },
+    {
+      "time": 1.86875,
+      "maximumSplitGapM": 1.1398745639530977e-7
+    },
+    {
+      "time": 1.8708333333333333,
+      "maximumSplitGapM": 1.2100910056329455e-7
+    },
+    {
+      "time": 1.8729166666666666,
+      "maximumSplitGapM": 1.1661301196879824e-7
+    },
+    {
+      "time": 1.875,
+      "maximumSplitGapM": 1.1742923020329848e-7
+    },
+    {
+      "time": 1.8770833333333334,
+      "maximumSplitGapM": 9.993318279670192e-8
+    },
+    {
+      "time": 1.8791666666666667,
+      "maximumSplitGapM": 1.2291970112557842e-7
+    },
+    {
+      "time": 1.88125,
+      "maximumSplitGapM": 1.1363270282004023e-7
+    },
+    {
+      "time": 1.8833333333333333,
+      "maximumSplitGapM": 1.2614127527106376e-7
+    },
+    {
+      "time": 1.8854166666666667,
+      "maximumSplitGapM": 1.2563457177882218e-7
+    },
+    {
+      "time": 1.8875,
+      "maximumSplitGapM": 1.1663918464235004e-7
+    },
+    {
+      "time": 1.8895833333333334,
+      "maximumSplitGapM": 1.1357685961573609e-7
+    },
+    {
+      "time": 1.8916666666666666,
+      "maximumSplitGapM": 8.180310445005866e-8
+    },
+    {
+      "time": 1.89375,
+      "maximumSplitGapM": 1.2040670986616385e-7
+    },
+    {
+      "time": 1.8958333333333333,
+      "maximumSplitGapM": 1.1841030954702175e-7
+    },
+    {
+      "time": 1.8979166666666667,
+      "maximumSplitGapM": 9.103337633884066e-8
+    },
+    {
+      "time": 1.9,
+      "maximumSplitGapM": 1.09341153909709e-7
+    },
+    {
+      "time": 1.9020833333333333,
+      "maximumSplitGapM": 1.1137474474652794e-7
+    },
+    {
+      "time": 1.9041666666666666,
+      "maximumSplitGapM": 8.541853869028779e-8
+    },
+    {
+      "time": 1.90625,
+      "maximumSplitGapM": 8.594517266997615e-8
+    },
+    {
+      "time": 1.9083333333333334,
+      "maximumSplitGapM": 1.0306513394895524e-7
+    },
+    {
+      "time": 1.9104166666666667,
+      "maximumSplitGapM": 1.099284601039736e-7
+    },
+    {
+      "time": 1.9125,
+      "maximumSplitGapM": 1.0475645919238216e-7
+    },
+    {
+      "time": 1.9145833333333333,
+      "maximumSplitGapM": 8.741174224211028e-8
+    },
+    {
+      "time": 1.9166666666666667,
+      "maximumSplitGapM": 8.533316236935657e-8
+    },
+    {
+      "time": 1.91875,
+      "maximumSplitGapM": 1.0803759175393834e-7
+    },
+    {
+      "time": 1.9208333333333334,
+      "maximumSplitGapM": 1.0113799998204056e-7
+    },
+    {
+      "time": 1.9229166666666666,
+      "maximumSplitGapM": 8.699005149495715e-8
+    },
+    {
+      "time": 1.925,
+      "maximumSplitGapM": 8.632039744031284e-8
+    },
+    {
+      "time": 1.9270833333333333,
+      "maximumSplitGapM": 8.389686577429284e-8
+    },
+    {
+      "time": 1.9291666666666667,
+      "maximumSplitGapM": 8.519439951981596e-8
+    },
+    {
+      "time": 1.93125,
+      "maximumSplitGapM": 8.256924292337156e-8
+    },
+    {
+      "time": 1.9333333333333333,
+      "maximumSplitGapM": 8.224390138087188e-8
+    },
+    {
+      "time": 1.9354166666666666,
+      "maximumSplitGapM": 8.329103924274292e-8
+    },
+    {
+      "time": 1.9375,
+      "maximumSplitGapM": 8.321477934945088e-8
+    },
+    {
+      "time": 1.9395833333333334,
+      "maximumSplitGapM": 8.292130396888494e-8
+    },
+    {
+      "time": 1.9416666666666667,
+      "maximumSplitGapM": 8.505829268760914e-8
+    },
+    {
+      "time": 1.94375,
+      "maximumSplitGapM": 8.275484568020525e-8
+    },
+    {
+      "time": 1.9458333333333333,
+      "maximumSplitGapM": 8.709510009139969e-8
+    },
+    {
+      "time": 1.9479166666666667,
+      "maximumSplitGapM": 8.217073715115827e-8
+    },
+    {
+      "time": 1.95,
+      "maximumSplitGapM": 8.751932988248263e-8
+    },
+    {
+      "time": 1.9520833333333334,
+      "maximumSplitGapM": 8.477298267706467e-8
+    },
+    {
+      "time": 1.9541666666666666,
+      "maximumSplitGapM": 8.473792014545495e-8
+    },
+    {
+      "time": 1.95625,
+      "maximumSplitGapM": 8.765968766264245e-8
+    },
+    {
+      "time": 1.9583333333333333,
+      "maximumSplitGapM": 8.326008090859405e-8
+    },
+    {
+      "time": 1.9604166666666667,
+      "maximumSplitGapM": 8.491112935188061e-8
+    },
+    {
+      "time": 1.9625,
+      "maximumSplitGapM": 8.451678728654862e-8
+    },
+    {
+      "time": 1.9645833333333333,
+      "maximumSplitGapM": 8.645824323870576e-8
+    },
+    {
+      "time": 1.9666666666666666,
+      "maximumSplitGapM": 8.373903804838102e-8
+    },
+    {
+      "time": 1.96875,
+      "maximumSplitGapM": 8.36565112947741e-8
+    },
+    {
+      "time": 1.9708333333333334,
+      "maximumSplitGapM": 8.617943041175983e-8
+    },
+    {
+      "time": 1.9729166666666667,
+      "maximumSplitGapM": 8.429484418850825e-8
+    },
+    {
+      "time": 1.975,
+      "maximumSplitGapM": 8.635044983262304e-8
+    },
+    {
+      "time": 1.9770833333333333,
+      "maximumSplitGapM": 8.469143378797156e-8
+    },
+    {
+      "time": 1.9791666666666667,
+      "maximumSplitGapM": 8.254187614243912e-8
+    },
+    {
+      "time": 1.98125,
+      "maximumSplitGapM": 8.590132800415922e-8
+    },
+    {
+      "time": 1.9833333333333334,
+      "maximumSplitGapM": 8.140593750154089e-8
+    },
+    {
+      "time": 1.9854166666666666,
+      "maximumSplitGapM": 8.587582449205346e-8
+    },
+    {
+      "time": 1.9875,
+      "maximumSplitGapM": 8.323852381632029e-8
+    },
+    {
+      "time": 1.9895833333333333,
+      "maximumSplitGapM": 8.516864753713413e-8
+    },
+    {
+      "time": 1.9916666666666667,
+      "maximumSplitGapM": 8.518107565195663e-8
+    },
+    {
+      "time": 1.99375,
+      "maximumSplitGapM": 8.053121022596047e-8
+    },
+    {
+      "time": 1.9958333333333333,
+      "maximumSplitGapM": 8.214694256550003e-8
+    },
+    {
+      "time": 1.9979166666666666,
+      "maximumSplitGapM": 8.462442065860323e-8
+    },
+    {
+      "time": 2,
+      "maximumSplitGapM": 8.506692914096182e-8
+    },
+    {
+      "time": 2.002083333333333,
+      "maximumSplitGapM": 8.644423588039847e-8
+    },
+    {
+      "time": 2.004166666666667,
+      "maximumSplitGapM": 8.813230298755726e-8
+    },
+    {
+      "time": 2.00625,
+      "maximumSplitGapM": 8.400252239910845e-8
+    },
+    {
+      "time": 2.0083333333333333,
+      "maximumSplitGapM": 8.309103325716418e-8
+    },
+    {
+      "time": 2.0104166666666665,
+      "maximumSplitGapM": 8.472599873934002e-8
+    },
+    {
+      "time": 2.0125,
+      "maximumSplitGapM": 8.406247441422352e-8
+    },
+    {
+      "time": 2.0145833333333334,
+      "maximumSplitGapM": 8.199777869527103e-8
+    },
+    {
+      "time": 2.0166666666666666,
+      "maximumSplitGapM": 8.590858489126684e-8
+    },
+    {
+      "time": 2.01875,
+      "maximumSplitGapM": 8.316546419842467e-8
+    },
+    {
+      "time": 2.0208333333333335,
+      "maximumSplitGapM": 8.631099131066059e-8
+    },
+    {
+      "time": 2.0229166666666667,
+      "maximumSplitGapM": 8.191558234441851e-8
+    },
+    {
+      "time": 2.025,
+      "maximumSplitGapM": 8.706895305268602e-8
+    },
+    {
+      "time": 2.027083333333333,
+      "maximumSplitGapM": 8.365045683010714e-8
+    },
+    {
+      "time": 2.029166666666667,
+      "maximumSplitGapM": 8.470565438000759e-8
+    },
+    {
+      "time": 2.03125,
+      "maximumSplitGapM": 8.354254892753316e-8
+    },
+    {
+      "time": 2.033333333333333,
+      "maximumSplitGapM": 8.807285373407624e-8
+    },
+    {
+      "time": 2.035416666666667,
+      "maximumSplitGapM": 8.422256539878513e-8
+    },
+    {
+      "time": 2.0375,
+      "maximumSplitGapM": 8.49419115895944e-8
+    },
+    {
+      "time": 2.0395833333333333,
+      "maximumSplitGapM": 8.281541536436912e-8
+    },
+    {
+      "time": 2.0416666666666665,
+      "maximumSplitGapM": 8.431925260442126e-8
+    },
+    {
+      "time": 2.04375,
+      "maximumSplitGapM": 8.548398171374197e-8
+    },
+    {
+      "time": 2.0458333333333334,
+      "maximumSplitGapM": 8.517580587601216e-8
+    },
+    {
+      "time": 2.0479166666666666,
+      "maximumSplitGapM": 8.322229850589998e-8
+    },
+    {
+      "time": 2.05,
+      "maximumSplitGapM": 8.463412834569309e-8
+    },
+    {
+      "time": 2.0520833333333335,
+      "maximumSplitGapM": 8.543045042698492e-8
+    },
+    {
+      "time": 2.0541666666666667,
+      "maximumSplitGapM": 8.517262490923611e-8
+    },
+    {
+      "time": 2.05625,
+      "maximumSplitGapM": 8.39063721163991e-8
+    },
+    {
+      "time": 2.058333333333333,
+      "maximumSplitGapM": 8.307323298134476e-8
+    },
+    {
+      "time": 2.060416666666667,
+      "maximumSplitGapM": 8.269650901550454e-8
+    },
+    {
+      "time": 2.0625,
+      "maximumSplitGapM": 8.444087002966692e-8
+    },
+    {
+      "time": 2.064583333333333,
+      "maximumSplitGapM": 8.407659950896392e-8
+    },
+    {
+      "time": 2.066666666666667,
+      "maximumSplitGapM": 8.543146551524692e-8
+    },
+    {
+      "time": 2.06875,
+      "maximumSplitGapM": 8.294192184596561e-8
+    },
+    {
+      "time": 2.0708333333333333,
+      "maximumSplitGapM": 8.496763020825201e-8
+    },
+    {
+      "time": 2.0729166666666665,
+      "maximumSplitGapM": 8.50771355270564e-8
+    },
+    {
+      "time": 2.075,
+      "maximumSplitGapM": 8.476519660460683e-8
+    },
+    {
+      "time": 2.0770833333333334,
+      "maximumSplitGapM": 8.674421834287208e-8
+    },
+    {
+      "time": 2.0791666666666666,
+      "maximumSplitGapM": 8.329440437726302e-8
+    },
+    {
+      "time": 2.08125,
+      "maximumSplitGapM": 8.465000924205985e-8
+    },
+    {
+      "time": 2.0833333333333335,
+      "maximumSplitGapM": 8.268063579186343e-8
+    },
+    {
+      "time": 2.0854166666666667,
+      "maximumSplitGapM": 8.281986652240179e-8
+    },
+    {
+      "time": 2.0875,
+      "maximumSplitGapM": 8.228574553041288e-8
+    },
+    {
+      "time": 2.089583333333333,
+      "maximumSplitGapM": 8.165626544773573e-8
+    },
+    {
+      "time": 2.091666666666667,
+      "maximumSplitGapM": 8.469085089872058e-8
+    },
+    {
+      "time": 2.09375,
+      "maximumSplitGapM": 8.557186378882014e-8
+    },
+    {
+      "time": 2.095833333333333,
+      "maximumSplitGapM": 8.360275201650355e-8
+    },
+    {
+      "time": 2.097916666666667,
+      "maximumSplitGapM": 8.438459484190465e-8
+    },
+    {
+      "time": 2.1,
+      "maximumSplitGapM": 8.348766507556506e-8
+    },
+    {
+      "time": 2.1020833333333333,
+      "maximumSplitGapM": 8.340179259121524e-8
+    },
+    {
+      "time": 2.1041666666666665,
+      "maximumSplitGapM": 8.628309384969635e-8
+    },
+    {
+      "time": 2.10625,
+      "maximumSplitGapM": 8.325710477358151e-8
+    },
+    {
+      "time": 2.1083333333333334,
+      "maximumSplitGapM": 8.169050551614435e-8
+    },
+    {
+      "time": 2.1104166666666666,
+      "maximumSplitGapM": 8.3453295893171e-8
+    },
+    {
+      "time": 2.1125,
+      "maximumSplitGapM": 8.202406087507311e-8
+    },
+    {
+      "time": 2.1145833333333335,
+      "maximumSplitGapM": 8.450305325420951e-8
+    },
+    {
+      "time": 2.1166666666666667,
+      "maximumSplitGapM": 8.477032167225253e-8
+    },
+    {
+      "time": 2.11875,
+      "maximumSplitGapM": 8.390746740278283e-8
+    },
+    {
+      "time": 2.120833333333333,
+      "maximumSplitGapM": 8.349705175318273e-8
+    },
+    {
+      "time": 2.122916666666667,
+      "maximumSplitGapM": 8.32890625240706e-8
+    },
+    {
+      "time": 2.125,
+      "maximumSplitGapM": 8.350336648757635e-8
+    },
+    {
+      "time": 2.127083333333333,
+      "maximumSplitGapM": 8.317328515536879e-8
+    },
+    {
+      "time": 2.129166666666667,
+      "maximumSplitGapM": 8.384179732348728e-8
+    },
+    {
+      "time": 2.13125,
+      "maximumSplitGapM": 8.591186957111686e-8
+    },
+    {
+      "time": 2.1333333333333333,
+      "maximumSplitGapM": 8.444258051174639e-8
+    },
+    {
+      "time": 2.1354166666666665,
+      "maximumSplitGapM": 8.392425635016549e-8
+    },
+    {
+      "time": 2.1375,
+      "maximumSplitGapM": 8.343946581708007e-8
+    },
+    {
+      "time": 2.1395833333333334,
+      "maximumSplitGapM": 8.671976124655433e-8
+    },
+    {
+      "time": 2.1416666666666666,
+      "maximumSplitGapM": 8.420192344387608e-8
+    },
+    {
+      "time": 2.14375,
+      "maximumSplitGapM": 8.565085527625675e-8
+    },
+    {
+      "time": 2.1458333333333335,
+      "maximumSplitGapM": 8.188668782373785e-8
+    },
+    {
+      "time": 2.1479166666666667,
+      "maximumSplitGapM": 8.301854495937919e-8
+    },
+    {
+      "time": 2.15,
+      "maximumSplitGapM": 8.479868976762281e-8
+    },
+    {
+      "time": 2.152083333333333,
+      "maximumSplitGapM": 8.761847797691451e-8
+    },
+    {
+      "time": 2.154166666666667,
+      "maximumSplitGapM": 8.276771007285003e-8
+    },
+    {
+      "time": 2.15625,
+      "maximumSplitGapM": 8.302867857229293e-8
+    },
+    {
+      "time": 2.158333333333333,
+      "maximumSplitGapM": 8.696680300171278e-8
+    },
+    {
+      "time": 2.160416666666667,
+      "maximumSplitGapM": 8.275376476008307e-8
+    },
+    {
+      "time": 2.1625,
+      "maximumSplitGapM": 8.151034155556923e-8
+    },
+    {
+      "time": 2.1645833333333333,
+      "maximumSplitGapM": 8.06727982502403e-8
+    },
+    {
+      "time": 2.1666666666666665,
+      "maximumSplitGapM": 8.198827661004426e-8
+    },
+    {
+      "time": 2.16875,
+      "maximumSplitGapM": 7.905127127183966e-8
+    },
+    {
+      "time": 2.1708333333333334,
+      "maximumSplitGapM": 7.97573324110729e-8
+    },
+    {
+      "time": 2.1729166666666666,
+      "maximumSplitGapM": 8.485068257918941e-8
+    },
+    {
+      "time": 2.175,
+      "maximumSplitGapM": 8.29079867729283e-8
+    },
+    {
+      "time": 2.1770833333333335,
+      "maximumSplitGapM": 8.057533103348173e-8
+    },
+    {
+      "time": 2.1791666666666667,
+      "maximumSplitGapM": 8.334889791001993e-8
+    },
+    {
+      "time": 2.18125,
+      "maximumSplitGapM": 8.346336735616868e-8
+    },
+    {
+      "time": 2.183333333333333,
+      "maximumSplitGapM": 8.036541196971146e-8
+    },
+    {
+      "time": 2.185416666666667,
+      "maximumSplitGapM": 8.077439575414469e-8
+    },
+    {
+      "time": 2.1875,
+      "maximumSplitGapM": 8.402309728880002e-8
+    },
+    {
+      "time": 2.189583333333333,
+      "maximumSplitGapM": 8.275593605675655e-8
+    },
+    {
+      "time": 2.191666666666667,
+      "maximumSplitGapM": 8.366334242027438e-8
+    },
+    {
+      "time": 2.19375,
+      "maximumSplitGapM": 8.084013120283015e-8
+    },
+    {
+      "time": 2.1958333333333333,
+      "maximumSplitGapM": 8.254370425465697e-8
+    },
+    {
+      "time": 2.1979166666666665,
+      "maximumSplitGapM": 8.641798709701754e-8
+    },
+    {
+      "time": 2.2,
+      "maximumSplitGapM": 8.063368113004403e-8
+    },
+    {
+      "time": 2.2020833333333334,
+      "maximumSplitGapM": 8.179999736479226e-8
+    },
+    {
+      "time": 2.2041666666666666,
+      "maximumSplitGapM": 8.204687548208217e-8
+    },
+    {
+      "time": 2.20625,
+      "maximumSplitGapM": 8.45489693205519e-8
+    },
+    {
+      "time": 2.2083333333333335,
+      "maximumSplitGapM": 8.28156237613047e-8
+    },
+    {
+      "time": 2.2104166666666667,
+      "maximumSplitGapM": 8.041111884612622e-8
+    },
+    {
+      "time": 2.2125,
+      "maximumSplitGapM": 8.37026657987991e-8
+    },
+    {
+      "time": 2.214583333333333,
+      "maximumSplitGapM": 8.339088235906053e-8
+    },
+    {
+      "time": 2.216666666666667,
+      "maximumSplitGapM": 8.067989452398067e-8
+    },
+    {
+      "time": 2.21875,
+      "maximumSplitGapM": 8.069276937288416e-8
+    },
+    {
+      "time": 2.220833333333333,
+      "maximumSplitGapM": 7.883997072818821e-8
+    },
+    {
+      "time": 2.222916666666667,
+      "maximumSplitGapM": 8.151538386822424e-8
+    },
+    {
+      "time": 2.225,
+      "maximumSplitGapM": 8.092316534762922e-8
+    },
+    {
+      "time": 2.2270833333333333,
+      "maximumSplitGapM": 8.3281529618102e-8
+    },
+    {
+      "time": 2.2291666666666665,
+      "maximumSplitGapM": 8.1106230941432e-8
+    },
+    {
+      "time": 2.23125,
+      "maximumSplitGapM": 8.41855160546409e-8
+    },
+    {
+      "time": 2.2333333333333334,
+      "maximumSplitGapM": 8.762364903515792e-8
+    },
+    {
+      "time": 2.2354166666666666,
+      "maximumSplitGapM": 8.338167379097947e-8
+    },
+    {
+      "time": 2.2375,
+      "maximumSplitGapM": 8.509686362244619e-8
+    },
+    {
+      "time": 2.2395833333333335,
+      "maximumSplitGapM": 8.100516969228402e-8
+    },
+    {
+      "time": 2.2416666666666667,
+      "maximumSplitGapM": 7.742767741296108e-8
+    },
+    {
+      "time": 2.24375,
+      "maximumSplitGapM": 8.288420724144249e-8
+    },
+    {
+      "time": 2.245833333333333,
+      "maximumSplitGapM": 7.968029572236314e-8
+    },
+    {
+      "time": 2.247916666666667,
+      "maximumSplitGapM": 8.055603705215396e-8
+    },
+    {
+      "time": 2.25,
+      "maximumSplitGapM": 8.413698824188953e-8
+    },
+    {
+      "time": 2.252083333333333,
+      "maximumSplitGapM": 8.157496180461742e-8
+    },
+    {
+      "time": 2.254166666666667,
+      "maximumSplitGapM": 8.288340745385917e-8
+    },
+    {
+      "time": 2.25625,
+      "maximumSplitGapM": 7.800163707777092e-8
+    },
+    {
+      "time": 2.2583333333333333,
+      "maximumSplitGapM": 7.669599038738167e-8
+    },
+    {
+      "time": 2.2604166666666665,
+      "maximumSplitGapM": 7.899208472249946e-8
+    },
+    {
+      "time": 2.2625,
+      "maximumSplitGapM": 7.933287028981556e-8
+    },
+    {
+      "time": 2.2645833333333334,
+      "maximumSplitGapM": 8.417415255267078e-8
+    },
+    {
+      "time": 2.2666666666666666,
+      "maximumSplitGapM": 8.331792684990365e-8
+    },
+    {
+      "time": 2.26875,
+      "maximumSplitGapM": 7.984130541880626e-8
+    },
+    {
+      "time": 2.2708333333333335,
+      "maximumSplitGapM": 8.036435860182439e-8
+    },
+    {
+      "time": 2.2729166666666667,
+      "maximumSplitGapM": 7.255808521479722e-8
+    },
+    {
+      "time": 2.275,
+      "maximumSplitGapM": 7.744291853860822e-8
+    },
+    {
+      "time": 2.277083333333333,
+      "maximumSplitGapM": 7.248839211500128e-8
+    },
+    {
+      "time": 2.279166666666667,
+      "maximumSplitGapM": 6.633986562973186e-8
+    },
+    {
+      "time": 2.28125,
+      "maximumSplitGapM": 6.98357459923589e-8
+    },
+    {
+      "time": 2.283333333333333,
+      "maximumSplitGapM": 6.723616151465335e-8
+    },
+    {
+      "time": 2.285416666666667,
+      "maximumSplitGapM": 6.888785194271412e-8
+    },
+    {
+      "time": 2.2875,
+      "maximumSplitGapM": 6.614810991158996e-8
+    },
+    {
+      "time": 2.2895833333333333,
+      "maximumSplitGapM": 6.916773712941554e-8
+    },
+    {
+      "time": 2.2916666666666665,
+      "maximumSplitGapM": 6.570257029136494e-8
+    },
+    {
+      "time": 2.29375,
+      "maximumSplitGapM": 6.724480545941641e-8
+    },
+    {
+      "time": 2.2958333333333334,
+      "maximumSplitGapM": 6.627076033173271e-8
+    },
+    {
+      "time": 2.2979166666666666,
+      "maximumSplitGapM": 6.310324988113683e-8
+    },
+    {
+      "time": 2.3,
+      "maximumSplitGapM": 6.781546320076481e-8
+    },
+    {
+      "time": 2.3020833333333335,
+      "maximumSplitGapM": 6.512006934458647e-8
+    },
+    {
+      "time": 2.3041666666666667,
+      "maximumSplitGapM": 6.849212352446561e-8
+    },
+    {
+      "time": 2.30625,
+      "maximumSplitGapM": 6.607601626377098e-8
+    },
+    {
+      "time": 2.308333333333333,
+      "maximumSplitGapM": 6.579157723950883e-8
+    },
+    {
+      "time": 2.310416666666667,
+      "maximumSplitGapM": 6.510237399814811e-8
+    },
+    {
+      "time": 2.3125,
+      "maximumSplitGapM": 6.490074174176444e-8
+    },
+    {
+      "time": 2.314583333333333,
+      "maximumSplitGapM": 6.575843932870232e-8
+    },
+    {
+      "time": 2.316666666666667,
+      "maximumSplitGapM": 6.676909659755482e-8
+    },
+    {
+      "time": 2.31875,
+      "maximumSplitGapM": 6.830302280175676e-8
+    },
+    {
+      "time": 2.3208333333333333,
+      "maximumSplitGapM": 6.072248945831879e-8
+    },
+    {
+      "time": 2.3229166666666665,
+      "maximumSplitGapM": 6.542573080687643e-8
+    },
+    {
+      "time": 2.325,
+      "maximumSplitGapM": 6.88318826885251e-8
+    },
+    {
+      "time": 2.3270833333333334,
+      "maximumSplitGapM": 6.681794575466182e-8
+    },
+    {
+      "time": 2.3291666666666666,
+      "maximumSplitGapM": 6.441916460225186e-8
+    },
+    {
+      "time": 2.33125,
+      "maximumSplitGapM": 6.389543250018981e-8
+    },
+    {
+      "time": 2.3333333333333335,
+      "maximumSplitGapM": 6.33574653973058e-8
+    },
+    {
+      "time": 2.3354166666666667,
+      "maximumSplitGapM": 6.547531482565608e-8
+    },
+    {
+      "time": 2.3375,
+      "maximumSplitGapM": 6.229283439365706e-8
+    },
+    {
+      "time": 2.339583333333333,
+      "maximumSplitGapM": 6.503186422409651e-8
+    },
+    {
+      "time": 2.341666666666667,
+      "maximumSplitGapM": 6.184482493328141e-8
+    },
+    {
+      "time": 2.34375,
+      "maximumSplitGapM": 6.210085140466779e-8
+    },
+    {
+      "time": 2.345833333333333,
+      "maximumSplitGapM": 6.382465524939095e-8
+    },
+    {
+      "time": 2.347916666666667,
+      "maximumSplitGapM": 6.301918008523483e-8
+    },
+    {
+      "time": 2.35,
+      "maximumSplitGapM": 6.474031369135689e-8
+    },
+    {
+      "time": 2.3520833333333333,
+      "maximumSplitGapM": 6.545650626486344e-8
+    },
+    {
+      "time": 2.3541666666666665,
+      "maximumSplitGapM": 6.020485280274192e-8
+    },
+    {
+      "time": 2.35625,
+      "maximumSplitGapM": 6.047286382621638e-8
+    },
+    {
+      "time": 2.3583333333333334,
+      "maximumSplitGapM": 6.344639215733661e-8
+    },
+    {
+      "time": 2.3604166666666666,
+      "maximumSplitGapM": 6.251664049639428e-8
+    },
+    {
+      "time": 2.3625,
+      "maximumSplitGapM": 6.215236411767486e-8
+    },
+    {
+      "time": 2.3645833333333335,
+      "maximumSplitGapM": 6.025340724275411e-8
+    },
+    {
+      "time": 2.3666666666666667,
+      "maximumSplitGapM": 6.167164156022441e-8
+    },
+    {
+      "time": 2.36875,
+      "maximumSplitGapM": 6.116327078848932e-8
+    },
+    {
+      "time": 2.370833333333333,
+      "maximumSplitGapM": 6.132550974390994e-8
+    },
+    {
+      "time": 2.372916666666667,
+      "maximumSplitGapM": 6.028353054650569e-8
+    },
+    {
+      "time": 2.375,
+      "maximumSplitGapM": 6.083551056754607e-8
+    },
+    {
+      "time": 2.377083333333333,
+      "maximumSplitGapM": 6.06883221291356e-8
+    },
+    {
+      "time": 2.379166666666667,
+      "maximumSplitGapM": 6.090266818522939e-8
+    },
+    {
+      "time": 2.38125,
+      "maximumSplitGapM": 6.294879501920934e-8
+    },
+    {
+      "time": 2.3833333333333333,
+      "maximumSplitGapM": 6.17664504624306e-8
+    },
+    {
+      "time": 2.3854166666666665,
+      "maximumSplitGapM": 5.981137070260458e-8
+    },
+    {
+      "time": 2.3875,
+      "maximumSplitGapM": 5.991799145453114e-8
+    },
+    {
+      "time": 2.3895833333333334,
+      "maximumSplitGapM": 6.288273919129858e-8
+    },
+    {
+      "time": 2.3916666666666666,
+      "maximumSplitGapM": 6.028077256585531e-8
+    },
+    {
+      "time": 2.39375,
+      "maximumSplitGapM": 6.1773410233577e-8
+    },
+    {
+      "time": 2.3958333333333335,
+      "maximumSplitGapM": 6.218718476957903e-8
+    },
+    {
+      "time": 2.3979166666666667,
+      "maximumSplitGapM": 6.056031247434573e-8
+    },
+    {
+      "time": 2.4,
+      "maximumSplitGapM": 6.27440391738816e-8
+    },
+    {
+      "time": 2.402083333333333,
+      "maximumSplitGapM": 6.107475046706394e-8
+    },
+    {
+      "time": 2.404166666666667,
+      "maximumSplitGapM": 6.093949166787236e-8
+    },
+    {
+      "time": 2.40625,
+      "maximumSplitGapM": 6.268778956615909e-8
+    },
+    {
+      "time": 2.408333333333333,
+      "maximumSplitGapM": 6.087359882789911e-8
+    },
+    {
+      "time": 2.410416666666667,
+      "maximumSplitGapM": 6.026443929994099e-8
+    },
+    {
+      "time": 2.4125,
+      "maximumSplitGapM": 5.9952238947037e-8
+    },
+    {
+      "time": 2.4145833333333333,
+      "maximumSplitGapM": 6.4669885971618e-8
+    },
+    {
+      "time": 2.4166666666666665,
+      "maximumSplitGapM": 6.066333760028878e-8
+    },
+    {
+      "time": 2.41875,
+      "maximumSplitGapM": 6.280551485841678e-8
+    },
+    {
+      "time": 2.4208333333333334,
+      "maximumSplitGapM": 6.048658408190993e-8
+    },
+    {
+      "time": 2.4229166666666666,
+      "maximumSplitGapM": 6.090916479451297e-8
+    },
+    {
+      "time": 2.425,
+      "maximumSplitGapM": 6.125926541609853e-8
+    },
+    {
+      "time": 2.4270833333333335,
+      "maximumSplitGapM": 6.109356525737017e-8
+    },
+    {
+      "time": 2.4291666666666667,
+      "maximumSplitGapM": 6.213910452792417e-8
+    },
+    {
+      "time": 2.43125,
+      "maximumSplitGapM": 6.314146160779123e-8
+    },
+    {
+      "time": 2.433333333333333,
+      "maximumSplitGapM": 6.200802101873872e-8
+    },
+    {
+      "time": 2.435416666666667,
+      "maximumSplitGapM": 6.12452120577384e-8
+    },
+    {
+      "time": 2.4375,
+      "maximumSplitGapM": 6.155724622870262e-8
+    },
+    {
+      "time": 2.439583333333333,
+      "maximumSplitGapM": 5.992452505200258e-8
+    },
+    {
+      "time": 2.441666666666667,
+      "maximumSplitGapM": 5.972416111527448e-8
+    },
+    {
+      "time": 2.44375,
+      "maximumSplitGapM": 6.006932577289649e-8
+    },
+    {
+      "time": 2.4458333333333333,
+      "maximumSplitGapM": 5.991043099777891e-8
+    },
+    {
+      "time": 2.4479166666666665,
+      "maximumSplitGapM": 6.000165433811659e-8
+    },
+    {
+      "time": 2.45,
+      "maximumSplitGapM": 5.992076738631107e-8
+    },
+    {
+      "time": 2.4520833333333334,
+      "maximumSplitGapM": 6.30725866243578e-8
+    },
+    {
+      "time": 2.4541666666666666,
+      "maximumSplitGapM": 6.169783936148194e-8
+    },
+    {
+      "time": 2.45625,
+      "maximumSplitGapM": 5.93197121482787e-8
+    },
+    {
+      "time": 2.4583333333333335,
+      "maximumSplitGapM": 6.050326074071631e-8
+    },
+    {
+      "time": 2.4604166666666667,
+      "maximumSplitGapM": 6.134545677141479e-8
+    },
+    {
+      "time": 2.4625,
+      "maximumSplitGapM": 6.032482229846701e-8
+    },
+    {
+      "time": 2.464583333333333,
+      "maximumSplitGapM": 6.032104293611262e-8
+    },
+    {
+      "time": 2.466666666666667,
+      "maximumSplitGapM": 6.029310719859885e-8
+    },
+    {
+      "time": 2.46875,
+      "maximumSplitGapM": 6.239325986145667e-8
+    },
+    {
+      "time": 2.470833333333333,
+      "maximumSplitGapM": 6.032549946185499e-8
+    },
+    {
+      "time": 2.472916666666667,
+      "maximumSplitGapM": 5.948063807101206e-8
+    },
+    {
+      "time": 2.475,
+      "maximumSplitGapM": 6.086578451724027e-8
+    },
+    {
+      "time": 2.4770833333333333,
+      "maximumSplitGapM": 6.162668611044583e-8
+    },
+    {
+      "time": 2.4791666666666665,
+      "maximumSplitGapM": 5.99730142702447e-8
+    },
+    {
+      "time": 2.48125,
+      "maximumSplitGapM": 6.009350695642585e-8
+    },
+    {
+      "time": 2.4833333333333334,
+      "maximumSplitGapM": 6.050304783905582e-8
+    },
+    {
+      "time": 2.4854166666666666,
+      "maximumSplitGapM": 6.146741362825884e-8
+    },
+    {
+      "time": 2.4875,
+      "maximumSplitGapM": 6.211617120540541e-8
+    },
+    {
+      "time": 2.4895833333333335,
+      "maximumSplitGapM": 6.007655959807562e-8
+    },
+    {
+      "time": 2.4916666666666667,
+      "maximumSplitGapM": 6.050585554591626e-8
+    },
+    {
+      "time": 2.49375,
+      "maximumSplitGapM": 6.022618304415255e-8
+    },
+    {
+      "time": 2.495833333333333,
+      "maximumSplitGapM": 5.960561558626609e-8
+    },
+    {
+      "time": 2.497916666666667,
+      "maximumSplitGapM": 6.222572282733235e-8
+    },
+    {
+      "time": 2.5,
+      "maximumSplitGapM": 5.961657457934137e-8
+    },
+    {
+      "time": 2.502083333333333,
+      "maximumSplitGapM": 6.217916134422794e-8
+    },
+    {
+      "time": 2.504166666666667,
+      "maximumSplitGapM": 6.051046508405212e-8
+    },
+    {
+      "time": 2.50625,
+      "maximumSplitGapM": 6.338338228508937e-8
+    },
+    {
+      "time": 2.5083333333333333,
+      "maximumSplitGapM": 6.150626884712771e-8
+    },
+    {
+      "time": 2.5104166666666665,
+      "maximumSplitGapM": 6.068260458088459e-8
+    },
+    {
+      "time": 2.5125,
+      "maximumSplitGapM": 6.060499143471638e-8
+    },
+    {
+      "time": 2.5145833333333334,
+      "maximumSplitGapM": 6.01611085141274e-8
+    },
+    {
+      "time": 2.5166666666666666,
+      "maximumSplitGapM": 6.046498570313431e-8
+    },
+    {
+      "time": 2.51875,
+      "maximumSplitGapM": 6.113259603327963e-8
+    },
+    {
+      "time": 2.5208333333333335,
+      "maximumSplitGapM": 6.333753508813239e-8
+    },
+    {
+      "time": 2.5229166666666667,
+      "maximumSplitGapM": 6.15263720406084e-8
+    },
+    {
+      "time": 2.525,
+      "maximumSplitGapM": 5.991432003947491e-8
+    },
+    {
+      "time": 2.527083333333333,
+      "maximumSplitGapM": 6.034691018310918e-8
+    },
+    {
+      "time": 2.529166666666667,
+      "maximumSplitGapM": 6.00569556548259e-8
+    },
+    {
+      "time": 2.53125,
+      "maximumSplitGapM": 6.041772352032216e-8
+    },
+    {
+      "time": 2.533333333333333,
+      "maximumSplitGapM": 5.997144056037068e-8
+    },
+    {
+      "time": 2.535416666666667,
+      "maximumSplitGapM": 6.082490286528246e-8
+    },
+    {
+      "time": 2.5375,
+      "maximumSplitGapM": 6.245333391499114e-8
+    },
+    {
+      "time": 2.5395833333333333,
+      "maximumSplitGapM": 6.153106687037025e-8
+    },
+    {
+      "time": 2.5416666666666665,
+      "maximumSplitGapM": 6.340750645453568e-8
+    },
+    {
+      "time": 2.54375,
+      "maximumSplitGapM": 6.093658164610278e-8
+    },
+    {
+      "time": 2.5458333333333334,
+      "maximumSplitGapM": 5.870521451549576e-8
+    },
+    {
+      "time": 2.5479166666666666,
+      "maximumSplitGapM": 6.078584792708651e-8
+    },
+    {
+      "time": 2.55,
+      "maximumSplitGapM": 6.146465523033422e-8
+    },
+    {
+      "time": 2.5520833333333335,
+      "maximumSplitGapM": 6.100098967877404e-8
+    },
+    {
+      "time": 2.5541666666666667,
+      "maximumSplitGapM": 5.90711994389878e-8
+    },
+    {
+      "time": 2.55625,
+      "maximumSplitGapM": 6.012009055686582e-8
+    },
+    {
+      "time": 2.558333333333333,
+      "maximumSplitGapM": 6.226961423824603e-8
+    },
+    {
+      "time": 2.560416666666667,
+      "maximumSplitGapM": 6.011244661445613e-8
+    },
+    {
+      "time": 2.5625,
+      "maximumSplitGapM": 5.897575894381114e-8
+    },
+    {
+      "time": 2.564583333333333,
+      "maximumSplitGapM": 6.09822315171554e-8
+    },
+    {
+      "time": 2.566666666666667,
+      "maximumSplitGapM": 6.000531038053672e-8
+    },
+    {
+      "time": 2.56875,
+      "maximumSplitGapM": 6.0350199450473e-8
+    },
+    {
+      "time": 2.5708333333333333,
+      "maximumSplitGapM": 6.226183326337262e-8
+    },
+    {
+      "time": 2.5729166666666665,
+      "maximumSplitGapM": 6.135930352109684e-8
+    },
+    {
+      "time": 2.575,
+      "maximumSplitGapM": 6.539412745931919e-8
+    },
+    {
+      "time": 2.5770833333333334,
+      "maximumSplitGapM": 6.067218342713969e-8
+    },
+    {
+      "time": 2.5791666666666666,
+      "maximumSplitGapM": 6.123424022229117e-8
+    },
+    {
+      "time": 2.58125,
+      "maximumSplitGapM": 6.240512717484062e-8
+    },
+    {
+      "time": 2.5833333333333335,
+      "maximumSplitGapM": 6.113217361682648e-8
+    },
+    {
+      "time": 2.5854166666666667,
+      "maximumSplitGapM": 6.51080052049768e-8
+    },
+    {
+      "time": 2.5875,
+      "maximumSplitGapM": 6.123427903003203e-8
+    },
+    {
+      "time": 2.589583333333333,
+      "maximumSplitGapM": 6.511750150505446e-8
+    },
+    {
+      "time": 2.591666666666667,
+      "maximumSplitGapM": 5.991003453857623e-8
+    },
+    {
+      "time": 2.59375,
+      "maximumSplitGapM": 6.212175366673049e-8
+    },
+    {
+      "time": 2.595833333333333,
+      "maximumSplitGapM": 6.197147045043497e-8
+    },
+    {
+      "time": 2.597916666666667,
+      "maximumSplitGapM": 5.894253085433412e-8
+    },
+    {
+      "time": 2.6,
+      "maximumSplitGapM": 6.013344923674016e-8
+    },
+    {
+      "time": 2.6020833333333333,
+      "maximumSplitGapM": 5.9363569935181515e-8
+    },
+    {
+      "time": 2.6041666666666665,
+      "maximumSplitGapM": 5.975704289471506e-8
+    },
+    {
+      "time": 2.60625,
+      "maximumSplitGapM": 6.310330403243757e-8
+    },
+    {
+      "time": 2.6083333333333334,
+      "maximumSplitGapM": 6.347440442157552e-8
+    },
+    {
+      "time": 2.6104166666666666,
+      "maximumSplitGapM": 6.622349853226436e-8
+    },
+    {
+      "time": 2.6125,
+      "maximumSplitGapM": 6.040586163879842e-8
+    },
+    {
+      "time": 2.6145833333333335,
+      "maximumSplitGapM": 5.998033613973538e-8
+    },
+    {
+      "time": 2.6166666666666667,
+      "maximumSplitGapM": 6.055023216935553e-8
+    },
+    {
+      "time": 2.61875,
+      "maximumSplitGapM": 6.21482858286632e-8
+    },
+    {
+      "time": 2.620833333333333,
+      "maximumSplitGapM": 6.109811913174184e-8
+    },
+    {
+      "time": 2.622916666666667,
+      "maximumSplitGapM": 6.008338300370154e-8
+    },
+    {
+      "time": 2.625,
+      "maximumSplitGapM": 6.422335142839355e-8
+    },
+    {
+      "time": 2.627083333333333,
+      "maximumSplitGapM": 6.017273968669821e-8
+    },
+    {
+      "time": 2.629166666666667,
+      "maximumSplitGapM": 6.114534082198361e-8
+    },
+    {
+      "time": 2.63125,
+      "maximumSplitGapM": 6.536846547621952e-8
+    },
+    {
+      "time": 2.6333333333333333,
+      "maximumSplitGapM": 6.005195153049527e-8
+    },
+    {
+      "time": 2.6354166666666665,
+      "maximumSplitGapM": 6.007798537389523e-8
+    },
+    {
+      "time": 2.6375,
+      "maximumSplitGapM": 6.111075586890924e-8
+    },
+    {
+      "time": 2.6395833333333334,
+      "maximumSplitGapM": 6.190912878109211e-8
+    },
+    {
+      "time": 2.6416666666666666,
+      "maximumSplitGapM": 5.938255498967735e-8
+    },
+    {
+      "time": 2.64375,
+      "maximumSplitGapM": 6.229701014061238e-8
+    },
+    {
+      "time": 2.6458333333333335,
+      "maximumSplitGapM": 6.110088734819547e-8
+    },
+    {
+      "time": 2.6479166666666667,
+      "maximumSplitGapM": 5.982466659199587e-8
+    },
+    {
+      "time": 2.65,
+      "maximumSplitGapM": 6.237122809388899e-8
+    },
+    {
+      "time": 2.652083333333333,
+      "maximumSplitGapM": 6.078584902177798e-8
+    },
+    {
+      "time": 2.654166666666667,
+      "maximumSplitGapM": 5.98133301482518e-8
+    },
+    {
+      "time": 2.65625,
+      "maximumSplitGapM": 6.132539155446424e-8
+    },
+    {
+      "time": 2.658333333333333,
+      "maximumSplitGapM": 5.945039808542441e-8
+    },
+    {
+      "time": 2.660416666666667,
+      "maximumSplitGapM": 5.980543360542986e-8
+    },
+    {
+      "time": 2.6625,
+      "maximumSplitGapM": 5.948210927570989e-8
+    },
+    {
+      "time": 2.6645833333333333,
+      "maximumSplitGapM": 6.094736175934877e-8
+    },
+    {
+      "time": 2.6666666666666665,
+      "maximumSplitGapM": 5.984908226007034e-8
+    },
+    {
+      "time": 2.66875,
+      "maximumSplitGapM": 6.333949814645912e-8
+    },
+    {
+      "time": 2.6708333333333334,
+      "maximumSplitGapM": 5.94645117553602e-8
+    },
+    {
+      "time": 2.6729166666666666,
+      "maximumSplitGapM": 5.929543836373589e-8
+    },
+    {
+      "time": 2.675,
+      "maximumSplitGapM": 5.918303621742415e-8
+    },
+    {
+      "time": 2.6770833333333335,
+      "maximumSplitGapM": 5.9188695069773545e-8
+    },
+    {
+      "time": 2.6791666666666667,
+      "maximumSplitGapM": 6.19404034078488e-8
+    },
+    {
+      "time": 2.68125,
+      "maximumSplitGapM": 6.12242708533805e-8
+    },
+    {
+      "time": 2.683333333333333,
+      "maximumSplitGapM": 5.971792600926169e-8
+    },
+    {
+      "time": 2.685416666666667,
+      "maximumSplitGapM": 6.16435904776387e-8
+    },
+    {
+      "time": 2.6875,
+      "maximumSplitGapM": 6.470910710208193e-8
+    },
+    {
+      "time": 2.689583333333333,
+      "maximumSplitGapM": 6.053668313974246e-8
+    },
+    {
+      "time": 2.691666666666667,
+      "maximumSplitGapM": 6.015599109901706e-8
+    },
+    {
+      "time": 2.69375,
+      "maximumSplitGapM": 6.183846107811475e-8
+    },
+    {
+      "time": 2.6958333333333333,
+      "maximumSplitGapM": 5.997535248546478e-8
+    },
+    {
+      "time": 2.6979166666666665,
+      "maximumSplitGapM": 6.031753359728615e-8
+    },
+    {
+      "time": 2.7,
+      "maximumSplitGapM": 6.024671627335133e-8
+    },
+    {
+      "time": 2.7020833333333334,
+      "maximumSplitGapM": 5.895748314000232e-8
+    },
+    {
+      "time": 2.7041666666666666,
+      "maximumSplitGapM": 6.052408076877085e-8
+    },
+    {
+      "time": 2.70625,
+      "maximumSplitGapM": 6.042881933294988e-8
+    },
+    {
+      "time": 2.7083333333333335,
+      "maximumSplitGapM": 6.209593820481351e-8
+    },
+    {
+      "time": 2.7104166666666667,
+      "maximumSplitGapM": 6.000556986448965e-8
+    },
+    {
+      "time": 2.7125,
+      "maximumSplitGapM": 6.016850931505451e-8
+    },
+    {
+      "time": 2.714583333333333,
+      "maximumSplitGapM": 6.139966129206885e-8
+    },
+    {
+      "time": 2.716666666666667,
+      "maximumSplitGapM": 6.237989347840359e-8
+    },
+    {
+      "time": 2.71875,
+      "maximumSplitGapM": 6.310814973238574e-8
+    },
+    {
+      "time": 2.720833333333333,
+      "maximumSplitGapM": 6.176756366381898e-8
+    },
+    {
+      "time": 2.722916666666667,
+      "maximumSplitGapM": 6.11682382029368e-8
+    },
+    {
+      "time": 2.725,
+      "maximumSplitGapM": 6.089018615349579e-8
+    },
+    {
+      "time": 2.7270833333333333,
+      "maximumSplitGapM": 6.066522321315688e-8
+    },
+    {
+      "time": 2.7291666666666665,
+      "maximumSplitGapM": 6.200502107842648e-8
+    },
+    {
+      "time": 2.73125,
+      "maximumSplitGapM": 6.111792299935135e-8
+    },
+    {
+      "time": 2.7333333333333334,
+      "maximumSplitGapM": 6.023732790710173e-8
+    },
+    {
+      "time": 2.7354166666666666,
+      "maximumSplitGapM": 6.181134075253902e-8
+    },
+    {
+      "time": 2.7375,
+      "maximumSplitGapM": 6.104087191340849e-8
+    },
+    {
+      "time": 2.7395833333333335,
+      "maximumSplitGapM": 6.019281125542769e-8
+    },
+    {
+      "time": 2.7416666666666667,
+      "maximumSplitGapM": 6.22056184994759e-8
+    },
+    {
+      "time": 2.74375,
+      "maximumSplitGapM": 6.08138103673633e-8
+    },
+    {
+      "time": 2.745833333333333,
+      "maximumSplitGapM": 6.01931071920144e-8
+    },
+    {
+      "time": 2.747916666666667,
+      "maximumSplitGapM": 6.218380159781446e-8
+    },
+    {
+      "time": 2.75,
+      "maximumSplitGapM": 5.986779447540919e-8
+    },
+    {
+      "time": 2.752083333333333,
+      "maximumSplitGapM": 6.049379810410683e-8
+    },
+    {
+      "time": 2.754166666666667,
+      "maximumSplitGapM": 6.096412164693852e-8
+    },
+    {
+      "time": 2.75625,
+      "maximumSplitGapM": 6.249376030309974e-8
+    },
+    {
+      "time": 2.7583333333333333,
+      "maximumSplitGapM": 6.188044472838085e-8
+    },
+    {
+      "time": 2.7604166666666665,
+      "maximumSplitGapM": 6.17684270052649e-8
+    },
+    {
+      "time": 2.7625,
+      "maximumSplitGapM": 6.028620242308934e-8
+    },
+    {
+      "time": 2.7645833333333334,
+      "maximumSplitGapM": 6.077594218468989e-8
+    },
+    {
+      "time": 2.7666666666666666,
+      "maximumSplitGapM": 5.987350186163617e-8
+    },
+    {
+      "time": 2.76875,
+      "maximumSplitGapM": 6.162542967682875e-8
+    },
+    {
+      "time": 2.7708333333333335,
+      "maximumSplitGapM": 6.457333291990166e-8
+    },
+    {
+      "time": 2.7729166666666667,
+      "maximumSplitGapM": 5.943363048538168e-8
+    },
+    {
+      "time": 2.775,
+      "maximumSplitGapM": 6.101625945833185e-8
+    },
+    {
+      "time": 2.777083333333333,
+      "maximumSplitGapM": 6.049747236996894e-8
+    },
+    {
+      "time": 2.779166666666667,
+      "maximumSplitGapM": 6.114499074135386e-8
+    },
+    {
+      "time": 2.78125,
+      "maximumSplitGapM": 6.126213439501023e-8
+    },
+    {
+      "time": 2.783333333333333,
+      "maximumSplitGapM": 6.20826226280092e-8
+    },
+    {
+      "time": 2.785416666666667,
+      "maximumSplitGapM": 6.636186430477731e-8
+    },
+    {
+      "time": 2.7875,
+      "maximumSplitGapM": 6.016239572971687e-8
+    },
+    {
+      "time": 2.7895833333333333,
+      "maximumSplitGapM": 6.146258628777695e-8
+    },
+    {
+      "time": 2.7916666666666665,
+      "maximumSplitGapM": 5.99594557127953e-8
+    },
+    {
+      "time": 2.79375,
+      "maximumSplitGapM": 6.331861653384567e-8
+    },
+    {
+      "time": 2.7958333333333334,
+      "maximumSplitGapM": 5.991440337939046e-8
+    },
+    {
+      "time": 2.7979166666666666,
+      "maximumSplitGapM": 6.006218813473805e-8
+    },
+    {
+      "time": 2.8,
+      "maximumSplitGapM": 6.042719898779397e-8
+    },
+    {
+      "time": 2.8020833333333335,
+      "maximumSplitGapM": 6.146927224846834e-8
+    },
+    {
+      "time": 2.8041666666666667,
+      "maximumSplitGapM": 6.011661516889137e-8
+    },
+    {
+      "time": 2.80625,
+      "maximumSplitGapM": 6.00256095550287e-8
+    },
+    {
+      "time": 2.808333333333333,
+      "maximumSplitGapM": 6.123674886573961e-8
+    },
+    {
+      "time": 2.810416666666667,
+      "maximumSplitGapM": 6.13156164882302e-8
+    },
+    {
+      "time": 2.8125,
+      "maximumSplitGapM": 6.20037182238478e-8
+    },
+    {
+      "time": 2.814583333333333,
+      "maximumSplitGapM": 6.171846344657897e-8
+    },
+    {
+      "time": 2.816666666666667,
+      "maximumSplitGapM": 6.029315235686765e-8
+    },
+    {
+      "time": 2.81875,
+      "maximumSplitGapM": 6.127373290365366e-8
+    },
+    {
+      "time": 2.8208333333333333,
+      "maximumSplitGapM": 5.991521162747638e-8
+    },
+    {
+      "time": 2.8229166666666665,
+      "maximumSplitGapM": 5.938504459421147e-8
+    },
+    {
+      "time": 2.825,
+      "maximumSplitGapM": 6.034364913501868e-8
+    },
+    {
+      "time": 2.8270833333333334,
+      "maximumSplitGapM": 6.126572403863282e-8
+    },
+    {
+      "time": 2.8291666666666666,
+      "maximumSplitGapM": 5.985935108659165e-8
+    },
+    {
+      "time": 2.83125,
+      "maximumSplitGapM": 5.997837836656208e-8
+    },
+    {
+      "time": 2.8333333333333335,
+      "maximumSplitGapM": 5.990710705220169e-8
+    },
+    {
+      "time": 2.8354166666666667,
+      "maximumSplitGapM": 6.017131948667969e-8
+    },
+    {
+      "time": 2.8375,
+      "maximumSplitGapM": 6.370280066266805e-8
+    },
+    {
+      "time": 2.839583333333333,
+      "maximumSplitGapM": 6.189693228426605e-8
+    },
+    {
+      "time": 2.841666666666667,
+      "maximumSplitGapM": 6.005356571244673e-8
+    },
+    {
+      "time": 2.84375,
+      "maximumSplitGapM": 6.585534198710204e-8
+    },
+    {
+      "time": 2.845833333333333,
+      "maximumSplitGapM": 6.215676576485793e-8
+    },
+    {
+      "time": 2.847916666666667,
+      "maximumSplitGapM": 6.064761099226776e-8
+    },
+    {
+      "time": 2.85,
+      "maximumSplitGapM": 5.91772485106443e-8
+    },
+    {
+      "time": 2.8520833333333333,
+      "maximumSplitGapM": 6.371061648295925e-8
+    },
+    {
+      "time": 2.8541666666666665,
+      "maximumSplitGapM": 5.980416762142699e-8
+    },
+    {
+      "time": 2.85625,
+      "maximumSplitGapM": 6.086382888172791e-8
+    },
+    {
+      "time": 2.8583333333333334,
+      "maximumSplitGapM": 6.217552913984634e-8
+    },
+    {
+      "time": 2.8604166666666666,
+      "maximumSplitGapM": 6.061759532905575e-8
+    },
+    {
+      "time": 2.8625,
+      "maximumSplitGapM": 6.142107570325837e-8
+    },
+    {
+      "time": 2.8645833333333335,
+      "maximumSplitGapM": 6.036600268885238e-8
+    },
+    {
+      "time": 2.8666666666666667,
+      "maximumSplitGapM": 6.055342644906296e-8
+    },
+    {
+      "time": 2.86875,
+      "maximumSplitGapM": 5.970204365687978e-8
+    },
+    {
+      "time": 2.870833333333333,
+      "maximumSplitGapM": 6.116955683219052e-8
+    },
+    {
+      "time": 2.872916666666667,
+      "maximumSplitGapM": 6.035407341199988e-8
+    },
+    {
+      "time": 2.875,
+      "maximumSplitGapM": 6.066908348923394e-8
+    },
+    {
+      "time": 2.877083333333333,
+      "maximumSplitGapM": 6.078359462755066e-8
+    },
+    {
+      "time": 2.879166666666667,
+      "maximumSplitGapM": 6.004578123950269e-8
+    },
+    {
+      "time": 2.88125,
+      "maximumSplitGapM": 6.147956761889773e-8
+    },
+    {
+      "time": 2.8833333333333333,
+      "maximumSplitGapM": 5.995226748806105e-8
+    },
+    {
+      "time": 2.8854166666666665,
+      "maximumSplitGapM": 6.071824356811066e-8
+    },
+    {
+      "time": 2.8875,
+      "maximumSplitGapM": 5.996076954519786e-8
+    },
+    {
+      "time": 2.8895833333333334,
+      "maximumSplitGapM": 5.987308581470813e-8
+    },
+    {
+      "time": 2.8916666666666666,
+      "maximumSplitGapM": 6.048714743792991e-8
+    },
+    {
+      "time": 2.89375,
+      "maximumSplitGapM": 6.037670787795266e-8
+    },
+    {
+      "time": 2.8958333333333335,
+      "maximumSplitGapM": 6.123283289410786e-8
+    },
+    {
+      "time": 2.8979166666666667,
+      "maximumSplitGapM": 6.307226687929937e-8
+    },
+    {
+      "time": 2.9,
+      "maximumSplitGapM": 6.272115959773477e-8
+    },
+    {
+      "time": 2.902083333333333,
+      "maximumSplitGapM": 6.01311810638272e-8
+    },
+    {
+      "time": 2.904166666666667,
+      "maximumSplitGapM": 6.123367888327275e-8
+    },
+    {
+      "time": 2.90625,
+      "maximumSplitGapM": 6.067323775182817e-8
+    },
+    {
+      "time": 2.908333333333333,
+      "maximumSplitGapM": 5.990758003033839e-8
+    },
+    {
+      "time": 2.910416666666667,
+      "maximumSplitGapM": 6.019435201476007e-8
+    },
+    {
+      "time": 2.9125,
+      "maximumSplitGapM": 6.113690496298477e-8
+    },
+    {
+      "time": 2.9145833333333333,
+      "maximumSplitGapM": 6.188308002787932e-8
+    },
+    {
+      "time": 2.9166666666666665,
+      "maximumSplitGapM": 6.005260255275122e-8
+    },
+    {
+      "time": 2.91875,
+      "maximumSplitGapM": 6.373411000992485e-8
+    },
+    {
+      "time": 2.9208333333333334,
+      "maximumSplitGapM": 6.006034172962505e-8
+    },
+    {
+      "time": 2.9229166666666666,
+      "maximumSplitGapM": 6.173230785185442e-8
+    },
+    {
+      "time": 2.925,
+      "maximumSplitGapM": 6.131426048856578e-8
+    },
+    {
+      "time": 2.9270833333333335,
+      "maximumSplitGapM": 6.15144587593021e-8
+    },
+    {
+      "time": 2.9291666666666667,
+      "maximumSplitGapM": 5.988397863005205e-8
+    },
+    {
+      "time": 2.93125,
+      "maximumSplitGapM": 6.113544380360671e-8
+    },
+    {
+      "time": 2.933333333333333,
+      "maximumSplitGapM": 6.253093358958397e-8
+    },
+    {
+      "time": 2.935416666666667,
+      "maximumSplitGapM": 6.26163433556862e-8
+    },
+    {
+      "time": 2.9375,
+      "maximumSplitGapM": 5.969433876217757e-8
+    },
+    {
+      "time": 2.939583333333333,
+      "maximumSplitGapM": 6.393924392825124e-8
+    },
+    {
+      "time": 2.941666666666667,
+      "maximumSplitGapM": 6.024163036767262e-8
+    },
+    {
+      "time": 2.94375,
+      "maximumSplitGapM": 5.996521009748181e-8
+    },
+    {
+      "time": 2.9458333333333333,
+      "maximumSplitGapM": 6.095261149095755e-8
+    },
+    {
+      "time": 2.9479166666666665,
+      "maximumSplitGapM": 6.021892583418454e-8
+    },
+    {
+      "time": 2.95,
+      "maximumSplitGapM": 6.092198217773149e-8
+    },
+    {
+      "time": 2.9520833333333334,
+      "maximumSplitGapM": 6.129123338320346e-8
+    },
+    {
+      "time": 2.9541666666666666,
+      "maximumSplitGapM": 6.003222167815704e-8
+    },
+    {
+      "time": 2.95625,
+      "maximumSplitGapM": 6.123410000818277e-8
+    },
+    {
+      "time": 2.9583333333333335,
+      "maximumSplitGapM": 6.018955015192844e-8
+    },
+    {
+      "time": 2.9604166666666667,
+      "maximumSplitGapM": 6.547630770799368e-8
+    },
+    {
+      "time": 2.9625,
+      "maximumSplitGapM": 6.216448694301107e-8
+    },
+    {
+      "time": 2.964583333333333,
+      "maximumSplitGapM": 6.132222940087464e-8
+    },
+    {
+      "time": 2.966666666666667,
+      "maximumSplitGapM": 6.049119882770707e-8
+    },
+    {
+      "time": 2.96875,
+      "maximumSplitGapM": 6.110046417371292e-8
+    },
+    {
+      "time": 2.970833333333333,
+      "maximumSplitGapM": 6.50989815432414e-8
+    },
+    {
+      "time": 2.972916666666667,
+      "maximumSplitGapM": 6.167517523884978e-8
+    },
+    {
+      "time": 2.975,
+      "maximumSplitGapM": 6.096635415018677e-8
+    },
+    {
+      "time": 2.9770833333333333,
+      "maximumSplitGapM": 6.167987176552797e-8
+    },
+    {
+      "time": 2.9791666666666665,
+      "maximumSplitGapM": 5.991905058958885e-8
+    },
+    {
+      "time": 2.98125,
+      "maximumSplitGapM": 6.065570398747149e-8
+    },
+    {
+      "time": 2.9833333333333334,
+      "maximumSplitGapM": 6.036726304825871e-8
+    },
+    {
+      "time": 2.9854166666666666,
+      "maximumSplitGapM": 6.130852018496001e-8
+    },
+    {
+      "time": 2.9875,
+      "maximumSplitGapM": 6.041319761799226e-8
+    },
+    {
+      "time": 2.9895833333333335,
+      "maximumSplitGapM": 5.978035671908551e-8
+    },
+    {
+      "time": 2.9916666666666667,
+      "maximumSplitGapM": 6.143702632358914e-8
+    },
+    {
+      "time": 2.99375,
+      "maximumSplitGapM": 6.047357246139489e-8
+    },
+    {
+      "time": 2.995833333333333,
+      "maximumSplitGapM": 6.226415490349e-8
+    },
+    {
+      "time": 2.997916666666667,
+      "maximumSplitGapM": 6.118062528103316e-8
+    },
+    {
+      "time": 3,
+      "maximumSplitGapM": 6.086221541218609e-8
+    },
+    {
+      "time": 3.002083333333333,
+      "maximumSplitGapM": 6.348447903398364e-8
+    },
+    {
+      "time": 3.004166666666667,
+      "maximumSplitGapM": 6.35397483096438e-8
+    },
+    {
+      "time": 3.00625,
+      "maximumSplitGapM": 6.177869424588019e-8
+    },
+    {
+      "time": 3.0083333333333333,
+      "maximumSplitGapM": 6.076789954423482e-8
+    },
+    {
+      "time": 3.0104166666666665,
+      "maximumSplitGapM": 6.123019895689455e-8
+    },
+    {
+      "time": 3.0125,
+      "maximumSplitGapM": 6.146001618290189e-8
+    },
+    {
+      "time": 3.0145833333333334,
+      "maximumSplitGapM": 5.998141219502444e-8
+    },
+    {
+      "time": 3.0166666666666666,
+      "maximumSplitGapM": 6.20309674179885e-8
+    },
+    {
+      "time": 3.01875,
+      "maximumSplitGapM": 6.223084708884662e-8
+    },
+    {
+      "time": 3.0208333333333335,
+      "maximumSplitGapM": 6.242289313359672e-8
+    },
+    {
+      "time": 3.0229166666666667,
+      "maximumSplitGapM": 6.095545568003969e-8
+    },
+    {
+      "time": 3.025,
+      "maximumSplitGapM": 6.107101186680745e-8
+    },
+    {
+      "time": 3.027083333333333,
+      "maximumSplitGapM": 6.096634049359273e-8
+    },
+    {
+      "time": 3.029166666666667,
+      "maximumSplitGapM": 6.068257773475512e-8
+    },
+    {
+      "time": 3.03125,
+      "maximumSplitGapM": 5.98559296975013e-8
+    },
+    {
+      "time": 3.033333333333333,
+      "maximumSplitGapM": 6.208262413254815e-8
+    },
+    {
+      "time": 3.035416666666667,
+      "maximumSplitGapM": 6.068524259418545e-8
+    },
+    {
+      "time": 3.0375,
+      "maximumSplitGapM": 6.316443389042109e-8
+    },
+    {
+      "time": 3.0395833333333333,
+      "maximumSplitGapM": 6.146543901500943e-8
+    },
+    {
+      "time": 3.0416666666666665,
+      "maximumSplitGapM": 6.011378809290595e-8
+    },
+    {
+      "time": 3.04375,
+      "maximumSplitGapM": 6.194343998673419e-8
+    },
+    {
+      "time": 3.0458333333333334,
+      "maximumSplitGapM": 6.287290721580959e-8
+    },
+    {
+      "time": 3.0479166666666666,
+      "maximumSplitGapM": 6.09420083850021e-8
+    },
+    {
+      "time": 3.05,
+      "maximumSplitGapM": 6.045353000115875e-8
+    },
+    {
+      "time": 3.0520833333333335,
+      "maximumSplitGapM": 5.936953013152267e-8
+    },
+    {
+      "time": 3.0541666666666667,
+      "maximumSplitGapM": 6.343672519235115e-8
+    },
+    {
+      "time": 3.05625,
+      "maximumSplitGapM": 6.093440039415518e-8
+    },
+    {
+      "time": 3.058333333333333,
+      "maximumSplitGapM": 5.972420156858234e-8
+    },
+    {
+      "time": 3.060416666666667,
+      "maximumSplitGapM": 6.053411127249911e-8
+    },
+    {
+      "time": 3.0625,
+      "maximumSplitGapM": 6.323275933416106e-8
+    },
+    {
+      "time": 3.064583333333333,
+      "maximumSplitGapM": 6.33420007574603e-8
+    },
+    {
+      "time": 3.066666666666667,
+      "maximumSplitGapM": 6.010127303835369e-8
+    },
+    {
+      "time": 3.06875,
+      "maximumSplitGapM": 6.348799613917126e-8
+    },
+    {
+      "time": 3.0708333333333333,
+      "maximumSplitGapM": 6.233831927349843e-8
+    },
+    {
+      "time": 3.0729166666666665,
+      "maximumSplitGapM": 6.01065556695603e-8
+    },
+    {
+      "time": 3.075,
+      "maximumSplitGapM": 5.98490868858524e-8
+    },
+    {
+      "time": 3.0770833333333334,
+      "maximumSplitGapM": 6.097008745282492e-8
+    },
+    {
+      "time": 3.0791666666666666,
+      "maximumSplitGapM": 6.219221263211633e-8
+    },
+    {
+      "time": 3.08125,
+      "maximumSplitGapM": 6.009351681569796e-8
+    },
+    {
+      "time": 3.0833333333333335,
+      "maximumSplitGapM": 6.368573639443971e-8
+    },
+    {
+      "time": 3.0854166666666667,
+      "maximumSplitGapM": 6.131265420192098e-8
+    },
+    {
+      "time": 3.0875,
+      "maximumSplitGapM": 6.00549751805174e-8
+    },
+    {
+      "time": 3.089583333333333,
+      "maximumSplitGapM": 5.975908405190079e-8
+    },
+    {
+      "time": 3.091666666666667,
+      "maximumSplitGapM": 6.125924828524932e-8
+    },
+    {
+      "time": 3.09375,
+      "maximumSplitGapM": 6.09723277459049e-8
+    },
+    {
+      "time": 3.095833333333333,
+      "maximumSplitGapM": 5.999901827533786e-8
+    },
+    {
+      "time": 3.097916666666667,
+      "maximumSplitGapM": 6.139589485580788e-8
+    },
+    {
+      "time": 3.1,
+      "maximumSplitGapM": 6.050306916839533e-8
+    },
+    {
+      "time": 3.1020833333333333,
+      "maximumSplitGapM": 6.004806216370187e-8
+    },
+    {
+      "time": 3.1041666666666665,
+      "maximumSplitGapM": 6.338243826944522e-8
+    },
+    {
+      "time": 3.10625,
+      "maximumSplitGapM": 6.074962690357399e-8
+    },
+    {
+      "time": 3.1083333333333334,
+      "maximumSplitGapM": 6.291389793033465e-8
+    },
+    {
+      "time": 3.1104166666666666,
+      "maximumSplitGapM": 6.131432267096985e-8
+    },
+    {
+      "time": 3.1125,
+      "maximumSplitGapM": 6.280003645474363e-8
+    },
+    {
+      "time": 3.1145833333333335,
+      "maximumSplitGapM": 6.384054612648893e-8
+    },
+    {
+      "time": 3.1166666666666667,
+      "maximumSplitGapM": 6.34606247007498e-8
+    },
+    {
+      "time": 3.11875,
+      "maximumSplitGapM": 5.956855396925722e-8
+    },
+    {
+      "time": 3.120833333333333,
+      "maximumSplitGapM": 6.019289806442633e-8
+    },
+    {
+      "time": 3.122916666666667,
+      "maximumSplitGapM": 6.076050743053874e-8
+    },
+    {
+      "time": 3.125,
+      "maximumSplitGapM": 6.069504063349402e-8
+    },
+    {
+      "time": 3.127083333333333,
+      "maximumSplitGapM": 6.049083273476742e-8
+    },
+    {
+      "time": 3.129166666666667,
+      "maximumSplitGapM": 6.204224848821291e-8
+    },
+    {
+      "time": 3.13125,
+      "maximumSplitGapM": 6.142722416753265e-8
+    },
+    {
+      "time": 3.1333333333333333,
+      "maximumSplitGapM": 6.223604264550525e-8
+    },
+    {
+      "time": 3.1354166666666665,
+      "maximumSplitGapM": 5.986932660241969e-8
+    },
+    {
+      "time": 3.1375,
+      "maximumSplitGapM": 6.083417726566497e-8
+    },
+    {
+      "time": 3.1395833333333334,
+      "maximumSplitGapM": 6.159208642899301e-8
+    },
+    {
+      "time": 3.1416666666666666,
+      "maximumSplitGapM": 6.315945483015241e-8
+    },
+    {
+      "time": 3.14375,
+      "maximumSplitGapM": 5.991035760688154e-8
+    },
+    {
+      "time": 3.1458333333333335,
+      "maximumSplitGapM": 6.125253654691799e-8
+    },
+    {
+      "time": 3.1479166666666667,
+      "maximumSplitGapM": 6.033358250370751e-8
+    },
+    {
+      "time": 3.15,
+      "maximumSplitGapM": 6.102570921111166e-8
+    },
+    {
+      "time": 3.152083333333333,
+      "maximumSplitGapM": 6.08706475523468e-8
+    },
+    {
+      "time": 3.154166666666667,
+      "maximumSplitGapM": 5.995777782811432e-8
+    },
+    {
+      "time": 3.15625,
+      "maximumSplitGapM": 6.106088158101864e-8
+    },
+    {
+      "time": 3.158333333333333,
+      "maximumSplitGapM": 6.242262167809101e-8
+    },
+    {
+      "time": 3.160416666666667,
+      "maximumSplitGapM": 6.120265358471711e-8
+    },
+    {
+      "time": 3.1625,
+      "maximumSplitGapM": 6.046829227578691e-8
+    },
+    {
+      "time": 3.1645833333333333,
+      "maximumSplitGapM": 6.08364409158003e-8
+    },
+    {
+      "time": 3.1666666666666665,
+      "maximumSplitGapM": 6.007173103358725e-8
+    },
+    {
+      "time": 3.16875,
+      "maximumSplitGapM": 6.296324754286842e-8
+    },
+    {
+      "time": 3.1708333333333334,
+      "maximumSplitGapM": 6.361586878555211e-8
+    },
+    {
+      "time": 3.1729166666666666,
+      "maximumSplitGapM": 6.180404077752331e-8
+    },
+    {
+      "time": 3.175,
+      "maximumSplitGapM": 6.090560735029108e-8
+    },
+    {
+      "time": 3.1770833333333335,
+      "maximumSplitGapM": 6.102244764977297e-8
+    },
+    {
+      "time": 3.1791666666666667,
+      "maximumSplitGapM": 5.948134772571104e-8
+    },
+    {
+      "time": 3.18125,
+      "maximumSplitGapM": 6.102128319852972e-8
+    },
+    {
+      "time": 3.183333333333333,
+      "maximumSplitGapM": 6.095100108869957e-8
+    },
+    {
+      "time": 3.185416666666667,
+      "maximumSplitGapM": 6.116872294139019e-8
+    },
+    {
+      "time": 3.1875,
+      "maximumSplitGapM": 6.227859041365093e-8
+    },
+    {
+      "time": 3.189583333333333,
+      "maximumSplitGapM": 6.048182448694227e-8
+    },
+    {
+      "time": 3.191666666666667,
+      "maximumSplitGapM": 6.139236867138879e-8
+    },
+    {
+      "time": 3.19375,
+      "maximumSplitGapM": 6.270893791060037e-8
+    },
+    {
+      "time": 3.1958333333333333,
+      "maximumSplitGapM": 6.106642185987287e-8
+    },
+    {
+      "time": 3.1979166666666665,
+      "maximumSplitGapM": 6.535342210340943e-8
+    },
+    {
+      "time": 3.2,
+      "maximumSplitGapM": 6.134841686089205e-8
+    },
+    {
+      "time": 3.2020833333333334,
+      "maximumSplitGapM": 6.14906309995866e-8
+    },
+    {
+      "time": 3.2041666666666666,
+      "maximumSplitGapM": 6.049696878513245e-8
+    },
+    {
+      "time": 3.20625,
+      "maximumSplitGapM": 5.986744848351599e-8
+    },
+    {
+      "time": 3.2083333333333335,
+      "maximumSplitGapM": 6.09782057591579e-8
+    },
+    {
+      "time": 3.2104166666666667,
+      "maximumSplitGapM": 6.081865982072609e-8
+    },
+    {
+      "time": 3.2125,
+      "maximumSplitGapM": 6.027824581149141e-8
+    },
+    {
+      "time": 3.214583333333333,
+      "maximumSplitGapM": 6.062496174998958e-8
+    },
+    {
+      "time": 3.216666666666667,
+      "maximumSplitGapM": 6.266421645154711e-8
+    },
+    {
+      "time": 3.21875,
+      "maximumSplitGapM": 5.980105509194456e-8
+    },
+    {
+      "time": 3.220833333333333,
+      "maximumSplitGapM": 6.080232753652548e-8
+    },
+    {
+      "time": 3.222916666666667,
+      "maximumSplitGapM": 6.090367214890396e-8
+    },
+    {
+      "time": 3.225,
+      "maximumSplitGapM": 6.055077566482e-8
+    },
+    {
+      "time": 3.2270833333333333,
+      "maximumSplitGapM": 6.167946217830807e-8
+    },
+    {
+      "time": 3.2291666666666665,
+      "maximumSplitGapM": 6.184184881170822e-8
+    },
+    {
+      "time": 3.23125,
+      "maximumSplitGapM": 6.158315293603397e-8
+    },
+    {
+      "time": 3.2333333333333334,
+      "maximumSplitGapM": 6.189485997540776e-8
+    },
+    {
+      "time": 3.2354166666666666,
+      "maximumSplitGapM": 6.539671434047763e-8
+    },
+    {
+      "time": 3.2375,
+      "maximumSplitGapM": 5.963899010138632e-8
+    },
+    {
+      "time": 3.2395833333333335,
+      "maximumSplitGapM": 6.081335680697808e-8
+    },
+    {
+      "time": 3.2416666666666667,
+      "maximumSplitGapM": 6.102453903492104e-8
+    },
+    {
+      "time": 3.24375,
+      "maximumSplitGapM": 6.160033894588174e-8
+    },
+    {
+      "time": 3.245833333333333,
+      "maximumSplitGapM": 6.023211767506997e-8
+    },
+    {
+      "time": 3.247916666666667,
+      "maximumSplitGapM": 6.325221231138717e-8
+    },
+    {
+      "time": 3.25,
+      "maximumSplitGapM": 6.266345760382354e-8
+    },
+    {
+      "time": 3.252083333333333,
+      "maximumSplitGapM": 6.013250355997585e-8
+    },
+    {
+      "time": 3.254166666666667,
+      "maximumSplitGapM": 6.482458774106955e-8
+    },
+    {
+      "time": 3.25625,
+      "maximumSplitGapM": 5.954826522442561e-8
+    },
+    {
+      "time": 3.2583333333333333,
+      "maximumSplitGapM": 6.3167333141994e-8
+    },
+    {
+      "time": 3.2604166666666665,
+      "maximumSplitGapM": 5.908725343375456e-8
+    },
+    {
+      "time": 3.2625,
+      "maximumSplitGapM": 6.009819889515035e-8
+    },
+    {
+      "time": 3.2645833333333334,
+      "maximumSplitGapM": 6.151376241331092e-8
+    },
+    {
+      "time": 3.2666666666666666,
+      "maximumSplitGapM": 5.952486672225625e-8
+    },
+    {
+      "time": 3.26875,
+      "maximumSplitGapM": 5.998069068736095e-8
+    },
+    {
+      "time": 3.2708333333333335,
+      "maximumSplitGapM": 5.986636596133061e-8
+    },
+    {
+      "time": 3.2729166666666667,
+      "maximumSplitGapM": 6.028615988194239e-8
+    },
+    {
+      "time": 3.275,
+      "maximumSplitGapM": 6.55877609591745e-8
+    },
+    {
+      "time": 3.277083333333333,
+      "maximumSplitGapM": 6.16724855031631e-8
+    },
+    {
+      "time": 3.279166666666667,
+      "maximumSplitGapM": 6.140493002498367e-8
+    },
+    {
+      "time": 3.28125,
+      "maximumSplitGapM": 6.019355141126704e-8
+    },
+    {
+      "time": 3.283333333333333,
+      "maximumSplitGapM": 6.172018984747064e-8
+    },
+    {
+      "time": 3.285416666666667,
+      "maximumSplitGapM": 6.111326149153193e-8
+    },
+    {
+      "time": 3.2875,
+      "maximumSplitGapM": 6.020363689578732e-8
+    },
+    {
+      "time": 3.2895833333333333,
+      "maximumSplitGapM": 6.028352934936774e-8
+    },
+    {
+      "time": 3.2916666666666665,
+      "maximumSplitGapM": 6.02074180697699e-8
+    },
+    {
+      "time": 3.29375,
+      "maximumSplitGapM": 6.191288157645266e-8
+    },
+    {
+      "time": 3.2958333333333334,
+      "maximumSplitGapM": 6.185065416882706e-8
+    },
+    {
+      "time": 3.2979166666666666,
+      "maximumSplitGapM": 6.142948165758159e-8
+    },
+    {
+      "time": 3.3,
+      "maximumSplitGapM": 6.18167073571319e-8
+    },
+    {
+      "time": 3.3020833333333335,
+      "maximumSplitGapM": 6.290932315068174e-8
+    },
+    {
+      "time": 3.3041666666666667,
+      "maximumSplitGapM": 6.083928822308281e-8
+    },
+    {
+      "time": 3.30625,
+      "maximumSplitGapM": 6.12112469408325e-8
+    },
+    {
+      "time": 3.308333333333333,
+      "maximumSplitGapM": 6.03169751235949e-8
+    },
+    {
+      "time": 3.310416666666667,
+      "maximumSplitGapM": 6.062758159334182e-8
+    },
+    {
+      "time": 3.3125,
+      "maximumSplitGapM": 6.106505598927302e-8
+    },
+    {
+      "time": 3.314583333333333,
+      "maximumSplitGapM": 6.44295018812225e-8
+    },
+    {
+      "time": 3.316666666666667,
+      "maximumSplitGapM": 6.102608425764906e-8
+    },
+    {
+      "time": 3.31875,
+      "maximumSplitGapM": 6.058368653729761e-8
+    },
+    {
+      "time": 3.3208333333333333,
+      "maximumSplitGapM": 6.007673936268628e-8
+    },
+    {
+      "time": 3.3229166666666665,
+      "maximumSplitGapM": 6.088055562626436e-8
+    },
+    {
+      "time": 3.325,
+      "maximumSplitGapM": 6.140721396208701e-8
+    },
+    {
+      "time": 3.3270833333333334,
+      "maximumSplitGapM": 5.931898909170409e-8
+    },
+    {
+      "time": 3.3291666666666666,
+      "maximumSplitGapM": 6.071876087482545e-8
+    },
+    {
+      "time": 3.33125,
+      "maximumSplitGapM": 6.059394359003468e-8
+    },
+    {
+      "time": 3.3333333333333335,
+      "maximumSplitGapM": 5.952723673162864e-8
+    },
+    {
+      "time": 3.3354166666666667,
+      "maximumSplitGapM": 6.003545756729232e-8
+    },
+    {
+      "time": 3.3375,
+      "maximumSplitGapM": 6.207363488806571e-8
+    },
+    {
+      "time": 3.339583333333333,
+      "maximumSplitGapM": 6.100533870304916e-8
+    },
+    {
+      "time": 3.341666666666667,
+      "maximumSplitGapM": 5.896720216225708e-8
+    },
+    {
+      "time": 3.34375,
+      "maximumSplitGapM": 5.9676224169986e-8
+    },
+    {
+      "time": 3.345833333333333,
+      "maximumSplitGapM": 5.907119381701896e-8
+    },
+    {
+      "time": 3.347916666666667,
+      "maximumSplitGapM": 5.980049093715243e-8
+    },
+    {
+      "time": 3.35,
+      "maximumSplitGapM": 5.984908783914357e-8
+    },
+    {
+      "time": 3.3520833333333333,
+      "maximumSplitGapM": 6.071147312582325e-8
+    },
+    {
+      "time": 3.3541666666666665,
+      "maximumSplitGapM": 6.05389792391859e-8
+    },
+    {
+      "time": 3.35625,
+      "maximumSplitGapM": 6.0873197212655e-8
+    },
+    {
+      "time": 3.3583333333333334,
+      "maximumSplitGapM": 5.95518599661177e-8
+    },
+    {
+      "time": 3.3604166666666666,
+      "maximumSplitGapM": 5.8824507339538746e-8
+    },
+    {
+      "time": 3.3625,
+      "maximumSplitGapM": 5.90083840917959e-8
+    },
+    {
+      "time": 3.3645833333333335,
+      "maximumSplitGapM": 6.66468527133254e-8
+    },
+    {
+      "time": 3.3666666666666667,
+      "maximumSplitGapM": 5.949308309224534e-8
+    },
+    {
+      "time": 3.36875,
+      "maximumSplitGapM": 6.329365618574221e-8
+    },
+    {
+      "time": 3.370833333333333,
+      "maximumSplitGapM": 6.219220581343292e-8
+    },
+    {
+      "time": 3.372916666666667,
+      "maximumSplitGapM": 6.250049407803547e-8
+    },
+    {
+      "time": 3.375,
+      "maximumSplitGapM": 6.474369715741595e-8
+    },
+    {
+      "time": 3.377083333333333,
+      "maximumSplitGapM": 6.036901195639259e-8
+    },
+    {
+      "time": 3.379166666666667,
+      "maximumSplitGapM": 6.102313715148637e-8
+    },
+    {
+      "time": 3.38125,
+      "maximumSplitGapM": 6.100297228716794e-8
+    },
+    {
+      "time": 3.3833333333333333,
+      "maximumSplitGapM": 5.978576857609042e-8
+    },
+    {
+      "time": 3.3854166666666665,
+      "maximumSplitGapM": 5.998365548587163e-8
+    },
+    {
+      "time": 3.3875,
+      "maximumSplitGapM": 6.063175233720351e-8
+    },
+    {
+      "time": 3.3895833333333334,
+      "maximumSplitGapM": 6.065863289147313e-8
+    },
+    {
+      "time": 3.3916666666666666,
+      "maximumSplitGapM": 6.114989770364551e-8
+    },
+    {
+      "time": 3.39375,
+      "maximumSplitGapM": 6.289899668881671e-8
+    },
+    {
+      "time": 3.3958333333333335,
+      "maximumSplitGapM": 6.04983894038941e-8
+    },
+    {
+      "time": 3.3979166666666667,
+      "maximumSplitGapM": 6.061194936237377e-8
+    },
+    {
+      "time": 3.4,
+      "maximumSplitGapM": 5.966832501764306e-8
+    },
+    {
+      "time": 3.402083333333333,
+      "maximumSplitGapM": 5.986863238371191e-8
+    },
+    {
+      "time": 3.404166666666667,
+      "maximumSplitGapM": 6.134802341876364e-8
+    },
+    {
+      "time": 3.40625,
+      "maximumSplitGapM": 6.332480637541682e-8
+    },
+    {
+      "time": 3.408333333333333,
+      "maximumSplitGapM": 6.12442091590259e-8
+    },
+    {
+      "time": 3.410416666666667,
+      "maximumSplitGapM": 6.145761423445729e-8
+    },
+    {
+      "time": 3.4125,
+      "maximumSplitGapM": 6.173352976840074e-8
+    },
+    {
+      "time": 3.4145833333333333,
+      "maximumSplitGapM": 6.101447678720326e-8
+    },
+    {
+      "time": 3.4166666666666665,
+      "maximumSplitGapM": 6.207342779583472e-8
+    },
+    {
+      "time": 3.41875,
+      "maximumSplitGapM": 6.449654749665471e-8
+    },
+    {
+      "time": 3.4208333333333334,
+      "maximumSplitGapM": 6.11007636932221e-8
+    },
+    {
+      "time": 3.4229166666666666,
+      "maximumSplitGapM": 6.2400328096936e-8
+    },
+    {
+      "time": 3.425,
+      "maximumSplitGapM": 5.996078887448554e-8
+    },
+    {
+      "time": 3.4270833333333335,
+      "maximumSplitGapM": 6.064175728833473e-8
+    },
+    {
+      "time": 3.4291666666666667,
+      "maximumSplitGapM": 5.984067499327694e-8
+    },
+    {
+      "time": 3.43125,
+      "maximumSplitGapM": 5.984067766418841e-8
+    },
+    {
+      "time": 3.433333333333333,
+      "maximumSplitGapM": 6.00976015080383e-8
+    },
+    {
+      "time": 3.435416666666667,
+      "maximumSplitGapM": 6.100859340536423e-8
+    },
+    {
+      "time": 3.4375,
+      "maximumSplitGapM": 6.029396891877905e-8
+    },
+    {
+      "time": 3.439583333333333,
+      "maximumSplitGapM": 6.278200905270267e-8
+    },
+    {
+      "time": 3.441666666666667,
+      "maximumSplitGapM": 6.21971763532033e-8
+    },
+    {
+      "time": 3.44375,
+      "maximumSplitGapM": 5.9428677943307065e-8
+    },
+    {
+      "time": 3.4458333333333333,
+      "maximumSplitGapM": 6.609526922599447e-8
+    },
+    {
+      "time": 3.4479166666666665,
+      "maximumSplitGapM": 5.986320959415904e-8
+    },
+    {
+      "time": 3.45,
+      "maximumSplitGapM": 6.194120217998724e-8
+    },
+    {
+      "time": 3.4520833333333334,
+      "maximumSplitGapM": 6.190362611325845e-8
+    },
+    {
+      "time": 3.4541666666666666,
+      "maximumSplitGapM": 6.180563206467633e-8
+    },
+    {
+      "time": 3.45625,
+      "maximumSplitGapM": 5.97277530825751e-8
+    },
+    {
+      "time": 3.4583333333333335,
+      "maximumSplitGapM": 6.019099919369864e-8
+    },
+    {
+      "time": 3.4604166666666667,
+      "maximumSplitGapM": 6.175738843022083e-8
+    },
+    {
+      "time": 3.4625,
+      "maximumSplitGapM": 6.00830622634528e-8
+    },
+    {
+      "time": 3.464583333333333,
+      "maximumSplitGapM": 6.039398999126183e-8
+    },
+    {
+      "time": 3.466666666666667,
+      "maximumSplitGapM": 6.104939018699289e-8
+    },
+    {
+      "time": 3.46875,
+      "maximumSplitGapM": 6.081787621725114e-8
+    },
+    {
+      "time": 3.470833333333333,
+      "maximumSplitGapM": 6.087973831398886e-8
+    },
+    {
+      "time": 3.472916666666667,
+      "maximumSplitGapM": 6.323774977463048e-8
+    },
+    {
+      "time": 3.475,
+      "maximumSplitGapM": 6.267355008856275e-8
+    },
+    {
+      "time": 3.4770833333333333,
+      "maximumSplitGapM": 6.132602582474686e-8
+    },
+    {
+      "time": 3.4791666666666665,
+      "maximumSplitGapM": 6.105502910474216e-8
+    },
+    {
+      "time": 3.48125,
+      "maximumSplitGapM": 6.04445314215208e-8
+    },
+    {
+      "time": 3.4833333333333334,
+      "maximumSplitGapM": 6.09943085112717e-8
+    },
+    {
+      "time": 3.4854166666666666,
+      "maximumSplitGapM": 6.10118078333037e-8
+    },
+    {
+      "time": 3.4875,
+      "maximumSplitGapM": 6.153537986127918e-8
+    },
+    {
+      "time": 3.4895833333333335,
+      "maximumSplitGapM": 5.931199689742679e-8
+    },
+    {
+      "time": 3.4916666666666667,
+      "maximumSplitGapM": 6.023950206752124e-8
+    },
+    {
+      "time": 3.49375,
+      "maximumSplitGapM": 6.381288766630847e-8
+    },
+    {
+      "time": 3.495833333333333,
+      "maximumSplitGapM": 6.543995720976173e-8
+    },
+    {
+      "time": 3.497916666666667,
+      "maximumSplitGapM": 6.096755686226127e-8
+    },
+    {
+      "time": 3.5,
+      "maximumSplitGapM": 6.126440989687951e-8
+    },
+    {
+      "time": 3.502083333333333,
+      "maximumSplitGapM": 6.07879907960126e-8
+    },
+    {
+      "time": 3.504166666666667,
+      "maximumSplitGapM": 6.133091265163096e-8
+    },
+    {
+      "time": 3.50625,
+      "maximumSplitGapM": 6.173121527071164e-8
+    },
+    {
+      "time": 3.5083333333333333,
+      "maximumSplitGapM": 6.177262259789128e-8
+    },
+    {
+      "time": 3.5104166666666665,
+      "maximumSplitGapM": 6.230859959235938e-8
+    },
+    {
+      "time": 3.5125,
+      "maximumSplitGapM": 6.119597263405065e-8
+    },
+    {
+      "time": 3.5145833333333334,
+      "maximumSplitGapM": 6.40851647059495e-8
+    },
+    {
+      "time": 3.5166666666666666,
+      "maximumSplitGapM": 6.055389449568882e-8
+    },
+    {
+      "time": 3.51875,
+      "maximumSplitGapM": 6.049512864327913e-8
+    },
+    {
+      "time": 3.5208333333333335,
+      "maximumSplitGapM": 6.096159282586761e-8
+    },
+    {
+      "time": 3.5229166666666667,
+      "maximumSplitGapM": 6.142678823515377e-8
+    },
+    {
+      "time": 3.525,
+      "maximumSplitGapM": 5.968832918743412e-8
+    },
+    {
+      "time": 3.527083333333333,
+      "maximumSplitGapM": 5.985536222668403e-8
+    },
+    {
+      "time": 3.529166666666667,
+      "maximumSplitGapM": 6.071250956559997e-8
+    },
+    {
+      "time": 3.53125,
+      "maximumSplitGapM": 6.078720987232116e-8
+    },
+    {
+      "time": 3.533333333333333,
+      "maximumSplitGapM": 6.303874893802428e-8
+    },
+    {
+      "time": 3.535416666666667,
+      "maximumSplitGapM": 6.114702161169041e-8
+    },
+    {
+      "time": 3.5375,
+      "maximumSplitGapM": 6.058835711937555e-8
+    },
+    {
+      "time": 3.5395833333333333,
+      "maximumSplitGapM": 6.061373999188034e-8
+    },
+    {
+      "time": 3.5416666666666665,
+      "maximumSplitGapM": 6.101566312583685e-8
+    },
+    {
+      "time": 3.54375,
+      "maximumSplitGapM": 6.379706740287898e-8
+    },
+    {
+      "time": 3.5458333333333334,
+      "maximumSplitGapM": 6.21576494425648e-8
+    },
+    {
+      "time": 3.5479166666666666,
+      "maximumSplitGapM": 6.408624624483898e-8
+    },
+    {
+      "time": 3.55,
+      "maximumSplitGapM": 6.2665532523339e-8
+    },
+    {
+      "time": 3.5520833333333335,
+      "maximumSplitGapM": 6.117301010529767e-8
+    },
+    {
+      "time": 3.5541666666666667,
+      "maximumSplitGapM": 6.039089542634271e-8
+    },
+    {
+      "time": 3.55625,
+      "maximumSplitGapM": 6.193260183227001e-8
+    },
+    {
+      "time": 3.558333333333333,
+      "maximumSplitGapM": 6.003122305166048e-8
+    },
+    {
+      "time": 3.560416666666667,
+      "maximumSplitGapM": 6.090420529330904e-8
+    },
+    {
+      "time": 3.5625,
+      "maximumSplitGapM": 6.214522016590131e-8
+    },
+    {
+      "time": 3.564583333333333,
+      "maximumSplitGapM": 6.180353435889982e-8
+    },
+    {
+      "time": 3.566666666666667,
+      "maximumSplitGapM": 6.103335725774196e-8
+    },
+    {
+      "time": 3.56875,
+      "maximumSplitGapM": 6.104349406929224e-8
+    },
+    {
+      "time": 3.5708333333333333,
+      "maximumSplitGapM": 6.192512827272713e-8
+    },
+    {
+      "time": 3.5729166666666665,
+      "maximumSplitGapM": 6.02456035532978e-8
+    },
+    {
+      "time": 3.575,
+      "maximumSplitGapM": 6.101436844153569e-8
+    },
+    {
+      "time": 3.5770833333333334,
+      "maximumSplitGapM": 5.970655873358264e-8
+    },
+    {
+      "time": 3.5791666666666666,
+      "maximumSplitGapM": 6.134364402944e-8
+    },
+    {
+      "time": 3.58125,
+      "maximumSplitGapM": 6.115778022015953e-8
+    },
+    {
+      "time": 3.5833333333333335,
+      "maximumSplitGapM": 6.452149925905217e-8
+    },
+    {
+      "time": 3.5854166666666667,
+      "maximumSplitGapM": 6.09948725565692e-8
+    },
+    {
+      "time": 3.5875,
+      "maximumSplitGapM": 6.020046627820603e-8
+    },
+    {
+      "time": 3.589583333333333,
+      "maximumSplitGapM": 6.176607338336109e-8
+    },
+    {
+      "time": 3.591666666666667,
+      "maximumSplitGapM": 6.122126287966452e-8
+    },
+    {
+      "time": 3.59375,
+      "maximumSplitGapM": 6.098462021892162e-8
+    },
+    {
+      "time": 3.595833333333333,
+      "maximumSplitGapM": 6.074581141224423e-8
+    },
+    {
+      "time": 3.597916666666667,
+      "maximumSplitGapM": 6.184487090139906e-8
+    },
+    {
+      "time": 3.6,
+      "maximumSplitGapM": 6.166269684817223e-8
+    },
+    {
+      "time": 3.6020833333333333,
+      "maximumSplitGapM": 6.02925980331901e-8
+    },
+    {
+      "time": 3.6041666666666665,
+      "maximumSplitGapM": 6.118913484573527e-8
+    },
+    {
+      "time": 3.60625,
+      "maximumSplitGapM": 6.07607528690862e-8
+    },
+    {
+      "time": 3.6083333333333334,
+      "maximumSplitGapM": 5.9228610635102096e-8
+    },
+    {
+      "time": 3.6104166666666666,
+      "maximumSplitGapM": 6.126939155265293e-8
+    },
+    {
+      "time": 3.6125,
+      "maximumSplitGapM": 6.615803218465208e-8
+    },
+    {
+      "time": 3.6145833333333335,
+      "maximumSplitGapM": 6.021079194934254e-8
+    },
+    {
+      "time": 3.6166666666666667,
+      "maximumSplitGapM": 6.017613599452445e-8
+    },
+    {
+      "time": 3.61875,
+      "maximumSplitGapM": 6.062333451360913e-8
+    },
+    {
+      "time": 3.620833333333333,
+      "maximumSplitGapM": 6.323737052348144e-8
+    },
+    {
+      "time": 3.622916666666667,
+      "maximumSplitGapM": 6.242512180718516e-8
+    },
+    {
+      "time": 3.625,
+      "maximumSplitGapM": 5.9101214082899356e-8
+    },
+    {
+      "time": 3.627083333333333,
+      "maximumSplitGapM": 6.03258585688976e-8
+    },
+    {
+      "time": 3.629166666666667,
+      "maximumSplitGapM": 6.003217688777777e-8
+    },
+    {
+      "time": 3.63125,
+      "maximumSplitGapM": 6.061667331464132e-8
+    },
+    {
+      "time": 3.6333333333333333,
+      "maximumSplitGapM": 5.990788417708188e-8
+    },
+    {
+      "time": 3.6354166666666665,
+      "maximumSplitGapM": 6.123658258744333e-8
+    },
+    {
+      "time": 3.6375,
+      "maximumSplitGapM": 6.009921318773982e-8
+    },
+    {
+      "time": 3.6395833333333334,
+      "maximumSplitGapM": 5.994392716278128e-8
+    },
+    {
+      "time": 3.6416666666666666,
+      "maximumSplitGapM": 6.12438234229641e-8
+    },
+    {
+      "time": 3.64375,
+      "maximumSplitGapM": 5.993671099831313e-8
+    },
+    {
+      "time": 3.6458333333333335,
+      "maximumSplitGapM": 6.276348798431765e-8
+    },
+    {
+      "time": 3.6479166666666667,
+      "maximumSplitGapM": 6.123658645047019e-8
+    },
+    {
+      "time": 3.65,
+      "maximumSplitGapM": 6.004688346064239e-8
+    },
+    {
+      "time": 3.652083333333333,
+      "maximumSplitGapM": 6.063585699835609e-8
+    },
+    {
+      "time": 3.654166666666667,
+      "maximumSplitGapM": 6.099961224132747e-8
+    },
+    {
+      "time": 3.65625,
+      "maximumSplitGapM": 6.043153014402084e-8
+    },
+    {
+      "time": 3.658333333333333,
+      "maximumSplitGapM": 6.225714482343205e-8
+    },
+    {
+      "time": 3.660416666666667,
+      "maximumSplitGapM": 6.127131662576399e-8
+    },
+    {
+      "time": 3.6625,
+      "maximumSplitGapM": 5.934489831904289e-8
+    },
+    {
+      "time": 3.6645833333333333,
+      "maximumSplitGapM": 6.219103850554736e-8
+    },
+    {
+      "time": 3.6666666666666665,
+      "maximumSplitGapM": 6.507551500566717e-8
+    },
+    {
+      "time": 3.66875,
+      "maximumSplitGapM": 6.082384580714514e-8
+    },
+    {
+      "time": 3.6708333333333334,
+      "maximumSplitGapM": 6.095404523368721e-8
+    },
+    {
+      "time": 3.6729166666666666,
+      "maximumSplitGapM": 6.043930953192287e-8
+    },
+    {
+      "time": 3.675,
+      "maximumSplitGapM": 6.311113829474106e-8
+    },
+    {
+      "time": 3.6770833333333335,
+      "maximumSplitGapM": 6.053274104510808e-8
+    },
+    {
+      "time": 3.6791666666666667,
+      "maximumSplitGapM": 6.095650433347806e-8
+    },
+    {
+      "time": 3.68125,
+      "maximumSplitGapM": 6.01773347635596e-8
+    },
+    {
+      "time": 3.683333333333333,
+      "maximumSplitGapM": 5.982986760094782e-8
+    },
+    {
+      "time": 3.685416666666667,
+      "maximumSplitGapM": 5.98738971053776e-8
+    },
+    {
+      "time": 3.6875,
+      "maximumSplitGapM": 6.093343347762719e-8
+    },
+    {
+      "time": 3.689583333333333,
+      "maximumSplitGapM": 6.153510755364799e-8
+    },
+    {
+      "time": 3.691666666666667,
+      "maximumSplitGapM": 6.061816799727693e-8
+    },
+    {
+      "time": 3.69375,
+      "maximumSplitGapM": 6.129272324292665e-8
+    },
+    {
+      "time": 3.6958333333333333,
+      "maximumSplitGapM": 6.019011081122525e-8
+    },
+    {
+      "time": 3.6979166666666665,
+      "maximumSplitGapM": 6.112568023410498e-8
+    },
+    {
+      "time": 3.7,
+      "maximumSplitGapM": 6.055910608765894e-8
+    },
+    {
+      "time": 3.7020833333333334,
+      "maximumSplitGapM": 6.017663491555482e-8
+    },
+    {
+      "time": 3.7041666666666666,
+      "maximumSplitGapM": 6.106608865085286e-8
+    },
+    {
+      "time": 3.70625,
+      "maximumSplitGapM": 6.104754073357968e-8
+    },
+    {
+      "time": 3.7083333333333335,
+      "maximumSplitGapM": 6.288112703972528e-8
+    },
+    {
+      "time": 3.7104166666666667,
+      "maximumSplitGapM": 6.045159434063393e-8
+    },
+    {
+      "time": 3.7125,
+      "maximumSplitGapM": 6.149272433947182e-8
+    },
+    {
+      "time": 3.714583333333333,
+      "maximumSplitGapM": 6.16813761878247e-8
+    },
+    {
+      "time": 3.716666666666667,
+      "maximumSplitGapM": 5.9177929630699974e-8
+    },
+    {
+      "time": 3.71875,
+      "maximumSplitGapM": 6.369945093941582e-8
+    },
+    {
+      "time": 3.720833333333333,
+      "maximumSplitGapM": 6.193735178299569e-8
+    },
+    {
+      "time": 3.722916666666667,
+      "maximumSplitGapM": 5.98284876680251e-8
+    },
+    {
+      "time": 3.725,
+      "maximumSplitGapM": 5.955231230139956e-8
+    },
+    {
+      "time": 3.7270833333333333,
+      "maximumSplitGapM": 6.101479453689295e-8
+    },
+    {
+      "time": 3.7291666666666665,
+      "maximumSplitGapM": 6.090597329424795e-8
+    },
+    {
+      "time": 3.73125,
+      "maximumSplitGapM": 6.180227968506585e-8
+    },
+    {
+      "time": 3.7333333333333334,
+      "maximumSplitGapM": 6.300746193339192e-8
+    },
+    {
+      "time": 3.7354166666666666,
+      "maximumSplitGapM": 6.019012081506176e-8
+    },
+    {
+      "time": 3.7375,
+      "maximumSplitGapM": 6.092056010717124e-8
+    },
+    {
+      "time": 3.7395833333333335,
+      "maximumSplitGapM": 6.387008420155774e-8
+    },
+    {
+      "time": 3.7416666666666667,
+      "maximumSplitGapM": 6.387009737621036e-8
+    },
+    {
+      "time": 3.74375,
+      "maximumSplitGapM": 6.09616591259699e-8
+    },
+    {
+      "time": 3.745833333333333,
+      "maximumSplitGapM": 6.070227524000808e-8
+    },
+    {
+      "time": 3.747916666666667,
+      "maximumSplitGapM": 6.074504027214212e-8
+    },
+    {
+      "time": 3.75,
+      "maximumSplitGapM": 5.933205653912708e-8
+    },
+    {
+      "time": 3.752083333333333,
+      "maximumSplitGapM": 6.072509538539005e-8
+    },
+    {
+      "time": 3.754166666666667,
+      "maximumSplitGapM": 6.194040340529325e-8
+    },
+    {
+      "time": 3.75625,
+      "maximumSplitGapM": 6.176801433580429e-8
+    },
+    {
+      "time": 3.7583333333333333,
+      "maximumSplitGapM": 6.235726112094736e-8
+    },
+    {
+      "time": 3.7604166666666665,
+      "maximumSplitGapM": 6.542865265435106e-8
+    },
+    {
+      "time": 3.7625,
+      "maximumSplitGapM": 6.320681628560907e-8
+    },
+    {
+      "time": 3.7645833333333334,
+      "maximumSplitGapM": 5.917826316639139e-8
+    },
+    {
+      "time": 3.7666666666666666,
+      "maximumSplitGapM": 6.020319625256648e-8
+    },
+    {
+      "time": 3.76875,
+      "maximumSplitGapM": 6.050786071830626e-8
+    },
+    {
+      "time": 3.7708333333333335,
+      "maximumSplitGapM": 6.035983042465966e-8
+    },
+    {
+      "time": 3.7729166666666667,
+      "maximumSplitGapM": 6.321294367791819e-8
+    },
+    {
+      "time": 3.775,
+      "maximumSplitGapM": 6.12422184297129e-8
+    },
+    {
+      "time": 3.777083333333333,
+      "maximumSplitGapM": 6.055695318492122e-8
+    },
+    {
+      "time": 3.779166666666667,
+      "maximumSplitGapM": 6.168854807330545e-8
+    },
+    {
+      "time": 3.78125,
+      "maximumSplitGapM": 5.933161498239046e-8
+    },
+    {
+      "time": 3.783333333333333,
+      "maximumSplitGapM": 6.006195269167763e-8
+    },
+    {
+      "time": 3.785416666666667,
+      "maximumSplitGapM": 6.082743035183132e-8
+    },
+    {
+      "time": 3.7875,
+      "maximumSplitGapM": 6.046698739123326e-8
+    },
+    {
+      "time": 3.7895833333333333,
+      "maximumSplitGapM": 6.333887972819447e-8
+    },
+    {
+      "time": 3.7916666666666665,
+      "maximumSplitGapM": 6.001511661903564e-8
+    },
+    {
+      "time": 3.79375,
+      "maximumSplitGapM": 6.477415426059185e-8
+    },
+    {
+      "time": 3.7958333333333334,
+      "maximumSplitGapM": 6.113052708513572e-8
+    },
+    {
+      "time": 3.7979166666666666,
+      "maximumSplitGapM": 6.148071086662413e-8
+    },
+    {
+      "time": 3.8,
+      "maximumSplitGapM": 6.208216249714921e-8
+    },
+    {
+      "time": 3.8020833333333335,
+      "maximumSplitGapM": 6.172283893119194e-8
+    },
+    {
+      "time": 3.8041666666666667,
+      "maximumSplitGapM": 6.027780670581136e-8
+    },
+    {
+      "time": 3.80625,
+      "maximumSplitGapM": 6.146408511330019e-8
+    },
+    {
+      "time": 3.808333333333333,
+      "maximumSplitGapM": 5.995972796939073e-8
+    },
+    {
+      "time": 3.810416666666667,
+      "maximumSplitGapM": 5.986636813393493e-8
+    },
+    {
+      "time": 3.8125,
+      "maximumSplitGapM": 6.110807252433387e-8
+    },
+    {
+      "time": 3.814583333333333,
+      "maximumSplitGapM": 6.417602311025207e-8
+    },
+    {
+      "time": 3.816666666666667,
+      "maximumSplitGapM": 6.50041739594909e-8
+    },
+    {
+      "time": 3.81875,
+      "maximumSplitGapM": 6.05458214602372e-8
+    },
+    {
+      "time": 3.8208333333333333,
+      "maximumSplitGapM": 6.091938360415308e-8
+    },
+    {
+      "time": 3.8229166666666665,
+      "maximumSplitGapM": 6.020323508310585e-8
+    },
+    {
+      "time": 3.825,
+      "maximumSplitGapM": 6.030962695959458e-8
+    },
+    {
+      "time": 3.8270833333333334,
+      "maximumSplitGapM": 6.522679787341422e-8
+    },
+    {
+      "time": 3.8291666666666666,
+      "maximumSplitGapM": 6.276316424475721e-8
+    },
+    {
+      "time": 3.83125,
+      "maximumSplitGapM": 6.04447042747187e-8
+    },
+    {
+      "time": 3.8333333333333335,
+      "maximumSplitGapM": 6.003508220943923e-8
+    },
+    {
+      "time": 3.8354166666666667,
+      "maximumSplitGapM": 6.048997070440763e-8
+    },
+    {
+      "time": 3.8375,
+      "maximumSplitGapM": 6.012245317189279e-8
+    },
+    {
+      "time": 3.839583333333333,
+      "maximumSplitGapM": 6.116846197922456e-8
+    },
+    {
+      "time": 3.841666666666667,
+      "maximumSplitGapM": 6.188017523934914e-8
+    },
+    {
+      "time": 3.84375,
+      "maximumSplitGapM": 6.296640997451504e-8
+    },
+    {
+      "time": 3.845833333333333,
+      "maximumSplitGapM": 6.293605121488292e-8
+    },
+    {
+      "time": 3.847916666666667,
+      "maximumSplitGapM": 6.103704227579683e-8
+    },
+    {
+      "time": 3.85,
+      "maximumSplitGapM": 5.984024518657916e-8
+    },
+    {
+      "time": 3.8520833333333333,
+      "maximumSplitGapM": 6.14278897459095e-8
+    },
+    {
+      "time": 3.8541666666666665,
+      "maximumSplitGapM": 6.384930519268286e-8
+    },
+    {
+      "time": 3.85625,
+      "maximumSplitGapM": 6.164751679750385e-8
+    },
+    {
+      "time": 3.8583333333333334,
+      "maximumSplitGapM": 6.537749771694128e-8
+    },
+    {
+      "time": 3.8604166666666666,
+      "maximumSplitGapM": 6.133084177658936e-8
+    },
+    {
+      "time": 3.8625,
+      "maximumSplitGapM": 6.633538268694444e-8
+    },
+    {
+      "time": 3.8645833333333335,
+      "maximumSplitGapM": 6.259456397864556e-8
+    },
+    {
+      "time": 3.8666666666666667,
+      "maximumSplitGapM": 5.984254803620992e-8
+    },
+    {
+      "time": 3.86875,
+      "maximumSplitGapM": 6.10382259219413e-8
+    },
+    {
+      "time": 3.870833333333333,
+      "maximumSplitGapM": 6.401128968463711e-8
+    },
+    {
+      "time": 3.872916666666667,
+      "maximumSplitGapM": 6.067516054602085e-8
+    },
+    {
+      "time": 3.875,
+      "maximumSplitGapM": 6.050045961789253e-8
+    },
+    {
+      "time": 3.877083333333333,
+      "maximumSplitGapM": 6.211717819471226e-8
+    },
+    {
+      "time": 3.879166666666667,
+      "maximumSplitGapM": 6.43387332442127e-8
+    },
+    {
+      "time": 3.88125,
+      "maximumSplitGapM": 6.180699632303902e-8
+    },
+    {
+      "time": 3.8833333333333333,
+      "maximumSplitGapM": 5.969086206974691e-8
+    },
+    {
+      "time": 3.8854166666666665,
+      "maximumSplitGapM": 6.201403597244376e-8
+    },
+    {
+      "time": 3.8875,
+      "maximumSplitGapM": 6.116037285194633e-8
+    },
+    {
+      "time": 3.8895833333333334,
+      "maximumSplitGapM": 6.075389422291279e-8
+    },
+    {
+      "time": 3.8916666666666666,
+      "maximumSplitGapM": 6.126801484085939e-8
+    },
+    {
+      "time": 3.89375,
+      "maximumSplitGapM": 6.223900776234521e-8
+    },
+    {
+      "time": 3.8958333333333335,
+      "maximumSplitGapM": 5.981784397813844e-8
+    },
+    {
+      "time": 3.8979166666666667,
+      "maximumSplitGapM": 6.28350472978297e-8
+    },
+    {
+      "time": 3.9,
+      "maximumSplitGapM": 6.24184416392862e-8
+    },
+    {
+      "time": 3.902083333333333,
+      "maximumSplitGapM": 6.092138058727255e-8
+    },
+    {
+      "time": 3.904166666666667,
+      "maximumSplitGapM": 6.022027196446006e-8
+    },
+    {
+      "time": 3.90625,
+      "maximumSplitGapM": 6.142993201398433e-8
+    },
+    {
+      "time": 3.908333333333333,
+      "maximumSplitGapM": 6.004130507742431e-8
+    },
+    {
+      "time": 3.910416666666667,
+      "maximumSplitGapM": 5.973641843017446e-8
+    },
+    {
+      "time": 3.9125,
+      "maximumSplitGapM": 5.964240581661329e-8
+    },
+    {
+      "time": 3.9145833333333333,
+      "maximumSplitGapM": 6.476200685928267e-8
+    },
+    {
+      "time": 3.9166666666666665,
+      "maximumSplitGapM": 6.331750198391893e-8
+    },
+    {
+      "time": 3.91875,
+      "maximumSplitGapM": 6.142266800087858e-8
+    },
+    {
+      "time": 3.9208333333333334,
+      "maximumSplitGapM": 6.096806592600481e-8
+    },
+    {
+      "time": 3.9229166666666666,
+      "maximumSplitGapM": 5.972126344087134e-8
+    },
+    {
+      "time": 3.925,
+      "maximumSplitGapM": 6.099436254060605e-8
+    },
+    {
+      "time": 3.9270833333333335,
+      "maximumSplitGapM": 5.918914406682388e-8
+    },
+    {
+      "time": 3.9291666666666667,
+      "maximumSplitGapM": 6.002860546050738e-8
+    },
+    {
+      "time": 3.93125,
+      "maximumSplitGapM": 6.044618545363852e-8
+    },
+    {
+      "time": 3.933333333333333,
+      "maximumSplitGapM": 6.025799848637491e-8
+    },
+    {
+      "time": 3.935416666666667,
+      "maximumSplitGapM": 6.222587189952546e-8
+    },
+    {
+      "time": 3.9375,
+      "maximumSplitGapM": 6.177161860777662e-8
+    },
+    {
+      "time": 3.939583333333333,
+      "maximumSplitGapM": 6.009779112524004e-8
+    },
+    {
+      "time": 3.941666666666667,
+      "maximumSplitGapM": 6.617020252062054e-8
+    },
+    {
+      "time": 3.94375,
+      "maximumSplitGapM": 6.097066640575908e-8
+    },
+    {
+      "time": 3.9458333333333333,
+      "maximumSplitGapM": 6.103483934677726e-8
+    },
+    {
+      "time": 3.9479166666666665,
+      "maximumSplitGapM": 6.150970259554624e-8
+    },
+    {
+      "time": 3.95,
+      "maximumSplitGapM": 6.040183516121944e-8
+    },
+    {
+      "time": 3.9520833333333334,
+      "maximumSplitGapM": 6.057287903083799e-8
+    },
+    {
+      "time": 3.9541666666666666,
+      "maximumSplitGapM": 6.470549248949341e-8
+    },
+    {
+      "time": 3.95625,
+      "maximumSplitGapM": 5.986636258515882e-8
+    },
+    {
+      "time": 3.9583333333333335,
+      "maximumSplitGapM": 6.004805207113984e-8
+    },
+    {
+      "time": 3.9604166666666667,
+      "maximumSplitGapM": 5.996629195307403e-8
+    },
+    {
+      "time": 3.9625,
+      "maximumSplitGapM": 6.219221649748186e-8
+    },
+    {
+      "time": 3.964583333333333,
+      "maximumSplitGapM": 5.9336131750181646e-8
+    },
+    {
+      "time": 3.966666666666667,
+      "maximumSplitGapM": 5.955186154519783e-8
+    },
+    {
+      "time": 3.96875,
+      "maximumSplitGapM": 5.9474940668553386e-8
+    },
+    {
+      "time": 3.970833333333333,
+      "maximumSplitGapM": 5.956159621188856e-8
+    },
+    {
+      "time": 3.972916666666667,
+      "maximumSplitGapM": 6.201478385417399e-8
+    },
+    {
+      "time": 3.975,
+      "maximumSplitGapM": 5.939814539529736e-8
+    },
+    {
+      "time": 3.9770833333333333,
+      "maximumSplitGapM": 5.9587936447397446e-8
+    },
+    {
+      "time": 3.9791666666666665,
+      "maximumSplitGapM": 6.01341952064249e-8
+    },
+    {
+      "time": 3.98125,
+      "maximumSplitGapM": 6.14116458064022e-8
+    },
+    {
+      "time": 3.9833333333333334,
+      "maximumSplitGapM": 6.054214693055967e-8
+    },
+    {
+      "time": 3.9854166666666666,
+      "maximumSplitGapM": 5.9416842944188173e-8
+    },
+    {
+      "time": 3.9875,
+      "maximumSplitGapM": 6.021426997129162e-8
+    },
+    {
+      "time": 3.9895833333333335,
+      "maximumSplitGapM": 6.089903349321546e-8
+    },
+    {
+      "time": 3.9916666666666667,
+      "maximumSplitGapM": 5.968214812957101e-8
+    },
+    {
+      "time": 3.99375,
+      "maximumSplitGapM": 6.19045508973942e-8
+    },
+    {
+      "time": 3.995833333333333,
+      "maximumSplitGapM": 5.986113973919485e-8
+    },
+    {
+      "time": 3.997916666666667,
+      "maximumSplitGapM": 6.007690332111073e-8
+    },
+    {
+      "time": 4,
+      "maximumSplitGapM": 6.004806233637995e-8
+    }
+  ],
+  "moduleSHA256": "9cad3fc031551bdb27297b08a8520704e297fef9b495f32215645ce988a3bd69"
+}

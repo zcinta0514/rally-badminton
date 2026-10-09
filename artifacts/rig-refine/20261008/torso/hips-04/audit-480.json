@@ -1,0 +1,5498 @@
+{
+  "source": "artifacts/rig-refine/20261008/torso/hips-04/rebuild.blend",
+  "sourceSha256": "0377dc31cdb889ae8b3a254705c1b8cad0fa56e50fcf239c1ffecfd966dc7fa2",
+  "sampleHz": 480,
+  "frameInterval": [
+    130.0,
+    320.0
+  ],
+  "samples": 761,
+  "shapeKeyPrefix": "Oct08HipResidual_",
+  "addedShapeKeyCount": 360,
+  "changedRestVertexIndices": [
+    16,
+    701,
+    752,
+    784,
+    791,
+    800,
+    872,
+    880,
+    1001,
+    1009,
+    1050,
+    1057,
+    1058,
+    1124,
+    1129,
+    1130,
+    1131,
+    1132,
+    1133,
+    1138,
+    1139,
+    1140,
+    1141,
+    1443,
+    1453,
+    1457,
+    1460,
+    1463,
+    1464,
+    1465,
+    1466,
+    1467,
+    1468,
+    1477,
+    1481,
+    1521,
+    1522,
+    1527,
+    1532,
+    1577,
+    1578,
+    1587,
+    1588,
+    1589,
+    1603,
+    1604,
+    1607,
+    1608,
+    1609,
+    1610,
+    1625,
+    1626,
+    1641,
+    1646,
+    1649,
+    1653,
+    1657,
+    1662,
+    1680,
+    1682,
+    1701,
+    1728,
+    1733,
+    1890,
+    1893,
+    2219,
+    2239,
+    2245,
+    2246,
+    2255,
+    2256,
+    2269,
+    2298,
+    2299,
+    2300,
+    2307,
+    2320,
+    2339,
+    2346,
+    2359,
+    2361,
+    2365,
+    2370,
+    2426,
+    2429,
+    2434,
+    2555,
+    2563,
+    2599,
+    2600,
+    2601,
+    2604,
+    2605,
+    2606,
+    2608,
+    2611,
+    2612,
+    2678,
+    2681,
+    2682,
+    2683,
+    2684,
+    2685,
+    2686,
+    2687,
+    2688,
+    2689,
+    2690,
+    2691,
+    2692,
+    2693,
+    2694,
+    2695,
+    2895,
+    2898,
+    2903,
+    2921,
+    2926,
+    2927,
+    2938,
+    2939,
+    2940,
+    2942,
+    2995,
+    2997,
+    3002,
+    3004,
+    3005,
+    3006,
+    3007,
+    3009,
+    3010,
+    3011,
+    3012,
+    3014,
+    3017,
+    3020,
+    3022,
+    3024,
+    3025,
+    3062,
+    3063,
+    3064,
+    3068,
+    3073,
+    3118,
+    3119,
+    3127,
+    3128,
+    3129
+  ],
+  "maxResidualRestMagnitudeM": 0.01565001556080628,
+  "maximumRestDeltaOutsideSplitM": 0,
+  "rows": [
+    {
+      "frame": 130.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47846123842162525,
+      "maxHipEdgeRatio": 1.7414581984771162
+    },
+    {
+      "frame": 130.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4784518503378521,
+      "maxHipEdgeRatio": 1.7414865959710766
+    },
+    {
+      "frame": 130.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4785446675010672,
+      "maxHipEdgeRatio": 1.7415510565401893
+    },
+    {
+      "frame": 130.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47875148282438473,
+      "maxHipEdgeRatio": 1.7416308482716854
+    },
+    {
+      "frame": 131.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47906175205607904,
+      "maxHipEdgeRatio": 1.7417264938188282
+    },
+    {
+      "frame": 131.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4793588409731165,
+      "maxHipEdgeRatio": 1.7417021017090448
+    },
+    {
+      "frame": 131.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47973140453408375,
+      "maxHipEdgeRatio": 1.7417691006495633
+    },
+    {
+      "frame": 131.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48018832210885487,
+      "maxHipEdgeRatio": 1.7418742374485305
+    },
+    {
+      "frame": 132.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4807251077657748,
+      "maxHipEdgeRatio": 1.7420494654468093
+    },
+    {
+      "frame": 132.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4806281746446493,
+      "maxHipEdgeRatio": 1.7421082183638792
+    },
+    {
+      "frame": 132.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4805370223632855,
+      "maxHipEdgeRatio": 1.7421722722960231
+    },
+    {
+      "frame": 132.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48045539690584915,
+      "maxHipEdgeRatio": 1.7422470755087338
+    },
+    {
+      "frame": 133.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48038163339048884,
+      "maxHipEdgeRatio": 1.7423293884927993
+    },
+    {
+      "frame": 133.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48032798719749953,
+      "maxHipEdgeRatio": 1.7423938841761994
+    },
+    {
+      "frame": 133.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4802822029465862,
+      "maxHipEdgeRatio": 1.7424680983872352
+    },
+    {
+      "frame": 133.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4802441418975946,
+      "maxHipEdgeRatio": 1.7425456993579014
+    },
+    {
+      "frame": 134.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4802189374362333,
+      "maxHipEdgeRatio": 1.74263110460076
+    },
+    {
+      "frame": 134.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4802460842597546,
+      "maxHipEdgeRatio": 1.7426958947849975
+    },
+    {
+      "frame": 134.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48027711580759586,
+      "maxHipEdgeRatio": 1.7427849812883243
+    },
+    {
+      "frame": 134.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4803381152287622,
+      "maxHipEdgeRatio": 1.7429010146182768
+    },
+    {
+      "frame": 135.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48042029564681565,
+      "maxHipEdgeRatio": 1.7430350124993137
+    },
+    {
+      "frame": 135.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4804924867737608,
+      "maxHipEdgeRatio": 1.743233800564588
+    },
+    {
+      "frame": 135.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4798943676225883,
+      "maxHipEdgeRatio": 1.7434296436214878
+    },
+    {
+      "frame": 135.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4788232819353897,
+      "maxHipEdgeRatio": 1.7436362359589543
+    },
+    {
+      "frame": 136.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47774626117990887,
+      "maxHipEdgeRatio": 1.7438515160711257
+    },
+    {
+      "frame": 136.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47662996913149497,
+      "maxHipEdgeRatio": 1.744163981459653
+    },
+    {
+      "frame": 136.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4755124567886679,
+      "maxHipEdgeRatio": 1.7444799808582299
+    },
+    {
+      "frame": 136.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47438573676981416,
+      "maxHipEdgeRatio": 1.7448039317794175
+    },
+    {
+      "frame": 137.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4732604589170851,
+      "maxHipEdgeRatio": 1.745124348690556
+    },
+    {
+      "frame": 137.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47216568842468537,
+      "maxHipEdgeRatio": 1.7456076245648007
+    },
+    {
+      "frame": 137.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4710650937998591,
+      "maxHipEdgeRatio": 1.7460858939248087
+    },
+    {
+      "frame": 137.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4699611710993606,
+      "maxHipEdgeRatio": 1.746573587311615
+    },
+    {
+      "frame": 138.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4688689521316429,
+      "maxHipEdgeRatio": 1.7470696739722886
+    },
+    {
+      "frame": 138.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46777617848464653,
+      "maxHipEdgeRatio": 1.7476976970081366
+    },
+    {
+      "frame": 138.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.466688230547375,
+      "maxHipEdgeRatio": 1.7483348495699456
+    },
+    {
+      "frame": 138.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4656007818214543,
+      "maxHipEdgeRatio": 1.7489767141451533
+    },
+    {
+      "frame": 139.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46451571821643206,
+      "maxHipEdgeRatio": 1.7496231434833416
+    },
+    {
+      "frame": 139.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4634050284287332,
+      "maxHipEdgeRatio": 1.750111425871823
+    },
+    {
+      "frame": 139.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4622930074107654,
+      "maxHipEdgeRatio": 1.7505952907477424
+    },
+    {
+      "frame": 139.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.461186865993152,
+      "maxHipEdgeRatio": 1.751087107146273
+    },
+    {
+      "frame": 140.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4600770636922991,
+      "maxHipEdgeRatio": 1.7515840773094586
+    },
+    {
+      "frame": 140.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4589908629947555,
+      "maxHipEdgeRatio": 1.7522854310538303
+    },
+    {
+      "frame": 140.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.4579168375073797,
+      "maxHipEdgeRatio": 1.7529965033258372
+    },
+    {
+      "frame": 140.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.45682597750389486,
+      "maxHipEdgeRatio": 1.753706250344076
+    },
+    {
+      "frame": 141.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 8,
+      "minHipEdgeRatio": 0.45574873487670253,
+      "maxHipEdgeRatio": 1.754416291863152
+    },
+    {
+      "frame": 141.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.4547496188259172,
+      "maxHipEdgeRatio": 1.755248109478511
+    },
+    {
+      "frame": 141.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.4537501977015285,
+      "maxHipEdgeRatio": 1.7560839028551753
+    },
+    {
+      "frame": 141.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.45276996848018347,
+      "maxHipEdgeRatio": 1.7569086524504356
+    },
+    {
+      "frame": 142.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45179439856477954,
+      "maxHipEdgeRatio": 1.7577412063178883
+    },
+    {
+      "frame": 142.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.450800135957683,
+      "maxHipEdgeRatio": 1.7586381086183223
+    },
+    {
+      "frame": 142.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 8,
+      "minHipEdgeRatio": 0.44981330605292114,
+      "maxHipEdgeRatio": 1.7595263231440514
+    },
+    {
+      "frame": 142.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 15,
+      "minHipEdgeRatio": 0.4488333541712154,
+      "maxHipEdgeRatio": 1.7597670775786616
+    },
+    {
+      "frame": 143.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 15,
+      "minHipEdgeRatio": 0.4478463855966339,
+      "maxHipEdgeRatio": 1.7600059177578282
+    },
+    {
+      "frame": 143.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 15,
+      "minHipEdgeRatio": 0.44692902927153116,
+      "maxHipEdgeRatio": 1.761225344410111
+    },
+    {
+      "frame": 143.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 19,
+      "minHipEdgeRatio": 0.4459997196079721,
+      "maxHipEdgeRatio": 1.7624636141561487
+    },
+    {
+      "frame": 143.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 19,
+      "minHipEdgeRatio": 0.4450848038716957,
+      "maxHipEdgeRatio": 1.7636630765083716
+    },
+    {
+      "frame": 144.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 19,
+      "minHipEdgeRatio": 0.44416631045407157,
+      "maxHipEdgeRatio": 1.7648963526559407
+    },
+    {
+      "frame": 144.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 19,
+      "minHipEdgeRatio": 0.44326398593742194,
+      "maxHipEdgeRatio": 1.7624509161486137
+    },
+    {
+      "frame": 144.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 25,
+      "minHipEdgeRatio": 0.4423653223040119,
+      "maxHipEdgeRatio": 1.7600374386714874
+    },
+    {
+      "frame": 144.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 25,
+      "minHipEdgeRatio": 0.44147459058428745,
+      "maxHipEdgeRatio": 1.7616585034087249
+    },
+    {
+      "frame": 145.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 25,
+      "minHipEdgeRatio": 0.4405828049739335,
+      "maxHipEdgeRatio": 1.7632915527822874
+    },
+    {
+      "frame": 145.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 25,
+      "minHipEdgeRatio": 0.4395260577460896,
+      "maxHipEdgeRatio": 1.7616612142193222
+    },
+    {
+      "frame": 145.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 25,
+      "minHipEdgeRatio": 0.43847491277896083,
+      "maxHipEdgeRatio": 1.7600282431319416
+    },
+    {
+      "frame": 145.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 27,
+      "minHipEdgeRatio": 0.4374229635268779,
+      "maxHipEdgeRatio": 1.7601792568680035
+    },
+    {
+      "frame": 146.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 25,
+      "minHipEdgeRatio": 0.4363702931917326,
+      "maxHipEdgeRatio": 1.760349609912913
+    },
+    {
+      "frame": 146.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 31,
+      "minHipEdgeRatio": 0.4353906463836301,
+      "maxHipEdgeRatio": 1.7603691562840624
+    },
+    {
+      "frame": 146.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 29,
+      "minHipEdgeRatio": 0.43441241400768843,
+      "maxHipEdgeRatio": 1.760406251586974
+    },
+    {
+      "frame": 146.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 29,
+      "minHipEdgeRatio": 0.43342672119544795,
+      "maxHipEdgeRatio": 1.7626452384661737
+    },
+    {
+      "frame": 147.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 33,
+      "minHipEdgeRatio": 0.4324648241242644,
+      "maxHipEdgeRatio": 1.7649006328831995
+    },
+    {
+      "frame": 147.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 33,
+      "minHipEdgeRatio": 0.4312961148840119,
+      "maxHipEdgeRatio": 1.7628018947838542
+    },
+    {
+      "frame": 147.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 35,
+      "minHipEdgeRatio": 0.4301442956277964,
+      "maxHipEdgeRatio": 1.7607834822827368
+    },
+    {
+      "frame": 147.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 39,
+      "minHipEdgeRatio": 0.42898679090897396,
+      "maxHipEdgeRatio": 1.760712002487511
+    },
+    {
+      "frame": 148.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 39,
+      "minHipEdgeRatio": 0.42781944063295435,
+      "maxHipEdgeRatio": 1.7608049058808717
+    },
+    {
+      "frame": 148.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 39,
+      "minHipEdgeRatio": 0.4266264364402942,
+      "maxHipEdgeRatio": 1.7612549103403796
+    },
+    {
+      "frame": 148.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 41,
+      "minHipEdgeRatio": 0.4254359005704243,
+      "maxHipEdgeRatio": 1.761700733573783
+    },
+    {
+      "frame": 148.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 41,
+      "minHipEdgeRatio": 0.4242146354685136,
+      "maxHipEdgeRatio": 1.7618380171642174
+    },
+    {
+      "frame": 149.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 41,
+      "minHipEdgeRatio": 0.4229883782530945,
+      "maxHipEdgeRatio": 1.7620230364193463
+    },
+    {
+      "frame": 149.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 37,
+      "minHipEdgeRatio": 0.42051314970579284,
+      "maxHipEdgeRatio": 1.761881048949544
+    },
+    {
+      "frame": 149.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 37,
+      "minHipEdgeRatio": 0.4180487096704622,
+      "maxHipEdgeRatio": 1.7617441137946184
+    },
+    {
+      "frame": 149.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 35,
+      "minHipEdgeRatio": 0.4155255568334796,
+      "maxHipEdgeRatio": 1.7617535215533537
+    },
+    {
+      "frame": 150.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 35,
+      "minHipEdgeRatio": 0.41301998732963224,
+      "maxHipEdgeRatio": 1.7617692011512458
+    },
+    {
+      "frame": 150.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 35,
+      "minHipEdgeRatio": 0.41020002561060925,
+      "maxHipEdgeRatio": 1.7618259961391667
+    },
+    {
+      "frame": 150.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 39,
+      "minHipEdgeRatio": 0.40739872884931505,
+      "maxHipEdgeRatio": 1.7618752997636502
+    },
+    {
+      "frame": 150.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 37,
+      "minHipEdgeRatio": 0.40459845824468643,
+      "maxHipEdgeRatio": 1.7619324431870798
+    },
+    {
+      "frame": 151.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 40,
+      "minHipEdgeRatio": 0.4018173518091374,
+      "maxHipEdgeRatio": 1.761988889739492
+    },
+    {
+      "frame": 151.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 42,
+      "minHipEdgeRatio": 0.3988523969266583,
+      "maxHipEdgeRatio": 1.7620988211424922
+    },
+    {
+      "frame": 151.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 42,
+      "minHipEdgeRatio": 0.395907410498213,
+      "maxHipEdgeRatio": 1.762231923506822
+    },
+    {
+      "frame": 151.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 44,
+      "minHipEdgeRatio": 0.3929677489908433,
+      "maxHipEdgeRatio": 1.7623073597944592
+    },
+    {
+      "frame": 152.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 51,
+      "minHipEdgeRatio": 0.3900573468154258,
+      "maxHipEdgeRatio": 1.7623976045912169
+    },
+    {
+      "frame": 152.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 51,
+      "minHipEdgeRatio": 0.3900163560167288,
+      "maxHipEdgeRatio": 1.762460322982786
+    },
+    {
+      "frame": 152.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 51,
+      "minHipEdgeRatio": 0.3900027941083642,
+      "maxHipEdgeRatio": 1.7625721707810842
+    },
+    {
+      "frame": 152.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 54,
+      "minHipEdgeRatio": 0.38998429555441905,
+      "maxHipEdgeRatio": 1.762649349246265
+    },
+    {
+      "frame": 153.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 56,
+      "minHipEdgeRatio": 0.38999164505486206,
+      "maxHipEdgeRatio": 1.7627455174466709
+    },
+    {
+      "frame": 153.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 63,
+      "minHipEdgeRatio": 0.3899786378257762,
+      "maxHipEdgeRatio": 1.7627836711348754
+    },
+    {
+      "frame": 153.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 63,
+      "minHipEdgeRatio": 0.3900048186877315,
+      "maxHipEdgeRatio": 1.7628453442199183
+    },
+    {
+      "frame": 153.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 63,
+      "minHipEdgeRatio": 0.38998460062802237,
+      "maxHipEdgeRatio": 1.7638455283476904
+    },
+    {
+      "frame": 154.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 63,
+      "minHipEdgeRatio": 0.3900017124837707,
+      "maxHipEdgeRatio": 1.764846060910971
+    },
+    {
+      "frame": 154.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 67,
+      "minHipEdgeRatio": 0.38997273049145786,
+      "maxHipEdgeRatio": 1.7635404730598085
+    },
+    {
+      "frame": 154.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 67,
+      "minHipEdgeRatio": 0.3899978851967476,
+      "maxHipEdgeRatio": 1.7622808786957969
+    },
+    {
+      "frame": 154.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 66,
+      "minHipEdgeRatio": 0.3899720648763234,
+      "maxHipEdgeRatio": 1.7621446878178544
+    },
+    {
+      "frame": 155.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 67,
+      "minHipEdgeRatio": 0.390003737063138,
+      "maxHipEdgeRatio": 1.7620332529545848
+    },
+    {
+      "frame": 155.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 71,
+      "minHipEdgeRatio": 0.389991229045403,
+      "maxHipEdgeRatio": 1.7632185186497542
+    },
+    {
+      "frame": 155.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 76,
+      "minHipEdgeRatio": 0.3899924770737801,
+      "maxHipEdgeRatio": 1.7644261961229672
+    },
+    {
+      "frame": 155.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 76,
+      "minHipEdgeRatio": 0.38996241345687377,
+      "maxHipEdgeRatio": 1.7632648605724135
+    },
+    {
+      "frame": 156.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 78,
+      "minHipEdgeRatio": 0.38999979884025915,
+      "maxHipEdgeRatio": 1.7621234885560173
+    },
+    {
+      "frame": 156.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 76,
+      "minHipEdgeRatio": 0.3899876236300914,
+      "maxHipEdgeRatio": 1.7634728765711176
+    },
+    {
+      "frame": 156.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 80,
+      "minHipEdgeRatio": 0.3899971918476492,
+      "maxHipEdgeRatio": 1.764790659665085
+    },
+    {
+      "frame": 156.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 78,
+      "minHipEdgeRatio": 0.38997567029163505,
+      "maxHipEdgeRatio": 1.763554758915666
+    },
+    {
+      "frame": 157.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 87,
+      "minHipEdgeRatio": 0.3900019066215183,
+      "maxHipEdgeRatio": 1.7623329283836966
+    },
+    {
+      "frame": 157.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 91,
+      "minHipEdgeRatio": 0.38998715215270446,
+      "maxHipEdgeRatio": 1.7635009256295693
+    },
+    {
+      "frame": 157.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 97,
+      "minHipEdgeRatio": 0.3899993828308001,
+      "maxHipEdgeRatio": 1.764748324750776
+    },
+    {
+      "frame": 157.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 90,
+      "minHipEdgeRatio": 0.38997261955560214,
+      "maxHipEdgeRatio": 1.763474096095398
+    },
+    {
+      "frame": 158.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 85,
+      "minHipEdgeRatio": 0.3899895650075669,
+      "maxHipEdgeRatio": 1.762253458899532
+    },
+    {
+      "frame": 158.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 85,
+      "minHipEdgeRatio": 0.3899919501284653,
+      "maxHipEdgeRatio": 1.763201445309827
+    },
+    {
+      "frame": 158.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 90,
+      "minHipEdgeRatio": 0.3899974137193607,
+      "maxHipEdgeRatio": 1.7641957060339508
+    },
+    {
+      "frame": 158.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 83,
+      "minHipEdgeRatio": 0.3899825205807272,
+      "maxHipEdgeRatio": 1.7645532008658944
+    },
+    {
+      "frame": 159.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 86,
+      "minHipEdgeRatio": 0.3899958328834163,
+      "maxHipEdgeRatio": 1.7649458876842186
+    },
+    {
+      "frame": 159.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 87,
+      "minHipEdgeRatio": 0.38994330475572203,
+      "maxHipEdgeRatio": 1.7635166052274616
+    },
+    {
+      "frame": 159.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 88,
+      "minHipEdgeRatio": 0.38999746918728856,
+      "maxHipEdgeRatio": 1.7621103916298562
+    },
+    {
+      "frame": 159.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 90,
+      "minHipEdgeRatio": 0.3899616646398475,
+      "maxHipEdgeRatio": 1.7632221772225958
+    },
+    {
+      "frame": 160.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 95,
+      "minHipEdgeRatio": 0.3899887531151502,
+      "maxHipEdgeRatio": 1.7643620839893632
+    },
+    {
+      "frame": 160.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 93,
+      "minHipEdgeRatio": 0.38993039296595017,
+      "maxHipEdgeRatio": 1.7633227008668606
+    },
+    {
+      "frame": 160.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 91,
+      "minHipEdgeRatio": 0.38999113179758327,
+      "maxHipEdgeRatio": 1.7623045147133807
+    },
+    {
+      "frame": 160.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 91,
+      "minHipEdgeRatio": 0.38995092970933287,
+      "maxHipEdgeRatio": 1.7622078416397673
+    },
+    {
+      "frame": 161.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 90,
+      "minHipEdgeRatio": 0.3899940521601744,
+      "maxHipEdgeRatio": 1.7620485696987394
+    },
+    {
+      "frame": 161.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 92,
+      "minHipEdgeRatio": 0.3899329365075618,
+      "maxHipEdgeRatio": 1.762191414986616
+    },
+    {
+      "frame": 161.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 92,
+      "minHipEdgeRatio": 0.3899938401983734,
+      "maxHipEdgeRatio": 1.7622941925597113
+    },
+    {
+      "frame": 161.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 97,
+      "minHipEdgeRatio": 0.3899378822829177,
+      "maxHipEdgeRatio": 1.7623089543493675
+    },
+    {
+      "frame": 162.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 95,
+      "minHipEdgeRatio": 0.3899983384988162,
+      "maxHipEdgeRatio": 1.762349244045948
+    },
+    {
+      "frame": 162.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 95,
+      "minHipEdgeRatio": 0.3900082771521505,
+      "maxHipEdgeRatio": 1.76251728426805
+    },
+    {
+      "frame": 162.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 95,
+      "minHipEdgeRatio": 0.3900005052194483,
+      "maxHipEdgeRatio": 1.7627024170887013
+    },
+    {
+      "frame": 162.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 96,
+      "minHipEdgeRatio": 0.3900110326555631,
+      "maxHipEdgeRatio": 1.7628984806349977
+    },
+    {
+      "frame": 163.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 98,
+      "minHipEdgeRatio": 0.39000860687050753,
+      "maxHipEdgeRatio": 1.7631118973840867
+    },
+    {
+      "frame": 163.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 98,
+      "minHipEdgeRatio": 0.3900168262781229,
+      "maxHipEdgeRatio": 1.7635061521622
+    },
+    {
+      "frame": 163.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 102,
+      "minHipEdgeRatio": 0.3899922274681047,
+      "maxHipEdgeRatio": 1.7639674006664887
+    },
+    {
+      "frame": 163.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 104,
+      "minHipEdgeRatio": 0.3899858900663846,
+      "maxHipEdgeRatio": 1.7643840094530345
+    },
+    {
+      "frame": 164.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 105,
+      "minHipEdgeRatio": 0.3899969725227655,
+      "maxHipEdgeRatio": 1.764823731466779
+    },
+    {
+      "frame": 164.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 110,
+      "minHipEdgeRatio": 0.38999241679404706,
+      "maxHipEdgeRatio": 1.7648795170953884
+    },
+    {
+      "frame": 164.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 114,
+      "minHipEdgeRatio": 0.3899928098813473,
+      "maxHipEdgeRatio": 1.7649678324511664
+    },
+    {
+      "frame": 164.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 112,
+      "minHipEdgeRatio": 0.3899975351225824,
+      "maxHipEdgeRatio": 1.76458960303571
+    },
+    {
+      "frame": 165.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 118,
+      "minHipEdgeRatio": 0.38999272667945556,
+      "maxHipEdgeRatio": 1.7642413352110666
+    },
+    {
+      "frame": 165.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 123,
+      "minHipEdgeRatio": 0.3899438618340459,
+      "maxHipEdgeRatio": 1.7644233875438176
+    },
+    {
+      "frame": 165.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 121,
+      "minHipEdgeRatio": 0.3899895773160815,
+      "maxHipEdgeRatio": 1.7646205633462169
+    },
+    {
+      "frame": 165.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 118,
+      "minHipEdgeRatio": 0.3899257461418639,
+      "maxHipEdgeRatio": 1.764306965362372
+    },
+    {
+      "frame": 166.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 118,
+      "minHipEdgeRatio": 0.3899964328623386,
+      "maxHipEdgeRatio": 1.7640354562799072
+    },
+    {
+      "frame": 166.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 118,
+      "minHipEdgeRatio": 0.38993824952156597,
+      "maxHipEdgeRatio": 1.764116352575103
+    },
+    {
+      "frame": 166.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 119,
+      "minHipEdgeRatio": 0.38998310761932853,
+      "maxHipEdgeRatio": 1.7642019571202836
+    },
+    {
+      "frame": 166.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 118,
+      "minHipEdgeRatio": 0.3899519961350452,
+      "maxHipEdgeRatio": 1.764355189256157
+    },
+    {
+      "frame": 167.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 118,
+      "minHipEdgeRatio": 0.3899703976759859,
+      "maxHipEdgeRatio": 1.7645215474222913
+    },
+    {
+      "frame": 167.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 120,
+      "minHipEdgeRatio": 0.3899683709552907,
+      "maxHipEdgeRatio": 1.7645091347632402
+    },
+    {
+      "frame": 167.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 126,
+      "minHipEdgeRatio": 0.38998982596283693,
+      "maxHipEdgeRatio": 1.7644907297860264
+    },
+    {
+      "frame": 167.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 122,
+      "minHipEdgeRatio": 0.38995167627295413,
+      "maxHipEdgeRatio": 1.7645108468541437
+    },
+    {
+      "frame": 168.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 124,
+      "minHipEdgeRatio": 0.38999316493355285,
+      "maxHipEdgeRatio": 1.7645960233765985
+    },
+    {
+      "frame": 168.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 124,
+      "minHipEdgeRatio": 0.3899365617457358,
+      "maxHipEdgeRatio": 1.764594596634179
+    },
+    {
+      "frame": 168.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 126,
+      "minHipEdgeRatio": 0.38999907775719683,
+      "maxHipEdgeRatio": 1.7646251289219599
+    },
+    {
+      "frame": 168.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 124,
+      "minHipEdgeRatio": 0.3899403060263422,
+      "maxHipEdgeRatio": 1.764717439156513
+    },
+    {
+      "frame": 169.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 124,
+      "minHipEdgeRatio": 0.38999293206202046,
+      "maxHipEdgeRatio": 1.7648633949060462
+    },
+    {
+      "frame": 169.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 124,
+      "minHipEdgeRatio": 0.38993013807166804,
+      "maxHipEdgeRatio": 1.7645739088690935
+    },
+    {
+      "frame": 169.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 126,
+      "minHipEdgeRatio": 0.3899976050541857,
+      "maxHipEdgeRatio": 1.7643126723320506
+    },
+    {
+      "frame": 169.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 126,
+      "minHipEdgeRatio": 0.3899419205326587,
+      "maxHipEdgeRatio": 1.7643574720440285
+    },
+    {
+      "frame": 170.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 126,
+      "minHipEdgeRatio": 0.3899783328027755,
+      "maxHipEdgeRatio": 1.764439937755886
+    },
+    {
+      "frame": 170.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 126,
+      "minHipEdgeRatio": 0.38993343578669754,
+      "maxHipEdgeRatio": 1.7646483848234007
+    },
+    {
+      "frame": 170.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 128,
+      "minHipEdgeRatio": 0.38999522273620973,
+      "maxHipEdgeRatio": 1.76488179988326
+    },
+    {
+      "frame": 170.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 128,
+      "minHipEdgeRatio": 0.38990306932746804,
+      "maxHipEdgeRatio": 1.7645079933693044
+    },
+    {
+      "frame": 171.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 128,
+      "minHipEdgeRatio": 0.38999547405068896,
+      "maxHipEdgeRatio": 1.7642001023551381
+    },
+    {
+      "frame": 171.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 128,
+      "minHipEdgeRatio": 0.3899026914642876,
+      "maxHipEdgeRatio": 1.7645198353313878
+    },
+    {
+      "frame": 171.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 128,
+      "minHipEdgeRatio": 0.3899841725064735,
+      "maxHipEdgeRatio": 1.7648267276258602
+    },
+    {
+      "frame": 171.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 128,
+      "minHipEdgeRatio": 0.3898740769161675,
+      "maxHipEdgeRatio": 1.7647064532398815
+    },
+    {
+      "frame": 172.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.3899898978151341,
+      "maxHipEdgeRatio": 1.7646465815822308
+    },
+    {
+      "frame": 172.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.38984683641597634,
+      "maxHipEdgeRatio": 1.7646751532939455
+    },
+    {
+      "frame": 172.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.3899922769094263,
+      "maxHipEdgeRatio": 1.7647542481544243
+    },
+    {
+      "frame": 172.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.3898539814652068,
+      "maxHipEdgeRatio": 1.7644993675797978
+    },
+    {
+      "frame": 173.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.3899789854755417,
+      "maxHipEdgeRatio": 1.7642803758625691
+    },
+    {
+      "frame": 173.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.3898435730521451,
+      "maxHipEdgeRatio": 1.7643770667162382
+    },
+    {
+      "frame": 173.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.38998853510864784,
+      "maxHipEdgeRatio": 1.7644673115129959
+    },
+    {
+      "frame": 173.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.389871088361922,
+      "maxHipEdgeRatio": 1.764605988845465
+    },
+    {
+      "frame": 174.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.3899868422017717,
+      "maxHipEdgeRatio": 1.764761913735616
+    },
+    {
+      "frame": 174.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.38988218379894823,
+      "maxHipEdgeRatio": 1.764833343014903
+    },
+    {
+      "frame": 174.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.3899969699759377,
+      "maxHipEdgeRatio": 1.7649624383708826
+    },
+    {
+      "frame": 174.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 132,
+      "minHipEdgeRatio": 0.38984790130312125,
+      "maxHipEdgeRatio": 1.7647202756923244
+    },
+    {
+      "frame": 175.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 132,
+      "minHipEdgeRatio": 0.3899706037831752,
+      "maxHipEdgeRatio": 1.7644822942398706
+    },
+    {
+      "frame": 175.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 132,
+      "minHipEdgeRatio": 0.3898735272969959,
+      "maxHipEdgeRatio": 1.7641812459603392
+    },
+    {
+      "frame": 175.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 134,
+      "minHipEdgeRatio": 0.3899852030424202,
+      "maxHipEdgeRatio": 1.7649943791669076
+    },
+    {
+      "frame": 175.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 136,
+      "minHipEdgeRatio": 0.3898693708020109,
+      "maxHipEdgeRatio": 1.7653554325635374
+    },
+    {
+      "frame": 176.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 136,
+      "minHipEdgeRatio": 0.3899910427461182,
+      "maxHipEdgeRatio": 1.7666959050267494
+    },
+    {
+      "frame": 176.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 135,
+      "minHipEdgeRatio": 0.38988297387650733,
+      "maxHipEdgeRatio": 1.7701318275782076
+    },
+    {
+      "frame": 176.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 135,
+      "minHipEdgeRatio": 0.3899871267095207,
+      "maxHipEdgeRatio": 1.774559746022983
+    },
+    {
+      "frame": 176.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 135,
+      "minHipEdgeRatio": 0.3898932105335779,
+      "maxHipEdgeRatio": 1.7793047407806906
+    },
+    {
+      "frame": 177.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 135,
+      "minHipEdgeRatio": 0.38998726411431356,
+      "maxHipEdgeRatio": 1.7840535683289942
+    },
+    {
+      "frame": 177.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 133,
+      "minHipEdgeRatio": 0.3899300693692716,
+      "maxHipEdgeRatio": 1.7857082885598912
+    },
+    {
+      "frame": 177.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 133,
+      "minHipEdgeRatio": 0.3899978297288197,
+      "maxHipEdgeRatio": 1.7873468065396327
+    },
+    {
+      "frame": 177.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 133,
+      "minHipEdgeRatio": 0.38992453882635764,
+      "maxHipEdgeRatio": 1.7890368929746643
+    },
+    {
+      "frame": 178.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 131,
+      "minHipEdgeRatio": 0.38999416870515646,
+      "maxHipEdgeRatio": 1.790722101312574
+    },
+    {
+      "frame": 178.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 131,
+      "minHipEdgeRatio": 0.389975874053444,
+      "maxHipEdgeRatio": 1.7901417819728058
+    },
+    {
+      "frame": 178.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 131,
+      "minHipEdgeRatio": 0.38998415688459936,
+      "maxHipEdgeRatio": 1.7895362010586557
+    },
+    {
+      "frame": 178.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 131,
+      "minHipEdgeRatio": 0.3899677027382147,
+      "maxHipEdgeRatio": 1.7889199928614898
+    },
+    {
+      "frame": 179.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.38998954179511647,
+      "maxHipEdgeRatio": 1.7883076174549197
+    },
+    {
+      "frame": 179.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 129,
+      "minHipEdgeRatio": 0.3899271366977205,
+      "maxHipEdgeRatio": 1.7859528902870105
+    },
+    {
+      "frame": 179.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 129,
+      "minHipEdgeRatio": 0.3899842269534563,
+      "maxHipEdgeRatio": 1.7835563508580552
+    },
+    {
+      "frame": 179.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 127,
+      "minHipEdgeRatio": 0.3899156605394428,
+      "maxHipEdgeRatio": 1.7811796722530966
+    },
+    {
+      "frame": 180.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 129,
+      "minHipEdgeRatio": 0.38999599928719997,
+      "maxHipEdgeRatio": 1.7787608329515834
+    },
+    {
+      "frame": 180.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 129,
+      "minHipEdgeRatio": 0.38988729699635777,
+      "maxHipEdgeRatio": 1.7750407612427666
+    },
+    {
+      "frame": 180.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 129,
+      "minHipEdgeRatio": 0.38999759159347586,
+      "maxHipEdgeRatio": 1.7713140692592844
+    },
+    {
+      "frame": 180.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 127,
+      "minHipEdgeRatio": 0.3898733149680764,
+      "maxHipEdgeRatio": 1.7678943489589816
+    },
+    {
+      "frame": 181.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 127,
+      "minHipEdgeRatio": 0.38997798929079325,
+      "maxHipEdgeRatio": 1.7647927502781375
+    },
+    {
+      "frame": 181.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 127,
+      "minHipEdgeRatio": 0.38978634395590495,
+      "maxHipEdgeRatio": 1.7646540917930793
+    },
+    {
+      "frame": 181.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 127,
+      "minHipEdgeRatio": 0.38999328135873423,
+      "maxHipEdgeRatio": 1.7646415292673543
+    },
+    {
+      "frame": 181.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 128,
+      "minHipEdgeRatio": 0.3897814660857572,
+      "maxHipEdgeRatio": 1.7645121309223215
+    },
+    {
+      "frame": 182.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 130,
+      "minHipEdgeRatio": 0.3899943907172917,
+      "maxHipEdgeRatio": 1.7644347327929308
+    },
+    {
+      "frame": 182.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 129,
+      "minHipEdgeRatio": 0.3897247866086886,
+      "maxHipEdgeRatio": 1.764434907010685
+    },
+    {
+      "frame": 182.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 127,
+      "minHipEdgeRatio": 0.38998812289426915,
+      "maxHipEdgeRatio": 1.7644948379181844
+    },
+    {
+      "frame": 182.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 123,
+      "minHipEdgeRatio": 0.3898817405020018,
+      "maxHipEdgeRatio": 1.7646328183796363
+    },
+    {
+      "frame": 183.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 121,
+      "minHipEdgeRatio": 0.38999979997290557,
+      "maxHipEdgeRatio": 1.76483961485406
+    },
+    {
+      "frame": 183.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 118,
+      "minHipEdgeRatio": 0.38997797221064173,
+      "maxHipEdgeRatio": 1.764900939503594
+    },
+    {
+      "frame": 183.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 115,
+      "minHipEdgeRatio": 0.38999094559042263,
+      "maxHipEdgeRatio": 1.7649488493860426
+    },
+    {
+      "frame": 183.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 113,
+      "minHipEdgeRatio": 0.3899682474925633,
+      "maxHipEdgeRatio": 1.764785781567963
+    },
+    {
+      "frame": 184.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 113,
+      "minHipEdgeRatio": 0.3899923256347725,
+      "maxHipEdgeRatio": 1.7646099958538153
+    },
+    {
+      "frame": 184.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 113,
+      "minHipEdgeRatio": 0.3899592517849851,
+      "maxHipEdgeRatio": 1.7647883948342784
+    },
+    {
+      "frame": 184.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 113,
+      "minHipEdgeRatio": 0.3899945772860801,
+      "maxHipEdgeRatio": 1.765000504852577
+    },
+    {
+      "frame": 184.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 107,
+      "minHipEdgeRatio": 0.3899540100658012,
+      "maxHipEdgeRatio": 1.7648850813908252
+    },
+    {
+      "frame": 185.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 109,
+      "minHipEdgeRatio": 0.38999907775719683,
+      "maxHipEdgeRatio": 1.764779217103285
+    },
+    {
+      "frame": 185.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 101,
+      "minHipEdgeRatio": 0.38995165267886667,
+      "maxHipEdgeRatio": 1.7646814852475372
+    },
+    {
+      "frame": 185.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 101,
+      "minHipEdgeRatio": 0.389999854308187,
+      "maxHipEdgeRatio": 1.7645887469902581
+    },
+    {
+      "frame": 185.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 102,
+      "minHipEdgeRatio": 0.3899568389301227,
+      "maxHipEdgeRatio": 1.7647859227926577
+    },
+    {
+      "frame": 186.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 100,
+      "minHipEdgeRatio": 0.3900004644553936,
+      "maxHipEdgeRatio": 1.7649915163753331
+    },
+    {
+      "frame": 186.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 100,
+      "minHipEdgeRatio": 0.3899610544926409,
+      "maxHipEdgeRatio": 1.7645975927932602
+    },
+    {
+      "frame": 186.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 102,
+      "minHipEdgeRatio": 0.38999189466053746,
+      "maxHipEdgeRatio": 1.7641553026431602
+    },
+    {
+      "frame": 186.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 102,
+      "minHipEdgeRatio": 0.39035742830521064,
+      "maxHipEdgeRatio": 1.7642272104611119
+    },
+    {
+      "frame": 187.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 97,
+      "minHipEdgeRatio": 0.39078081499865375,
+      "maxHipEdgeRatio": 1.7642861349230445
+    },
+    {
+      "frame": 187.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 95,
+      "minHipEdgeRatio": 0.3914507566314857,
+      "maxHipEdgeRatio": 1.7642919845669653
+    },
+    {
+      "frame": 187.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 93,
+      "minHipEdgeRatio": 0.3921871488419077,
+      "maxHipEdgeRatio": 1.7642946953775627
+    },
+    {
+      "frame": 187.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 92,
+      "minHipEdgeRatio": 0.3932709366845889,
+      "maxHipEdgeRatio": 1.764518123240484
+    },
+    {
+      "frame": 188.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 88,
+      "minHipEdgeRatio": 0.3944084174814497,
+      "maxHipEdgeRatio": 1.764761810845765
+    },
+    {
+      "frame": 188.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 88,
+      "minHipEdgeRatio": 0.3961594290284971,
+      "maxHipEdgeRatio": 1.7646030144144549
+    },
+    {
+      "frame": 188.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 88,
+      "minHipEdgeRatio": 0.3979788325306101,
+      "maxHipEdgeRatio": 1.7644607681952131
+    },
+    {
+      "frame": 188.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 88,
+      "minHipEdgeRatio": 0.40008897117666153,
+      "maxHipEdgeRatio": 1.7645343881040685
+    },
+    {
+      "frame": 189.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 84,
+      "minHipEdgeRatio": 0.40226345261904395,
+      "maxHipEdgeRatio": 1.7646539491188373
+    },
+    {
+      "frame": 189.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 87,
+      "minHipEdgeRatio": 0.40475901016191046,
+      "maxHipEdgeRatio": 1.764368315286418
+    },
+    {
+      "frame": 189.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 91,
+      "minHipEdgeRatio": 0.4073437046648665,
+      "maxHipEdgeRatio": 1.7640923833024524
+    },
+    {
+      "frame": 189.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 82,
+      "minHipEdgeRatio": 0.41018984724584484,
+      "maxHipEdgeRatio": 1.7644429339149672
+    },
+    {
+      "frame": 190.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 76,
+      "minHipEdgeRatio": 0.4131194690582698,
+      "maxHipEdgeRatio": 1.764797194057773
+    },
+    {
+      "frame": 190.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 78,
+      "minHipEdgeRatio": 0.4164905046406961,
+      "maxHipEdgeRatio": 1.764727141004967
+    },
+    {
+      "frame": 190.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 76,
+      "minHipEdgeRatio": 0.4199154550490135,
+      "maxHipEdgeRatio": 1.764855817105215
+    },
+    {
+      "frame": 190.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 55,
+      "minHipEdgeRatio": 0.4235374275371305,
+      "maxHipEdgeRatio": 1.7646981500375207
+    },
+    {
+      "frame": 191.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 56,
+      "minHipEdgeRatio": 0.42721043051888924,
+      "maxHipEdgeRatio": 1.7645444899781766
+    },
+    {
+      "frame": 191.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 56,
+      "minHipEdgeRatio": 0.4310416280309375,
+      "maxHipEdgeRatio": 1.7641749741211823
+    },
+    {
+      "frame": 191.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 56,
+      "minHipEdgeRatio": 0.4349178377664535,
+      "maxHipEdgeRatio": 1.763798315336259
+    },
+    {
+      "frame": 191.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 52,
+      "minHipEdgeRatio": 0.43895041159063924,
+      "maxHipEdgeRatio": 1.7631817587035845
+    },
+    {
+      "frame": 192.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 50,
+      "minHipEdgeRatio": 0.4430203430642464,
+      "maxHipEdgeRatio": 1.7626291532983764
+    },
+    {
+      "frame": 192.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 49,
+      "minHipEdgeRatio": 0.4469296948866656,
+      "maxHipEdgeRatio": 1.7622432629267966
+    },
+    {
+      "frame": 192.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 50,
+      "minHipEdgeRatio": 0.4508828386381394,
+      "maxHipEdgeRatio": 1.7618760545493966
+    },
+    {
+      "frame": 192.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 49,
+      "minHipEdgeRatio": 0.4549630316784028,
+      "maxHipEdgeRatio": 1.7613211074436008
+    },
+    {
+      "frame": 193.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 50,
+      "minHipEdgeRatio": 0.4590481058963189,
+      "maxHipEdgeRatio": 1.7607776451702926
+    },
+    {
+      "frame": 193.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 61,
+      "minHipEdgeRatio": 0.46259697165550123,
+      "maxHipEdgeRatio": 1.7600508849704841
+    },
+    {
+      "frame": 193.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 55,
+      "minHipEdgeRatio": 0.4661530759792708,
+      "maxHipEdgeRatio": 1.7593417348471565
+    },
+    {
+      "frame": 193.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 59,
+      "minHipEdgeRatio": 0.46977252467666963,
+      "maxHipEdgeRatio": 1.7584603122365163
+    },
+    {
+      "frame": 194.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 66,
+      "minHipEdgeRatio": 0.4734260861497094,
+      "maxHipEdgeRatio": 1.7576041562573486
+    },
+    {
+      "frame": 194.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 47,
+      "minHipEdgeRatio": 0.47631685267866036,
+      "maxHipEdgeRatio": 1.756690116722444
+    },
+    {
+      "frame": 194.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 51,
+      "minHipEdgeRatio": 0.4792290852956976,
+      "maxHipEdgeRatio": 1.7557841931358307
+    },
+    {
+      "frame": 194.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 53,
+      "minHipEdgeRatio": 0.48218935313827155,
+      "maxHipEdgeRatio": 1.7547363170196717
+    },
+    {
+      "frame": 195.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 53,
+      "minHipEdgeRatio": 0.4851728620426236,
+      "maxHipEdgeRatio": 1.7537039071445961
+    },
+    {
+      "frame": 195.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 45,
+      "minHipEdgeRatio": 0.4872116411994684,
+      "maxHipEdgeRatio": 1.752876925090906
+    },
+    {
+      "frame": 195.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 37,
+      "minHipEdgeRatio": 0.48926961225935667,
+      "maxHipEdgeRatio": 1.7527937236521745
+    },
+    {
+      "frame": 195.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 35,
+      "minHipEdgeRatio": 0.4913725123408209,
+      "maxHipEdgeRatio": 1.7526447520620512
+    },
+    {
+      "frame": 196.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 35,
+      "minHipEdgeRatio": 0.49349865348406324,
+      "maxHipEdgeRatio": 1.7524951945463032
+    },
+    {
+      "frame": 196.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 29,
+      "minHipEdgeRatio": 0.49452153754194156,
+      "maxHipEdgeRatio": 1.752744945343904
+    },
+    {
+      "frame": 196.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 21,
+      "minHipEdgeRatio": 0.49557964373401825,
+      "maxHipEdgeRatio": 1.7536213443134152
+    },
+    {
+      "frame": 196.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 13,
+      "minHipEdgeRatio": 0.49548026191389877,
+      "maxHipEdgeRatio": 1.754845944627172
+    },
+    {
+      "frame": 197.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 9,
+      "minHipEdgeRatio": 0.49486550429027193,
+      "maxHipEdgeRatio": 1.7560625204127789
+    },
+    {
+      "frame": 197.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 9,
+      "minHipEdgeRatio": 0.49425176409444316,
+      "maxHipEdgeRatio": 1.7558911394187169
+    },
+    {
+      "frame": 197.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 9,
+      "minHipEdgeRatio": 0.49369069891052375,
+      "maxHipEdgeRatio": 1.7556959714304958
+    },
+    {
+      "frame": 197.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 9,
+      "minHipEdgeRatio": 0.49314656002542684,
+      "maxHipEdgeRatio": 1.755495214931599
+    },
+    {
+      "frame": 198.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4926405746827577,
+      "maxHipEdgeRatio": 1.7552844277725144
+    },
+    {
+      "frame": 198.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4922175097056315,
+      "maxHipEdgeRatio": 1.7550177555066706
+    },
+    {
+      "frame": 198.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4918483221550851,
+      "maxHipEdgeRatio": 1.75520422167289
+    },
+    {
+      "frame": 198.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.49156274867085314,
+      "maxHipEdgeRatio": 1.7554520682122101
+    },
+    {
+      "frame": 199.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.49132665917498203,
+      "maxHipEdgeRatio": 1.7556994753073114
+    },
+    {
+      "frame": 199.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4911354752423804,
+      "maxHipEdgeRatio": 1.7559083577925776
+    },
+    {
+      "frame": 199.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.49096695220164494,
+      "maxHipEdgeRatio": 1.7561169473150313
+    },
+    {
+      "frame": 199.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4908321430184002,
+      "maxHipEdgeRatio": 1.7563026857381152
+    },
+    {
+      "frame": 200.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4907076468532905,
+      "maxHipEdgeRatio": 1.7564677702829223
+    },
+    {
+      "frame": 200.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4906492834950556,
+      "maxHipEdgeRatio": 1.7566309505694486
+    },
+    {
+      "frame": 200.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4905942499005234,
+      "maxHipEdgeRatio": 1.7567775784570725
+    },
+    {
+      "frame": 200.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4905727451766096,
+      "maxHipEdgeRatio": 1.756913366720636
+    },
+    {
+      "frame": 201.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4905560501113776,
+      "maxHipEdgeRatio": 1.7570488620213873
+    },
+    {
+      "frame": 201.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.49082243120760044,
+      "maxHipEdgeRatio": 1.7571158040240287
+    },
+    {
+      "frame": 201.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4911103170277371,
+      "maxHipEdgeRatio": 1.7571871404688566
+    },
+    {
+      "frame": 201.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.49144787182310706,
+      "maxHipEdgeRatio": 1.7572356258143147
+    },
+    {
+      "frame": 202.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4918275573786608,
+      "maxHipEdgeRatio": 1.7572773730150866
+    },
+    {
+      "frame": 202.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4919796165877547,
+      "maxHipEdgeRatio": 1.757212921196351
+    },
+    {
+      "frame": 202.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49214235878872836,
+      "maxHipEdgeRatio": 1.7571484693776152
+    },
+    {
+      "frame": 202.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4923163389421989,
+      "maxHipEdgeRatio": 1.757512553565754
+    },
+    {
+      "frame": 203.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49249124403003136,
+      "maxHipEdgeRatio": 1.7600029429989426
+    },
+    {
+      "frame": 203.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49294714417700447,
+      "maxHipEdgeRatio": 1.7600075989685038
+    },
+    {
+      "frame": 203.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49340771524250504,
+      "maxHipEdgeRatio": 1.7599939636290745
+    },
+    {
+      "frame": 203.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4939017226851878,
+      "maxHipEdgeRatio": 1.7599996173063988
+    },
+    {
+      "frame": 204.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4944036383166647,
+      "maxHipEdgeRatio": 1.7599946287675832
+    },
+    {
+      "frame": 204.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49454936172537967,
+      "maxHipEdgeRatio": 1.7600039407067056
+    },
+    {
+      "frame": 204.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49469240282444515,
+      "maxHipEdgeRatio": 1.7599992847371444
+    },
+    {
+      "frame": 204.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49483155919919075,
+      "maxHipEdgeRatio": 1.7600028321425245
+    },
+    {
+      "frame": 205.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.494982323500178,
+      "maxHipEdgeRatio": 1.7600047167016326
+    },
+    {
+      "frame": 205.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49506552134602955,
+      "maxHipEdgeRatio": 1.7599965133266913
+    },
+    {
+      "frame": 205.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49293070375643255,
+      "maxHipEdgeRatio": 1.7600081532505945
+    },
+    {
+      "frame": 205.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4877480829157686,
+      "maxHipEdgeRatio": 1.7599972893216183
+    },
+    {
+      "frame": 206.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48255007671344635,
+      "maxHipEdgeRatio": 1.7599986195986357
+    },
+    {
+      "frame": 206.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47758045516192105,
+      "maxHipEdgeRatio": 1.7600036081374513
+    },
+    {
+      "frame": 206.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4726127427428643,
+      "maxHipEdgeRatio": 1.7599972893216183
+    },
+    {
+      "frame": 206.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4676381424733328,
+      "maxHipEdgeRatio": 1.7600000607320714
+    },
+    {
+      "frame": 207.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46266496469466023,
+      "maxHipEdgeRatio": 1.760004051563124
+    },
+    {
+      "frame": 207.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4595502712231697,
+      "maxHipEdgeRatio": 1.7600082641070125
+    },
+    {
+      "frame": 207.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4564246844664175,
+      "maxHipEdgeRatio": 1.7600091509583575
+    },
+    {
+      "frame": 207.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4533077075227588,
+      "maxHipEdgeRatio": 1.7600013910090888
+    },
+    {
+      "frame": 208.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45016819532917707,
+      "maxHipEdgeRatio": 1.760005936122232
+    },
+    {
+      "frame": 208.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44829893003864313,
+      "maxHipEdgeRatio": 1.7600018344347612
+    },
+    {
+      "frame": 208.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4464244988602531,
+      "maxHipEdgeRatio": 1.7600026120460233
+    },
+    {
+      "frame": 208.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44454677349250554,
+      "maxHipEdgeRatio": 1.7600159752477211
+    },
+    {
+      "frame": 209.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44265328842339996,
+      "maxHipEdgeRatio": 1.7599974001780363
+    },
+    {
+      "frame": 209.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44113732494145835,
+      "maxHipEdgeRatio": 1.7600082985148309
+    },
+    {
+      "frame": 209.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4396176554964896,
+      "maxHipEdgeRatio": 1.760002469884303
+    },
+    {
+      "frame": 209.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.43809439239040354,
+      "maxHipEdgeRatio": 1.7600070190593493
+    },
+    {
+      "frame": 210.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.43655484550737983,
+      "maxHipEdgeRatio": 1.760005936122232
+    },
+    {
+      "frame": 210.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4372391759124314,
+      "maxHipEdgeRatio": 1.7600129898515973
+    },
+    {
+      "frame": 210.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4379239929590926,
+      "maxHipEdgeRatio": 1.7600055974421474
+    },
+    {
+      "frame": 210.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.43860008789075045,
+      "maxHipEdgeRatio": 1.7600101486259134
+    },
+    {
+      "frame": 211.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4392815358801142,
+      "maxHipEdgeRatio": 1.7600033981581111
+    },
+    {
+      "frame": 211.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4421311968442055,
+      "maxHipEdgeRatio": 1.760008967294048
+    },
+    {
+      "frame": 211.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44497977222316754,
+      "maxHipEdgeRatio": 1.7600072796770974
+    },
+    {
+      "frame": 211.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4478232940161834,
+      "maxHipEdgeRatio": 1.7600246621316884
+    },
+    {
+      "frame": 212.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4506652435824606,
+      "maxHipEdgeRatio": 1.7600044601483857
+    },
+    {
+      "frame": 212.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4538483663510592,
+      "maxHipEdgeRatio": 1.7600154066008404
+    },
+    {
+      "frame": 212.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4570122854930624,
+      "maxHipEdgeRatio": 1.7600018793028556
+    },
+    {
+      "frame": 212.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4601693167845908,
+      "maxHipEdgeRatio": 1.7600176811883634
+    },
+    {
+      "frame": 213.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4633385889842999,
+      "maxHipEdgeRatio": 1.760009862293753
+    },
+    {
+      "frame": 213.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46599651315419643,
+      "maxHipEdgeRatio": 1.7600197680425318
+    },
+    {
+      "frame": 213.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46867075853500056,
+      "maxHipEdgeRatio": 1.7600047482516716
+    },
+    {
+      "frame": 213.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47133171485646475,
+      "maxHipEdgeRatio": 1.760012705528157
+    },
+    {
+      "frame": 214.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4740013184249924,
+      "maxHipEdgeRatio": 1.7600031806929042
+    },
+    {
+      "frame": 214.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4780298499714306,
+      "maxHipEdgeRatio": 1.7600108574257944
+    },
+    {
+      "frame": 214.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48205272898840307,
+      "maxHipEdgeRatio": 1.7600084610089628
+    },
+    {
+      "frame": 214.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48607777917563394,
+      "maxHipEdgeRatio": 1.7600276998421995
+    },
+    {
+      "frame": 215.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4900820535095305,
+      "maxHipEdgeRatio": 1.7600048866335463
+    },
+    {
+      "frame": 215.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4928903309528548,
+      "maxHipEdgeRatio": 1.7600125633664367
+    },
+    {
+      "frame": 215.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48242116579204597,
+      "maxHipEdgeRatio": 1.7600018793028556
+    },
+    {
+      "frame": 215.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47195013963820875,
+      "maxHipEdgeRatio": 1.760023649561518
+    },
+    {
+      "frame": 216.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46149779785437683,
+      "maxHipEdgeRatio": 1.7600026120460233
+    },
+    {
+      "frame": 216.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4456926446030451,
+      "maxHipEdgeRatio": 1.7600336065015265
+    },
+    {
+      "frame": 216.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.42991607620462985,
+      "maxHipEdgeRatio": 1.7600117764588967
+    },
+    {
+      "frame": 216.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.41420319098764713,
+      "maxHipEdgeRatio": 1.7600354628801722
+    },
+    {
+      "frame": 217.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.39853701669567765,
+      "maxHipEdgeRatio": 1.760003060634721
+    },
+    {
+      "frame": 217.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.400151725906715,
+      "maxHipEdgeRatio": 1.7600164017328819
+    },
+    {
+      "frame": 217.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4018312721148624,
+      "maxHipEdgeRatio": 1.7600060239273079
+    },
+    {
+      "frame": 217.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4035545144393171,
+      "maxHipEdgeRatio": 1.760011498719474
+    },
+    {
+      "frame": 218.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4053359686257007,
+      "maxHipEdgeRatio": 1.7600053239321944
+    },
+    {
+      "frame": 218.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4073895372126996,
+      "maxHipEdgeRatio": 1.7600075205370294
+    },
+    {
+      "frame": 218.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.40950574682503504,
+      "maxHipEdgeRatio": 1.7600020290249423
+    },
+    {
+      "frame": 218.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4116945723853394,
+      "maxHipEdgeRatio": 1.760003401902964
+    },
+    {
+      "frame": 219.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4139361757079297,
+      "maxHipEdgeRatio": 1.760000244283514
+    },
+    {
+      "frame": 219.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4164053040381744,
+      "maxHipEdgeRatio": 1.7600021663127445
+    },
+    {
+      "frame": 219.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4189223715488311,
+      "maxHipEdgeRatio": 1.7600040732048914
+    },
+    {
+      "frame": 219.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.42147978538834396,
+      "maxHipEdgeRatio": 1.7600121737662542
+    },
+    {
+      "frame": 220.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.42408078368458235,
+      "maxHipEdgeRatio": 1.7600020480645506
+    },
+    {
+      "frame": 220.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.42683237353668035,
+      "maxHipEdgeRatio": 1.7599406188075495
+    },
+    {
+      "frame": 220.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4296181684406407,
+      "maxHipEdgeRatio": 1.7598827335461444
+    },
+    {
+      "frame": 220.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4324293845093692,
+      "maxHipEdgeRatio": 1.7597224099358393
+    },
+    {
+      "frame": 221.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4352539252881812,
+      "maxHipEdgeRatio": 1.7595350844543247
+    },
+    {
+      "frame": 221.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4382296531406219,
+      "maxHipEdgeRatio": 1.7580786710259724
+    },
+    {
+      "frame": 221.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4412044132766878,
+      "maxHipEdgeRatio": 1.756575004323004
+    },
+    {
+      "frame": 221.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44419845330052815,
+      "maxHipEdgeRatio": 1.7549937072403088
+    },
+    {
+      "frame": 222.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4471934982606038,
+      "maxHipEdgeRatio": 1.753378657818602
+    },
+    {
+      "frame": 222.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45023376535127,
+      "maxHipEdgeRatio": 1.7507432023585123
+    },
+    {
+      "frame": 222.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4532715014914176,
+      "maxHipEdgeRatio": 1.7489896252613415
+    },
+    {
+      "frame": 222.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45632460943397996,
+      "maxHipEdgeRatio": 1.7471575195413267
+    },
+    {
+      "frame": 223.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45592277460225095,
+      "maxHipEdgeRatio": 1.745318274855599
+    },
+    {
+      "frame": 223.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4553540342675403,
+      "maxHipEdgeRatio": 1.7432003359314578
+    },
+    {
+      "frame": 223.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4548797539096923,
+      "maxHipEdgeRatio": 1.741078141085449
+    },
+    {
+      "frame": 223.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4545008520091869,
+      "maxHipEdgeRatio": 1.7388907345334077
+    },
+    {
+      "frame": 224.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4542125639485342,
+      "maxHipEdgeRatio": 1.7367155465957598
+    },
+    {
+      "frame": 224.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45375567731477573,
+      "maxHipEdgeRatio": 1.7341939815332263
+    },
+    {
+      "frame": 224.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45338782588254506,
+      "maxHipEdgeRatio": 1.731673240197506
+    },
+    {
+      "frame": 224.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4531101290499271,
+      "maxHipEdgeRatio": 1.7291087040528919
+    },
+    {
+      "frame": 225.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.452915669510807,
+      "maxHipEdgeRatio": 1.7265385391083887
+    },
+    {
+      "frame": 225.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45254618203522134,
+      "maxHipEdgeRatio": 1.7237992355916072
+    },
+    {
+      "frame": 225.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45225068964330384,
+      "maxHipEdgeRatio": 1.7210743472940537
+    },
+    {
+      "frame": 225.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4520325218267943,
+      "maxHipEdgeRatio": 1.7183048404607937
+    },
+    {
+      "frame": 226.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45188619640532807,
+      "maxHipEdgeRatio": 1.7155391776859945
+    },
+    {
+      "frame": 226.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.452087114010323,
+      "maxHipEdgeRatio": 1.7130266736184045
+    },
+    {
+      "frame": 226.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4523336399116517,
+      "maxHipEdgeRatio": 1.710519935638506
+    },
+    {
+      "frame": 226.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45261699113972453,
+      "maxHipEdgeRatio": 1.7102964435054806
+    },
+    {
+      "frame": 227.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4529447738610163,
+      "maxHipEdgeRatio": 1.7101905401404054
+    },
+    {
+      "frame": 227.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45377855321923016,
+      "maxHipEdgeRatio": 1.7103743894128656
+    },
+    {
+      "frame": 227.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4546204553891889,
+      "maxHipEdgeRatio": 1.7105697051080648
+    },
+    {
+      "frame": 227.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45548302336994706,
+      "maxHipEdgeRatio": 1.710784217398637
+    },
+    {
+      "frame": 228.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45636493684581475,
+      "maxHipEdgeRatio": 1.7110058156807892
+    },
+    {
+      "frame": 228.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45759056293879874,
+      "maxHipEdgeRatio": 1.7114861170737334
+    },
+    {
+      "frame": 228.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4588324633577873,
+      "maxHipEdgeRatio": 1.7119554673887807
+    },
+    {
+      "frame": 228.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4600931926266154,
+      "maxHipEdgeRatio": 1.7124494254200435
+    },
+    {
+      "frame": 229.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.461375448781693,
+      "maxHipEdgeRatio": 1.712952144313624
+    },
+    {
+      "frame": 229.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46306424735922025,
+      "maxHipEdgeRatio": 1.7130389799195374
+    },
+    {
+      "frame": 229.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46479087585151657,
+      "maxHipEdgeRatio": 1.7131313554825043
+    },
+    {
+      "frame": 229.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.466552607519657,
+      "maxHipEdgeRatio": 1.7132224426833658
+    },
+    {
+      "frame": 230.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4683673814355161,
+      "maxHipEdgeRatio": 1.7133216465654921
+    },
+    {
+      "frame": 230.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47035244737286586,
+      "maxHipEdgeRatio": 1.7137669045091657
+    },
+    {
+      "frame": 230.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47239184717110927,
+      "maxHipEdgeRatio": 1.7141978616334679
+    },
+    {
+      "frame": 230.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47447223416077167,
+      "maxHipEdgeRatio": 1.7146324261716654
+    },
+    {
+      "frame": 231.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.476594412012273,
+      "maxHipEdgeRatio": 1.7150615795890198
+    },
+    {
+      "frame": 231.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4791353308550987,
+      "maxHipEdgeRatio": 1.7155917405954484
+    },
+    {
+      "frame": 231.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48176453863406216,
+      "maxHipEdgeRatio": 1.7160972938856611
+    },
+    {
+      "frame": 231.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48448502041072333,
+      "maxHipEdgeRatio": 1.716603104848295
+    },
+    {
+      "frame": 232.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48729516884424223,
+      "maxHipEdgeRatio": 1.717096161026084
+    },
+    {
+      "frame": 232.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4903017572904162,
+      "maxHipEdgeRatio": 1.718052254544603
+    },
+    {
+      "frame": 232.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4887921637652539,
+      "maxHipEdgeRatio": 1.7190035811233315
+    },
+    {
+      "frame": 232.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4864340250592241,
+      "maxHipEdgeRatio": 1.7199386743395304
+    },
+    {
+      "frame": 233.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48413811796006456,
+      "maxHipEdgeRatio": 1.720858178374252
+    },
+    {
+      "frame": 233.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4817631186571973,
+      "maxHipEdgeRatio": 1.7227461442037062
+    },
+    {
+      "frame": 233.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4794546312451657,
+      "maxHipEdgeRatio": 1.7246048642133645
+    },
+    {
+      "frame": 233.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4772181270434733,
+      "maxHipEdgeRatio": 1.7264492834036513
+    },
+    {
+      "frame": 234.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4750516333995099,
+      "maxHipEdgeRatio": 1.7282884203093054
+    },
+    {
+      "frame": 234.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47243537496043847,
+      "maxHipEdgeRatio": 1.7301059127315865
+    },
+    {
+      "frame": 234.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4699257514218954,
+      "maxHipEdgeRatio": 1.7318985397652307
+    },
+    {
+      "frame": 234.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4675151327124642,
+      "maxHipEdgeRatio": 1.7336786696864512
+    },
+    {
+      "frame": 235.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46521397761296457,
+      "maxHipEdgeRatio": 1.7354415355554575
+    },
+    {
+      "frame": 235.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46295365270050837,
+      "maxHipEdgeRatio": 1.7373894102228191
+    },
+    {
+      "frame": 235.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4608042057526854,
+      "maxHipEdgeRatio": 1.7393133213550176
+    },
+    {
+      "frame": 235.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45875264703815716,
+      "maxHipEdgeRatio": 1.7412255083920556
+    },
+    {
+      "frame": 236.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4568042617771244,
+      "maxHipEdgeRatio": 1.7431102533162457
+    },
+    {
+      "frame": 236.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45532302298608524,
+      "maxHipEdgeRatio": 1.7451517919086799
+    },
+    {
+      "frame": 236.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45390874272420856,
+      "maxHipEdgeRatio": 1.7471928151562717
+    },
+    {
+      "frame": 236.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45255323262216934,
+      "maxHipEdgeRatio": 1.7492190222396498
+    },
+    {
+      "frame": 237.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4512691474325608,
+      "maxHipEdgeRatio": 1.7512219099689175
+    },
+    {
+      "frame": 237.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4500809778236369,
+      "maxHipEdgeRatio": 1.7524528111245476
+    },
+    {
+      "frame": 237.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44895891068708244,
+      "maxHipEdgeRatio": 1.7536506013740654
+    },
+    {
+      "frame": 237.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44789959623544623,
+      "maxHipEdgeRatio": 1.7548480051149515
+    },
+    {
+      "frame": 238.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44690001966002224,
+      "maxHipEdgeRatio": 1.7560330405796245
+    },
+    {
+      "frame": 238.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44602315696489214,
+      "maxHipEdgeRatio": 1.756991324313723
+    },
+    {
+      "frame": 238.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4451982904149761,
+      "maxHipEdgeRatio": 1.757943423909715
+    },
+    {
+      "frame": 238.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4444132118960076,
+      "maxHipEdgeRatio": 1.7588832840657043
+    },
+    {
+      "frame": 239.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44367711471354704,
+      "maxHipEdgeRatio": 1.7598136103421125
+    },
+    {
+      "frame": 239.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44310143513013617,
+      "maxHipEdgeRatio": 1.7599098509913962
+    },
+    {
+      "frame": 239.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.44163486427888393,
+      "maxHipEdgeRatio": 1.7600064781493114
+    },
+    {
+      "frame": 239.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4399700936881415,
+      "maxHipEdgeRatio": 1.7600037725888897
+    },
+    {
+      "frame": 240.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.43831619130104105,
+      "maxHipEdgeRatio": 1.7600069934941536
+    },
+    {
+      "frame": 240.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4365126153879858,
+      "maxHipEdgeRatio": 1.7600078953476275
+    },
+    {
+      "frame": 240.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4347199573050731,
+      "maxHipEdgeRatio": 1.759999649830152
+    },
+    {
+      "frame": 240.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.43294501588289186,
+      "maxHipEdgeRatio": 1.760009441382154
+    },
+    {
+      "frame": 241.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4311721587737378,
+      "maxHipEdgeRatio": 1.7600022265543631
+    },
+    {
+      "frame": 241.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.42932883203366345,
+      "maxHipEdgeRatio": 1.7600044167699425
+    },
+    {
+      "frame": 241.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.42749151010016745,
+      "maxHipEdgeRatio": 1.759999649830152
+    },
+    {
+      "frame": 241.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4256694731288711,
+      "maxHipEdgeRatio": 1.7600078953476275
+    },
+    {
+      "frame": 242.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.42386073605974844,
+      "maxHipEdgeRatio": 1.7600028707354158
+    },
+    {
+      "frame": 242.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4222059403956363,
+      "maxHipEdgeRatio": 1.7600072511665747
+    },
+    {
+      "frame": 242.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.420555263731078,
+      "maxHipEdgeRatio": 1.7600073800027853
+    },
+    {
+      "frame": 242.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.418915405643661,
+      "maxHipEdgeRatio": 1.7600023553905737
+    },
+    {
+      "frame": 243.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.41727907103778994,
+      "maxHipEdgeRatio": 1.7600027418992052
+    },
+    {
+      "frame": 243.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4154114521256483,
+      "maxHipEdgeRatio": 1.760009441382154
+    },
+    {
+      "frame": 243.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4135522945318671,
+      "maxHipEdgeRatio": 1.760000809356047
+    },
+    {
+      "frame": 243.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.41171663508614287,
+      "maxHipEdgeRatio": 1.7600032572440476
+    },
+    {
+      "frame": 244.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.40989730275913183,
+      "maxHipEdgeRatio": 1.760003128407837
+    },
+    {
+      "frame": 244.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4080517924530289,
+      "maxHipEdgeRatio": 1.7600090548735225
+    },
+    {
+      "frame": 244.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4062159593145524,
+      "maxHipEdgeRatio": 1.7600033860802582
+    },
+    {
+      "frame": 244.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.40441558431078894,
+      "maxHipEdgeRatio": 1.7600049321147848
+    },
+    {
+      "frame": 245.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.40262443983614604,
+      "maxHipEdgeRatio": 1.7600020977181525
+    },
+    {
+      "frame": 245.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.40082185645310375,
+      "maxHipEdgeRatio": 1.7599993921577308
+    },
+    {
+      "frame": 245.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.3990450540371482,
+      "maxHipEdgeRatio": 1.7599955270714143
+    },
+    {
+      "frame": 245.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.39728477724590844,
+      "maxHipEdgeRatio": 1.760004545606153
+    },
+    {
+      "frame": 246.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.3955401824288735,
+      "maxHipEdgeRatio": 1.7600063493131008
+    },
+    {
+      "frame": 246.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.40532623059768225,
+      "maxHipEdgeRatio": 1.7569037156905465
+    },
+    {
+      "frame": 246.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.41512843219245193,
+      "maxHipEdgeRatio": 1.7537925788780957
+    },
+    {
+      "frame": 246.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.42493385950976376,
+      "maxHipEdgeRatio": 1.7506041403393127
+    },
+    {
+      "frame": 247.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.43401386554360394,
+      "maxHipEdgeRatio": 1.747400241455263
+    },
+    {
+      "frame": 247.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.45652670611136636,
+      "maxHipEdgeRatio": 1.737664862040983
+    },
+    {
+      "frame": 247.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4795447764351972,
+      "maxHipEdgeRatio": 1.737503001278588
+    },
+    {
+      "frame": 247.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.502963762908744,
+      "maxHipEdgeRatio": 1.7386483063645741
+    },
+    {
+      "frame": 248.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5266905233962142,
+      "maxHipEdgeRatio": 1.739585881508056
+    },
+    {
+      "frame": 248.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5200475822400792,
+      "maxHipEdgeRatio": 1.7401514030231722
+    },
+    {
+      "frame": 248.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5112393398184126,
+      "maxHipEdgeRatio": 1.7405941468409276
+    },
+    {
+      "frame": 248.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5032992870355294,
+      "maxHipEdgeRatio": 1.7409420169834497
+    },
+    {
+      "frame": 249.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49627843402148736,
+      "maxHipEdgeRatio": 1.7411767208140105
+    },
+    {
+      "frame": 249.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49120910001758644,
+      "maxHipEdgeRatio": 1.7411981138976416
+    },
+    {
+      "frame": 249.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4868567751310187,
+      "maxHipEdgeRatio": 1.741153932529273
+    },
+    {
+      "frame": 249.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4832206731675766,
+      "maxHipEdgeRatio": 1.7410244888710709
+    },
+    {
+      "frame": 250.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4803394101368688,
+      "maxHipEdgeRatio": 1.740806992520822
+    },
+    {
+      "frame": 250.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4785738954269028,
+      "maxHipEdgeRatio": 1.7403206874240786
+    },
+    {
+      "frame": 250.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47725900873804716,
+      "maxHipEdgeRatio": 1.7397618318698043
+    },
+    {
+      "frame": 250.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47637454025449466,
+      "maxHipEdgeRatio": 1.7391549193885323
+    },
+    {
+      "frame": 251.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4759314966951518,
+      "maxHipEdgeRatio": 1.7385063058964145
+    },
+    {
+      "frame": 251.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4761532959551318,
+      "maxHipEdgeRatio": 1.7378859064711143
+    },
+    {
+      "frame": 251.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4769116496384413,
+      "maxHipEdgeRatio": 1.7372062885099662
+    },
+    {
+      "frame": 251.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4781927762230881,
+      "maxHipEdgeRatio": 1.7364795437558913
+    },
+    {
+      "frame": 252.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.479985715236884,
+      "maxHipEdgeRatio": 1.7356929603765878
+    },
+    {
+      "frame": 252.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48210409240590907,
+      "maxHipEdgeRatio": 1.7348449881486039
+    },
+    {
+      "frame": 252.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4846421122949214,
+      "maxHipEdgeRatio": 1.7347523236966362
+    },
+    {
+      "frame": 252.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4876117528039073,
+      "maxHipEdgeRatio": 1.7355801655506897
+    },
+    {
+      "frame": 253.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49098730075760644,
+      "maxHipEdgeRatio": 1.7363560280069343
+    },
+    {
+      "frame": 253.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4944718984725718,
+      "maxHipEdgeRatio": 1.736936194656698
+    },
+    {
+      "frame": 253.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4959165548906134,
+      "maxHipEdgeRatio": 1.7374779289471751
+    },
+    {
+      "frame": 253.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49258549355116354,
+      "maxHipEdgeRatio": 1.7379709233490555
+    },
+    {
+      "frame": 254.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48971344266001104,
+      "maxHipEdgeRatio": 1.7384061955867969
+    },
+    {
+      "frame": 254.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48768521572740303,
+      "maxHipEdgeRatio": 1.7386036583983027
+    },
+    {
+      "frame": 254.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4858884442371481,
+      "maxHipEdgeRatio": 1.7387651921076404
+    },
+    {
+      "frame": 254.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4843509631218004,
+      "maxHipEdgeRatio": 1.738905080005426
+    },
+    {
+      "frame": 255.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48306634552591365,
+      "maxHipEdgeRatio": 1.7390172848244918
+    },
+    {
+      "frame": 255.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48269066258271465,
+      "maxHipEdgeRatio": 1.7391991390916133
+    },
+    {
+      "frame": 255.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4824255658763351,
+      "maxHipEdgeRatio": 1.7393552245354582
+    },
+    {
+      "frame": 255.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4795555119244725,
+      "maxHipEdgeRatio": 1.739511457229722
+    },
+    {
+      "frame": 256.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4732345325753365,
+      "maxHipEdgeRatio": 1.7396485473695518
+    },
+    {
+      "frame": 256.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4707937515393371,
+      "maxHipEdgeRatio": 1.7396700459306853
+    },
+    {
+      "frame": 256.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4683837671691889,
+      "maxHipEdgeRatio": 1.7396906609893064
+    },
+    {
+      "frame": 256.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4659933212497812,
+      "maxHipEdgeRatio": 1.7397071530362032
+    },
+    {
+      "frame": 257.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4636252828101261,
+      "maxHipEdgeRatio": 1.7397264428410557
+    },
+    {
+      "frame": 257.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46560916189674584,
+      "maxHipEdgeRatio": 1.739315614172822
+    },
+    {
+      "frame": 257.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46759859745727506,
+      "maxHipEdgeRatio": 1.7389072887617067
+    },
+    {
+      "frame": 257.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.46960266869744816,
+      "maxHipEdgeRatio": 1.7385138356428824
+    },
+    {
+      "frame": 258.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4716236998939332,
+      "maxHipEdgeRatio": 1.7381230330315949
+    },
+    {
+      "frame": 258.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4736040925655509,
+      "maxHipEdgeRatio": 1.737287975907024
+    },
+    {
+      "frame": 258.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47560002883738595,
+      "maxHipEdgeRatio": 1.7364527715320346
+    },
+    {
+      "frame": 258.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47761110922438604,
+      "maxHipEdgeRatio": 1.7356116771402963
+    },
+    {
+      "frame": 259.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4796293440255049,
+      "maxHipEdgeRatio": 1.7381622392896503
+    },
+    {
+      "frame": 259.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48568278486286265,
+      "maxHipEdgeRatio": 1.7409442109379334
+    },
+    {
+      "frame": 259.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4854630750528771,
+      "maxHipEdgeRatio": 1.7437425748475304
+    },
+    {
+      "frame": 259.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4852837879474925,
+      "maxHipEdgeRatio": 1.7465151209455578
+    },
+    {
+      "frame": 260.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48512444625556234,
+      "maxHipEdgeRatio": 1.7492942239481108
+    },
+    {
+      "frame": 260.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4848632056624506,
+      "maxHipEdgeRatio": 1.7487209046086474
+    },
+    {
+      "frame": 260.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48466787358002045,
+      "maxHipEdgeRatio": 1.7481455362365195
+    },
+    {
+      "frame": 260.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.48457231288800334,
+      "maxHipEdgeRatio": 1.7475476285050848
+    },
+    {
+      "frame": 261.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.48454602926538454,
+      "maxHipEdgeRatio": 1.7469394756103287
+    },
+    {
+      "frame": 261.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4845923469477398,
+      "maxHipEdgeRatio": 1.746546880951854
+    },
+    {
+      "frame": 261.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.484688572486872,
+      "maxHipEdgeRatio": 1.746129697901408
+    },
+    {
+      "frame": 261.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.48484126570765074,
+      "maxHipEdgeRatio": 1.7456836234903959
+    },
+    {
+      "frame": 262.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4850319438602749,
+      "maxHipEdgeRatio": 1.7452107067514817
+    },
+    {
+      "frame": 262.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4846133117934374,
+      "maxHipEdgeRatio": 1.7442615948213906
+    },
+    {
+      "frame": 262.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.48424826640408075,
+      "maxHipEdgeRatio": 1.7432919925646568
+    },
+    {
+      "frame": 262.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4839439437179075,
+      "maxHipEdgeRatio": 1.7422719841043819
+    },
+    {
+      "frame": 263.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 4,
+      "minHipEdgeRatio": 0.483697063822483,
+      "maxHipEdgeRatio": 1.741233739253395
+    },
+    {
+      "frame": 263.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 2,
+      "minHipEdgeRatio": 0.48369821622414927,
+      "maxHipEdgeRatio": 1.7386529346122408
+    },
+    {
+      "frame": 263.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 2,
+      "minHipEdgeRatio": 0.4837522904561812,
+      "maxHipEdgeRatio": 1.7365273738636968
+    },
+    {
+      "frame": 263.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 2,
+      "minHipEdgeRatio": 0.483882777783314,
+      "maxHipEdgeRatio": 1.734396817483371
+    },
+    {
+      "frame": 264.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 2,
+      "minHipEdgeRatio": 0.4840789963285644,
+      "maxHipEdgeRatio": 1.7322601374253768
+    },
+    {
+      "frame": 264.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4842231795062692,
+      "maxHipEdgeRatio": 1.730519079174636
+    },
+    {
+      "frame": 264.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.48445405874778924,
+      "maxHipEdgeRatio": 1.7287504643743883
+    },
+    {
+      "frame": 264.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.48476214890094826,
+      "maxHipEdgeRatio": 1.7269815272753157
+    },
+    {
+      "frame": 265.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4851305628490217,
+      "maxHipEdgeRatio": 1.7252071110962244
+    },
+    {
+      "frame": 265.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 1,
+      "minHipEdgeRatio": 0.4855479538679109,
+      "maxHipEdgeRatio": 1.723978185677847
+    },
+    {
+      "frame": 265.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 3,
+      "minHipEdgeRatio": 0.48604924859273163,
+      "maxHipEdgeRatio": 1.72272637704292
+    },
+    {
+      "frame": 265.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 5,
+      "minHipEdgeRatio": 0.4866131275926582,
+      "maxHipEdgeRatio": 1.7214710231209218
+    },
+    {
+      "frame": 266.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 5,
+      "minHipEdgeRatio": 0.4872841799475464,
+      "maxHipEdgeRatio": 1.7202034218435869
+    },
+    {
+      "frame": 266.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 5,
+      "minHipEdgeRatio": 0.48799507880620246,
+      "maxHipEdgeRatio": 1.719793135439812
+    },
+    {
+      "frame": 266.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 5,
+      "minHipEdgeRatio": 0.48879125538816137,
+      "maxHipEdgeRatio": 1.719385910874871
+    },
+    {
+      "frame": 266.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.48968033327367677,
+      "maxHipEdgeRatio": 1.7189611210239868
+    },
+    {
+      "frame": 267.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 7,
+      "minHipEdgeRatio": 0.4906488382278817,
+      "maxHipEdgeRatio": 1.718521505427169
+    },
+    {
+      "frame": 267.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 7,
+      "minHipEdgeRatio": 0.4919035820267279,
+      "maxHipEdgeRatio": 1.7187766049468767
+    },
+    {
+      "frame": 267.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 7,
+      "minHipEdgeRatio": 0.49322520944535786,
+      "maxHipEdgeRatio": 1.7190357332018924
+    },
+    {
+      "frame": 267.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 7,
+      "minHipEdgeRatio": 0.4946217872954354,
+      "maxHipEdgeRatio": 1.719254251805003
+    },
+    {
+      "frame": 268.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 7,
+      "minHipEdgeRatio": 0.49607469985773633,
+      "maxHipEdgeRatio": 1.7194698697186914
+    },
+    {
+      "frame": 268.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.4974747792359536,
+      "maxHipEdgeRatio": 1.7200817540372828
+    },
+    {
+      "frame": 268.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.49893301057517575,
+      "maxHipEdgeRatio": 1.7206842916899596
+    },
+    {
+      "frame": 268.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.5004791347030203,
+      "maxHipEdgeRatio": 1.7212550829084086
+    },
+    {
+      "frame": 269.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 6,
+      "minHipEdgeRatio": 0.5020924970357767,
+      "maxHipEdgeRatio": 1.7218215230927247
+    },
+    {
+      "frame": 269.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 5,
+      "minHipEdgeRatio": 0.503746193426852,
+      "maxHipEdgeRatio": 1.7208978146612879
+    },
+    {
+      "frame": 269.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 5,
+      "minHipEdgeRatio": 0.5054744413411059,
+      "maxHipEdgeRatio": 1.7199594416333295
+    },
+    {
+      "frame": 269.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 5,
+      "minHipEdgeRatio": 0.5072669134866828,
+      "maxHipEdgeRatio": 1.7189948012511624
+    },
+    {
+      "frame": 270.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 5,
+      "minHipEdgeRatio": 0.5091348679413995,
+      "maxHipEdgeRatio": 1.7180258098348626
+    },
+    {
+      "frame": 270.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 5,
+      "minHipEdgeRatio": 0.5109333237110127,
+      "maxHipEdgeRatio": 1.7145772124111447
+    },
+    {
+      "frame": 270.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 5,
+      "minHipEdgeRatio": 0.5128039375541901,
+      "maxHipEdgeRatio": 1.7111294207344883
+    },
+    {
+      "frame": 270.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 4,
+      "minHipEdgeRatio": 0.5147256116558105,
+      "maxHipEdgeRatio": 1.7076742161848653
+    },
+    {
+      "frame": 271.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 4,
+      "minHipEdgeRatio": 0.5167272447038127,
+      "maxHipEdgeRatio": 1.704215466348171
+    },
+    {
+      "frame": 271.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5186062799437818,
+      "maxHipEdgeRatio": 1.6998127032540868
+    },
+    {
+      "frame": 271.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5205600883226345,
+      "maxHipEdgeRatio": 1.6954012380917376
+    },
+    {
+      "frame": 271.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.522567704994673,
+      "maxHipEdgeRatio": 1.6944805893612305
+    },
+    {
+      "frame": 272.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5246478786485445,
+      "maxHipEdgeRatio": 1.6953935084987803
+    },
+    {
+      "frame": 272.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5265794811337512,
+      "maxHipEdgeRatio": 1.6955429949333451
+    },
+    {
+      "frame": 272.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5285671967154763,
+      "maxHipEdgeRatio": 1.6957240379690617
+    },
+    {
+      "frame": 272.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5306113799788479,
+      "maxHipEdgeRatio": 1.6992178493197376
+    },
+    {
+      "frame": 273.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5327223138925802,
+      "maxHipEdgeRatio": 1.7033273912928801
+    },
+    {
+      "frame": 273.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.534704045850269,
+      "maxHipEdgeRatio": 1.704686490613674
+    },
+    {
+      "frame": 273.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5367361732192859,
+      "maxHipEdgeRatio": 1.7061252012530703
+    },
+    {
+      "frame": 273.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.538837045780009,
+      "maxHipEdgeRatio": 1.7076550796928012
+    },
+    {
+      "frame": 274.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.540991593664495,
+      "maxHipEdgeRatio": 1.7151446972943192
+    },
+    {
+      "frame": 274.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5430441983246584,
+      "maxHipEdgeRatio": 1.717147853033933
+    },
+    {
+      "frame": 274.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5451667892244764,
+      "maxHipEdgeRatio": 1.7191640751051238
+    },
+    {
+      "frame": 274.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5473510779365799,
+      "maxHipEdgeRatio": 1.7212010290890831
+    },
+    {
+      "frame": 275.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5495917900071888,
+      "maxHipEdgeRatio": 1.7232597602923374
+    },
+    {
+      "frame": 275.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5516275075506276,
+      "maxHipEdgeRatio": 1.7243390392805882
+    },
+    {
+      "frame": 275.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5537378652635268,
+      "maxHipEdgeRatio": 1.725440095488134
+    },
+    {
+      "frame": 275.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5559228188227454,
+      "maxHipEdgeRatio": 1.7265533469384846
+    },
+    {
+      "frame": 276.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5581687610239936,
+      "maxHipEdgeRatio": 1.7276923826164803
+    },
+    {
+      "frame": 276.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5602385630628689,
+      "maxHipEdgeRatio": 1.7285216591272268
+    },
+    {
+      "frame": 276.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5623948838729952,
+      "maxHipEdgeRatio": 1.7293633050985326
+    },
+    {
+      "frame": 276.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.564643396816422,
+      "maxHipEdgeRatio": 1.7302394461852013
+    },
+    {
+      "frame": 277.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.566983880277444,
+      "maxHipEdgeRatio": 1.7345294204858352
+    },
+    {
+      "frame": 277.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5694950521544947,
+      "maxHipEdgeRatio": 1.734958277013761
+    },
+    {
+      "frame": 277.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5704922538247795,
+      "maxHipEdgeRatio": 1.7354001354479713
+    },
+    {
+      "frame": 277.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5680712351331795,
+      "maxHipEdgeRatio": 1.7358636637259892
+    },
+    {
+      "frame": 278.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5657282251724426,
+      "maxHipEdgeRatio": 1.736339781151362
+    },
+    {
+      "frame": 278.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5641228409497896,
+      "maxHipEdgeRatio": 1.7366813391656628
+    },
+    {
+      "frame": 278.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5625729049784489,
+      "maxHipEdgeRatio": 1.7370334225326702
+    },
+    {
+      "frame": 278.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.561076688655862,
+      "maxHipEdgeRatio": 1.7374291232882149
+    },
+    {
+      "frame": 279.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5596449181825224,
+      "maxHipEdgeRatio": 1.739016737117109
+    },
+    {
+      "frame": 279.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5588293723598603,
+      "maxHipEdgeRatio": 1.7391866641845053
+    },
+    {
+      "frame": 279.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5580621830857051,
+      "maxHipEdgeRatio": 1.7393652485420759
+    },
+    {
+      "frame": 279.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5573429957749163,
+      "maxHipEdgeRatio": 1.7395593716256006
+    },
+    {
+      "frame": 280.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5566535936159118,
+      "maxHipEdgeRatio": 1.739736624092375
+    },
+    {
+      "frame": 280.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5564731984257903,
+      "maxHipEdgeRatio": 1.7398065483591678
+    },
+    {
+      "frame": 280.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5563256023611456,
+      "maxHipEdgeRatio": 1.7398830210890412
+    },
+    {
+      "frame": 280.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5561958241998002,
+      "maxHipEdgeRatio": 1.7399649323729984
+    },
+    {
+      "frame": 281.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.556101947783909,
+      "maxHipEdgeRatio": 1.7400472876205544
+    },
+    {
+      "frame": 281.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5563818041058811,
+      "maxHipEdgeRatio": 1.7400539470745346
+    },
+    {
+      "frame": 281.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5566822706891326,
+      "maxHipEdgeRatio": 1.7400478425750527
+    },
+    {
+      "frame": 281.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5569962115077148,
+      "maxHipEdgeRatio": 1.7400661560734985
+    },
+    {
+      "frame": 282.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5573252665179019,
+      "maxHipEdgeRatio": 1.7400963455982088
+    },
+    {
+      "frame": 282.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5579082044885352,
+      "maxHipEdgeRatio": 1.740064602200903
+    },
+    {
+      "frame": 282.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5585100241178886,
+      "maxHipEdgeRatio": 1.7400502843748453
+    },
+    {
+      "frame": 282.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.559117871694627,
+      "maxHipEdgeRatio": 1.7400327478126973
+    },
+    {
+      "frame": 283.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.559733874729592,
+      "maxHipEdgeRatio": 1.740016321159546
+    },
+    {
+      "frame": 283.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5595953285609496,
+      "maxHipEdgeRatio": 1.7400085325430992
+    },
+    {
+      "frame": 283.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5533423259527703,
+      "maxHipEdgeRatio": 1.7400048739702576
+    },
+    {
+      "frame": 283.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5471458380346139,
+      "maxHipEdgeRatio": 1.7399998173182423
+    },
+    {
+      "frame": 284.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5410047704694673,
+      "maxHipEdgeRatio": 1.7400226476408274
+    },
+    {
+      "frame": 284.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5346297102008863,
+      "maxHipEdgeRatio": 1.7400167319249953
+    },
+    {
+      "frame": 284.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5282947495671347,
+      "maxHipEdgeRatio": 1.7400232886591076
+    },
+    {
+      "frame": 284.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5220042268327993,
+      "maxHipEdgeRatio": 1.7400178247140141
+    },
+    {
+      "frame": 285.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5157659196073647,
+      "maxHipEdgeRatio": 1.7400170980958438
+    },
+    {
+      "frame": 285.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5103487168927789,
+      "maxHipEdgeRatio": 1.7400312504076723
+    },
+    {
+      "frame": 285.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.5049639534539324,
+      "maxHipEdgeRatio": 1.7400535745261971
+    },
+    {
+      "frame": 285.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4996184298136909,
+      "maxHipEdgeRatio": 1.7400679368961571
+    },
+    {
+      "frame": 286.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.49431202872166013,
+      "maxHipEdgeRatio": 1.7400726202776657
+    },
+    {
+      "frame": 286.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4905237075672939,
+      "maxHipEdgeRatio": 1.7400826114915509
+    },
+    {
+      "frame": 286.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.48675176238465634,
+      "maxHipEdgeRatio": 1.7400876070984936
+    },
+    {
+      "frame": 286.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4830027201123599,
+      "maxHipEdgeRatio": 1.7400899487892478
+    },
+    {
+      "frame": 287.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47927067914722793,
+      "maxHipEdgeRatio": 1.7400851092950222
+    },
+    {
+      "frame": 287.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47825407914571944,
+      "maxHipEdgeRatio": 1.7400826114915509
+    },
+    {
+      "frame": 287.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4772371273930282,
+      "maxHipEdgeRatio": 1.7400810503643813
+    },
+    {
+      "frame": 287.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47622314598365767,
+      "maxHipEdgeRatio": 1.7400773036591743
+    },
+    {
+      "frame": 288.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520865648924543,
+      "maxHipEdgeRatio": 1.7400741814048353
+    },
+    {
+      "frame": 288.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520588156324844,
+      "maxHipEdgeRatio": 1.7400780842227592
+    },
+    {
+      "frame": 288.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520295030339255,
+      "maxHipEdgeRatio": 1.7400816748152492
+    },
+    {
+      "frame": 288.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520056621204304,
+      "maxHipEdgeRatio": 1.7400841726187206
+    },
+    {
+      "frame": 289.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519708778368064,
+      "maxHipEdgeRatio": 1.7400886998875122
+    },
+    {
+      "frame": 289.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519669694903316,
+      "maxHipEdgeRatio": 1.7400841726187206
+    },
+    {
+      "frame": 289.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519626703092094,
+      "maxHipEdgeRatio": 1.7400798014626457
+    },
+    {
+      "frame": 289.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519548536162604,
+      "maxHipEdgeRatio": 1.7400762108701557
+    },
+    {
+      "frame": 290.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751949381931196,
+      "maxHipEdgeRatio": 1.7400718397140809
+    },
+    {
+      "frame": 290.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519798670336977,
+      "maxHipEdgeRatio": 1.7400758986447218
+    },
+    {
+      "frame": 290.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751992764577064,
+      "maxHipEdgeRatio": 1.7400815187025322
+    },
+    {
+      "frame": 290.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752022468010271,
+      "maxHipEdgeRatio": 1.7400838603932867
+    },
+    {
+      "frame": 291.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520451364198235,
+      "maxHipEdgeRatio": 1.7400886998875122
+    },
+    {
+      "frame": 291.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520154329866165,
+      "maxHipEdgeRatio": 1.7400829237169848
+    },
+    {
+      "frame": 291.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752009961301552,
+      "maxHipEdgeRatio": 1.7400807381389476
+    },
+    {
+      "frame": 291.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751995109584949,
+      "maxHipEdgeRatio": 1.7400779281100422
+    },
+    {
+      "frame": 292.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751945473584721,
+      "maxHipEdgeRatio": 1.7400730886158167
+    },
+    {
+      "frame": 292.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519736136793383,
+      "maxHipEdgeRatio": 1.740078864786344
+    },
+    {
+      "frame": 292.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751992764577064,
+      "maxHipEdgeRatio": 1.7400816748152492
+    },
+    {
+      "frame": 292.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520056621204304,
+      "maxHipEdgeRatio": 1.7400854215204562
+    },
+    {
+      "frame": 293.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752027548860688,
+      "maxHipEdgeRatio": 1.7400894804510971
+    },
+    {
+      "frame": 293.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520142604826743,
+      "maxHipEdgeRatio": 1.7400854215204562
+    },
+    {
+      "frame": 293.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751996282088891,
+      "maxHipEdgeRatio": 1.7400818309279662
+    },
+    {
+      "frame": 293.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751985338718762,
+      "maxHipEdgeRatio": 1.7400765230955897
+    },
+    {
+      "frame": 294.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519755678525755,
+      "maxHipEdgeRatio": 1.7400718397140809
+    },
+    {
+      "frame": 294.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751979085364403,
+      "maxHipEdgeRatio": 1.7400760547574388
+    },
+    {
+      "frame": 294.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519966729235386,
+      "maxHipEdgeRatio": 1.7400815187025322
+    },
+    {
+      "frame": 294.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520025354432505,
+      "maxHipEdgeRatio": 1.7400863581967578
+    },
+    {
+      "frame": 295.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520205138370336,
+      "maxHipEdgeRatio": 1.7400899487892478
+    },
+    {
+      "frame": 295.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752004880451135,
+      "maxHipEdgeRatio": 1.7400855776331732
+    },
+    {
+      "frame": 295.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751991982907769,
+      "maxHipEdgeRatio": 1.7400807381389476
+    },
+    {
+      "frame": 295.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519591527973826,
+      "maxHipEdgeRatio": 1.7400801136880797
+    },
+    {
+      "frame": 296.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751952117773728,
+      "maxHipEdgeRatio": 1.7400748058557032
+    },
+    {
+      "frame": 296.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519720503407487,
+      "maxHipEdgeRatio": 1.7400785525609102
+    },
+    {
+      "frame": 296.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519876837266467,
+      "maxHipEdgeRatio": 1.7400812064770983
+    },
+    {
+      "frame": 296.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752009961301552,
+      "maxHipEdgeRatio": 1.7400841726187206
+    },
+    {
+      "frame": 297.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520302847032203,
+      "maxHipEdgeRatio": 1.7400894804510971
+    },
+    {
+      "frame": 297.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752002144608603,
+      "maxHipEdgeRatio": 1.7400846409568713
+    },
+    {
+      "frame": 297.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519935462463586,
+      "maxHipEdgeRatio": 1.7400804259135136
+    },
+    {
+      "frame": 297.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519728320100435,
+      "maxHipEdgeRatio": 1.7400757425320048
+    },
+    {
+      "frame": 298.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519642336477996,
+      "maxHipEdgeRatio": 1.7400709030377792
+    },
+    {
+      "frame": 298.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519771311911657,
+      "maxHipEdgeRatio": 1.7400766792083067
+    },
+    {
+      "frame": 298.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751997845427481,
+      "maxHipEdgeRatio": 1.7400812064770983
+    },
+    {
+      "frame": 298.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520177779945016,
+      "maxHipEdgeRatio": 1.7400862020840409
+    },
+    {
+      "frame": 299.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520349747189894,
+      "maxHipEdgeRatio": 1.7400911976909836
+    },
+    {
+      "frame": 299.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520416189079967,
+      "maxHipEdgeRatio": 1.7400863581967578
+    },
+    {
+      "frame": 299.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752033020545752,
+      "maxHipEdgeRatio": 1.7400815187025322
+    },
+    {
+      "frame": 299.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.475202872136463,
+      "maxHipEdgeRatio": 1.7400779281100422
+    },
+    {
+      "frame": 300.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520302847032203,
+      "maxHipEdgeRatio": 1.7400732447285336
+    },
+    {
+      "frame": 300.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752024031348861,
+      "maxHipEdgeRatio": 1.7400774597718913
+    },
+    {
+      "frame": 300.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752012306309437,
+      "maxHipEdgeRatio": 1.7400821431534002
+    },
+    {
+      "frame": 300.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752016605490559,
+      "maxHipEdgeRatio": 1.7400862020840409
+    },
+    {
+      "frame": 301.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520068346243727,
+      "maxHipEdgeRatio": 1.7400907293528327
+    },
+    {
+      "frame": 301.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519935462463586,
+      "maxHipEdgeRatio": 1.7400863581967578
+    },
+    {
+      "frame": 301.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519966729235386,
+      "maxHipEdgeRatio": 1.7400813625898153
+    },
+    {
+      "frame": 301.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751990419569179,
+      "maxHipEdgeRatio": 1.7400768353210236
+    },
+    {
+      "frame": 302.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519966729235386,
+      "maxHipEdgeRatio": 1.7400730886158167
+    },
+    {
+      "frame": 302.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751970487002159,
+      "maxHipEdgeRatio": 1.7400765230955897
+    },
+    {
+      "frame": 302.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.475195954363203,
+      "maxHipEdgeRatio": 1.7400821431534002
+    },
+    {
+      "frame": 302.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751952508608376,
+      "maxHipEdgeRatio": 1.7400852654077392
+    },
+    {
+      "frame": 303.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519403927343046,
+      "maxHipEdgeRatio": 1.740089636563814
+    },
+    {
+      "frame": 303.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751951336104433,
+      "maxHipEdgeRatio": 1.7400865143094748
+    },
+    {
+      "frame": 303.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751944301080779,
+      "maxHipEdgeRatio": 1.7400804259135136
+    },
+    {
+      "frame": 303.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519517269390804,
+      "maxHipEdgeRatio": 1.7400755864192878
+    },
+    {
+      "frame": 304.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519560261202026,
+      "maxHipEdgeRatio": 1.7400723080522318
+    },
+    {
+      "frame": 304.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519677511596264,
+      "maxHipEdgeRatio": 1.7400768353210236
+    },
+    {
+      "frame": 304.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519708778368064,
+      "maxHipEdgeRatio": 1.7400812064770983
+    },
+    {
+      "frame": 304.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519747861832806,
+      "maxHipEdgeRatio": 1.7400849531823053
+    },
+    {
+      "frame": 305.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751986902057352,
+      "maxHipEdgeRatio": 1.7400899487892478
+    },
+    {
+      "frame": 305.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519955004195963,
+      "maxHipEdgeRatio": 1.7400863581967578
+    },
+    {
+      "frame": 305.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519986270967757,
+      "maxHipEdgeRatio": 1.7400822992661171
+    },
+    {
+      "frame": 305.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520162146559114,
+      "maxHipEdgeRatio": 1.7400773036591743
+    },
+    {
+      "frame": 306.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519958912542437,
+      "maxHipEdgeRatio": 1.7400724641649488
+    },
+    {
+      "frame": 306.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520205138370336,
+      "maxHipEdgeRatio": 1.7400768353210236
+    },
+    {
+      "frame": 306.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752018950498444,
+      "maxHipEdgeRatio": 1.7400818309279662
+    },
+    {
+      "frame": 306.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752018168829149,
+      "maxHipEdgeRatio": 1.7400851092950222
+    },
+    {
+      "frame": 307.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752027548860688,
+      "maxHipEdgeRatio": 1.7400905732401157
+    },
+    {
+      "frame": 307.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520232496795656,
+      "maxHipEdgeRatio": 1.740086045971324
+    },
+    {
+      "frame": 307.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752033020545752,
+      "maxHipEdgeRatio": 1.7400818309279662
+    },
+    {
+      "frame": 307.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520334113803997,
+      "maxHipEdgeRatio": 1.7400769914337406
+    },
+    {
+      "frame": 308.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752033020545752,
+      "maxHipEdgeRatio": 1.7400719958267978
+    },
+    {
+      "frame": 308.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752018950498444,
+      "maxHipEdgeRatio": 1.7400765230955897
+    },
+    {
+      "frame": 308.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520068346243727,
+      "maxHipEdgeRatio": 1.7400810503643813
+    },
+    {
+      "frame": 308.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751974395348633,
+      "maxHipEdgeRatio": 1.7400854215204562
+    },
+    {
+      "frame": 309.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751964624482447,
+      "maxHipEdgeRatio": 1.7400904171273988
+    },
+    {
+      "frame": 309.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751963061143857,
+      "maxHipEdgeRatio": 1.7400849531823053
+    },
+    {
+      "frame": 309.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519720503407487,
+      "maxHipEdgeRatio": 1.7400805820262306
+    },
+    {
+      "frame": 309.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519642336477996,
+      "maxHipEdgeRatio": 1.7400763669828727
+    },
+    {
+      "frame": 310.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751984947884115,
+      "maxHipEdgeRatio": 1.7400724641649488
+    },
+    {
+      "frame": 310.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519755678525755,
+      "maxHipEdgeRatio": 1.7400755864192878
+    },
+    {
+      "frame": 310.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519814303722874,
+      "maxHipEdgeRatio": 1.7400805820262306
+    },
+    {
+      "frame": 310.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.475198416621482,
+      "maxHipEdgeRatio": 1.7400852654077392
+    },
+    {
+      "frame": 311.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751991201238474,
+      "maxHipEdgeRatio": 1.740089636563814
+    },
+    {
+      "frame": 311.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751989247065237,
+      "maxHipEdgeRatio": 1.7400857337458902
+    },
+    {
+      "frame": 311.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.475201191547479,
+      "maxHipEdgeRatio": 1.7400808942516643
+    },
+    {
+      "frame": 311.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752026767191393,
+      "maxHipEdgeRatio": 1.7400768353210236
+    },
+    {
+      "frame": 312.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.475203184804181,
+      "maxHipEdgeRatio": 1.7400713713759302
+    },
+    {
+      "frame": 312.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752019732167739,
+      "maxHipEdgeRatio": 1.7400748058557032
+    },
+    {
+      "frame": 312.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752020904671681,
+      "maxHipEdgeRatio": 1.7400799575753627
+    },
+    {
+      "frame": 312.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752027939695335,
+      "maxHipEdgeRatio": 1.7400858898586071
+    },
+    {
+      "frame": 313.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.475203184804181,
+      "maxHipEdgeRatio": 1.7400882315493613
+    },
+    {
+      "frame": 313.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752024031348861,
+      "maxHipEdgeRatio": 1.7400849531823053
+    },
+    {
+      "frame": 313.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520005812700133,
+      "maxHipEdgeRatio": 1.7400808942516643
+    },
+    {
+      "frame": 313.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752015042151969,
+      "maxHipEdgeRatio": 1.7400771475464576
+    },
+    {
+      "frame": 314.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751997845427481,
+      "maxHipEdgeRatio": 1.7400734008412506
+    },
+    {
+      "frame": 314.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519700961675115,
+      "maxHipEdgeRatio": 1.7400768353210236
+    },
+    {
+      "frame": 314.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519786945297554,
+      "maxHipEdgeRatio": 1.7400813625898153
+    },
+    {
+      "frame": 314.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519626703092094,
+      "maxHipEdgeRatio": 1.7400854215204562
+    },
+    {
+      "frame": 315.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751944691915426,
+      "maxHipEdgeRatio": 1.7400893243383802
+    },
+    {
+      "frame": 315.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751968141994274,
+      "maxHipEdgeRatio": 1.7400862020840409
+    },
+    {
+      "frame": 315.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751991982907769,
+      "maxHipEdgeRatio": 1.7400810503643813
+    },
+    {
+      "frame": 315.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520111338054943,
+      "maxHipEdgeRatio": 1.7400766792083067
+    },
+    {
+      "frame": 316.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752034583884342,
+      "maxHipEdgeRatio": 1.7400726202776657
+    },
+    {
+      "frame": 316.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520244221835084,
+      "maxHipEdgeRatio": 1.7400771475464576
+    },
+    {
+      "frame": 316.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752019732167739,
+      "maxHipEdgeRatio": 1.7400810503643813
+    },
+    {
+      "frame": 316.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520076162936675,
+      "maxHipEdgeRatio": 1.7400857337458902
+    },
+    {
+      "frame": 317.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752000190435366,
+      "maxHipEdgeRatio": 1.7400893243383802
+    },
+    {
+      "frame": 317.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520052712857824,
+      "maxHipEdgeRatio": 1.7400843287314374
+    },
+    {
+      "frame": 317.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752002926277898,
+      "maxHipEdgeRatio": 1.7400812064770983
+    },
+    {
+      "frame": 317.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47519997996007185,
+      "maxHipEdgeRatio": 1.7400769914337406
+    },
+    {
+      "frame": 318.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.475198416621482,
+      "maxHipEdgeRatio": 1.7400723080522318
+    },
+    {
+      "frame": 318.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4751997845427481,
+      "maxHipEdgeRatio": 1.7400776158846083
+    },
+    {
+      "frame": 318.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752020123002386,
+      "maxHipEdgeRatio": 1.7400801136880797
+    },
+    {
+      "frame": 318.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752027548860688,
+      "maxHipEdgeRatio": 1.7400862020840409
+    },
+    {
+      "frame": 319.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520381013961693,
+      "maxHipEdgeRatio": 1.7400911976909836
+    },
+    {
+      "frame": 319.25,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520302847032203,
+      "maxHipEdgeRatio": 1.7400854215204562
+    },
+    {
+      "frame": 319.5,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752042009742644,
+      "maxHipEdgeRatio": 1.7400818309279662
+    },
+    {
+      "frame": 319.75,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.4752038883065464,
+      "maxHipEdgeRatio": 1.7400771475464576
+    },
+    {
+      "frame": 320.0,
+      "hipPairs": 0,
+      "wholeBodyPairsIncludingOtherAgentScope": 0,
+      "minHipEdgeRatio": 0.47520373197268745,
+      "maxHipEdgeRatio": 1.7400730886158167
+    }
+  ],
+  "failures": [],
+  "passed": true,
+  "limits": "Hip-only audit. Lower-body pairs are disclosed but are outside this independently assigned residual. Merge then audit the whole body/racket and foot support."
+}

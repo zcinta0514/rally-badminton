@@ -1,0 +1,475 @@
+{
+  "source": "artifacts/rig-tempo/20261009/motion/final-01/rebuild.blend",
+  "sourceSHA256": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+  "rows": [
+    {
+      "sourceFrame": 480,
+      "modelFrame": 0.0,
+      "leftSoleCenter": [
+        -1.80465500831604,
+        2.064835737546285,
+        -0.0030000558821484447
+      ],
+      "rightSoleCenter": [
+        -1.5654143969217935,
+        0.9816440224647522,
+        -0.0030000911901394527
+      ],
+      "leftSolePixel": [
+        511.05611870284713,
+        123.74995298776781
+      ],
+      "rightSolePixel": [
+        424.0332843677626,
+        129.43742887544357
+      ],
+      "relativeLeftShoeHeightPixels": 5.68747588767576,
+      "relativeLeftShoeHorizontalPixels": 87.02283433508455,
+      "leftKneePixel": [
+        504.9542709705414,
+        94.12583583152502
+      ]
+    },
+    {
+      "sourceFrame": 484,
+      "modelFrame": 19.2,
+      "leftSoleCenter": [
+        -1.804667497475942,
+        2.0648307832082113,
+        -0.003007184559634576
+      ],
+      "rightSoleCenter": [
+        -1.5654083879788716,
+        0.9816386493047079,
+        -0.0030239960566783943
+      ],
+      "leftSolePixel": [
+        511.05567368897186,
+        123.75020728259096
+      ],
+      "rightSolePixel": [
+        424.03284626056393,
+        129.4394236013713
+      ],
+      "relativeLeftShoeHeightPixels": 5.689216318780325,
+      "relativeLeftShoeHorizontalPixels": 87.02282742840794,
+      "leftKneePixel": [
+        502.7310292803611,
+        96.10510787942769
+      ]
+    },
+    {
+      "sourceFrame": 485,
+      "modelFrame": 24.0,
+      "leftSoleCenter": [
+        -1.8046552046140034,
+        2.0648361253738403,
+        -0.0029998807655647395
+      ],
+      "rightSoleCenter": [
+        -1.5654141290982564,
+        0.9816436962286631,
+        -0.00299989794070522
+      ],
+      "leftSolePixel": [
+        511.0561495652254,
+        123.7499348328684
+      ],
+      "rightSolePixel": [
+        424.0332584278133,
+        129.43742030449573
+      ],
+      "relativeLeftShoeHeightPixels": 5.687485471627326,
+      "relativeLeftShoeHorizontalPixels": 87.0228911374121,
+      "leftKneePixel": [
+        500.6028832110634,
+        98.41044978923964
+      ]
+    },
+    {
+      "sourceFrame": 486,
+      "modelFrame": 28.799999999999997,
+      "leftSoleCenter": [
+        -1.7435409625371296,
+        1.9716183400154115,
+        0.07701348654925823
+      ],
+      "rightSoleCenter": [
+        -1.5597322614987692,
+        0.9789341374238332,
+        -0.00041257512270628165
+      ],
+      "leftSolePixel": [
+        503.79304613438217,
+        119.01666359093954
+      ],
+      "rightSolePixel": [
+        423.82338304114876,
+        129.37270864058496
+      ],
+      "relativeLeftShoeHeightPixels": 10.356045049645417,
+      "relativeLeftShoeHorizontalPixels": 79.96966309323341,
+      "leftKneePixel": [
+        491.657694900156,
+        100.86803089105186
+      ]
+    },
+    {
+      "sourceFrame": 487,
+      "modelFrame": 33.6,
+      "leftSoleCenter": [
+        -1.644204097588857,
+        1.7955589008331299,
+        0.297117950518926
+      ],
+      "rightSoleCenter": [
+        -1.5654267191886901,
+        0.9816340657075247,
+        -0.0012013502019302298
+      ],
+      "leftSolePixel": [
+        490.03008280243375,
+        104.30437796094438
+      ],
+      "rightSolePixel": [
+        424.0333383870435,
+        129.2978342231243
+      ],
+      "relativeLeftShoeHeightPixels": 24.993456262179933,
+      "relativeLeftShoeHorizontalPixels": 65.99674441539025,
+      "leftKneePixel": [
+        472.03299754719126,
+        100.30049812030924
+      ],
+      "referenceRelativeRearShoePixels": [
+        66,
+        -25
+      ]
+    },
+    {
+      "sourceFrame": 488,
+      "modelFrame": 38.4,
+      "leftSoleCenter": [
+        -1.5614370560646058,
+        1.6693664423624675,
+        0.32218479037284853
+      ],
+      "rightSoleCenter": [
+        -1.5654024736086527,
+        0.9815969367822012,
+        -0.0011722829767192404
+      ],
+      "leftSolePixel": [
+        480.0302476204939,
+        104.29754105431329
+      ],
+      "rightSolePixel": [
+        424.0303803608265,
+        129.29616198649722
+      ],
+      "relativeLeftShoeHeightPixels": 24.99862093218394,
+      "relativeLeftShoeHorizontalPixels": 55.99986725966744,
+      "leftKneePixel": [
+        460.0312328377047,
+        105.29604472008646
+      ],
+      "referenceRelativeRearShoePixels": [
+        56,
+        -25
+      ]
+    },
+    {
+      "sourceFrame": 489,
+      "modelFrame": 43.199999999999996,
+      "leftSoleCenter": [
+        -1.6182997250556945,
+        1.5482608191172282,
+        0.2792902765671412
+      ],
+      "rightSoleCenter": [
+        -1.565411721865336,
+        0.981622897386551,
+        -0.0010923921417755385
+      ],
+      "leftSolePixel": [
+        470.0332686093491,
+        106.29587911006226
+      ],
+      "rightSolePixel": [
+        424.0325089817336,
+        129.28975410473475
+      ],
+      "relativeLeftShoeHeightPixels": 22.993874994672495,
+      "relativeLeftShoeHorizontalPixels": 46.00075962761548,
+      "leftKneePixel": [
+        453.0034532224681,
+        109.22408585691588
+      ],
+      "referenceRelativeRearShoePixels": [
+        46,
+        -23
+      ]
+    },
+    {
+      "sourceFrame": 489.5,
+      "modelFrame": 45.6,
+      "leftSoleCenter": [
+        -1.5838574759165447,
+        1.4823234407107035,
+        0.23601600577433904
+      ],
+      "rightSoleCenter": [
+        -1.565417758623759,
+        0.9816302637259166,
+        -0.001082894377177581
+      ],
+      "leftSolePixel": [
+        464.7318455682465,
+        110.46577064231457
+      ],
+      "rightSolePixel": [
+        424.0331014957428,
+        129.28887443352397
+      ],
+      "relativeLeftShoeHeightPixels": 18.823103791209405,
+      "relativeLeftShoeHorizontalPixels": 40.6987440725037,
+      "leftKneePixel": [
+        449.6961432659243,
+        110.16728417798777
+      ]
+    },
+    {
+      "sourceFrame": 490,
+      "modelFrame": 48.0,
+      "leftSoleCenter": [
+        -1.5372485073407491,
+        1.423329737186432,
+        0.21345405176281929
+      ],
+      "rightSoleCenter": [
+        -1.5654852636655172,
+        0.9816007423400879,
+        -0.0014778788605084021
+      ],
+      "leftSolePixel": [
+        460.0306671728007,
+        113.3176120422736
+      ],
+      "rightSolePixel": [
+        424.0304168974476,
+        129.31785197499806
+      ],
+      "relativeLeftShoeHeightPixels": 16.00023993272447,
+      "relativeLeftShoeHorizontalPixels": 36.000250275353096,
+      "leftKneePixel": [
+        445.99011143097414,
+        111.20193992723378
+      ],
+      "referenceRelativeRearShoePixels": [
+        36,
+        -16
+      ]
+    },
+    {
+      "sourceFrame": 490.5,
+      "modelFrame": 50.4,
+      "leftSoleCenter": [
+        -1.4079208397865295,
+        1.3303097454706827,
+        0.2008986383676529
+      ],
+      "rightSoleCenter": [
+        -1.5656296873092652,
+        0.9816641759872436,
+        -0.0017390386775756877
+      ],
+      "leftSolePixel": [
+        452.73178544628763,
+        117.35770347885602
+      ],
+      "rightSolePixel": [
+        424.03521486331806,
+        129.3346290317092
+      ],
+      "relativeLeftShoeHeightPixels": 11.976925552853174,
+      "relativeLeftShoeHorizontalPixels": 28.69657058296957,
+      "leftKneePixel": [
+        438.72774538979456,
+        112.72539026108174
+      ]
+    },
+    {
+      "sourceFrame": 491,
+      "modelFrame": 52.8,
+      "leftSoleCenter": [
+        -1.2384432466824848,
+        1.219897717634837,
+        0.16372638737161954
+      ],
+      "rightSoleCenter": [
+        -1.5654279192288716,
+        0.981710440715154,
+        -0.0011508390784729272
+      ],
+      "leftSolePixel": [
+        444.0406359300257,
+        124.29684256455894
+      ],
+      "rightSolePixel": [
+        424.03954900695226,
+        129.29389378064536
+      ],
+      "relativeLeftShoeHeightPixels": 4.997051216086419,
+      "relativeLeftShoeHorizontalPixels": 20.001086923073444,
+      "leftKneePixel": [
+        430.0386092357263,
+        115.29113793056277
+      ],
+      "referenceRelativeRearShoePixels": [
+        20,
+        -5
+      ]
+    },
+    {
+      "sourceFrame": 492,
+      "modelFrame": 57.599999999999994,
+      "leftSoleCenter": [
+        -0.9141030915578207,
+        1.0208265312512717,
+        -0.01799689343664795
+      ],
+      "rightSoleCenter": [
+        -1.481929907798767,
+        0.9660167034467061,
+        0.04232123199850321
+      ],
+      "leftSolePixel": [
+        428.2131105821866,
+        146.34943761823598
+      ],
+      "rightSolePixel": [
+        422.9108292083963,
+        127.91824087155538
+      ],
+      "relativeLeftShoeHeightPixels": -18.431196746680598,
+      "relativeLeftShoeHorizontalPixels": 5.302281373790265,
+      "leftKneePixel": [
+        414.79543657761985,
+        123.67289534605422
+      ]
+    },
+    {
+      "sourceFrame": 493,
+      "modelFrame": 62.4,
+      "leftSoleCenter": [
+        -0.49473039428393045,
+        0.7670795969168345,
+        -0.03915260790886047
+      ],
+      "rightSoleCenter": [
+        -1.2895580593744913,
+        0.924209239880244,
+        0.12656328901648523
+      ],
+      "leftSolePixel": [
+        407.9046414800815,
+        158.36021627021927
+      ],
+      "rightSolePixel": [
+        419.82697847543125,
+        125.9700913256502
+      ],
+      "relativeLeftShoeHeightPixels": -32.39012494456907,
+      "relativeLeftShoeHorizontalPixels": -11.922336995349724,
+      "leftKneePixel": [
+        400.9290176363428,
+        118.955988718696
+      ]
+    },
+    {
+      "sourceFrame": 494,
+      "modelFrame": 67.2,
+      "leftSoleCenter": [
+        -0.11346106459697088,
+        0.4953354569276174,
+        -0.011831891088125606
+      ],
+      "rightSoleCenter": [
+        -1.0661681008338928,
+        0.8602557412783305,
+        0.18036215573549272
+      ],
+      "leftSolePixel": [
+        385.7660876012278,
+        165.7492415560772
+      ],
+      "rightSolePixel": [
+        414.9338461532043,
+        127.13424487198165
+      ],
+      "relativeLeftShoeHeightPixels": -38.61499668409556,
+      "relativeLeftShoeHorizontalPixels": -29.167758551976476,
+      "leftKneePixel": [
+        389.30137991053607,
+        119.05463206488335
+      ]
+    },
+    {
+      "sourceFrame": 495,
+      "modelFrame": 72.0,
+      "leftSoleCenter": [
+        0.10182711405058702,
+        0.33703776260217033,
+        0.03012803863734007
+      ],
+      "rightSoleCenter": [
+        -0.8231779539585113,
+        0.7297484691937765,
+        0.19111259341239928
+      ],
+      "leftSolePixel": [
+        372.72078273094553,
+        167.8565923415759
+      ],
+      "rightSolePixel": [
+        404.53115435940174,
+        132.16728260902062
+      ],
+      "relativeLeftShoeHeightPixels": -35.68930973255527,
+      "relativeLeftShoeHorizontalPixels": -31.81037162845621,
+      "leftKneePixel": [
+        381.2138025482325,
+        120.81967648117896
+      ]
+    },
+    {
+      "sourceFrame": 496,
+      "modelFrame": 76.8,
+      "leftSoleCenter": [
+        0.21225305254260698,
+        0.32682818700869876,
+        -0.0009600615866171817
+      ],
+      "rightSoleCenter": [
+        -0.5422961461544037,
+        0.5282775447765986,
+        0.19770218014717103
+      ],
+      "leftSolePixel": [
+        371.92225422865,
+        173.14233669958782
+      ],
+      "rightSolePixel": [
+        388.20185518498386,
+        138.50365346813533
+      ],
+      "relativeLeftShoeHeightPixels": -34.63868323145249,
+      "relativeLeftShoeHorizontalPixels": -16.279600956333866,
+      "leftKneePixel": [
+        377.39095462266107,
+        125.63888197534214
+      ]
+    }
+  ],
+  "scope": "Final evaluated sole centers and fixed approximate camera, with original blurred outline estimates for comparison. Not a scientific fit/acceptance threshold, and not actual normal-speed playback."
+}

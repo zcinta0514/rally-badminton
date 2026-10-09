@@ -1,0 +1,207 @@
+{
+  "schema": "rally-flight-reference-residual-v1",
+  "flight": "artifacts/rig-tempo/20261009/flight/final/comparison-initial-flight.json",
+  "flightSHA256": "1e01876390ed86bea7cbffbe526c88e2a2efc04216eaf74d4bec779d98a8bdf2",
+  "sourceSHA256": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+  "glbSHA256": "bee8c9d6d7287153ec7e21f23daa8a0050f47191a2296a92d94e05a02e4f6c7c",
+  "cameraSHA256": "752b0b7e5e5f9bdf5db13c4634472cf57a8de8be14af6d0ff9271ea54b60fba9",
+  "checkerSHA256": "e73c9302ca712dab44734ee3aff74202a20b188fb8277899780822f8fe4bdac2",
+  "sourceVideoFrames": [
+    487,
+    537
+  ],
+  "referenceFramesActuallyOpened": [
+    487,
+    488,
+    489,
+    500,
+    506,
+    513,
+    514,
+    522,
+    536,
+    537
+  ],
+  "observationsBy": "Independent reference-review agent; direct full-frame visual readings, not automatic tracking",
+  "camera": "artifacts/rig-refine/20261008/reference-camera.json",
+  "cameraStatus": "Manual court-corner homography plus square-pixel camera assumption. Only an approximate comparison camera, not measured lens calibration.",
+  "rows": [
+    {
+      "sourceFrame": 488,
+      "imageBox": [
+        414,
+        453,
+        430,
+        490
+      ],
+      "status": "ball/racket merged; only a broad region is visible",
+      "worldM": [
+        10.352319942888139,
+        0.3018489977297951,
+        2.147425413131714
+      ],
+      "projectedPixel": [
+        362.09608097746127,
+        593.6784187499246
+      ],
+      "pixelResidual": [
+        51.90391902253873,
+        103.67841874992462
+      ],
+      "errorPx": 115.94494954237109
+    },
+    {
+      "sourceFrame": 500,
+      "pixel": [
+        395,
+        234
+      ],
+      "uncertaintyPx": 3,
+      "worldM": [
+        5.015992150465739,
+        1.9529709986004644,
+        2.147425413131714
+      ],
+      "projectedPixel": [
+        384.2893695421337,
+        265.966978424266
+      ],
+      "pixelResidual": [
+        -10.710630457866273,
+        31.966978424266017
+      ],
+      "errorPx": 33.71357759690392
+    },
+    {
+      "sourceFrame": 506,
+      "pixel": [
+        393,
+        223
+      ],
+      "uncertaintyPx": 3,
+      "worldM": [
+        3.539716958916369,
+        1.7058025641400127,
+        2.147425413131714
+      ],
+      "projectedPixel": [
+        390.5940168405074,
+        247.79152748711226
+      ],
+      "pixelResidual": [
+        -2.405983159492621,
+        24.791527487112262
+      ],
+      "errorPx": 24.908002531475802
+    },
+    {
+      "sourceFrame": 513,
+      "pixel": [
+        397,
+        264
+      ],
+      "uncertaintyPx": 4,
+      "worldM": [
+        2.228094151363443,
+        0.8601881188194535,
+        2.147425413131714
+      ],
+      "projectedPixel": [
+        396.6459713971906,
+        285.0762629390983
+      ],
+      "pixelResidual": [
+        -0.3540286028094215,
+        21.076262939098285
+      ],
+      "errorPx": 21.079236127754132
+    },
+    {
+      "sourceFrame": 514,
+      "pixel": [
+        397,
+        257
+      ],
+      "uncertaintyPx": 6,
+      "status": "long motion blur",
+      "worldM": [
+        2.5607375778479957,
+        1.066539345898947,
+        2.1267027124590694
+      ],
+      "projectedPixel": [
+        396.9860586590604,
+        276.5268852929948
+      ],
+      "pixelResidual": [
+        -0.013941340939595648,
+        19.52688529299479
+      ],
+      "errorPx": 19.526890269747597
+    },
+    {
+      "sourceFrame": 522,
+      "pixel": [
+        398,
+        203
+      ],
+      "uncertaintyPx": 3,
+      "worldM": [
+        5.7073527209757655,
+        2.736849418410863,
+        1.9579239602231955
+      ],
+      "projectedPixel": [
+        398.2694430469086,
+        214.13917193475837
+      ],
+      "pixelResidual": [
+        0.26944304690857734,
+        11.139171934758366
+      ],
+      "errorPx": 11.142430208335874
+    },
+    {
+      "sourceFrame": 536,
+      "pixel": [
+        404,
+        326
+      ],
+      "uncertaintyPx": 6,
+      "worldM": [
+        8.7526599514317,
+        2.458900639147616,
+        1.7945791814205554
+      ],
+      "projectedPixel": [
+        402.39713870676786,
+        329.356296463603
+      ],
+      "pixelResidual": [
+        -1.602861293232138,
+        3.3562964636029733
+      ],
+      "errorPx": 3.7193938050353887
+    }
+  ],
+  "impact": {
+    "sourceFrame": 513.3333333333333,
+    "projectedPixel": [
+      396.9080765535351,
+      288.0701278883581
+    ],
+    "observedIntervalSourceFrames": [
+      513,
+      514
+    ],
+    "status": "Current real stringbed contact remains below the observed ball projection; do not move the shuttle off the strings to hide it."
+  },
+  "professionalFlightFidelity": "improved_not_passed",
+  "limits": [
+    "Single-view camera and manually read pixels cannot determine unique 3D positions or velocities.",
+    "The488 source ball overlaps racket and motion blur. A selected point inside its region is an authoring assumption, not a measured centre.",
+    "Source513\u2014514, not a unique subframe, is the visible return interval.",
+    "The model contact is physically attached to the actual string mesh, but its camera projection remains lower than the real match.",
+    "Numerical contact, net and in-court landing checks do not imply exact professional-video restoration."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "rally-sequence-flight-authoring-v1",
+  "scope": "Only this source480—540 rebuilt-racket sequence; not general game physics constants",
+  "calibratedFromSourceSHA256": "e9330f5607223c46056bdc9ad0c7c4fd00ad4cbcbc7d79f66b986babc3d11a1c",
+  "fitReport": "contact-02/bounded-fit.json",
+  "hitSourceFrame": 513.3333333333333,
+  "incomingMps": [-3.5695359274674754, -4.338731434775277, 0.16719010307018053],
+  "restitution": 0.98,
+  "quadraticDrag": 0.18,
+  "feedTime": 0.32,
+  "fitBoundaryFlags": ["Restitution reaches the search upper bound0.98", "Inferred previous-feed height0.99946m nearly reaches the authoring upper bound1m"],
+  "limits": [
+    "These per-sequence parameters are authored monocular inferences, not measured shuttle or string restitution.",
+    "The bounded fit reaches restitution0.98 and feed-height1m assumptions. This can reflect the fixed low contact geometry, approximate camera and simplified drag/impact model; it does not establish a unique real-world solution.",
+    "The real string contact remains20—27px below the observed ball in the approximate source-camera view. It was not detached from the racket to hide that residual.",
+    "Source488 is a broad blurred region, not a known exact centre; even the selected fit remains about14px outside that region horizontally.",
+    "Professional-video flight fidelity remains improved_not_passed. Contact, net and export checks remain independent."
+  ]
+}

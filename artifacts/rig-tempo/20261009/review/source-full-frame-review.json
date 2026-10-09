@@ -1,0 +1,150 @@
+{
+  "reviewDate": "2026-10-09",
+  "kind": "independent_full_frame_visual_reference_review",
+  "sourceVideo": "artifacts/match-reference/20261006/match15/2_18_14.mp4",
+  "sourceFps": 25,
+  "sourceVideoSha256": "e76277c477ebf887de15778585d07fc27dbfb0df926220ad40e499afba900112",
+  "allFramesIndividuallyOpened": true,
+  "fullFrameCoverage": [
+    480,
+    540
+  ],
+  "uniqueFullFrameCount": 61,
+  "fullFrameBatches": [
+    [
+      500,
+      505
+    ],
+    [
+      506,
+      511
+    ],
+    [
+      512,
+      517
+    ],
+    [
+      518,
+      523
+    ],
+    [
+      524,
+      529
+    ],
+    [
+      530,
+      535
+    ],
+    [
+      536,
+      540
+    ],
+    [
+      480,
+      485
+    ],
+    [
+      486,
+      491
+    ],
+    [
+      492,
+      499
+    ]
+  ],
+  "imageDirectories": [
+    "artifacts/rig-tempo/20261009/review/full-480-499",
+    "artifacts/rig-tempo/20261009/review/full-500-540"
+  ],
+  "normalSpeedVideoActuallyViewed": false,
+  "contactWindows": {
+    "precedingNearPlayer": [
+      487,
+      489
+    ],
+    "farPlayer": [
+      513,
+      514
+    ],
+    "followingNearPlayer": [
+      536,
+      537
+    ]
+  },
+  "observations": [
+    {
+      "frames": [
+        480,
+        487
+      ],
+      "observed": "球屏幕投影快速向左下移动；近端球员向己方左侧低位跨步，接球脚处在短发球线后、双打后发球线前。远端球员由后场向对角前场启动。",
+      "confidence": "high for visible motion, no 3D speed measured"
+    },
+    {
+      "frames": [
+        487,
+        489
+      ],
+      "observed": "近端球员持拍臂横过身体左侧低位救球；488附近球拍与球像模糊/遮挡，489球像已反向上移；非持拍手随后落地。",
+      "inference": "来球由防守挡/救球产生，不是该时段近端头顶下压球。",
+      "confidence": "moderate for contact window, high for low defensive posture"
+    },
+    {
+      "frames": [
+        490,
+        505
+      ],
+      "observed": "球投影持续向远端前场方向上移，约504—505达到这一段屏幕纵坐标极值；远端从后场向前场跑动、抬拍。",
+      "limitation": "屏幕纵坐标极值不是三维高度极值。"
+    },
+    {
+      "frames": [
+        506,
+        514
+      ],
+      "observed": "球投影下降至513，514反向上移；远端向画面左前方长步、逐渐屈膝；近端已起身但保持短发球线后位置。",
+      "inference": "远端触球窗口513—514，无法由25fps远景锁定唯一亚帧。"
+    },
+    {
+      "frames": [
+        515,
+        524
+      ],
+      "observed": "球像上移至522左右的屏幕最高点，523—524重新下移；近端保持两脚位于短发球线后方且后双打发球线前方，并横向调整；远端从弓步回起。",
+      "limitation": "522仅为屏幕投影最高点，不能当物理弹道顶点或测出球高。"
+    },
+    {
+      "frames": [
+        525,
+        533
+      ],
+      "observed": "近端开始侧身、抬非持拍臂定位，双脚从中场区域向己方左后方移动，准备头顶挥拍；鞋的地面落点一直在短发球线与后双打发球线之间。",
+      "inference": "此球到达对手可头顶处理的中后场方向，不是落网前的小回放。"
+    },
+    {
+      "frames": [
+        534,
+        540
+      ],
+      "observed": "近端在短发球线后起跳，535—537持拍手伸向头顶上方；536球仍在其拍头上方附近，537以后旧出射段球像消失/改变。539—540脚落向己方双打后发球线附近；没有向网前大跨跳扑。",
+      "inference": "下一触球窗口536—537；应使用两次触球之间约0.88—0.96s飞行段拟合，不把无限制外推落点当真实落点。"
+    }
+  ],
+  "withdrawnPreliminaryInference": {
+    "text": "只看650x300远端裁剪时曾误认为短网前回放。",
+    "whyInvalid": "裁剪隐藏近端脚步和地板场线；球与网带的屏幕重叠不是世界空间深度。",
+    "replacement": "全幅61帧支持远端低位出球至近端中后场头顶处理，具体可称挑/推高球方向；不宣称唯一球种技术、3D初速、最高点或真实落点已测量。",
+    "correctionSentTo": [
+      "root",
+      "flight"
+    ]
+  },
+  "limits": [
+    "单目25fps转播、运动模糊和球拍遮挡",
+    "未从像素推出唯一3D轨迹、手腕轴转或接触力",
+    "人物中后场判断依赖接触脚与短发球线/双打后发球线关系及连续足迹，而非人物头部y坐标",
+    "没有测量真实下一触球高度；飞行终点只是视觉时间窗口",
+    "本报告不是候选动作专业一致性通过或用户观感验收",
+    "原始全幅截图仅本地审查，不加入公开上传"
+  ]
+}

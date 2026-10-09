@@ -1,0 +1,60 @@
+{
+  "tree": "dc2475515370571f00cad3e2f09beabcf3675830",
+  "snapshot": "/var/folders/lf/8fsjs52958d2hyz271jmcm440000gn/T/rally-start-flight-qa-kx9h1ame",
+  "preexistingModifiedFilesUnchanged": true,
+  "temporarySnapshotCommit": "4bc27de49d7ab48f99b369ecac9c23739e23b165",
+  "setupCorrection": "Initial archive lacked .git metadata needed by project-brief.test; added an isolated Git repository sharing read-only objects, with unchanged tested tree. Initial failure report retained.",
+  "commands": {
+    "test": {
+      "exitCode": 0,
+      "log": "snapshot-test.log"
+    },
+    "build": {
+      "exitCode": 0,
+      "log": "snapshot-build.log"
+    }
+  },
+  "passed": true,
+  "tests": 691,
+  "passedTests": 691,
+  "failedTests": 0,
+  "buildID": "bc91ba3fa312a101",
+  "formalRuntimeChanged": false,
+  "testedCodeAndAssetHashes": {
+    "artifacts/rig-tempo/20261009/audit-runtime-dense.py": "fd9b94a00a6d9979301d41218538cf898722fff45cab7e0aadbee530d1d62cc1",
+    "artifacts/rig-tempo/20261009/check-browser.mjs": "0f7ecaf9804710cdaa7b7fcb2691f60fe186fb2c1be6177d5911030dc50ccfa8",
+    "artifacts/rig-tempo/20261009/check-runtime.mjs": "d378bc3630f79463e13dd27b0fc7be9d17ad8297a6e98bd644c3fefcf386edde",
+    "artifacts/rig-tempo/20261009/export-tools/check-export.mjs": "e731687782043b9583018abd2b81c5149a588fd38323c7cde10f48b077382607",
+    "artifacts/rig-tempo/20261009/export-tools/export.py": "48f5b86352b0067a001ed14cf9a437d577158c734adcb37fcdb0c6afc97d236c",
+    "artifacts/rig-tempo/20261009/final/rebuild.blend": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+    "artifacts/rig-tempo/20261009/flight-view.mjs": "c036fefdaa21e386c7c62cda3031f4aae8cfde416efce2920dcbd7833a9899ce",
+    "artifacts/rig-tempo/20261009/flight/build-flight.py": "47e5d2fc6f1ed2a69b79ffa83fb4b99b89abf0999f603cc576d70e88ba0259af",
+    "artifacts/rig-tempo/20261009/flight/check-display.mjs": "a89937d46262d521753c7aa1eb83b3554fe44f69ab594f113ffbac54c9a450b5",
+    "artifacts/rig-tempo/20261009/flight/check-glb.mjs": "49752bfc81049026dad7d87359cbf330057ec1af9fd878cf48888ea5db5098d5",
+    "artifacts/rig-tempo/20261009/flight/compare-reference.py": "e73c9302ca712dab44734ee3aff74202a20b188fb8277899780822f8fe4bdac2",
+    "artifacts/rig-tempo/20261009/flight/extract-racket.py": "3779d248d5709946f7cefa756387eb96afd907efcc28fd65d27ab0e7e26327c9",
+    "artifacts/rig-tempo/20261009/flight/fit-bounded.py": "da2ac61265cda55cf9555c13f46f42a10e602bda48befd98d34bedb5697d3b9f",
+    "artifacts/rig-tempo/20261009/flight/parameters.json": "2925b18516b9e423e8fc4c6b72c0b0705e83d8e0215ab6c3aab1f6b18c2dc4ce",
+    "artifacts/rig-tempo/20261009/flight/runtime.mjs": "5467dbdc6f6640fb842409d1c4419d3c63b5db672ac3d0ab89b060ef6a7108b7",
+    "artifacts/rig-tempo/20261009/flight/verify-source.py": "04a2ca6835bfd45e111b408810e4261075475261f64fdb3e6c2bfdeec53fb84e",
+    "artifacts/rig-tempo/20261009/morph-stream.mjs": "9cad3fc031551bdb27297b08a8520704e297fef9b495f32215645ce988a3bd69",
+    "artifacts/rig-tempo/20261009/motion/apply-start-relative.py": "3664fea273f873582d7be54c12a7b690e7b478670174d7feb8d0f15de765b0ac",
+    "artifacts/rig-tempo/20261009/motion/check-preservation.py": "5a019e0f5401bac5b93d6e25fc2d2336b47703f31909a0eff906ba5eeec4e70b",
+    "artifacts/rig-tempo/20261009/motion/check-start-silhouette.py": "221f2eca26bef5640e2056845c54c289a17be07de30b56f2e7f07341b4b11763",
+    "artifacts/rig-tempo/20261009/motion/contact.py": "31eaa710541d7cacea0a10920d6ca6d619f79b79360fa2023ec855613814c1a6",
+    "artifacts/rig-tempo/20261009/motion/final-01/rebuild.blend": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+    "artifacts/rig-tempo/20261009/motion/rebake-left-leg-full-weights.py": "89d2fb0e3caa21e51f0abcf812a3932873e8329ee1726413634ad59234b3310f",
+    "artifacts/rig-tempo/20261009/motion/repair-ankle.py": "af539389d8cb4097cc221386e13c9556a55639e9ec2311e9d647699db1a32f94",
+    "artifacts/rig-tempo/20261009/motion/repair-start-leg.py": "91f0db4bddc080294899f5e7f2b2d8cdbd15cc64d65f13540b956439c251e137",
+    "artifacts/rig-tempo/20261009/motion/retime.py": "9c29d7103fe57d1a64a630a894159c72c35beb30ed93709b095c20eb870c7ba3",
+    "artifacts/rig-tempo/20261009/motion/solve-start-relative.py": "63d36a7b78c899927b38a47f7e8dd3ab7b13e4f46d613fc8e9363b8cb4f2315e",
+    "artifacts/rig-tempo/20261009/motion/start-leg.py": "eb37aabeb3af466e743755588100dda596a4c2f4b5bf2f86397b1513fd85befd",
+    "artifacts/rig-tempo/20261009/motion/verify-retime.py": "54a5f91a0973308ccd394f2da1c07944edb4ab34d2fa61d4e4e60b4071a68d20",
+    "artifacts/rig-tempo/20261009/preview.html": "5de20bf59759d2525760ac8fadcdbbf76de77082595ee0aa34f1610269c5bf84",
+    "artifacts/rig-tempo/20261009/reference-camera.json": "752b0b7e5e5f9bdf5db13c4634472cf57a8de8be14af6d0ff9271ea54b60fba9",
+    "artifacts/rig-tempo/20261009/review-config.json": "2e41d227eb7b2066b323655549f671f47e53bcfbc75d4e36e5d605de5c2cb993",
+    "artifacts/rig-tempo/20261009/sample-runtime-dense.mjs": "adca8d02502d64e2b57a25f50a06fb4d177fa9103ac4cf9688217a51bfcf390d",
+    "artifacts/rig-tempo/20261009/serve.mjs": "01679f91bf9c25b574695ba1503493bf09df1c1c7af6d035b21a30a365c7cf03"
+  },
+  "subsequentChanges": "Only evidence/status bookkeeping after the tested tree; every selected code and model asset above remains byte-identical."
+}

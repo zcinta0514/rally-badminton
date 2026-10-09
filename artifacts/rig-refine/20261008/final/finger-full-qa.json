@@ -1,0 +1,36 @@
+{
+  "samples": 961,
+  "sampleHz": 240,
+  "restEdgeMinM": 0.005,
+  "threshold": [
+    0.35,
+    1.8
+  ],
+  "regions": {
+    "thumb": {
+      "min": 0.46958018174178506,
+      "max": 1.6008286412898387,
+      "severeFrames": 0
+    },
+    "index": {
+      "min": 0.431962750274963,
+      "max": 1.7302380585520898,
+      "severeFrames": 0
+    },
+    "middle": {
+      "min": 0.657596577080952,
+      "max": 1.7300424884107182,
+      "severeFrames": 0
+    },
+    "ring": {
+      "min": 0.4297399029508854,
+      "max": 1.7300372347674697,
+      "severeFrames": 0
+    },
+    "pinky": {
+      "min": 0.4298791889071006,
+      "max": 1.7302531231898854,
+      "severeFrames": 0
+    }
+  }
+}

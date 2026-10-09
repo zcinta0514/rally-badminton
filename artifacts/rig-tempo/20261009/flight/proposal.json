@@ -1,0 +1,50 @@
+{
+  "schema": "rally-contact-proposal-v1",
+  "sourceSHA256": "c77cf94202253cb37727a72a002a54e568f9dd597b5fc3d4cbdec39bd344a100",
+  "hitTime": 1.331999999999998,
+  "hitSourceFrame": 513.3,
+  "sourceContactInterval": [
+    513,
+    514
+  ],
+  "coordinateSystem": "glTF Y-up metres; Blender [x,y,z] -> [x,z,-y]",
+  "incomingMps": [
+    -4,
+    -4,
+    0
+  ],
+  "outgoingTargetMps": [
+    14,
+    9.8,
+    -0.5
+  ],
+  "restitution": 0.8,
+  "normalTarget": [
+    0.793413598960667,
+    0.6082837592031781,
+    -0.022039266637796307
+  ],
+  "normalChangeDeg": 44.870757366960056,
+  "racketNormalVelocityTargetMps": 6.996977396019486,
+  "existingVelocityAlongTargetNormalMps": 2.7891782190483387,
+  "minimumVelocityCorrectionAlongNormalMps": 4.207799176971147,
+  "acceptableNormalConeDegrees": 8,
+  "targetRacketVelocityMps": [
+    9.948060305989566,
+    -1.495678026882608,
+    -0.628320304113317
+  ],
+  "nextOpponentContactTime": 2.26,
+  "nextOpponentContactSourceFrames": [
+    536,
+    537
+  ],
+  "requirements": [
+    "Rotate connected forearm and wrist/hand with held prop; no standalone racket rotation.",
+    "Keep real contact inside513\u2014514; adjust impact normal and forward/upward contact-point speed together.",
+    "Target is a preliminary 3D authored inference, not measured match geometry or velocities.",
+    "Final output must be recomputed from actual candidate kinematics and actual strings, not forced to this outgoing vector.",
+    "Incoming direction kept predominantly toward player and downward; no artificial side feed to cancel wrong face normal."
+  ],
+  "status": "proposal_not_validated"
+}

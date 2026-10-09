@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-08",
+  "status": "not_passed",
+  "reviewKind": "independent_visual_review_of_consecutive_still_frames",
+  "source": "artifacts/match-reference/20261006/match15/2_18_14.mp4",
+  "sourceFps": 25,
+  "candidatePairs": "artifacts/rig-rebuild/20261007/integration/review-final/pairs",
+  "viewedRanges": [[480, 495], [513, 519], [521, 535]],
+  "viewedUniqueFrameCount": 38,
+  "sourceSingleFramesAdditionallyViewed": [513, 515, 517, 519],
+  "authoringFrameFormula": "(sourceFrame - 480) * 4.8",
+  "professionalFidelity": "not_passed",
+  "normalSpeedVisualReview": "not_performed_in_this_audit",
+  "userAcceptance": "not_received",
+  "primaryFindings": [
+    {"range": [480, 495], "finding": "Running torso stays too upright/front-facing; reference lateral lean/side-facing peaks near 487-490 then rotates back near 491-495."},
+    {"range": [513, 519], "finding": "Rear knee remains above rear shoe in candidate projection; source knee folds lower than shoe near 515-517 with deeper load sinking."},
+    {"range": [521, 535], "finding": "Candidate retains similar squat silhouette while moving backward; source front-leg extension, transfer and alternating steps are more distinct."}
+  ],
+  "manualApproximateSilhouette": {
+    "sourceFrame": 517,
+    "cropDimensions": [650, 300],
+    "points": {"pelvisShortsVisualCenter": [249, 184], "rearKneeVisibleContour": [260, 219], "rearShoe": [278, 207]},
+    "estimatedVisualUncertaintyPixels": [8, 12],
+    "notMeasuredJointCenters": true,
+    "notGroundTruth3D": true
+  },
+  "limitations": ["Single camera", "Motion blur and net/clothing occlusion", "Approximate camera and different character proportions", "No closeup anatomy acceptance", "Not a substitute for collision/support gates"]
+}

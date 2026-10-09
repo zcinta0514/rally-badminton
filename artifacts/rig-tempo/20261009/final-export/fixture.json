@@ -1,0 +1,183 @@
+{
+  "schema": "rally-full-export-v1",
+  "source": "/Users/xindong/Documents/\u5f00\u62cdrally/artifacts/rig-tempo/20261009/final/rebuild.blend",
+  "sourceSHA256": "8dd408483665825b3dadcb42c041f15d85a161cee28fa30bfba8671de2750599",
+  "exporterSHA256": "48f5b86352b0067a001ed14cf9a437d577158c734adcb37fcdb0c6afc97d236c",
+  "checkerSHA256": "e731687782043b9583018abd2b81c5149a588fd38323c7cde10f48b077382607",
+  "glbSHA256": "bee8c9d6d7287153ec7e21f23daa8a0050f47191a2296a92d94e05a02e4f6c7c",
+  "scope": "Encoding only. No pose, grip, collision, or professional-motion acceptance.",
+  "bodyMaterial": "Neutral PBR in export copy, matching diagnostic viewer; source body and all racket materials unchanged.",
+  "fps": 120,
+  "frameStart": 0,
+  "frameEnd": 480,
+  "sampleCount": 961,
+  "sampleStepFrames": 0.5,
+  "exportSamplingHz": 480,
+  "surfaceSamplingHz": 240,
+  "exportCopyFrames": [
+    0,
+    1920
+  ],
+  "durationSeconds": 4,
+  "coordinateSystem": "glTF Y-up right handed; matrices column major",
+  "body": {
+    "name": "SuperHero_Male",
+    "vertexCount": 6285,
+    "bind": {
+      "file": "body-bind.f32",
+      "count": 18855,
+      "bytes": 75420,
+      "sha256": "3468df2798bebde617e5f67a843cf58cdd83b21edbd6dfbd6fe0fb7c4fffbc47"
+    },
+    "world": {
+      "file": "body-world.f32",
+      "count": 18119655,
+      "bytes": 72478620,
+      "sha256": "bf72bf9994dd3f24a3df582e3512c4a00701c6f5635927a55af42143397a0e97"
+    }
+  },
+  "rackets": [
+    {
+      "name": "RacketBatch_Racket_Carbon",
+      "vertexCount": 288,
+      "local": {
+        "file": "racket-00-local.f32",
+        "count": 864,
+        "bytes": 3456,
+        "sha256": "0d432db90008c01fefaab330dffe7a67c9eba2559aac16a54d9ff143a330078a"
+      }
+    },
+    {
+      "name": "RacketBatch_Racket_GripRubber",
+      "vertexCount": 120,
+      "local": {
+        "file": "racket-01-local.f32",
+        "count": 360,
+        "bytes": 1440,
+        "sha256": "1cfedc825e97b6193f1538c45d1214ff2645f4931f37801c180d6d5e13f87fbe"
+      }
+    },
+    {
+      "name": "RacketBatch_Racket_StringIvory",
+      "vertexCount": 3664,
+      "local": {
+        "file": "racket-02-local.f32",
+        "count": 10992,
+        "bytes": 43968,
+        "sha256": "2f6a05d94ab597ca7b9b450c53afcd83b1b07852735481151fc593f6c830c44c"
+      }
+    },
+    {
+      "name": "Racket_ButtBadge",
+      "vertexCount": 32,
+      "local": {
+        "file": "racket-03-local.f32",
+        "count": 96,
+        "bytes": 384,
+        "sha256": "09d31527f4b61703ba7ab8a5be35933b80304069265e59b561b416fa0897e04b"
+      }
+    },
+    {
+      "name": "Racket_Ferrule",
+      "vertexCount": 48,
+      "local": {
+        "file": "racket-04-local.f32",
+        "count": 144,
+        "bytes": 576,
+        "sha256": "3557d47f19d3cf9b8f8a2850c5308f9209a098d5b285831c4ff0e05b81118a57"
+      }
+    },
+    {
+      "name": "Racket_Frame",
+      "vertexCount": 737,
+      "local": {
+        "file": "racket-05-local.f32",
+        "count": 2211,
+        "bytes": 8844,
+        "sha256": "d36692b4bced423cc7f81192736668853522881a63a074645cbe9898eabee511"
+      }
+    },
+    {
+      "name": "Racket_GripWrapSeam",
+      "vertexCount": 1092,
+      "local": {
+        "file": "racket-06-local.f32",
+        "count": 3276,
+        "bytes": 13104,
+        "sha256": "ebc8dcdb667b4a77f76b575b2a650f57d35fe64551f3de6e48ea4743d2526b80"
+      }
+    },
+    {
+      "name": "Racket_Grommets",
+      "vertexCount": 1747,
+      "local": {
+        "file": "racket-07-local.f32",
+        "count": 5241,
+        "bytes": 20964,
+        "sha256": "9118fe341a7c3ef09bc4d6b7968785782affed62a5fe062f182dfcd411dc56f0"
+      }
+    }
+  ],
+  "racketWorldMatrices": {
+    "file": "racket-world-matrices.f32",
+    "count": 123008,
+    "bytes": 492032,
+    "sha256": "7922bfbc27300f5aa4d1d15582ce7d98a585fb5d9d53b5e72e44b54f66ac45eb"
+  },
+  "markers": [
+    "Racket_BackNormal",
+    "Racket_ButtEnd",
+    "Racket_ContactPoint",
+    "Racket_FaceNormal",
+    "Racket_GripCenter",
+    "Racket_GripIndexSide",
+    "Racket_GripPinkySide",
+    "Racket_HeadTip",
+    "Racket_ShaftBase",
+    "Racket_StringBedCenter"
+  ],
+  "markerWorldMatrices": {
+    "file": "marker-world-matrices.f32",
+    "count": 153760,
+    "bytes": 615040,
+    "sha256": "8062a9a3fe43e80338897ae56fbf6077f5a1893940492ac25c8d2065a0a07ba9"
+  },
+  "requiredBoneParent": "DEF_hand_r",
+  "compression": {
+    "samples": 961,
+    "sourceSampleHz": 240,
+    "surfaceKeys": 961,
+    "preservesIndependentHalfFrameCorrectives": true,
+    "maxErrorM": 9.684608464999152e-07,
+    "maxErrorFrame": 186.5,
+    "thresholdM": 2e-06,
+    "passed": true
+  },
+  "selectedObjects": [
+    "RALLY_AnatomicalRig_Rebuilt",
+    "SuperHero_Male",
+    "RacketBatch_Racket_Carbon",
+    "RacketBatch_Racket_GripRubber",
+    "RacketBatch_Racket_StringIvory",
+    "Racket_ButtBadge",
+    "Racket_Ferrule",
+    "Racket_Frame",
+    "Racket_GripWrapSeam",
+    "Racket_Grommets",
+    "Racket_BackNormal",
+    "Racket_ButtEnd",
+    "Racket_ContactPoint",
+    "Racket_FaceNormal",
+    "Racket_GripCenter",
+    "Racket_GripIndexSide",
+    "Racket_GripPinkySide",
+    "Racket_HeadTip",
+    "Racket_ShaftBase",
+    "Racket_StringBedCenter"
+  ],
+  "skinEncoding": {
+    "file": "skin-encoding.json",
+    "sha256": "29f36df78601845dadd750349ea7d6cad0d72855b7a9e53254b2a5cee0f7d68b",
+    "preservesAllPositiveWeights": true
+  }
+}

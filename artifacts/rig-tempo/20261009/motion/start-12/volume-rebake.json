@@ -1,0 +1,500 @@
+{
+  "source": "artifacts/rig-tempo/20261009/motion/start-09/rebuild.blend",
+  "fullWeightAuthor": "artifacts/rig-rebuild/20261007/integration/author-body-13/rebuild.blend",
+  "rangeModelFrames": [
+    24,
+    72
+  ],
+  "sampleHz": 240,
+  "newKeys": 95,
+  "maxWorldVolumeReplacementM": 0.07875866403857287,
+  "leftLegWeightMask": "smoothstep(min(1,sum(left thigh/calf/foot/toe weight)/.12))",
+  "rows": [
+    {
+      "frame": 24.0,
+      "maxWorldDeltaM": 0.0,
+      "changedVertices": 0
+    },
+    {
+      "frame": 24.5,
+      "maxWorldDeltaM": 0.0019095202708251109,
+      "changedVertices": 900
+    },
+    {
+      "frame": 25.0,
+      "maxWorldDeltaM": 0.004056746587382783,
+      "changedVertices": 1026
+    },
+    {
+      "frame": 25.5,
+      "maxWorldDeltaM": 0.004324309559703328,
+      "changedVertices": 1064
+    },
+    {
+      "frame": 26.0,
+      "maxWorldDeltaM": 0.004604578211078769,
+      "changedVertices": 1078
+    },
+    {
+      "frame": 26.5,
+      "maxWorldDeltaM": 0.004955757052312283,
+      "changedVertices": 1050
+    },
+    {
+      "frame": 27.0,
+      "maxWorldDeltaM": 0.0053300772706706715,
+      "changedVertices": 1034
+    },
+    {
+      "frame": 27.5,
+      "maxWorldDeltaM": 0.005767789077923488,
+      "changedVertices": 1072
+    },
+    {
+      "frame": 28.0,
+      "maxWorldDeltaM": 0.00661900430760575,
+      "changedVertices": 1081
+    },
+    {
+      "frame": 28.5,
+      "maxWorldDeltaM": 0.007995487752664591,
+      "changedVertices": 1075
+    },
+    {
+      "frame": 29.0,
+      "maxWorldDeltaM": 0.008619721313648288,
+      "changedVertices": 1064
+    },
+    {
+      "frame": 29.5,
+      "maxWorldDeltaM": 0.008437314267302095,
+      "changedVertices": 1017
+    },
+    {
+      "frame": 30.0,
+      "maxWorldDeltaM": 0.008615371572974288,
+      "changedVertices": 1036
+    },
+    {
+      "frame": 30.5,
+      "maxWorldDeltaM": 0.012746624991844884,
+      "changedVertices": 1069
+    },
+    {
+      "frame": 31.0,
+      "maxWorldDeltaM": 0.01593256264742579,
+      "changedVertices": 1050
+    },
+    {
+      "frame": 31.5,
+      "maxWorldDeltaM": 0.017513742409494798,
+      "changedVertices": 1033
+    },
+    {
+      "frame": 32.0,
+      "maxWorldDeltaM": 0.01776830533581031,
+      "changedVertices": 1079
+    },
+    {
+      "frame": 32.5,
+      "maxWorldDeltaM": 0.018279485990738167,
+      "changedVertices": 1063
+    },
+    {
+      "frame": 33.0,
+      "maxWorldDeltaM": 0.019838338022795464,
+      "changedVertices": 1038
+    },
+    {
+      "frame": 33.5,
+      "maxWorldDeltaM": 0.022382549939494914,
+      "changedVertices": 1064
+    },
+    {
+      "frame": 34.0,
+      "maxWorldDeltaM": 0.02476255567782041,
+      "changedVertices": 1059
+    },
+    {
+      "frame": 34.5,
+      "maxWorldDeltaM": 0.027030317692566714,
+      "changedVertices": 1047
+    },
+    {
+      "frame": 35.0,
+      "maxWorldDeltaM": 0.02924880019021648,
+      "changedVertices": 1077
+    },
+    {
+      "frame": 35.5,
+      "maxWorldDeltaM": 0.031373382675514955,
+      "changedVertices": 1033
+    },
+    {
+      "frame": 36.0,
+      "maxWorldDeltaM": 0.033339130989229124,
+      "changedVertices": 1066
+    },
+    {
+      "frame": 36.5,
+      "maxWorldDeltaM": 0.03522875432774306,
+      "changedVertices": 1046
+    },
+    {
+      "frame": 37.0,
+      "maxWorldDeltaM": 0.037027740238946595,
+      "changedVertices": 989
+    },
+    {
+      "frame": 37.5,
+      "maxWorldDeltaM": 0.0386583604650256,
+      "changedVertices": 990
+    },
+    {
+      "frame": 38.0,
+      "maxWorldDeltaM": 0.04022559480883181,
+      "changedVertices": 999
+    },
+    {
+      "frame": 38.5,
+      "maxWorldDeltaM": 0.041733613377364025,
+      "changedVertices": 1064
+    },
+    {
+      "frame": 39.0,
+      "maxWorldDeltaM": 0.04323687185165671,
+      "changedVertices": 1044
+    },
+    {
+      "frame": 39.5,
+      "maxWorldDeltaM": 0.04483780398993969,
+      "changedVertices": 1019
+    },
+    {
+      "frame": 40.0,
+      "maxWorldDeltaM": 0.046489769847937304,
+      "changedVertices": 1081
+    },
+    {
+      "frame": 40.5,
+      "maxWorldDeltaM": 0.04812405163264759,
+      "changedVertices": 971
+    },
+    {
+      "frame": 41.0,
+      "maxWorldDeltaM": 0.049543525088902404,
+      "changedVertices": 1066
+    },
+    {
+      "frame": 41.5,
+      "maxWorldDeltaM": 0.0507654928763132,
+      "changedVertices": 1063
+    },
+    {
+      "frame": 42.0,
+      "maxWorldDeltaM": 0.05185365246504266,
+      "changedVertices": 1063
+    },
+    {
+      "frame": 42.5,
+      "maxWorldDeltaM": 0.05280211025330237,
+      "changedVertices": 1063
+    },
+    {
+      "frame": 43.0,
+      "maxWorldDeltaM": 0.05361891989413885,
+      "changedVertices": 1022
+    },
+    {
+      "frame": 43.5,
+      "maxWorldDeltaM": 0.05412026235013239,
+      "changedVertices": 1056
+    },
+    {
+      "frame": 44.0,
+      "maxWorldDeltaM": 0.054556104866355024,
+      "changedVertices": 1061
+    },
+    {
+      "frame": 44.5,
+      "maxWorldDeltaM": 0.05499035963546685,
+      "changedVertices": 1071
+    },
+    {
+      "frame": 45.0,
+      "maxWorldDeltaM": 0.055428220960159764,
+      "changedVertices": 1005
+    },
+    {
+      "frame": 45.5,
+      "maxWorldDeltaM": 0.0558747229367267,
+      "changedVertices": 1050
+    },
+    {
+      "frame": 46.0,
+      "maxWorldDeltaM": 0.056122575153716596,
+      "changedVertices": 1075
+    },
+    {
+      "frame": 46.5,
+      "maxWorldDeltaM": 0.05636476612700733,
+      "changedVertices": 1045
+    },
+    {
+      "frame": 47.0,
+      "maxWorldDeltaM": 0.05661751326516447,
+      "changedVertices": 1074
+    },
+    {
+      "frame": 47.5,
+      "maxWorldDeltaM": 0.05688346340382461,
+      "changedVertices": 1043
+    },
+    {
+      "frame": 48.0,
+      "maxWorldDeltaM": 0.05727253163210214,
+      "changedVertices": 968
+    },
+    {
+      "frame": 48.5,
+      "maxWorldDeltaM": 0.05805257439289186,
+      "changedVertices": 1020
+    },
+    {
+      "frame": 49.0,
+      "maxWorldDeltaM": 0.05869180735550939,
+      "changedVertices": 1069
+    },
+    {
+      "frame": 49.5,
+      "maxWorldDeltaM": 0.05911472850181683,
+      "changedVertices": 1063
+    },
+    {
+      "frame": 50.0,
+      "maxWorldDeltaM": 0.059239444578352965,
+      "changedVertices": 976
+    },
+    {
+      "frame": 50.5,
+      "maxWorldDeltaM": 0.0590868063401758,
+      "changedVertices": 1079
+    },
+    {
+      "frame": 51.0,
+      "maxWorldDeltaM": 0.05871695119819523,
+      "changedVertices": 1026
+    },
+    {
+      "frame": 51.5,
+      "maxWorldDeltaM": 0.0582099470610391,
+      "changedVertices": 1073
+    },
+    {
+      "frame": 52.0,
+      "maxWorldDeltaM": 0.05799975876556445,
+      "changedVertices": 1075
+    },
+    {
+      "frame": 52.5,
+      "maxWorldDeltaM": 0.061405085261057306,
+      "changedVertices": 1072
+    },
+    {
+      "frame": 53.0,
+      "maxWorldDeltaM": 0.06565773936647122,
+      "changedVertices": 1008
+    },
+    {
+      "frame": 53.5,
+      "maxWorldDeltaM": 0.06964532594398201,
+      "changedVertices": 1034
+    },
+    {
+      "frame": 54.0,
+      "maxWorldDeltaM": 0.07357296795892306,
+      "changedVertices": 978
+    },
+    {
+      "frame": 54.5,
+      "maxWorldDeltaM": 0.0758742231625121,
+      "changedVertices": 1070
+    },
+    {
+      "frame": 55.0,
+      "maxWorldDeltaM": 0.07813596655719962,
+      "changedVertices": 1033
+    },
+    {
+      "frame": 55.5,
+      "maxWorldDeltaM": 0.07844929805609499,
+      "changedVertices": 1067
+    },
+    {
+      "frame": 56.0,
+      "maxWorldDeltaM": 0.07875866403857287,
+      "changedVertices": 1061
+    },
+    {
+      "frame": 56.5,
+      "maxWorldDeltaM": 0.07703250473418746,
+      "changedVertices": 1017
+    },
+    {
+      "frame": 57.0,
+      "maxWorldDeltaM": 0.07531422512454689,
+      "changedVertices": 1040
+    },
+    {
+      "frame": 57.5,
+      "maxWorldDeltaM": 0.07192067228836752,
+      "changedVertices": 1024
+    },
+    {
+      "frame": 58.0,
+      "maxWorldDeltaM": 0.06855118610451937,
+      "changedVertices": 1000
+    },
+    {
+      "frame": 58.5,
+      "maxWorldDeltaM": 0.0643354132612104,
+      "changedVertices": 953
+    },
+    {
+      "frame": 59.0,
+      "maxWorldDeltaM": 0.06017870307151081,
+      "changedVertices": 868
+    },
+    {
+      "frame": 59.5,
+      "maxWorldDeltaM": 0.05567319618099918,
+      "changedVertices": 896
+    },
+    {
+      "frame": 60.0,
+      "maxWorldDeltaM": 0.0512005356306323,
+      "changedVertices": 967
+    },
+    {
+      "frame": 60.5,
+      "maxWorldDeltaM": 0.046737358271361495,
+      "changedVertices": 855
+    },
+    {
+      "frame": 61.0,
+      "maxWorldDeltaM": 0.04230644363589224,
+      "changedVertices": 986
+    },
+    {
+      "frame": 61.5,
+      "maxWorldDeltaM": 0.03811740171522208,
+      "changedVertices": 939
+    },
+    {
+      "frame": 62.0,
+      "maxWorldDeltaM": 0.03395890030538254,
+      "changedVertices": 866
+    },
+    {
+      "frame": 62.5,
+      "maxWorldDeltaM": 0.03014632579177242,
+      "changedVertices": 965
+    },
+    {
+      "frame": 63.0,
+      "maxWorldDeltaM": 0.026362502372009343,
+      "changedVertices": 922
+    },
+    {
+      "frame": 63.5,
+      "maxWorldDeltaM": 0.024415962189974882,
+      "changedVertices": 751
+    },
+    {
+      "frame": 64.0,
+      "maxWorldDeltaM": 0.022471051773132168,
+      "changedVertices": 993
+    },
+    {
+      "frame": 64.5,
+      "maxWorldDeltaM": 0.02086618524859694,
+      "changedVertices": 875
+    },
+    {
+      "frame": 65.0,
+      "maxWorldDeltaM": 0.01926909244839135,
+      "changedVertices": 746
+    },
+    {
+      "frame": 65.5,
+      "maxWorldDeltaM": 0.017706278093889933,
+      "changedVertices": 770
+    },
+    {
+      "frame": 66.0,
+      "maxWorldDeltaM": 0.01615832500962319,
+      "changedVertices": 1010
+    },
+    {
+      "frame": 66.5,
+      "maxWorldDeltaM": 0.014652849619667653,
+      "changedVertices": 919
+    },
+    {
+      "frame": 67.0,
+      "maxWorldDeltaM": 0.013213703846606457,
+      "changedVertices": 817
+    },
+    {
+      "frame": 67.5,
+      "maxWorldDeltaM": 0.011766448762693902,
+      "changedVertices": 860
+    },
+    {
+      "frame": 68.0,
+      "maxWorldDeltaM": 0.010347307507073336,
+      "changedVertices": 749
+    },
+    {
+      "frame": 68.5,
+      "maxWorldDeltaM": 0.0089164746185264,
+      "changedVertices": 738
+    },
+    {
+      "frame": 69.0,
+      "maxWorldDeltaM": 0.007511573863523841,
+      "changedVertices": 692
+    },
+    {
+      "frame": 69.5,
+      "maxWorldDeltaM": 0.006145756222304535,
+      "changedVertices": 720
+    },
+    {
+      "frame": 70.0,
+      "maxWorldDeltaM": 0.004803084944086445,
+      "changedVertices": 856
+    },
+    {
+      "frame": 70.5,
+      "maxWorldDeltaM": 0.0035533431502602275,
+      "changedVertices": 656
+    },
+    {
+      "frame": 71.0,
+      "maxWorldDeltaM": 0.0029767658089151485,
+      "changedVertices": 677
+    },
+    {
+      "frame": 71.5,
+      "maxWorldDeltaM": 0.0016315403125922675,
+      "changedVertices": 612
+    },
+    {
+      "frame": 72.0,
+      "maxWorldDeltaM": 0.0,
+      "changedVertices": 0
+    }
+  ],
+  "scope": "Replace transported old full-weight-DQ-minus-four-weight-LBS volume with new-pose full-weight DQ compensation, while retaining every old key. Additional surface QA required."
+}

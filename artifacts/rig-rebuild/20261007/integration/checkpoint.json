@@ -1,0 +1,172 @@
+{
+  "schema": "rally-rig-racket-integration-checkpoint-v1",
+  "task": "P1-3B",
+  "asOf": "2026-10-07",
+  "phase": "Final support/intersection repair, rebuilt racket integration, export and sidebar loading complete; professional-motion fidelity incomplete",
+  "baseline": {
+    "branch": "wip/P1-3-capture",
+    "head": "dcf053230b3612058aac3f09d2cc2713cfcf8ea6",
+    "liveRemoteMain": "dcf053230b3612058aac3f09d2cc2713cfcf8ea6",
+    "releaseTag": "v1.9.0",
+    "formalAssetReplaced": false,
+    "committedOrPublished": false
+  },
+  "currentCandidate": "final/rebuild.blend",
+  "sourceSHA256": "f3081bc384c2aff262361102757d89b8de4ee546abd124c5be908aedb94336a4",
+  "latestRigAuthoring": "author-body-13/rebuild.blend",
+  "authoringFps": 120,
+  "exportCopyFps": 240,
+  "exportedAsset": "final-export/clear.glb",
+  "glbSHA256": "a0ae1b16210ac72d7559ee2b724cdd4aa2c94eb423d9e1ac974447f9a6c616a6",
+  "exportDurationSeconds": 4,
+  "reproduction": "README.md",
+  "grip": {
+    "apply": "../grip-final/apply-final.py",
+    "fit": "../grip-final/pad-fit.json",
+    "surfaceCorrection": "../grip-final/pads/surface-edge-delta.json",
+    "status": "Fixed fitted grip, not measured squeeze or contact force"
+  },
+  "racket": {
+    "editable": "artifacts/racket-rebuild/20261007/racket.blend",
+    "runtime": "artifacts/racket-rebuild/20261007/racket-runtime.blend",
+    "meshCount": 8,
+    "triangles": 15244
+  },
+  "support": {
+    "contract": "final/source-contact-contract.json",
+    "maximumDriftM": 0.0014202891427571506,
+    "initialLeftDriftM": 3.3355243522166816e-05,
+    "originalInitialLeftDriftMm": 14.369,
+    "floorZ": -0.013,
+    "driftLimitM": 0.003,
+    "floorGapLimitM": [
+      -0.001,
+      0.005
+    ],
+    "legacyWindowsRetainedInReport": true,
+    "reasonForChangedWindows": "Source shoe travel contradicted previous double-support windows; old-window failures remain in legacySupportComparison."
+  },
+  "qa": {
+    "bodyAndRacket": "final/final-qa.json",
+    "sampleHz": 240,
+    "samples": 961,
+    "bodyIntersectionRows": 0,
+    "racketIntersectionRows": 0,
+    "racketMeshesCovered": 8,
+    "jointRegions": 12,
+    "surfaceEdgeRatioLimits": [
+      0.35,
+      1.8
+    ],
+    "geometricHingeViolations": 0,
+    "allExplicitGatesPassed": true,
+    "fingers": "final/finger-full-qa.json",
+    "localDense": "ankle-residual/candidate-03/dense-qa.json",
+    "localDenseSamples": 138,
+    "localDenseHz": 480,
+    "localDenseBodyIntersections": 0,
+    "fullClipAt480Hz": false,
+    "export": "final-export/export-parity.json",
+    "exportMaximumSurfaceErrorM": 5.047955218733938e-06,
+    "exportLimitM": 1e-05,
+    "compressionLimitM": 2e-06,
+    "exportPassed": true,
+    "runtime": "runtime-stream/runtime-parity.json",
+    "runtimePassed": true,
+    "runtimeModule": "runtime-stream/morph-stream.mjs",
+    "all961SurfaceSamplesRetained": true
+  },
+  "localRepairDisclosure": {
+    "deepLeftKneeMaximumChangeFromOriginalLbsM": 0.045769,
+    "finalAnkleVerticesChanged": 8,
+    "finalAnkleMaxChangeM": 0.0024046006210158835,
+    "soleOutsideAndRestDeltaM": 0,
+    "scope": "Local corrections valid only within the sampled authored sequence, not a general-purpose pose-corrective rig."
+  },
+  "reference": {
+    "video": "artifacts/match-reference/20261006/match15/2_18_14.mp4",
+    "sha256": "e76277c477ebf887de15778585d07fc27dbfb0df926220ad40e499afba900112",
+    "sourceFps": 25,
+    "range": [
+      480,
+      540
+    ],
+    "reviewedFrames": 61,
+    "durationSeconds": 2.4,
+    "review": "reference-review/final-rebuilt-review.json",
+    "pairs": "review-final/pairs",
+    "normalSpeedVideo": "normal-speed-comparison.mp4",
+    "nextShot541OnwardExcluded": true,
+    "professionalFidelity": "not_passed",
+    "userNaturalnessAcceptance": "not_received"
+  },
+  "preview": {
+    "server": "serve.mjs",
+    "url": "http://127.0.0.1:3040/",
+    "manifest": "served-hashes.json",
+    "httpQA": "http-qa.json",
+    "httpResourceCount": 67,
+    "browserQA": "browser-qa.json",
+    "browserResourceCount": 66,
+    "frameMappingPassed": true,
+    "viewApiCount": 8,
+    "deterministicSeekPassed": true,
+    "errors": [],
+    "mode": "CPU position/normal streaming with standard skinning",
+    "speed": 1,
+    "visibleNormalSpeedVerification": "not_verified; host viewport 1x1, background clock advances intermittently: 0.2829s animation over 1.0199s wall time in separate calls, 2 renders. No visible playback/FPS acceptance.",
+    "pointerUIVerification": "not_verified; two pointer attempts failed, including one refreshed-snapshot retry; API checks passed",
+    "oldComparison": "/before-rebuild.html",
+    "pressureReview": "/pressure.html"
+  },
+  "remaining": [
+    {
+      "frames": [
+        513,
+        519
+      ],
+      "issue": "Rear-knee deep fold and weight sinking do not yet match source."
+    },
+    {
+      "frames": [
+        480,
+        495
+      ],
+      "issue": "Trunk lean and coordinated chest/pelvis turn insufficient."
+    },
+    {
+      "frames": [
+        521,
+        535
+      ],
+      "issue": "Recovery weight transfer weaker than source."
+    },
+    {
+      "frames": [
+        487,
+        520
+      ],
+      "issue": "Free-arm height and flexion still differ despite removal of fixed elbow pose."
+    },
+    {
+      "issue": "New racket/motion require contact and flight recalibration; old flight QA is not inherited."
+    },
+    {
+      "issue": "Professional fidelity and visible normal-speed user acceptance remain incomplete."
+    }
+  ],
+  "next": [
+    "Preserve current final source and preview as comparison.",
+    "Edit authoring motion for source513\u2013519 loading, approach torso lean and recovery weight shift; repeat joint/support/body/racket and export gates.",
+    "Recalibrate contact/flight from changed racket and motion.",
+    "Verify visible normal-speed playback and naturalness on expanded sidebar."
+  ],
+  "inheritedProjectTests": {
+    "rerunThisTurn": false,
+    "lastKnownPassed": 824,
+    "lastKnownTotal": 825,
+    "unresolvedV4SupportError": 0.011391154335168342,
+    "scope": "Independent artifacts, preview tools and docs only; formal-game historical test failure unchanged."
+  },
+  "visualAccepted": false
+}
