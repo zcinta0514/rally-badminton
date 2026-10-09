@@ -1,7 +1,7 @@
 {
   "task": "P1-3B",
   "asOf": "2026-10-09",
-  "phase": "final_candidate_verified_pending_user_visual_acceptance",
+  "phase": "verified_candidate_saved_to_draft_pending_user_visual_acceptance",
   "baseline": "d920bab635647e9a6950726f855349d4f7c6ecd6",
   "originMain": "dcf053230b3612058aac3f09d2cc2713cfcf8ea6",
   "branch": "wip/P1-3-capture",
@@ -182,7 +182,8 @@
     "productionChanged": false,
     "pullRequest": "https://github.com/zcinta0514/rally-badminton/pull/4",
     "draft": true,
-    "gitHubSync": "ready_to_push"
+    "gitHubSync": "pushed",
+    "assetCommit": "f6a32e699be3e763da1e5be921a2df58dab76abc"
   },
   "selectionManifest": "sync-files.json",
   "rawBroadcastPublished": false,
