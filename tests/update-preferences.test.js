@@ -65,6 +65,17 @@ test('restoring validates stored fields before applying any of the preferences',
   }
 });
 
+test('the selected court palette survives an update and unknown names normalize before storage',async()=>{
+  const {saveUpdatePreferences,restoreUpdatePreferences}=await load();
+  const f=fixture();
+  saveUpdatePreferences({...selection,arena:{master:.25,courtPalette:'purple'}},f.storage);
+  const restored=restoreUpdatePreferences(VERSION,f.storage);
+  assert.equal(restored.arena.courtPalette,'purple');assert.equal(restored.arena.master,.25);
+  const g=fixture();
+  saveUpdatePreferences({...selection,arena:{courtPalette:'chartreuse'}},g.storage);
+  assert.equal(restoreUpdatePreferences(VERSION,g.storage).arena.courtPalette,'green','an unknown palette cannot leak a broken colour scheme into the next session');
+});
+
 test('storage failure or a silent dropped write rejects update preparation instead of pretending preferences are safe',async()=>{
   const {saveUpdatePreferences}=await load();
   for(const storage of [null,{}, {setItem(){throw Error('quota');},getItem(){return null;}},{setItem(){},getItem(){return null;}}]){

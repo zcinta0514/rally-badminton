@@ -162,7 +162,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     initOnboarding: options => { onboardingOptions = options; return { maybeShow() { onboardingAttempts++; } }; },
     initFeedback: () => null,
     getWebSocketURL: () => 'ws://localhost/ws', queueMicrotask,
-    bindMatchSettings:()=>({close(){},update(){}}), bindCameraSettings() {}, ResizeObserver: class { observe() {} },
+    bindMatchSettings:()=>({close(){},update(){},selectPalette(){}}), bindPalettePicker:()=>null, bindCameraSettings() {}, ResizeObserver: class { observe() {} },
     requestAnimationFrame(callback) { frame = callback; },
     setTimeout(callback, delay) { timers.set(++nextId, { callback, delay, at: now + delay }); return nextId; },
     clearTimeout(id) { timers.delete(id); },

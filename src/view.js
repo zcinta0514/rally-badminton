@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { fitCourtViewport, getShuttleEdgeHint } from './court-layout.js';
 import { normalizeCameraSettings } from './camera-settings.js';
+import { normalizeCourtPalette, resolveCourtPalette } from './court-palettes.js';
 import { makeAthlete, updateAthlete, applyAthletePose } from './athlete.js';
 import { upgradeAthlete } from './athlete-import.js';
 import { sampleFinalePose } from './finale-pose.js';
@@ -10,12 +11,11 @@ import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
 import { COURT } from '../shared/game.js';
 import { StaminaHUD } from './stamina-hud.js';
 
+// Venue-wide colours. The court floor, apron and accent strip come from the
+// selected court palette instead; see court-palettes.js.
 const COLORS = {
   background: 0x101e29,
   floor: 0x132b34,
-  apron: 0x1c4248,
-  court: 0x0c7054,
-  farCourt: 0x0c7054,
   line: 0xf0f5e7,
   coral: 0xfb7959,
   mint: 0xb7e2cb,
@@ -50,8 +50,9 @@ function ring(parent, radius, thickness, color, opacity = 1) {
 }
 
 export class CourtView {
-  constructor(canvas) {
+  constructor(canvas, { courtPalette } = {}) {
     this.canvas = canvas;
+    this.courtPalette = normalizeCourtPalette(courtPalette);
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -109,12 +110,13 @@ export class CourtView {
 
   makeCourt() {
     const scene = this.scene;
+    const palette = resolveCourtPalette(this.courtPalette);
     const floorMat = material(COLORS.floor);
-    const apronMat = material(COLORS.apron);
-    const courtMat = makeCourtMaterial(COLORS.court);
+    const apronMat = material(palette.apron);
+    const courtMat = makeCourtMaterial(palette.court);
     const lineMat = material(COLORS.line);
-    const darkMat = material(0x14383c);
-    const edgeMat = material(0x3d7069);
+    const darkMat = material(palette.dark);
+    const edgeMat = material(palette.edge);
     box(scene, 90, 0.15, 90, floorMat, 0, -0.27, 0);
     box(scene, 10.2, 0.14, 18.5, darkMat, 0, -0.135, 0);
     box(scene, 9.7, 0.055, 18, apronMat, 0, -0.042, 0);
@@ -148,6 +150,8 @@ export class CourtView {
 
     // Only low apron accents: the court and athletes own the available pixels.
     for (const z of [-7.15, 7.15]) box(scene, 6.6, 0.012, 0.055, edgeMat, 0, 0.008, z);
+    // Kept live so the local settings panel can recolour the venue in place.
+    this.courtMaterials = { court: courtMat, apron: apronMat, edge: edgeMat, dark: darkMat };
     this.arena = makeArena(scene);
   }
 
@@ -277,6 +281,18 @@ export class CourtView {
     this.cameraSettings = normalizeCameraSettings(settings);
     this.updateCamera(this.cameraSide ?? 0);
     return { ...this.cameraSettings };
+  }
+
+  setCourtPalette(name) {
+    this.courtPalette = normalizeCourtPalette(name);
+    const palette = resolveCourtPalette(this.courtPalette);
+    if (this.courtMaterials) {
+      this.courtMaterials.court.color.setHex(palette.court);
+      this.courtMaterials.apron.color.setHex(palette.apron);
+      this.courtMaterials.edge.color.setHex(palette.edge);
+      this.courtMaterials.dark.color.setHex(palette.dark);
+    }
+    return this.courtPalette;
   }
 
   setQuality({ pixelRatio, shadows } = {}) {

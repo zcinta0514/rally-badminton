@@ -35,6 +35,7 @@
       <button id="sound" class="icon-btn" aria-label="关闭声音" title="声音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4Z"/><path class="sound-on" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path class="sound-off" d="m16 9 5 6m0-6-5 6"/></svg></button>
       <button id="fullscreen" class="icon-btn" aria-label="全屏" title="全屏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></svg></button>
       <button id="help" class="icon-btn" aria-label="操作说明" title="操作说明"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 8.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16h.01"/></svg></button>
+      <button id="palette-toggle" class="palette-toggle" aria-expanded="false" aria-controls="palette-panel" title="更换地胶配色">配色<i id="palette-current" aria-hidden="true"></i></button>
       <button id="match-settings-toggle" class="match-settings-toggle" aria-expanded="false" aria-controls="match-settings-panel">设置</button>
       <button id="pause" class="icon-btn" hidden aria-label="暂停比赛"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" stroke-width="3"/></svg></button>
     </div>
@@ -55,7 +56,11 @@
     <label for="arena-movement">移动</label><div class="arena-volume"><input id="arena-movement" data-volume="movement" type="range" min="0" max="100" value="65"><output>65%</output></div>
     <label for="arena-crowd">观众</label><div class="arena-volume"><input id="arena-crowd" data-volume="crowd" type="range" min="0" max="100" value="50"><output>50%</output></div>
     <label for="arena-environment">环境</label><div class="arena-volume"><input id="arena-environment" data-volume="environment" type="range" min="0" max="100" value="15"><output>15%</output></div>
-    <small>个人音量即时生效；打开面板不暂停比赛。</small>
+    <small>个人音量即时生效；配色在顶部「配色」中切换，只改本机画面。打开面板不暂停比赛。</small>
+  </aside>
+  <aside id="palette-panel" class="palette-panel" hidden aria-label="地胶配色">
+    <div class="palette-heading"><strong>地胶配色</strong><small>即时生效 · 只改本机画面</small></div>
+    <div id="palette-options" class="palette-options" role="group" aria-label="选择地胶配色"></div>
   </aside>
   <main id="menu" class="menu-panel" data-entry="home">
     <div class="menu-heading" id="entry-home-heading"><div class="eyebrow"><span></span> READY FOR THE NEXT POINT</div>

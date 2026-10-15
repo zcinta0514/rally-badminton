@@ -7,6 +7,7 @@ import { NetworkPlayback } from './network-playback.js';
 import { PerformanceMonitor, formatPerformance } from './performance.js';
 import { bindCameraSettings } from './camera-settings.js';
 import { bindMatchSettings, describeRole } from './match-settings.js';
+import { bindPalettePicker } from './palette-picker.js';
 import { readArenaPreferences } from './arena-preferences.js';
 import { matchPressure } from './arena-feedback.js';
 import { initPWA, getWebSocketURL } from './pwa.js';
@@ -49,7 +50,7 @@ let entryStage='home',friendAction='create';
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
 let trainingSession=null;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
-let pendingShot=null,aim=0,dragAim=null,view,controls,lastFrame=performance.now(),accumulator=0,lastSend=0;
+let pendingShot=null,aim=0,dragAim=null,view,controls,palettePicker,lastFrame=performance.now(),accumulator=0,lastSend=0;
 let toastTimer,helpOpen=false,rematchRequested=false,lastPhase='',lastHit=0,lastPoint=0,connecting=false,reconnecting=false,resultPending=false;
 let reconnectError='';
 let playerProfile=null,currentPlayerId=null,leaderboardRecord=null,leaderboardReturn=null;
@@ -579,9 +580,15 @@ function updateUI(info,state){
 }
 
 try{
-  view=new CourtView($('court'));
+  view=new CourtView($('court'),{courtPalette:arenaPreferences.courtPalette});
   bindCameraSettings(view);
-  matchSettings=bindMatchSettings(arenaAudio,{preferences:arenaPreferences,onChange:value=>{arenaPreferences=value;}});
+  matchSettings=bindMatchSettings(arenaAudio,{preferences:arenaPreferences,onChange:value=>{
+    const paletteChanged=value.courtPalette!==arenaPreferences.courtPalette;
+    arenaPreferences=value;
+    if(paletteChanged)view.setCourtPalette(value.courtPalette);
+    palettePicker?.setValue(value.courtPalette);
+  }});
+  palettePicker=bindPalettePicker({palette:arenaPreferences.courtPalette,onSelect:name=>matchSettings.selectPalette(name)});
   view.setMode('menu');
   const resizeCourt=()=>view.resize();
   window.addEventListener('resize',resizeCourt);
