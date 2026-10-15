@@ -1,0 +1,88 @@
+{
+  "task": "FX-4",
+  "date": "2026-10-15",
+  "baseline": "dcf053230b36",
+  "remoteMain": "dcf053230b36",
+  "deployed": false,
+  "releaseVersion": null,
+  "branch": "feat/FX-4-court-colors",
+  "worktree": ".cindy-worktrees/fx-4-court-colors",
+  "defaultPalette": "green",
+  "palettes": {
+    "green": {
+      "label": "经典绿",
+      "court": "0x0c7054",
+      "apron": "0x1c4248",
+      "edge": "0x3d7069",
+      "dark": "0x14383c"
+    },
+    "blue": {
+      "label": "赛事蓝",
+      "court": "0x154473",
+      "apron": "0x1e324a",
+      "edge": "0x415970",
+      "dark": "0x192838"
+    },
+    "purple": {
+      "label": "紫罗兰",
+      "court": "0x73589e",
+      "apron": "0x483861",
+      "edge": "0x776494",
+      "dark": "0x362b47"
+    },
+    "pink": {
+      "label": "玫瑰粉",
+      "court": "0xa14d72",
+      "apron": "0x633449",
+      "edge": "0x8f5871",
+      "dark": "0x452634"
+    }
+  },
+  "tests": {
+    "command": "npm test",
+    "total": 709,
+    "passed": 709,
+    "failed": 0,
+    "node": "v24.21.0"
+  },
+  "build": {
+    "command": "npm run build",
+    "pwa": "a691ee18f5a7129b"
+  },
+  "browser": {
+    "tool": "playwright-core + system Chrome headless",
+    "viewport": [
+      1280,
+      800
+    ],
+    "palettes": 4,
+    "persisted": true,
+    "reloadRestored": "pink",
+    "errors": 0
+  },
+  "reference": {
+    "purple": {
+      "source": "Paris 2024 La Chapelle press photo",
+      "photoPurpleMean": "#7A6CA3",
+      "gamePurpleMean": "#8765AB"
+    },
+    "pink": {
+      "source": "commercial-hall rose direction; no authoritative public photo found",
+      "calibrated": false
+    }
+  },
+  "userAccepted": {
+    "paletteColors": true,
+    "standaloneEntry": true,
+    "date": "2026-10-15"
+  },
+  "deviceValidation": "pending user phone check",
+  "artifacts": {
+    "latest": "artifacts/fx4/20261015-entry",
+    "entryPanelSha256Prefix": "d2ac5620c1acc725",
+    "reportSha256Prefix": "30eac38bdbfceed7",
+    "compareSha256Prefix": "b58f6be681e7a37c"
+  },
+  "qualityAccepted": true,
+  "notes": "Automated checks cannot replace phone play-through; deviceValidation stays pending."
+}
