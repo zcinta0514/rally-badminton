@@ -31,4 +31,4 @@
 - 视觉证据：`node scripts/capture-fx4-palettes.mjs --out artifacts/fx4/<new-directory>` 实机切换四色截图、设置入口截图与 reload 持久化核验；截图与 `report.json` 落在被忽略的 `artifacts/`，检查点记录摘要与文件哈希。
 - 需要用户实际查看的内容：四套配色观感、独立入口位置与操作、是否再调深浅；真机 30 分钟／稳定 60 帧由用户自理。
 - 回退：入口与配色均无存档写入以外的副作用；恢复默认可在设置面板「恢复默认」或清除 `rally.arena.v1`；移除本任务提交即回到单一绿色球场，旧存档因字段未知自动回退，不影响联机。
-- Issue／PR：分支 `feat/FX-4-court-colors`；PR 建立后回填链接。
+- Issue／PR：Draft PR [#5](https://github.com/zcinta0514/rally-badminton/pull/5)（`feat/FX-4-court-colors`，待合并决定）。
