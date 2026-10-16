@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-16T02:26:48Z",
+  "version": "1.10.0",
+  "source": "d3d5c0c5d52a989e65d99e7865698d238728702e",
+  "tests": {
+    "node22": {
+      "passed": 709,
+      "failed": 0,
+      "run": 38839954084
+    },
+    "node24": {
+      "passed": 709,
+      "failed": 0,
+      "run": 38839954084
+    }
+  },
+  "build": {
+    "basePath": "/",
+    "pwa": "31e7cd941732fbc7",
+    "assets": 87
+  },
+  "mergeCommit": "6aecf9a878ed901ee0609ff591e93d2ff7d875c0",
+  "tag": {
+    "name": "v1.10.0",
+    "annotated": "bd41d950b2473001e1c1b884022ac963c61acf4c",
+    "target": "6aecf9a878ed901ee0609ff591e93d2ff7d875c0"
+  },
+  "pr": "https://github.com/zcinta0514/rally-badminton/pull/5",
+  "workflows": {
+    "tests": {
+      "run": 38839954084,
+      "conclusion": "success"
+    },
+    "pages": {
+      "run": 38839954128,
+      "conclusion": "success"
+    },
+    "vercel": {
+      "commit": "6aecf9a878ed901ee0609ff591e93d2ff7d875c0",
+      "state": "success"
+    }
+  },
+  "live": {
+    "date": "2026-10-16T02:26:48Z",
+    "method": "headless Chrome via playwright-core; release notice reached by seeding the updater's post-reload sessionStorage marker",
+    "results": [
+      {
+        "entry": "pages",
+        "url": "https://zcinta0514.github.io/rally-badminton/",
+        "buildId": "152a297fac2bf852",
+        "version": "正式版 1.10.0",
+        "notice": "地胶配色更新",
+        "paletteChoices": [
+          "经典绿",
+          "赛事蓝",
+          "紫罗兰",
+          "玫瑰粉"
+        ],
+        "storedPalette": "purple",
+        "pageErrors": 0
+      },
+      {
+        "entry": "vercel",
+        "url": "https://kaipai-rally.vercel.app/",
+        "buildId": "31e7cd941732fbc7",
+        "version": "正式版 1.10.0",
+        "notice": "地胶配色更新",
+        "paletteChoices": [
+          "经典绿",
+          "赛事蓝",
+          "紫罗兰",
+          "玫瑰粉"
+        ],
+        "storedPalette": "purple",
+        "pageErrors": 0
+      }
+    ]
+  },
+  "realPhoneAccepted": false,
+  "productionVerified": true
+}
