@@ -3,17 +3,17 @@
 <!-- project-brief
 {
   "statusVersion": 1,
-  "asOf": "2026-10-15",
+  "asOf": "2026-10-16",
   "baseline": {
     "branch": "main",
-    "head": "dcf053230b3612058aac3f09d2cc2713cfcf8ea6",
-    "originMain": "dcf053230b3612058aac3f09d2cc2713cfcf8ea6",
-    "releaseTag": "v1.9.0"
+    "head": "6aecf9a878ed901ee0609ff591e93d2ff7d875c0",
+    "originMain": "6aecf9a878ed901ee0609ff591e93d2ff7d875c0",
+    "releaseTag": "v1.10.0"
   },
   "activeTask": {
-    "title": "1.10.0 发布准备完成：FX-4 地胶配色（待合并与部署核验）",
-    "scope": "四套地胶配色与比赛屏独立「配色」入口；用户已授权合并与发布，版本号按整批改动定为 1.10.0。",
-    "nextAction": "合并 PR #5、打标签 v1.10.0，核验 Pages／Vercel 线上后回填发布结果。",
+    "title": "1.10.0 已发布并核验：FX-4 地胶配色",
+    "scope": "四套地胶配色与比赛屏独立「配色」入口随 1.10.0 发布；PR #5 合并 6aecf9a，标签 v1.10.0；Pages、Vercel 生产部署与线上浏览器核验完成。",
+    "nextAction": "用户继续真机与实战验收；如有反馈，在实时 main 基线建立下一修复任务。",
     "blockedBy": [
       "手机真机 30 分钟／稳定 60 帧与横屏触控实测未做（用户自理）。",
       "联机对打双机配色视觉未实测；实现为本机偏好，不上传、不影响判定。",
@@ -27,7 +27,7 @@
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "v1.9.0 已发布（PR#2合并62051d0）。1.10.0 发布准备完成：FX-4 配色版本号已定、范围冻结、709/709 与构建 31e7cd941732fbc7 通过，待合并 PR #5 与部署核验。"
+    "releaseState": "v1.10.0 已发布：PR#5合并6aecf9a，标签v1.10.0；Pages 152a297fac2bf852、Vercel 31e7cd941732fbc7；线上两处显示正式版 1.10.0 且更新公告实际弹出。"
   },
   "readNext": [
     "docs/tasks/FX-4.md",
@@ -38,6 +38,7 @@
     "docs/FX-4-CHECKPOINT.md",
     "docs/FX-4-QA.json",
     "docs/RELEASE-1.10.0-CHECKPOINT.md",
+    "docs/RELEASE-1.10.0-QA.json",
     "docs/RELEASE-1.9.0-QA.json",
     "docs/tasks/R-1.9.0.md",
     "docs/RELEASE-1.9.0-CHECKPOINT.md",
@@ -59,19 +60,19 @@
   ],
   "handoff": {
     "taskId": "FX-4",
-    "branch": "feat/FX-4-court-colors",
-    "baselineHead": "dcf053230b3612058aac3f09d2cc2713cfcf8ea6",
+    "branch": "docs/R-1.10.0-result",
+    "baselineHead": "6aecf9a878ed901ee0609ff591e93d2ff7d875c0",
     "taskFile": "docs/tasks/FX-4.md",
-    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/fx-4-court-colors",
-    "phase": "发布准备完成，待合并",
-    "stopReason": "用户已授权合并与发布；版本号定为 1.10.0，709/709 与构建通过，待合并 PR #5 与部署核验。",
-    "nextAction": "合并 PR #5、打标签 v1.10.0、核验 Pages／Vercel 并回填发布检查点。",
+    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/release-1-10-postcheck",
+    "phase": "已发布",
+    "stopReason": "合并、标签、两处生产部署及线上浏览器核验完成。",
+    "nextAction": "用户继续真机与实战验收；如有反馈，在实时 main 基线建立下一修复任务。",
     "checkpoint": "docs/RELEASE-1.10.0-CHECKPOINT.md",
-    "validation": "npm test 709/709（Node v24.21.0）；npm run build PWA 31e7cd941732fbc7；功能证据见 docs/FX-4-CHECKPOINT.md。",
+    "validation": "Node22/24各709/709；构建 31e7cd941732fbc7；线上核验见 docs/RELEASE-1.10.0-QA.json。",
     "scopeBoundary": "用户授权合并与发布；真机与实战验收用户自理，配色保持本机视觉。"
   },
-  "publication": "v1.9.0 已发布：PR#2合并62051d0；Pages 633bc77d0521649d、Vercel bc91ba3fa312a101。1.10.0（FX-4 地胶配色）发布准备完成，待合并与部署核验。人物实验未合并，原P1预览3040未改。"
+  "publication": "v1.10.0 已发布：PR#5合并6aecf9a，标签v1.10.0；Pages 152a297fac2bf852、Vercel 31e7cd941732fbc7。人物实验未合并，原P1预览3040未改。"
 }
 -->
 
-正式1.9.0已上线并核验；1.10.0地胶配色发布准备完成、待合并。3053为旧候选，3040为独立人物任务，3010为FX-4配色候选预览。
+正式1.10.0已上线并核验（地胶配色）。3040为独立人物任务，3010为FX-4配色本地预览。

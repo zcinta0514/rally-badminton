@@ -19,14 +19,15 @@
 | --- | --- | --- |
 | 全量回归 | 709 项通过，0 失败（Node v24.21.0） | 本检查点记录 |
 | 版本一致性 | `package.json`／`package-lock.json`／首页「正式版 1.10.0」一致 | `tests/release-version.test.js` |
-| 玩家公告 | 根路径与 Pages 构建均嵌入新公告 `2026-10-15-court-palettes` | `tests/release-notice.test.js` |
+| 玩家公告 | 根路径与 Pages 构建均嵌入新公告 `2026-10-15-court-palettes`，线上更新路径实际弹出 | `tests/release-notice.test.js`、`RELEASE-1.10.0-QA.json` |
 | 构建 | PWA `31e7cd941732fbc7`（87 个资源） | `npm run build` |
 | 功能证据 | 四色实机截图、独立入口、reload 持久化、0 页面错误 | `docs/FX-4-CHECKPOINT.md`、`artifacts/fx4/20261015-entry/report.json` |
 
-## 合并与部署（部署后回填）
+## 合并与部署（2026-10-16 已核验）
 
-- 合并：PR #5 → `main` 合并提交待填；标签 `v1.10.0` 待打。
-- Pages／Vercel 生产部署：待核验；实际构建号与线上页面核验结果待回填。
+- 合并：PR [#5](https://github.com/zcinta0514/rally-badminton/pull/5) → `main` 合并提交 `6aecf9a878ed901ee0609ff591e93d2ff7d875c0`；标签 `v1.10.0`（annotated `bd41d950b2473001e1c1b884022ac963c61acf4c`）指向该提交。
+- GitHub Actions「Tests and build」与「Deploy browser game to GitHub Pages」在 main 与标签上均成功（run 38839954084／38839954128／38839979218）；Vercel 生产部署完成。
+- 线上核验：Pages 实际构建号 `152a297fac2bf852`、Vercel `31e7cd941732fbc7`；两处首页均显示「正式版 1.10.0」，更新公告「地胶配色更新」在实际更新路径弹出，进入比赛可打开「配色」入口、切换紫罗兰并本机落盘，页面零错误。完整记录见 [RELEASE-1.10.0-QA.json](RELEASE-1.10.0-QA.json)。
 
 ## 回退
 
