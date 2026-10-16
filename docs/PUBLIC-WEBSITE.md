@@ -7,6 +7,15 @@
 - 历史二维码：`docs/images/kaipai-rally-qr.png`，本轮社媒宣传不用二维码。
 - 宣传文案：开拍 RALLY｜有空，就开拍。打开链接，手机横屏，直接人机练习；两台手机还可创建房间、邀请球友对打。
 
+## 1.10.0 地胶配色
+
+- 发布标识：[v1.10.0](https://github.com/zcinta0514/rally-badminton/tree/v1.10.0)。PR [#5](https://github.com/zcinta0514/rally-badminton/pull/5)；合并提交与两处生产部署结果在发布检查点回填，版本由用户在发布准备阶段确认。
+- 比赛屏右上角新增独立「配色」入口（圆点显示当前颜色）：经典绿（默认，现有球场逐字节不变）、赛事蓝、紫罗兰、玫瑰粉，点选即时切换并本机保存。
+- 紫罗兰对齐 2024 巴黎奥运会场馆紫色调（实拍取样），玫瑰粉取自浅玫粉球馆方向；配色只影响本机画面，不上传、不改变对手视角、不影响判定与联机协议。
+- 设置面板内的旧配色下拉合并到新入口；不包含在制人物实验与其它未合并候选。
+
+- 实际发布包：Pages／Vercel 待部署核验；完整资源、浏览器和回退记录见 [发布检查点](RELEASE-1.10.0-CHECKPOINT.md)。
+
 ## 1.9.0 陪练、体力与开打入口
 
 - 发布标识：[v1.9.0](https://github.com/zcinta0514/rally-badminton/tree/v1.9.0)。PR [#2](https://github.com/zcinta0514/rally-badminton/pull/2)合并提交62051d0；Pages与Vercel生产部署均成功，版本由用户在发布准备阶段确认。
