@@ -37,6 +37,18 @@ body[data-screen=match] .icon-btn:hover { background:#145340; }
 .match-note #connection { grid-column:2; grid-row:1; text-align:right; overflow:hidden; text-overflow:ellipsis; }
 .match-note strong { grid-column:1/-1; grid-row:2; display:block; min-width:0; padding:2px 5px; font-size:10px; font-weight:550; background:#092c30e8; border-radius:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .camera-toggle { display:none; }
+.palette-toggle { display:none; }
+body[data-screen=match] .palette-toggle { display:flex; align-items:center; gap:6px; min-height:30px; padding:5px 8px; border:1px solid #93bca94a; border-radius:4px; background:#092b31eb; color:#eaf7ed; font-size:11px; }
+.palette-toggle[aria-expanded=true] { border-color:#a8f7d5!important; }
+.palette-toggle i { width:12px; height:12px; border-radius:50%; background:#0c7054; box-shadow:0 0 0 1px #ffffff66 inset; }
+.palette-panel { position:fixed; z-index:8; right:max(16px,env(safe-area-inset-right)); top:max(52px,calc(env(safe-area-inset-top) + 46px)); width:188px; padding:10px; border:1px solid #81b6a46b; border-radius:5px; background:#092b31f5; color:#eaf7ed; box-shadow:0 5px 16px #00171c4d; touch-action:pan-y; font-size:11px; }
+body:not([data-screen=match]) .palette-panel,body[data-finale=true] :is(.palette-panel,.palette-toggle) { display:none; }
+.palette-heading { display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:8px; }
+.palette-heading small { font-size:9px; color:#b8d3c7; }
+.palette-options { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.palette-options button { display:flex; align-items:center; gap:6px; padding:8px 9px; border:1px solid #81b6a46b; border-radius:4px; background:#123c36e8; color:#eaf7ed; font-size:11px; }
+.palette-options button[aria-pressed=true] { border-color:#a8f7d5; background:#1b4a41f0; box-shadow:0 0 0 1px #a8f7d533 inset; }
+.palette-options button i { flex:none; width:16px; height:16px; border-radius:3px; box-shadow:0 0 0 1px #ffffff44 inset; }
 .match-settings-toggle { display:none; }
 body[data-screen=match] .match-settings-toggle { display:block; min-height:30px; padding:5px 8px; border:1px solid #93bca94a; border-radius:4px; background:#092b31eb; color:#eaf7ed; font-size:11px; }
 .match-settings-toggle[aria-expanded=true] { border-color:#a8f7d5!important; }

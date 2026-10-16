@@ -44,7 +44,11 @@ export function bindMatchSettings(audio, { document = globalThis.document, prefe
   panel.addEventListener('pointerdown', event => event.stopPropagation());
   document.addEventListener('pointerdown', event => { if (!panel.hidden && !panel.contains(event.target) && !button.contains(event.target)) close(); });
   apply();
-  return { close, update(state, side, mode) {
+  return { close, selectPalette(name) {
+    settings = normalizeArenaPreferences({ ...settings, courtPalette: name });
+    apply(); saveArenaPreferences(settings);
+    return settings.courtPalette;
+  }, update(state, side, mode) {
     if (document.body.dataset.screen !== 'match' || state.phase === 'over') close();
     const summary = panel.querySelector('#match-settings-summary'), text = describeMatch(state, side, mode);
     if (summary.textContent !== text) summary.textContent = text;

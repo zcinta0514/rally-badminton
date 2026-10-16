@@ -1,9 +1,12 @@
-export const ARENA_DEFAULTS = Object.freeze({ master: .6, hits: 1, movement: .65, crowd: .5, environment: .15 });
+import { DEFAULT_COURT_PALETTE, normalizeCourtPalette } from './court-palettes.js';
+
+export const ARENA_DEFAULTS = Object.freeze({ master: .6, hits: 1, movement: .65, crowd: .5, environment: .15, courtPalette: DEFAULT_COURT_PALETTE });
 export const ARENA_STORAGE_KEY = 'rally.arena.v1';
 const levels = ['master', 'hits', 'movement', 'crowd', 'environment'];
 export function normalizeArenaPreferences(value) {
   const result = { ...ARENA_DEFAULTS };
   for (const key of levels) if (Number.isFinite(value?.[key])) result[key] = Math.max(0, Math.min(1, value[key]));
+  result.courtPalette = normalizeCourtPalette(value?.courtPalette);
   return result;
 }
 const storage = () => { try { return globalThis.localStorage; } catch { return null; } };
