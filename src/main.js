@@ -534,6 +534,9 @@ function updateUI(info,state){
     : (info.availability.assist==='beginner'?'向黄色圈移动 · 提前准备挥拍':'向黄色圈移动 · 提前准备挥拍');
   else if(info.intercept.status==='out')guidance=info.intercept.reason;
   else if(info.intercept.status==='unreachable')guidance='来球较远 · 尽快移动接球';
+  if(state.phase==='rally'&&state.shuttle.lastHit===1-side&&state.lastShot==='smash'&&
+    ['approach','ready'].includes(info.intercept.status))guidance='来球快 · 提前松开高远／吊球键接回';
+  if(state.phase==='rally'&&state.shuttle.lastHit===1-side&&self.pendingShot)guidance='击球已准备 · 继续跑位，进入范围后出手';
   if(state.phase==='rally'&&!info.prepare&&info.availability.canHit&&staminaEffects(self,ROLES[self.role]).severity>.5)guidance='体力偏低 · 先减速，收力打场内';
   if(info.prepare&&info.availability.canHit&&risk>.25)guidance=qualityReason;
   else if(info.prepare==='smash'&&info.availability.canHit&&!info.availability.canSmash)guidance=info.target.fallbackReason||qualityReason||info.availability.reason;

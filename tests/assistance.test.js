@@ -63,14 +63,25 @@ test('availability uses turn, court, reach, height, cooldown and stamina boundar
 });
 
 test('beginner shot input remains buffered longer but still uses the normal contact contract', () => {
-  const standard = incoming({x: 0, y: 1.2});
+  const standard = incoming({x: 2.4, y: 4.5, vy: 0});
   const assisted = rules.createMatch({playerAssist: 'beginner'});
   assisted.phase = 'rally'; assisted.players[0].x = 0; assisted.players[0].z = 3.8;
-  Object.assign(assisted.shuttle, {x: 0, y: 1.2, z: 3.8, vx: 0, vy: -0.2, vz: 0, active: true, lastHit: 1});
+  Object.assign(assisted.shuttle, {x: 2.4, y: 4.5, z: 3.8, vx: 0, vy: 0, vz: 0, active: true, lastHit: 1});
   rules.stepMatch(standard, [{shot: 'clear'}, {}], frame);
   rules.stepMatch(assisted, [{shot: 'clear'}, {}], frame);
   assert.ok(assisted.players[0].pendingShot.remaining > standard.players[0].pendingShot.remaining);
-  assert.ok(assisted.players[0].pendingShot.remaining < 0.6);
+  assert.ok(assisted.players[0].pendingShot.remaining < 0.65);
+  assert.ok(Math.abs(assisted.players[0].pendingShot.remaining - standard.players[0].pendingShot.remaining - .1) < 1e-8);
+  for (let tick = 0; tick < 68; tick++) {
+    rules.stepMatch(standard, [{}, {}], frame);
+    rules.stepMatch(assisted, [{}, {}], frame);
+  }
+  assert.equal(standard.players[0].pendingShot, null);
+  assert.ok(assisted.players[0].pendingShot);
+  for (let tick = 0; tick < 14; tick++) rules.stepMatch(assisted, [{}, {}], frame);
+  assert.equal(assisted.players[0].pendingShot, null);
+  assert.equal(standard.hitId, 0);
+  assert.equal(assisted.hitId, 0);
 });
 
 test('future interception never advertises immediate smash while ball is unreachable', () => {

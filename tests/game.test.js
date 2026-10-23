@@ -232,8 +232,9 @@ test('an unreachable smash expires with actionable feedback', () => {
   const state = createMatch();
   incoming(state, { x: 2.3, z: 6.1, y: 4.8, vx: 0, vz: 0, vy: 0 });
   stepMatch(state, [{ shot: 'smash' }, {}]);
-  advance(state, 0.5);
+  advance(state, 0.65); // Past the bounded early-input window.
   assert.equal(state.hitId, 0);
+  assert.equal(state.players[0].pendingShot, null);
   assert.match(state.message, /距离|跑位|够到|未接/);
 });
 

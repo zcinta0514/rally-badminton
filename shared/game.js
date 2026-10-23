@@ -1,7 +1,7 @@
 import { contactQuality, contactDrift } from './shot-quality.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 7;
+export const RULES_VERSION = 8;
 
 /** Shared, serializable rules. Coordinates are metres; side 0 plays at positive z. */
 export const COURT = Object.freeze({ halfWidth: 2.59, halfLength: 6.7, netHeight: 1.52 });
@@ -28,9 +28,9 @@ export const ROLES = Object.freeze({
 
 const TUNING = {
   gravity: 9.81, playerMargin: 0.16, netMargin: 0.54,
-  acceleration: 23, braking: 28,
-  reach: 1.45, minHitHeight: 0.28, maxHitHeight: 3.25,
-  smashHeight: 1.65, shotBuffer: 0.44, swingTime: 0.42,
+  acceleration: 30, braking: 38,
+  reach: 1.45, minHitHeight: 0.22, maxHitHeight: 3.25,
+  smashHeight: 1.65, shotBuffer: 0.54, swingTime: 0.42,
   pointWait: 1.4, pauseLimit: 30, resumeCountdown: 2,
 };
 const SHOTS = new Set(['clear', 'drop', 'smash']);
@@ -220,7 +220,10 @@ function movePlayer(player, input, side, dt, state) {
   const targetX = input.x * role.speed * fatigue.speedScale, targetZ = input.z * role.speed * fatigue.speedScale;
   const dx = targetX - player.vx, dz = targetZ - player.vz, difference = Math.hypot(dx, dz);
   const reversing = player.vx * targetX + player.vz * targetZ < 0;
-  const change = Math.min(1, (effort > 0.01 ? TUNING.acceleration * role.acceleration : TUNING.braking * role.braking) *
+  // Brake the existing velocity first when changing direction; top speed and
+  // fatigue limits stay role-dependent. A swing never locks rally movement.
+  const accelerating = effort > .01 && !reversing;
+  const change = Math.min(1, (accelerating ? TUNING.acceleration * role.acceleration : TUNING.braking * role.braking) *
     (effort > .01 && !reversing ? fatigue.accelerationScale : 1) * dt / (difference || 1));
   player.vx += dx * change; player.vz += dz * change;
   const nextX = player.x + player.vx * dt, nextZ = player.z + player.vz * dt;
@@ -294,7 +297,9 @@ export function getShotTarget(state, side, request = {}) {
   const distance = Math.hypot(aimX - ball.x, aimZ - ball.z);
   const minDuration = minimumNetDuration(ball, aimZ, type === 'smash' ? 0.12 : type === 'drop' ? 0.18 : 0.28);
   const shotSpeed = role.shotSpeed?.[type] || 1;
-  let duration = type === 'clear' ? (1.55 + distance * 0.035) / shotSpeed
+  // Separate the low service launch from an overhead clear. Both remain
+  // ballistic, with a deep target and net clearance; no presentation speedup.
+  let duration = type === 'clear' ? ((serving ? 1.3 : 1.16) + distance * 0.032) / shotSpeed
     : type === 'drop' ? (0.85 + distance * 0.02) / shotSpeed
       : (0.49 + distance * 0.012) / role.power / shotSpeed / (1 + input.charge * 0.12);
   if (type === 'smash') {
