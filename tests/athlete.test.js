@@ -215,7 +215,10 @@ test('real preparation, release and cancellation blend from the displayed pose',
     const held=structuredClone(rig.root.userData.pose);
     stepMatch(state,[{shot},{}],1/120);const released=draw();
     assert.ok(poseDistance(held.racketHead,released.racketHead)<.18,`${shot} release snapped to a different backswing`);
-    for(let i=0;i<25&&state.players[0].action?.stage!=='contact';i++){stepMatch(state,[{},{}],1/120);draw();}
+    for(let i=0;i<25&&state.players[0].action?.stage!=='contact';i++){
+      const wait=state.players[0].pendingShot?.contactAt-state.time;
+      stepMatch(state,[{},{}],Math.min(1/120,wait>0?wait:1/120));draw();
+    }
     const a=state.players[0].action;assert.equal(a?.stage,'contact');
     const contact=rig.root.userData.pose.racketHead;
     assert.ok(poseDistance(contact,{x:a.contact.x-state.players[0].x,y:a.contact.y,z:a.contact.z-state.players[0].z})<1e-7);
@@ -265,7 +268,10 @@ test('sculpted grip follows the shaft through real strokes without moving the au
       assert.ok(rig.hands.right.getWorldQuaternion(new THREE.Quaternion()).angleTo(rig.racket.getWorldQuaternion(new THREE.Quaternion()))<1e-7);
     };
     draw();stepMatch(state,side===0?[{shot:type},{}]:[{}, {shot:type}],1/120);draw();
-    for(let i=0;i<30&&state.players[side].action?.stage!=='contact';i++){stepMatch(state,[{},{}],1/120);draw();}
+    for(let i=0;i<30&&state.players[side].action?.stage!=='contact';i++){
+      const wait=state.players[side].pendingShot?.contactAt-state.time;
+      stepMatch(state,[{},{}],Math.min(1/120,wait>0?wait:1/120));draw();
+    }
     const action=state.players[side].action;assert.equal(action?.stage,'contact');
     assert.ok(rig.racket.localToWorld(new THREE.Vector3(0,.54,0)).distanceTo(new THREE.Vector3(action.contact.x,action.contact.y,action.contact.z))<1e-7);
     for(let i=0;i<35;i++){stepMatch(state,[{},{}],1/120);draw();}
@@ -348,7 +354,7 @@ test('ready stance keeps both elbows below the shoulders and the racket above th
 
 test('a real shortened windup still reaches the exact contact without a next-frame jump',()=>{
   const state=strokeState();
-  Object.assign(state.shuttle,{x:Math.cos(Math.PI*7/8)*.6,y:2,z:3.8+Math.sin(Math.PI*7/8)*.6,vy:0});
+  Object.assign(state.shuttle,{x:Math.cos(Math.PI*7/8)*.6,y:.65,z:3.8+Math.sin(Math.PI*7/8)*.6,vy:-9});
   stepMatch(state,[{shot:'smash'},{}],1/120);
   for(let i=0;i<30&&state.players[0].action?.stage!=='contact';i++)stepMatch(state,[{},{}],1/120);
   const p=state.players[0],a=p.action;

@@ -79,8 +79,11 @@ export function measureMovement(game, role = 'balanced') {
   }
   const stop = make(); stop.players[0].vz = -game.ROLES[role].speed; const origin = stop.players[0].z;
   for (let tick = 0; tick < 100 && stop.players[0].vz !== 0; tick++) game.stepMatch(stop, [{}, {}], dt);
+  const shortMove = make(), shortOrigin = shortMove.players[0].z;
+  for (let tick = 0; tick < 48; tick++) game.stepMatch(shortMove, [{ z: -1 }, {}], dt);
   return { role, topSpeed: game.ROLES[role].speed, firstMotion: round(firstMotion), fullSpeed: round(fullSpeed),
-    reverseZero: round(reverseZero), reverseFull: round(reverseFull), stopDistance: round(origin - stop.players[0].z) };
+    reverseZero: round(reverseZero), reverseFull: round(reverseFull), stopDistance: round(origin - stop.players[0].z),
+    distanceAtPoint4: round(shortOrigin - shortMove.players[0].z) };
 }
 
 export function measurePace(game = currentGame) {
@@ -89,15 +92,21 @@ export function measurePace(game = currentGame) {
     const { state, target } = shotFixture(game, { type, serving, role });
     Object.assign(state.shuttle, { vx: target.vx, vy: target.vy, vz: target.vz, active: true, lastHit: 0 });
     const landing = game.predictLanding(state);
+    const descendingAt = height => {
+      const discriminant = target.vy ** 2 + 19.62 * (state.shuttle.y - height);
+      return discriminant < 0 ? null : round((target.vy + Math.sqrt(discriminant)) / 9.81);
+    };
     flights.push({ role, type, serving, duration: round(target.duration),
       initialVelocity: { vx: round(target.vx), vy: round(target.vy), vz: round(target.vz) },
       apex: round(state.shuttle.y + Math.max(0, target.vy) ** 2 / (2 * 9.81)),
-      netHeight: round(target.netHeight), x: round(landing.x), z: round(landing.z), event: landing.event });
+      netHeight: round(target.netHeight), x: round(landing.x), z: round(landing.z), event: landing.event,
+      descendingContactTimes: { high3_05: descendingAt(3.05), low0_7: descendingAt(.7) } });
   }
   return { rulesVersion: game.RULES_VERSION, flights, movement: Object.keys(game.ROLES).map(role => measureMovement(game, role)),
     receives: {
       dropTimely: runReceive(game),
       dropScramble: runReceive(game, { reaction: .55, pressAt: .82 }),
+      dropWeakContact: runReceive(game, { reaction: .35, pressAt: .72 }),
       dropLate: runReceive(game, { reaction: .66, pressAt: .9 }),
       smashPositioned: runReceive(game, { type: 'smash', startZ: 3.6, moving: false, pressAt: .24 }),
       smashEarly: runReceive(game, { type: 'smash', startZ: 4.8, moving: false, pressAt: 0 }),

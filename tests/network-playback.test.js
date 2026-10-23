@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { NetworkPlayback } from '../src/network-playback.js';
+import { sampleShuttleFlight } from '../shared/shuttle-flight.js';
 import { createMatch, stepMatch, pauseMatch, resumeMatch, finishMatch } from '../shared/game.js';
 import { sampleAthletePose } from '../src/athlete.js';
 import * as THREE from 'three';
@@ -18,7 +19,7 @@ function liveState() {
   return state;
 }
 
-test('20 Hz snapshots produce intermediate body and parabolic shuttle positions without mutating snapshots', () => {
+test('20 Hz snapshots preserve shared decelerating flight without mutating snapshots', () => {
   const player = playback(), first = liveState();
   receive(player, first, 0, 1);
   const last = copy(first); stepMatch(last, [{ x: 1 }, {}], .05); const saved = copy(last);
@@ -26,7 +27,8 @@ test('20 Hz snapshots produce intermediate body and parabolic shuttle positions 
   const middle = player.sample(185);
   near(middle.time, .025, 'one shared animation time');
   near(middle.players[0].x, (first.players[0].x + last.players[0].x) / 2, 'body interpolation');
-  near(middle.shuttle.x, first.shuttle.x + first.shuttle.vx * .025, 'ball x');
+  near(middle.shuttle.x, sampleShuttleFlight(first.shuttle, .025).x, 'dragged ball x');
+  assert.ok(middle.shuttle.vx < first.shuttle.vx);
   near(middle.shuttle.y, first.shuttle.y + first.shuttle.vy * .025 - 9.81 * .025 ** 2 / 2, 'parabolic ball height');
   assert.ok(player.sample(190).shuttle.z < middle.shuttle.z, 'ball moves between packets');
   assert.deepEqual(last, saved);
@@ -199,11 +201,15 @@ test('a sub-slice net collision never presents a score before its recorded conta
   for (let i = 0; i < 6; i++) stepMatch(state, [i === 0 ? { shot: 'smash', charge: .8 } : {}, {}], 1 / 120);
   const before = copy(state);
   for (let i = 0; i < 6; i++) stepMatch(state, [{}, {}], 1 / 120);
-  assert.ok(state.rallyEnd.at < state.lastShotInfo.at, 'physics can record a within-slice collision just before the slice contact time');
+  assert.ok(state.rallyEnd.at > state.lastShotInfo.at, 'net impact must follow the exact launch instant');
   const player = playback(); receive(player, before, 50, 1); receive(player, state, 100, 2);
   const between = (state.rallyEnd.at + state.lastShotInfo.at) / 2;
   const display = player.sample(160 + between * 1000);
-  assert.equal(display.hitId, before.hitId); assert.equal(display.pointId, before.pointId); assert.equal(display.phase, 'rally');
+  assert.equal(display.hitId, before.hitId + 1); assert.equal(display.pointId, before.pointId); assert.equal(display.phase, 'rally');
+  const legacy = copy(state); legacy.rallyEnd.at = legacy.lastShotInfo.at - .002;
+  const oldPlayback = playback(); receive(oldPlayback, before, 50, 1); receive(oldPlayback, legacy, 100, 2);
+  const guarded = oldPlayback.sample(160 + (legacy.lastShotInfo.at - .001) * 1000);
+  assert.equal(guarded.hitId, before.hitId); assert.equal(guarded.pointId, before.pointId);
 });
 
 test('a gap hiding multiple contacts freezes the entire prior frame instead of advancing an unsupported action', () => {

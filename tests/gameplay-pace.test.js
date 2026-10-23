@@ -6,7 +6,7 @@ import { shotFixture, runReceive, measureMovement } from '../scripts/measure-gam
 test('high service and rally clears retain height and depth with bounded flight time', () => {
   for (const role of Object.keys(game.ROLES)) for (const serving of [true, false]) {
     const { state, target } = shotFixture(game, { serving, role });
-    assert.ok(target.duration >= 1.35 && target.duration <= 1.7, JSON.stringify({ role, serving, duration: target.duration }));
+    assert.ok(target.duration >= (serving ? 1.7 : 1.4) && target.duration <= (serving ? 1.9 : 1.7), JSON.stringify({ role, serving, duration: target.duration }));
     const apex = state.shuttle.y + Math.max(0, target.vy) ** 2 / (2 * 9.81);
     assert.ok(apex > (serving ? 3.3 : 3.8));
     assert.ok(Math.abs(target.z) > 5.3);
@@ -24,15 +24,16 @@ test('high service and rally clears retain height and depth with bounded flight 
   }
 });
 
-test('faster response preserves role top speeds and limits reverse drift', () => {
+test('video-calibrated acceleration preserves role top speeds and bounded braking', () => {
   for (const role of Object.keys(game.ROLES)) {
     const m = measureMovement(game, role);
-    assert.ok(m.fullSpeed < .18);
-    assert.ok(m.reverseZero < .15);
-    assert.ok(m.reverseFull < .31);
-    assert.ok(m.stopDistance < .32);
+    assert.ok(m.fullSpeed > .24 && m.fullSpeed < .28);
+    assert.ok(m.reverseZero > .16 && m.reverseZero < .2);
+    assert.ok(m.reverseFull > .4 && m.reverseFull < .47);
+    assert.ok(m.stopDistance < .47);
   }
   assert.deepEqual(Object.values(game.ROLES).map(role => role.speed), [4.6, 5.35, 4.05]);
+  assert.ok(Math.abs(measureMovement(game).distanceAtPoint4 - 1.27) < .3, 'video ground-displacement estimate with declared uncertainty');
 });
 
 test('a single early release survives the approach to a drop; a late start still loses', () => {
@@ -63,7 +64,7 @@ test('a positioned defender can buffer one return against an unchanged fast smas
 
 test('a last-moment low contact retains control loss and cannot create a strong attack', () => {
   const timely = runReceive(game);
-  const scramble = runReceive(game, { reaction: .55, pressAt: .82 });
+  const scramble = runReceive(game, { reaction: .35, pressAt: .72 });
   assert.equal(scramble.received, true);
   assert.ok(scramble.contactHeight < .35);
   assert.ok(scramble.quality.risk > .65);

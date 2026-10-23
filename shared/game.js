@@ -1,7 +1,8 @@
 import { contactQuality, contactDrift } from './shot-quality.js';
+import { sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 8;
+export const RULES_VERSION = 9;
 
 /** Shared, serializable rules. Coordinates are metres; side 0 plays at positive z. */
 export const COURT = Object.freeze({ halfWidth: 2.59, halfLength: 6.7, netHeight: 1.52 });
@@ -28,7 +29,7 @@ export const ROLES = Object.freeze({
 
 const TUNING = {
   gravity: 9.81, playerMargin: 0.16, netMargin: 0.54,
-  acceleration: 30, braking: 38,
+  acceleration: 18, braking: 26,
   reach: 1.45, minHitHeight: 0.22, maxHitHeight: 3.25,
   smashHeight: 1.65, shotBuffer: 0.54, swingTime: 0.42,
   pointWait: 1.4, pauseLimit: 30, resumeCountdown: 2,
@@ -234,8 +235,7 @@ function movePlayer(player, input, side, dt, state) {
 }
 
 function flightPoint(ball, time) {
-  return { x: ball.x + ball.vx * time, y: ball.y + ball.vy * time - TUNING.gravity * time * time / 2,
-    z: ball.z + ball.vz * time, time };
+  return { ...sampleShuttleFlight(ball, time), time };
 }
 function serviceFault(state, point) {
   if (!state.service?.active || state.shuttle.lastHit !== state.service.side) return false;
@@ -249,7 +249,7 @@ export function predictLanding(state) {
   if (!ball?.active || ball.lastHit === null) return null;
   const disc = ball.vy * ball.vy + 2 * TUNING.gravity * Math.max(0, ball.y);
   const time = Math.max(0, (ball.vy + Math.sqrt(disc)) / TUNING.gravity);
-  const netTime = ball.vz ? -ball.z / ball.vz : -1;
+  const netTime = timeToShuttleZ(ball, 0);
   if (netTime > 0 && netTime <= time) {
     const net = flightPoint(ball, netTime);
     if (net.y <= COURT.netHeight) return { ...net, z: 0, y: Math.max(0, net.y),
@@ -261,8 +261,9 @@ export function predictLanding(state) {
   return { ...point, event: 'landing', out, serviceFault: fault, side, winner: out || fault ? 1 - ball.lastHit : 1 - side };
 }
 
-function minimumNetDuration(ball, z, margin) {
-  const f = Math.abs(ball.z) / Math.abs(z - ball.z);
+function minimumNetDuration(ball, x, z, margin) {
+  const fraction = Math.abs(ball.z) / Math.abs(z - ball.z);
+  const f = horizontalTimeFraction(Math.hypot(x - ball.x, z - ball.z), fraction);
   if (!(f > 0 && f < 1)) return 0;
   return Math.sqrt(Math.max(0, 2 * (COURT.netHeight + margin - ball.y * (1 - f)) / (TUNING.gravity * f * (1 - f))));
 }
@@ -295,11 +296,11 @@ export function getShotTarget(state, side, request = {}) {
   const quality = contactQuality({player, ball, role, ...input, shot: type, serving, assist: assist.level});
   const drift = contactDrift({quality, player, ball, role, aimX, aimDepth: input.aimDepth, side, shot: type, charge: input.charge});
   const distance = Math.hypot(aimX - ball.x, aimZ - ball.z);
-  const minDuration = minimumNetDuration(ball, aimZ, type === 'smash' ? 0.12 : type === 'drop' ? 0.18 : 0.28);
+  const minDuration = minimumNetDuration(ball, aimX, aimZ, type === 'smash' ? 0.12 : type === 'drop' ? 0.18 : 0.28);
   const shotSpeed = role.shotSpeed?.[type] || 1;
   // Separate the low service launch from an overhead clear. Both remain
   // ballistic, with a deep target and net clearance; no presentation speedup.
-  let duration = type === 'clear' ? ((serving ? 1.3 : 1.16) + distance * 0.032) / shotSpeed
+  let duration = type === 'clear' ? ((serving ? 1.5 : 1.24) + distance * 0.032) / shotSpeed
     : type === 'drop' ? (0.85 + distance * 0.02) / shotSpeed
       : (0.49 + distance * 0.012) / role.power / shotSpeed / (1 + input.charge * 0.12);
   if (type === 'smash') {
@@ -308,12 +309,13 @@ export function getShotTarget(state, side, request = {}) {
     // no feasible net-clearance interval the normal net collision decides it.
     duration = Math.min(Math.max(duration, minDuration), downwardLimit);
   } else duration = Math.max(duration, minDuration);
-  const vx = (aimX + drift.x - ball.x) / duration, vz = (aimZ + drift.z - ball.z) / duration;
+  const { vx, vz } = horizontalLaunch(ball, { x: aimX + drift.x, z: aimZ + drift.z }, duration);
   const vy = (TUNING.gravity * duration * duration / 2 - ball.y) / duration - drift.verticalLoss;
   duration = (vy + Math.sqrt(vy * vy + 2 * TUNING.gravity * Math.max(0, ball.y))) / TUNING.gravity;
-  const x = quality.risk === 0 ? aimX : ball.x + vx * duration;
-  const z = quality.risk === 0 ? aimZ : ball.z + vz * duration;
-  const netTime = vz ? -ball.z / vz : 0;
+  const endpoint = flightPoint({ ...ball, vx, vy, vz }, duration);
+  const x = quality.risk === 0 ? aimX : endpoint.x;
+  const z = quality.risk === 0 ? aimZ : endpoint.z;
+  const netTime = timeToShuttleZ({ ...ball, vx, vy, vz }, 0);
   const netHeight = ball.y + vy * netTime - TUNING.gravity * netTime * netTime / 2;
   const smashViable = type === 'smash' && !serving && ball.y >= TUNING.smashHeight
     && player.stamina >= shotStaminaCost(role, type, input.charge) && netHeight > COURT.netHeight + 0.02;
@@ -407,18 +409,17 @@ function integrateShuttle(state, dt) {
     // stepLive has already advanced time by dt; retain the exact collision instant
     // and incoming velocity for rendering after the authoritative rally ends.
     const impact = {
+      ...sampleShuttleFlight(ball, event.time),
       kind: event.event === 'net' ? 'net' : event.serviceFault ? 'serviceFault' : event.out ? 'out' : 'in',
       at: state.time - dt + event.time,
       x: event.x, y: event.y, z: event.z,
-      vx: ball.vx, vy: ball.vy - TUNING.gravity * event.time, vz: ball.vz,
       hitSide: ball.lastHit, hitId: state.hitId,
     };
-    Object.assign(ball, { x: event.x, y: event.y, z: event.z, vy: ball.vy - TUNING.gravity * event.time });
+    Object.assign(ball, sampleShuttleFlight(ball, event.time), { x: event.x, y: event.y, z: event.z });
     awardPoint(state, event.winner, event.event === 'net' ? '未过网' : event.serviceFault ? '发球未落入对角发球区' : event.out ? '出界' : '落地', impact);
     return;
   }
-  const point = flightPoint(ball, dt);
-  Object.assign(ball, { x: point.x, y: point.y, z: point.z, vy: ball.vy - TUNING.gravity * dt });
+  Object.assign(ball, sampleShuttleFlight(ball, dt));
 }
 
 function actionFor(state, side, request, stage, lead) {
@@ -531,11 +532,9 @@ function stepLive(state, inputs, dt, firstSlice) {
     attemptShot(state, state.server);
     return;
   }
-  // Test both ends of each short physics slice so a moving shuttle cannot
-  // tunnel through a valid, buffered racket contact.
-  for (let side = 0; side < 2; side++) {
-    attemptShot(state, side);
-  }
+  // Ball and match clock must describe the same instant at contact. The prior
+  // slice already checked its endpoint; do not launch and then advance a new
+  // fast shot through a slice whose time was counted before that contact.
   integrateShuttle(state, dt);
   if (state.phase === 'rally') for (let side = 0; side < 2; side++) {
     attemptShot(state, side);
@@ -610,7 +609,11 @@ export function stepMatch(state, inputs = [{}, {}], dt = 1 / 60) {
   // A stalled tab must not leap through a full rally when it wakes up.
   let remaining = Math.min(dt, 0.25), firstSlice = true;
   while (remaining > 0.000001 && state.phase !== 'over') {
-    const slice = Math.min(remaining, 1 / 120);
+    let slice = Math.min(remaining, 1 / 120);
+    for (const player of state.players) {
+      const untilContact = player.pendingShot?.contactAt - state.time;
+      if (untilContact > 1e-7) slice = Math.min(slice, untilContact);
+    }
     stepLive(state, normalized, slice, firstSlice);
     firstSlice = false; remaining -= slice;
   }
@@ -628,7 +631,7 @@ function smashOpportunity(state, side) {
   const bestHeight = Math.min(3.05, ball.y + Math.max(0, ball.vy) ** 2 / (2 * TUNING.gravity));
   const discriminant = ball.vy * ball.vy + 2 * TUNING.gravity * (ball.y - bestHeight);
   const contactTime = discriminant >= 0 ? (ball.vy + Math.sqrt(discriminant)) / TUNING.gravity : -1;
-  const contactDepth = (ball.z + ball.vz * contactTime) * direction(side);
+  const contactDepth = flightPoint(ball, Math.max(0, contactTime)).z * direction(side);
   return { contactTime, highChance: contactTime >= 0 && contactDepth > 0.5 && contactDepth < 6.4 };
 }
 
@@ -727,8 +730,9 @@ export function aiInput(state, side, difficulty = 'easy') {
   const contactHeight = memory.shot === 'smash' ? Math.min(3.05, ball.y + Math.max(0, ball.vy) ** 2 / (2 * TUNING.gravity)) : 1.2;
   const discriminant = ball.vy * ball.vy + 2 * TUNING.gravity * (ball.y - contactHeight);
   const contactTime = discriminant > 0 ? Math.max(0, (ball.vy + Math.sqrt(discriminant)) / TUNING.gravity) : 0;
-  const targetX = clamp(ball.x + ball.vx * contactTime + memory.errorX, -COURT.halfWidth + 0.15, COURT.halfWidth - 0.15);
-  const targetZ = direction(side) * clamp((ball.z + ball.vz * contactTime) * direction(side) + memory.errorZ, 0.7, COURT.halfLength - 0.25);
+  const contactPoint = flightPoint(ball, contactTime);
+  const targetX = clamp(contactPoint.x + memory.errorX, -COURT.halfWidth + 0.15, COURT.halfWidth - 0.15);
+  const targetZ = direction(side) * clamp(contactPoint.z * direction(side) + memory.errorZ, 0.7, COURT.halfLength - 0.25);
   Object.assign(output, moveToward(player, targetX, targetZ, config.pace));
   const horizontal = Math.hypot(ball.x - player.x, ball.z - player.z);
   if (memory.shot === 'smash' && contactTime < 0.4) output.prepare = 'smash';

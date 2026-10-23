@@ -50,7 +50,7 @@ export class Controls {
         event.preventDefault();
         this._moveStick(event);
       }
-      if (event.pointerId === this.activeShot?.pointerId) {
+      if (this.activeShot?.pointerId != null && event.pointerId === this.activeShot.pointerId) {
         event.preventDefault();
         this._moveAim(event);
       }
@@ -241,7 +241,7 @@ export class Controls {
       event.preventDefault();
       this._clearStick();
     }
-    if (this.activeShot?.pointerId === event.pointerId) {
+    if (this.activeShot?.pointerId != null && this.activeShot.pointerId === event.pointerId) {
       event.preventDefault();
       this._moveAim(event);
       this._finishShot(this.enabled);
@@ -250,7 +250,7 @@ export class Controls {
 
   _pointerCancel(event) {
     if (event.pointerId === this.stickPointer) this._clearStick();
-    if (this.activeShot?.pointerId === event.pointerId) this._finishShot(false);
+    if (this.activeShot?.pointerId != null && this.activeShot.pointerId === event.pointerId) this._finishShot(false);
   }
 
   _ignoreKeyboard(event) {
