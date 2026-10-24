@@ -11,12 +11,11 @@
     "releaseTag": "v1.10.0"
   },
   "activeTask": {
-    "title": "PACE-1 真实录像校准候选待试玩",
+    "title": "PACE-1 前后同条件对比完成，待用户试玩",
     "scope": "职业与业余录像逐帧取样，校准球的减速和人物移动节奏；工程验证完成，用户手感待确认。",
-    "nextAction": "用户试玩3063候选；侧边栏宿主RAF恢复前可用系统浏览器访问同一地址。沿本分支处理反馈，确认前不合并。",
+    "nextAction": "用户先看3064左右同步对比，再到3063试玩；按反馈继续此分支，确认前不合并。",
     "blockedBy": [
       "用户玩法与实体手机手感尚未确认。",
-      "Cindy侧边栏原生RAF无回调、截图UnknownVizError；当前播放未验过。",
       "WebRTC真双机与公网延迟未实测；两端需同规则9候选。"
     ],
     "documents": [
@@ -35,8 +34,17 @@
       "pid": 84539,
       "buildId": "41c3a12bbdfe9175",
       "sidebarTab": "PACE-1 玩法测试",
-      "verifiedOn": "2026-10-23",
-      "limitations": "侧边栏已读回当前构建和规则9、无waiting；宿主RAF无回调。独立Chrome操作验证通过，真机手感未测。"
+      "verifiedOn": "2026-10-24",
+      "limitations": "侧边栏已恢复并实测发球与移动；任务未在主窗口展开时预览可能保持1×1，选中本任务再focus即可恢复。真机手感待确认。"
+    },
+    "comparisonPreview": {
+      "url": "http://127.0.0.1:3064/",
+      "pid": 8405,
+      "baseline": "01fed373",
+      "candidate": "6b2724b6",
+      "scope": "相同站位／输入／人物／镜头的真实共享规则重放；不代表旧版整套UI录像；五场景验证通过。",
+      "evidence": "artifacts/pace-compare/RESULT.md",
+      "sidebarTab": "修复前后同步对比"
     }
   },
   "readNext": [
@@ -78,15 +86,15 @@
     "baselineHead": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
     "taskFile": "docs/tasks/PACE-1.md",
     "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/vibrant-thompson",
-    "phase": "工程候选完成，待用户试玩",
-    "stopReason": "真实录像取样、实现、721项测试、构建、服务与独立Chrome操作验证已完成；保留用户验收与侧边栏宿主限制。",
-    "nextAction": "用户试玩3063候选；侧边栏宿主RAF恢复前可用系统浏览器访问同一地址。沿本分支处理反馈，确认前不合并。",
+    "phase": "同条件对比与侧边栏实测完成，待用户试玩",
+    "stopReason": "新增3064同步对比工具，五场景及79项相关测试通过；3063侧边栏发球／移动／减速实测通过，已清观察钩子。",
+    "nextAction": "用户先看3064左右同步对比，再到3063试玩；按反馈继续此分支，确认前不合并。",
     "checkpoint": "docs/PACE-1-REAL-REFERENCE.md",
-    "validation": "实现6b2724b6，Node24完整721/721；88资源构建41c3a12bbdfe9175；服务资源和sw逐字节一致；WebSocket协议9双客户端通过；Chrome键盘/触屏接球通过。侧边栏RAF未运行，用户手感未验收。",
+    "validation": "实现6b2724b6；此前721全量及构建41c3a12bbdfe9175通过；本轮79定向项通过。3064五场景、播放／暂停与截图通过；3063同hitId水平球速13.5487→6.9537m/s，W前进z3.8→2.75875，console无错。用户手感未验收。",
     "scopeBoundary": "只在此工作区修改、测试、启动独立侧边栏游戏候选及本地提交；用户试玩确认前不合并、不发布、不改发布版本号；不使用子代理。"
   },
   "publication": "v1.10.0 已发布：PR#5合并6aecf9a，标签v1.10.0；Pages 152a297fac2bf852、Vercel 31e7cd941732fbc7。人物实验未合并，原P1预览3040未改。"
 }
 -->
 
-PACE-1真实录像校准候选已完成工程验证，3063提供当前构建。侧边栏宿主动画帧异常，系统浏览器已验证可操作。待用户试玩；未推送、未合并、未发布。
+PACE-1同条件前后对比已完成。3064左右同步重放、3063可玩候选均已实际核对；侧边栏已恢复，等待用户玩法与真手机验收。未合并、未发布。
