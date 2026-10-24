@@ -13,7 +13,7 @@
 - 发布标识：[v1.11.0](https://github.com/zcinta0514/rally-badminton/tree/v1.11.0)，准备阶段确定次版本号。
 - 参考职业／业余录像校准球的水平减速、高远节奏与起步制动；有限输入缓存和低点容错改善接球，保留站位与弱触球惩罚。
 - 原地胶配色、人物资产、体力及三打法差异保留。规则协议更新为9，好友两端需更新后重新建房。
-- 上线验证与剩余真机限制见 [发布检查点](RELEASE-1.11.0-CHECKPOINT.md)；部署未完成前不声明线上已更新。
+- 已合并PR [#7](https://github.com/zcinta0514/rally-badminton/pull/7)，合并提交829d005f；Pages构建b9cf9dd3efba46e4、Vercel构建a41043ea6cbc4d21均已实际核验。版本、公告、资源和操作证据及真机限制见 [发布检查点](RELEASE-1.11.0-CHECKPOINT.md)。
 
 ## 1.10.0 地胶配色
 
