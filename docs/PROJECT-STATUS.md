@@ -11,28 +11,28 @@
     "releaseTag": "v1.10.0"
   },
   "activeTask": {
-    "title": "PACE-1 前后同条件对比完成，待用户试玩",
+    "title": "PACE-1 / 1.11.0 最终验证完成，准备合并",
     "scope": "职业与业余录像逐帧取样，校准球的减速和人物移动节奏；工程验证完成，用户手感待确认。",
-    "nextAction": "用户先看3064左右同步对比，再到3063试玩；按反馈继续此分支，确认前不合并。",
+    "nextAction": "用户已授权核实后合并。提交PR，等待Node22/24 CI成功后合并main，核对两处部署。",
     "blockedBy": [
-      "用户玩法与实体手机手感尚未确认。",
-      "WebRTC真双机与公网延迟未实测；两端需同规则9候选。"
+      "远端CI与生产部署尚待完成。",
+      "真手机手感与双真机WebRTC未实测。"
     ],
     "documents": [
       "docs/tasks/PACE-1.md",
-      "docs/PACE-1-REAL-QA.json"
+      "docs/RELEASE-1.11.0-QA.json"
     ],
-    "checkpoint": "docs/PACE-1-REAL-REFERENCE.md"
+    "checkpoint": "docs/RELEASE-1.11.0-CHECKPOINT.md"
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "v1.10.0 已发布：PR#5合并6aecf9a，标签v1.10.0；Pages 152a297fac2bf852、Vercel 31e7cd941732fbc7；线上两处显示正式版 1.10.0 且更新公告实际弹出。",
+    "releaseState": "1.11.0本地721/721与构建通过；线上当前仍1.10.0。",
     "localPreview": {
       "task": "PACE-1",
       "url": "http://127.0.0.1:3063/",
       "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/vibrant-thompson",
-      "pid": 84539,
-      "buildId": "41c3a12bbdfe9175",
+      "pid": 20663,
+      "buildId": "a41043ea6cbc4d21",
       "sidebarTab": "PACE-1 玩法测试",
       "verifiedOn": "2026-10-24",
       "limitations": "侧边栏已恢复并实测发球与移动；任务未在主窗口展开时预览可能保持1×1，选中本任务再focus即可恢复。真机手感待确认。"
@@ -49,7 +49,7 @@
   },
   "readNext": [
     "docs/tasks/PACE-1.md",
-    "docs/PACE-1-REAL-REFERENCE.md"
+    "docs/RELEASE-1.11.0-CHECKPOINT.md"
   ],
   "links": [
     "docs/tasks/PACE-1.md",
@@ -86,15 +86,15 @@
     "baselineHead": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
     "taskFile": "docs/tasks/PACE-1.md",
     "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/vibrant-thompson",
-    "phase": "同条件对比与侧边栏实测完成，待用户试玩",
-    "stopReason": "新增3064同步对比工具，五场景及79项相关测试通过；3063侧边栏发球／移动／减速实测通过，已清观察钩子。",
-    "nextAction": "用户先看3064左右同步对比，再到3063试玩；按反馈继续此分支，确认前不合并。",
-    "checkpoint": "docs/PACE-1-REAL-REFERENCE.md",
-    "validation": "实现6b2724b6；此前721全量及构建41c3a12bbdfe9175通过；本轮79定向项通过。3064五场景、播放／暂停与截图通过；3063同hitId水平球速13.5487→6.9537m/s，W前进z3.8→2.75875，console无错。用户手感未验收。",
-    "scopeBoundary": "只在此工作区修改、测试、启动独立侧边栏游戏候选及本地提交；用户试玩确认前不合并、不发布、不改发布版本号；不使用子代理。"
+    "phase": "最终验证完成，准备PR合并",
+    "stopReason": "用户已授权核实后合并，版本与公告同步，当前没有测试失败。",
+    "nextAction": "用户已授权核实后合并。提交PR，等待Node22/24 CI成功后合并main，核对两处部署。",
+    "checkpoint": "docs/RELEASE-1.11.0-CHECKPOINT.md",
+    "validation": "1.11.0最终721/721、88资源a41043ea6cbc4d21，Pages路径b9cf9dd3efba46e4；服务含sw逐字节一致；浏览器发球/移动/接吊/接杀通过；WebSocket协议9双客户端一致。远端CI待验。",
+    "scopeBoundary": "用户授权最终核实后合并并核对现有main自动部署；不改人物并行成果，不使用子代理。"
   },
-  "publication": "v1.10.0 已发布：PR#5合并6aecf9a，标签v1.10.0；Pages 152a297fac2bf852、Vercel 31e7cd941732fbc7。人物实验未合并，原P1预览3040未改。"
+  "publication": "当前线上1.10.0；本轮1.11.0准备合并，尚未核验生产。"
 }
 -->
 
-PACE-1同条件前后对比已完成。3064左右同步重放、3063可玩候选均已实际核对；侧边栏已恢复，等待用户玩法与真手机验收。未合并、未发布。
+用户已授权最终核实后合并。1.11.0本地验证完成，远端CI及生产部署待核验。

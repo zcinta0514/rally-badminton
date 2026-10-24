@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-24",
+  "version": "1.11.0",
+  "baseline": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
+  "gameplayImplementation": "6b2724b6",
+  "authorization": "User explicitly requested merge after final verification; no claim of real-phone acceptance.",
+  "tests": {
+    "node24Local": {
+      "passed": 721,
+      "failed": 0
+    },
+    "remoteCI": "pending"
+  },
+  "build": {
+    "root": "a41043ea6cbc4d21",
+    "pages": "b9cf9dd3efba46e4",
+    "assets": 88
+  },
+  "localService": {
+    "port": 3063,
+    "pid": 20663,
+    "allResourceBytesMatch": true,
+    "websocketRules": [
+      9,
+      9
+    ],
+    "oldRulesRejected": true
+  },
+  "browser": {
+    "ok": true,
+    "checks": [
+      "Product version1.11.0 and new notice ID",
+      "Menu to AI match",
+      "Keyboard serve and movement",
+      "Shuttle deceleration in one flight",
+      "Single keyboard release receives drop",
+      "Touch button receives smash"
+    ],
+    "pageErrors": [],
+    "build": "a41043ea6cbc4d21",
+    "environment": "Headless Chrome software WebGL,844x390",
+    "limitation": "About15fps software renderer is not real-device performance evidence"
+  },
+  "athleteSha256": "2bd358cca2e5a963c4de5da6d80e576920d15d33b19143b94e509608dc8b242f",
+  "pending": [
+    "Remote CI",
+    "Pages and Vercel actual deployment",
+    "Actual phone feel and dual-device WebRTC"
+  ],
+  "publication": {
+    "merged": false,
+    "tag": null,
+    "pages": "pending",
+    "vercel": "pending"
+  }
+}

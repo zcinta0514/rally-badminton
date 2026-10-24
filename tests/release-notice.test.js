@@ -15,6 +15,6 @@ test('player-facing release notice is embedded in root and Pages builds', async 
   const pages = await createPwaBuild({basePath: '/rally-badminton/'});
   assert.equal(JSON.stringify(config(root).releaseNotice), JSON.stringify(RELEASE_NOTICE));
   assert.equal(JSON.stringify(config(pages).releaseNotice), JSON.stringify(RELEASE_NOTICE));
-  assert.equal(config(root).releaseNotice.id, '2026-10-15-court-palettes');
+  assert.equal(config(root).releaseNotice.id, '2026-10-24-gameplay-rhythm');
   assert.ok(config(root).releaseNotice.items.length >= 2);
 });
