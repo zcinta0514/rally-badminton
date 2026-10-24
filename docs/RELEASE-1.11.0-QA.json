@@ -9,7 +9,13 @@
       "passed": 721,
       "failed": 0
     },
-    "remoteCI": "pending"
+    "remoteCI": {
+      "pushRun": 40067552841,
+      "pullRequestRun": 40067600344,
+      "mainRun": 40067671118,
+      "node22": "success",
+      "node24": "success"
+    }
   },
   "build": {
     "root": "a41043ea6cbc4d21",
@@ -43,14 +49,89 @@
   },
   "athleteSha256": "2bd358cca2e5a963c4de5da6d80e576920d15d33b19143b94e509608dc8b242f",
   "pending": [
-    "Remote CI",
-    "Pages and Vercel actual deployment",
-    "Actual phone feel and dual-device WebRTC"
+    "Actual phone feel, sustained hardware frame rate, and real dual-device WebRTC"
   ],
   "publication": {
-    "merged": false,
-    "tag": null,
-    "pages": "pending",
-    "vercel": "pending"
+    "merged": true,
+    "pages": {
+      "deploymentId": 7294723651,
+      "build": "b9cf9dd3efba46e4",
+      "liveVerified": true
+    },
+    "vercel": {
+      "deploymentId": 7294724420,
+      "build": "a41043ea6cbc4d21",
+      "liveVerified": true
+    }
+  },
+  "sourceHead": "ce1880c0e046b85fba797cd27a62e01b3531d644",
+  "mergeCommit": "829d005f545058062fdcc5a5c6cea357f4a24a4d",
+  "pr": "https://github.com/zcinta0514/rally-badminton/pull/7",
+  "tag": {
+    "name": "v1.11.0",
+    "annotated": "32d32b52379678f7428516a4bfdde49b26e0877a",
+    "target": "829d005f545058062fdcc5a5c6cea357f4a24a4d"
+  },
+  "workflows": {
+    "pages": {
+      "run": 40067671165,
+      "conclusion": "success"
+    },
+    "mainTests": {
+      "run": 40067671118,
+      "conclusion": "success"
+    }
+  },
+  "live": {
+    "date": "2026-10-24T05:50:04.755Z",
+    "method": "Fresh headless Chrome contexts; seeded updater post-reload marker to exercise actual notice UI",
+    "sites": [
+      {
+        "name": "pages",
+        "url": "https://zcinta0514.github.io/rally-badminton/",
+        "expectedBuild": "b9cf9dd3efba46e4",
+        "errors": [],
+        "hashes": {
+          "shared/game.js": "95f086907b824decf010bf581f4f7488804e56118eb0628013a1cd709c5b45ec",
+          "shared/shuttle-flight.js": "a9cc2bccd4aaebcac80a5586a8a7f4bba932394f7be91d1e859b1e1053474767",
+          "src/network-playback.js": "597d13796bbe7bb73abe5ae38e058b9bf8d818b6022cda32bae831e9cba8ebe6",
+          "src/models/athlete.glb": "2bd358cca2e5a963c4de5da6d80e576920d15d33b19143b94e509608dc8b242f"
+        },
+        "notice": "球路节奏与接球更新",
+        "runtime": {
+          "build": "b9cf9dd3efba46e4",
+          "rules": 9,
+          "waiting": false
+        },
+        "movement": {
+          "before": 3.8,
+          "after": 3.3480499999999993
+        },
+        "ok": true
+      },
+      {
+        "name": "vercel",
+        "url": "https://kaipai-rally.vercel.app/",
+        "expectedBuild": "a41043ea6cbc4d21",
+        "errors": [],
+        "hashes": {
+          "shared/game.js": "95f086907b824decf010bf581f4f7488804e56118eb0628013a1cd709c5b45ec",
+          "shared/shuttle-flight.js": "a9cc2bccd4aaebcac80a5586a8a7f4bba932394f7be91d1e859b1e1053474767",
+          "src/network-playback.js": "597d13796bbe7bb73abe5ae38e058b9bf8d818b6022cda32bae831e9cba8ebe6",
+          "src/models/athlete.glb": "2bd358cca2e5a963c4de5da6d80e576920d15d33b19143b94e509608dc8b242f"
+        },
+        "notice": "球路节奏与接球更新",
+        "runtime": {
+          "build": "a41043ea6cbc4d21",
+          "rules": 9,
+          "waiting": false
+        },
+        "movement": {
+          "before": 3.8,
+          "after": 3.2035499999999995
+        },
+        "ok": true
+      }
+    ]
   }
 }

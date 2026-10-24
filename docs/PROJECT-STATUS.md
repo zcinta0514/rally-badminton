@@ -6,17 +6,16 @@
   "asOf": "2026-10-24",
   "baseline": {
     "branch": "main",
-    "head": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
-    "originMain": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
-    "releaseTag": "v1.10.0"
+    "head": "829d005f545058062fdcc5a5c6cea357f4a24a4d",
+    "originMain": "829d005f545058062fdcc5a5c6cea357f4a24a4d",
+    "releaseTag": "v1.11.0"
   },
   "activeTask": {
-    "title": "PACE-1 / 1.11.0 最终验证完成，准备合并",
-    "scope": "职业与业余录像逐帧取样，校准球的减速和人物移动节奏；工程验证完成，用户手感待确认。",
-    "nextAction": "用户已授权核实后合并。提交PR，等待Node22/24 CI成功后合并main，核对两处部署。",
+    "title": "PACE-1 / 1.11.0 已合并并核验上线",
+    "scope": "用户授权最终核实后合并；PR#7已合并，两处生产实际版本、公告、资源及操作已核验。",
+    "nextAction": "本轮发布完成；后续收集真实手机手感与双真机联机反馈。",
     "blockedBy": [
-      "远端CI与生产部署尚待完成。",
-      "真手机手感与双真机WebRTC未实测。"
+      "无合并或部署阻塞；真实手机手感、长时硬件帧率与WebRTC双真机尚未实测。"
     ],
     "documents": [
       "docs/tasks/PACE-1.md",
@@ -26,7 +25,7 @@
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "1.11.0本地721/721与构建通过；线上当前仍1.10.0。",
+    "releaseState": "v1.11.0已发布：PR#7合并829d005f，标签v1.11.0；Pages b9cf9dd3efba46e4、Vercel a41043ea6cbc4d21。两处正式版、公告、关键资源哈希与发球/移动/配色操作实际核验通过。",
     "localPreview": {
       "task": "PACE-1",
       "url": "http://127.0.0.1:3063/",
@@ -52,6 +51,8 @@
     "docs/RELEASE-1.11.0-CHECKPOINT.md"
   ],
   "links": [
+    "docs/RELEASE-1.11.0-QA.json",
+    "docs/RELEASE-1.11.0-CHECKPOINT.md",
     "docs/tasks/PACE-1.md",
     "docs/PACE-1-REAL-QA.json",
     "docs/PACE-1-REAL-REFERENCE.md",
@@ -83,18 +84,18 @@
   "handoff": {
     "taskId": "PACE-1",
     "branch": "cindy/vibrant-thompson",
-    "baselineHead": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
+    "baselineHead": "829d005f545058062fdcc5a5c6cea357f4a24a4d",
     "taskFile": "docs/tasks/PACE-1.md",
     "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/vibrant-thompson",
-    "phase": "最终验证完成，准备PR合并",
-    "stopReason": "用户已授权核实后合并，版本与公告同步，当前没有测试失败。",
-    "nextAction": "用户已授权核实后合并。提交PR，等待Node22/24 CI成功后合并main，核对两处部署。",
+    "phase": "已合并、已部署并核验",
+    "stopReason": "本轮用户授权目标已完成。发布记录回填，不修改玩法。",
+    "nextAction": "本轮发布完成；后续收集真实手机手感与双真机联机反馈。",
     "checkpoint": "docs/RELEASE-1.11.0-CHECKPOINT.md",
-    "validation": "1.11.0最终721/721、88资源a41043ea6cbc4d21，Pages路径b9cf9dd3efba46e4；服务含sw逐字节一致；浏览器发球/移动/接吊/接杀通过；WebSocket协议9双客户端一致。远端CI待验。",
+    "validation": "最终本地721/721与构建通过；PR及main Node22/24 CI成功。Pages与Vercel实际1.11.0、更新公告和四关键资源哈希一致，线上发球/移动/配色通过，无页面错误。真实手机与双真机仍待反馈。",
     "scopeBoundary": "用户授权最终核实后合并并核对现有main自动部署；不改人物并行成果，不使用子代理。"
   },
-  "publication": "当前线上1.10.0；本轮1.11.0准备合并，尚未核验生产。"
+  "publication": "v1.11.0已发布：PR#7合并829d005f，标签v1.11.0；Pages b9cf9dd3efba46e4、Vercel a41043ea6cbc4d21。两处正式版、公告、关键资源哈希与发球/移动/配色操作实际核验通过。"
 }
 -->
 
-用户已授权最终核实后合并。1.11.0本地验证完成，远端CI及生产部署待核验。
+v1.11.0已发布：PR#7合并829d005f，标签v1.11.0；Pages b9cf9dd3efba46e4、Vercel a41043ea6cbc4d21。两处正式版、公告、关键资源哈希与发球/移动/配色操作实际核验通过。
