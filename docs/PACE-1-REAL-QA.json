@@ -1,0 +1,2117 @@
+{
+  "task": "PACE-1",
+  "date": "2026-10-23",
+  "branch": "cindy/vibrant-thompson",
+  "baseline": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
+  "priorCandidate": "ae123e37",
+  "packageVersion": "1.10.0",
+  "rulesVersion": 9,
+  "source": {
+    "datasetPage": "https://hackmd.io/Nf8Rh1NrSrqNUzmO0sQKZw",
+    "professionalMatch": "2020 All England final: Viktor Axelsen vs Chou Tien Chen",
+    "amateurIdentity": "Dataset Amateur category only; identities and exact skill unknown",
+    "license": "Reference only; no redistribution of broadcast/video",
+    "videos": [
+      {
+        "file": "2_16_12.mp4",
+        "sha256": "d7ef311e797bef34d8dc5a6dafadbd196aaf5831ff678c10871058f01b75fb30",
+        "bytes": 18196123
+      },
+      {
+        "file": "2_18_14.mp4",
+        "sha256": "e76277c477ebf887de15778585d07fc27dbfb0df926220ad40e499afba900112",
+        "bytes": 28443140
+      },
+      {
+        "file": "1_21_12.mp4",
+        "sha256": "3136a439825525f9c25270c438341ba86bbdbf319e1db60dbc7df855edbb570b",
+        "bytes": 9880594
+      },
+      {
+        "file": "2_19_14.mp4",
+        "sha256": "fe976f5545b4b23c7e1cf4a58442e9fe77cb501495ba1e016dd55ec7f60e4b47",
+        "bytes": 21102597
+      },
+      {
+        "file": "2_14_08.mp4",
+        "sha256": "25d2aa9940937a5d57503fbd86164d41b5c26f192aee43a2d4b51e2cdcfa8c9c",
+        "bytes": 7347487
+      },
+      {
+        "file": "Amateur/match2/1_03_00.mp4",
+        "sha256": "5d48be0d6272602c3338c539acfa24d2e9dec188baacb9918fb6c3ca6989262f",
+        "bytes": 10266701
+      },
+      {
+        "file": "Amateur/match1/1_02_04.mp4",
+        "sha256": "0a2e47c0572d339a37d30cda5263353c87f4aa93eeef136720cabdc4698b1a0b",
+        "bytes": 14547380
+      }
+    ]
+  },
+  "manualIntervals": [
+    {
+      "clip": "Professional/match15/2_14_08",
+      "fps": 25,
+      "frames": [
+        7,
+        39
+      ],
+      "seconds": 1.28,
+      "kind": "high serve to overhead return"
+    },
+    {
+      "clip": "Professional/match15/2_14_08",
+      "fps": 25,
+      "frames": [
+        39,
+        59
+      ],
+      "seconds": 0.8,
+      "kind": "fast downward overhead to return; subtype uncertain"
+    },
+    {
+      "clip": "Professional/match15/2_14_08",
+      "fps": 25,
+      "frames": [
+        59,
+        85
+      ],
+      "seconds": 1.04,
+      "kind": "rally exchange"
+    },
+    {
+      "clip": "Professional/match15/2_14_08",
+      "fps": 25,
+      "frames": [
+        85,
+        103
+      ],
+      "seconds": 0.72,
+      "kind": "front-court reply"
+    },
+    {
+      "clip": "Professional/match15/2_14_08",
+      "fps": 25,
+      "frames": [
+        103,
+        133
+      ],
+      "seconds": 1.2,
+      "kind": "low lift to overhead reply"
+    },
+    {
+      "clip": "Professional/match15/2_18_14",
+      "fps": 25,
+      "frames": [
+        472,
+        487
+      ],
+      "seconds": 0.6,
+      "kind": "smash to diving defense"
+    },
+    {
+      "clip": "Amateur/match1/1_02_04",
+      "fps": 30,
+      "frames": [
+        6,
+        40,
+        71,
+        110,
+        155,
+        187
+      ],
+      "seconds": [
+        1.1333,
+        1.0333,
+        1.3,
+        1.5,
+        1.0667
+      ],
+      "kind": "high-arc / overhead exchanges; subtypes uncertain"
+    }
+  ],
+  "intervalUncertainty": "Approx +/-2 frames per contact endpoint: interval bound +/-0.16s at25fps; +/-0.133s at30fps. Manual estimates, not certified motion capture.",
+  "decelerationObservation": {
+    "clip": "Professional/match15/2_18_14",
+    "samples": [
+      {
+        "frames": [
+          473,
+          476
+        ],
+        "pixels": [
+          [
+            666,
+            100
+          ],
+          [
+            567,
+            225
+          ]
+        ],
+        "pixelsPerSecondApprox": 1329
+      },
+      {
+        "frames": [
+          483,
+          486
+        ],
+        "pixels": [
+          [
+            459,
+            408
+          ],
+          [
+            428,
+            477
+          ]
+        ],
+        "pixelsPerSecondApprox": 630
+      }
+    ],
+    "limitation": "Image plane speed, not world m/s; perspective and vertical motion prohibit unique 3D drag fit."
+  },
+  "groundMovement": {
+    "clip": "Professional/match15/2_14_08",
+    "fps": 25,
+    "frames": [
+      90,
+      100
+    ],
+    "courtXYmetres": [
+      [
+        -0.29,
+        10.12
+      ],
+      [
+        -0.83,
+        8.97
+      ]
+    ],
+    "distanceMetresApprox": 1.27,
+    "durationSeconds": 0.4,
+    "averageMetresPerSecondApprox": 3.18,
+    "method": "Apple Vision ankle midpoint, court floor homography, feet overlay manually checked",
+    "engineeringToleranceMetres": 0.3,
+    "limitation": "Not COM or statistical CI; airborne feet and homography error; cannot uniquely determine acceleration or maximum sprint speed."
+  },
+  "model": {
+    "horizontal": "dv/dt=-0.2*|v_horizontal|*v_horizontal, analytical solution",
+    "vertical": "gravity-only 9.81m/s2",
+    "acceleration": 18,
+    "braking": 26,
+    "limitation": "Rhythm approximation. Horizontal drag coefficient and acceleration are engineering calibration choices, not uniquely measured physiological/aerodynamic constants. Fixed game fixtures are not exact 3D reconstruction of these clips. Contact-to-contact video intervals must not be equated to time-to-floor."
+  },
+  "before": {
+    "rulesVersion": 8,
+    "flights": [
+      {
+        "role": "balanced",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.6019,
+        "initialVelocity": {
+          "vx": -1.0612,
+          "vy": 7.1831,
+          "vz": -5.7931
+        },
+        "apex": 3.7098,
+        "netHeight": 3.625,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.099,
+          "low0_7": 1.5156
+        }
+      },
+      {
+        "role": "balanced",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.5061,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 5.661,
+          "vz": -7.1809
+        },
+        "apex": 4.2334,
+        "netHeight": 4.1273,
+        "x": 0,
+        "z": -5.615,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.0682,
+          "low0_7": 1.4258
+        }
+      },
+      {
+        "role": "balanced",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.1737,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.5417,
+          "vz": -5.6446
+        },
+        "apex": 3.2393,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.425,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 0.5575,
+          "low0_7": 1.0805
+        }
+      },
+      {
+        "role": "balanced",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.5865,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -1.5565,
+          "vz": -16.7097
+        },
+        "apex": 2.6,
+        "netHeight": 1.6406,
+        "x": 0,
+        "z": -4.6,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": null,
+          "low0_7": 0.4836
+        }
+      },
+      {
+        "role": "swift",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.6019,
+        "initialVelocity": {
+          "vx": -1.0612,
+          "vy": 7.1831,
+          "vz": -5.7931
+        },
+        "apex": 3.7098,
+        "netHeight": 3.625,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.099,
+          "low0_7": 1.5156
+        }
+      },
+      {
+        "role": "swift",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.5007,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 5.6283,
+          "vz": -7.0944
+        },
+        "apex": 4.2146,
+        "netHeight": 4.0902,
+        "x": 0,
+        "z": -5.4466,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.061,
+          "low0_7": 1.4202
+        }
+      },
+      {
+        "role": "swift",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.2088,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.7785,
+          "vz": -5.4097
+        },
+        "apex": 3.3277,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.3395,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 0.6231,
+          "low0_7": 1.1171
+        }
+      },
+      {
+        "role": "swift",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.67,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -0.5945,
+          "vz": -14.4214
+        },
+        "apex": 2.6,
+        "netHeight": 1.7479,
+        "x": 0,
+        "z": -4.462,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": null,
+          "low0_7": 0.5647
+        }
+      },
+      {
+        "role": "power",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.5403,
+        "initialVelocity": {
+          "vx": -1.1037,
+          "vy": 6.854,
+          "vz": -6.0248
+        },
+        "apex": 3.4743,
+        "netHeight": 3.4024,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 0.9928,
+          "low0_7": 1.4507
+        }
+      },
+      {
+        "role": "power",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.4602,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 5.382,
+          "vz": -7.6754
+        },
+        "apex": 4.0763,
+        "netHeight": 3.9949,
+        "x": 0,
+        "z": -6.0081,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.0061,
+          "low0_7": 1.3783
+        }
+      },
+      {
+        "role": "power",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.1968,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.6976,
+          "vz": -5.4881
+        },
+        "apex": 3.2969,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.368,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 0.6013,
+          "low0_7": 1.1045
+        }
+      },
+      {
+        "role": "power",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.5583,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -1.9188,
+          "vz": -18.0482
+        },
+        "apex": 2.6,
+        "netHeight": 1.64,
+        "x": 0,
+        "z": -4.876,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": null,
+          "low0_7": 0.4568
+        }
+      }
+    ],
+    "movement": [
+      {
+        "role": "balanced",
+        "topSpeed": 4.6,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.1583,
+        "reverseZero": 0.125,
+        "reverseFull": 0.275,
+        "stopDistance": 0.2596,
+        "distanceAtPoint4": 1.5062
+      },
+      {
+        "role": "swift",
+        "topSpeed": 5.35,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.1583,
+        "reverseZero": 0.125,
+        "reverseFull": 0.2833,
+        "stopDistance": 0.3055,
+        "distanceAtPoint4": 1.7472
+      },
+      {
+        "role": "power",
+        "topSpeed": 4.05,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.1583,
+        "reverseZero": 0.1333,
+        "reverseFull": 0.2833,
+        "stopDistance": 0.2371,
+        "distanceAtPoint4": 1.3152
+      }
+    ],
+    "receives": {
+      "dropTimely": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0.42,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 1.1296,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": 0.9167,
+        "eligibleWindow": 0.0333,
+        "minDistance": 1.1796,
+        "contactAt": 0.95,
+        "contactHeight": 1.3008,
+        "quality": {
+          "score": 0.6910134690537241,
+          "risk": 0.30898653094627593,
+          "reason": "跑动中击球，先减速更稳 · 极限够球，提前靠近更稳",
+          "reasonCode": "movement",
+          "spread": 0.6412025112842616,
+          "factors": {
+            "movement": 0.9082125603864735,
+            "stretch": 0.4897846879576201,
+            "lowContact": 0,
+            "lateContact": 0,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "y": 0,
+          "z": -5.253252264311415,
+          "time": 1.2900297506870357,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 1.5331,
+          "speed": 4.2833
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "dropScramble": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.55,
+          "pressAt": 0.82,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 1.1296,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": 1.0917,
+        "eligibleWindow": 0.0083,
+        "minDistance": 1.4263,
+        "contactAt": 1.1,
+        "contactHeight": 0.2907,
+        "quality": {
+          "score": 0.17175063097207222,
+          "risk": 0.8282493690279278,
+          "reason": "击球不稳，存在下网风险 · 触点偏低，提早接球 · 极限够球，提前靠近更稳",
+          "reasonCode": "net-risk",
+          "spread": 2.0554212429131216,
+          "factors": {
+            "movement": 1,
+            "stretch": 0.8966157624733134,
+            "lowContact": 0.9840582027787408,
+            "lateContact": 0.8704633628899598,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "y": 1.2269361876063023,
+          "z": 0,
+          "time": 0.22997429052246313,
+          "event": "net",
+          "out": false,
+          "side": null,
+          "winner": 1
+        },
+        "player": {
+          "x": 0,
+          "z": 2.6038,
+          "speed": 4.6
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "dropWeakContact": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.35,
+          "pressAt": 0.72,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 1.1296,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": 1,
+        "eligibleWindow": 0.0333,
+        "minDistance": 1.1803,
+        "contactAt": 1.0333,
+        "contactHeight": 0.7669,
+        "quality": {
+          "score": 0.5477314489647456,
+          "risk": 0.45226855103525443,
+          "reason": "跑动中击球，先减速更稳 · 极限够球，提前靠近更稳",
+          "reasonCode": "movement",
+          "spread": 0.9829486947899082,
+          "factors": {
+            "movement": 1,
+            "stretch": 0.48668672524000367,
+            "lowContact": 0.2733087785233688,
+            "lateContact": 0.34168575035486026,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "y": 0,
+          "z": -4.951968606568215,
+          "time": 1.2277484068591096,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 1.9904,
+          "speed": 4.6
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "dropLate": {
+        "received": false,
+        "failure": "not-in-reach",
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.66,
+          "pressAt": 0.9,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 1.1296,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 1.8787,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 0,
+          "z": 2.9871,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      },
+      "smashPositioned": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "smash",
+          "startZ": 3.6,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0.24,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": 0.4333,
+        "eligibleWindow": 0.0083,
+        "minDistance": 1.3994,
+        "contactAt": 0.4417,
+        "contactHeight": 1.0942,
+        "quality": {
+          "score": 0.7542656475199152,
+          "risk": 0.2457343524800848,
+          "reason": "极限够球，提前靠近更稳",
+          "reasonCode": "stretch",
+          "spread": 0.50209523400607,
+          "factors": {
+            "movement": 0,
+            "stretch": 0.9156344466563499,
+            "lowContact": 0,
+            "lateContact": 0.047933727183961536,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "y": 0,
+          "z": -4.961260039992204,
+          "time": 1.294995408635053,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 3.6,
+          "speed": 0
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "smashEarly": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "smash",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": 0.5083,
+        "eligibleWindow": 0.025,
+        "minDistance": 1.1185,
+        "contactAt": 0.5333,
+        "contactHeight": 0.4444,
+        "quality": {
+          "score": 0.571683728205276,
+          "risk": 0.428316271794724,
+          "reason": "触点偏低，提早接球 · 极限够球，提前靠近更稳",
+          "reasonCode": "lowContact",
+          "spread": 1.4964945543957882,
+          "factors": {
+            "movement": 0,
+            "stretch": 0.44746737447468177,
+            "lowContact": 0.7545941909886571,
+            "lateContact": 0.723626654839099,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "y": 0,
+          "z": -3.953505445604211,
+          "time": 1.197699587268077,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 4.8,
+          "speed": 0
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "smashMisplaced": {
+        "received": false,
+        "failure": "not-in-reach",
+        "input": {
+          "type": "smash",
+          "startZ": 6.3,
+          "startX": 2.2,
+          "reaction": 0.16,
+          "pressAt": 0.24,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 3.1216,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 2.2,
+          "z": 6.3,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      }
+    }
+  },
+  "after": {
+    "rulesVersion": 9,
+    "flights": [
+      {
+        "role": "balanced",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.8019,
+        "initialVelocity": {
+          "vx": -2.7994,
+          "vy": 8.239,
+          "vz": -15.2815
+        },
+        "apex": 4.5398,
+        "netHeight": 3.2707,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.391,
+          "low0_7": 1.7246
+        }
+      },
+      {
+        "role": "balanced",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.5861,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 6.1405,
+          "vz": -24.2648
+        },
+        "apex": 4.5218,
+        "netHeight": 4.2176,
+        "x": 0,
+        "z": -5.615,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.1737,
+          "low0_7": 1.5086
+        }
+      },
+      {
+        "role": "balanced",
+        "type": "drop",
+        "serving": false,
+        "duration": 0.9825,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 2.1729,
+          "vz": -14.0569
+        },
+        "apex": 2.8406,
+        "netHeight": 1.9373,
+        "x": 0,
+        "z": -1.425,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": null,
+          "low0_7": 0.8821
+        }
+      },
+      {
+        "role": "balanced",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.5865,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -1.5565,
+          "vz": -51.9989
+        },
+        "apex": 2.6,
+        "netHeight": 2.1745,
+        "x": 0,
+        "z": -4.6,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": null,
+          "low0_7": 0.4836
+        }
+      },
+      {
+        "role": "swift",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.8019,
+        "initialVelocity": {
+          "vx": -2.7994,
+          "vy": 8.239,
+          "vz": -15.2815
+        },
+        "apex": 4.5398,
+        "netHeight": 3.2707,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.391,
+          "low0_7": 1.7246
+        }
+      },
+      {
+        "role": "swift",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.5807,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 6.1084,
+          "vz": -23.4362
+        },
+        "apex": 4.5018,
+        "netHeight": 4.2368,
+        "x": 0,
+        "z": -5.4465,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.1667,
+          "low0_7": 1.5031
+        }
+      },
+      {
+        "role": "swift",
+        "type": "drop",
+        "serving": false,
+        "duration": 0.9081,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 1.5914,
+          "vz": -14.8568
+        },
+        "apex": 2.7291,
+        "netHeight": 1.7208,
+        "x": 0,
+        "z": -1.3395,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": null,
+          "low0_7": 0.8054
+        }
+      },
+      {
+        "role": "swift",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.67,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -0.5945,
+          "vz": -44.0768
+        },
+        "apex": 2.6,
+        "netHeight": 2.2654,
+        "x": 0,
+        "z": -4.462,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": null,
+          "low0_7": 0.5647
+        }
+      },
+      {
+        "role": "power",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.7326,
+        "initialVelocity": {
+          "vx": -2.9114,
+          "vy": 7.8751,
+          "vz": -15.8927
+        },
+        "apex": 4.2409,
+        "netHeight": 3.0904,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.2955,
+          "low0_7": 1.6524
+        }
+      },
+      {
+        "role": "power",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.5372,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 5.8484,
+          "vz": -27.3505
+        },
+        "apex": 4.3433,
+        "netHeight": 4.0072,
+        "x": 0,
+        "z": -6.008,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": 1.1097,
+          "low0_7": 1.458
+        }
+      },
+      {
+        "role": "power",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.033,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 2.55,
+          "vz": -13.1632
+        },
+        "apex": 2.9314,
+        "netHeight": 2.0038,
+        "x": 0,
+        "z": -1.368,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": null,
+          "low0_7": 0.9344
+        }
+      },
+      {
+        "role": "power",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.4875,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -2.9421,
+          "vz": -66.6891
+        },
+        "apex": 2.6,
+        "netHeight": 2.1042,
+        "x": 0,
+        "z": -4.876,
+        "event": "landing",
+        "descendingContactTimes": {
+          "high3_05": null,
+          "low0_7": 0.391
+        }
+      }
+    ],
+    "movement": [
+      {
+        "role": "balanced",
+        "topSpeed": 4.6,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.2583,
+        "reverseZero": 0.1833,
+        "reverseFull": 0.4333,
+        "stopDistance": 0.3879,
+        "distanceAtPoint4": 1.2712
+      },
+      {
+        "role": "swift",
+        "topSpeed": 5.35,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.2583,
+        "reverseZero": 0.1833,
+        "reverseFull": 0.4333,
+        "stopDistance": 0.4566,
+        "distanceAtPoint4": 1.4709
+      },
+      {
+        "role": "power",
+        "topSpeed": 4.05,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.2667,
+        "reverseZero": 0.1833,
+        "reverseFull": 0.45,
+        "stopDistance": 0.3542,
+        "distanceAtPoint4": 1.1008
+      }
+    ],
+    "receives": {
+      "dropTimely": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0.42,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.9745,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": 0.8333,
+        "eligibleWindow": 0.0333,
+        "minDistance": 1.2056,
+        "contactAt": 0.8633,
+        "contactHeight": 0.7673,
+        "quality": {
+          "score": 0.5442251761189768,
+          "risk": 0.4557748238810232,
+          "reason": "跑动中击球，先减速更稳 · 极限够球，提前靠近更稳",
+          "reasonCode": "movement",
+          "spread": 0.9917748216731394,
+          "factors": {
+            "movement": 1,
+            "stretch": 0.5211213649927947,
+            "lowContact": 0.272614223527081,
+            "lateContact": 0.30877231791159654,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "z": -5.371252317997209,
+          "y": 0,
+          "vx": 0,
+          "vz": -2.3619771058667234,
+          "vy": -7.983646862656915,
+          "time": 1.521741537317773,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 2.1488,
+          "speed": 4.6
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "dropScramble": {
+        "received": false,
+        "failure": "not-in-reach",
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.55,
+          "pressAt": 0.82,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.9745,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 2.2635,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 0,
+          "z": 3.4138,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      },
+      "dropWeakContact": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.35,
+          "pressAt": 0.72,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.9745,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": 0.9333,
+        "eligibleWindow": 0.0083,
+        "minDistance": 1.4131,
+        "contactAt": 0.9393,
+        "contactHeight": 0.2559,
+        "quality": {
+          "score": 0.18251615816058486,
+          "risk": 0.8174838418394151,
+          "reason": "击球不稳，存在下网风险 · 触点偏低，提早接球 · 极限够球，提前靠近更稳",
+          "reasonCode": "net-risk",
+          "spread": 2.0211743796286825,
+          "factors": {
+            "movement": 1,
+            "stretch": 0.8549602893728175,
+            "lowContact": 1,
+            "lateContact": 0.8449635412655155,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "z": 0,
+          "y": 1.250980836940953,
+          "vx": 0,
+          "vz": -7.253202985537848,
+          "vy": 5.555782912718031,
+          "time": 0.15494363436639286,
+          "event": "net",
+          "out": false,
+          "side": null,
+          "winner": 1
+        },
+        "player": {
+          "x": 0,
+          "z": 2.6471,
+          "speed": 4.6
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "dropLate": {
+        "received": false,
+        "failure": "not-in-reach",
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.66,
+          "pressAt": 0.9,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.9745,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 2.8002,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 0,
+          "z": 3.9504,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      },
+      "smashPositioned": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "smash",
+          "startZ": 3.6,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0.24,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": 0.3167,
+        "eligibleWindow": 0.0083,
+        "minDistance": 1.4406,
+        "contactAt": 0.3217,
+        "contactHeight": 1.7744,
+        "quality": {
+          "score": 0.7696401810106568,
+          "risk": 0.23035981898934316,
+          "reason": "极限够球，提前靠近更稳",
+          "reasonCode": "stretch",
+          "spread": 0.46937077386620596,
+          "factors": {
+            "movement": 0,
+            "stretch": 0.885999303805166,
+            "lowContact": 0,
+            "lateContact": 0,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "z": -5.272007758120335,
+          "y": 0,
+          "vx": 0,
+          "vz": -2.7793733282223165,
+          "vy": -8.121591095550457,
+          "time": 1.393458842944608,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 3.6,
+          "speed": 0
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "smashEarly": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "smash",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 1.4967,
+        "contactAt": 0.43,
+        "contactHeight": 1.1163,
+        "quality": {
+          "score": 0.7355099032476725,
+          "risk": 0.2644900967523275,
+          "reason": "极限够球，提前靠近更稳",
+          "reasonCode": "stretch",
+          "spread": 0.5425926746310068,
+          "factors": {
+            "movement": 0,
+            "stretch": 0.9995675401462203,
+            "lowContact": 0,
+            "lateContact": 0.028765851964438763,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "z": -5.222915645188484,
+          "y": 0,
+          "vx": 0,
+          "vz": -2.903508775185562,
+          "vy": -7.716571695079392,
+          "time": 1.4087006028263238,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 4.8,
+          "speed": 0
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "smashMisplaced": {
+        "received": false,
+        "failure": "not-in-reach",
+        "input": {
+          "type": "smash",
+          "startZ": 6.3,
+          "startX": 2.2,
+          "reaction": 0.16,
+          "pressAt": 0.24,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 2.9315,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 2.2,
+          "z": 6.3,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      }
+    }
+  },
+  "validation": {
+    "tests": {
+      "passed": 721,
+      "failed": 0,
+      "node": "24.21.0"
+    },
+    "build": "41c3a12bbdfe9175",
+    "assetCount": 88,
+    "service": {
+      "build": "41c3a12bbdfe9175",
+      "resources": [
+        {
+          "url": "/",
+          "sha256": "21f9e874fb037aec26c2e39f38c7d47fc498b74dfeb2e79b043530d4e85801fb"
+        },
+        {
+          "url": "/manifest.webmanifest",
+          "sha256": "45ba3377fb97519af9931c3b6f7905a102d47a87848020fa4de26d644790808f"
+        },
+        {
+          "url": "/src/analytics-frame.html",
+          "sha256": "91540095b46c4106c180854d5ade28a353c03892cf40ed44845dfb50a660a1df"
+        },
+        {
+          "url": "/src/analytics-frame.js",
+          "sha256": "21480614402245f317dbbfa459620d5e488fb6391950b77169dcc1a227e58bd3"
+        },
+        {
+          "url": "/src/analytics.js",
+          "sha256": "2ffd1ef148e6c358483c93bf12e44af28f66f78bc8d2a8f3060be0c19a18c8a8"
+        },
+        {
+          "url": "/src/arena-audio.js",
+          "sha256": "a04ae657e43aebafd21c77420dfcb36a4d16d740774389fd082e525697a3bb96"
+        },
+        {
+          "url": "/src/arena-feedback.js",
+          "sha256": "c15e6d760f407905d8abfca540aeb73f785da1cfdb748e3debf03dd63b1efe39"
+        },
+        {
+          "url": "/src/arena-preferences.js",
+          "sha256": "74ad9eacfc7d34cac048cd40316fc04aa3d2a42711db20a61eda38b3c5e50c24"
+        },
+        {
+          "url": "/src/arena.js",
+          "sha256": "542aef4725f4af894de40c170c064e4061e9169170ccfadb34c0d2c63598a7d4"
+        },
+        {
+          "url": "/src/athlete-import.js",
+          "sha256": "153b836a47d1395cba7f05cd0f516b791725162445286b77adb0671ae7188d03"
+        },
+        {
+          "url": "/src/athlete-model.js",
+          "sha256": "646f7f7966f68087eaca172ff5f2f40153cd133c21d7890d5b2cc599ef59d61a"
+        },
+        {
+          "url": "/src/athlete-skin.js",
+          "sha256": "4d6d5c49d7b031ad9014ed073c69922754991840e4e3c40fbe66cc358e3d19a1"
+        },
+        {
+          "url": "/src/athlete.js",
+          "sha256": "40ee41c1d3f3342c435ed68aa3ee596bf0b787bcf5d560b64f46596d3f5ebf5b"
+        },
+        {
+          "url": "/src/audio/applause-2.wav",
+          "sha256": "a47229c1ca303992d93e98de9b2219df1bb24fc21cc5660f3f62abbeaeccf815"
+        },
+        {
+          "url": "/src/audio/applause-3.wav",
+          "sha256": "48075ed6ac972aefe44dd17f5e9ac49d08daa47db5a3b666c973596adf94739e"
+        },
+        {
+          "url": "/src/audio/applause.wav",
+          "sha256": "a39076d64db34d67eae67dfa0f4f3c84c90f4f0ad0da26888248807068992304"
+        },
+        {
+          "url": "/src/audio/cheer-long.wav",
+          "sha256": "5249bfe5f4c2b0211b5e3ebe4cf01e00e322093ba11e40509330d351eb134d83"
+        },
+        {
+          "url": "/src/audio/cheer.wav",
+          "sha256": "728af5cc2647c2c332784ae940691d16958e9e7791275c3d514bb3daaada9aa1"
+        },
+        {
+          "url": "/src/audio/finale-dad.wav",
+          "sha256": "90f3618a5caba9cf15611ebd3c568b8c5451e50aa65ccbaeaeabe8d16fb9debb"
+        },
+        {
+          "url": "/src/audio/FINALE-VOICE.txt",
+          "sha256": "c943bea93b3b54116cabd35c21138ab5c94de1fe5e7bd3e7585c6343fd557717"
+        },
+        {
+          "url": "/src/audio/hit-1.wav",
+          "sha256": "d125e9a3d6628253f7cb899d09cd6e6c4c8046be767a3a05ab0ed88c337e2904"
+        },
+        {
+          "url": "/src/audio/hit-2.wav",
+          "sha256": "d5cd63fdaa957110826f505ac9d9a8d2d9bb8474b341888e5f7fb6ed5cf30813"
+        },
+        {
+          "url": "/src/audio/hit-3.wav",
+          "sha256": "b9268e8a8fd02866af5eec0e492a8cf853cda53e4775c944c014ca761507ee25"
+        },
+        {
+          "url": "/src/audio/LICENSE.txt",
+          "sha256": "4bf63b1e07690564856d73d9ca7b873b9353a38e01243a8cd3b82ba4d0fc3dc0"
+        },
+        {
+          "url": "/src/audio/manifest.json",
+          "sha256": "df3f2fe3b084ad661cf6b5d9c5f02c40b3d2be4cf291a808ebfd136a3863ea15"
+        },
+        {
+          "url": "/src/audio/smash-1.wav",
+          "sha256": "f84d5c950f6fed616890e22943cb0b66a372190f274212d61e9d86a2118100bc"
+        },
+        {
+          "url": "/src/audio/step-1.wav",
+          "sha256": "738d00f33cd060a0d334e8a36a10f151a3f6d0d93b00e37f0020942b2b67ba67"
+        },
+        {
+          "url": "/src/audio/step-2.wav",
+          "sha256": "f26db7780c4facda1e89d77232ab012823f2fd4176cae4c0f7a19227fd78bb8b"
+        },
+        {
+          "url": "/src/audio/step-3.wav",
+          "sha256": "61587105d36d03f0cc3dd87b880ffc8045ce225d7f19b6c0f532989eb60ce282"
+        },
+        {
+          "url": "/src/audio/step-4.wav",
+          "sha256": "0fb8e2905ad62c146dcfb665ba533c5bf5c3d00fe06956926bb93aebe2611a4b"
+        },
+        {
+          "url": "/src/camera-settings.js",
+          "sha256": "06a5401aec78225e2d04398bb4c1e0b5299535bdff1d20a0f10a79f196c321f5"
+        },
+        {
+          "url": "/src/controls.js",
+          "sha256": "bb4197206b00e1e6c4bc03f3aa15aa68803825cdb882816c5773b2f6beffb3f3"
+        },
+        {
+          "url": "/src/court-layout.js",
+          "sha256": "8507dd032e6c62bc376d88138f723aa55a2773ca0bca39f53c21689d17797873"
+        },
+        {
+          "url": "/src/court-palettes.js",
+          "sha256": "c91d31847c9cc3c504e1bfc2ac39d428dcd6c2081d0ea3d6e224a90da2604775"
+        },
+        {
+          "url": "/src/entry.js",
+          "sha256": "4ee553fd243eef467565ad17f7284709b9e611b3fbb7b4f5d87171447ccb9584"
+        },
+        {
+          "url": "/src/feedback.js",
+          "sha256": "0f8c29e0d3ddd7df61dff01195cddf3a952d786a899581650b42b0214f4129c1"
+        },
+        {
+          "url": "/src/finale-pose.js",
+          "sha256": "d20c87942b5a0b033df2f2962680cf17e368ee6459720d318305c8d9e1cfc5eb"
+        },
+        {
+          "url": "/src/leaderboard.js",
+          "sha256": "34cf2bc92d3ea80386d7a80c217af4d387bd718f0c519f6209f73f11f1ee8aee"
+        },
+        {
+          "url": "/src/main.js",
+          "sha256": "810ff18f87c6743753eac27040c3e34474677c83250af422fada51db293a10de"
+        },
+        {
+          "url": "/src/match-finale.js",
+          "sha256": "30e06a545e696aa52551f0bf9324a857428ac7760cbfea64ad0afdefbc4fa3ea"
+        },
+        {
+          "url": "/src/match-settings.js",
+          "sha256": "42641f092251bb52cf2b4296dcf6fad5d4cc06c0b61613ac73e3a00d2b015295"
+        },
+        {
+          "url": "/src/model-assets.js",
+          "sha256": "f71f0847274cdbe1418caf6db37d9b6fa01547e3699df803605b087f08eaf6f5"
+        },
+        {
+          "url": "/src/model-preview.css",
+          "sha256": "2dda767c15e18e6a885e2a1b7d9c68bef6e6bf2d754430ee1136c9fbac286543"
+        },
+        {
+          "url": "/src/model-preview.js",
+          "sha256": "13eecc388e5872f5cd96e3ad392ea68a99aaf1b9021f0cb873a1b31d67a825d4"
+        },
+        {
+          "url": "/src/models/athlete.glb",
+          "sha256": "2bd358cca2e5a963c4de5da6d80e576920d15d33b19143b94e509608dc8b242f"
+        },
+        {
+          "url": "/src/models/LICENSE-Quaternius.txt",
+          "sha256": "5d75e506fad47093e332b67bedb3c044d1db20c1d04805701dff66b02e6cc7c9"
+        },
+        {
+          "url": "/src/net-visual.js",
+          "sha256": "33b25ce200d7584871223f92ff1df42561c8f2a2e7e3e5e0f9b83982222f2b37"
+        },
+        {
+          "url": "/src/network-playback.js",
+          "sha256": "597d13796bbe7bb73abe5ae38e058b9bf8d818b6022cda32bae831e9cba8ebe6"
+        },
+        {
+          "url": "/src/onboarding.css",
+          "sha256": "6b6305e4c780b71c4b689253731db4a7e224449616b2f5d0324bb31564834787"
+        },
+        {
+          "url": "/src/onboarding.js",
+          "sha256": "7b76460e627f474b122af3edfaaaa5de4c280f485c4606751a302e9dfcc7590a"
+        },
+        {
+          "url": "/src/palette-picker.js",
+          "sha256": "5efc55f03669d064ab63b1727eb4b27fb2ab7b132bf6e0003eb8f36d13cfb288"
+        },
+        {
+          "url": "/src/peer-match.js",
+          "sha256": "58b0bbc39c49c3a57ffbb62708129f6e8f7cd280fbfaa9dc4eb87a7ae47c8976"
+        },
+        {
+          "url": "/src/peer-network.js",
+          "sha256": "ce9370452ad252e6a58ae5bb8644d7c355d48ef13ed2e8fe28ba2b64faee919c"
+        },
+        {
+          "url": "/src/peer-records.js",
+          "sha256": "a1997c145a66b38a12ea101d383d29c824dddfc4fbffc2bfe734ff1bd286fada"
+        },
+        {
+          "url": "/src/performance.js",
+          "sha256": "f2cd6c40890bfa786e3db6dbc487436e788eab119ba72c6b1d734bc73ca08567"
+        },
+        {
+          "url": "/src/play-input.js",
+          "sha256": "1e30a2cfca052411a27d7233f35bb24c1f389d1c0ea558f6ef91228d052276b0"
+        },
+        {
+          "url": "/src/player-profile.js",
+          "sha256": "83ea38498af5c9d82bd30853fff2af8fe931bba2e8e536f0f2f3c38324eff96b"
+        },
+        {
+          "url": "/src/pwa.css",
+          "sha256": "270a1249261418d09e1642e405c36cdb5b7124bfbccb545d84c6def461fc4790"
+        },
+        {
+          "url": "/src/pwa.js",
+          "sha256": "be7f511bdb3e5ad7c1e7f7b171f1c1d4a4b50121819d6480ca1190cabaeef765"
+        },
+        {
+          "url": "/src/racket-visual.js",
+          "sha256": "4ab0a539989a0f3b332312065becceb3f0808bda079fe9a9448a57f6ab11e924"
+        },
+        {
+          "url": "/src/release-notes.js",
+          "sha256": "b85f26af809a5a662920119cb0af229966176ebd68e0973c9bc08c65b1fd82ad"
+        },
+        {
+          "url": "/src/shuttle-visual.js",
+          "sha256": "e45e2da39fd4607d441b6cead1dc61750f24678f9a32fbf65247becb63b2fc76"
+        },
+        {
+          "url": "/src/stamina-hud.js",
+          "sha256": "f42b9806181fac251d00ecf961ea5b9c0d188f9031b20e76b6353f06c649fd6b"
+        },
+        {
+          "url": "/src/style.css",
+          "sha256": "b6f49b68e3dc3840f8234a504f5ec7db268754527720c5b7845998c15e222886"
+        },
+        {
+          "url": "/src/ui-dialogs.css",
+          "sha256": "ad32fdaa681d7df469b896af9f6a6517d3b0a514cc5345e34292643ca8e9d79d"
+        },
+        {
+          "url": "/src/ui-match.css",
+          "sha256": "f94768b989eef13434dd284ed2b2fa2dc53f59df9033371f14776b2662ea1bca"
+        },
+        {
+          "url": "/src/update-client.js",
+          "sha256": "956ad39c01da89f786744d247261290fe73cf3a5db9425f37a1bfcdf445ad32e"
+        },
+        {
+          "url": "/src/update-preferences.js",
+          "sha256": "e2932fb783adddf102f84ff7ef9655d50225f81d91adac5c37e21bbe0fe6b136"
+        },
+        {
+          "url": "/src/view.js",
+          "sha256": "1eb5c57d37bbd07a2e6931be3ca4a52be315cf6921150406c6832b161e2aefb9"
+        },
+        {
+          "url": "/shared/game.js",
+          "sha256": "95f086907b824decf010bf581f4f7488804e56118eb0628013a1cd709c5b45ec"
+        },
+        {
+          "url": "/shared/room-readiness.js",
+          "sha256": "3bdb6de948f1af6c2ea4796ec6315c4e9767772ea80f73bd07ad7dcaf2e7c480"
+        },
+        {
+          "url": "/shared/shot-quality.js",
+          "sha256": "8c22526de9e03e703a72ce1a7f296472954429ab9a9d5b6963b1459cfb254a44"
+        },
+        {
+          "url": "/shared/shuttle-flight.js",
+          "sha256": "a9cc2bccd4aaebcac80a5586a8a7f4bba932394f7be91d1e859b1e1053474767"
+        },
+        {
+          "url": "/shared/stamina.js",
+          "sha256": "4e8cb931d068af780c97d79c5650222cefbf7f20c7442dfaa7f28121c5c96e03"
+        },
+        {
+          "url": "/icons/apple-touch-icon.png",
+          "sha256": "1175dbc2b8c75c0bfea00a1d1ee14ad12cccf1923a40f0114221481b9ca6d4af"
+        },
+        {
+          "url": "/icons/rally-192.png",
+          "sha256": "6206425893fa0831bc7d13c60593e0d006480302e833e0b269d7a49f3f751907"
+        },
+        {
+          "url": "/icons/rally-512.png",
+          "sha256": "b0e3bd4d0bfa3a8c26bd3cb70ea3f37f340414f1e99ab38ca61eaa33d471468a"
+        },
+        {
+          "url": "/icons/rally.svg",
+          "sha256": "f5dde2ec181d6b8d41b4d6affaedebc257c21663792979b556ef0270df795ca7"
+        },
+        {
+          "url": "/vendor/three.module.js",
+          "sha256": "bbf5ed13fe4373f5bd38b14ea8e62e9f157327da5638edc6d3863e08b167c9c7"
+        },
+        {
+          "url": "/vendor/three.core.js",
+          "sha256": "3718df126d69c125362a03340913204470d8c50238605150e57f808840fb7759"
+        },
+        {
+          "url": "/vendor/three.LICENSE.txt",
+          "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+        },
+        {
+          "url": "/vendor/three-addons/loaders/GLTFLoader.js",
+          "sha256": "97642d720f16cc9a0c9844934198e4d0c023bea8e89576d0f7545d03b2d103d2"
+        },
+        {
+          "url": "/vendor/three-addons/utils/SkeletonUtils.js",
+          "sha256": "b1632a703206c3d830de9fcbe515696770d04b71a15ee6b50afa6d2c3298c86f"
+        },
+        {
+          "url": "/vendor/three-addons/utils/BufferGeometryUtils.js",
+          "sha256": "5c552223a9309883743b80538d6e9cdb45e3227f30d3ec56fb2c39b46e78d595"
+        },
+        {
+          "url": "/vendor/peerjs.min.js",
+          "sha256": "7604d8c31bec4f134b0d15c2d80b1d095ea18af005354f439f14291fcd7b4168"
+        },
+        {
+          "url": "/vendor/peerjs.LICENSE.txt",
+          "sha256": "9407807dba7f47a79bfb3ac55759d63d77c9371ebd0616d5a093e97d3e810397"
+        },
+        {
+          "url": "/vendor/peerjs-dependencies.LICENSE.txt",
+          "sha256": "97fda149794085c9bfa4d0e3b93e4dc2f73410efa48dfa3c68902f405401e93a"
+        },
+        {
+          "url": "/runtime-config.js",
+          "sha256": "3f91e3fa977e8b7a2fbfb4a6afd434ad702671b0bd1e592b7e131eb3de38fdf0"
+        },
+        {
+          "url": "/sw.js",
+          "sha256": "a41e161b4146207fd6af1021b591cd48c8d30f6647a754e88167cbd7ec9ae98d"
+        }
+      ],
+      "websocket": {
+        "initialRules": [
+          9,
+          9
+        ],
+        "authorityRules": [
+          9,
+          9
+        ],
+        "sameContact": true,
+        "oldRulesRejected": "比赛规则已更新，请双方联网刷新后重新建房"
+      },
+      "ok": true
+    },
+    "browser": {
+      "errors": [],
+      "checks": [
+        "UI keyboard serve, visible flight samples decelerate",
+        "W advances player via actual control loop",
+        "fixed rear drop: forward movement and single keyboard release receive",
+        "fixed smash: actual touchscreen tap receives from reasonable stance"
+      ],
+      "serve": [
+        {
+          "time": 0.8166666666666662,
+          "phase": "rally",
+          "hitId": 1,
+          "ball": {
+            "x": 0.7404726249055688,
+            "y": 1.3757444187842973,
+            "z": 2.947241404105866,
+            "vx": -2.830375448374904,
+            "vy": 7.885906875935433,
+            "vz": -13.767396949204427,
+            "active": true,
+            "lastHit": 0
+          },
+          "player": {
+            "x": 0.8381801016882047,
+            "z": 3.7959331111420047
+          }
+        },
+        {
+          "time": 0.8333333333333328,
+          "phase": "rally",
+          "hitId": 1,
+          "ball": {
+            "x": 0.694371406107141,
+            "y": 1.505813700049888,
+            "z": 2.7229977337459856,
+            "vx": -2.7037039621021037,
+            "vy": 7.722406875935432,
+            "vz": -13.151246666151115,
+            "active": true,
+            "lastHit": 0
+          },
+          "player": {
+            "x": 0.8251682649077008,
+            "z": 3.7914886772994687
+          }
+        },
+        {
+          "time": 0.366666666666667,
+          "phase": "rally",
+          "hitId": 1,
+          "ball": {
+            "x": 0.60209385721596,
+            "y": 1.8765462978983252,
+            "z": 2.147599831054914,
+            "vx": -2.101440200097324,
+            "vy": 7.2016625603063655,
+            "vz": -11.294432829269638,
+            "active": true,
+            "lastHit": 0
+          },
+          "player": {
+            "x": 0.85,
+            "z": 3.8
+          }
+        },
+        {
+          "time": 0.4666666666666673,
+          "phase": "rally",
+          "hitId": 1,
+          "ball": {
+            "x": 0.4129326252144229,
+            "y": 2.54766255392896,
+            "z": 1.130930963368693,
+            "vx": -1.7088139938405111,
+            "vy": 6.22066256030636,
+            "vz": -9.184217980722837,
+            "active": true,
+            "lastHit": 0
+          },
+          "player": {
+            "x": 0.85,
+            "z": 3.8
+          }
+        },
+        {
+          "time": 0.5166666666666673,
+          "phase": "rally",
+          "hitId": 1,
+          "ball": {
+            "x": 0.33125045043735396,
+            "y": 2.846433181944276,
+            "z": 0.6919206901638965,
+            "vx": -1.5628180867389383,
+            "vy": 5.730162560306358,
+            "vz": -8.39954613232542,
+            "active": true,
+            "lastHit": 0
+          },
+          "player": {
+            "x": 0.85,
+            "z": 3.8
+          }
+        }
+      ],
+      "movement": {
+        "z": 3.8,
+        "next": 3.0654166666666667
+      },
+      "drop": {
+        "hitId": 1,
+        "side": 0,
+        "at": 0.8549999999999996,
+        "type": "clear",
+        "requested": "clear",
+        "aimX": 0,
+        "aimZ": -5.450846153846154,
+        "x": 0,
+        "z": -5.386792044660968,
+        "quality": {
+          "score": 0.5744510205231588,
+          "risk": 0.4255489794768412,
+          "reason": "跑动中击球，先减速更稳 · 极限够球，提前靠近更稳",
+          "reasonCode": "movement",
+          "spread": 0.9164160056510331,
+          "factors": {
+            "movement": 1,
+            "stretch": 0.5126449238622964,
+            "lowContact": 0.1940503256454014,
+            "lateContact": 0.2613013412802489,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "serving": false,
+        "contact": {
+          "x": 0,
+          "y": 0.819986281817581,
+          "z": 0.9681630456826333
+        },
+        "charge": 0.0015384615384615385,
+        "staminaBefore": 97.73711850189054,
+        "staminaAfter": 93.53711502260059
+      },
+      "smash": {
+        "hitId": 1,
+        "side": 0,
+        "at": 0.4923139285124215,
+        "type": "clear",
+        "requested": "clear",
+        "aimX": 0,
+        "aimZ": -5.451607692388388,
+        "x": 0,
+        "z": -5.13857093106262,
+        "quality": {
+          "score": 0.8255900358848733,
+          "risk": 0.17440996411512671,
+          "reason": "触点偏低，提早接球 · 来球已下降到低位",
+          "reasonCode": "lowContact",
+          "spread": 0.3538738910200912,
+          "factors": {
+            "movement": 0,
+            "stretch": 0,
+            "lowContact": 0.39466660021904953,
+            "lateContact": 0.44872905036358635,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "serving": false,
+        "contact": {
+          "x": 0,
+          "y": 0.6855733778532368,
+          "z": 3.901361962828888
+        },
+        "charge": 0.0029230770697960488,
+        "staminaBefore": 100,
+        "staminaAfter": 95.79998743976205
+      },
+      "runtime": {
+        "build": "41c3a12bbdfe9175",
+        "rules": 9,
+        "sw": false,
+        "waiting": false,
+        "diagnostics": {
+          "render": {
+            "fps": 14.992503748126182,
+            "frameMs": 66.69999999999891,
+            "frameP95": 100.10000000000036,
+            "renderMs": 1.100000023841858,
+            "guidanceMs": 0,
+            "uiMs": 0.10000002384185791,
+            "quality": {
+              "pixelRatio": 1,
+              "shadows": true
+            }
+          },
+          "network": null,
+          "rtt": null,
+          "renderer": {
+            "pixelRatio": 1,
+            "shadows": true,
+            "calls": 116,
+            "triangles": 91336,
+            "geometries": 87,
+            "textures": 6
+          },
+          "peer": null
+        }
+      },
+      "ok": true
+    }
+  },
+  "preview": {
+    "url": "http://127.0.0.1:3063/",
+    "lan": "http://172.27.68.240:3063/",
+    "pid": 84539,
+    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/vibrant-thompson",
+    "sidebarTab": "PACE-1 玩法测试",
+    "sidebar": {
+      "build": "41c3a12bbdfe9175",
+      "rules": 9,
+      "serviceWorkerControlled": true,
+      "waiting": false,
+      "animation": "Native RAF probe remained at 0 callbacks; no rallyDiagnostics; screenshot UnknownVizError. Sidebar gameplay unverified in this host state."
+    },
+    "fallback": "Same server passed independent headless Chrome UI/control/render checks; use system browser for interactive play if sidebar stays frozen."
+  },
+  "pending": [
+    "User gameplay and actual phone feel",
+    "Sidebar compositor/RAF recovery",
+    "WebRTC dual real devices and public-network latency",
+    "Hardware long-duration frame rate"
+  ],
+  "publication": {
+    "pushed": false,
+    "merged": false,
+    "released": false,
+    "versionBumped": false
+  },
+  "implementationCommit": "6b2724b6f1f5b6ad82694e0f4724b61876b7716c"
+}

@@ -610,3 +610,15 @@ test('disposing floating controls unregisters surface and global listeners and r
   }
   assert.equal(floatingDown(f, 2, 100, 200).defaultPrevented, false);
 });
+
+test('unowned pointer events do not release a keyboard-owned shot', (t) => {
+  const f = fixture(t);
+  for (const type of ['pointermove', 'pointerup', 'pointercancel']) emit(f.window, type, { clientX: 200, clientY: 250 });
+  key(f.window, 'keydown', 'KeyJ');
+  assert.ok(f.controls.activeShot);
+  for (const type of ['pointermove', 'pointerup', 'pointercancel']) emit(f.window, type, { clientX: 200, clientY: 250 });
+  assert.ok(f.controls.activeShot);
+  assert.equal(f.shots.length, 0);
+  key(f.window, 'keyup', 'KeyJ');
+  assert.equal(f.shots.length, 1);
+});

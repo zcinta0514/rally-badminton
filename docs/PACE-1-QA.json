@@ -1,0 +1,1395 @@
+{
+  "task": "PACE-1",
+  "asOf": "2026-10-23",
+  "baseline": {
+    "head": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
+    "remoteMainVerified": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
+    "release": "v1.10.0",
+    "gameSha256": "1bed17ad8e0b522b910a5d1b093e3b7634f5fe12d3da6d6c68e4011214fd2268"
+  },
+  "candidate": {
+    "branch": "cindy/vibrant-thompson",
+    "implementationCommit": "1840a8310365ba2a594de8585958c55f73ee04d5",
+    "packageVersion": "1.10.0",
+    "rulesVersion": 8,
+    "localOnly": true
+  },
+  "before": {
+    "rulesVersion": 7,
+    "flights": [
+      {
+        "role": "balanced",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.8802,
+        "initialVelocity": {
+          "vx": -0.9042,
+          "vy": 8.648,
+          "vz": -4.9356
+        },
+        "apex": 4.8918,
+        "netHeight": 4.7391,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing"
+      },
+      {
+        "role": "balanced",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.9285,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 8.1112,
+          "vz": -5.6079
+        },
+        "apex": 5.9533,
+        "netHeight": 5.9038,
+        "x": 0,
+        "z": -5.615,
+        "event": "landing"
+      },
+      {
+        "role": "balanced",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.1737,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.5417,
+          "vz": -5.6446
+        },
+        "apex": 3.2393,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.425,
+        "event": "landing"
+      },
+      {
+        "role": "balanced",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.5865,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -1.5565,
+          "vz": -16.7097
+        },
+        "apex": 2.6,
+        "netHeight": 1.6406,
+        "x": 0,
+        "z": -4.6,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.8802,
+        "initialVelocity": {
+          "vx": -0.9042,
+          "vy": 8.648,
+          "vz": -4.9356
+        },
+        "apex": 4.8918,
+        "netHeight": 4.7391,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.9226,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 8.0782,
+          "vz": -5.5375
+        },
+        "apex": 5.926,
+        "netHeight": 5.8605,
+        "x": 0,
+        "z": -5.4466,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.2088,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.7785,
+          "vz": -5.4097
+        },
+        "apex": 3.3277,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.3395,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.67,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -0.5945,
+          "vz": -14.4214
+        },
+        "apex": 2.6,
+        "netHeight": 1.7479,
+        "x": 0,
+        "z": -4.462,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.8079,
+        "initialVelocity": {
+          "vx": -0.9403,
+          "vy": 8.2703,
+          "vz": -5.1331
+        },
+        "apex": 4.5661,
+        "netHeight": 4.4325,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.8676,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 7.7683,
+          "vz": -6.0014
+        },
+        "apex": 5.6758,
+        "netHeight": 5.6485,
+        "x": 0,
+        "z": -6.008,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.1968,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.6976,
+          "vz": -5.4881
+        },
+        "apex": 3.2969,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.368,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.5583,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -1.9188,
+          "vz": -18.0482
+        },
+        "apex": 2.6,
+        "netHeight": 1.64,
+        "x": 0,
+        "z": -4.876,
+        "event": "landing"
+      }
+    ],
+    "movement": [
+      {
+        "role": "balanced",
+        "topSpeed": 4.6,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.2,
+        "reverseZero": 0.2083,
+        "reverseFull": 0.4,
+        "stopDistance": 0.3589
+      },
+      {
+        "role": "swift",
+        "topSpeed": 5.35,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.2083,
+        "reverseZero": 0.2083,
+        "reverseFull": 0.4083,
+        "stopDistance": 0.4222
+      },
+      {
+        "role": "power",
+        "topSpeed": 4.05,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.2083,
+        "reverseZero": 0.2083,
+        "reverseFull": 0.4167,
+        "stopDistance": 0.3279
+      }
+    ],
+    "receives": {
+      "dropTimely": {
+        "received": false,
+        "failure": "missed-window",
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0.42,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 1.1296,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": 0.9333,
+        "eligibleWindow": 0.1667,
+        "minDistance": 0.0167,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 0,
+          "z": 1.2403,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      },
+      "dropScramble": {
+        "received": false,
+        "failure": "not-in-reach",
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.55,
+          "pressAt": 0.82,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 1.1296,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 1.4491,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 0,
+          "z": 2.5575,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      },
+      "dropLate": {
+        "received": false,
+        "failure": "not-in-reach",
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.66,
+          "pressAt": 0.9,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 1.1296,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 1.9858,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 0,
+          "z": 3.0942,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      },
+      "smashPositioned": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "smash",
+          "startZ": 3.6,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0.24,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": 0.4333,
+        "eligibleWindow": 0.0083,
+        "minDistance": 1.3994,
+        "contactAt": 0.4417,
+        "contactHeight": 1.0942,
+        "quality": {
+          "score": 0.7542656475199152,
+          "risk": 0.2457343524800848,
+          "reason": "极限够球，提前靠近更稳",
+          "reasonCode": "stretch",
+          "spread": 0.50209523400607,
+          "factors": {
+            "movement": 0,
+            "stretch": 0.9156344466563499,
+            "lowContact": 0,
+            "lateContact": 0.047933727183961536,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "y": 0,
+          "z": -5.06779242109026,
+          "time": 1.7031993610110927,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 3.6,
+          "speed": 0
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "smashEarly": {
+        "received": false,
+        "failure": "missed-window",
+        "input": {
+          "type": "smash",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": 0.5083,
+        "eligibleWindow": 0.0417,
+        "minDistance": 0.7146,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 0,
+          "z": 4.8,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      },
+      "smashMisplaced": {
+        "received": false,
+        "failure": "not-in-reach",
+        "input": {
+          "type": "smash",
+          "startZ": 6.3,
+          "startX": 2.2,
+          "reaction": 0.16,
+          "pressAt": 0.24,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 3.1216,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 2.2,
+          "z": 6.3,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      }
+    }
+  },
+  "flightStage": {
+    "flights": [
+      {
+        "role": "balanced",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.6019,
+        "initialVelocity": {
+          "vx": -1.0612,
+          "vy": 7.1831,
+          "vz": -5.7931
+        },
+        "apex": 3.7098,
+        "netHeight": 3.625,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing"
+      },
+      {
+        "role": "balanced",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.5061,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 5.661,
+          "vz": -7.1809
+        },
+        "apex": 4.2334,
+        "netHeight": 4.1273,
+        "x": 0,
+        "z": -5.615,
+        "event": "landing"
+      },
+      {
+        "role": "balanced",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.1737,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.5417,
+          "vz": -5.6446
+        },
+        "apex": 3.2393,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.425,
+        "event": "landing"
+      },
+      {
+        "role": "balanced",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.5865,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -1.5565,
+          "vz": -16.7097
+        },
+        "apex": 2.6,
+        "netHeight": 1.6406,
+        "x": 0,
+        "z": -4.6,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.6019,
+        "initialVelocity": {
+          "vx": -1.0612,
+          "vy": 7.1831,
+          "vz": -5.7931
+        },
+        "apex": 3.7098,
+        "netHeight": 3.625,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.5007,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 5.6283,
+          "vz": -7.0944
+        },
+        "apex": 4.2146,
+        "netHeight": 4.0902,
+        "x": 0,
+        "z": -5.4466,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.2088,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.7785,
+          "vz": -5.4097
+        },
+        "apex": 3.3277,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.3395,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.67,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -0.5945,
+          "vz": -14.4214
+        },
+        "apex": 2.6,
+        "netHeight": 1.7479,
+        "x": 0,
+        "z": -4.462,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.5403,
+        "initialVelocity": {
+          "vx": -1.1037,
+          "vy": 6.854,
+          "vz": -6.0248
+        },
+        "apex": 3.4743,
+        "netHeight": 3.4024,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.4602,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 5.382,
+          "vz": -7.6754
+        },
+        "apex": 4.0763,
+        "netHeight": 3.9949,
+        "x": 0,
+        "z": -6.0081,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.1968,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.6976,
+          "vz": -5.4881
+        },
+        "apex": 3.2969,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.368,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.5583,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -1.9188,
+          "vz": -18.0482
+        },
+        "apex": 2.6,
+        "netHeight": 1.64,
+        "x": 0,
+        "z": -4.876,
+        "event": "landing"
+      }
+    ],
+    "movement": [
+      {
+        "role": "balanced",
+        "topSpeed": 4.6,
+        "fullSpeed": 0.2,
+        "reverseZero": 0.2083,
+        "reverseFull": 0.4,
+        "stopDistance": 0.3589
+      },
+      {
+        "role": "swift",
+        "topSpeed": 5.35,
+        "fullSpeed": 0.2083,
+        "reverseZero": 0.2083,
+        "reverseFull": 0.4083,
+        "stopDistance": 0.4222
+      },
+      {
+        "role": "power",
+        "topSpeed": 4.05,
+        "fullSpeed": 0.2083,
+        "reverseZero": 0.2083,
+        "reverseFull": 0.4167,
+        "stopDistance": 0.3279
+      }
+    ]
+  },
+  "after": {
+    "rulesVersion": 8,
+    "flights": [
+      {
+        "role": "balanced",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.6019,
+        "initialVelocity": {
+          "vx": -1.0612,
+          "vy": 7.1831,
+          "vz": -5.7931
+        },
+        "apex": 3.7098,
+        "netHeight": 3.625,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing"
+      },
+      {
+        "role": "balanced",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.5061,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 5.661,
+          "vz": -7.1809
+        },
+        "apex": 4.2334,
+        "netHeight": 4.1273,
+        "x": 0,
+        "z": -5.615,
+        "event": "landing"
+      },
+      {
+        "role": "balanced",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.1737,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.5417,
+          "vz": -5.6446
+        },
+        "apex": 3.2393,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.425,
+        "event": "landing"
+      },
+      {
+        "role": "balanced",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.5865,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -1.5565,
+          "vz": -16.7097
+        },
+        "apex": 2.6,
+        "netHeight": 1.6406,
+        "x": 0,
+        "z": -4.6,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.6019,
+        "initialVelocity": {
+          "vx": -1.0612,
+          "vy": 7.1831,
+          "vz": -5.7931
+        },
+        "apex": 3.7098,
+        "netHeight": 3.625,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.5007,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 5.6283,
+          "vz": -7.0944
+        },
+        "apex": 4.2146,
+        "netHeight": 4.0902,
+        "x": 0,
+        "z": -5.4466,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.2088,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.7785,
+          "vz": -5.4097
+        },
+        "apex": 3.3277,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.3395,
+        "event": "landing"
+      },
+      {
+        "role": "swift",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.67,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -0.5945,
+          "vz": -14.4214
+        },
+        "apex": 2.6,
+        "netHeight": 1.7479,
+        "x": 0,
+        "z": -4.462,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "clear",
+        "serving": true,
+        "duration": 1.5403,
+        "initialVelocity": {
+          "vx": -1.1037,
+          "vy": 6.854,
+          "vz": -6.0248
+        },
+        "apex": 3.4743,
+        "netHeight": 3.4024,
+        "x": -0.85,
+        "z": -5.8,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "clear",
+        "serving": false,
+        "duration": 1.4602,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 5.382,
+          "vz": -7.6754
+        },
+        "apex": 4.0763,
+        "netHeight": 3.9949,
+        "x": 0,
+        "z": -6.0081,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "drop",
+        "serving": false,
+        "duration": 1.1968,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": 3.6976,
+          "vz": -5.4881
+        },
+        "apex": 3.2969,
+        "netHeight": 1.7,
+        "x": 0,
+        "z": -1.368,
+        "event": "landing"
+      },
+      {
+        "role": "power",
+        "type": "smash",
+        "serving": false,
+        "duration": 0.5583,
+        "initialVelocity": {
+          "vx": 0,
+          "vy": -1.9188,
+          "vz": -18.0482
+        },
+        "apex": 2.6,
+        "netHeight": 1.64,
+        "x": 0,
+        "z": -4.876,
+        "event": "landing"
+      }
+    ],
+    "movement": [
+      {
+        "role": "balanced",
+        "topSpeed": 4.6,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.1583,
+        "reverseZero": 0.125,
+        "reverseFull": 0.275,
+        "stopDistance": 0.2596
+      },
+      {
+        "role": "swift",
+        "topSpeed": 5.35,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.1583,
+        "reverseZero": 0.125,
+        "reverseFull": 0.2833,
+        "stopDistance": 0.3055
+      },
+      {
+        "role": "power",
+        "topSpeed": 4.05,
+        "firstMotion": 0.0083,
+        "fullSpeed": 0.1583,
+        "reverseZero": 0.1333,
+        "reverseFull": 0.2833,
+        "stopDistance": 0.2371
+      }
+    ],
+    "receives": {
+      "dropTimely": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0.42,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 1.1296,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": 0.9167,
+        "eligibleWindow": 0.0333,
+        "minDistance": 1.1796,
+        "contactAt": 0.95,
+        "contactHeight": 1.3008,
+        "quality": {
+          "score": 0.6910134690537241,
+          "risk": 0.30898653094627593,
+          "reason": "跑动中击球，先减速更稳 · 极限够球，提前靠近更稳",
+          "reasonCode": "movement",
+          "spread": 0.6412025112842616,
+          "factors": {
+            "movement": 0.9082125603864735,
+            "stretch": 0.4897846879576201,
+            "lowContact": 0,
+            "lateContact": 0,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "y": 0,
+          "z": -5.253252264311415,
+          "time": 1.2900297506870357,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 1.5331,
+          "speed": 4.2833
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "dropScramble": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.55,
+          "pressAt": 0.82,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 1.1296,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": 1.0917,
+        "eligibleWindow": 0.0083,
+        "minDistance": 1.4263,
+        "contactAt": 1.1,
+        "contactHeight": 0.2907,
+        "quality": {
+          "score": 0.17175063097207222,
+          "risk": 0.8282493690279278,
+          "reason": "击球不稳，存在下网风险 · 触点偏低，提早接球 · 极限够球，提前靠近更稳",
+          "reasonCode": "net-risk",
+          "spread": 2.0554212429131216,
+          "factors": {
+            "movement": 1,
+            "stretch": 0.8966157624733134,
+            "lowContact": 0.9840582027787408,
+            "lateContact": 0.8704633628899598,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "y": 1.2269361876063023,
+          "z": 0,
+          "time": 0.22997429052246313,
+          "event": "net",
+          "out": false,
+          "side": null,
+          "winner": 1
+        },
+        "player": {
+          "x": 0,
+          "z": 2.6038,
+          "speed": 4.6
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "dropLate": {
+        "received": false,
+        "failure": "not-in-reach",
+        "input": {
+          "type": "drop",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.66,
+          "pressAt": 0.9,
+          "shot": "clear",
+          "side": 0,
+          "moving": true,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 1.1296,
+        "incomingLanding": {
+          "x": 0,
+          "z": 1.425
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 1.8787,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 0,
+          "z": 2.9871,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      },
+      "smashPositioned": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "smash",
+          "startZ": 3.6,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0.24,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": 0.4333,
+        "eligibleWindow": 0.0083,
+        "minDistance": 1.3994,
+        "contactAt": 0.4417,
+        "contactHeight": 1.0942,
+        "quality": {
+          "score": 0.7542656475199152,
+          "risk": 0.2457343524800848,
+          "reason": "极限够球，提前靠近更稳",
+          "reasonCode": "stretch",
+          "spread": 0.50209523400607,
+          "factors": {
+            "movement": 0,
+            "stretch": 0.9156344466563499,
+            "lowContact": 0,
+            "lateContact": 0.047933727183961536,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "y": 0,
+          "z": -4.961260039992204,
+          "time": 1.294995408635053,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 3.6,
+          "speed": 0
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "smashEarly": {
+        "received": true,
+        "failure": null,
+        "input": {
+          "type": "smash",
+          "startZ": 4.8,
+          "startX": 0,
+          "reaction": 0.16,
+          "pressAt": 0,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": 0.5083,
+        "eligibleWindow": 0.025,
+        "minDistance": 1.1185,
+        "contactAt": 0.5333,
+        "contactHeight": 0.4444,
+        "quality": {
+          "score": 0.571683728205276,
+          "risk": 0.428316271794724,
+          "reason": "触点偏低，提早接球 · 极限够球，提前靠近更稳",
+          "reasonCode": "lowContact",
+          "spread": 1.4964945543957882,
+          "factors": {
+            "movement": 0,
+            "stretch": 0.44746737447468177,
+            "lowContact": 0.7545941909886571,
+            "lateContact": 0.723626654839099,
+            "fatigue": 0,
+            "linePower": 0
+          }
+        },
+        "returnLanding": {
+          "x": 0,
+          "y": 0,
+          "z": -3.953505445604211,
+          "time": 1.197699587268077,
+          "event": "landing",
+          "out": false,
+          "serviceFault": false,
+          "side": 1,
+          "winner": 0
+        },
+        "player": {
+          "x": 0,
+          "z": 4.8,
+          "speed": 0
+        },
+        "score": [
+          0,
+          0
+        ]
+      },
+      "smashMisplaced": {
+        "received": false,
+        "failure": "not-in-reach",
+        "input": {
+          "type": "smash",
+          "startZ": 6.3,
+          "startX": 2.2,
+          "reaction": 0.16,
+          "pressAt": 0.24,
+          "shot": "clear",
+          "side": 0,
+          "moving": false,
+          "frame": 0.008333333333333333
+        },
+        "incomingFlight": 0.5819,
+        "incomingLanding": {
+          "x": 0,
+          "z": 4.6
+        },
+        "firstEligible": null,
+        "eligibleWindow": 0,
+        "minDistance": 3.1216,
+        "contactAt": null,
+        "contactHeight": null,
+        "quality": null,
+        "returnLanding": null,
+        "player": {
+          "x": 2.2,
+          "z": 6.3,
+          "speed": 0
+        },
+        "score": [
+          0,
+          1
+        ]
+      }
+    }
+  },
+  "validation": {
+    "node": "v24.21.0",
+    "fullTests": {
+      "passed": 716,
+      "failed": 0,
+      "command": "npm test",
+      "log": "artifacts/pace-1/full-tests.log"
+    },
+    "build": {
+      "passed": true,
+      "command": "npm run build",
+      "buildId": "bb2e6129c85d9436",
+      "resources": 87
+    },
+    "service": {
+      "buildId": "bb2e6129c85d9436",
+      "assets": 87,
+      "workerMatches": true,
+      "mismatches": [],
+      "hashes": {
+        "/shared/game.js": "ad73deb7a76ac8d63fe5a4db16816ad44b7a1e8d3ac8a8d0dab95f6e38860f83",
+        "/src/main.js": "810ff18f87c6743753eac27040c3e34474677c83250af422fada51db293a10de",
+        "/src/models/athlete.glb": "2bd358cca2e5a963c4de5da6d80e576920d15d33b19143b94e509608dc8b242f"
+      }
+    },
+    "webSocket": {
+      "initialRules": [
+        8,
+        8
+      ],
+      "authorityRules": [
+        8,
+        8
+      ],
+      "sameContact": true,
+      "contact": {
+        "x": 0.85,
+        "y": 1.08,
+        "z": 3.48
+      },
+      "aim": -5.800000000000001,
+      "oldRulesRejected": "比赛规则已更新，请双方联网刷新后重新建房"
+    },
+    "browser": {
+      "finalBrowser": {
+        "buildId": "bb2e6129c85d9436",
+        "diagnosticHookPresent": false,
+        "hashes": {
+          "/shared/game.js": "ad73deb7a76ac8d63fe5a4db16816ad44b7a1e8d3ac8a8d0dab95f6e38860f83",
+          "/src/main.js": "810ff18f87c6743753eac27040c3e34474677c83250af422fada51db293a10de",
+          "/src/models/athlete.glb": "2bd358cca2e5a963c4de5da6d80e576920d15d33b19143b94e509608dc8b242f"
+        },
+        "hint": "按住击球键，拖动选落点",
+        "palette": "经典绿",
+        "rulesVersion": 8,
+        "screen": "match",
+        "serviceWorker": {
+          "controller": "http://127.0.0.1:3062/sw.js",
+          "waiting": false
+        }
+      },
+      "touchSmash": {
+        "hitId": 2,
+        "incomingDuration": 0.5818532818532819,
+        "info": {
+          "aimX": 0,
+          "aimZ": -5.450338461518288,
+          "at": 0.5333333333333339,
+          "charge": 0.000615384578704834,
+          "contact": {
+            "x": 0,
+            "y": 0.4444218920375997,
+            "z": 3.681519575315191
+          },
+          "hitId": 2,
+          "quality": {
+            "factors": {
+              "fatigue": 0,
+              "lateContact": 0.723626654839099,
+              "linePower": 0,
+              "lowContact": 0.7545941909886571,
+              "movement": 0,
+              "stretch": 0.44746737447468177
+            },
+            "reason": "触点偏低，提早接球 · 极限够球，提前靠近更稳",
+            "reasonCode": "lowContact",
+            "risk": 0.428316271794724,
+            "score": 0.571683728205276,
+            "spread": 1.497174583723499
+          },
+          "requested": "clear",
+          "serving": false,
+          "side": 0,
+          "staminaAfter": 95.79999944331368,
+          "staminaBefore": 100,
+          "type": "clear",
+          "x": 0,
+          "z": -3.953163877794789
+        },
+        "position": 4.8,
+        "queuedHint": "击球已准备 · 继续跑位，进入范围后出手",
+        "scenario": "touch-smash-early-release"
+      },
+      "actualUiScenarios": [
+        {
+          "scenario": "keyboard-serve",
+          "result": "hitId1 then AI hitId2; legal service from y1.08"
+        },
+        {
+          "scenario": "keyboard-movement",
+          "result": "W moved z3.8 to3.3671 during service followthrough"
+        },
+        {
+          "scenario": "drop-single-release",
+          "result": "real client fixture at .16 movement / .42 release, contact .95, quality .6738"
+        },
+        {
+          "scenario": "floating-touch-movement",
+          "result": "vz -4.6 while held, 0 after release; knob reset"
+        },
+        {
+          "scenario": "palette",
+          "result": "independent picker opened, blue selected, restored green"
+        }
+      ],
+      "method": "浏览器当前页面操作与状态读回；固定来球通过render诊断钩子放入真实单机状态，输入由Controls事件链路处理。完成后重新导航清除钩子。触控为合成PointerEvent，非实体手机。"
+    }
+  },
+  "preview": {
+    "url": "http://127.0.0.1:3062/",
+    "lanUrl": "http://172.27.68.240:3062/",
+    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/vibrant-thompson",
+    "pid": 37577,
+    "backend": "rsb-webview",
+    "tabLabel": "PACE-1 玩法测试"
+  },
+  "acceptance": {
+    "automatedPassed": true,
+    "userPlaytestPassed": false,
+    "merged": false,
+    "pushed": false,
+    "published": false
+  },
+  "limitations": [
+    "触控事件验证为合成PointerEvent，实体手机手感和长时间帧率尚待用户测试。",
+    "WebSocket双客户端实测通过，WebRTC真双机和公网延迟未实测。规则8候选不能与规则7正式版混局。",
+    "极限低点救球只保证合理范围内允许触球；dropScramble实际触球后下网，不能记录为成功救回。",
+    "固定场景结果不能替代人类手感与整局平衡验收。"
+  ]
+}

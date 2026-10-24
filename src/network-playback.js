@@ -1,3 +1,5 @@
+import { horizontalLaunch, sampleShuttleFlight } from '../shared/shuttle-flight.js';
+
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const mix = (a, b, alpha) => a + (b - a) * alpha;
 const copy = value => structuredClone(value);
@@ -5,18 +7,17 @@ const EPSILON = 1e-7;
 const frozenPhase = phase => phase === 'paused' || phase === 'countdown';
 const gravity = 9.81; // Matches the shared ballistic simulation, in metres / second².
 
-// Position + velocity interpolation preserves a parabola within one flight.
-// Contact/landing anchors split it into separate curves at velocity changes.
+// Exact shared flight plus endpoint corrections for slice/packet rounding.
+// Consistent snapshots need zero correction; contact anchors keep both ends.
 function flightBetween(a, b, duration, alpha) {
   if (duration <= EPSILON) return { ...b };
   const t = clamp(alpha, 0, 1), t2 = t * t, t3 = t2 * t;
-  const ball = { ...a };
+  const ball = { ...a, ...sampleShuttleFlight(a, t * duration) };
+  const end = sampleShuttleFlight(a, duration);
   for (const [axis, velocity] of [['x', 'vx'], ['y', 'vy'], ['z', 'vz']]) {
-    const va = a[velocity] || 0, vb = b[velocity] || 0;
-    ball[axis] = (2 * t3 - 3 * t2 + 1) * a[axis] + (t3 - 2 * t2 + t) * va * duration
-      + (-2 * t3 + 3 * t2) * b[axis] + (t3 - t2) * vb * duration;
-    ball[velocity] = ((6 * t2 - 6 * t) * a[axis] + (3 * t2 - 4 * t + 1) * va * duration
-      + (-6 * t2 + 6 * t) * b[axis] + (3 * t2 - 2 * t) * vb * duration) / duration;
+    const delta = b[axis] - end[axis], deltaV = (b[velocity] || 0) - end[velocity];
+    ball[axis] += (3 * t2 - 2 * t3) * delta + (t3 - t2) * deltaV * duration;
+    ball[velocity] += (6 * t - 6 * t2) * delta / duration + (3 * t2 - 2 * t) * deltaV;
   }
   return ball;
 }
@@ -25,9 +26,8 @@ function contactBall(contact, end, duration) {
   // Derive launch velocity from exact authoritative contact and endpoint. This
   // also absorbs the physics slice in which a hit precedes shuttle integration.
   return { ...end, ...contact,
-    vx: duration > EPSILON ? (end.x - contact.x) / duration : end.vx,
+    ...(duration > EPSILON ? horizontalLaunch(contact, end, duration) : { vx: end.vx, vz: end.vz }),
     vy: duration > EPSILON ? (end.y - contact.y) / duration + gravity * duration / 2 : end.vy,
-    vz: duration > EPSILON ? (end.z - contact.z) / duration : end.vz,
   };
 }
 
@@ -97,7 +97,7 @@ function interpolate(a, b, alpha, packetSpanMs) {
     if (!hit) {
       if (a.shuttle.active) {
         const duration = hitAt - a.time;
-        const endpoint = { ...a.shuttle, ...contact, vy: a.shuttle.vy - gravity * duration };
+        const endpoint = { ...a.shuttle, ...sampleShuttleFlight(a.shuttle, duration), ...contact };
         state.shuttle = flightBetween(a.shuttle, endpoint, duration, (time - a.time) / duration);
       } else {
         state.shuttle = { ...a.shuttle };

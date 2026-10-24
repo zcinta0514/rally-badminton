@@ -3,37 +3,59 @@
 <!-- project-brief
 {
   "statusVersion": 1,
-  "asOf": "2026-10-16",
+  "asOf": "2026-10-24",
   "baseline": {
     "branch": "main",
-    "head": "6aecf9a878ed901ee0609ff591e93d2ff7d875c0",
-    "originMain": "6aecf9a878ed901ee0609ff591e93d2ff7d875c0",
+    "head": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
+    "originMain": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
     "releaseTag": "v1.10.0"
   },
   "activeTask": {
-    "title": "1.10.0 已发布并核验：FX-4 地胶配色",
-    "scope": "四套地胶配色与比赛屏独立「配色」入口随 1.10.0 发布；PR #5 合并 6aecf9a，标签 v1.10.0；Pages、Vercel 生产部署与线上浏览器核验完成。",
-    "nextAction": "用户继续真机与实战验收；如有反馈，在实时 main 基线建立下一修复任务。",
+    "title": "PACE-1 / 1.11.0 最终验证完成，准备合并",
+    "scope": "职业与业余录像逐帧取样，校准球的减速和人物移动节奏；工程验证完成，用户手感待确认。",
+    "nextAction": "用户已授权核实后合并。提交PR，等待Node22/24 CI成功后合并main，核对两处部署。",
     "blockedBy": [
-      "手机真机 30 分钟／稳定 60 帧与横屏触控实测未做（用户自理）。",
-      "联机对打双机配色视觉未实测；实现为本机偏好，不上传、不影响判定。",
-      "玫瑰粉无权威实拍基准，如需终版校准以用户提供的参考为准。"
+      "远端CI与生产部署尚待完成。",
+      "真手机手感与双真机WebRTC未实测。"
     ],
     "documents": [
-      "docs/tasks/FX-4.md",
-      "docs/RELEASE-1.10.0-CHECKPOINT.md"
+      "docs/tasks/PACE-1.md",
+      "docs/RELEASE-1.11.0-QA.json"
     ],
-    "checkpoint": "docs/RELEASE-1.10.0-CHECKPOINT.md"
+    "checkpoint": "docs/RELEASE-1.11.0-CHECKPOINT.md"
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "v1.10.0 已发布：PR#5合并6aecf9a，标签v1.10.0；Pages 152a297fac2bf852、Vercel 31e7cd941732fbc7；线上两处显示正式版 1.10.0 且更新公告实际弹出。"
+    "releaseState": "1.11.0本地721/721与构建通过；线上当前仍1.10.0。",
+    "localPreview": {
+      "task": "PACE-1",
+      "url": "http://127.0.0.1:3063/",
+      "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/vibrant-thompson",
+      "pid": 20663,
+      "buildId": "a41043ea6cbc4d21",
+      "sidebarTab": "PACE-1 玩法测试",
+      "verifiedOn": "2026-10-24",
+      "limitations": "侧边栏已恢复并实测发球与移动；任务未在主窗口展开时预览可能保持1×1，选中本任务再focus即可恢复。真机手感待确认。"
+    },
+    "comparisonPreview": {
+      "url": "http://127.0.0.1:3064/",
+      "pid": 8405,
+      "baseline": "01fed373",
+      "candidate": "6b2724b6",
+      "scope": "相同站位／输入／人物／镜头的真实共享规则重放；不代表旧版整套UI录像；五场景验证通过。",
+      "evidence": "artifacts/pace-compare/RESULT.md",
+      "sidebarTab": "修复前后同步对比"
+    }
   },
   "readNext": [
-    "docs/tasks/FX-4.md",
-    "docs/RELEASE-1.10.0-CHECKPOINT.md"
+    "docs/tasks/PACE-1.md",
+    "docs/RELEASE-1.11.0-CHECKPOINT.md"
   ],
   "links": [
+    "docs/tasks/PACE-1.md",
+    "docs/PACE-1-REAL-QA.json",
+    "docs/PACE-1-REAL-REFERENCE.md",
+    "docs/PACE-1-CHECKPOINT.md",
     "docs/tasks/FX-4.md",
     "docs/FX-4-CHECKPOINT.md",
     "docs/FX-4-QA.json",
@@ -59,20 +81,20 @@
     "docs/DEPLOYMENT.md"
   ],
   "handoff": {
-    "taskId": "FX-4",
-    "branch": "docs/R-1.10.0-result",
-    "baselineHead": "6aecf9a878ed901ee0609ff591e93d2ff7d875c0",
-    "taskFile": "docs/tasks/FX-4.md",
-    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/release-1-10-postcheck",
-    "phase": "已发布",
-    "stopReason": "合并、标签、两处生产部署及线上浏览器核验完成。",
-    "nextAction": "用户继续真机与实战验收；如有反馈，在实时 main 基线建立下一修复任务。",
-    "checkpoint": "docs/RELEASE-1.10.0-CHECKPOINT.md",
-    "validation": "Node22/24各709/709；构建 31e7cd941732fbc7；线上核验见 docs/RELEASE-1.10.0-QA.json。",
-    "scopeBoundary": "用户授权合并与发布；真机与实战验收用户自理，配色保持本机视觉。"
+    "taskId": "PACE-1",
+    "branch": "cindy/vibrant-thompson",
+    "baselineHead": "01fed373cea2ff89e0776e3cf5d34b1c7f77f16a",
+    "taskFile": "docs/tasks/PACE-1.md",
+    "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/vibrant-thompson",
+    "phase": "最终验证完成，准备PR合并",
+    "stopReason": "用户已授权核实后合并，版本与公告同步，当前没有测试失败。",
+    "nextAction": "用户已授权核实后合并。提交PR，等待Node22/24 CI成功后合并main，核对两处部署。",
+    "checkpoint": "docs/RELEASE-1.11.0-CHECKPOINT.md",
+    "validation": "1.11.0最终721/721、88资源a41043ea6cbc4d21，Pages路径b9cf9dd3efba46e4；服务含sw逐字节一致；浏览器发球/移动/接吊/接杀通过；WebSocket协议9双客户端一致。远端CI待验。",
+    "scopeBoundary": "用户授权最终核实后合并并核对现有main自动部署；不改人物并行成果，不使用子代理。"
   },
-  "publication": "v1.10.0 已发布：PR#5合并6aecf9a，标签v1.10.0；Pages 152a297fac2bf852、Vercel 31e7cd941732fbc7。人物实验未合并，原P1预览3040未改。"
+  "publication": "当前线上1.10.0；本轮1.11.0准备合并，尚未核验生产。"
 }
 -->
 
-正式1.10.0已上线并核验（地胶配色）。3040为独立人物任务，3010为FX-4配色本地预览。
+用户已授权最终核实后合并。1.11.0本地验证完成，远端CI及生产部署待核验。

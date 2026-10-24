@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as rules from '../shared/game.js';
+import { sampleShuttleFlight } from '../shared/shuttle-flight.js';
 
 const frame = 1 / 120;
 const advance = (s, seconds, inputs = [{}, {}]) => {
@@ -63,14 +64,25 @@ test('availability uses turn, court, reach, height, cooldown and stamina boundar
 });
 
 test('beginner shot input remains buffered longer but still uses the normal contact contract', () => {
-  const standard = incoming({x: 0, y: 1.2});
+  const standard = incoming({x: 2.4, y: 4.5, vy: 0});
   const assisted = rules.createMatch({playerAssist: 'beginner'});
   assisted.phase = 'rally'; assisted.players[0].x = 0; assisted.players[0].z = 3.8;
-  Object.assign(assisted.shuttle, {x: 0, y: 1.2, z: 3.8, vx: 0, vy: -0.2, vz: 0, active: true, lastHit: 1});
+  Object.assign(assisted.shuttle, {x: 2.4, y: 4.5, z: 3.8, vx: 0, vy: 0, vz: 0, active: true, lastHit: 1});
   rules.stepMatch(standard, [{shot: 'clear'}, {}], frame);
   rules.stepMatch(assisted, [{shot: 'clear'}, {}], frame);
   assert.ok(assisted.players[0].pendingShot.remaining > standard.players[0].pendingShot.remaining);
-  assert.ok(assisted.players[0].pendingShot.remaining < 0.6);
+  assert.ok(assisted.players[0].pendingShot.remaining < 0.65);
+  assert.ok(Math.abs(assisted.players[0].pendingShot.remaining - standard.players[0].pendingShot.remaining - .1) < 1e-8);
+  for (let tick = 0; tick < 68; tick++) {
+    rules.stepMatch(standard, [{}, {}], frame);
+    rules.stepMatch(assisted, [{}, {}], frame);
+  }
+  assert.equal(standard.players[0].pendingShot, null);
+  assert.ok(assisted.players[0].pendingShot);
+  for (let tick = 0; tick < 14; tick++) rules.stepMatch(assisted, [{}, {}], frame);
+  assert.equal(assisted.players[0].pendingShot, null);
+  assert.equal(standard.hitId, 0);
+  assert.equal(assisted.hitId, 0);
 });
 
 test('future interception never advertises immediate smash while ball is unreachable', () => {
@@ -191,7 +203,8 @@ test('service contact holds the feet still throughout the windup', () => {
 test('prediction agrees with independently calculated net height and the singles boundary', () => {
   for (const offset of [-0.001, 0.001]) {
     // 0.5 seconds to net; gravity drop is 1.22625 m.
-    const s = incoming({x: 0, y: 1.52 + 1.22625 + offset, z: 1, vz: -2, vy: 0});
+    const vz = -Math.expm1(.2) / (.2 * .5); // 1m in .5s with quadratic drag.
+    const s = incoming({x: 0, y: 1.52 + 1.22625 + offset, z: 1, vz, vy: 0});
     const event = rules.predictLanding(s);
     assert.equal(event.event, offset < 0 ? 'net' : 'landing');
     if (offset < 0) { assert.ok(Math.abs(event.time - 0.5) < 1e-9); assert.ok(Math.abs(event.y - (1.52 + offset)) < 1e-9); }
@@ -440,7 +453,9 @@ test('risk spread encloses actual control drift including the shortened flight f
     Object.assign(s.players[side], {x: 0, z: end * 3.8, vx: end * 3, vz: -end * 2, stamina: 12});
     const result = rules.getShotTarget(s, side, {shot, aim: end * 0.9, aimDepth: 0.65, charge: 0.85});
     const flightTime = (result.vy + Math.sqrt(result.vy ** 2 + 19.62 * height)) / 9.81;
-    const actualX = s.shuttle.x + result.vx * flightTime, actualZ = s.shuttle.z + result.vz * flightTime;
+    const speed = Math.hypot(result.vx, result.vz);
+    const scale = Math.log1p(.2 * speed * flightTime) / (.2 * speed);
+    const actualX = s.shuttle.x + result.vx * scale, actualZ = s.shuttle.z + result.vz * scale;
     assert.ok(Math.hypot(actualX - result.x, actualZ - result.z) < 1e-8);
     assert.ok(Math.hypot(actualX - result.aimX, actualZ - result.aimZ) <= result.quality.spread + 1e-8);
   }
@@ -477,7 +492,9 @@ for (const [kind, changes] of [
   assert.equal(event.duration, 1.4);
   assert.ok(Math.abs(event.at - (12 + expected.time)) < 1e-8);
   for (const axis of ['x', 'y', 'z']) assert.ok(Math.abs(event[axis] - expected[axis]) < 1e-8, axis);
-  assert.equal(event.vx, before.vx); assert.equal(event.vz, before.vz);
+  const impactVelocity = sampleShuttleFlight(before, expected.time);
+  assert.ok(Math.abs(event.vx - impactVelocity.vx) < 1e-9);
+  assert.ok(Math.abs(event.vz - impactVelocity.vz) < 1e-9);
   assert.ok(Math.abs(event.vy - (before.vy - 9.81 * expected.time)) < 1e-8);
   assert.equal(s.shuttle.active, false); assert.equal(s.pointId, 1);
   assert.deepEqual(JSON.parse(JSON.stringify(event)), event);
