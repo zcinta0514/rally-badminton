@@ -93,6 +93,9 @@ button.secondary-btn:active:not(:disabled), .dialog button.secondary-btn:active:
 .segments button.selected, .friend-setup #friend-modes button[aria-pressed=true], .dialog #friend-modes button[aria-pressed=true] { color: var(--ink); background: var(--surface); box-shadow: 0 2px 5px #243d3115; font-weight: 600; }
 .rules-note { color: var(--muted); }
 #ai-start-controls { border-top: 1px solid var(--line); }
+/* The install row sits directly under the launch action; its divider must not read as a
+   stray rule hanging off the bottom edge of that button. */
+#menu[data-entry="ai"] > #install-app { border-top-color: transparent; }
 .entry-content>h3 { font-weight: 550; }
 .training-goals b { font-weight: 550; }
 .friend-setup input, .dialog input, .dialog textarea, .dialog select { border: 1px solid var(--line); border-radius: 11px; background: var(--surface); color: var(--ink); }
@@ -129,6 +132,7 @@ button.secondary-btn:active:not(:disabled), .dialog button.secondary-btn:active:
 
 /* Live match: opaque light surfaces keep contrast against every court palette. */
 body[data-screen=match] .topbar { color: var(--ink); }
+body[data-screen=match] .brand { color: var(--surface); }
 body[data-screen=match] .icon-btn, body[data-screen=match] .camera-toggle, body[data-screen=match] .palette-toggle, body[data-screen=match] .match-settings-toggle {
   background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; box-shadow: inset 0 1px 0 #fff, 0 2px 0 #bdccbb;
 }
