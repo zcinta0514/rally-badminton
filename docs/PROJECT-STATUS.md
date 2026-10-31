@@ -5,15 +5,15 @@
   "statusVersion": 1,
   "asOf": "2026-10-31",
   "baseline": {
-    "branch": "ui-2-court-white",
-    "head": "7164832c6b2dae212318c8ff2ec53a607cfe5fab",
-    "originMain": "7164832c6b2dae212318c8ff2ec53a607cfe5fab",
-    "releaseTag": "v1.11.0"
+    "branch": "main",
+    "head": "b0f9f84e30ddabfe11ea5b8cd6878b74cebaa657",
+    "originMain": "b0f9f84e30ddabfe11ea5b8cd6878b74cebaa657",
+    "releaseTag": "v1.12.0"
   },
   "activeTask": {
-    "title": "UI-2：界面与击球反馈 1.12.0 发布准备",
-    "scope": "球场白全界面、主菜单文案、击球触感/视觉反馈、竖屏安全区；保留全部玩法与标志。",
-    "nextAction": "创建 PR，CI 通过后合并 main、打 v1.12.0，核验 Pages/Vercel 并回填发布检查点。",
+    "title": "UI-2：1.12.0 已发布，等待实体设备验收",
+    "scope": "球场白全界面、主菜单文案、击球触感/视觉反馈、竖屏安全区；已合并并上线。",
+    "nextAction": "用户在实体安卓机确认振动强度，在实体 iPhone/Android 复测安装态安全区；新任务另建 worktree。",
     "blockedBy": [],
     "documents": [
       "docs/tasks/UI-2.md"
@@ -22,16 +22,16 @@
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "v1.11.0已发布：PR#7合并829d005f，标签v1.11.0；Pages b9cf9dd3efba46e4、Vercel a41043ea6cbc4d21。两处正式版、公告、关键资源哈希与发球/移动/配色操作实际核验通过。",
+    "releaseState": "v1.12.0已发布：PR#9合并b0f9f84e，标签v1.12.0；Pages构建e3f6043e1405a3a2、Vercel构建a7ae870879cdef42。两处正式版1.12.0、标题、公告、统计默认开启、标志与关键资源实际回读通过。",
     "localPreview": {
       "task": "UI-2",
       "url": "http://127.0.0.1:3072/",
       "worktree": "/Users/xindong/Documents/开拍rally-ui-2-court-white",
       "transport": "本机WebSocket对战，PUBLIC_PEER_MODE=0",
       "verifiedOn": "2026-10-31",
-      "limitations": "仅本机127.0.0.1，房间用WebSocket；R3主菜单与竖屏安全区已接入，安全区为Chrome模拟，实体手机待复核。",
-      "buildId": "121ef2eca07996f3",
-      "pid": 39907,
+      "limitations": "仅本机127.0.0.1，房间用WebSocket；已合并主线，实体振动强度与安装态安全区待复核。",
+      "buildId": "641c33bfc78eca96",
+      "pid": 69535,
       "sidebarTab": "球馆白 A · 完整游戏"
     }
   },
@@ -49,15 +49,15 @@
     "baselineHead": "7164832c6b2dae212318c8ff2ec53a607cfe5fab",
     "taskFile": "docs/tasks/UI-2.md",
     "worktree": "/Users/xindong/Documents/开拍rally-ui-2-court-white",
-    "phase": "发布准备：本地核验完成，标志核对一致，PR 待创建",
-    "stopReason": "用户要求合并本轮改动；本地测试、构建、几何与标志核对已完成，等待 PR/CI/合并/部署。",
-    "nextAction": "创建 PR，CI 通过后合并 main、打 v1.12.0，核验 Pages/Vercel 并回填发布检查点。",
+    "phase": "已发布 v1.12.0：PR/CI/Pages/Vercel 已核验，等待实体设备验收",
+    "stopReason": "按用户要求完成 PR 合并、标签与部署；线上两处已回读通过。",
+    "nextAction": "用户在实体安卓机确认振动强度，在实体 iPhone/Android 复测安装态安全区；新任务另建 worktree。",
     "checkpoint": "docs/UI-2-CHECKPOINT.md",
-    "validation": "727/727与根路径a7ae870879cdef42、Pages e3f6043e1405a3a2构建通过；标志与origin/main逐项一致；首页主控件7视口0px；触感、竖屏安全区与51LA默认开启已核验；实体振动/安装态未测。",
-    "scopeBoundary": "仅本地实现与试玩；不改版本、不推送、不合并、不上线，不动其他worktree。"
+    "validation": "727/727；根路径a7ae870879cdef42、Pages e3f6043e1405a3a2均上线；PR#9合并b0f9f84e、标签v1.12.0；两处线上正式版/标题/公告/统计默认开启/标志计算样式回读通过；实体振动与安装态未测。",
+    "scopeBoundary": "已按用户授权合并 main、打 v1.12.0 并部署；实体设备验收与后续任务另行授权，不动其他 worktree。"
   },
-  "publication": "v1.11.0已发布：PR#7合并829d005f，标签v1.11.0；Pages b9cf9dd3efba46e4、Vercel a41043ea6cbc4d21。两处正式版、公告、关键资源哈希与发球/移动/配色操作实际核验通过。"
+  "publication": "v1.12.0已发布：PR#9合并b0f9f84e，标签v1.12.0；Pages构建e3f6043e1405a3a2、Vercel构建a7ae870879cdef42。两处正式版1.12.0、标题、公告、统计默认开启、标志与关键资源实际回读通过。"
 }
 -->
 
-球馆白 A 已完整接入本地候选，可实际游玩。等待用户视觉和点击手感反馈；未推送、合并或发布，线上仍为既有 v1.11.0。
+v1.12.0 已发布到 GitHub Pages 与 Vercel：球场白界面、主菜单文案、击球触感/视觉反馈与竖屏安全区均已上线。剩余真机验收（安卓振动强度、iPhone/Android 安装态）由用户完成；本地预览 http://127.0.0.1:3072/ 仍在 UI-2 worktree 上运行。
