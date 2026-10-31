@@ -81,11 +81,11 @@ function preparePlayerProfile(){
 }
 if(practiceOnly){
   for(const id of ['open-leaderboard','result-leaderboard'])$(id).hidden=true;
-  setText('menu-intro','人机练习，也可在局域网与好友对打。');
-  setText('open-friends','局域网 1V1 说明 ↗');
+  setText('menu-intro','可进行人机对战，也可通过局域网与好友对战。');
+  setText('open-friends','局域网联机说明 ↗');
 }else try{$('player-name').value=preparePlayerProfile().name;}catch(error){setText('player-profile-note',error.message);}
 if(peerMode){
-  setText('menu-intro','选个对手，开始比赛。');
+  setText('menu-intro','选择对战模式，开始比赛。');
   setText('leaderboard-title','本机好友榜');
 }else setText('friends-network-note','同一局域网网址 · 主机电脑需保持运行');
 function dialog(id){
@@ -163,7 +163,7 @@ if(restoredUpdatePreferences){
   syncRulesControls();syncSoundControls();
 }
 setText('role-note',roleNotes[settings.role]);setText('difficulty-note',difficultyNotes[settings.difficulty]);
-function syncCoachNote(){setText('coach-note',ROLES[settings.coachRole].label+'陪练 · '+({balanced:'攻守均衡',swift:'移动快、体力回满快，连续杀球耗费较高',power:'重击省力、体力池大，跑动较费力、回满较慢'}[settings.coachRole])+'。仅人机练习；基础练习使用均衡陪练。');}
+function syncCoachNote(){setText('coach-note',ROLES[settings.coachRole].label+'陪练 · '+({balanced:'攻守均衡',swift:'移动快、体力回满快，连续杀球耗费较高',power:'重击省力、体力池大，跑动较费力、回满较慢'}[settings.coachRole])+'。仅人机对战；三步训练使用均衡陪练。');}
 syncCoachNote();
 for(const [id,key,attr] of [['roles','role','role'],['friend-roles','friendRole','friendRole'],['coach-roles','coachRole','coachRole'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset'],['friend-modes','finale','finale']]){
   $(id).addEventListener('click',event=>{
@@ -194,7 +194,7 @@ function openEntry(stage){
   $('mode-setup').hidden=!['home','ai'].includes(stage);$('ai-setup').hidden=stage!=='ai';
   $('home-actions').hidden=stage!=='home';$('ai-start-controls').hidden=stage!=='ai';
   $('training-setup').hidden=stage!=='training';$('friends-dialog').hidden=stage!=='friends';
-  const labels={ai:['人机对战','选择打法、对手和比赛形式。'],training:['基础练习','练习跑位、击球和回位。'],friends:['好友对打','创建房间或输入房间码加入。'],home:['','']};
+  const labels={ai:['人机对战','选择打法、陪练与赛制。'],training:['三步训练','依次练习跑位、选线与回位。'],friends:['好友对战','创建或加入房间，确认规则后开始。'],home:['','']};
   setText('entry-title',labels[stage][0]);setText('entry-description',labels[stage][1]);syncEntrySettings();
 }
 for(const [id,friend]of [['ai-formats',false],['friend-formats',true]])$(id).addEventListener('click',event=>{
@@ -285,17 +285,17 @@ function handleNetwork(message){
     currentPlayerId=message.players[side]?.playerId||null;
     setText('waiting-code',message.code);
     setText('waiting-mode',message.rules?.finale==='father-son'?'父子局 · 赛后互动不可跳过':'普通对局 · 无赛后互动');
-    setText('waiting-status',message.players.filter(Boolean).length===2?'● 球友已到，准备开场':'● 房间已创建，等待加入');
+    setText('waiting-status',message.players.filter(Boolean).length===2?'● 对手已加入，可以准备':'● 房间已创建，等待对手加入');
     history.replaceState(null,'',`?room=${encodeURIComponent(message.code)}`);
     if(!state){mode='waiting';
       const connected=message.players.filter(p=>p?.connected).length;
       const ready=message.ready||[];const parent=message.rules?.finale==='father-son';
-      const lineup=message.players.map((p,index)=>p?(p.name+' · '+ROLES[p.role].label+'型 · '+(!p.connected?'已断开':ready.includes(index)?'已准备':'未准备')):'等待球友加入').join('\n');
+      const lineup=message.players.map((p,index)=>p?(p.name+' · '+ROLES[p.role].label+'型 · '+(!p.connected?'已断开':ready.includes(index)?'已准备':'未准备')):'等待对手加入').join('\n');
       setText('waiting-players',lineup);setText('waiting-rules',(message.ruleset==='standard21'?'标准三局 · 每局21分':message.target+'分单局')+' · '+(parent?'父子局':'普通对局'));
-      setText('waiting-consent',parent?'父子局：败者跪拜叫爸爸，约3秒不可跳过。双方确认并准备后开打。':'确认本房间规则，双方准备后倒数3秒开打。');
+      setText('waiting-consent',parent?'父子局：败者跪拜叫爸爸，约3秒不可跳过。双方确认并准备后开始比赛。':'确认本房间规则，双方准备后倒数 3 秒开始比赛。');
       $('ready-room').disabled=connected!==2||ready.includes(side)||!message.readyRequired;
-      setText('ready-room',connected!==2?'等待球友加入':ready.includes(side)?'已准备，等待球友':parent?'同意父子局并准备':'确认规则并准备');
-      if(connected!==2&&message.players[1])setText('waiting-status','球友已断开，请重新建房');
+      setText('ready-room',connected!==2?'等待对手加入':ready.includes(side)?'已准备，等待对手':parent?'同意父子局并准备':'确认规则并准备');
+      if(connected!==2&&message.players[1])setText('waiting-status','对手已断开，请重新创建房间');
       dialog('waiting-dialog');}
   }else if(message.type==='state'){
     if(message.state?.rulesVersion!==RULES_VERSION){showToast('比赛规则已更新，请双方联网刷新后重新建房');controls.setEnabled(false);return;}
@@ -318,9 +318,9 @@ function handleNetwork(message){
     setText('connection',lastRtt===null?'手机直连':`${lastRtt} ms · ${peerMode?'手机直连':'联机'}`);
   }else if(message.type==='rematch'){
     rematchRequested=message.ready.includes(side);
-    if(state?.phase==='over')setText('rematch',rematchRequested?'等待球友同意…':message.ready.length?'球友邀你再战 · 开始 ↗':'再来一局 ↗');
+    if(state?.phase==='over')setText('rematch',rematchRequested?'等待对手确认…':message.ready.length?'对手邀请再战 · 开始 ↗':'再来一局 ↗');
   }else if(message.type==='resumeReady'){
-    if(state?.phase==='paused')setText('resume',message.ready.includes(side)?'已准备，等待球友…':'球友已准备 · 继续 ↗');
+    if(state?.phase==='paused')setText('resume',message.ready.includes(side)?'已准备，等待对手…':'对手已准备 · 继续 ↗');
   }
 }
 async function connect(){
@@ -491,7 +491,7 @@ function updateUI(info,state){
   setText('name-self',nameSelf);setText('name-other',nameOther);
   setText('role-self',ROLES[self.role].label+'型');setText('role-other',ROLES[opponent.role].label+'型');
   setText('score-self',state.score[side]);setText('score-other',state.score[1-side]);
-  const matchType=mode==='ai'?'人机练习':room?.rules?.finale==='father-son'?'父子局':'普通对局';
+  const matchType=mode==='ai'?'人机对战':room?.rules?.finale==='father-son'?'父子局':'普通对局';
   const matchLabel=trainingSession&&trainingSession.step<3
     ?`训练 ${trainingSession.step+1}/3 · ${TRAINING_STEPS[trainingSession.step].title}`
     :trainingSession?'训练完成 · 继续实战':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[side]}:${state.games[1-side]} · ${matchType}`:`${state.target} 分制 · ${matchType}`;
@@ -559,12 +559,12 @@ function updateUI(info,state){
   if(state.phase!==lastPhase){
     lastPhase=state.phase;
     if(state.phase==='paused'){
-      setText('pause-title','已暂停');
-      setText('resume','准备继续 ↗');
-      setText('pause-description',mode==='ai'?'每人每场可暂停一次，最多 30 秒。':peerMode?'每人每场一次，最多 30 秒；双方准备后继续，请保持游戏在前台。':'每人每场一次；双方准备后继续，断线球友可在倒计时内重连。');
+      setText('pause-title','比赛暂停');
+      setText('resume','继续比赛 ↗');
+      setText('pause-description',mode==='ai'?'每人每场可暂停一次，最多 30 秒。':peerMode?'每人每场一次，最多 30 秒；双方准备后继续，请保持游戏在前台。':'每人每场一次；双方准备后继续，断线对手可在倒计时内重连。');
       dialog(helpOpen?'help-dialog':'pause-dialog');
     }else if(state.phase==='over'){
-      setText('result-title',state.winner===null?'本局结束':state.winner===side?'你赢了':'本局落败');
+      setText('result-title',state.winner===null?'本局结束':state.winner===side?'本局获胜':'本局失利');
       setText('result-score',state.ruleset==='standard21'?`局数 ${state.games[side]} : ${state.games[1-side]}`:`${state.score[side]} : ${state.score[1-side]}`);
       const resultReason=relativeMessage(state.message).replace(/\s*·\s*(?:局数\s*)?\d+\s*:\s*\d+$/,'');
       setText('result-reason',resultReason+(state.ruleset==='standard21'?` · 本局比分 ${state.score[side]}:${state.score[1-side]}`:''));setText('rematch','再来一局 ↗');

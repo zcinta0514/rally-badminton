@@ -59,14 +59,14 @@ export function createLeaderboard({ document, getURL, fetchImpl = globalThis.fet
       }
       $('leaderboard-table').hidden = !data.entries.length;
       const local = data.storage === 'local' || data.storage === 'local-memory';
-      $('leaderboard-status').textContent = (local ? '本机好友战绩 · ' : '') + (data.entries.length ? `前 ${Math.min(50, data.entries.length)} 位球友 · 完成好友对局后更新` : '暂无战绩。完成一场好友 1V1，即可上榜。');
+      $('leaderboard-status').textContent = (local ? '本机好友战绩 · ' : '') + (data.entries.length ? `前 ${Math.min(50, data.entries.length)} 位玩家 · 完成好友对战后更新` : '暂无战绩 · 完成一场好友对战后更新。');
       $('leaderboard-storage').textContent = local
         ? '仅保存本机参加的对局，与服务器榜单独立；统计最近 500 场完整好友对局。' + (data.storage === 'local-memory' ? '浏览器无法保存，关闭页面后新增战绩会丢失。' : '')
-        : data.storage === 'memory' ? '当前是临时排行榜，服务器重启后可能丢失。' : '统计本服务器已完成的好友对局；人机练习和中途退出不计入。';
+        : data.storage === 'memory' ? '当前是临时排行榜，服务器重启后可能丢失。' : '统计本服务器已完成的好友对局；人机对战和中途退出不计入。';
     } catch {
       if (current !== generation) return;
       $('leaderboard-rows').replaceChildren(); $('leaderboard-table').hidden = true;
-      $('leaderboard-status').textContent = '无法连接排行榜。请检查网络或服务器后重试；离线仍可人机练习。';
+      $('leaderboard-status').textContent = '无法连接排行榜。请检查网络或服务器后重试；离线仍可进行人机对战。';
     } finally {
       clearTimeout(timer);
       if (current === generation) { controller = null; $('leaderboard-retry').disabled = false; $('leaderboard-retry').hidden = false; }

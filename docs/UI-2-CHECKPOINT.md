@@ -28,7 +28,7 @@
 启动：`PORT=3072 HOST=127.0.0.1 PUBLIC_PEER_MODE=0 LEADERBOARD_PATH=artifacts/ui-2/leaderboard.json node server/index.js`。
 地址：http://127.0.0.1:3072/ 。监听仅127.0.0.1；服务器启动日志里的其他网卡地址不是本轮已可用的手机链接。本地预览使用WebSocket房间，不改变生产的peer默认设置。
 
-PID 27987（需以实际端口重新核验），Cindy标签「球馆白 A · 完整游戏」。Node资源在启动时构建快照；后续修改需重启并核验页面/Service Worker，不依赖单次刷新。
+第二轮的当前 PID 见下方 R2 段（以实际端口重新核验），Cindy标签「球馆白 A · 完整游戏」。Node资源在启动时构建快照；后续修改需重启并核验页面/Service Worker，不依赖单次刷新。
 
 证据目录 `artifacts/ui-2/`（本机忽略）：browser-qa.json、final-qa.json、served-inventory.json、tests-final.log、build-final.log及各入口截图；qa.cjs/final.cjs复现脚本依赖临时Playwright `/tmp/rally-ui-1-tools/node_modules/playwright` 和本机Chrome，每次新建独立浏览器，结束自动关闭。`delivered-home.png`、`delivered-match.png`、`delivered-pause.png`为最终运行画面。
 
@@ -40,3 +40,26 @@ PID 27987（需以实际端口重新核验），Cindy标签「球馆白 A · 完
 4. 打开配色/设置，再看暂停、结算和好友等待，确认全套界面一致。
 
 当前只是本地候选，尚未获得用户视觉和手感验收；未推送、开PR、合并或上线，未修改游戏版本。后续继续此分支，勿把UI-1玻璃试作当作本轮选定方向。
+
+## R2：恢复原版控件位置、正式文案、标志不变
+
+2026-10-31。用户验收第一轮后指出：操作按键位置不能改（老玩家操作习惯）；品牌标志不能改；界面标语和引导语要按成熟游戏的正式口径写，不要口语化。基线仍为主线上游 7164832c（本轮开始前 `git fetch` 复核 origin/main 未变），分支与工作目录不变，版本号未改。
+
+### 实现
+
+- `src/ui-court-white.css` 重写为纯表面层：删除 `--header-height`/`--menu-width`、菜单内边距、h1 字号与间距、首页按钮 `order`/最小高度、开始训练缩成文字链、role-note 折叠、分组控件内边距、对话框内边距与字号等全部几何覆盖；保留颜色、描边、圆角、底边阴影、55ms 按下与 180ms 回弹、hover 与减少动态效果处理。
+- 恢复主线的首页结构：按钮顺序与文案人机对战→三步训练→好友对战，role-note 常显，`01` 序号常显；配色/设置按钮回到仅比赛可见，不再挤动顶栏其余按钮。
+- 品牌区不再套用主题：标志保持 `#008650` 底、`#0756b0` 下边线、白色图形，RALLY 副字保持品牌绿；其余界面用主题色。
+- 文案改为正式游戏口径：顶部模式标签「羽毛球 · 单打」，首页标题「羽毛球／单打」，导语「选择对战模式，开始比赛。」；按钮副标「选择打法、难度与赛制」「跑位 · 选线 · 回位」「创建或加入房间」；对话框「比赛暂停」「本局获胜／本局失利／本局结束」「操作说明」「排行榜」「意见反馈」；关闭按钮统一「关闭」。好友流程统一用「对手」，排行榜与离线状态、菜单、教学、反馈、PWA 安装与更新公告同步。测试中的人机练习/已暂停/好友对打等旧预期逐条更新，未删除断言。
+
+### 检查结果（本轮实测）
+
+- 几何对照：新建干净工作树 `/tmp/rally-main-baseline`（7164832c，88 资源构建）并启动 3074 端口，与本轮 3072 用同一 Chrome、同视口逐元素比较 `getBoundingClientRect`。首页 1440×900、1280×720、844×390、667×375、568×320、390×844、320×700 共 7 种视口：人机/三步训练/好友三张入口卡、声音/全屏/帮助、视角/配色/设置、标题区与菜单面板 **全部 0 px 差异**；仅页脚文字链接因字体栈不同宽 2 px。三入口、操作说明、比赛 HUD、暂停：入口卡、开始按钮、分组控件、击球键、比分板、暂停按钮 0 px 差异；返回链接宽度差 2 px（字体），摇杆与提示块纵向 1 px（字体行高）。对话框补回主线 4 px 绿色顶边后，暂停与操作说明对话框矩形与内容逐像素一致。证据 `artifacts/ui-2/r2/geometry-home.json`、`geometry-entries.json`。
+- `npm test`：721/721 通过，零失败/跳过。
+- `npm run build`：90 资源，`bc052290305665b8`；服务重启后页面运行时 buildId `e9e402d2400d0053`。HTTP 取回的 index.html、ui-court-white.css、main.js、onboarding.js SHA-256 与磁盘一致。
+- 比赛中直接压在场地上、没有浅色底板的状态文字（击球瞄准提示、落点风险、摇杆提示、比分旁提示）保留主线浅色，不套用深色字，避免在深色场地上看不清；这类文字只改颜色，不改位置。
+- 浏览器实测首页、人机开局、训练、好友、操作说明、排行榜、比赛、暂停与配色/设置面板；页面无 pageerror。计算样式核对标志为 `rgb(0,134,80)` 底、`5px solid rgb(7,86,176)` 下边线、白色图形，与主线一致。
+- 截图 `artifacts/ui-2/r2/`：home-1440／home-844x390／home-390x844／home-320x700、ai-entry、training、friends、help、leaderboard、match、pause、onboarding。
+- 未做：实体手机触感、用户视觉与手感判断；本轮不改玩法、人物、联机协议，不推送、不合并、不上线。
+
+预览仍是 `PORT=3072 HOST=127.0.0.1 PUBLIC_PEER_MODE=0 LEADERBOARD_PATH=artifacts/ui-2/leaderboard.json node server/index.js`，http://127.0.0.1:3072/ ，重启后 PID 75216（以实际端口为准）。

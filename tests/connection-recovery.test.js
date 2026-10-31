@@ -305,7 +305,7 @@ test('static page explains LAN room codes without pretending to host a room and 
   assert.equal(f.element('open-friends').hidden,false);
   assert.equal(f.element('open-leaderboard').hidden,true);
   assert.match(f.element('menu-intro').textContent,/局域网/);
-  assert.match(f.element('open-friends').textContent,/1V1 说明/);
+  assert.match(f.element('open-friends').textContent,/联机说明/);
   assert.notEqual(f.visibleDialogs().includes('friends-dialog'),true);
   f.click('open-friends');f.click('open-leaderboard');await f.click('create-room');await f.click('join-room');
   assert.deepEqual(f.visibleDialogs(),['lan-dialog']);
@@ -369,9 +369,9 @@ for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
     f.chooseSetting('targets', target); f.startAI();
     const state = f.liveState;
     state.score = [target - 2, target - 2]; f.draw(0);
-    assert.equal(f.element('match-label').textContent, `${target} 分制 · 人机练习`);
+    assert.equal(f.element('match-label').textContent, `${target} 分制 · 人机对战`);
     state.score = [target - 1, target - 1]; f.draw(0);
-    assert.match(f.element('match-label').textContent, /人机练习 · 加球中$/);
+    assert.match(f.element('match-label').textContent, /人机对战 · 加球中$/);
     assert.match(f.element('match-message').textContent, /你发球.*发球区 → 对角/);
     landScoringShuttle(state, 0); f.draw(0);
     assert.deepEqual([...state.score], [target, target - 1]);
@@ -397,11 +397,11 @@ test('standard HUD retains game counts and hides deuce hints during a completed 
   f.chooseSetting('rulesets', 'standard21'); f.startAI();
   const state = f.liveState;
   state.score = [20, 20]; state.games = [1, 0]; state.gameNumber = 2; f.draw(0);
-  assert.equal(f.element('match-label').textContent, '第2局 · 1:0 · 人机练习 · 加球中');
+  assert.equal(f.element('match-label').textContent, '第2局 · 1:0 · 人机对战 · 加球中');
   state.score = [29, 29]; f.draw(0);
   assert.match(f.element('match-label').textContent, /下一分获胜$/);
   state.score = [20, 22]; state.games = [1, 1]; state.phase = 'intermission'; state.timer = 4; f.draw(0);
-  assert.equal(f.element('match-label').textContent, '第2局 · 1:1 · 人机练习');
+  assert.equal(f.element('match-label').textContent, '第2局 · 1:1 · 人机对战');
   f.click('pause'); f.draw(0);
   assert.deepEqual(f.visibleDialogs(), ['pause-dialog']);
   assert.doesNotMatch(f.element('match-label').textContent, /加球中|下一分获胜/);
@@ -605,7 +605,7 @@ test('sustained disconnect keeps a local exit available and permits offline AI w
   assert.equal(f.socket(), offlineSocket, 'a queued old retry must not reconnect after leaving for AI');
   f.click('pause'); f.draw();
   assert.deepEqual(f.visibleDialogs(), ['pause-dialog']);
-  assert.equal(f.element('pause-title').textContent, '已暂停');
+  assert.equal(f.element('pause-title').textContent, '比赛暂停');
   assert.equal(f.element('resume').disabled, false);
 });
 
@@ -633,7 +633,7 @@ for (const phase of ['serve', 'paused']) {
     assert.equal(f.view.dt > 0, true);
     if (phase === 'paused') {
       assert.deepEqual(f.visibleDialogs(), ['pause-dialog']);
-      assert.equal(f.element('pause-title').textContent, '已暂停');
+      assert.equal(f.element('pause-title').textContent, '比赛暂停');
       assert.equal(f.element('resume').disabled, false);
       assert.equal(f.controls.enabled, false);
       f.click('resume'); assert.deepEqual(retry.socket.sent.at(-1), { type: 'resume' });
