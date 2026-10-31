@@ -14,6 +14,7 @@
 - 按键保持原位置、顺序与命中区域，新增按下、满蓄力、出拍的视觉反馈；支持振动的设备在击球与杀球时轻振，可在比赛设置关闭。iOS 不提供振动 API，保留视觉与声音。
 - 文案移除单打限定；竖屏安装版按系统安全区排版，顶部与底部不再被状态栏或 Home 条遮挡。
 - 品牌标志、图标、玩法规则、人物资产与联机协议保持不变。已合并 PR [#9](https://github.com/zcinta0514/rally-badminton/pull/9)，合并提交 `b0f9f84e`；Pages 构建 `e3f6043e1405a3a2`、Vercel 构建 `a7ae870879cdef42`，两处已实际回读正式版 1.12.0、新标题、更新公告与统计开关。完整证据见 [发布检查点](RELEASE-1.12.0-CHECKPOINT.md)。
+- GitHub Releases 已补齐 v1.4.0–v1.12.0，最新为 [v1.12.0](https://github.com/zcinta0514/rally-badminton/releases/tag/v1.12.0)。
 
 ## 1.11.0 球路节奏与接球
 
@@ -25,12 +26,12 @@
 
 ## 1.10.0 地胶配色
 
-- 发布标识：[v1.10.0](https://github.com/zcinta0514/rally-badminton/tree/v1.10.0)。PR [#5](https://github.com/zcinta0514/rally-badminton/pull/5)；合并提交与两处生产部署结果在发布检查点回填，版本由用户在发布准备阶段确认。
+- 发布标识：[v1.10.0](https://github.com/zcinta0514/rally-badminton/tree/v1.10.0)。PR [#5](https://github.com/zcinta0514/rally-badminton/pull/5)，合并提交 `6aecf9a8`；版本由用户在发布准备阶段确认。
 - 比赛屏右上角新增独立「配色」入口（圆点显示当前颜色）：经典绿（默认，现有球场逐字节不变）、赛事蓝、紫罗兰、玫瑰粉，点选即时切换并本机保存。
 - 紫罗兰对齐 2024 巴黎奥运会场馆紫色调（实拍取样），玫瑰粉取自浅玫粉球馆方向；配色只影响本机画面，不上传、不改变对手视角、不影响判定与联机协议。
 - 设置面板内的旧配色下拉合并到新入口；不包含在制人物实验与其它未合并候选。
 
-- 实际发布包：Pages／Vercel 待部署核验；完整资源、浏览器和回退记录见 [发布检查点](RELEASE-1.10.0-CHECKPOINT.md)。
+- 实际发布包：Pages `152a297fac2bf852`、Vercel `31e7cd941732fbc7`，两处均显示正式版 1.10.0；完整资源、浏览器和回退记录见 [发布检查点](RELEASE-1.10.0-CHECKPOINT.md)。
 
 ## 1.9.0 陪练、体力与开打入口
 

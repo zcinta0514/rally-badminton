@@ -1,6 +1,6 @@
 # RELEASE-1.12.0 界面与击球反馈
 
-2026-10-31。用户要求合并本轮 UI-2 改动，并明确合入前核对品牌标志与线上一致、不得改动标志。线上最新发布为 1.11.0（7164832c）；本轮整理为主线之后的界面与触感更新，按次版本 1.12.0 准备。
+2026-11-01。用户要求合并本轮 UI-2 改动，并明确合入前核对品牌标志与线上一致、不得改动标志。线上最新发布为 1.11.0（7164832c）；本轮整理为主线之后的界面与触感更新，按次版本 1.12.0 准备。
 
 ## 范围
 
@@ -30,6 +30,7 @@
 
 - PR [#9](https://github.com/zcinta0514/rally-badminton/pull/9) 已合并；squash 合并提交 `b0f9f84e30ddabfe11ea5b8cd6878b74cebaa657`。标签 `v1.12.0` 的 annotated 对象 `23c3ae9a21cb19964d6c31466399aee4796f0ad3` 指向该提交。
 - PR CI 41221461001、main CI 41221519325 的 Node 22/24 检查全部通过；Pages 工作流 41221519413 成功（部署 7461482867）；Vercel 生产部署 7461483838 成功。
-- 线上回读（2026-10-31）：Pages `https://zcinta0514.github.io/rally-badminton/` 构建 `e3f6043e1405a3a2`，Vercel `https://kaipai-rally.vercel.app/` 构建 `a7ae870879cdef42`；两处均显示正式版 1.12.0、标题“开拍 RALLY · 比赛 MATCH”、公告 `2026-10-31-court-white-ui`，正文无单打/1V1/SINGLES，帮助里的 `#usage-enabled` 默认勾选且可用，标志计算样式与主线一致，页面异常为空。
+- 线上回读（2026-11-01）：Pages `https://zcinta0514.github.io/rally-badminton/` 构建 `e3f6043e1405a3a2`，Vercel `https://kaipai-rally.vercel.app/` 构建 `a7ae870879cdef42`；两处均显示正式版 1.12.0、标题“开拍 RALLY · 比赛 MATCH”、公告 `2026-10-31-court-white-ui`，正文无单打/1V1/SINGLES，帮助里的 `#usage-enabled` 默认勾选且可用，标志计算样式与主线一致，页面异常为空。
+- GitHub Releases 已补齐 v1.4.0–v1.12.0，最新为 [v1.12.0](https://github.com/zcinta0514/rally-badminton/releases/tag/v1.12.0)；此前旧标签只有 tag、没有 release 记录，现逐版本补齐。
 - 本地预览仍为 `127.0.0.1:3072`（PUBLIC_PEER_MODE=0），不冒充线上；线上两处为 PUBLIC_PEER_MODE=1。
 - 回退：使用 main 上可审查的 revert 提交；本次不涉及规则协议、人物资产或联机协议，可整批回退 UI 层。

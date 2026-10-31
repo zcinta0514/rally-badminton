@@ -3,11 +3,11 @@
 <!-- project-brief
 {
   "statusVersion": 1,
-  "asOf": "2026-10-31",
+  "asOf": "2026-11-01",
   "baseline": {
     "branch": "main",
-    "head": "b0f9f84e30ddabfe11ea5b8cd6878b74cebaa657",
-    "originMain": "b0f9f84e30ddabfe11ea5b8cd6878b74cebaa657",
+    "head": "93d617c6c7a6a327da9b8480e7a65352dfa8d13e",
+    "originMain": "93d617c6c7a6a327da9b8480e7a65352dfa8d13e",
     "releaseTag": "v1.12.0"
   },
   "activeTask": {
@@ -22,7 +22,7 @@
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "v1.12.0已发布：PR#9合并b0f9f84e，标签v1.12.0；Pages构建e3f6043e1405a3a2、Vercel构建a7ae870879cdef42。两处正式版1.12.0、标题、公告、统计默认开启、标志与关键资源实际回读通过。",
+    "releaseState": "v1.12.0已发布：PR#9合并b0f9f84e，标签v1.12.0；GitHub Releases已补齐v1.4.0–v1.12.0且最新为v1.12.0；Pages构建e3f6043e1405a3a2、Vercel构建a7ae870879cdef42。两处正式版1.12.0、标题、公告、统计默认开启、标志与关键资源实际回读通过。",
     "localPreview": {
       "task": "UI-2",
       "url": "http://127.0.0.1:3072/",
@@ -53,10 +53,10 @@
     "stopReason": "按用户要求完成 PR 合并、标签与部署；线上两处已回读通过。",
     "nextAction": "用户在实体安卓机确认振动强度，在实体 iPhone/Android 复测安装态安全区；新任务另建 worktree。",
     "checkpoint": "docs/UI-2-CHECKPOINT.md",
-    "validation": "727/727；根路径a7ae870879cdef42、Pages e3f6043e1405a3a2均上线；PR#9合并b0f9f84e、标签v1.12.0；两处线上正式版/标题/公告/统计默认开启/标志计算样式回读通过；实体振动与安装态未测。",
+    "validation": "727/727；根路径a7ae870879cdef42、Pages e3f6043e1405a3a2均上线；PR#9合并b0f9f84e、标签v1.12.0；GitHub Releases已补齐v1.4.0–v1.12.0且最新v1.12.0；两处线上正式版/标题/公告/统计默认开启/标志计算样式回读通过；实体振动与安装态未测。",
     "scopeBoundary": "已按用户授权合并 main、打 v1.12.0 并部署；实体设备验收与后续任务另行授权，不动其他 worktree。"
   },
-  "publication": "v1.12.0已发布：PR#9合并b0f9f84e，标签v1.12.0；Pages构建e3f6043e1405a3a2、Vercel构建a7ae870879cdef42。两处正式版1.12.0、标题、公告、统计默认开启、标志与关键资源实际回读通过。"
+  "publication": "v1.12.0已发布：PR#9合并b0f9f84e，标签v1.12.0；GitHub Releases已补齐v1.4.0–v1.12.0且最新为v1.12.0；Pages构建e3f6043e1405a3a2、Vercel构建a7ae870879cdef42。两处正式版1.12.0、标题、公告、统计默认开启、标志与关键资源实际回读通过。"
 }
 -->
 
