@@ -30,6 +30,15 @@
     "note": "本地 127.0.0.1 不是生产域名，因此预览里的开关不启用；生产域名默认勾选并上报"
   },
   "pwa": { "safeAreaSimulation": "390x844，顶部 47、底部 34，无溢出/黑色底", "statusBarStyle": "default", "orientation": "manifest 不再锁横向" },
+  "merge": { "pr": 9, "commit": "b0f9f84e30ddabfe11ea5b8cd6878b74cebaa657", "tag": "v1.12.0", "tagObject": "23c3ae9a21cb19964d6c31466399aee4796f0ad3" },
+  "deploy": { "prCi": "41221461001", "mainCi": "41221519325", "pagesRun": "41221519413", "pagesDeployment": "7461482867", "vercelDeployment": "7461483838" },
+  "production": {
+    "pages": { "url": "https://zcinta0514.github.io/rally-badminton/", "buildId": "e3f6043e1405a3a2", "version": "1.12.0" },
+    "vercel": { "url": "https://kaipai-rally.vercel.app/", "buildId": "a7ae870879cdef42", "version": "1.12.0" },
+    "analyticsDefaultChecked": true,
+    "logoComputed": "rgb(0,134,80) / 5px solid rgb(7,86,176) / white / [32, 8.5, 42, 42]",
+    "pageErrors": []
+  },
   "limitations": [
     "未在实体安卓机测量振动强度",
     "未在实体 iPhone/Android 上复测主屏幕安装态",

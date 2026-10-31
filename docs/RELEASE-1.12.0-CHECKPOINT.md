@@ -28,5 +28,8 @@
 
 ## 合并与部署
 
-- PR、合并提交、标签、Pages/Vercel 部署与线上回读结果：待执行后回填。
+- PR [#9](https://github.com/zcinta0514/rally-badminton/pull/9) 已合并；squash 合并提交 `b0f9f84e30ddabfe11ea5b8cd6878b74cebaa657`。标签 `v1.12.0` 的 annotated 对象 `23c3ae9a21cb19964d6c31466399aee4796f0ad3` 指向该提交。
+- PR CI 41221461001、main CI 41221519325 的 Node 22/24 检查全部通过；Pages 工作流 41221519413 成功（部署 7461482867）；Vercel 生产部署 7461483838 成功。
+- 线上回读（2026-10-31）：Pages `https://zcinta0514.github.io/rally-badminton/` 构建 `e3f6043e1405a3a2`，Vercel `https://kaipai-rally.vercel.app/` 构建 `a7ae870879cdef42`；两处均显示正式版 1.12.0、标题“开拍 RALLY · 比赛 MATCH”、公告 `2026-10-31-court-white-ui`，正文无单打/1V1/SINGLES，帮助里的 `#usage-enabled` 默认勾选且可用，标志计算样式与主线一致，页面异常为空。
+- 本地预览仍为 `127.0.0.1:3072`（PUBLIC_PEER_MODE=0），不冒充线上；线上两处为 PUBLIC_PEER_MODE=1。
 - 回退：使用 main 上可审查的 revert 提交；本次不涉及规则协议、人物资产或联机协议，可整批回退 UI 层。
