@@ -1,6 +1,7 @@
 import { CourtView } from './view.js';
 import { Controls } from './controls.js';
 import { ArenaAudio } from './arena-audio.js';
+import { createHaptics } from './haptics.js';
 import { MatchFinale } from './match-finale.js';
 import { createUsageAnalytics } from './analytics.js';
 import { NetworkPlayback } from './network-playback.js';
@@ -50,11 +51,30 @@ let entryStage='home',friendAction='create';
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
 let trainingSession=null;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
-let pendingShot=null,aim=0,dragAim=null,view,controls,palettePicker,lastFrame=performance.now(),accumulator=0,lastSend=0;
+let pendingShot=null,aim=0,dragAim=null,view,controls,palettePicker,lastFrame=performance.now(),accumulator=0,lastSend=0,smashReady=false;
 let toastTimer,helpOpen=false,rematchRequested=false,lastPhase='',lastHit=0,lastPoint=0,connecting=false,reconnecting=false,resultPending=false;
 let reconnectError='';
 let playerProfile=null,currentPlayerId=null,leaderboardRecord=null,leaderboardReturn=null;
 const arenaAudio=new ArenaAudio({preferences:arenaPreferences});
+const haptics=createHaptics();
+const shotFlashTimers=new WeakMap();
+function flashShotButton(button,shot){
+  if(!button)return;
+  button.classList.remove('fired');
+  void button.offsetWidth;
+  button.classList.add('fired');
+  clearTimeout(shotFlashTimers.get(button));
+  shotFlashTimers.set(button,setTimeout(()=>button.classList.remove('fired'),shot==='smash'?300:220));
+}
+function syncHapticsToggle(){
+  const toggle=$('haptics-enabled');if(!toggle)return;
+  toggle.checked=haptics.enabled&&haptics.supported;
+  toggle.disabled=!haptics.supported;
+  const note=$('haptics-note');
+  if(note)note.textContent=haptics.supported?'击球与杀球时轻振；可在本机关闭。':'当前浏览器不支持振动反馈，按键与画面反馈不受影响。';
+}
+syncHapticsToggle();
+$('haptics-enabled')?.addEventListener('change',event=>{haptics.setEnabled(event.target.checked);syncHapticsToggle();});
 const finale=new MatchFinale();
 let sound=restoredUpdatePreferences?.sound??true;
 let selectedShot='clear',dragDepth=0,lastShotRequest=null,gestureOrigin=null;
@@ -507,8 +527,11 @@ function updateUI(info,state){
   if(mode==='ai')setText('connection','本地练习');
   const roleHint=roleGuidance[self.role]||roleGuidance.balanced;
   const smashButton=document.querySelector('[data-shot="smash"]');
-  smashButton.classList.toggle('unavailable',!info.availability.canSmash);
-  smashButton.classList.toggle('ready',info.availability.canSmash);
+  const canSmash=Boolean(info.availability.canSmash);
+  smashButton.classList.toggle('unavailable',!canSmash);
+  smashButton.classList.toggle('ready',canSmash);
+  if(canSmash&&!smashReady&&state.phase==='rally')haptics.ready();
+  smashReady=canSmash;
   const lane=info.aim,depth=info.aimDepth;
   const quality=info.target?.quality;
   const risk=quality?.risk||0;
@@ -598,7 +621,7 @@ try{
   window.visualViewport?.addEventListener('resize',resizeCourt);
   new ResizeObserver(resizeCourt).observe($('court'));
   window.addEventListener('orientationchange',()=>{controls?.reset();pendingShot=null;requestAnimationFrame(resizeCourt);setTimeout(resizeCourt,250);});
-  controls=new Controls({joystick:$('joystick'),knob:$('knob'),movementSurface:$('court'),shotButtons:document.querySelectorAll('[data-shot]'),onShot:fireShot,onAim:(value,explicit,depth=0)=>{dragAim=explicit?value:null;dragDepth=explicit?depth:0;if(controls?.activeShot)lastShotRequest=null;},onAimSelect:selectAim,onPause:requestPause});
+  controls=new Controls({joystick:$('joystick'),knob:$('knob'),movementSurface:$('court'),shotButtons:document.querySelectorAll('[data-shot]'),onShot:fireShot,onAim:(value,explicit,depth=0)=>{dragAim=explicit?value:null;dragDepth=explicit?depth:0;if(controls?.activeShot)lastShotRequest=null;},onAimSelect:selectAim,onPause:requestPause,onFeedback:(type,detail)=>{if(type==='press')haptics.press(detail.shot);else if(type==='charged')haptics.charged();else if(type==='shoot'){haptics.shoot(detail.shot);flashShotButton(detail.button,detail.shot);}}});
   document.querySelectorAll('[data-shot]').forEach(button=>button.addEventListener('pointerdown',event=>{
     if(controls.activeShot?.pointerId===event.pointerId)gestureOrigin={x:event.clientX,y:event.clientY};
   }));

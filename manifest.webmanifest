@@ -2,7 +2,7 @@
   "id": "/",
   "name": "开拍 RALLY",
   "short_name": "开拍",
-  "description": "羽毛球单打：人机对战、好友对战与三步训练，支持离线人机。",
+  "description": "羽毛球：人机对战、好友对战与三步训练，支持离线人机。",
   "lang": "zh-CN",
   "start_url": "/?source=homescreen",
   "scope": "/",

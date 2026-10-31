@@ -166,6 +166,16 @@ body[data-screen=match] .icon-btn:active, body[data-screen=match] .camera-toggle
 .shot-btn.smash.unavailable { border-color: #b7c5ae; box-shadow: 0 2px 0 #9eae96; }
 .shot-btn.smash.ready, .shot-btn.smash.ready::after { background: #e9d6a6; color: #594829; }
 .shot-btn.smash.ready { border-color: #d5b878; box-shadow: inset 0 1px 0 #fff8, 0 3px 0 #af9359, 0 0 0 2px #f8e5b030; }
+/* Hold and release feedback never changes a shot button's hit area. */
+.shot-btn { transition: background-color 80ms, border-color 80ms, box-shadow 90ms, transform 110ms var(--press-ease), filter 160ms ease-out; }
+.shot-btn.charging { transform: scale(.945); }
+.shot-btn.fired { animation: shot-fired 220ms ease-out; }
+.shot-btn.smash.fired { animation: smash-fired 280ms ease-out; }
+@keyframes shot-fired { 0% { filter: brightness(1.28); } 100% { filter: brightness(1); } }
+@keyframes smash-fired { 0% { filter: brightness(1.45) saturate(1.12); } 100% { filter: none; } }
+.arena-haptics { display: flex; align-items: center; gap: 7px; margin-top: 10px; font-size: 11px; color: var(--ink); }
+.arena-haptics input { width: 16px; height: 16px; margin: 0; accent-color: var(--green); }
+.arena-haptics-note { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; line-height: 1.5; }
 .shot-btn:active:not(:disabled), .shot-btn.charging { border-color: #688d61; box-shadow: inset 0 2px 5px #243d3130, 0 1px 0 #9caf92; }
 .shot-btn.charging::after { box-shadow: inset 0 2px 4px #18382420; }
 .shot-instruction { color: #d8e9df; }
@@ -195,6 +205,8 @@ body[data-screen=match] .icon-btn:active, body[data-screen=match] .camera-toggle
 
 @media (prefers-reduced-motion:reduce) {
   button { transition: none; }
+  .shot-btn.charging { transform: none; }
+  .shot-btn.fired, .shot-btn.smash.fired { animation: none; }
   button:active:not(:disabled):not(.shot-btn), button.primary-btn:active:not(:disabled), .dialog button.primary-btn:active:not(:disabled), button.secondary-btn:active:not(:disabled), .dialog button.secondary-btn:active:not(:disabled), .pwa-actions button:active:not(:disabled), .release-dialog .release-dismiss:active:not(:disabled) { transform: none; }
   .ui-flight-layer { display: none; }
 }

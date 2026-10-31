@@ -162,6 +162,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
       unlock() { this.unlocks++; this.context = { state: 'running' }; }
     },
     initPWA: options => { pwaOptions = options; updateSafeAtInit = options.isSafeToUpdate(); return { setMatchActive() {} }; },
+    createHaptics: () => ({ supported: true, enabled: true, setEnabled() {}, press() {}, charged() {}, shoot() {}, ready() {} }),
     // These independently tested UI modules do not replace any match decisions.
     initOnboarding: options => { onboardingOptions = options; return { maybeShow() { onboardingAttempts++; } }; },
     initFeedback: () => null,
