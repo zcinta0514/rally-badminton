@@ -4,7 +4,8 @@
 
 :root {
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
-  color: #243d31; background: #f7f8f3; font-synthesis: none;
+  color: #243d31; background: #f7f8f3; font-synthesis: none; color-scheme: light;
+  --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px);
   --ink: #243d31; --green: #37694c; --blue: #3e6454;
   --paper: #f7f8f3; --line: #d9dfd4; --muted: #647268; --lime: #dce7cd;
   --header-height: 72px; --menu-width: 40%;
@@ -12,8 +13,8 @@
 * { box-sizing: border-box; }
 /* Keep the responsive type scale stable when iOS rotates the viewport. */
 html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
-html,body { margin:0; width:100%; height:100dvh; overflow:hidden; overscroll-behavior:none; }
-body { touch-action:manipulation; -webkit-user-select:none; user-select:none; }
+html,body { margin:0; width:100%; height:100dvh; min-height:100vh; overflow:hidden; overscroll-behavior:none; }
+body { background: var(--paper); touch-action:manipulation; -webkit-user-select:none; user-select:none; }
 body[data-screen=match],body[data-screen=match] * { -webkit-touch-callout:none; }
 button,input { font:inherit; }
 button { cursor:pointer; border:0; color:inherit; -webkit-tap-highlight-color:transparent; }
@@ -174,6 +175,10 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   .brand-mark { width:36px; height:36px; }.icon-btn { width:32px; height:32px; }
   body[data-screen=menu] #court { left:0; top:0; width:100vw; height:100dvh; }
   body[data-screen=menu] .court-caption,body[data-screen=menu] #rotate-note { display:none; }
+  /* The portrait lobby is an opaque sheet; hiding the 3D canvas removes any dark edge behind it. */
+  body[data-screen=menu] #court { display:none; }
+  body[data-screen=menu] .topbar { height: calc(var(--header-height) + var(--safe-top)); padding-top: var(--safe-top); }
+  body[data-screen=menu] .menu-panel { top: calc(var(--header-height) + var(--safe-top)); }
   .menu-panel { padding:28px 24px max(18px,env(safe-area-inset-bottom)); }
   .menu-panel h1 { font-size:48px; margin:12px 0; }.intro { font-size:12px; margin-bottom:24px; }
   .role-card { padding:11px; }.role-note { margin-bottom:12px; }.launch-actions { padding-top:10px; }.launch-actions .primary-btn { min-height:48px; }

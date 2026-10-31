@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="开拍">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="stylesheet" href="./src/pwa.css">
   <link rel="stylesheet" href="./src/ui-court-white.css">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/three-addons/"}}</script>
@@ -30,7 +30,7 @@
   </section>
   <header class="topbar">
     <a class="brand" href="./" aria-label="开拍首页"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M8 29 23 7h6L14 29Z" fill="currentColor"/><path d="m19 29 12-18h5L24 29Z" fill="currentColor"/><circle cx="10" cy="32" r="4" fill="currentColor"/></svg></span><span>开拍<small>RALLY</small></span></a>
-    <span class="edition">羽毛球 <i></i> 单打</span>
+    <span class="edition">BADMINTON <i></i> SINGLES</span>
     <button id="camera-toggle" class="camera-toggle" aria-expanded="false" aria-controls="camera-panel" title="调整视角">视角 <span aria-hidden="true">⌄</span></button>
     <div class="top-actions">
       <button id="sound" class="icon-btn" aria-label="关闭声音" title="声音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4Z"/><path class="sound-on" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path class="sound-off" d="m16 9 5 6m0-6-5 6"/></svg></button>
@@ -64,9 +64,9 @@
     <div id="palette-options" class="palette-options" role="group" aria-label="选择球场配色"></div>
   </aside>
   <main id="menu" class="menu-panel" data-entry="home">
-    <div class="menu-heading" id="entry-home-heading"><div class="eyebrow"><span></span>开拍 RALLY</div>
-    <h1>羽毛球<br><span>单打</span></h1>
-    <p id="menu-intro" class="intro">选择对战模式，开始比赛。</p></div>
+    <div class="menu-heading" id="entry-home-heading"><div class="eyebrow"><span></span>BADMINTON</div>
+    <h1 aria-label="开拍 RALLY · 单打 SINGLES"><span class="zh">开拍 <span class="latin">RALLY</span></span><span class="sep" aria-hidden="true">·</span><br><span class="zh mode">单打 <span class="latin">SINGLES</span></span></h1>
+    <p id="menu-intro" class="intro">1V1 · 5 / 11 / 21 分 · 对角发球</p></div>
     <div id="entry-heading" class="entry-heading" hidden><button id="entry-back" class="text-btn">← 返回首页</button><h2 id="entry-title"></h2><p id="entry-description"></p></div><div class="setup" id="mode-setup">
       <div class="setup-fields" id="ai-setup" hidden><div class="section-label"><b>01</b><span>打法与赛制</span></div>
       <div class="role-grid" id="roles" role="group" aria-label="角色打法">
@@ -83,9 +83,9 @@
       <div class="setup-row" hidden><span class="field-label">比赛规则</span><div id="rulesets" class="segments" role="group" aria-label="比赛规则"><button data-ruleset="quick" class="selected" aria-pressed="true">单局快赛</button><button data-ruleset="standard21" aria-pressed="false">标准计分</button></div></div>
       <div class="setup-row"><span class="field-label">比赛形式</span><div id="ai-formats" class="segments format-choices" role="group" aria-label="人机比赛形式"><button data-format="quick:5" class="selected" aria-pressed="true">5 分</button><button data-format="quick:11" aria-pressed="false">11 分</button><button data-format="quick:21" aria-pressed="false">21 分</button><button data-format="standard21:21" aria-pressed="false">标准三局</button></div></div><p id="rules-note" class="rules-note">达到 5 分且净胜 2 分获胜 · 10 分封顶 · 对角发球</p></div>
       <span class="menu-tip-compact">上下滑动查看更多设置</span>
-      <div class="launch-actions" id="home-actions"><button id="start-ai" class="primary-btn" aria-label="人机对战"><span class="entry-copy"><strong>人机对战</strong><small>选择打法、难度与赛制</small></span><span aria-hidden="true">↗</span></button>
-      <button id="start-training" class="secondary-btn" aria-label="三步训练"><span class="entry-copy"><strong>三步训练</strong><small>跑位 · 选线 · 回位</small></span><span aria-hidden="true">↗</span></button>
-      <button id="open-friends" class="secondary-btn" aria-label="好友对战"><span class="entry-copy"><strong>好友对战</strong><small>创建或加入房间</small></span><span aria-hidden="true">1V1 ＋</span></button></div><div class="launch-actions" id="ai-start-controls" hidden><p id="ai-summary" class="rules-note"></p><button id="start-ai-confirm" class="primary-btn">开始比赛 ↗</button></div>
+      <div class="launch-actions" id="home-actions"><button id="start-ai" class="primary-btn" aria-label="人机对战"><span class="entry-copy"><strong>人机对战</strong><small><span class="tag" aria-hidden="true">AI MATCH</span>选择打法、难度与赛制</small></span><span aria-hidden="true">↗</span></button>
+      <button id="start-training" class="secondary-btn" aria-label="三步训练"><span class="entry-copy"><strong>三步训练</strong><small><span class="tag" aria-hidden="true">TRAINING</span>跑位 · 选线 · 回位</small></span><span aria-hidden="true">↗</span></button>
+      <button id="open-friends" class="secondary-btn" aria-label="好友对战"><span class="entry-copy"><strong>好友对战</strong><small><span class="tag" aria-hidden="true">FRIENDS</span>创建或加入房间</small></span><span aria-hidden="true">1V1 ＋</span></button></div><div class="launch-actions" id="ai-start-controls" hidden><p id="ai-summary" class="rules-note"></p><button id="start-ai-confirm" class="primary-btn">开始比赛 ↗</button></div>
     </div>
     <section id="training-setup" class="entry-content" hidden><h3>练习步骤</h3><ol class="training-goals"><li><b>跑位接球</b><p>左手移动，赶到来球附近。</p></li><li><b>选线击球</b><p>按住击球键拖动选线，松手击球。</p></li><li><b>回位再接</b><p>击球后回到中场，准备下一拍。</p></li></ol><p class="rules-note">均衡陪练 · 入门难度 · 接球辅助开启</p><button id="start-training-confirm" class="primary-btn">开始训练 ↗</button></section>    <section id="friends-dialog" class="entry-content friend-setup" hidden aria-labelledby="entry-title"><div id="friend-tabs" class="segments" role="group" aria-label="好友房间操作"><button data-action="create" class="selected" aria-pressed="true">创建房间</button><button data-action="join" aria-pressed="false">加入房间</button></div><p id="friends-description">两台手机打开游戏并填写昵称；一方创建房间，另一方输入 5 位房间码加入。</p><label class="input-label" for="player-name">昵称 / 玩家 ID</label><input id="player-name" maxlength="16" placeholder="输入昵称或常用 ID" autocomplete="nickname" aria-describedby="player-profile-note" required><small id="player-profile-note" class="dialog-foot profile-note"></small><div class="setup-row"><span class="field-label">自己的打法</span><div id="friend-roles" class="segments" role="group" aria-label="好友自己的打法"><button data-friend-role="balanced" class="selected" aria-pressed="true">均衡</button><button data-friend-role="swift" aria-pressed="false">灵巧</button><button data-friend-role="power" aria-pressed="false">力量</button></div></div><div id="friend-create-options"><div class="setup-row"><span class="field-label">比赛形式</span><div id="friend-formats" class="segments format-choices" role="group" aria-label="好友比赛形式"><button data-format="quick:5" class="selected" aria-pressed="true">5 分</button><button data-format="quick:11" aria-pressed="false">11 分</button><button data-format="quick:21" aria-pressed="false">21 分</button><button data-format="standard21:21" aria-pressed="false">标准三局</button></div></div><p id="friend-rules-note" class="rules-note"></p><div class="room-mode-picker"><div class="room-mode-row"><span>建房模式</span><div id="friend-modes" class="segments" role="group" aria-label="建房对局类型" aria-describedby="friend-mode-note"><button type="button" data-finale="none" class="selected" aria-pressed="true">普通对局</button><button type="button" data-finale="father-son" aria-pressed="false">父子局</button></div></div><small id="friend-mode-note">父子局：败者跪拜叫爸爸，约 3 秒不可跳过。</small></div><button id="create-room" class="primary-btn">创建房间 <span>＋</span></button></div><div id="friend-join-options" hidden><p class="rules-note">比分与对局类型由房主设置，加入后双方确认规则再开始。</p><div class="join-row"><input id="room-code" maxlength="5" placeholder="5 位房间码" autocomplete="off" autocapitalize="characters" aria-label="房间码"><button id="join-room" class="secondary-btn">加入 ↗</button></div></div><small id="friends-network-note" class="dialog-foot">联网配对 · 同一 Wi-Fi / 热点 · 无需电脑</small><small class="dialog-foot">也可分享邀请链接：对方填写名称与打法后加入，双方确认规则并准备后开赛。规则由房主设置，打法各自选择，战绩按玩家身份记录。</small></section>
     <div class="menu-foot"><span class="menu-tip-desktop">手机横屏 · 双手操控</span><span class="menu-foot-actions"><button id="open-leaderboard" class="leaderboard-entry" type="button">排行榜 ↗</button><button id="open-feedback" class="leaderboard-entry" type="button">意见反馈 ↗</button></span><span>正式版 1.11.0</span></div>

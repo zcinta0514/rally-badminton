@@ -22,6 +22,25 @@ button:disabled { transform: none !important; box-shadow: none !important; }
 button:active:not(:disabled):not(.shot-btn) { transform: translateY(2px); transition-duration: 55ms; }
 input, textarea, select { accent-color: var(--green); }
 
+/* Lobby title block: wordmark plus discipline, with the small-cap accents
+   mainstream sports menus use instead of a sentence. */
+.menu-heading .eyebrow { gap: 10px; color: var(--muted); font-weight: 600; letter-spacing: .22em; }
+.menu-heading .eyebrow>span { width: 26px; height: 1px; background: var(--green); }
+.menu-panel h1 .zh { color: var(--ink); }
+.menu-panel h1 .mode { color: var(--green); }
+.menu-panel h1 .latin { display: inline-block; margin-left: .36em; font-size: .26em; font-weight: 600; letter-spacing: .34em; vertical-align: .26em; color: var(--muted); }
+.menu-panel h1 .mode .latin { color: #6f8a76; }
+.menu-panel h1 .sep { display: none; }
+.menu-heading .intro { font-size: 11px; line-height: 23.8px; font-weight: 500; letter-spacing: .1em; color: var(--muted); }
+@media (max-height:760px) and (orientation:landscape), (orientation:portrait) { .menu-heading .intro { line-height: 20.4px; } }
+@media (max-height:550px) and (orientation:landscape) { .menu-heading .intro { line-height: 18.7px; } }
+#home-actions .entry-copy small .tag { display: inline-block; margin-right: .1em; font-size: .78em; font-weight: 600; letter-spacing: .16em; opacity: .72; }
+#home-actions .entry-copy small .tag::after { content: "·"; margin: 0 .5em 0 .55em; opacity: .55; }
+@media (max-height:500px) and (orientation:landscape) {
+  .menu-panel h1 .latin { display: none; }
+  .menu-panel h1 .sep { display: inline; margin: 0 .5em; color: var(--muted); font-weight: 400; }
+}
+
 /* Global header. The brand mark keeps its shipped colours, size and underline. */
 .brand-mark { background: #008650; border-bottom-color: #0756b0; color: #ffffff; }
 .brand small { color: #008650; }

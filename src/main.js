@@ -81,11 +81,11 @@ function preparePlayerProfile(){
 }
 if(practiceOnly){
   for(const id of ['open-leaderboard','result-leaderboard'])$(id).hidden=true;
-  setText('menu-intro','可进行人机对战，也可通过局域网与好友对战。');
+  setText('menu-intro','人机对战 · 局域网联机 · 5 / 11 / 21 分');
   setText('open-friends','局域网联机说明 ↗');
 }else try{$('player-name').value=preparePlayerProfile().name;}catch(error){setText('player-profile-note',error.message);}
 if(peerMode){
-  setText('menu-intro','选择对战模式，开始比赛。');
+  setText('menu-intro','人机对战 · 好友对战 · 5 / 11 / 21 分');
   setText('leaderboard-title','本机好友榜');
 }else setText('friends-network-note','同一局域网网址 · 主机电脑需保持运行');
 function dialog(id){
