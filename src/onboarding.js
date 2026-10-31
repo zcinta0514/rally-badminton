@@ -41,7 +41,7 @@ export function initOnboarding({
   footer?.insertBefore(entry, footer.querySelector('span:last-child'));
   const help = document.getElementById('help-dialog');
   const settings = create('div', 'onboarding-settings');
-  const replay = button('再看三步教学 ↗', 'onboarding-replay');
+  const replay = button('查看新手入门', 'onboarding-replay');
   const label = create('label', 'onboarding-hints-label');
   const hints = create('input', '', '', 'operation-hints'); hints.type = 'checkbox';
   const hintDescription = create('p', 'onboarding-hints-note', '收起操作说明、键位与图例。体力、击球状态和实时风险会保留。', 'operation-hints-description');
@@ -65,26 +65,26 @@ export function initOnboarding({
   content.append(title, intro, visual, instructions, keyboard);
   const actions = create('div', 'onboarding-actions');
   const back = button('上一步', 'onboarding-back', 'secondary-btn');
-  const practice = button('去人机练习', 'onboarding-practice', 'secondary-btn');
+  const practice = button('开始人机对战', 'onboarding-practice', 'secondary-btn');
   const next = button('下一步 ↗', 'onboarding-next', 'primary-btn');
   actions.append(back, practice, next);
-  const note = create('p', 'onboarding-return-note', '内容可上下滑动 · 随时从首页「新手入门」重看。');
+  const note = create('p', 'onboarding-return-note', '内容可上下滑动；也可从首页「新手入门」重新查看。');
   modal.append(header, content, actions, note);
   document.body.append(modal);
 
   const pages = [
     {
-      title: '先选一场，轻松开打。',
-      intro: '第一次玩，推荐均衡型 · 入门难度 · 5 分快赛。',
-      visual: ['人机练习', '好友对打'],
+      title: '选择比赛模式',
+      intro: '首次游玩建议：均衡型 · 入门难度 · 5 分制。',
+      visual: ['人机对战', '好友对战'],
       lines: [
-        ['自己练', '在首页选好打法、难度与分制，点「人机开打」。'],
-        ['和朋友打', '点「好友对打」，一人建房，另一人输入 5 位房间码加入。加入后自动开赛，双方先准备好。'],
+        ['人机对战', '在首页选择打法、难度与赛制，再点「开始比赛」。'],
+        ['好友对战', '一方创建房间，另一方输入 5 位房间码加入；双方确认规则后开始。'],
       ],
-      keyboard: '手机横屏，双手操控。比赛规则和高级技巧可在「操作说明」查看。',
+      keyboard: '手机横屏，双手操控。规则与技巧可在「操作说明」查看。',
     },
     {
-      title: '左手移动，先到接球位置。',
+      title: '移动与跑位',
       intro: '左半屏空白处按下并拖动，松手就停。右手可以同时击球。',
       visual: ['↕ ↔', '移动 → 到位'],
       lines: [
@@ -94,7 +94,7 @@ export function initOnboarding({
       keyboard: '电脑：W A S D 或方向键移动。',
     },
     {
-      title: '右手选球路，松开击球。',
+      title: '击球与选线',
       intro: '按住高远、吊球或杀球按钮，拖动瞄准，再松开出手。',
       visual: ['按住', '拖动', '松开'],
       lines: [
@@ -122,7 +122,7 @@ export function initOnboarding({
     keyboard.textContent = current.keyboard;
     back.hidden = page === 0;
     practice.hidden = page !== pages.length - 1 || typeof onStartPractice !== 'function';
-    next.textContent = page === pages.length - 1 ? '准备好了 ↗' : '下一步 ↗';
+    next.textContent = page === pages.length - 1 ? '完成' : '下一步 ↗';
     content.scrollTop = 0;
   }
   function eligible() {

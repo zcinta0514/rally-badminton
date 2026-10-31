@@ -17,7 +17,7 @@ const editable = (target) => Boolean(target && (
 const textEditable = (target) => editable(target) && !(target.tagName === 'INPUT' && target.type === 'range');
 
 export class Controls {
-  constructor({ joystick, knob, shotButtons, movementSurface = null, onShot = () => {}, onAim = () => {}, onAimSelect = () => {}, onPause = () => {} }) {
+  constructor({ joystick, knob, shotButtons, movementSurface = null, onShot = () => {}, onAim = () => {}, onAimSelect = () => {}, onPause = () => {}, onFeedback = () => {} }) {
     this.joystick = joystick;
     this.knob = knob;
     this.shotButtons = Array.from(shotButtons);
@@ -28,6 +28,7 @@ export class Controls {
     this.onAim = onAim;
     this.onAimSelect = onAimSelect;
     this.onPause = onPause;
+    this.onFeedback = onFeedback;
     this.enabled = true;
     this.disposed = false;
     this.keys = new Set();
@@ -190,9 +191,10 @@ export class Controls {
   }
 
   _startShot(data) {
-    this.activeShot = { ...data, startTime: this.window.performance.now(), aim: 0, aimDepth: 0, aimExplicit: false };
+    this.activeShot = { ...data, startTime: this.window.performance.now(), aim: 0, aimDepth: 0, aimExplicit: false, fullChargeNotified: false };
     data.button?.classList.add('charging');
     this.onAim(0, false, 0);
+    this.onFeedback('press', { shot: data.shot, button: data.button });
     this._paintCharge();
   }
 
@@ -204,6 +206,10 @@ export class Controls {
     if (!this.activeShot) return;
     const charge = this._charge();
     this.activeShot.button?.style.setProperty('--charge', String(charge));
+    if (charge >= 1 && !this.activeShot.fullChargeNotified) {
+      this.activeShot.fullChargeNotified = true;
+      this.onFeedback('charged', { shot: this.activeShot.shot, button: this.activeShot.button });
+    }
     if (charge < 1) this.chargeFrame = this.window.requestAnimationFrame(() => {
       this.chargeFrame = null;
       this._paintCharge();
@@ -233,7 +239,10 @@ export class Controls {
     shot.button?.style.setProperty('--charge', '0');
     if (shot.button) this._release(shot.button, shot.pointerId);
     this.onAim(0, false, 0);
-    if (fire && this.enabled) this.onShot(result);
+    if (fire && this.enabled) {
+      this.onFeedback('shoot', { ...result, button: shot.button });
+      this.onShot(result);
+    }
   }
 
   _pointerUp(event) {

@@ -1,6 +1,7 @@
 import { CourtView } from './view.js';
 import { Controls } from './controls.js';
 import { ArenaAudio } from './arena-audio.js';
+import { createHaptics } from './haptics.js';
 import { MatchFinale } from './match-finale.js';
 import { createUsageAnalytics } from './analytics.js';
 import { NetworkPlayback } from './network-playback.js';
@@ -50,11 +51,30 @@ let entryStage='home',friendAction='create';
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
 let trainingSession=null;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
-let pendingShot=null,aim=0,dragAim=null,view,controls,palettePicker,lastFrame=performance.now(),accumulator=0,lastSend=0;
+let pendingShot=null,aim=0,dragAim=null,view,controls,palettePicker,lastFrame=performance.now(),accumulator=0,lastSend=0,smashReady=false;
 let toastTimer,helpOpen=false,rematchRequested=false,lastPhase='',lastHit=0,lastPoint=0,connecting=false,reconnecting=false,resultPending=false;
 let reconnectError='';
 let playerProfile=null,currentPlayerId=null,leaderboardRecord=null,leaderboardReturn=null;
 const arenaAudio=new ArenaAudio({preferences:arenaPreferences});
+const haptics=createHaptics();
+const shotFlashTimers=new WeakMap();
+function flashShotButton(button,shot){
+  if(!button)return;
+  button.classList.remove('fired');
+  void button.offsetWidth;
+  button.classList.add('fired');
+  clearTimeout(shotFlashTimers.get(button));
+  shotFlashTimers.set(button,setTimeout(()=>button.classList.remove('fired'),shot==='smash'?300:220));
+}
+function syncHapticsToggle(){
+  const toggle=$('haptics-enabled');if(!toggle)return;
+  toggle.checked=haptics.enabled&&haptics.supported;
+  toggle.disabled=!haptics.supported;
+  const note=$('haptics-note');
+  if(note)note.textContent=haptics.supported?'击球与杀球时轻振；可在本机关闭。':'当前浏览器不支持振动反馈，按键与画面反馈不受影响。';
+}
+syncHapticsToggle();
+$('haptics-enabled')?.addEventListener('change',event=>{haptics.setEnabled(event.target.checked);syncHapticsToggle();});
 const finale=new MatchFinale();
 let sound=restoredUpdatePreferences?.sound??true;
 let selectedShot='clear',dragDepth=0,lastShotRequest=null,gestureOrigin=null;
@@ -66,7 +86,7 @@ const pwa=initPWA({fullscreenButton:$('fullscreen'),showToast,onUpdateLock:({ver
   },
   isSafeToUpdate:({allowHidden=false}={})=>entryStage==='home'&&isUpdateSafe({ready:Boolean(controls&&view)&&$('loading').hidden,visible:allowHidden||!document.hidden,mode,state,room,
     connection:socket||peerSession||peerAttempt,connecting,reconnecting,pendingResult:resultPending,finale:finale.blocking,
-    overlay:Boolean(document.querySelector('dialog[open], .dialog:not([hidden]), #camera-panel:not([hidden]), #match-settings-panel:not([hidden])')),
+    overlay:Boolean(document.querySelector('dialog[open], .dialog:not([hidden]), #camera-panel:not([hidden]), #match-settings-panel:not([hidden]), #palette-panel:not([hidden])')),
     editing:Boolean(document.activeElement?.matches('input, textarea, select, [contenteditable="true"]'))})});
 const onboarding=initOnboarding({showToast,canOpen:()=>Boolean(controls)&&$('loading').hidden&&mode==='menu'&&!room&&!connecting&&!peerSession&&!peerAttempt,
   onStartPractice:()=>openEntry('ai')});
@@ -81,12 +101,12 @@ function preparePlayerProfile(){
 }
 if(practiceOnly){
   for(const id of ['open-leaderboard','result-leaderboard'])$(id).hidden=true;
-  setText('menu-intro','与人机练习，或通过局域网和好友 1V1。');
-  setText('open-friends','局域网 1V1 说明 ↗');
+  setText('menu-intro','人机对战 · 局域网联机 · 5 / 11 / 21 分');
+  setText('open-friends','局域网联机说明 ↗');
 }else try{$('player-name').value=preparePlayerProfile().name;}catch(error){setText('player-profile-note',error.message);}
 if(peerMode){
-  setText('menu-intro','与人机练习，或和好友双手机对打，无需电脑。');
-  setText('leaderboard-title','本机好友榜。');
+  setText('menu-intro','人机对战 · 好友对战 · 5 / 11 / 21 分');
+  setText('leaderboard-title','本机好友榜');
 }else setText('friends-network-note','同一局域网网址 · 主机电脑需保持运行');
 function dialog(id){
   if(id==='friends-dialog'){openEntry('friends');return;}
@@ -106,7 +126,7 @@ function closeLeaderboard(){
 }
 function showConnectionRecovery(){
   helpOpen=false;
-  setText('pause-title','连接中断。');setText('pause-time','—');
+  setText('pause-title','连接中断');setText('pause-time','—');
   setText('pause-description',reconnectError?`连接恢复失败：${reconnectError}。可返回首页继续人机，或重新约战。`:'正在尝试恢复连接。可直接返回首页；离线人机不需要比赛服务器。');
   setText('resume','等待连接恢复…');$('resume').disabled=true;
   dialog('pause-dialog');
@@ -163,7 +183,7 @@ if(restoredUpdatePreferences){
   syncRulesControls();syncSoundControls();
 }
 setText('role-note',roleNotes[settings.role]);setText('difficulty-note',difficultyNotes[settings.difficulty]);
-function syncCoachNote(){setText('coach-note',ROLES[settings.coachRole].label+'陪练 · '+({balanced:'攻守均衡',swift:'移动快、体力回满快，连续杀球耗费较高',power:'重击省力、体力池大，跑动较费力、回满较慢'}[settings.coachRole])+'。仅人机练习；三步训练使用均衡陪练。');}
+function syncCoachNote(){setText('coach-note',ROLES[settings.coachRole].label+'陪练 · '+({balanced:'攻守均衡',swift:'移动快、体力回满快，连续杀球耗费较高',power:'重击省力、体力池大，跑动较费力、回满较慢'}[settings.coachRole])+'。仅人机对战；三步训练使用均衡陪练。');}
 syncCoachNote();
 for(const [id,key,attr] of [['roles','role','role'],['friend-roles','friendRole','friendRole'],['coach-roles','coachRole','coachRole'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset'],['friend-modes','finale','finale']]){
   $(id).addEventListener('click',event=>{
@@ -194,7 +214,7 @@ function openEntry(stage){
   $('mode-setup').hidden=!['home','ai'].includes(stage);$('ai-setup').hidden=stage!=='ai';
   $('home-actions').hidden=stage!=='home';$('ai-start-controls').hidden=stage!=='ai';
   $('training-setup').hidden=stage!=='training';$('friends-dialog').hidden=stage!=='friends';
-  const labels={ai:['人机开打','选择自己、陪练与比赛形式。'],training:['三步训练','先学跑位、选线和回位。'],friends:['好友对打','各自选打法，共同确认规则。'],home:['','']};
+  const labels={ai:['人机对战','选择打法、陪练与赛制。'],training:['三步训练','依次练习跑位、选线与回位。'],friends:['好友对战','创建或加入房间，确认规则后开始。'],home:['','']};
   setText('entry-title',labels[stage][0]);setText('entry-description',labels[stage][1]);syncEntrySettings();
 }
 for(const [id,friend]of [['ai-formats',false],['friend-formats',true]])$(id).addEventListener('click',event=>{
@@ -285,17 +305,17 @@ function handleNetwork(message){
     currentPlayerId=message.players[side]?.playerId||null;
     setText('waiting-code',message.code);
     setText('waiting-mode',message.rules?.finale==='father-son'?'父子局 · 赛后互动不可跳过':'普通对局 · 无赛后互动');
-    setText('waiting-status',message.players.filter(Boolean).length===2?'● 球友已到，准备开场':'● 房间已创建，等待加入');
+    setText('waiting-status',message.players.filter(Boolean).length===2?'● 对手已加入，可以准备':'● 房间已创建，等待对手加入');
     history.replaceState(null,'',`?room=${encodeURIComponent(message.code)}`);
     if(!state){mode='waiting';
       const connected=message.players.filter(p=>p?.connected).length;
       const ready=message.ready||[];const parent=message.rules?.finale==='father-son';
-      const lineup=message.players.map((p,index)=>p?(p.name+' · '+ROLES[p.role].label+'型 · '+(!p.connected?'已断开':ready.includes(index)?'已准备':'未准备')):'等待球友加入').join('\n');
+      const lineup=message.players.map((p,index)=>p?(p.name+' · '+ROLES[p.role].label+'型 · '+(!p.connected?'已断开':ready.includes(index)?'已准备':'未准备')):'等待对手加入').join('\n');
       setText('waiting-players',lineup);setText('waiting-rules',(message.ruleset==='standard21'?'标准三局 · 每局21分':message.target+'分单局')+' · '+(parent?'父子局':'普通对局'));
-      setText('waiting-consent',parent?'父子局：败者跪拜叫爸爸，约3秒不可跳过。双方确认并准备后开打。':'确认本房间规则，双方准备后倒数3秒开打。');
+      setText('waiting-consent',parent?'父子局：败者跪拜叫爸爸，约3秒不可跳过。双方确认并准备后开始比赛。':'确认本房间规则，双方准备后倒数 3 秒开始比赛。');
       $('ready-room').disabled=connected!==2||ready.includes(side)||!message.readyRequired;
-      setText('ready-room',connected!==2?'等待球友加入':ready.includes(side)?'已准备，等待球友':parent?'同意父子局并准备':'确认规则并准备');
-      if(connected!==2&&message.players[1])setText('waiting-status','球友已断开，请重新建房');
+      setText('ready-room',connected!==2?'等待对手加入':ready.includes(side)?'已准备，等待对手':parent?'同意父子局并准备':'确认规则并准备');
+      if(connected!==2&&message.players[1])setText('waiting-status','对手已断开，请重新创建房间');
       dialog('waiting-dialog');}
   }else if(message.type==='state'){
     if(message.state?.rulesVersion!==RULES_VERSION){showToast('比赛规则已更新，请双方联网刷新后重新建房');controls.setEnabled(false);return;}
@@ -318,9 +338,9 @@ function handleNetwork(message){
     setText('connection',lastRtt===null?'手机直连':`${lastRtt} ms · ${peerMode?'手机直连':'联机'}`);
   }else if(message.type==='rematch'){
     rematchRequested=message.ready.includes(side);
-    if(state?.phase==='over')setText('rematch',rematchRequested?'等待球友同意…':message.ready.length?'球友邀你再战 · 开始 ↗':'再来一局 ↗');
+    if(state?.phase==='over')setText('rematch',rematchRequested?'等待对手确认…':message.ready.length?'对手邀请再战 · 开始 ↗':'再来一局 ↗');
   }else if(message.type==='resumeReady'){
-    if(state?.phase==='paused')setText('resume',message.ready.includes(side)?'已准备，等待球友…':'球友已准备 · 继续 ↗');
+    if(state?.phase==='paused')setText('resume',message.ready.includes(side)?'已准备，等待对手…':'对手已准备 · 继续 ↗');
   }
 }
 async function connect(){
@@ -491,7 +511,7 @@ function updateUI(info,state){
   setText('name-self',nameSelf);setText('name-other',nameOther);
   setText('role-self',ROLES[self.role].label+'型');setText('role-other',ROLES[opponent.role].label+'型');
   setText('score-self',state.score[side]);setText('score-other',state.score[1-side]);
-  const matchType=mode==='ai'?'人机练习':room?.rules?.finale==='father-son'?'父子局':'普通对局';
+  const matchType=mode==='ai'?'人机对战':room?.rules?.finale==='father-son'?'父子局':'普通对局';
   const matchLabel=trainingSession&&trainingSession.step<3
     ?`训练 ${trainingSession.step+1}/3 · ${TRAINING_STEPS[trainingSession.step].title}`
     :trainingSession?'训练完成 · 继续实战':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[side]}:${state.games[1-side]} · ${matchType}`:`${state.target} 分制 · ${matchType}`;
@@ -507,8 +527,11 @@ function updateUI(info,state){
   if(mode==='ai')setText('connection','本地练习');
   const roleHint=roleGuidance[self.role]||roleGuidance.balanced;
   const smashButton=document.querySelector('[data-shot="smash"]');
-  smashButton.classList.toggle('unavailable',!info.availability.canSmash);
-  smashButton.classList.toggle('ready',info.availability.canSmash);
+  const canSmash=Boolean(info.availability.canSmash);
+  smashButton.classList.toggle('unavailable',!canSmash);
+  smashButton.classList.toggle('ready',canSmash);
+  if(canSmash&&!smashReady&&state.phase==='rally')haptics.ready();
+  smashReady=canSmash;
   const lane=info.aim,depth=info.aimDepth;
   const quality=info.target?.quality;
   const risk=quality?.risk||0;
@@ -543,7 +566,7 @@ function updateUI(info,state){
   const lastShot=state.lastShotInfo;
   if(!info.prepare&&lastShot?.side===side&&state.time-lastShot.at<1.2&&lastShot.quality.risk>.25)guidance='刚才一拍 · '+lastShot.quality.reason.split(' · ')[0];
   if(trainingSession&&trainingSession.step<3&&!info.prepare)guidance=`训练 ${trainingSession.step+1}/3 · ${TRAINING_STEPS[trainingSession.step].text}`;
-  if(trainingSession&&trainingSession.step>=3&&!info.prepare)guidance='三步训练完成 · 现在按自己的节奏继续';
+  if(trainingSession&&trainingSession.step>=3&&!info.prepare)guidance='基础练习完成 · 现在按自己的节奏继续';
   setText('assist-status',guidance);
   $('assist-status').dataset.kind=guidance==='按住击球键，拖动选落点'?'instruction':'live';
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
@@ -559,12 +582,12 @@ function updateUI(info,state){
   if(state.phase!==lastPhase){
     lastPhase=state.phase;
     if(state.phase==='paused'){
-      setText('pause-title','休息一下。');
-      setText('resume','准备继续 ↗');
-      setText('pause-description',mode==='ai'?'每人每场可暂停一次，最多 30 秒。':peerMode?'每人每场一次，最多 30 秒；双方准备后继续，请保持游戏在前台。':'每人每场一次；双方准备后继续，断线球友可在倒计时内重连。');
+      setText('pause-title','比赛暂停');
+      setText('resume','继续比赛 ↗');
+      setText('pause-description',mode==='ai'?'每人每场可暂停一次，最多 30 秒。':peerMode?'每人每场一次，最多 30 秒；双方准备后继续，请保持游戏在前台。':'每人每场一次；双方准备后继续，断线对手可在倒计时内重连。');
       dialog(helpOpen?'help-dialog':'pause-dialog');
     }else if(state.phase==='over'){
-      setText('result-title',state.winner===null?'本局结束。':state.winner===side?'这一局，你拿下。':'下一局，再争取。');
+      setText('result-title',state.winner===null?'本局结束':state.winner===side?'本局获胜':'本局失利');
       setText('result-score',state.ruleset==='standard21'?`局数 ${state.games[side]} : ${state.games[1-side]}`:`${state.score[side]} : ${state.score[1-side]}`);
       const resultReason=relativeMessage(state.message).replace(/\s*·\s*(?:局数\s*)?\d+\s*:\s*\d+$/,'');
       setText('result-reason',resultReason+(state.ruleset==='standard21'?` · 本局比分 ${state.score[side]}:${state.score[1-side]}`:''));setText('rematch','再来一局 ↗');
@@ -598,7 +621,7 @@ try{
   window.visualViewport?.addEventListener('resize',resizeCourt);
   new ResizeObserver(resizeCourt).observe($('court'));
   window.addEventListener('orientationchange',()=>{controls?.reset();pendingShot=null;requestAnimationFrame(resizeCourt);setTimeout(resizeCourt,250);});
-  controls=new Controls({joystick:$('joystick'),knob:$('knob'),movementSurface:$('court'),shotButtons:document.querySelectorAll('[data-shot]'),onShot:fireShot,onAim:(value,explicit,depth=0)=>{dragAim=explicit?value:null;dragDepth=explicit?depth:0;if(controls?.activeShot)lastShotRequest=null;},onAimSelect:selectAim,onPause:requestPause});
+  controls=new Controls({joystick:$('joystick'),knob:$('knob'),movementSurface:$('court'),shotButtons:document.querySelectorAll('[data-shot]'),onShot:fireShot,onAim:(value,explicit,depth=0)=>{dragAim=explicit?value:null;dragDepth=explicit?depth:0;if(controls?.activeShot)lastShotRequest=null;},onAimSelect:selectAim,onPause:requestPause,onFeedback:(type,detail)=>{if(type==='press')haptics.press(detail.shot);else if(type==='charged')haptics.charged();else if(type==='shoot'){haptics.shoot(detail.shot);flashShotButton(detail.button,detail.shot);}}});
   document.querySelectorAll('[data-shot]').forEach(button=>button.addEventListener('pointerdown',event=>{
     if(controls.activeShot?.pointerId===event.pointerId)gestureOrigin={x:event.clientX,y:event.clientY};
   }));

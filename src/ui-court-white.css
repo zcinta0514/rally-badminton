@@ -1,0 +1,222 @@
+/* Court White: shared surface, type and tactile control treatment.
+   This layer only replaces colours, borders, radii, shadows and press feedback.
+   Layout, control order, sizes, hit targets and input handling stay as shipped. */
+
+:root {
+  --surface: #fffef9;
+  --soft: #e9eee4;
+  --button-face: #37694c;
+  --button-edge: #244a34;
+  --panel-shadow: 0 16px 48px -24px #243d3145;
+  --press-ease: cubic-bezier(.2,.8,.25,1.2);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tactile buttons: immediate :active response, no input delay, no layout shift. */
+button {
+  font-weight: 550;
+  transition: background-color 140ms, color 140ms, border-color 140ms, box-shadow 140ms, transform 180ms var(--press-ease);
+}
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid #507baa; outline-offset: 4px; }
+button:disabled { transform: none !important; box-shadow: none !important; }
+button:active:not(:disabled):not(.shot-btn) { transform: translateY(2px); transition-duration: 55ms; }
+input, textarea, select { accent-color: var(--green); }
+
+/* Lobby title block: wordmark plus discipline, with the small-cap accents
+   mainstream sports menus use instead of a sentence. */
+.menu-heading .eyebrow { gap: 10px; color: var(--muted); font-weight: 600; letter-spacing: .22em; }
+.menu-heading .eyebrow>span { width: 26px; height: 1px; background: var(--green); }
+.menu-panel h1 .zh { color: var(--ink); }
+.menu-panel h1 .mode { color: var(--green); }
+.menu-panel h1 .latin { display: inline-block; margin-left: .36em; font-size: .26em; font-weight: 600; letter-spacing: .34em; vertical-align: .26em; color: var(--muted); }
+.menu-panel h1 .mode .latin { color: #6f8a76; }
+.menu-panel h1 .sep { display: none; }
+.menu-heading .intro { font-size: 11px; line-height: 23.8px; font-weight: 500; letter-spacing: .1em; color: var(--muted); }
+@media (max-height:760px) and (orientation:landscape), (orientation:portrait) { .menu-heading .intro { line-height: 20.4px; } }
+@media (max-height:550px) and (orientation:landscape) { .menu-heading .intro { line-height: 18.7px; } }
+#home-actions .entry-copy small .tag { display: inline-block; margin-right: .1em; font-size: .78em; font-weight: 600; letter-spacing: .16em; opacity: .72; }
+#home-actions .entry-copy small .tag::after { content: "·"; margin: 0 .5em 0 .55em; opacity: .55; }
+@media (max-height:500px) and (orientation:landscape) {
+  .menu-panel h1 .latin { display: none; }
+  .menu-panel h1 .sep { display: inline; margin: 0 .5em; color: var(--muted); font-weight: 400; }
+}
+
+/* Global header. The brand mark keeps its shipped colours, size and underline. */
+.brand { color: #122b25; }
+.brand-mark { background: #008650; border-bottom-color: #0756b0; color: #ffffff; }
+.brand small { color: #008650; }
+.topbar { background: var(--paper); border-color: var(--line); }
+.edition { letter-spacing: 1px; gap: 12px; }
+.icon-btn { border-radius: 11px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 2px 0 var(--soft); }
+.icon-btn:active { background: var(--soft); box-shadow: inset 0 1px 2px #243d3115; }
+
+/* Lobby: the live court keeps its own card, the menu column keeps the shipped layout. */
+body[data-screen=menu] #court { left: calc(var(--menu-width) + 12px); top: calc(var(--header-height) + 24px); width: calc(100vw - var(--menu-width) - 40px); height: calc(100dvh - var(--header-height) - 52px); border: 1px solid var(--line); border-radius: 22px; }
+body[data-screen=menu] .screen-vignette { display: none; }
+.menu-panel { background: var(--paper); }
+.court-caption { inset: calc(var(--header-height) + 24px) 28px 28px calc(var(--menu-width) + 12px); border-radius: 22px; z-index: 2; }
+.live-tag { top: 20px; left: 20px; color: var(--ink); background: var(--paper); border: 1px solid var(--line); padding: 9px 12px; border-radius: 20px; font-size: 10px; font-weight: 500; letter-spacing: 0; }
+.live-tag i { background: #6d9774; width: 5px; height: 5px; }
+.live-tag span { color: var(--muted); }
+.court-strip { background: var(--paper); color: var(--muted); border: 0; border-top: 1px solid var(--line); }
+.court-strip b { color: var(--green); }
+.court-strip span, .court-strip span:last-child { font-size: 9px; letter-spacing: 1.4px; opacity: 1; }
+.pwa-entry { color: var(--muted); }
+.menu-foot { color: var(--muted); }
+.menu-foot button { font-weight: 500; border-radius: 5px; }
+
+/* Controls share a top face and a small, stable bottom edge. */
+button.primary-btn, .dialog button.primary-btn, .pwa-actions #pwa-install, .release-dialog .release-dismiss {
+  background: linear-gradient(#ffffff08, #00000004), var(--button-face); color: #fffef9;
+  border: 1px solid #325e44; border-radius: 13px; font-weight: 600;
+  box-shadow: inset 0 1px 0 #ffffff32, 0 3px 0 var(--button-edge), 0 7px 12px -8px #173c2b60;
+}
+button.secondary-btn, .dialog button.secondary-btn, .pwa-actions button {
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 13px;
+  box-shadow: inset 0 1px 0 #fff, 0 3px 0 #e1e6da; font-weight: 550;
+}
+button.primary-btn:active:not(:disabled), .dialog button.primary-btn:active:not(:disabled), .pwa-actions #pwa-install:active:not(:disabled), .release-dialog .release-dismiss:active:not(:disabled) { transform: translateY(3px); box-shadow: inset 0 2px 4px #123c3026, 0 0 0 var(--button-edge); }
+button.secondary-btn:active:not(:disabled), .dialog button.secondary-btn:active:not(:disabled), .pwa-actions button:active:not(:disabled) { transform: translateY(2px); box-shadow: inset 0 1px 3px #243d3112, 0 1px 0 #e1e6da; }
+.text-btn, .dialog .text-btn { color: var(--muted); text-decoration: none; border-radius: 8px; }
+.text-btn:active { background: var(--soft); }
+
+/* Entry setup surfaces. */
+.role-card { background: var(--surface); border: 1px solid var(--line); border-radius: 13px; box-shadow: 0 2px 0 #e5e9df; }
+.role-card.selected { color: var(--ink); background: #e5eddf; border-color: #87a385; box-shadow: inset 0 0 0 1px #87a38533, 0 2px 0 #c7d7c0; }
+.role-card.selected::after { color: var(--green); }
+.role-card strong { font-weight: 600; }
+.role-card small { color: var(--muted); opacity: 1; }
+.role-card:active { box-shadow: inset 0 2px 3px #243d3112; }
+.field-label { font-weight: 500; }
+.segments { border-radius: 11px; background: var(--soft); }
+.segments button { border-radius: 8px; font-weight: 450; color: var(--muted); }
+.segments button.selected, .friend-setup #friend-modes button[aria-pressed=true], .dialog #friend-modes button[aria-pressed=true] { color: var(--ink); background: var(--surface); box-shadow: 0 2px 5px #243d3115; font-weight: 600; }
+.rules-note { color: var(--muted); }
+#ai-start-controls { border-top: 1px solid var(--line); }
+.entry-content>h3 { font-weight: 550; }
+.training-goals b { font-weight: 550; }
+.friend-setup input, .dialog input, .dialog textarea, .dialog select { border: 1px solid var(--line); border-radius: 11px; background: var(--surface); color: var(--ink); }
+.friend-setup>p { color: var(--muted); }
+.section-label b { color: var(--green); }
+
+/* Pause, results, friends, records, help, feedback, install and onboarding. */
+#dialog-backdrop { background: #1d302650; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+#dialog-backdrop .dialog, .pwa-dialog, .release-dialog, .onboarding-dialog { background: var(--paper); color: var(--ink); border-color: var(--line); border-top-color: var(--green); border-radius: 21px; box-shadow: var(--panel-shadow); }
+.dialog h2, .pwa-dialog h2, .release-dialog h2, .onboarding-dialog h2 { font-weight: 550; }
+.dialog .eyebrow { font-weight: 450; color: var(--muted); letter-spacing: 1px; }
+.dialog .close-dialog, .pwa-close, .release-dialog .release-close { border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--muted); }
+.dialog .room-code { border: 1px solid var(--line); border-radius: 13px; color: var(--ink); background: var(--surface); font-weight: 550; }
+.dialog .result-score, .dialog .pause-clock { color: var(--ink); border: 0; font-weight: 500; }
+.dialog .rule-note, .dialog .feedback-status { color: var(--muted); border: 0; background: none; }
+.dialog .help-item strong { font-weight: 600; }
+.dialog .help-item>b { color: var(--green); font-weight: 500; }
+.usage-settings { background: var(--surface); }
+.dialog .usage-settings input { accent-color: var(--green); }
+.leaderboard-table th { background: var(--soft); }
+.leaderboard-table tr[data-self=true] { background: #e5eddf; }
+.leaderboard-table td strong { font-weight: 550; }
+.leaderboard-status, .dialog .dialog-foot { color: var(--muted); }
+.pwa-dialog::backdrop, .release-dialog::backdrop, .onboarding-dialog::backdrop { background: #1d302650; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+.pwa-eyebrow, .onboarding-progress { color: var(--muted); font-weight: 500; }
+.pwa-cache-detail { background: var(--soft); border-color: var(--line); border-left-color: var(--green); border-radius: 11px; }
+.onboarding-visual { background: var(--soft); border-color: var(--line); }
+.onboarding-visual span { border-color: var(--line); background: var(--surface); color: var(--green); font-weight: 550; box-shadow: 0 2px 0 #d5dfcf; }
+.onboarding-instructions strong { color: var(--green); font-weight: 550; }
+.onboarding-intro { color: var(--muted); }
+#toast { border: 1px solid #3f5d4b; border-radius: 13px; background: #2b4435; color: #fffef9; box-shadow: 0 6px 22px #243d3128; }
+#countdown { border: 1px solid var(--line); border-radius: 20px; color: var(--ink); background: var(--paper); font-weight: 500; box-shadow: var(--panel-shadow); }
+#rotate-note { border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+
+/* Live match: opaque light surfaces keep contrast against every court palette. */
+body[data-screen=match] .topbar { color: var(--ink); }
+body[data-screen=match] .icon-btn, body[data-screen=match] .camera-toggle, body[data-screen=match] .palette-toggle, body[data-screen=match] .match-settings-toggle {
+  background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; box-shadow: inset 0 1px 0 #fff, 0 2px 0 #bdccbb;
+}
+body[data-screen=match] .icon-btn:active, body[data-screen=match] .camera-toggle:active, body[data-screen=match] .palette-toggle:active, body[data-screen=match] .match-settings-toggle:active { background: var(--soft); box-shadow: inset 0 1px 3px #243d3122; }
+.palette-toggle[aria-expanded=true], .camera-toggle[aria-expanded=true], .match-settings-toggle[aria-expanded=true] { border-color: #76947b !important; }
+.scoreboard { background: var(--paper); border-left-color: var(--green); border-radius: 12px; box-shadow: 0 3px 14px #152d2a20; }
+.score-player { font-weight: 550; }
+.score-player b { font-family: inherit; font-weight: 600; }
+.player-dot { background: #6b8f63; border-radius: 3px; }
+.opponent .player-dot { background: #b58568; }
+/* HUD text drawn straight over the court keeps the shipped light ink. */
+.match-note { color: #e1ede6; }
+.match-note strong { background: var(--surface); color: var(--ink); font-weight: 550; }
+.camera-panel, .palette-panel, .match-settings-panel { border: 1px solid var(--line); border-radius: 13px; background: var(--paper); color: var(--ink); box-shadow: var(--panel-shadow); }
+.camera-panel output, .camera-panel-heading button, .arena-settings-heading button, .palette-heading small, .match-settings-panel small, #performance-details summary { color: var(--muted); }
+.camera-panel input[type=range], .arena-volume input { accent-color: var(--green); }
+.match-settings-panel details, #performance-details { border-color: var(--line); }
+.match-settings-panel select { background: var(--surface); color: var(--ink); border-color: var(--line); border-radius: 7px; }
+.palette-options button { background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 9px; }
+.palette-options button[aria-pressed=true] { background: var(--soft); border-color: #8ca583; box-shadow: inset 0 0 0 1px #8ca58330; }
+.palette-options button i { border: 1px solid #243d3122; box-shadow: none; }
+.assist-panel>strong { background: var(--paper); color: var(--ink); border-color: #87a385; border-radius: 12px; box-shadow: 0 3px 12px #152d2a1a; }
+.assist-panel>strong[data-kind=instruction] { color: var(--muted); }
+.joystick-wrap>small { color: #e0eee6; }
+.joystick-wrap>small span { color: #9bb8ac; }
+.joystick { background: #f7f8f3dd; border-color: #d2ddca; box-shadow: inset 0 0 0 10px #c7d4c31c, 0 3px 12px #153c2c22; }
+.joystick::after { border-color: #93a58b66; }
+.stick-cross::before, .stick-cross::after { background: #8ca58366; }
+#knob { background: #fffef9; border-color: #bdcdb4; box-shadow: 0 4px 0 #9baf96, 0 5px 12px #243d3125; }
+.aim-heading b { color: #f5d1df; font-weight: 550; }
+.shot-btn { border-color: #c1d0b9; background: var(--paper); color: var(--ink); box-shadow: inset 0 1px 0 #fff, 0 3px 0 #a6b89c, 0 6px 14px #16352b30; transition: background-color 100ms, border-color 100ms, box-shadow 90ms; }
+.shot-btn::after { background: var(--paper); box-shadow: inset 0 1px 0 #fff8; }
+.shot-btn.smash, .shot-btn.smash::after { background: #37694c; color: #fffef9; }
+.shot-btn.smash { border-color: #6d8c64; box-shadow: inset 0 1px 0 #ffffff44, 0 3px 0 #244a34, 0 6px 14px #16352b30; }
+.shot-btn.smash.unavailable, .shot-btn.smash.unavailable::after { background: #d9e0d3; color: #51624e; }
+.shot-btn.smash.unavailable { border-color: #b7c5ae; box-shadow: 0 2px 0 #9eae96; }
+.shot-btn.smash.ready, .shot-btn.smash.ready::after { background: #e9d6a6; color: #594829; }
+.shot-btn.smash.ready { border-color: #d5b878; box-shadow: inset 0 1px 0 #fff8, 0 3px 0 #af9359, 0 0 0 2px #f8e5b030; }
+/* Hold and release feedback never changes a shot button's hit area. */
+.shot-btn { transition: background-color 80ms, border-color 80ms, box-shadow 90ms, transform 110ms var(--press-ease), filter 160ms ease-out; }
+.shot-btn.charging { transform: scale(.945); }
+.shot-btn.fired { animation: shot-fired 220ms ease-out; }
+.shot-btn.smash.fired { animation: smash-fired 280ms ease-out; }
+@keyframes shot-fired { 0% { filter: brightness(1.28); } 100% { filter: brightness(1); } }
+@keyframes smash-fired { 0% { filter: brightness(1.45) saturate(1.12); } 100% { filter: none; } }
+.arena-haptics { display: flex; align-items: center; gap: 7px; margin-top: 10px; font-size: 11px; color: var(--ink); }
+.arena-haptics input { width: 16px; height: 16px; margin: 0; accent-color: var(--green); }
+.arena-haptics-note { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; line-height: 1.5; }
+.shot-btn:active:not(:disabled), .shot-btn.charging { border-color: #688d61; box-shadow: inset 0 2px 5px #243d3130, 0 1px 0 #9caf92; }
+.shot-btn.charging::after { box-shadow: inset 0 2px 4px #18382420; }
+.shot-instruction { color: #d8e9df; }
+#shot-risk[data-risk=low] { color: #c3efba; } #shot-risk[data-risk=medium] { color: #ffd18b; } #shot-risk[data-risk=high] { color: #ff9b85; }
+.gesture-pad { background: #f7f8f3ed; border-color: #aa7f91; }
+.gesture-pad::before, .gesture-pad::after { background: #997f8d66; }
+.gesture-pad>span { color: #75586a; }
+#gesture-dot { background: #b17b94; border-color: #fffef9; }
+.finale-player { background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; }
+.finale-player small { color: var(--muted); }
+.finale-player[data-result=winner] { border-color: #8da77f; }
+.finale-player[data-result=winner] small { color: var(--green); }
+.finale-bubble { background: var(--paper); font-weight: 550; }
+.finale-bubble::after { border-top-color: var(--paper); }
+
+/* Menu-only shuttle decoration. Never intercepts input. */
+.ui-flight-layer { position: fixed; inset: 0; z-index: 40; overflow: hidden; pointer-events: none; }
+.ui-flight { position: absolute; width: 40px; height: 46px; filter: drop-shadow(1px 4px 3px #243d3126); }
+.ui-flight svg { width: 100%; height: 100%; }
+
+@media (hover:hover) {
+  button.primary-btn:hover:not(:disabled), .dialog button.primary-btn:hover:not(:disabled), .pwa-actions #pwa-install:hover:not(:disabled) { background-color: #3e7253; }
+  button.secondary-btn:hover:not(:disabled), .dialog button.secondary-btn:hover:not(:disabled), .role-card:not(.selected):hover, .icon-btn:hover { background: #edf2e7; border-color: #a9bba0; }
+  body[data-screen=match] .icon-btn:hover { background: var(--soft); }
+  .segments button:not(.selected):hover { background: #f3f5ed; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  button { transition: none; }
+  .shot-btn.charging { transform: none; }
+  .shot-btn.fired, .shot-btn.smash.fired { animation: none; }
+  button:active:not(:disabled):not(.shot-btn), button.primary-btn:active:not(:disabled), .dialog button.primary-btn:active:not(:disabled), button.secondary-btn:active:not(:disabled), .dialog button.secondary-btn:active:not(:disabled), .pwa-actions button:active:not(:disabled), .release-dialog .release-dismiss:active:not(:disabled) { transform: none; }
+  .ui-flight-layer { display: none; }
+}
+
+/* The renderer owns this hint's position; only replace its inline visual skin. */
+.shuttle-edge-indicator {
+  background: var(--paper) !important;
+  color: #755c28 !important;
+  border: 1px solid #d4c59e !important;
+  box-shadow: 0 3px 12px #243d3126 !important;
+  font-family: inherit !important;
+}

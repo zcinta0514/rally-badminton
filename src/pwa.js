@@ -1,7 +1,7 @@
 import { createUpdateClient } from './update-client.js';
 
 export function getWebSocketURL(page = globalThis.location, config = globalThis.RALLY_CONFIG || {}) {
-  if (config.demoMode === true) throw new Error('本页可人机练习；好友对打请直接打开主机的局域网游戏网址。');
+  if (config.demoMode === true) throw new Error('本页可进行人机对战；好友对战请直接打开主机的局域网游戏网址。');
   const base = new URL(page.href);
   const url = new URL(config.wsUrl || `${base.protocol === 'https:' ? 'wss:' : 'ws:'}//${base.host}/ws`);
   if (!['ws:', 'wss:'].includes(url.protocol) || url.username || url.password || url.hash || url.search || url.pathname !== '/ws') throw new Error('联机地址配置无效');
@@ -34,7 +34,7 @@ export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate
   const status = entry.querySelector('#pwa-status');
   const dialog = document.createElement('dialog');
   dialog.id = 'pwa-dialog'; dialog.className = 'pwa-dialog'; dialog.setAttribute('aria-labelledby', 'pwa-title');
-  dialog.innerHTML = '<button type="button" class="pwa-close" aria-label="关闭主屏幕说明">×</button><small class="pwa-eyebrow">开拍 / RALLY</small><h2 id="pwa-title">从主屏幕开拍</h2><p id="pwa-intro"></p><ol id="pwa-steps"></ol><p class="pwa-note">把手机手动横置，并关闭系统竖排方向锁定。独立窗口可去掉普通浏览器地址栏和工具栏；方向锁定、通知与系统手势仍由设备控制。</p><p id="pwa-cache-detail" class="pwa-cache-detail" role="status" aria-live="polite"></p><div class="pwa-actions"><button id="pwa-install" type="button">添加到主屏幕</button><button id="pwa-check" type="button">检查更新</button></div>';
+  dialog.innerHTML = '<button type="button" class="pwa-close" aria-label="关闭主屏幕说明">×</button><small class="pwa-eyebrow">开拍 / RALLY</small><h2 id="pwa-title">添加到主屏幕</h2><p id="pwa-intro"></p><ol id="pwa-steps"></ol><p class="pwa-note">使用时请手动横屏，并关闭系统方向锁定。独立窗口可隐藏地址栏与工具栏；方向锁定、通知与系统手势仍由设备控制。</p><p id="pwa-cache-detail" class="pwa-cache-detail" role="status" aria-live="polite"></p><div class="pwa-actions"><button id="pwa-install" type="button">添加到主屏幕</button><button id="pwa-check" type="button">检查更新</button></div>';
   document.body.append(dialog);
   const releaseNotice = globalThis.RALLY_CONFIG?.releaseNotice;
   const validReleaseNotice = releaseNotice && typeof releaseNotice.id === 'string' && /^[a-z0-9][a-z0-9._-]{1,64}$/i.test(releaseNotice.id) &&
@@ -42,7 +42,7 @@ export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate
     Array.isArray(releaseNotice.items) && releaseNotice.items.length > 0 && releaseNotice.items.every(item => typeof item === 'string');
   const releaseDialog = document.createElement('dialog');
   releaseDialog.id = 'release-notice-dialog'; releaseDialog.className = 'release-dialog'; releaseDialog.setAttribute('aria-labelledby', 'release-notice-title');
-  releaseDialog.innerHTML = '<button type="button" class="release-close" aria-label="关闭更新公告">×</button><small class="pwa-eyebrow">开拍 / RALLY · 更新公告</small><h2 id="release-notice-title"></h2><p id="release-notice-summary"></p><ul id="release-notice-items"></ul><button type="button" class="release-dismiss">知道了 ↗</button>';
+  releaseDialog.innerHTML = '<button type="button" class="release-close" aria-label="关闭更新公告">×</button><small class="pwa-eyebrow">开拍 / RALLY · 更新公告</small><h2 id="release-notice-title"></h2><p id="release-notice-summary"></p><ul id="release-notice-items"></ul><button type="button" class="release-dismiss">关闭</button>';
   document.body.append(releaseDialog);
   const detail = dialog.querySelector('#pwa-cache-detail'), nativeInstall = dialog.querySelector('#pwa-install'), checkButton = dialog.querySelector('#pwa-check');
   const releaseDismiss = releaseDialog.querySelector('.release-dismiss');
@@ -110,12 +110,12 @@ export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate
       short = '新版已备好 · 空闲时自动更新';
       long = '结束对局并返回首页后，游戏会在没有进行中的操作时自动更新。若其他游戏窗口仍在使用，将继续等待；很久未更新时，可关闭所有开拍窗口后重新打开，无需删除主屏幕图标。';
     } else if (cached) {
-      short = navigator.onLine ? '离线人机已就绪' : '当前离线 · 可人机开打';
-      long = `本机离线资源已备好${version ? '（' + version.slice(0,8) + '）' : ''}。断网后仍可从同一网址或主屏幕进入人机。${peerMode ? '双手机好友对打无需电脑，创建和加入房间时需要联网；比赛时保持两台手机互通。' : demoMode ? '好友对打请直接打开主机的局域网游戏网址。' : '好友对打需要与运行游戏的电脑保持网络连接。'}浏览器清理存储后需重新联网下载。`;
+      short = navigator.onLine ? '离线模式已就绪' : '当前离线 · 可进行人机对战';
+      long = `离线资源已就绪${version ? '（' + version.slice(0,8) + '）' : ''}。断网后仍可从同一网址或主屏幕进入人机对战。${peerMode ? '双设备好友对战无需电脑；创建和加入房间时需要联网，比赛时保持两台设备互通。' : demoMode ? '好友对战请直接打开主机的局域网游戏网址。' : '好友对战需要与运行游戏的电脑保持网络连接。'}浏览器清理存储后需重新联网下载。`;
     } else if (failure) {
       short = '离线资源未就绪 · 点击重试'; long = '离线资源尚未完整下载，当前可继续在线玩。联网后点击“重试缓存”；若服务器已更新，请关闭全部开拍窗口再重新打开。';
     } else {
-      short = '正在准备离线人机…'; long = '首次打开需要联网下载完整游戏资源。请等到“离线人机已就绪”再断网。';
+      short = '正在准备离线资源…'; long = '首次打开需联网下载完整游戏资源；显示「离线模式已就绪」后即可断网。';
     }
     status.textContent = short; detail.textContent = long + (pageVersion ? ` 当前页面版本：${pageVersion.slice(0,8)}。` : '');
     entry.setAttribute('aria-label', `主屏幕安装与更新：${short}`);

@@ -1,0 +1,38 @@
+{
+  "release": "1.12.0",
+  "date": "2026-10-31",
+  "baseline": "7164832c6b2dae212318c8ff2ec53a607cfe5fab",
+  "sourceBranch": "ui-2-court-white",
+  "tests": { "command": "npm test", "passed": 727, "failed": 0, "skipped": 0 },
+  "builds": { "root": "a7ae870879cdef42", "pages": "e3f6043e1405a3a2", "resources": 91 },
+  "logo": {
+    "icons": "rally.svg, rally-192.png, rally-512.png, apple-touch-icon.png 与 origin/main 逐字节一致",
+    "markup": "brand 链接和标志 SVG 与 origin/main 一致",
+    "markComputed": { "background": "rgb(0,134,80)", "borderBottom": "5px solid rgb(7,86,176)", "color": "rgb(255,255,255)", "rect": [32, 8.5, 42, 42] },
+    "wordmark": { "text": "开拍 RALLY", "color": "rgb(18,43,37)", "fontSize": "24px", "fontWeight": "850", "letterSpacing": "1px", "gap": "10px", "rect": [32, 8.5, 102, 42] },
+    "result": "标志图形、底色、下边线、字标颜色与位置和 origin/main 完全一致"
+  },
+  "geometry": {
+    "viewports": ["1440x900", "1280x720", "844x390", "667x375", "568x320", "390x844", "320x700"],
+    "homeControls": "0 px",
+    "entryOrState": "最大 2 px 文本宽度 / 1 px 字体行高",
+    "dialogs": "暂停与操作说明对话框逐像素一致"
+  },
+  "haptics": {
+    "press": 8, "charged": 8, "shot": 12, "smash": [16, 20, 26], "ready": 7,
+    "fallback": "无 Vibration API 时静默降级（iOS Safari）",
+    "toggle": "比赛设置可关闭，按本机保存"
+  },
+  "analytics": {
+    "defaultEnabledOnProduction": true,
+    "exclusions": "主动关闭或浏览器 Do Not Track",
+    "localPreviewConfigured": false,
+    "note": "本地 127.0.0.1 不是生产域名，因此预览里的开关不启用；生产域名默认勾选并上报"
+  },
+  "pwa": { "safeAreaSimulation": "390x844，顶部 47、底部 34，无溢出/黑色底", "statusBarStyle": "default", "orientation": "manifest 不再锁横向" },
+  "limitations": [
+    "未在实体安卓机测量振动强度",
+    "未在实体 iPhone/Android 上复测主屏幕安装态",
+    "本轮未做真实双手机 WebRTC 对局"
+  ]
+}

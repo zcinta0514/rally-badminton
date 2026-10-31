@@ -67,10 +67,10 @@ test('skipping or Escape marks this tutorial as seen and restores the original f
 });
 
 test('three pages advance and go back; only the explicit practice action starts play',async()=>{
-  const f=await setup();f.api.open();assert.match(f.el('onboarding-title').textContent,/先选/);assert.equal(f.el('onboarding-back').hidden,true);
-  f.el('onboarding-next').click();assert.match(f.el('onboarding-title').textContent,/左手/);
-  f.el('onboarding-back').click();assert.match(f.el('onboarding-title').textContent,/先选/);
-  f.el('onboarding-next').click();f.el('onboarding-next').click();assert.match(f.el('onboarding-title').textContent,/右手/);
+  const f=await setup();f.api.open();assert.match(f.el('onboarding-title').textContent,/选择比赛/);assert.equal(f.el('onboarding-back').hidden,true);
+  f.el('onboarding-next').click();assert.match(f.el('onboarding-title').textContent,/移动/);
+  f.el('onboarding-back').click();assert.match(f.el('onboarding-title').textContent,/选择比赛/);
+  f.el('onboarding-next').click();f.el('onboarding-next').click();assert.match(f.el('onboarding-title').textContent,/击球/);
   assert.equal(f.practice,0);assert.equal(f.el('onboarding-practice').hidden,false);f.el('onboarding-practice').click();
   assert.equal(f.practice,1);assert.equal(f.api.isOpen,false);
 });

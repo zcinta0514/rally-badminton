@@ -61,6 +61,8 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   });
   const closeButtons = ['close-friends','close-help','close-lan'].map(element);
   element('camera-panel').hidden = true;
+  element('palette-panel').hidden = true;
+  element('match-settings-panel').hidden = true;
   const settingGroups = new Map();
   for (const [id, attribute, values] of [['roles','role',['balanced','swift','power']], ['coach-roles','coachRole',['balanced','swift','power']], ['friend-roles','friendRole',['balanced','swift','power']], ['ai-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-tabs','action',['create','join']], ['difficulties','difficulty',['easy','medium','hard']], ['targets','target',[5,11,21]], ['rulesets','ruleset',['quick','standard21']]]) {
     const choices=values.map((value,index)=>{const button=element(`choice-${attribute}-${value}`);button.dataset[attribute]=String(value);button.closest=selector=>selector==='button'?button:null;button.setAttribute('aria-pressed',String(index===0));return button;});
@@ -86,7 +88,9 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
         if (part === '[data-shot="smash"]') found = element('smash');
         else if (part === 'dialog[open]') found = [...elements.values()].find(node => node.tagName === 'DIALOG' && node.open);
         else if (part === '.dialog:not([hidden])') found = dialogs.find(node => !node.hidden);
-        else if (part === '#camera-panel:not([hidden])') found = element('camera-panel').hidden ? null : element('camera-panel');
+        else if (['camera-panel','palette-panel','match-settings-panel'].some(id=>part === `#${id}:not([hidden])`)) {
+          const id = part.slice(1,part.indexOf(':')); found = element(id).hidden ? null : element(id);
+        }
         if (found) return found;
       }
       return null;
@@ -158,6 +162,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
       unlock() { this.unlocks++; this.context = { state: 'running' }; }
     },
     initPWA: options => { pwaOptions = options; updateSafeAtInit = options.isSafeToUpdate(); return { setMatchActive() {} }; },
+    createHaptics: () => ({ supported: true, enabled: true, setEnabled() {}, press() {}, charged() {}, shoot() {}, ready() {} }),
     // These independently tested UI modules do not replace any match decisions.
     initOnboarding: options => { onboardingOptions = options; return { maybeShow() { onboardingAttempts++; } }; },
     initFeedback: () => null,
@@ -210,7 +215,7 @@ test('the production update callback permits only a ready and visible lobby', as
   f.document.hidden = false; assert.equal(safe(), true);
 });
 
-test('the production update callback defers for friend forms, native dialogs, camera settings and text editing', async () => {
+test('the production update callback defers for friend forms, native dialogs, camera, palette, audio settings and text editing', async () => {
   const f = await fixture('serve', { peerMode: true });
   const safe = f.pwaOptions.isSafeToUpdate;
   f.click('open-friends'); assert.deepEqual(f.visibleDialogs(), ['friends-dialog']); assert.equal(safe(), false);
@@ -219,6 +224,10 @@ test('the production update callback defers for friend forms, native dialogs, ca
   nativeDialog.open = false; assert.equal(safe(), true);
   f.element('camera-panel').hidden = false; assert.equal(safe(), false);
   f.element('camera-panel').hidden = true;
+  for (const id of ['palette-panel','match-settings-panel']) {
+    f.element(id).hidden = false; assert.equal(safe(), false, `${id} must not be interrupted by an update`);
+    f.element(id).hidden = true; assert.equal(safe(), true);
+  }
   for (const tag of ['input', 'textarea', 'select', 'div']) {
     const field = f.document.createElement(tag); if (tag === 'div') field.contentEditable = 'true';
     field.focus(); assert.equal(safe(), false, `${tag} editing must preserve the current page`);
@@ -297,7 +306,7 @@ test('static page explains LAN room codes without pretending to host a room and 
   assert.equal(f.element('open-friends').hidden,false);
   assert.equal(f.element('open-leaderboard').hidden,true);
   assert.match(f.element('menu-intro').textContent,/局域网/);
-  assert.match(f.element('open-friends').textContent,/1V1 说明/);
+  assert.match(f.element('open-friends').textContent,/联机说明/);
   assert.notEqual(f.visibleDialogs().includes('friends-dialog'),true);
   f.click('open-friends');f.click('open-leaderboard');await f.click('create-room');await f.click('join-room');
   assert.deepEqual(f.visibleDialogs(),['lan-dialog']);
@@ -361,9 +370,9 @@ for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
     f.chooseSetting('targets', target); f.startAI();
     const state = f.liveState;
     state.score = [target - 2, target - 2]; f.draw(0);
-    assert.equal(f.element('match-label').textContent, `${target} 分制 · 人机练习`);
+    assert.equal(f.element('match-label').textContent, `${target} 分制 · 人机对战`);
     state.score = [target - 1, target - 1]; f.draw(0);
-    assert.match(f.element('match-label').textContent, /人机练习 · 加球中$/);
+    assert.match(f.element('match-label').textContent, /人机对战 · 加球中$/);
     assert.match(f.element('match-message').textContent, /你发球.*发球区 → 对角/);
     landScoringShuttle(state, 0); f.draw(0);
     assert.deepEqual([...state.score], [target, target - 1]);
@@ -389,11 +398,11 @@ test('standard HUD retains game counts and hides deuce hints during a completed 
   f.chooseSetting('rulesets', 'standard21'); f.startAI();
   const state = f.liveState;
   state.score = [20, 20]; state.games = [1, 0]; state.gameNumber = 2; f.draw(0);
-  assert.equal(f.element('match-label').textContent, '第2局 · 1:0 · 人机练习 · 加球中');
+  assert.equal(f.element('match-label').textContent, '第2局 · 1:0 · 人机对战 · 加球中');
   state.score = [29, 29]; f.draw(0);
   assert.match(f.element('match-label').textContent, /下一分获胜$/);
   state.score = [20, 22]; state.games = [1, 1]; state.phase = 'intermission'; state.timer = 4; f.draw(0);
-  assert.equal(f.element('match-label').textContent, '第2局 · 1:1 · 人机练习');
+  assert.equal(f.element('match-label').textContent, '第2局 · 1:1 · 人机对战');
   f.click('pause'); f.draw(0);
   assert.deepEqual(f.visibleDialogs(), ['pause-dialog']);
   assert.doesNotMatch(f.element('match-label').textContent, /加球中|下一分获胜/);
@@ -573,7 +582,7 @@ test('online results wait for server persistence and closing the leaderboard ret
 function assertRecovery(f) {
   assert.deepEqual(f.visibleDialogs(), ['pause-dialog']);
   assert.equal(f.element('dialog-backdrop').hidden, false);
-  assert.equal(f.element('pause-title').textContent, '连接中断。');
+  assert.equal(f.element('pause-title').textContent, '连接中断');
   assert.equal(f.element('resume').disabled, true);
   assert.equal(f.controls.enabled, false);
   assert.equal(f.view.dt, 0, 'a disconnected cosmetic tail must not advance');
@@ -597,7 +606,7 @@ test('sustained disconnect keeps a local exit available and permits offline AI w
   assert.equal(f.socket(), offlineSocket, 'a queued old retry must not reconnect after leaving for AI');
   f.click('pause'); f.draw();
   assert.deepEqual(f.visibleDialogs(), ['pause-dialog']);
-  assert.equal(f.element('pause-title').textContent, '休息一下。');
+  assert.equal(f.element('pause-title').textContent, '比赛暂停');
   assert.equal(f.element('resume').disabled, false);
 });
 
@@ -625,7 +634,7 @@ for (const phase of ['serve', 'paused']) {
     assert.equal(f.view.dt > 0, true);
     if (phase === 'paused') {
       assert.deepEqual(f.visibleDialogs(), ['pause-dialog']);
-      assert.equal(f.element('pause-title').textContent, '休息一下。');
+      assert.equal(f.element('pause-title').textContent, '比赛暂停');
       assert.equal(f.element('resume').disabled, false);
       assert.equal(f.controls.enabled, false);
       f.click('resume'); assert.deepEqual(retry.socket.sent.at(-1), { type: 'resume' });

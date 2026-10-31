@@ -54,8 +54,8 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   const manifest = JSON.parse(await readFile(path.join(root, 'manifest.webmanifest'), 'utf8'));
   manifest.id = basePath; manifest.scope = basePath; manifest.start_url = basePath + '?source=homescreen';
   manifest.icons = manifest.icons.map(icon => ({...icon, src:publicURL(icon.src)}));
-  if (peerMode) manifest.description = '人机练习与双手机好友对打，无需电脑；配对需联网，缓存后可离线人机。';
-  else if (demoMode) manifest.description = '人机练习，缓存后可离线游玩。';
+  if (peerMode) manifest.description = '羽毛球：人机对战与双设备好友对战，配对需联网，可离线人机。';
+  else if (demoMode) manifest.description = '羽毛球：人机对战，可离线游玩。';
   assets.set(publicURL('/manifest.webmanifest'), Buffer.from(JSON.stringify(manifest, null, 2) + '\n'));
   async function walk(directory) {
     for (const item of (await readdir(path.join(root, directory), { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {

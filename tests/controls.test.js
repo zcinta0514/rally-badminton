@@ -88,10 +88,11 @@ function fixture(t, { floating = false } = {}) {
   const aimPreviews = [];
   const selections = [];
   let pauses = 0;
-  const controls = new Controls({ joystick, knob, shotButtons, movementSurface: floating ? movementSurface : undefined, onShot: (shot) => shots.push(shot), onAim: (aim, explicit, aimDepth) => { aims.push(aim); aimPreviews.push({ aim, explicit, aimDepth }); }, onAimSelect: (aim) => selections.push(aim), onPause: () => pauses++ });
+  const feedback = [];
+  const controls = new Controls({ joystick, knob, shotButtons, movementSurface: floating ? movementSurface : undefined, onShot: (shot) => shots.push(shot), onAim: (aim, explicit, aimDepth) => { aims.push(aim); aimPreviews.push({ aim, explicit, aimDepth }); }, onAimSelect: (aim) => selections.push(aim), onPause: () => pauses++, onFeedback: (type, detail) => feedback.push({ type, ...detail }) });
   t.after(() => controls.dispose());
   return {
-    controls, joystick, knob, shotButtons, movementSurface, window, document, shots, aims, aimPreviews, selections,
+    controls, joystick, knob, shotButtons, movementSurface, window, document, shots, aims, aimPreviews, selections, feedback,
     get pauses() { return pauses; },
     advance(ms) { now += ms; const pending = [...frames.values()]; frames.clear(); pending.forEach((callback) => callback(now)); },
     get pendingFrames() { return frames.size; },
@@ -621,4 +622,32 @@ test('unowned pointer events do not release a keyboard-owned shot', (t) => {
   assert.equal(f.shots.length, 0);
   key(f.window, 'keyup', 'KeyJ');
   assert.equal(f.shots.length, 1);
+});
+
+
+test('shot feedback reports press, a single full-charge tick and release without delaying the shot', (t) => {
+  const f = fixture(t);
+  pointer(f.shotButtons[2], 'pointerdown', 7, 500, 260);
+  assert.deepEqual(f.feedback.at(-1), { type: 'press', shot: 'smash', button: f.shotButtons[2] });
+  f.advance(650);
+  const charged = f.feedback.filter((item) => item.type === 'charged');
+  assert.equal(charged.length, 1, 'full charge is announced once per shot');
+  assert.equal(charged[0].shot, 'smash');
+  f.advance(200);
+  assert.equal(f.feedback.filter((item) => item.type === 'charged').length, 1);
+  pointer(f.window, 'pointerup', 7, 500, 260);
+  const release = f.feedback.at(-1);
+  assert.equal(release.type, 'shoot');
+  assert.equal(release.shot, 'smash');
+  assert.equal(release.button, f.shotButtons[2]);
+  assert.equal(f.shots.length, 1, 'feedback must not add or delay shots');
+  assert.equal(release.charge, 1);
+});
+
+test('a cancelled pointer releases without a shot or release feedback', (t) => {
+  const f = fixture(t);
+  pointer(f.shotButtons[0], 'pointerdown', 8, 500, 260);
+  emit(f.window, 'pointercancel', { pointerId: 8 });
+  assert.equal(f.shots.length, 0);
+  assert.equal(f.feedback.filter((item) => item.type === 'shoot').length, 0);
 });
