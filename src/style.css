@@ -3,10 +3,10 @@
 @import url('./onboarding.css');
 
 :root {
-  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
-  color: #122b25; background: #102c2a; font-synthesis: none;
-  --ink: #122b25; --green: #008650; --blue: #0756b0;
-  --paper: #f6f7f2; --line: #dbe2dc; --muted: #64746a; --lime: #d7f35a;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: #243d31; background: #f7f8f3; font-synthesis: none;
+  --ink: #243d31; --green: #37694c; --blue: #3e6454;
+  --paper: #f7f8f3; --line: #d9dfd4; --muted: #647268; --lime: #dce7cd;
   --header-height: 72px; --menu-width: 40%;
 }
 * { box-sizing: border-box; }
