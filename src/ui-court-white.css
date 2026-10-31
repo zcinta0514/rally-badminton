@@ -42,6 +42,7 @@ input, textarea, select { accent-color: var(--green); }
 }
 
 /* Global header. The brand mark keeps its shipped colours, size and underline. */
+.brand { color: #122b25; }
 .brand-mark { background: #008650; border-bottom-color: #0756b0; color: #ffffff; }
 .brand small { color: #008650; }
 .topbar { background: var(--paper); border-color: var(--line); }

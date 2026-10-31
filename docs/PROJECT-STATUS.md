@@ -11,9 +11,9 @@
     "releaseTag": "v1.11.0"
   },
   "activeTask": {
-    "title": "UI-2：球馆白 A 全界面接入与本地试玩",
-    "scope": "完整游戏UI、文案和按钮反馈；基于最新主线保留全部玩法。",
-    "nextAction": "用户试玩新主菜单与击球反馈：安卓机确认震动，iPhone 确认按键视觉反馈；竖屏 PWA 黑条仍待真机复核。",
+    "title": "UI-2：界面与击球反馈 1.12.0 发布准备",
+    "scope": "球场白全界面、主菜单文案、击球触感/视觉反馈、竖屏安全区；保留全部玩法与标志。",
+    "nextAction": "创建 PR，CI 通过后合并 main、打 v1.12.0，核验 Pages/Vercel 并回填发布检查点。",
     "blockedBy": [],
     "documents": [
       "docs/tasks/UI-2.md"
@@ -49,11 +49,11 @@
     "baselineHead": "7164832c6b2dae212318c8ff2ec53a607cfe5fab",
     "taskFile": "docs/tasks/UI-2.md",
     "worktree": "/Users/xindong/Documents/开拍rally-ui-2-court-white",
-    "phase": "R4 已交付：去掉单打标签、主菜单文案与击球触感/视觉反馈",
-    "stopReason": "按用户反馈完成第四轮接入并交付预览，触感与竖屏安装态需真机确认。",
-    "nextAction": "用户试玩新主菜单与击球反馈：安卓机确认震动，iPhone 确认按键视觉反馈；竖屏 PWA 黑条仍待真机复核。",
+    "phase": "发布准备：本地核验完成，标志核对一致，PR 待创建",
+    "stopReason": "用户要求合并本轮改动；本地测试、构建、几何与标志核对已完成，等待 PR/CI/合并/部署。",
+    "nextAction": "创建 PR，CI 通过后合并 main、打 v1.12.0，核验 Pages/Vercel 并回填发布检查点。",
     "checkpoint": "docs/UI-2-CHECKPOINT.md",
-    "validation": "727/727与构建2ef8182f2d68d6ac通过；首页主控件7种视口0px差异；击球键反馈与触感调用实测；服务运行时buildId 121ef2eca07996f3，关键文件SHA-256一致；竖屏安全区47/34为Chrome模拟通过，实体机未验。",
+    "validation": "727/727与根路径a7ae870879cdef42、Pages e3f6043e1405a3a2构建通过；标志与origin/main逐项一致；首页主控件7视口0px；触感、竖屏安全区与51LA默认开启已核验；实体振动/安装态未测。",
     "scopeBoundary": "仅本地实现与试玩；不改版本、不推送、不合并、不上线，不动其他worktree。"
   },
   "publication": "v1.11.0已发布：PR#7合并829d005f，标签v1.11.0；Pages b9cf9dd3efba46e4、Vercel a41043ea6cbc4d21。两处正式版、公告、关键资源哈希与发球/移动/配色操作实际核验通过。"
