@@ -6,7 +6,7 @@ A free, open-source 3D badminton game for mobile and desktop browsers.
 
 **[打开游戏：人机练习 / 好友 1V1 →](https://zcinta0514.github.io/rally-badminton/)** · [Vercel 备用入口](https://kaipai-rally.vercel.app/) · 手机建议横屏。推荐双方连接同一 Wi-Fi 或支持设备互访的同一热点，建房和加入时保持互联网可用。
 
-本版源码以 [v1.12.0 标签](https://github.com/zcinta0514/rally-badminton/tree/v1.12.0) 为发布标识，网站更新与验证方式见 [公开网站说明](docs/PUBLIC-WEBSITE.md)。
+本版源码以 [v1.12.0 标签](https://github.com/zcinta0514/rally-badminton/tree/v1.12.0) 为发布标识；[GitHub Releases](https://github.com/zcinta0514/rally-badminton/releases/tag/v1.12.0) 同样以 v1.12.0 为最新版本，网站更新与验证方式见 [公开网站说明](docs/PUBLIC-WEBSITE.md)。
 
 ![手机横屏比赛画面](docs/images/gameplay.png)
 
