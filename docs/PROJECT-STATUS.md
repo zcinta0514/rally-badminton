@@ -29,9 +29,9 @@
       "worktree": "/Users/xindong/Documents/开拍rally/.cindy-worktrees/ui-3-menu-hud",
       "transport": "本机WebSocket对战，PUBLIC_PEER_MODE=0",
       "verifiedOn": "2026-11-01",
-      "limitations": "仅本机127.0.0.1；未合并、未改版本号；实体手机需经局域网地址复核。",
+      "limitations": "仅本机127.0.0.1；未合并、未改版本号；实体手机可用局域网地址 http://192.168.5.128:3092/ 复核（启动时按当前网卡生成，以服务日志为准）。",
       "buildId": "bebfc7733547254f",
-      "pid": 96489,
+      "pid": 11816,
       "sidebarTab": "UI-3 · 顶栏与开局页修复"
     }
   },
