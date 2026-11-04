@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>RALLY · 网前拖动试打</title>
+<link rel="stylesheet" href="./net-drag-demo.css">
+<script type="importmap">{"imports":{"three":"../vendor/three.module.js","three/addons/":"../vendor/three-addons/"}}</script>
+<body data-screen="match">
+<header id="hud"><strong>网前拖动试打 <small>定点 demo</small></strong><div class="options"><label><input id="enabled" type="checkbox" checked>扩展拖动</label><label>触球位置 <select id="position"><option value="front">网前</option><option value="rear">后场</option></select></label><button id="reset">再试一球</button></div></header>
+<canvas id="court" aria-label="三维定点试打球场"></canvas>
+<section id="game-controls"><div class="readout"><output id="result" aria-live="polite">轻点「吊球」放短；向上拖远，挑到后场。</output><p>左右拖选方向 · 向上拖打深 · 松手出球</p><small>固定触点对比球路；尚未接入跑位、连续对打与新动作。</small></div><div class="shots"><button data-shot="clear">高远球<small>J</small></button><button data-shot="drop">吊球<small>轻点 / 拖动 · K</small></button><button data-shot="smash">杀球<small>L</small></button></div></section>
+<div id="joystick" hidden><div id="knob"></div></div>
+<script type="module" src="./net-drag-demo.js"></script></body></html>
