@@ -86,12 +86,13 @@ export function getScoringRules({ ruleset = 'quick', target = 5 } = {}) {
 }
 
 export function createMatch({ target = 5, roles = ['balanced', 'balanced'], difficulty = 'easy', seed = 1, ruleset = 'quick',
-  playerAssist = 'none', assistSide = 0 } = {}) {
+  playerAssist = 'none', assistSide = 0, netDragSide = null } = {}) {
   ruleset = ruleset === 'standard21' ? 'standard21' : 'quick';
   playerAssist = assistLevelOf(playerAssist);
   assistSide = assistSide === 0 || assistSide === 1 ? assistSide : 0;
   const state = {
     rulesVersion: RULES_VERSION,
+    ...((netDragSide === 0 || netDragSide === 1) ? { netDragSide } : {}),
     phase: 'serve', time: 0, timer: 0, target: getScoringRules({ ruleset, target }).target,
     ruleset, games: [0, 0], gameNumber: 1, gameScores: [],
     sideChange: { id: 0, at: 0, reason: null, ends: [1, -1] }, _deciderChanged: false,
@@ -280,7 +281,7 @@ function shotDepth(type, charge, aimDepth, serving, role) {
 }
 
 /** Preview uses exactly the same target and launch solution as actual contact. */
-export function getShotTarget(state, side, request = {}) {
+export function getShotTarget(state, side, request = {}, { netDrag = state?.netDragSide === side } = {}) {
   if (side !== 0 && side !== 1) return null;
   const input = inputOf(request), ball = state.shuttle, player = state.players[side], role = ROLES[player.role], assist = assistFor(state, side);
   const serving = state.phase === 'serve' && state.server === side;
@@ -288,7 +289,14 @@ export function getShotTarget(state, side, request = {}) {
   const type = requested === 'smash' && serving ? 'clear' : requested;
   const fallbackReason = type !== requested ? '发球采用合法下手高远球' : '';
   let aimX = input.aim * (COURT.halfWidth - 0.3);
-  const aimZ = -direction(side) * shotDepth(type, input.charge, input.aimDepth, serving, role);
+  // Opt-in local playtest: preserve neutral, sideways and backward drags.
+  // Forward drag continuously extends the front-court drop into a lift.
+  const lift = netDrag && !serving && type === 'drop'
+    && ball.z * direction(side) > 0 && ball.z * direction(side) <= 2.2
+    && ball.y <= 1.9 ? Math.max(0, input.aimDepth) : 0;
+  const normalDepth = shotDepth(type, input.charge, input.aimDepth, serving, role);
+  const liftDepth = shotDepth(type, input.charge, 0, false, role);
+  const aimZ = -direction(side) * (lift > 0 ? liftDepth + (6.05 - liftDepth) * lift : normalDepth);
   if (serving) {
     const sign = direction(side) * (state.score[side] % 2 ? -1 : 1);
     aimX = -sign * 0.85 + input.aim * 0.55;
@@ -303,6 +311,7 @@ export function getShotTarget(state, side, request = {}) {
   let duration = type === 'clear' ? ((serving ? 1.5 : 1.24) + distance * 0.032) / shotSpeed
     : type === 'drop' ? (0.85 + distance * 0.02) / shotSpeed
       : (0.49 + distance * 0.012) / role.power / shotSpeed / (1 + input.charge * 0.12);
+  if (lift > 0) duration += lift * .65;
   if (type === 'smash') {
     const downwardLimit = Math.sqrt(2 * Math.max(0.01, ball.y) / TUNING.gravity) * 0.998;
     // A deliberately shallow/low smash remains a downward attack. When there is

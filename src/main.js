@@ -35,6 +35,7 @@ if(usageToggle){
   $('usage-status').textContent=usage.configured?'仅记录访问、开局、完赛、中断及体验降级事件；关闭不影响游戏。':'当前站点未启用使用统计。';
   usageToggle.addEventListener('change',()=>{usage.setEnabled(usageToggle.checked);usageToggle.checked=usage.enabled;});
 }
+const netDragPlaytest=new URLSearchParams(location.search).get('netDrag')==='1';
 const names={easy:'入门',medium:'进阶',hard:'高手'};
 const difficultyNotes=Object.fromEntries(['easy','medium','hard'].map(key=>{const p=getDifficultyProfile(key);return [key, 'AI 反应 '+Math.round(p.reaction*1000)+'ms · 回球节奏 '+Math.round(p.pace*100)+'%'+(key==='easy'?' · 入门接球辅助开启':' · 接球辅助关闭')];}));
 const roleNotes=Object.fromEntries(Object.keys(ROLES).map(key=>[key,describeRole(key)]));
@@ -108,6 +109,10 @@ if(peerMode){
   setText('menu-intro','人机对战 · 好友对战 · 5 / 11 / 21 分');
   setText('leaderboard-title','本机好友榜');
 }else setText('friends-network-note','同一局域网网址 · 主机电脑需保持运行');
+if(netDragPlaytest){
+  document.title='开拍 RALLY · 网前试打';
+  setText('menu-intro','网前试打 · 吊球轻点打短，向上拖可挑后场');
+}
 function dialog(id){
   if(id==='friends-dialog'){openEntry('friends');return;}
   for(const el of document.querySelectorAll('.dialog'))el.hidden=el.id!==id;
@@ -259,7 +264,7 @@ function exitToMenu(){
   mode='menu';side=0;state=null;pendingShot=null;helpOpen=false;rematchRequested=false;controls.reset();controls.setEnabled(false);
   arenaAudio.reset();
   playback.reset();lastRtt=null;peerStats=null;lastPeerStats=0;peerStatsPending=false;
-  $('countdown').hidden=true;setScreen('menu');dialog(null);history.replaceState(null,'',location.pathname);
+  $('countdown').hidden=true;setScreen('menu');dialog(null);history.replaceState(null,'',location.pathname+(netDragPlaytest?'?netDrag=1':''));
   openEntry('home');queueMicrotask(()=>onboarding.maybeShow());
 }
 function startAI(){
@@ -267,8 +272,9 @@ function startAI(){
   trainingSession=null;
   playback.reset();lastRtt=null;
   mode='ai';side=0;state=createMatch({target:settings.target,ruleset:settings.ruleset,roles:[settings.role,settings.coachRole],difficulty:settings.difficulty,
-    playerAssist:settings.difficulty==='easy'?'beginner':'none',assistSide:0,seed:Math.floor(Math.random()*0x7fffffff)});
+    playerAssist:settings.difficulty==='easy'?'beginner':'none',assistSide:0,netDragSide:netDragPlaytest?0:null,seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
+  if(netDragPlaytest)showToast('网前试打：吊球轻点打短，向上拖可挑后场');
 }
 function startTraining(){
   if(peerAttempt||peerSession)exitToMenu();
@@ -276,7 +282,7 @@ function startTraining(){
   trainingSession={step:0,startedHit:0,aimed:false,hadMovement:false,movedAfterShot:false,returned:false,
     start:{x:.85,z:3.8},home:{x:0,z:3.8}};
   mode='ai';side=0;state=createMatch({target:5,ruleset:'quick',roles:[settings.role,'balanced'],difficulty:'easy',
-    playerAssist:'beginner',assistSide:0,seed:Math.floor(Math.random()*0x7fffffff)});
+    playerAssist:'beginner',assistSide:0,netDragSide:netDragPlaytest?0:null,seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
 }
 const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},side,dragAim??aim);
@@ -511,7 +517,7 @@ function updateUI(info,state){
   setText('name-self',nameSelf);setText('name-other',nameOther);
   setText('role-self',ROLES[self.role].label+'型');setText('role-other',ROLES[opponent.role].label+'型');
   setText('score-self',state.score[side]);setText('score-other',state.score[1-side]);
-  const matchType=mode==='ai'?'人机对战':room?.rules?.finale==='father-son'?'父子局':'普通对局';
+  const matchType=mode==='ai'?(state.netDragSide===side?'人机 · 网前试打':'人机对战'):room?.rules?.finale==='father-son'?'父子局':'普通对局';
   const matchLabel=trainingSession&&trainingSession.step<3
     ?`训练 ${trainingSession.step+1}/3 · ${TRAINING_STEPS[trainingSession.step].title}`
     :trainingSession?'训练完成 · 继续实战':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[side]}:${state.games[1-side]} · ${matchType}`:`${state.target} 分制 · ${matchType}`;
@@ -561,6 +567,9 @@ function updateUI(info,state){
     ['approach','ready'].includes(info.intercept.status))guidance='来球快 · 提前松开高远／吊球键接回';
   if(state.phase==='rally'&&state.shuttle.lastHit===1-side&&self.pendingShot)guidance='击球已准备 · 继续跑位，进入范围后出手';
   if(state.phase==='rally'&&!info.prepare&&info.availability.canHit&&staminaEffects(self,ROLES[self.role]).severity>.5)guidance='体力偏低 · 先减速，收力打场内';
+  if(state.netDragSide===side&&state.phase==='rally'&&info.prepare==='drop'&&
+    state.shuttle.z*(side===0?1:-1)>0&&Math.abs(state.shuttle.z)<=2.2&&state.shuttle.y<=1.9)
+    guidance=`网前试打 · ${Math.abs(info.target.aimZ)>3?'挑后场':'轻放 / 打短'} · 目标距网 ${Math.abs(info.target.aimZ).toFixed(1)} 米`;
   if(info.prepare&&info.availability.canHit&&risk>.25)guidance=qualityReason;
   else if(info.prepare==='smash'&&info.availability.canHit&&!info.availability.canSmash)guidance=info.target.fallbackReason||qualityReason||info.availability.reason;
   const lastShot=state.lastShotInfo;
@@ -680,7 +689,9 @@ try{
       if(stats.quality.shadows===false||stats.quality.pixelRatio<performanceMonitor.maxPixelRatio)usage.markDegraded?.('performance');
       if($('performance-readout'))setText('performance-readout',formatPerformance(stats,network,lastRtt,renderer,peerStats));
       // Read-only diagnostics for reproducible browser QA and user bug reports.
-      window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats};
+      window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats,
+        netDragPlaytest:state?.netDragSide===side&&mode==='ai',
+        lastShot:state?.netDragSide===side?state.lastShotInfo:null};
     }
     requestAnimationFrame(frame);
   }
