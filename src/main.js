@@ -7,6 +7,7 @@ import { createUsageAnalytics } from './analytics.js';
 import { NetworkPlayback } from './network-playback.js';
 import { PerformanceMonitor, formatPerformance } from './performance.js';
 import { bindCameraSettings } from './camera-settings.js';
+import { bindShotLayout } from './shot-layout.js';
 import { bindMatchSettings, describeRole } from './match-settings.js';
 import { bindPalettePicker } from './palette-picker.js';
 import { readArenaPreferences } from './arena-preferences.js';
@@ -52,7 +53,7 @@ let entryStage='home',friendAction='create';
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
 let trainingSession=null;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
-let pendingShot=null,aim=0,dragAim=null,view,controls,palettePicker,lastFrame=performance.now(),accumulator=0,lastSend=0,smashReady=false;
+let pendingShot=null,aim=0,dragAim=null,view,controls,palettePicker,lastFrame=performance.now(),accumulator=0,lastSend=0,smashReady=false,shotLayoutHold=false;
 let toastTimer,helpOpen=false,rematchRequested=false,lastPhase='',lastHit=0,lastPoint=0,connecting=false,reconnecting=false,resultPending=false;
 let reconnectError='';
 let playerProfile=null,currentPlayerId=null,leaderboardRecord=null,leaderboardReturn=null;
@@ -80,6 +81,17 @@ const finale=new MatchFinale();
 let sound=restoredUpdatePreferences?.sound??true;
 let selectedShot='clear',dragDepth=0,lastShotRequest=null,gestureOrigin=null;
 const showToast=text=>{clearTimeout(toastTimer);$('toast').textContent=text;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,3800);};
+const shotLayout=bindShotLayout({showToast,onClose:()=>{shotLayoutHold=false;accumulator=0;lastFrame=performance.now();controls?.reset();}});
+for(const trigger of document.querySelectorAll('[data-open-shot-layout]'))trigger.addEventListener('click',()=>{closeHelpOrSetup();shotLayout?.open();});
+const openShotLayoutInMatch=()=>{
+  if(mode==='online'){showToast('联机对局请回首页调整按键');return;}
+  if(!state||state.phase==='over')return;
+  matchSettings?.close();shotLayoutHold=true;accumulator=0;
+  controls?.reset();pendingShot=null;dragAim=null;gestureOrigin=null;
+  try{if(!shotLayout?.open())shotLayoutHold=false;}
+  catch(error){shotLayoutHold=false;console.error(error);showToast('调整面板打开失败，请回首页重试');}
+};
+$('edit-shot-layout')?.addEventListener('click',openShotLayoutInMatch);
 const playback=new NetworkPlayback();
 const performanceMonitor=new PerformanceMonitor({devicePixelRatio:window.devicePixelRatio});
 const pwa=initPWA({fullscreenButton:$('fullscreen'),showToast,onUpdateLock:({version}={})=>{
@@ -87,7 +99,7 @@ const pwa=initPWA({fullscreenButton:$('fullscreen'),showToast,onUpdateLock:({ver
   },
   isSafeToUpdate:({allowHidden=false}={})=>entryStage==='home'&&isUpdateSafe({ready:Boolean(controls&&view)&&$('loading').hidden,visible:allowHidden||!document.hidden,mode,state,room,
     connection:socket||peerSession||peerAttempt,connecting,reconnecting,pendingResult:resultPending,finale:finale.blocking,
-    overlay:Boolean(document.querySelector('dialog[open], .dialog:not([hidden]), #camera-panel:not([hidden]), #match-settings-panel:not([hidden]), #palette-panel:not([hidden])')),
+    overlay:Boolean(document.querySelector('dialog[open], .dialog:not([hidden]), #camera-panel:not([hidden]), #match-settings-panel:not([hidden]), #palette-panel:not([hidden]), #shot-layout-editor:not([hidden])')),
     editing:Boolean(document.activeElement?.matches('input, textarea, select, [contenteditable="true"]'))})});
 const onboarding=initOnboarding({showToast,canOpen:()=>Boolean(controls)&&$('loading').hidden&&mode==='menu'&&!room&&!connecting&&!peerSession&&!peerAttempt,
   onStartPractice:()=>openEntry('ai')});
@@ -238,6 +250,7 @@ function setScreen(screen){
   pwa.setMatchActive(screen==='match');
   $('menu').hidden=screen!=='menu';$('court-caption').hidden=screen!=='menu';
   $('hud').hidden=screen!=='match';$('game-controls').hidden=screen!=='match';$('pause').hidden=screen!=='match';
+  if(screen==='match')shotLayout?.refresh();
   view?.setMode(screen);
 }
 function enterMatch(){
@@ -461,6 +474,7 @@ document.addEventListener('visibilitychange',()=>{
   if(finale.blocking)lastFrame=performance.now();
   arenaAudio.setVisible(!document.hidden);
   if(!document.hidden||!state||state.phase==='over')return;
+  if(shotLayoutHold){controls?.reset();pendingShot=null;return;}
   controls?.reset();pendingShot=null;
   if(mode==='online'){playback.freeze(performance.now());send({type:'suspend'});}
   else if(mode==='ai'&&state.phase!=='paused'){
@@ -580,7 +594,7 @@ function updateUI(info,state){
   $('assist-status').dataset.kind=guidance==='按住击球键，拖动选落点'?'instruction':'live';
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
   $('help').disabled=reconnecting||state.phase==='countdown'||finale.blocking;
-  controls.setEnabled(['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting);
+  controls.setEnabled(['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting&&!shotLayoutHold);
   $('pause').disabled=!['serve','rally','point','intermission'].includes(state.phase);
   $('countdown').hidden=!['countdown','intermission'].includes(state.phase)||(state.phase==='intermission'&&view.rallyEnding);
   if(state.phase==='countdown')setText('countdown',Math.max(1,Math.ceil(state.timer)));
@@ -650,7 +664,8 @@ try{
       view.render(demo,0,Math.min(elapsed,.1));renderMs=performance.now()-renderStart;
     }else if(state){
       if(mode==='ai'){
-        if(state.phase==='paused'){stepMatch(state,[{},{}],elapsed);accumulator=0;}
+        if(shotLayoutHold){accumulator=0;}
+        else if(state.phase==='paused'){stepMatch(state,[{},{}],elapsed);accumulator=0;}
         else{
           accumulator+=Math.min(elapsed,.15);
           while(accumulator>=1/60){
@@ -690,6 +705,7 @@ try{
       if($('performance-readout'))setText('performance-readout',formatPerformance(stats,network,lastRtt,renderer,peerStats));
       // Read-only diagnostics for reproducible browser QA and user bug reports.
       window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats,
+        stateTime:state?.time??null,statePhase:state?.phase??null,
         netDragPlaytest:state?.netDragSide===side&&mode==='ai',
         lastShot:state?.netDragSide===side?state.lastShotInfo:null};
     }

@@ -1,0 +1,72 @@
+/* Optional shot-button layouts. The default grid in ui-match.css is untouched. */
+
+/* B: auxiliary keys follow an arc around the larger thumb resting target. */
+body[data-shot-layout=arc] .shot-buttons { position:relative; display:block; width:224px; height:168px; }
+body[data-shot-layout=arc] .shot-buttons .shot-btn { position:absolute; width:68px; height:68px; }
+body[data-shot-layout=arc] .shot-buttons [data-shot=clear] { left:123px; top:0; }
+body[data-shot-layout=arc] .shot-buttons [data-shot=drop] { left:31px; top:51px; }
+body[data-shot-layout=arc] .shot-buttons [data-shot=smash] { left:128px; top:83px; width:84px; height:84px; }
+body[data-shot-layout=arc] .shots-wrap { width:224px; }
+@media (max-height:420px) and (orientation:landscape) {
+  body[data-shot-layout=arc] .shot-buttons { width:202px; height:149px; }
+  body[data-shot-layout=arc] .shots-wrap { width:202px; }
+  body[data-shot-layout=arc] .shot-buttons .shot-btn { width:62px; height:62px; }
+  body[data-shot-layout=arc] .shot-buttons [data-shot=clear] { left:116px; top:0; }
+  body[data-shot-layout=arc] .shot-buttons [data-shot=drop] { left:32px; top:46px; }
+  body[data-shot-layout=arc] .shot-buttons [data-shot=smash] { left:120px; top:74px; width:75px; height:75px; }
+}
+
+/* C: free placement. Percent positions keep the player's relative layout on resize. */
+body[data-shot-layout=custom] .shots-wrap { position:fixed; inset:0; width:auto; height:auto; pointer-events:none; }
+body[data-shot-layout=custom] .shot-buttons { position:absolute; inset:0; display:block; width:100%; height:100%; pointer-events:none; }
+body[data-shot-layout=custom] .shot-btn { position:absolute; transform:translate(-50%,-50%); pointer-events:auto; }
+body[data-shot-layout=custom] .aim-heading,
+body[data-shot-layout=custom] .shot-instruction { position:absolute; width:auto; margin:0; transform:none; }
+body[data-shot-layout=custom] #game-controls:has(.gesture-pad:not([hidden])) .aim-heading { transform:none; width:auto; }
+
+/* Editor */
+body[data-shot-layout-editing=true] :is(#menu, #court-caption, .topbar, #hud, #court, #game-controls) { visibility:hidden; }
+.shot-layout-editor { position:fixed; inset:0; z-index:45; color:#f0fff8;
+  background:linear-gradient(180deg,#061d1a 0%,#05201d 55%,#041512 100%); }
+.shot-layout-editor[hidden] { display:none; }
+.shot-layout-stage { position:absolute; inset:0; pointer-events:none; }
+.shot-layout-keys { position:absolute; inset:0; pointer-events:none; }
+.shot-layout-key { position:absolute; transform:translate(-50%,-50%); pointer-events:auto; cursor:grab; touch-action:none;
+  outline:1px dashed #eafff05c; outline-offset:5px; -webkit-user-select:none; user-select:none; }
+.shot-layout-key.dragging { cursor:grabbing; outline:2px solid #8ff0c6; outline-offset:6px; }
+.shot-layout-toolbar { position:absolute; z-index:2; top:max(10px,env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:12px; max-width:calc(100vw - 24px); padding:6px 6px 6px 14px;
+  border:1px solid #d9fff033; border-radius:16px; background:#0a2b26e8; box-shadow:0 10px 30px #00110f66; }
+.shot-layout-title { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.shot-layout-title strong { font-size:13px; font-weight:650; letter-spacing:.02em; white-space:nowrap; }
+.shot-layout-title small { font-size:10px; color:#a9c9bd; white-space:nowrap; }
+.shot-layout-presets { flex:0 0 auto; display:flex; gap:4px; padding:3px; border:1px solid #c9f4e32b; border-radius:11px; }
+.shot-layout-presets button { padding:6px 10px; border:0; border-radius:8px; background:transparent; color:#d9f2e7; font:inherit; font-size:11px; cursor:pointer; }
+.shot-layout-presets button[aria-pressed=true] { background:#e8fff31f; box-shadow:inset 0 0 0 1px #d5ffeb38; color:#fff; }
+.shot-layout-status { flex:0 0 auto; margin-left:2px; padding:0 4px; font-size:10px; color:#8fe6c2; white-space:nowrap; }
+.shot-layout-actions { display:flex; align-items:center; gap:4px; flex:0 0 auto; }
+.shot-layout-actions .text-btn { color:#d6eee3; padding:7px 10px; white-space:nowrap; flex:0 0 auto; }
+.shot-layout-actions .primary-btn { min-height:34px; padding:7px 14px; border-radius:10px; font-size:12px; }
+.shot-layout-joystick { position:absolute; left:max(16px,env(safe-area-inset-left)); bottom:max(12px,env(safe-area-inset-bottom));
+  width:96px; height:96px; border:1px dashed #c5f4e147; border-radius:50%; }
+.shot-layout-joystick i { position:absolute; inset:26px; border:1px solid #c5f4e13d; border-radius:50%; background:#dcfff40a; }
+.shot-layout-note { position:absolute; left:50%; bottom:max(12px,env(safe-area-inset-bottom)); transform:translateX(-50%);
+  margin:0; color:#a8c9bd; font-size:10px; white-space:nowrap; pointer-events:none; }
+.shot-layout-measure { position:fixed; inset:0; visibility:hidden; pointer-events:none; z-index:-1; }
+body[data-screen=match] .help-layout-entry { display:none; }
+body[data-screen=menu] #edit-shot-layout { display:none; }
+.shot-layout-settings { display:flex; flex-direction:column; align-items:flex-start; gap:2px; width:100%; margin:0 0 12px; padding:10px 11px; border:1px solid #cfe0d7; border-radius:10px; background:#f4faf5; color:#163b30; text-align:left; cursor:pointer; }
+.shot-layout-settings span { font-size:12px; font-weight:750; }
+.shot-layout-settings small { color:#6c7f74; font-size:10px; font-weight:400; }
+.shot-layout-settings:hover { background:#e9f4ec; border-color:#a9c9b8; }
+.help-layout-entry { margin:8px 0 16px; }
+.help-layout-entry .rules-note { margin-top:8px; }
+
+@media (max-height:420px) and (orientation:landscape) {
+  .shot-layout-toolbar { gap:8px; padding:5px 5px 5px 10px; }
+  .shot-layout-title small { display:none; }
+  .shot-layout-actions .primary-btn { min-height:32px; padding:6px 12px; }
+  .shot-layout-presets button { padding:5px 8px; }
+  .shot-layout-joystick { width:82px; height:82px; }
+  .shot-layout-joystick i { inset:22px; }
+}
