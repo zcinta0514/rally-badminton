@@ -226,3 +226,17 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 @keyframes hell-shimmer { 0%,25% { transform:translateX(-30%); } 75%,100% { transform:translateX(30%); } }
 @media(max-height:500px) and (orientation:landscape) { .hell-contract { padding:4px 8px 8px; }.hell-contract strong { font-size:28px; }.hell-skills { gap:5px; margin:7px 0; }.hell-skills article { padding:7px 10px; }.hell-status { padding:6px 9px; max-width:260px; }.hell-status span { font-size:9px; } }
 @media(prefers-reduced-motion:reduce) { .hell-entry::before { animation:none; } }
+
+/* Small flames stay inside the card's lower edge, clear of its label. */
+.hell-entry::after { content:""; position:absolute; inset:auto 0 0; height:20px; z-index:-1; pointer-events:none; background:radial-gradient(ellipse at 50% 110%,#ff9c4259,transparent 72%); opacity:.7; animation:hell-heat 2.8s ease-in-out infinite alternate; }
+.hell-fire { position:absolute; left:0; right:0; bottom:0; height:24px; z-index:-1; pointer-events:none; overflow:hidden; }
+.hell-fire i { position:absolute; bottom:-6px; left:8%; width:12px; height:22px; border-radius:70% 15% 60% 45%; background:linear-gradient(35deg,#e15b2444,#ffad587d 55%,#fff3bf88); filter:blur(.65px); transform-origin:50% 100%; animation:hell-flame 1.8s ease-in-out infinite alternate; }
+.hell-fire i:nth-child(2) { left:23%; height:15px; width:8px; animation-delay:-.6s; }
+.hell-fire i:nth-child(3) { left:39%; height:20px; width:10px; animation-delay:-1.2s; }
+.hell-fire i:nth-child(4) { left:54%; height:16px; width:9px; animation-delay:-.35s; }
+.hell-fire i:nth-child(5) { left:69%; height:24px; width:12px; animation-delay:-1.4s; }
+.hell-fire i:nth-child(6) { left:84%; height:17px; width:9px; animation-delay:-.9s; }
+.hell-fire i:nth-child(7) { left:94%; height:13px; width:7px; animation-delay:-.2s; }
+@keyframes hell-flame { from { transform:rotate(-12deg) scale(.8,.7); opacity:.35; } to { transform:rotate(10deg) scale(1,1.08); opacity:.75; } }
+@keyframes hell-heat { from { opacity:.4; } to { opacity:.85; } }
+@media(prefers-reduced-motion:reduce) { .hell-fire i,.hell-entry::after { animation:none; } .hell-fire i { opacity:.45; } }

@@ -42,10 +42,10 @@ test('boss stays at full stamina, player consumes stamina and refills once at ne
   tick(s,[{x:1},{x:1}],1);
   assert.ok(s.players[0].stamina<100);assert.equal(s.players[1].stamina,100);
   assert.equal(s.players[1].staminaStatus,'infinite');
-  point(s,1);s.players[0].stamina=10;s.challenge.rescueUsed=true;
+  point(s,1);s.players[0].stamina=10;s.challenge.rescueUses=1;
   tick(s,[{},{}],1.5);
   assert.equal(s.phase,'serve');assert.equal(s.players[0].stamina,100);
-  assert.equal(s.challenge.rescueUsed,false);assert.equal(s.challenge.active,null);
+  assert.equal(s.challenge.rescueUses,0);assert.equal(s.challenge.active,null);
 });
 
 test('a real boss return produces three visual fakes without mutating the authoritative ball', () => {
@@ -82,9 +82,9 @@ test('rescue moves continuously to a reachable legal contact and leaves a recove
     maxStep=Math.max(maxStep,Math.hypot(s.players[1].x-before.x,s.players[1].z-before.z));
   }
   assert.equal(diving,true);assert.equal(s.lastShotInfo.skill,'rescue');
-  assert.equal(s.challenge.counts.rescue,1);assert.equal(s.challenge.rescueUsed,true);
+  assert.equal(s.challenge.counts.rescue,1);assert.equal(s.challenge.rescueUses,1);
   assert.ok(maxStep<=HELL.diveSpeed*dt+1e-6,`continuous displacement ${maxStep}`);
-  assert.equal(s.lastShotInfo.aimX,0);assert.ok(predictLanding(s).time>1.4);
+  assert.ok(Math.abs(s.lastShotInfo.aimX)<=2.29);assert.ok(predictLanding(s).time>=1.2);
   const position={x:s.players[1].x,z:s.players[1].z};
   tick(s,[{},{x:1,z:1,shot:'smash'}],.4);
   assert.equal(s.players[1].x,position.x);assert.equal(s.players[1].z,position.z);
@@ -101,8 +101,8 @@ test('rescue cannot catch an out ball or reach an arbitrarily distant ball', () 
   }
 });
 
-test('real complete rallies exercise all three skills, telegraph cannon and keep one ordinary return between attacks', () => {
-  const counts={phantom:0,cannon:0,rescue:0};
+test('real complete rallies exercise all three skills, telegraph cannon and allow consecutive active attacks', () => {
+  const counts={phantom:0,cannon:0,rescue:0};let consecutive=0,bossReturns=0;
   for(let seed=1;seed<=5;seed++){
     const s=createMatch({challenge:'hell',seed});let previous=0,warning=null,lastAttackPoint=-1,lastAttackHit=-99;
     for(let frame=0;frame<60*150&&s.phase!=='over';frame++){
@@ -111,6 +111,8 @@ test('real complete rallies exercise all three skills, telegraph cannon and keep
       stepMatch(s,inputs,1/60);
       if(s.hitId!==previous){
         previous=s.hitId;const shot=s.lastShotInfo;
+        if(shot.side===1&&!shot.serving)bossReturns++;
+        assert.ok(s.challenge.rescueUses<=HELL.rescueLimit);
         if(shot.skill){
           counts[shot.skill]++;
           if(shot.skill==='cannon'){
@@ -119,7 +121,7 @@ test('real complete rallies exercise all three skills, telegraph cannon and keep
             assert.equal(predictLanding(s).event,'landing');
           }
           if(['phantom','cannon'].includes(shot.skill)){
-            if(lastAttackPoint===s.pointId)assert.ok(s.hitId-lastAttackHit>=4,'a normal boss return separates active skills');
+            if(lastAttackPoint===s.pointId&&s.hitId-lastAttackHit===2)consecutive++;
             lastAttackPoint=s.pointId;lastAttackHit=s.hitId;
           }
         }
@@ -128,14 +130,35 @@ test('real complete rallies exercise all three skills, telegraph cannon and keep
     assert.equal(s.phase,'over');assert.ok(s.score[0]===2||s.score[1]===5);
   }
   for(const skill in counts)assert.ok(counts[skill]>0,`${skill} must occur in ordinary complete matches`);
+  assert.ok(consecutive>0,'active skills can happen on adjacent boss returns');
+  assert.ok(Object.values(counts).reduce((a,b)=>a+b,0)/bossReturns>.8,'the boss uses skills on most returns');
 });
 
 test('spent rescue state clears after recovery and cannot immobilize the next cannon', () => {
   const s=createMatch({challenge:'hell'});s.phase='rally';s.shuttle.active=false;
-  s.challenge.rescue={hit:true};s.challenge.rescueUsed=true;s.challenge.recoverUntil=.01;
-  tick(s,[{},{}],.03);assert.equal(s.challenge.rescue,null);assert.equal(s.challenge.rescueUsed,true);
+  s.challenge.rescue={hit:true};s.challenge.rescueUses=1;s.challenge.recoverUntil=.01;
+  tick(s,[{},{}],.03);assert.equal(s.challenge.rescue,null);assert.equal(s.challenge.rescueUses,1);
   s.challenge.recoverUntil=s.time+1;const before=s.players[1].x;
   tick(s,[{},{x:1}],.2);assert.ok(s.players[1].x>before);
   s.challenge.active={kind:'cannon',hitId:s.hitId};s.shuttle.lastHit=1;
   assert.equal(hellStatus(s).key,'cannon','the incoming cannon takes priority over recovery advice');
+});
+
+
+test('two rescues are allowed per rally, a third is blocked, and pause preserves the remaining charge', () => {
+  const s=createMatch({challenge:'hell'});s.phase='rally';s.service.active=false;
+  for(let attempt=0;attempt<3;attempt++){
+    s.shuttle.active=false;tick(s,[{},{}],.7);
+    s.challenge.active=null;s.hitId++;
+    Object.assign(s.players[1],{x:-1.8,z:-3.8,cooldown:0,pendingShot:null});
+    Object.assign(s.shuttle,{x:1,y:1.5,z:-3.8,vx:0,vy:-1,vz:0,active:true,lastHit:0});
+    const before=s.hitId;
+    for(let frame=0;frame<100&&s.hitId===before&&s.phase==='rally';frame++)stepMatch(s,[{},aiInput(s,1,'hard')],dt);
+    assert.equal(s.challenge.rescueUses,Math.min(attempt+1,2));
+    assert.equal(s.challenge.counts.rescue,Math.min(attempt+1,2));
+    if(attempt===0){
+      pauseMatch(s,0);stepMatch(s,[{},{}],1);assert.equal(s.challenge.rescueUses,1);
+      resumeMatch(s);stepMatch(s,[{},{}],2);
+    }
+  }
 });

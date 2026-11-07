@@ -1,29 +1,32 @@
 import { sampleShuttleFlight } from './shuttle-flight.js';
 
-export const HELL = Object.freeze({ targets: Object.freeze([2, 5]), chargeTime: .45, recovery: 1.05,
-  diveTime: .32, diveSpeed: 10, moveScale: 1.12 });
+export const HELL = Object.freeze({ targets: Object.freeze([2, 5]), chargeTime: .36, recovery: .62,
+  diveTime: .25, diveSpeed: 12, rescueLimit: 2, moveScale: 1.28, recoveryMoveScale: .5,
+  reaction: .035, error: .06 });
 
 export function createHellChallenge() {
-  return { kind: 'hell', bossSide: 1, next: 'phantom', ordinary: 0, warning: null,
-    active: null, rescue: null, rescueUsed: false, recoverUntil: 0,
+  return { kind: 'hell', bossSide: 1, next: 'phantom', warning: null,
+    active: null, rescue: null, rescueUses: 0, recoverUntil: 0,
     counts: { phantom: 0, cannon: 0, rescue: 0 } };
 }
 
 export function resetHellRally(challenge) {
   challenge.warning = null; challenge.active = null; challenge.rescue = null;
-  challenge.rescueUsed = false; challenge.recoverUntil = 0; challenge.ordinary = 0;
+  challenge.rescueUses = 0; challenge.recoverUntil = 0;
 }
 
 export function hellStatus(state) {
   const h = state?.challenge;
   if (!h || h.kind !== 'hell') return null;
   if (!['serve', 'rally', 'paused', 'countdown'].includes(state.phase)) return { key: 'idle', title: '地狱挑战', hint: '你得 2 分获胜 · 对手得 5 分获胜' };
-  if (h.rescue && !h.rescue.hit) return { key: 'rescue', title: '极限救球', hint: '本回合仅一次 · 准备接慢球再反攻' };
+  if (h.rescue && !h.rescue.hit) return { key: 'rescue', title: '极限救球', hint: '本回合最多两次 · 拉开落点再进攻' };
   if (h.warning) return { key: 'charge', title: '重炮蓄力', hint: '线路已锁定 · 提前站位，挡回后反攻' };
   if (h.active?.hitId === state.hitId && state.shuttle.lastHit === h.bossSide) {
     return h.active.kind === 'phantom'
       ? { key: 'phantom', title: '四重幻影', hint: '追踪实线真球 · 虚影过网前消散' }
-      : { key: 'cannon', title: '重炮来袭', hint: '稳住回球 · 对手随后回位减速' };
+      : h.active.kind === 'cannon'
+        ? { key: 'cannon', title: '重炮来袭', hint: '稳住回球 · 对手随后回位减速' }
+        : { key: 'recovery', title: '扑救回球', hint: '对手短暂恢复 · 尽快组织进攻' };
   }
   if (state.time < h.recoverUntil) return { key: 'recovery', title: '破绽出现', hint: '对手恢复中 · 趁机打空当' };
   return { key: 'idle', title: '地狱人机 · 无限体力', hint: '拉开落点 · 识破技能 · 抓住两次机会' };

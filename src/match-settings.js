@@ -15,8 +15,8 @@ export function describeMatch(state, side = 0, mode = 'ai') {
     '你：' + ROLES[state.players[side].role].label + '型，每分回满体力；对手无限体力、高手决策、移动加快。',
     '幻影球：一真三假，真球有实线尾迹，虚影过网前消散。',
     '重炮：提前蓄力并锁定线路；挡回后，利用对手回位减速反攻。',
-    '极限救球：每回合最多一次；扑救后回球慢、恢复期间不能移动，趁机打空当。',
-    '幻影和重炮之间至少一次普通回球，扑救不叠加主动技能。移动与击球按键沿用你的布局。',
+    '极限救球：每回合最多两次；扑救后短暂恢复期间不能移动，趁机打空当。',
+    '幻影和重炮可连续出现，扑救不叠加主动技能。移动与击球按键沿用你的布局。',
   ].join('\n');
   const self = ROLES[state.players[side].role], other = ROLES[state.players[1 - side].role], rule = getScoringRules(state);
   const assistance = state.assist?.side === side && state.assist.level === 'beginner' ? '入门接球辅助开启' : '接球辅助关闭';

@@ -228,7 +228,7 @@ function movePlayer(player, input, side, dt, state) {
   const effort = Math.hypot(input.x, input.z);
   const fatigue = staminaEffects(player, role);
   const h = state.challenge?.bossSide === side ? state.challenge : null;
-  const moveScale = !h ? 1 : state.time < h.recoverUntil ? (h.rescue?.hit ? 0 : .28) : HELL.moveScale;
+  const moveScale = !h ? 1 : state.time < h.recoverUntil ? (h.rescue?.hit ? 0 : HELL.recoveryMoveScale) : HELL.moveScale;
   const targetX = input.x * role.speed * fatigue.speedScale * moveScale, targetZ = input.z * role.speed * fatigue.speedScale * moveScale;
   const dx = targetX - player.vx, dz = targetZ - player.vz, difference = Math.hypot(dx, dz);
   const reversing = player.vx * targetX + player.vz * targetZ < 0;
@@ -408,20 +408,20 @@ function playShot(state, side, request, serving = false) {
   if (!serving && boss) {
     if (h.rescue && !h.rescue.hit) {
       skill = 'rescue';
-      target = getShotTarget(state, side, { shot: 'clear', aim: 0, aimDepth: -.35, charge: 0 });
+      target = getShotTarget(state, side, { shot: 'clear', aim: request.aim, aimDepth: -.15, charge: 0 });
       h.rescue.hit = true; h.recoverUntil = state.time + HELL.recovery;
-      h.warning = null; h.ordinary = 1;
+      h.warning = null;
     } else if (h.warning && state.time - h.warning.at >= HELL.chargeTime && target.type === 'smash' && target.smashViable) {
-      skill = 'cannon'; h.warning = null; h.next = 'phantom'; h.ordinary = 1;
+      skill = 'cannon'; h.warning = null; h.next = 'phantom';
       h.recoverUntil = state.time + HELL.recovery;
-    } else if (h.next === 'phantom' && h.ordinary === 0 && state.time >= h.recoverUntil) {
-      skill = 'phantom'; h.next = 'cannon'; h.ordinary = 1;
+    } else if (!h.warning && state.time >= h.recoverUntil) {
+      skill = 'phantom'; h.next = 'cannon';
       target = getShotTarget(state, side, { ...request, shot: 'drop', aimDepth: .65, charge: .2 });
-    } else { h.ordinary = Math.max(0, h.ordinary - 1); h.warning = null; }
+    } else h.warning = null;
   }
   const type = target.type;
   if (skill === 'cannon' || skill === 'rescue') {
-    const duration = skill === 'rescue' ? Math.max(1.55, target.duration)
+    const duration = skill === 'rescue' ? Math.max(1.25, target.duration * .85)
       : Math.max(.48, minimumNetDuration(ball, target.aimX, target.aimZ, .14), target.duration * .82);
     const launch = horizontalLaunch(ball, { x: target.aimX, z: target.aimZ }, duration);
     target = { ...target, ...launch, vy: (TUNING.gravity * duration * duration / 2 - ball.y) / duration, duration };
@@ -560,7 +560,7 @@ function stepLive(state, inputs, dt, firstSlice) {
           player.x = dive.from.x + (dive.to.x - dive.from.x) * t;
           player.z = dive.from.z + (dive.to.z - dive.from.z) * t;
           player.vx = (player.x - oldX) / dt; player.vz = (player.z - oldZ) / dt;
-          player.pendingShot ??= { shot: 'clear', aim: 0, aimDepth: -.35, charge: 0, remaining: .5 };
+          player.pendingShot ??= { shot: 'clear', aim: h.rescue.aim, aimDepth: -.15, charge: 0, remaining: .5 };
           if (t === 1 && state.time - dive.at > HELL.diveTime + .12) { h.rescue = null; h.recoverUntil = state.time + .5; }
         } else if (h?.rescue?.hit && state.time < h.recoverUntil) { player.vx = 0; player.vz = 0; }
         else movePlayer(player, inputs[side], side, dt, state);
@@ -777,7 +777,7 @@ function chooseAIShot(state, side, level) {
 export function aiInput(state, side, difficulty = 'easy') {
   if ((side !== 0 && side !== 1) || !['serve', 'rally'].includes(state.phase)) return { x: 0, z: 0, shot: null, aim: 0, aimDepth: 0, charge: 0 };
   const h = state.challenge?.bossSide === side ? state.challenge : null;
-  const level = h ? 'hard' : difficultyOf(difficulty), config = AI[level], player = state.players[side], ball = state.shuttle, role = ROLES[player.role];
+  const level = h ? 'hard' : difficultyOf(difficulty), config = h ? { ...AI.hard, reaction: HELL.reaction, error: HELL.error } : AI[level], player = state.players[side], ball = state.shuttle, role = ROLES[player.role];
   const output = { x: 0, z: 0, shot: null, aim: 0, aimDepth: 0, charge: 0.3 };
   if (state.phase === 'serve') {
     if (state.server === side && state._serveAge > config.serveDelay + config.reaction) {
@@ -793,7 +793,7 @@ export function aiInput(state, side, difficulty = 'easy') {
     const decision = chooseAIShot(state, side, level);
     // Phantom returns use a low contact and a flatter arc so all four balls
     // remain readable in the regular phone camera.
-    if (h?.next === 'phantom' && h.ordinary === 0) decision.shot = 'drop';
+    if (h && (h.next === 'phantom' || !smashOpportunity(state, side).highChance)) decision.shot = 'drop';
     // Reaction delay and spatial prediction error remain difficulty-dependent.
     // Every reachable return is attempted; the common contact model causes errors.
     memory = state._ai[side] = { hitId: state.hitId, ready: state.time + config.reaction,
@@ -805,16 +805,16 @@ export function aiInput(state, side, difficulty = 'easy') {
     const landing = predictLanding(state);
     const legal = landing && landing.event === 'landing' && !landing.out && !landing.serviceFault && landing.side === side;
     const distance = Math.hypot(ball.x - player.x, ball.z - player.z);
-    if (!h.rescueUsed && legal && landing.time < .65 && landing.time > .18 && distance > TUNING.reach + .2
+    if (h.rescueUses < HELL.rescueLimit && legal && landing.time < .65 && landing.time > .18 && distance > TUNING.reach + .2
         && Math.hypot(landing.x - player.x, landing.z - player.z) < HELL.diveSpeed * HELL.diveTime
         && !h.warning && !h.active && player.cooldown <= 0) {
       const point = flightPoint(ball, Math.min(HELL.diveTime, landing.time * .6));
-      h.rescueUsed = true; h.rescue = { at: state.time, from: { x: player.x, z: player.z },
+      h.rescueUses++; h.rescue = { aim: memory.aim, at: state.time, from: { x: player.x, z: player.z },
         to: { x: clamp(point.x, -COURT.halfWidth + .16, COURT.halfWidth - .16),
           z: direction(side) * clamp(point.z * direction(side), .54, COURT.halfLength - .16) }, hit: false };
       return output;
     }
-    if (h.next === 'cannon' && h.ordinary === 0 && !h.warning) {
+    if (h.next === 'cannon' && !h.warning) {
       const chance = smashOpportunity(state, side);
       if (chance.highChance && chance.contactTime >= HELL.chargeTime && chance.contactTime < 1.4) {
         h.warning = { at: state.time, hitId: state.hitId, aim: memory.aim, aimDepth: .35 };
