@@ -9,6 +9,7 @@ import { NetworkPlayback } from './network-playback.js';
 import { PerformanceMonitor, formatPerformance } from './performance.js';
 import { bindCameraSettings } from './camera-settings.js';
 import { bindShotLayout } from './shot-layout.js';
+import { paintShotAim, clearShotAim } from './shot-buttons.js';
 import { bindMatchSettings, describeRole } from './match-settings.js';
 import { bindPalettePicker } from './palette-picker.js';
 import { readArenaPreferences } from './arena-preferences.js';
@@ -624,7 +625,13 @@ try{
   window.visualViewport?.addEventListener('resize',resizeCourt);
   new ResizeObserver(resizeCourt).observe($('court'));
   window.addEventListener('orientationchange',()=>{controls?.reset();pendingShot=null;requestAnimationFrame(resizeCourt);setTimeout(resizeCourt,250);});
-  controls=new Controls({joystick:$('joystick'),knob:$('knob'),movementSurface:$('court'),shotButtons:document.querySelectorAll('[data-shot]'),onShot:fireShot,onAim:(value,explicit,depth=0)=>{dragAim=explicit?value:null;dragDepth=explicit?depth:0;if(controls?.activeShot)lastShotRequest=null;},onAimSelect:selectAim,onPause:requestPause,onFeedback:(type,detail)=>{if(type==='press')haptics.press(detail.shot);else if(type==='charged')haptics.charged();else if(type==='shoot'){haptics.shoot(detail.shot);flashShotButton(detail.button,detail.shot);}}});
+  controls=new Controls({joystick:$('joystick'),knob:$('knob'),movementSurface:$('court'),shotButtons:document.querySelectorAll('[data-shot]'),onShot:fireShot,onAim:(value,explicit,depth=0)=>{
+    dragAim=explicit?value:null;dragDepth=explicit?depth:0;
+    const active=controls?.activeShot;
+    if(active?.button)paintShotAim(active.button,value,depth);
+    else clearShotAim(document.querySelectorAll('[data-shot]'));
+    if(active)lastShotRequest=null;
+  },onAimSelect:selectAim,onPause:requestPause,onFeedback:(type,detail)=>{if(type==='press')haptics.press(detail.shot);else if(type==='charged')haptics.charged();else if(type==='shoot'){haptics.shoot(detail.shot);flashShotButton(detail.button,detail.shot);}}});
   document.querySelectorAll('[data-shot]').forEach(button=>button.addEventListener('pointerdown',event=>{
     if(controls.activeShot?.pointerId===event.pointerId)gestureOrigin={x:event.clientX,y:event.clientY};
   }));

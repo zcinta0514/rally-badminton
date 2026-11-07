@@ -61,12 +61,17 @@ export function applyShotLayout(layout, doc = globalThis.document) {
   const normalized = normalizeShotLayout(layout);
   if (doc.body) doc.body.dataset.shotLayout = normalized.mode;
   const buttons = [...(doc.querySelectorAll?.('#game-controls .shot-btn') || [])];
+  const view = doc.defaultView || globalThis;
   for (const button of buttons) {
     if (normalized.mode === 'custom') {
       const point = normalized.positions?.[button.dataset.shot];
       if (point) {
-        button.style.left = `${point.x * 100}%`;
-        button.style.top = `${point.y * 100}%`;
+        const halfWidth = (button.offsetWidth || 0) / 2, halfHeight = (button.offsetHeight || 0) / 2;
+        const width = view.innerWidth || 0, height = view.innerHeight || 0;
+        const x = width > 0 ? Math.max((halfWidth + 8) / width, Math.min(1 - (halfWidth + 8) / width, point.x)) : point.x;
+        const y = height > 0 ? Math.max((halfHeight + 8) / height, Math.min(1 - (halfHeight + 8) / height, point.y)) : point.y;
+        button.style.left = `${x * 100}%`;
+        button.style.top = `${y * 100}%`;
         continue;
       }
     }
@@ -180,6 +185,8 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
       clone.classList.remove('unavailable', 'ready', 'charging', 'fired');
       clone.classList.add('shot-layout-key');
       clone.removeAttribute('disabled');
+      clone.removeAttribute('data-aiming');
+      for (const property of ['--charge', '--aim-x', '--aim-y', '--aim-angle']) clone.style.removeProperty(property);
       clone.setAttribute('role', 'button');
       clone.setAttribute('tabindex', '0');
       clone.setAttribute('aria-label', `拖动${KEY_LABELS[clone.dataset.shot] || '击球键'}`);
@@ -243,7 +250,11 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
         const positions = {};
         for (const key of keys) {
           const center = keyCenter(key);
-          positions[key.dataset.shot] = { x: center.x / view.innerWidth, y: center.y / view.innerHeight };
+          const halfWidth = center.width / 2, halfHeight = center.height / 2;
+          positions[key.dataset.shot] = {
+            x: Math.max((halfWidth + 8) / view.innerWidth, Math.min(1 - (halfWidth + 8) / view.innerWidth, center.x / view.innerWidth)),
+            y: Math.max((halfHeight + 8) / view.innerHeight, Math.min(1 - (halfHeight + 8) / view.innerHeight, center.y / view.innerHeight)),
+          };
         }
         saved = saveShotLayout({ mode: 'custom', positions }, store);
       } else saved = saveShotLayout({ mode }, store);
