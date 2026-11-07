@@ -6,7 +6,7 @@
 .onboarding-hints-label { display:flex; align-items:center; gap:10px; padding:10px 0 5px; font-size:13px; font-weight:650; cursor:pointer; }
 .onboarding-hints-label input { width:18px; height:18px; margin:0; accent-color:#008650; }
 .onboarding-hints-note { margin:3px 0 0; color:var(--muted,#64746a); font-size:12px; line-height:1.6; }
-.onboarding-dialog { position:fixed; inset:0; margin:auto; width:min(580px,calc(100vw - 32px)); max-height:calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); padding:24px 28px 18px; border:1px solid #dbe2dc; border-top:4px solid #008650; border-radius:8px; color:#122b25; background:#fdfefb; box-shadow:0 24px 80px #0004; overflow:auto; overscroll-behavior:contain; touch-action:pan-y; -webkit-overflow-scrolling:touch; font-family:inherit; }
+.onboarding-dialog { position:fixed; inset:0; margin:auto; width:min(580px,calc(100vw - 32px)); max-height:calc(100dvh - 32px - var(--safe-top) - var(--safe-bottom)); padding:24px 28px 18px; border:1px solid #dbe2dc; border-top:4px solid #008650; border-radius:8px; color:#122b25; background:#fdfefb; box-shadow:0 24px 80px #0004; overflow:auto; overscroll-behavior:contain; touch-action:pan-y; -webkit-overflow-scrolling:touch; font-family:inherit; }
 .onboarding-dialog::backdrop { background:#09231dcc; }
 .onboarding-dialog[open] { display:flex; flex-direction:column; gap:14px; }
 .onboarding-header { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:12px; }
@@ -39,7 +39,7 @@ body[data-operation-hints=off] #shot-risk[data-risk=idle],
 body[data-operation-hints=off] .shots-wrap:has(#shot-risk[data-risk=idle]) .aim-heading,
 body[data-operation-hints=off] #assist-status[data-kind=instruction] { visibility:hidden; }
 @media(max-height:500px) and (orientation:landscape) {
-  .onboarding-dialog { width:min(700px,calc(100vw - 40px)); max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); padding:10px 22px; }
+  .onboarding-dialog { width:min(700px,calc(100vw - 40px)); max-height:calc(100dvh - 20px - var(--safe-top) - var(--safe-bottom)); padding:10px 22px; }
   .onboarding-dialog[open] { gap:7px; }
   .onboarding-dialog h2 { font-size:24px; margin-bottom:6px; }
   .onboarding-intro { font-size:12px; }

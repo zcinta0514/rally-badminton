@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  padding: max(16px, var(--safe-top)) max(16px, var(--safe-right)) max(16px, var(--safe-bottom)) max(16px, var(--safe-left));
   overflow: auto;
   background: rgb(10 25 20 / 58%);
   overscroll-behavior: contain;
@@ -19,7 +19,7 @@
   width: 440px;
   min-width: 0;
   max-width: 100%;
-  max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(16px, env(safe-area-inset-bottom)));
+  max-height: calc(100dvh - max(16px, var(--safe-top)) - max(16px, var(--safe-bottom)));
   padding: 32px;
   overflow: auto;
   border: 1px solid var(--line, #dbe2dc);
@@ -389,7 +389,7 @@
   position: fixed;
   z-index: 50;
   left: 50%;
-  bottom: max(20px, env(safe-area-inset-bottom));
+  bottom: max(20px, var(--safe-bottom));
   width: max-content;
   max-width: calc(100vw - 32px);
   margin: 0;
@@ -472,9 +472,9 @@
 #rotate-note {
   position: fixed;
   z-index: 10;
-  right: max(14px, env(safe-area-inset-right));
-  bottom: max(12px, env(safe-area-inset-bottom));
-  left: max(14px, env(safe-area-inset-left));
+  right: max(14px, var(--safe-right));
+  bottom: max(12px, var(--safe-bottom));
+  left: max(14px, var(--safe-left));
   display: none;
   align-items: center;
   justify-content: center;
@@ -540,7 +540,7 @@
   .dialog .result-score { margin: 14px 0; padding: 12px 0; font-size: 48px; }
   .dialog .rule-note { margin: 10px 0; }
   .dialog .help-item { padding: 12px 0; }
-  #toast { bottom: max(12px, env(safe-area-inset-bottom)); padding: 10px 14px; }
+  #toast { bottom: max(12px, var(--safe-bottom)); padding: 10px 14px; }
   /* Keep both room actions visible together on short phone screens. */
   #dialog-backdrop #friends-dialog,
   #dialog-backdrop #waiting-dialog { padding: 14px 24px; }
