@@ -1,3 +1,4 @@
+import { hellStatus } from '../shared/hell-mode.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -64,8 +65,8 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   element('palette-panel').hidden = true;
   element('match-settings-panel').hidden = true;
   const settingGroups = new Map();
-  for (const [id, attribute, values] of [['roles','role',['balanced','swift','power']], ['coach-roles','coachRole',['balanced','swift','power']], ['friend-roles','friendRole',['balanced','swift','power']], ['ai-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-tabs','action',['create','join']], ['difficulties','difficulty',['easy','medium','hard']], ['targets','target',[5,11,21]], ['rulesets','ruleset',['quick','standard21']]]) {
-    const choices=values.map((value,index)=>{const button=element(`choice-${attribute}-${value}`);button.dataset[attribute]=String(value);button.closest=selector=>selector==='button'?button:null;button.setAttribute('aria-pressed',String(index===0));return button;});
+  for (const [id, attribute, values] of [['hell-roles','hellRole',['balanced','swift','power']], ['roles','role',['balanced','swift','power']], ['coach-roles','coachRole',['balanced','swift','power']], ['friend-roles','friendRole',['balanced','swift','power']], ['ai-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-tabs','action',['create','join']], ['difficulties','difficulty',['easy','medium','hard']], ['targets','target',[5,11,21]], ['rulesets','ruleset',['quick','standard21']]]) {
+    const choices=values.map((value,index)=>{const button=element(`choice-${attribute}-${value}`);button.dataset[attribute]=String(value);button.closest=selector=>selector==='button'||selector==='[data-hell-role]'?button:null;button.setAttribute('aria-pressed',String(index===0));return button;});
     settingGroups.set(id,choices);element(id).querySelectorAll=selector=>selector==='button'?choices:[];
   }
   const shots = ['clear', 'drop', 'smash'].map(shot => {
@@ -73,7 +74,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   });
   const friendModes=['none','father-son'].map(finale=>{
     const button=element(`mode-${finale}`);button.dataset.finale=finale;
-    button.closest=selector=>selector==='button'?button:null;
+    button.closest=selector=>selector==='button'||selector==='[data-hell-role]'?button:null;
     button.attributes={'aria-pressed':String(finale==='none')};
     button.setAttribute=(name,value)=>{button.attributes[name]=value;};
     return button;
@@ -129,7 +130,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     sample() { return { x: 0, z: 0, prepare: null, charge: 0 }; }
   }
   const context = vm.createContext({
-    ...game, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
+    ...game, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
     getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
     createUsageAnalytics:()=>({configured:true,enabled:true,
@@ -176,7 +177,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
   assert.equal(typeof frame, 'function', 'the real application must initialize its render loop');
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
-  const common = { element, click, startAI(){click('entry-back');click('start-ai');click('start-ai-confirm');}, startTraining(){click('entry-back');click('start-training');click('start-training-confirm');}, draw, controls, view, audio, document, usageEvents,
+  const common = { element, click, startAI(){click('entry-back');click('start-ai');click('start-ai-confirm');}, startHell(){click('entry-back');click('start-hell');click('start-hell-confirm');}, draw, controls, view, audio, document, usageEvents,
     pwaOptions, onboardingOptions, updateSafeAtInit, get onboardingAttempts() { return onboardingAttempts; },
     choice:(id,value)=>settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value))),
     chooseSetting:(id,value)=>{const button=settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value)));if(!button.disabled)element(id).emit('click',{target:button});},
@@ -269,7 +270,7 @@ test('automatic update transfers selected controls and mute once without preserv
   assert.deepEqual({...ordinary.settings},{role:'balanced',coachRole:'balanced',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'easy',target:5,ruleset:'quick',finale:'none'});assert.equal(ordinary.sound,true);
 });
 
-test('independent player and coach choices create all nine AI lineups and retain simple training', async () => {
+test('independent player and coach choices create all nine AI lineups and isolate hell mode from ordinary coach choices', async () => {
   for(const player of ['balanced','swift','power'])for(const coach of ['balanced','swift','power']){
     const f=await fixture('serve',{demoMode:true});
     f.chooseSetting('roles',player);f.chooseSetting('coach-roles',coach);f.startAI();f.draw(0);
@@ -277,7 +278,7 @@ test('independent player and coach choices create all nine AI lineups and retain
     assert.equal(f.element('role-other').textContent,game.ROLES[coach].label+'型');
     assert.equal(f.settings.role,player);assert.equal(f.settings.coachRole,coach);
   }
-  const f=await fixture('serve',{demoMode:true});f.chooseSetting('coach-roles','power');f.startTraining();
+  const f=await fixture('serve',{demoMode:true});f.chooseSetting('coach-roles','power');f.startHell();
   assert.equal(f.liveState.players[1].role,'balanced');assert.equal(f.settings.coachRole,'power');
 });
 
@@ -331,13 +332,23 @@ test('usage hooks count actual AI starts and restarts while menu autoplay remain
   assert.ok(f.usageEvents.some(event=>event[0]==='leave'));
 });
 
-test('three-step training starts a local quick match and exposes a guided label', async () => {
+test('hell challenge starts locally, exposes asymmetric targets and retries in the same mode', async () => {
   const f = await fixture();
-  f.startTraining(); f.draw();
+  f.chooseSetting('hell-roles','swift');
+  f.startHell(); f.draw();
+  assert.equal(f.liveState.players[0].role,'swift');
   assert.equal(f.document.body.dataset.screen, 'match');
   assert.equal(f.liveState.ruleset, 'quick');
-  assert.match(f.element('match-label').textContent, /训练 1\/3/);
-  assert.match(f.element('assist-status').textContent, /训练 1\/3|黄色圈/);
+  assert.match(f.element('match-label').textContent, /你 2 分 \/ 对手 5 分/);
+  assert.equal(f.element('score-self').textContent,'0/2');
+  assert.equal(f.element('score-other').textContent,'0/5');
+  assert.equal(f.element('hell-status').hidden,false);
+  game.finishMatch(f.liveState,0,'通关','scored');f.draw();
+  assert.equal(f.element('result-title').textContent,'地狱挑战通关');
+  f.click('rematch');f.draw();
+  assert.equal(f.liveState.challenge.kind,'hell');
+  assert.equal(f.liveState.players[0].role,'swift');
+  assert.deepEqual([...f.liveState.score],[0,0]);
   assert.deepEqual(f.usageEvents.at(-1), ['start', 'ai']);
 });
 
@@ -411,11 +422,7 @@ test('standard HUD retains game counts and hides deuce hints during a completed 
   assert.doesNotMatch(f.element('match-label').textContent, /加球中|下一分获胜/);
 });
 
-test('deuce retains training guidance and the existing pause-timeout decisions', async () => {
-  const training = await fixture('serve', { demoMode: true });
-  training.startTraining(); training.liveState.score = [4, 4]; training.draw(0);
-  assert.equal(training.element('match-label').textContent, '训练 1/3 · 到位 · 加球中');
-  assert.match(training.element('assist-status').textContent, /训练 1\/3|黄色圈/);
+test('deuce retains the existing pause-timeout decisions', async () => {
   for (const [score, winner] of [[[4, 4], null], [[5, 4], 0]]) {
     const f = await fixture('serve', { demoMode: true });
     f.startAI(); f.liveState.score = score; f.draw(0);

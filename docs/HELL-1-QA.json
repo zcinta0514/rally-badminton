@@ -1,0 +1,202 @@
+{
+  "task": "HELL-1",
+  "date": "2026-11-07",
+  "baseline": "3826d33ba032813e7301086812569f8c136c7a43",
+  "branch": "feat/HELL-1-challenge",
+  "buildId": "4339dc04457d109b",
+  "preview": "http://127.0.0.1:3248/",
+  "tests": {
+    "passed": 749,
+    "failed": 0,
+    "command": "npm test"
+  },
+  "build": {
+    "passed": true,
+    "command": "npm run build"
+  },
+  "browser": {
+    "verifiedBuildId": "4339dc04457d109b",
+    "checks": [
+      "真实点击首页地狱人机进入准备页",
+      "7个底边火苗计算样式为hell-flame动画",
+      "准备页实读玩家2分/人机5分、扑救最多两次"
+    ],
+    "finalHostScreenshot": {
+      "passed": false,
+      "error": "UnknownVizError"
+    },
+    "limitations": [
+      "火焰视觉效果尚需用户实看",
+      "最终完整手动比赛/结算/重试和实体手机未完成",
+      "用户玩法验收待确认"
+    ]
+  },
+  "publication": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "versionChanged": false
+  },
+  "sourceHashes": {
+    "index.html": "b4495b0cc66e66272147abd3c1a1f03bce3ae8daea2b071b53e065688b59c210",
+    "shared/game.js": "de8b2edad41594d8cf606a908dbf5108cfeb591787d41be7b615d7849933cb70",
+    "shared/hell-mode.js": "861f225b2ef83465a40499d9d86e9a4362b77ce8676c6832c6af534b8c06d6f7",
+    "src/main.js": "f1ed05779bb40dbe44e64d8359ff5cb5a92d91e1eabff2fd306015286added94",
+    "src/view.js": "f13e79b2c3269f35c6472e309e44b8e9ded2385857ac3c83e78adcf003400cef",
+    "src/style.css": "1f93aa3a312d63d65f0e2dd4cfe27e381af8c0f09f21e355d5866058abc8aca6",
+    "src/ui-feedback.js": "0cd9544b1e41590d0f0e6938394e33adaa4ea86db414ca4c41298644bba19884",
+    "src/arena-feedback.js": "61c468d52c2d892be31416033b21829d4eb1a4b7d95bc1139ff144c39c701e15",
+    "src/match-settings.js": "8c304db53ed3f4ea2f52761a179114136f3bc9018a3aeb3cd3d6a9d2896c6a7b",
+    "src/stamina-hud.js": "89af884ae4bb617f8055c74f6acf5a24018e9dab444bc279866c96a1af678be4"
+  },
+  "servedBytesMatch": {
+    "index.html": true,
+    "shared/game.js": true,
+    "shared/hell-mode.js": true,
+    "src/main.js": true,
+    "src/view.js": true,
+    "src/style.css": true,
+    "src/ui-feedback.js": true,
+    "src/arena-feedback.js": true,
+    "src/match-settings.js": true,
+    "src/stamina-hud.js": true
+  },
+  "previousCandidate": {
+    "buildId": "44f234349eb05075",
+    "preview": "http://127.0.0.1:3247/",
+    "tests": {
+      "passed": 748,
+      "failed": 0,
+      "command": "npm test"
+    },
+    "browser": {
+      "verifiedBuildId": "44f234349eb05075",
+      "earlierUiBuild": "5a60cf8523e56fa1",
+      "earlierUiChecks": [
+        "首页入口",
+        "准备页",
+        "HUD 0/2和0/5",
+        "无限体力"
+      ],
+      "finalRendering": {
+        "method": "浏览器生产createMatch/stepMatch/aiInput/CourtView完整回合场景回放；不是用户手动比赛。",
+        "seed": 1,
+        "captures": [
+          {
+            "skill": "phantom",
+            "time": 2.6333333333333266,
+            "hit": 2
+          },
+          {
+            "skill": "rescue",
+            "time": 3.4833333333333236,
+            "hit": 3
+          },
+          {
+            "skill": "cannon",
+            "time": 6.083333333333425,
+            "hit": 7
+          }
+        ],
+        "artifactDirectory": "artifacts/hell-1/"
+      },
+      "finalHostScreenshot": {
+        "passed": false,
+        "error": "UnknownVizError"
+      },
+      "limitations": [
+        "实体手机未测",
+        "最终UI完整手动比赛/结算/重试未完成；事件处理与重试由真实main循环VM回归覆盖",
+        "用户玩法验收待确认"
+      ]
+    }
+  },
+  "tuning": {
+    "comparison": "相同固定种子1..200、dt=1/60、生产createMatch/aiInput/stepMatch，玩家medium与hard两档，各200局，单局上限180秒。自动对手胜率不代表真人胜率。",
+    "before": {
+      "medium": {
+        "matches": 200,
+        "playerWins": 23,
+        "bossWins": 177,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 733,
+          "cannon": 652,
+          "rescue": 846
+        },
+        "bossReturns": 4151,
+        "totalSeconds": 10657.816666666336,
+        "winRate": 0.115,
+        "skillRate": 0.5374608528065526
+      },
+      "hard": {
+        "matches": 200,
+        "playerWins": 196,
+        "bossWins": 4,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 642,
+          "cannon": 616,
+          "rescue": 640
+        },
+        "bossReturns": 3361,
+        "totalSeconds": 7681.31666666646,
+        "winRate": 0.98,
+        "skillRate": 0.5647128830705147
+      }
+    },
+    "after": {
+      "medium": {
+        "matches": 200,
+        "playerWins": 6,
+        "bossWins": 194,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 2009,
+          "cannon": 1122,
+          "rescue": 1553
+        },
+        "bossReturns": 4772,
+        "totalSeconds": 10325.024999999641,
+        "winRate": 0.03,
+        "skillRate": 0.9815590947191953
+      },
+      "hard": {
+        "matches": 200,
+        "playerWins": 137,
+        "bossWins": 63,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 2687,
+          "cannon": 1654,
+          "rescue": 1566
+        },
+        "bossReturns": 5907,
+        "totalSeconds": 11567.533333333859,
+        "winRate": 0.685,
+        "skillRate": 1
+      }
+    },
+    "humanTarget": "约10%，待用户试玩校准",
+    "rules": {
+      "targets": [
+        2,
+        5
+      ],
+      "rescueLimit": 2,
+      "consecutiveSkills": true,
+      "chargeTime": 0.36,
+      "recovery": 0.62
+    }
+  },
+  "releasePreparation": {
+    "version": "1.13.0",
+    "userApprovedMerge": true,
+    "tests": {
+      "passed": 749,
+      "failed": 0
+    },
+    "buildId": "6cd2e3a4ee267ef3",
+    "note": "之前preview和sourceHashes属于已验收强化候选；本次仅同步发布版本与公告，线上另核验。"
+  }
+}

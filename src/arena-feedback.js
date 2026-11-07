@@ -15,6 +15,7 @@ export function pointGrade(state) {
   return isExcitingPoint(state) ? 'highlight' : 'point';
 }
 export function matchPressure(state) {
+  if (state.challenge?.kind === 'hell') return state.score.map((score, side) => score + 1 >= (side === 0 ? 2 : 5) ? 'match' : null);
   const rule = getScoringRules(state);
   return [0, 1].map(side => {
     const next = state.score[side] + 1;

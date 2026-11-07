@@ -80,7 +80,6 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 .entry-content { flex:1; min-height:0; overflow-y:auto; touch-action:pan-y; padding:0 4px 8px 0; }
 .entry-content .primary-btn { width:100%; margin-top:14px; }
 .format-choices { flex-wrap:wrap; }.format-choices button { flex:1 0 40%; }
-.training-goals { padding-left:22px; }.training-goals li { margin:20px 0; }.training-goals p { color:var(--muted); font-size:13px; }
 .lobby-players { white-space:pre-line; margin:16px 0; font-size:14px; line-height:1.8; }
 .menu-panel[data-entry="home"] .setup { justify-content:center; }
 .menu-panel[data-entry="home"] .menu-tip-compact { display:none; }
@@ -92,7 +91,6 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 .friend-setup .dialog-foot { display:block; margin-top:10px; color:var(--muted); font-size:11px; line-height:1.6; }
 .friend-setup #friend-modes button[aria-pressed="true"] { background:var(--green); color:white; }
 .dialog#waiting-dialog #waiting-rules,.dialog#waiting-dialog #waiting-consent,.dialog#waiting-dialog #waiting-status { display:block; }
-.entry-content #start-training-confirm { position:sticky; bottom:0; }
 .setup-row { display:grid; grid-template-columns:70px minmax(0,1fr); align-items:center; gap:10px; padding:8px 0; border-top:1px solid var(--line); }
 .field-label { font-size:12px; font-weight:650; white-space:nowrap; }
 .segments { display:flex; padding:3px; background:#e8ede7; border-radius:3px; gap:2px; min-width:0; }
@@ -208,3 +206,37 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   #home-actions button { min-height:44px; padding:6px 10px; }
   .menu-panel[data-entry="home"] .intro { display:none; }
 }
+
+/* HELL-1: local challenge, keeping the established glass and court lighting. */
+#home-actions .hell-entry { position:relative; overflow:hidden; isolation:isolate; border-color:#bd745d88; background:linear-gradient(115deg,#fff8eecc,#f0ded4aa); box-shadow:inset 0 1px 0 #ffffffda,0 4px 16px #7b493310; }
+.hell-entry::before { content:""; position:absolute; inset:-100% -40%; z-index:-1; background:linear-gradient(110deg,transparent 40%,#fff9 50%,transparent 60%); transform:translateX(-30%); animation:hell-shimmer 6s ease-in-out infinite; pointer-events:none; }
+.hell-entry:active { transform:scale(.985); }
+.hell-entry em { font-size:9px; font-style:normal; font-weight:600; letter-spacing:1px; border:1px solid #9b4e3a66; border-radius:4px; padding:2px 5px; vertical-align:middle; }
+#home-actions .hell-entry-mark { font-size:19px; letter-spacing:3px; opacity:.65; }
+.hell-contract { display:flex; align-items:center; justify-content:space-around; padding:6px 8px 8px; border-bottom:1px solid var(--line); }
+.hell-contract>span { display:flex; flex-direction:column; gap:4px; font-size:11px; }
+.hell-contract strong { font-size:32px; line-height:1.1; font-weight:650; }.hell-contract strong small { font-size:12px; font-weight:400; }
+.hell-contract>b { opacity:.4; font-size:12px; letter-spacing:2px; }
+.hell-skills { display:grid; gap:6px; margin:8px 0; }.hell-skills article { border:1px solid #9b68532c; border-radius:10px; padding:7px 10px; background:#ffffff44; }
+.hell-skills b { font-size:12px; }.hell-skills p { font-size:11px; line-height:1.45; margin:3px 0 0; opacity:.76; }
+.hell-setup .hell-confirm { position:sticky; bottom:0; margin-top:8px; }
+.hell-status { max-width:340px; display:flex; flex-direction:column; gap:4px; padding:9px 12px; border:1px solid #b6d6c966; border-radius:12px; background:#143b3bdb; color:#fff3df; backdrop-filter:blur(16px); pointer-events:none; }
+.hell-status b { font-size:12px; letter-spacing:.5px; }.hell-status span { font-size:10px; opacity:.85; line-height:1.4; }
+.hell-status[data-skill="charge"],.hell-status[data-skill="cannon"] { border-color:#ffb288; }.hell-status[data-skill="recovery"] { border-color:#b5ebc7; }
+@keyframes hell-shimmer { 0%,25% { transform:translateX(-30%); } 75%,100% { transform:translateX(30%); } }
+@media(max-height:500px) and (orientation:landscape) { .hell-contract { padding:4px 8px 8px; }.hell-contract strong { font-size:28px; }.hell-skills { gap:5px; margin:7px 0; }.hell-skills article { padding:7px 10px; }.hell-status { padding:6px 9px; max-width:260px; }.hell-status span { font-size:9px; } }
+@media(prefers-reduced-motion:reduce) { .hell-entry::before { animation:none; } }
+
+/* Small flames stay inside the card's lower edge, clear of its label. */
+.hell-entry::after { content:""; position:absolute; inset:auto 0 0; height:20px; z-index:-1; pointer-events:none; background:radial-gradient(ellipse at 50% 110%,#ff9c4259,transparent 72%); opacity:.7; animation:hell-heat 2.8s ease-in-out infinite alternate; }
+.hell-fire { position:absolute; left:0; right:0; bottom:0; height:24px; z-index:-1; pointer-events:none; overflow:hidden; }
+.hell-fire i { position:absolute; bottom:-6px; left:8%; width:12px; height:22px; border-radius:70% 15% 60% 45%; background:linear-gradient(35deg,#e15b2444,#ffad587d 55%,#fff3bf88); filter:blur(.65px); transform-origin:50% 100%; animation:hell-flame 1.8s ease-in-out infinite alternate; }
+.hell-fire i:nth-child(2) { left:23%; height:15px; width:8px; animation-delay:-.6s; }
+.hell-fire i:nth-child(3) { left:39%; height:20px; width:10px; animation-delay:-1.2s; }
+.hell-fire i:nth-child(4) { left:54%; height:16px; width:9px; animation-delay:-.35s; }
+.hell-fire i:nth-child(5) { left:69%; height:24px; width:12px; animation-delay:-1.4s; }
+.hell-fire i:nth-child(6) { left:84%; height:17px; width:9px; animation-delay:-.9s; }
+.hell-fire i:nth-child(7) { left:94%; height:13px; width:7px; animation-delay:-.2s; }
+@keyframes hell-flame { from { transform:rotate(-12deg) scale(.8,.7); opacity:.35; } to { transform:rotate(10deg) scale(1,1.08); opacity:.75; } }
+@keyframes hell-heat { from { opacity:.4; } to { opacity:.85; } }
+@media(prefers-reduced-motion:reduce) { .hell-fire i,.hell-entry::after { animation:none; } .hell-fire i { opacity:.45; } }

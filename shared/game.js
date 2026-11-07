@@ -1,3 +1,4 @@
+import { HELL, createHellChallenge, resetHellRally } from './hell-mode.js';
 import { contactQuality, contactDrift } from './shot-quality.js';
 import { sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
@@ -86,12 +87,13 @@ export function getScoringRules({ ruleset = 'quick', target = 5 } = {}) {
 }
 
 export function createMatch({ target = 5, roles = ['balanced', 'balanced'], difficulty = 'easy', seed = 1, ruleset = 'quick',
-  playerAssist = 'none', assistSide = 0, netDragSide = null } = {}) {
-  ruleset = ruleset === 'standard21' ? 'standard21' : 'quick';
+  playerAssist = 'none', assistSide = 0, netDragSide = null, challenge = null } = {}) {
+  ruleset = challenge === 'hell' ? 'quick' : ruleset === 'standard21' ? 'standard21' : 'quick';
   playerAssist = assistLevelOf(playerAssist);
   assistSide = assistSide === 0 || assistSide === 1 ? assistSide : 0;
   const state = {
     rulesVersion: RULES_VERSION,
+    ...(challenge === 'hell' ? { challenge: createHellChallenge() } : {}),
     ...((netDragSide === 0 || netDragSide === 1) ? { netDragSide } : {}),
     phase: 'serve', time: 0, timer: 0, target: getScoringRules({ ruleset, target }).target,
     ruleset, games: [0, 0], gameNumber: 1, gameScores: [],
@@ -121,6 +123,10 @@ function attachServe(state) {
     active: false, lastHit: null });
 }
 function startServe(state) {
+  if (state.challenge) {
+    resetHellRally(state.challenge);
+    for (const p of state.players) p.stamina = ROLES[p.role].maxStamina;
+  }
   // Earned once after an actual scored rally, never by waiting to serve.
   // The bounded allowance is identical for both sides and follows role recovery.
   if (['point', 'intermission'].includes(state.phase) && state.rallyEnd?.id === state.pointId && state.pointId > 0) {
@@ -169,8 +175,10 @@ function awardPoint(state, winner, reason, impact) {
   // Quick games also require two clear points, with a cap for each target.
   // Court coordinates stay player-relative; standard breaks are shortened for play.
   const scoring = getScoringRules(state);
-  const wonGame = state.score[winner] >= scoring.target
-    && (state.score[winner] - state.score[1 - winner] >= scoring.winBy || state.score[winner] >= scoring.cap);
+  const wonGame = state.challenge ? state.score[winner] >= HELL.targets[winner]
+    : state.score[winner] >= scoring.target
+      && (state.score[winner] - state.score[1 - winner] >= scoring.winBy || state.score[winner] >= scoring.cap);
+  if (state.challenge) { state.challenge.active = null; state.challenge.warning = null; state.challenge.rescue = null; }
   state.rallyEnd.grade = wonGame ? state.ruleset === 'standard21' && state.games[winner] < 1 ? 'game' : 'match'
     : impact.kind === 'in' && winner === impact.hitSide && (state.lastShot === 'smash' || state.rally >= 8) ? 'highlight' : 'point';
   if (wonGame && state.ruleset === 'standard21') {
@@ -219,7 +227,9 @@ function movePlayer(player, input, side, dt, state) {
   const role = ROLES[player.role];
   const effort = Math.hypot(input.x, input.z);
   const fatigue = staminaEffects(player, role);
-  const targetX = input.x * role.speed * fatigue.speedScale, targetZ = input.z * role.speed * fatigue.speedScale;
+  const h = state.challenge?.bossSide === side ? state.challenge : null;
+  const moveScale = !h ? 1 : state.time < h.recoverUntil ? (h.rescue?.hit ? 0 : HELL.recoveryMoveScale) : HELL.moveScale;
+  const targetX = input.x * role.speed * fatigue.speedScale * moveScale, targetZ = input.z * role.speed * fatigue.speedScale * moveScale;
   const dx = targetX - player.vx, dz = targetZ - player.vz, difference = Math.hypot(dx, dz);
   const reversing = player.vx * targetX + player.vz * targetZ < 0;
   // Brake the existing velocity first when changing direction; top speed and
@@ -392,7 +402,30 @@ export function getInterceptAdvice(state, side, request = {}) {
 
 function playShot(state, side, request, serving = false) {
   const player = state.players[side], ball = state.shuttle, role = ROLES[player.role];
-  const target = getShotTarget(state, side, request), type = target.type;
+  let target = getShotTarget(state, side, request);
+  const h = state.challenge, boss = h?.bossSide === side;
+  let skill = null;
+  if (!serving && boss) {
+    if (h.rescue && !h.rescue.hit) {
+      skill = 'rescue';
+      target = getShotTarget(state, side, { shot: 'clear', aim: request.aim, aimDepth: -.15, charge: 0 });
+      h.rescue.hit = true; h.recoverUntil = state.time + HELL.recovery;
+      h.warning = null;
+    } else if (h.warning && state.time - h.warning.at >= HELL.chargeTime && target.type === 'smash' && target.smashViable) {
+      skill = 'cannon'; h.warning = null; h.next = 'phantom';
+      h.recoverUntil = state.time + HELL.recovery;
+    } else if (!h.warning && state.time >= h.recoverUntil) {
+      skill = 'phantom'; h.next = 'cannon';
+      target = getShotTarget(state, side, { ...request, shot: 'drop', aimDepth: .65, charge: .2 });
+    } else h.warning = null;
+  }
+  const type = target.type;
+  if (skill === 'cannon' || skill === 'rescue') {
+    const duration = skill === 'rescue' ? Math.max(1.25, target.duration * .85)
+      : Math.max(.48, minimumNetDuration(ball, target.aimX, target.aimZ, .14), target.duration * .82);
+    const launch = horizontalLaunch(ball, { x: target.aimX, z: target.aimZ }, duration);
+    target = { ...target, ...launch, vy: (TUNING.gravity * duration * duration / 2 - ball.y) / duration, duration };
+  }
   const contact = { x: ball.x, y: ball.y, z: ball.z };
   ball.vx = target.vx; ball.vy = target.vy; ball.vz = target.vz;
   ball.active = true; ball.lastHit = side;
@@ -401,14 +434,24 @@ function playShot(state, side, request, serving = false) {
   player.stamina = Math.max(0, player.stamina - shotStaminaCost(role, type, request.charge, serving));
   player.swing = role.swingTime; player.cooldown = role.swingTime;
   player.pendingShot = null; player.lastShot = type;
+  if (skill === 'rescue') player.cooldown = HELL.recovery;
   const rest = !serving && STAMINA_TUNING.shotRecovery[type];
   player.shotRecovery = rest ? { type, expiresAt: state.time + rest.duration, remaining: rest.budget } : null;
   if (player.action) Object.assign(player.action, { type, stage: 'contact', contact, quality: target.quality,
     contactAt: state.time, endsAt: state.time + role.swingTime, swingTime: role.swingTime });
   state.phase = 'rally'; state.hitId++; state.rally++; state.lastShot = type;
+  if (h) {
+    h.active = null;
+    if (skill) {
+      h.counts[skill]++;
+      const netTime = timeToShuttleZ(ball, 0);
+      h.active = { kind: skill, at: state.time, hitId: state.hitId, launch: { ...ball },
+        fadeAt: Math.max(.005, Math.min(.65, netTime * .86)) };
+    }
+  }
   state.lastShotInfo = {hitId: state.hitId, side, at: state.time, type, requested: target.requested,
     aimX: target.aimX, aimZ: target.aimZ, x: target.x, z: target.z, quality: target.quality,
-    serving, contact, charge: request.charge, staminaBefore, staminaAfter: player.stamina};
+    serving, contact, charge: request.charge, staminaBefore, staminaAfter: player.stamina, ...(skill ? { skill } : {})};
   state.message = target.fallbackReason || `${shotName(type)} · ${state.rally} 拍${target.quality.risk >= 0.16 ? ` · ${target.quality.reason}` : ''}`;
 }
 
@@ -490,6 +533,7 @@ function stepLive(state, inputs, dt, firstSlice) {
   const speeds = [0, 0];
   try {
   state.time += dt;
+  if (state.challenge?.rescue?.hit && state.time >= state.challenge.recoverUntil) state.challenge.rescue = null;
   for (let side = 0; side < 2; side++) {
     const player = state.players[side];
     player.swing = Math.max(0, player.swing - dt);
@@ -508,7 +552,19 @@ function stepLive(state, inputs, dt, firstSlice) {
     if (state.phase === 'serve' || state.phase === 'rally') {
       if (state.phase === 'serve' && state.players[state.server].pendingShot?.contactAt !== undefined) {
         player.vx = 0; player.vz = 0;
-      } else movePlayer(player, inputs[side], side, dt);
+      } else {
+        const h = state.challenge?.bossSide === side ? state.challenge : null;
+        if (h?.rescue && !h.rescue.hit) {
+          const dive = h.rescue, t = clamp((state.time - dive.at) / HELL.diveTime, 0, 1);
+          const oldX = player.x, oldZ = player.z;
+          player.x = dive.from.x + (dive.to.x - dive.from.x) * t;
+          player.z = dive.from.z + (dive.to.z - dive.from.z) * t;
+          player.vx = (player.x - oldX) / dt; player.vz = (player.z - oldZ) / dt;
+          player.pendingShot ??= { shot: 'clear', aim: h.rescue.aim, aimDepth: -.15, charge: 0, remaining: .5 };
+          if (t === 1 && state.time - dive.at > HELL.diveTime + .12) { h.rescue = null; h.recoverUntil = state.time + .5; }
+        } else if (h?.rescue?.hit && state.time < h.recoverUntil) { player.vx = 0; player.vz = 0; }
+        else movePlayer(player, inputs[side], side, dt, state);
+      }
       if (state.phase === 'serve') {
         const sign = state.service.sourceSign * (side === state.server ? 1 : -1);
         player.x = sign * clamp(player.x * sign, 0.22, COURT.halfWidth - TUNING.playerMargin);
@@ -590,7 +646,11 @@ function stepLive(state, inputs, dt, firstSlice) {
         player.staminaStatus = 'draining';
       }
       if (state.lastShotInfo?.side === side && state.time - state.lastShotInfo.at < .18) player.staminaStatus = 'draining';
-      if (state.phase !== 'rally') { player.recoveryWait = 0; player.staminaRate = 0; player.staminaStatus = 'idle'; }
+      if (state.challenge?.bossSide === side) {
+        player.stamina = role.maxStamina; player.staminaRate = 0; player.staminaStatus = 'infinite';
+        if (state.lastShotInfo?.side === side) state.lastShotInfo.staminaAfter = role.maxStamina;
+      }
+      if (state.phase !== 'rally' && state.challenge?.bossSide !== side) { player.recoveryWait = 0; player.staminaRate = 0; player.staminaStatus = 'idle'; }
     }
   }
 }
@@ -716,7 +776,8 @@ function chooseAIShot(state, side, level) {
 
 export function aiInput(state, side, difficulty = 'easy') {
   if ((side !== 0 && side !== 1) || !['serve', 'rally'].includes(state.phase)) return { x: 0, z: 0, shot: null, aim: 0, aimDepth: 0, charge: 0 };
-  const level = difficultyOf(difficulty), config = AI[level], player = state.players[side], ball = state.shuttle, role = ROLES[player.role];
+  const h = state.challenge?.bossSide === side ? state.challenge : null;
+  const level = h ? 'hard' : difficultyOf(difficulty), config = h ? { ...AI.hard, reaction: HELL.reaction, error: HELL.error } : AI[level], player = state.players[side], ball = state.shuttle, role = ROLES[player.role];
   const output = { x: 0, z: 0, shot: null, aim: 0, aimDepth: 0, charge: 0.3 };
   if (state.phase === 'serve') {
     if (state.server === side && state._serveAge > config.serveDelay + config.reaction) {
@@ -725,10 +786,14 @@ export function aiInput(state, side, difficulty = 'easy') {
     }
     return output;
   }
+  if (h && ((h.rescue && !h.rescue.hit) || (state.time < h.recoverUntil && h.rescue?.hit))) return output;
   if (ball.lastHit === side) return { ...output, ...moveToward(player, ball.x * 0.15, direction(side) * 3.55, config.pace * 0.72) };
   let memory = state._ai[side];
   if (!memory || memory.hitId !== state.hitId) {
     const decision = chooseAIShot(state, side, level);
+    // Phantom returns use a low contact and a flatter arc so all four balls
+    // remain readable in the regular phone camera.
+    if (h && (h.next === 'phantom' || !smashOpportunity(state, side).highChance)) decision.shot = 'drop';
     // Reaction delay and spatial prediction error remain difficulty-dependent.
     // Every reachable return is attempted; the common contact model causes errors.
     memory = state._ai[side] = { hitId: state.hitId, ready: state.time + config.reaction,
@@ -736,6 +801,28 @@ export function aiInput(state, side, difficulty = 'easy') {
       shot: decision.shot, aim: decision.aim, aimDepth: decision.aimDepth };
   }
   if (state.time < memory.ready) return output;
+  if (h && state.time >= h.recoverUntil) {
+    const landing = predictLanding(state);
+    const legal = landing && landing.event === 'landing' && !landing.out && !landing.serviceFault && landing.side === side;
+    const distance = Math.hypot(ball.x - player.x, ball.z - player.z);
+    if (h.rescueUses < HELL.rescueLimit && legal && landing.time < .65 && landing.time > .18 && distance > TUNING.reach + .2
+        && Math.hypot(landing.x - player.x, landing.z - player.z) < HELL.diveSpeed * HELL.diveTime
+        && !h.warning && !h.active && player.cooldown <= 0) {
+      const point = flightPoint(ball, Math.min(HELL.diveTime, landing.time * .6));
+      h.rescueUses++; h.rescue = { aim: memory.aim, at: state.time, from: { x: player.x, z: player.z },
+        to: { x: clamp(point.x, -COURT.halfWidth + .16, COURT.halfWidth - .16),
+          z: direction(side) * clamp(point.z * direction(side), .54, COURT.halfLength - .16) }, hit: false };
+      return output;
+    }
+    if (h.next === 'cannon' && !h.warning) {
+      const chance = smashOpportunity(state, side);
+      if (chance.highChance && chance.contactTime >= HELL.chargeTime && chance.contactTime < 1.4) {
+        h.warning = { at: state.time, hitId: state.hitId, aim: memory.aim, aimDepth: .35 };
+        memory.shot = 'smash'; memory.aimDepth = .35;
+      }
+    }
+  }
+  if (h?.warning && h.warning.hitId !== state.hitId) h.warning = null;
   const contactHeight = memory.shot === 'smash' ? Math.min(3.05, ball.y + Math.max(0, ball.vy) ** 2 / (2 * TUNING.gravity)) : 1.2;
   const discriminant = ball.vy * ball.vy + 2 * TUNING.gravity * (ball.y - contactHeight);
   const contactTime = discriminant > 0 ? Math.max(0, (ball.vy + Math.sqrt(discriminant)) / TUNING.gravity) : 0;
@@ -748,6 +835,14 @@ export function aiInput(state, side, difficulty = 'easy') {
   if (ball.z * direction(side) > 0.1 && ball.vy < 1.5 && horizontal < TUNING.reach + role.reachBonus + 0.15
     && ball.y <= (memory.shot === 'smash' ? 4.35 : 1.9)) {
     output.shot = memory.shot; output.aim = memory.aim; output.aimDepth = memory.aimDepth;
+  }
+  if (h?.warning) {
+    output.aim = h.warning.aim; output.aimDepth = h.warning.aimDepth; output.prepare = 'smash';
+    if (state.time - h.warning.at < HELL.chargeTime) output.shot = null;
+    else if (getShotAvailability(state, side, { ...output, shot: 'smash' }).canSmash) output.shot = 'smash';
+    else if (ball.y < 1.65 || state.time - h.warning.at > 1.6) {
+      h.warning = null; memory.shot = 'clear'; output.shot = 'clear'; output.prepare = null;
+    }
   }
   return output;
 }

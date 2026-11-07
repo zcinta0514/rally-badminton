@@ -6,7 +6,7 @@ layer.setAttribute('aria-hidden', 'true');
 document.body.append(layer);
 let flight;
 function clearFlight() { flight?.cancel(); flight = null; layer.replaceChildren(); }
-const menuActions = new Set(['start-ai', 'open-friends', 'start-training', 'entry-back']);
+const menuActions = new Set(['start-ai', 'open-friends', 'start-hell', 'entry-back']);
 document.addEventListener('click', event => {
   const button = event.target.closest?.('button');
   if (!button || button.disabled || !menuActions.has(button.id) || document.body.dataset.screen !== 'menu' || reducedMotion.matches) return;
