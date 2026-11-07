@@ -1,3 +1,4 @@
+import { hellStatus } from '../shared/hell-mode.js';
 import { CourtView } from './view.js';
 import { Controls } from './controls.js';
 import { ArenaAudio } from './arena-audio.js';
@@ -51,7 +52,7 @@ let arenaPreferences=restoredUpdatePreferences?.arena??readArenaPreferences(),ma
 const settings={role:'balanced',coachRole:'balanced',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'easy',target:5,ruleset:'quick',...restoredUpdatePreferences?.settings,finale:'none'};
 let entryStage='home',friendAction='create';
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
-let trainingSession=null;
+let hellRole=settings.role;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
 let pendingShot=null,aim=0,dragAim=null,view,controls,palettePicker,lastFrame=performance.now(),accumulator=0,lastSend=0,smashReady=false,shotLayoutHold=false;
 let toastTimer,helpOpen=false,rematchRequested=false,lastPhase='',lastHit=0,lastPoint=0,connecting=false,reconnecting=false,resultPending=false;
@@ -200,7 +201,7 @@ if(restoredUpdatePreferences){
   syncRulesControls();syncSoundControls();
 }
 setText('role-note',roleNotes[settings.role]);setText('difficulty-note',difficultyNotes[settings.difficulty]);
-function syncCoachNote(){setText('coach-note',ROLES[settings.coachRole].label+'陪练 · '+({balanced:'攻守均衡',swift:'移动快、体力回满快，连续杀球耗费较高',power:'重击省力、体力池大，跑动较费力、回满较慢'}[settings.coachRole])+'。仅人机对战；三步训练使用均衡陪练。');}
+function syncCoachNote(){setText('coach-note',ROLES[settings.coachRole].label+'陪练 · '+({balanced:'攻守均衡',swift:'移动快、体力回满快，连续杀球耗费较高',power:'重击省力、体力池大，跑动较费力、回满较慢'}[settings.coachRole])+'。仅用于普通人机对战。');}
 syncCoachNote();
 for(const [id,key,attr] of [['roles','role','role'],['friend-roles','friendRole','friendRole'],['coach-roles','coachRole','coachRole'],['difficulties','difficulty','difficulty'],['targets','target','target'],['rulesets','ruleset','ruleset'],['friend-modes','finale','finale']]){
   $(id).addEventListener('click',event=>{
@@ -214,6 +215,7 @@ for(const [id,key,attr] of [['roles','role','role'],['friend-roles','friendRole'
   });
 }
 function syncEntrySettings(){
+  groupChoice('hell-roles','hellRole',hellRole);
   groupChoice('ai-formats','format',settings.ruleset+':'+(settings.ruleset==='standard21'?21:settings.target));
   groupChoice('friend-formats','format',settings.friendRuleset+':'+(settings.friendRuleset==='standard21'?21:settings.friendTarget));
   const rule=getScoringRules({ruleset:settings.friendRuleset,target:settings.friendTarget});
@@ -230,8 +232,8 @@ function openEntry(stage){
   $('entry-home-heading').hidden=stage!=='home';$('entry-heading').hidden=stage==='home';
   $('mode-setup').hidden=!['home','ai'].includes(stage);$('ai-setup').hidden=stage!=='ai';
   $('home-actions').hidden=stage!=='home';$('ai-start-controls').hidden=stage!=='ai';
-  $('training-setup').hidden=stage!=='training';$('friends-dialog').hidden=stage!=='friends';
-  const labels={ai:['人机对战','选择打法、陪练与赛制。'],training:['三步训练','依次练习跑位、选线与回位。'],friends:['好友对战','创建或加入房间，确认规则后开始。'],home:['','']};
+  $('hell-setup').hidden=stage!=='hell';$('friends-dialog').hidden=stage!=='friends';
+  const labels={ai:['人机对战','选择打法、陪练与赛制。'],hell:['地狱人机','识破技能，抓住两次机会。'],friends:['好友对战','创建或加入房间，确认规则后开始。'],home:['','']};
   setText('entry-title',labels[stage][0]);setText('entry-description',labels[stage][1]);syncEntrySettings();
 }
 for(const [id,friend]of [['ai-formats',false],['friend-formats',true]])$(id).addEventListener('click',event=>{
@@ -267,7 +269,6 @@ function enterMatch(){
 }
 function exitToMenu(){
   usage.endMatch('quit');
-  trainingSession=null;
   clearFinale();finale.reset();
   resultPending=false;
   leaderboardReturn=null;leaderboard.cancel();leaderboardRecord=null;
@@ -277,34 +278,33 @@ function exitToMenu(){
   mode='menu';side=0;state=null;pendingShot=null;helpOpen=false;rematchRequested=false;controls.reset();controls.setEnabled(false);
   arenaAudio.reset();
   playback.reset();lastRtt=null;peerStats=null;lastPeerStats=0;peerStatsPending=false;
-  $('countdown').hidden=true;setScreen('menu');dialog(null);history.replaceState(null,'',location.pathname+(netDragPlaytest?'?netDrag=1':''));
+  $('countdown').hidden=true;$('hell-status').hidden=true;setScreen('menu');dialog(null);history.replaceState(null,'',location.pathname+(netDragPlaytest?'?netDrag=1':''));
   openEntry('home');queueMicrotask(()=>onboarding.maybeShow());
 }
 function startAI(){
   if(peerAttempt||peerSession)exitToMenu();
-  trainingSession=null;
   playback.reset();lastRtt=null;
   mode='ai';side=0;state=createMatch({target:settings.target,ruleset:settings.ruleset,roles:[settings.role,settings.coachRole],difficulty:settings.difficulty,
     playerAssist:settings.difficulty==='easy'?'beginner':'none',assistSide:0,netDragSide:netDragPlaytest?0:null,seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
   if(netDragPlaytest)showToast('网前试打：吊球轻点打短，向上拖可挑后场');
 }
-function startTraining(){
+function startHell(){
   if(peerAttempt||peerSession)exitToMenu();
   playback.reset();lastRtt=null;
-  trainingSession={step:0,startedHit:0,aimed:false,hadMovement:false,movedAfterShot:false,returned:false,
-    start:{x:.85,z:3.8},home:{x:0,z:3.8}};
-  mode='ai';side=0;state=createMatch({target:5,ruleset:'quick',roles:[settings.role,'balanced'],difficulty:'easy',
-    playerAssist:'beginner',assistSide:0,netDragSide:netDragPlaytest?0:null,seed:Math.floor(Math.random()*0x7fffffff)});
+  mode='ai';side=0;state=createMatch({challenge:'hell',roles:[hellRole,'balanced'],difficulty:'hard',
+    seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
 }
+$('hell-roles').addEventListener('click',event=>{
+  const button=event.target.closest('[data-hell-role]');if(!button)return;
+  hellRole=button.dataset.hellRole;groupChoice('hell-roles','hellRole',hellRole);
+});
 const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},side,dragAim??aim);
 function send(message){if(peerMode)peerSession?.send(message);else if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(['create','join','resumeSession'].includes(message.type)?{...message,rulesVersion:RULES_VERSION}:message));}
 function fireShot(request){
   if(!state||!['serve','rally'].includes(state.phase))return;
   const selectedAim=resolveShotAim(request,aim);
-  if(trainingSession&&trainingSession.step===1&&
-    (Math.abs(selectedAim)>0.15||Math.abs(request.aimDepth??0)>0.15||Number(request.charge)>0.45))trainingSession.aimed=true;
   const input=worldInput({...controls.sample(),...request,aim:selectedAim});dragAim=null;dragDepth=0;
   selectedShot=request.shot;lastShotRequest={shot:request.shot,aim:selectedAim,aimDepth:request.aimDepth??0,charge:request.charge};
   if(mode==='online')send({type:'input',...input});else pendingShot=input;
@@ -436,8 +436,8 @@ function closeHelpOrSetup(){
 initFeedback({recipient:'2228144556@qq.com',canOpen:()=>mode==='menu',openDialog:dialog});
 $('start-ai').addEventListener('click',()=>openEntry('ai'));
 $('start-ai-confirm').addEventListener('click',startAI);
-$('start-training')?.addEventListener('click',()=>openEntry('training'));
-$('start-training-confirm').addEventListener('click',startTraining);
+$('start-hell').addEventListener('click',()=>openEntry('hell'));
+$('start-hell-confirm').addEventListener('click',startHell);
 $('open-friends').addEventListener('click',()=>{settings.finale='none';groupChoice('friend-modes','finale','none');setFriendAction('create');dialog(practiceOnly?'lan-dialog':'friends-dialog');});
 $('open-leaderboard').addEventListener('click',()=>openLeaderboard('menu'));
 $('result-leaderboard').addEventListener('click',()=>openLeaderboard('result'));
@@ -454,6 +454,7 @@ $('rematch').addEventListener('click',()=>{
   if(finale.blocking)return;
   if(peerMode&&peerDisconnected){exitToMenu();dialog('friends-dialog');return;}
   if(mode==='online'){send({type:'rematch'});rematchRequested=true;setText('rematch','等待球友同意…');}
+  else if(state?.challenge)startHell();
   else startAI();
 });
 for(const button of document.querySelectorAll('[data-close]'))button.addEventListener('click',closeHelpOrSetup);
@@ -496,55 +497,36 @@ function shotGuidance(state){
     target:getShotTarget(state,side,request),
     shot,prepare:input.prepare,charge:input.charge,aim:localRequest.aim,aimDepth:localRequest.aimDepth};
 }
-const TRAINING_STEPS=[
-  {title:'到位',text:'向黄色圈移动，进入击球范围后完成一次稳健回球。'},
-  {title:'选线',text:'按住击球键拖动到左、右或深浅方向，再松手完成一次有意图的击球。'},
-  {title:'回位',text:'击球后回到中间位置，等下一拍再出手。'},
-];
-function updateTraining(state){
-  if(!trainingSession)return;
-  const player=state.players[side];
-  if(player&&(Math.hypot(player.vx,player.vz)>.15||Math.hypot(player.x-trainingSession.start.x,player.z-trainingSession.start.z)>.55))trainingSession.hadMovement=true;
-  if(trainingSession.step===2&&player){
-    if(Math.hypot(player.x-trainingSession.home.x,player.z-trainingSession.home.z)>.8)trainingSession.movedAfterShot=true;
-    if(trainingSession.movedAfterShot&&Math.hypot(player.x-trainingSession.home.x,player.z-trainingSession.home.z)<.55)trainingSession.returned=true;
-  }
-  const last=state.lastShotInfo;
-  if(trainingSession.step===0&&trainingSession.hadMovement&&last?.side===side&&last.hitId>trainingSession.startedHit){
-    trainingSession.step=1;trainingSession.startedHit=last.hitId;
-  }else if(trainingSession.step===1&&trainingSession.aimed&&last?.side===side&&last.hitId>trainingSession.startedHit){
-    trainingSession.step=2;trainingSession.startedHit=last.hitId;trainingSession.movedAfterShot=false;trainingSession.returned=false;
-  }else if(trainingSession.step===2&&trainingSession.returned&&last?.side===side&&last.hitId>trainingSession.startedHit){
-    trainingSession.step=3;
-  }
-}
 function updateUI(info,state){
   if(!state)return;
   matchSettings?.update(state,side,mode);
-  updateTraining(state);
+  const hell=hellStatus(state);
+  $('hell-status').hidden=!hell;
+  if(hell){
+    $('hell-status').dataset.skill=hell.key;
+    setText('hell-skill-title',hell.title);setText('hell-skill-hint',hell.hint);
+  }
   $('result-leaderboard').hidden=mode!=='online';
   $('result-record').hidden=mode!=='online';
   if(mode==='online'&&state.phase==='over')setText('result-record',resultRecordText(leaderboardRecord));
   const self=state.players[side],opponent=state.players[1-side];
   const nameSelf=mode==='online'?room?.players[side]?.name||'你':'你';
-  const nameOther=mode==='online'?room?.players[1-side]?.name||'球友':`${names[settings.difficulty]}陪练`;
+  const nameOther=mode==='online'?room?.players[1-side]?.name||'球友':state.challenge?'地狱球王':`${names[settings.difficulty]}陪练`;
   setText('name-self',nameSelf);setText('name-other',nameOther);
-  setText('role-self',ROLES[self.role].label+'型');setText('role-other',ROLES[opponent.role].label+'型');
-  setText('score-self',state.score[side]);setText('score-other',state.score[1-side]);
+  setText('role-self',ROLES[self.role].label+'型');setText('role-other',state.challenge?'体力 ∞':ROLES[opponent.role].label+'型');
+  setText('score-self',state.challenge?state.score[side]+'/2':state.score[side]);setText('score-other',state.challenge?state.score[1-side]+'/5':state.score[1-side]);
   const matchType=mode==='ai'?(state.netDragSide===side?'人机 · 网前试打':'人机对战'):room?.rules?.finale==='father-son'?'父子局':'普通对局';
-  const matchLabel=trainingSession&&trainingSession.step<3
-    ?`训练 ${trainingSession.step+1}/3 · ${TRAINING_STEPS[trainingSession.step].title}`
-    :trainingSession?'训练完成 · 继续实战':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[side]}:${state.games[1-side]} · ${matchType}`:`${state.target} 分制 · ${matchType}`;
+  const matchLabel=state.challenge?'地狱挑战 · 你 2 分 / 对手 5 分':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[side]}:${state.games[1-side]} · ${matchType}`:`${state.target} 分制 · ${matchType}`;
   const scoring=getScoringRules(state);
   const scoringPhase=['paused','countdown'].includes(state.phase)?state.pause.previousPhase:state.phase;
-  const extraPoints=['serve','rally','point'].includes(scoringPhase)&&Math.min(...state.score)>=scoring.target-1;
+  const extraPoints=!state.challenge&&['serve','rally','point'].includes(scoringPhase)&&Math.min(...state.score)>=scoring.target-1;
   const pressure=['serve','rally','point'].includes(scoringPhase)?matchPressure(state):[null,null];
   const pressureHint=[side,1-side].filter(player=>pressure[player]).map(player=>(player===side?'你':'对手')+'的'+(pressure[player]==='match'?'赛点':'局点')).join(' · ');
   const scoringHint=[pressureHint,extraPoints?(state.score.every(score=>score===scoring.cap-1)?'下一分获胜':'加球中'):''].filter(Boolean).join(' · ');
   setText('match-label',matchLabel+(scoringHint?` · ${scoringHint}`:''));
   setText('match-message',state.phase==='serve'?(state.server===side?`你发球 · ${state.service?.court==='left'?'左':'右'}发球区 → 对角`:'等待对手对角发球'):relativeMessage(state.message));
   setText('rally',state.phase==='rally'?`${state.rally} 拍回合`:`第 ${state.pointId+1} 分`);
-  if(mode==='ai')setText('connection','本地练习');
+  if(mode==='ai')setText('connection',state.challenge?'2 / 5 非对称挑战':'本地练习');
   const roleHint=roleGuidance[self.role]||roleGuidance.balanced;
   const smashButton=document.querySelector('[data-shot="smash"]');
   const canSmash=Boolean(info.availability.canSmash);
@@ -588,8 +570,6 @@ function updateUI(info,state){
   else if(info.prepare==='smash'&&info.availability.canHit&&!info.availability.canSmash)guidance=info.target.fallbackReason||qualityReason||info.availability.reason;
   const lastShot=state.lastShotInfo;
   if(!info.prepare&&lastShot?.side===side&&state.time-lastShot.at<1.2&&lastShot.quality.risk>.25)guidance='刚才一拍 · '+lastShot.quality.reason.split(' · ')[0];
-  if(trainingSession&&trainingSession.step<3&&!info.prepare)guidance=`训练 ${trainingSession.step+1}/3 · ${TRAINING_STEPS[trainingSession.step].text}`;
-  if(trainingSession&&trainingSession.step>=3&&!info.prepare)guidance='基础练习完成 · 现在按自己的节奏继续';
   setText('assist-status',guidance);
   $('assist-status').dataset.kind=guidance==='按住击球键，拖动选落点'?'instruction':'live';
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
@@ -610,10 +590,10 @@ function updateUI(info,state){
       setText('pause-description',mode==='ai'?'每人每场可暂停一次，最多 30 秒。':peerMode?'每人每场一次，最多 30 秒；双方准备后继续，请保持游戏在前台。':'每人每场一次；双方准备后继续，断线对手可在倒计时内重连。');
       dialog(helpOpen?'help-dialog':'pause-dialog');
     }else if(state.phase==='over'){
-      setText('result-title',state.winner===null?'本局结束':state.winner===side?'本局获胜':'本局失利');
+      setText('result-title',state.challenge&&state.endReason==='scored'?(state.winner===side?'地狱挑战通关':'挑战失败'):state.winner===null?'本局结束':state.winner===side?'本局获胜':'本局失利');
       setText('result-score',state.ruleset==='standard21'?`局数 ${state.games[side]} : ${state.games[1-side]}`:`${state.score[side]} : ${state.score[1-side]}`);
       const resultReason=relativeMessage(state.message).replace(/\s*·\s*(?:局数\s*)?\d+\s*:\s*\d+$/,'');
-      setText('result-reason',resultReason+(state.ruleset==='standard21'?` · 本局比分 ${state.score[side]}:${state.score[1-side]}`:''));setText('rematch','再来一局 ↗');
+      setText('result-reason',resultReason+(state.ruleset==='standard21'?` · 本局比分 ${state.score[side]}:${state.score[1-side]}`:''));setText('rematch',state.challenge?'再次挑战 ↗':'再来一局 ↗');
       rematchRequested=false;helpOpen=false;resultPending=true;dialog(null);
     }else if(!helpOpen)dialog(null);
   }
@@ -670,7 +650,7 @@ try{
           accumulator+=Math.min(elapsed,.15);
           while(accumulator>=1/60){
             const input=worldInput(controls.sample());if(pendingShot){Object.assign(input,pendingShot);pendingShot=null;}
-            stepMatch(state,[input,aiInput(state,1,settings.difficulty)],1/60);accumulator-=1/60;
+            stepMatch(state,[input,aiInput(state,1,state.challenge?'hard':settings.difficulty)],1/60);accumulator-=1/60;
           }
         }
         usage.observeResult(state);
@@ -706,6 +686,7 @@ try{
       // Read-only diagnostics for reproducible browser QA and user bug reports.
       window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats,
         stateTime:state?.time??null,statePhase:state?.phase??null,
+        challenge:state?.challenge?{...state.challenge,score:[...state.score],hitId:state.hitId,lastShot:state.lastShotInfo}:null,
         netDragPlaytest:state?.netDragSide===side&&mode==='ai',
         lastShot:state?.netDragSide===side?state.lastShotInfo:null};
     }

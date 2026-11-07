@@ -10,6 +10,7 @@ import { makeNetVisual, updateNetVisual } from './net-visual.js';
 import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
 import { COURT } from '../shared/game.js';
 import { StaminaHUD } from './stamina-hud.js';
+import { phantomPositions } from '../shared/hell-mode.js';
 
 // Venue-wide colours. The court floor, apron and accent strip come from the
 // selected court palette instead; see court-palettes.js.
@@ -184,6 +185,23 @@ export class CourtView {
     this.trail.frustumCulled = false;
     this.scene.add(this.trail);
     this.trailPoints = [];
+    this.phantoms = Array.from({length:3}, () => {
+      const ghost = makeShuttleModel();
+      ghost.scale.setScalar(1.8); ghost.visible = false;
+      ghost.traverse(object => {
+        if (!object.isMesh) return;
+        object.material = object.material.clone();
+        object.material.transparent = true; object.material.opacity = .4;
+        object.material.depthWrite = false; object.castShadow = false;
+      });
+      this.scene.add(ghost); return ghost;
+    });
+    this.bossRing = ring(this.scene, .7, .045, 0xffb998, .8);
+    this.bossRing.visible = false;
+    const cannonGeometry = new THREE.BufferGeometry();
+    cannonGeometry.setAttribute('position',new THREE.BufferAttribute(new Float32Array(6),3));
+    this.cannonLine = new THREE.Line(cannonGeometry,new THREE.LineDashedMaterial({color:0xffb998,dashSize:.24,gapSize:.16,transparent:true,opacity:.8,depthWrite:false}));
+    this.cannonLine.frustumCulled=false;this.cannonLine.visible=false;this.scene.add(this.cannonLine);
   }
 
   makeHints() {
@@ -540,6 +558,25 @@ export class CourtView {
       const point = this.staminaProjection.set(x, y, z).project(this.camera);
       return { x: (point.x + 1) * this.width / 2, y: (1 - point.y) * this.height / 2, depth: point.z };
     }, { left: 0, right: this.width, top: 0, bottom: this.height }, this.mode === 'match');
+    const ghosts = phantomPositions(state), h = state.challenge, boss = state.players[1];
+    this.phantoms.forEach((ghost,index) => {
+      const point = ghosts[index];ghost.visible = this.mode === 'match' && !!point;
+      if (!point) return;
+      ghost.position.set(point.x,point.y,point.z);ghost.quaternion.copy(this.shuttle.quaternion);
+      ghost.traverse(object => { if(object.isMesh)object.material.opacity=point.opacity; });
+    });
+    this.bossRing.visible=this.mode==='match'&&!!h&&state.phase==='rally'&&!!(h.warning||h.rescue&&!h.rescue.hit||state.time<h.recoverUntil);
+    if(this.bossRing.visible){
+      this.bossRing.position.set(boss.x,.04,boss.z);
+      this.bossRing.scale.setScalar(h.warning?1+.12*Math.sin(state.time*15):1);
+    }
+    this.cannonLine.visible=this.mode==='match'&&state.phase==='rally'&&!!h?.warning;
+    if(this.cannonLine.visible){
+      const points=this.cannonLine.geometry.attributes.position;
+      points.setXYZ(0,boss.x,.055,boss.z);points.setXYZ(1,h.warning.aim*(COURT.halfWidth-.3),.055,4.8);
+      points.needsUpdate=true;this.cannonLine.computeLineDistances();
+    }
+    this.trail.material.opacity=h?.active?.kind==='phantom'&&h.active.hitId===state.hitId? .95 : .35;
     this.renderer.render(this.scene,this.camera);
   }
   dispose() {

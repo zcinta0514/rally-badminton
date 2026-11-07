@@ -23,6 +23,8 @@ export function placeStaminaMeter(anchor, bounds, own, obstacles = []) {
 }
 
 export function staminaDisplay(player, phase, own) {
+  if (player.staminaStatus === 'infinite') return { fraction: 1, percent: 100, low: false,
+    status: 'infinite', fatigued: false, speed: ROLES[player.role].speed * 1.12, label: '∞ 无限体力' };
   const fraction = Math.max(0, Math.min(1, player.stamina / ROLES[player.role].maxStamina));
   const status = ['paused', 'countdown'].includes(phase) ? 'paused' : player.staminaStatus || 'idle';
   const fatigue = staminaEffects(player, ROLES[player.role]), fatigued = fatigue.severity > .25;
