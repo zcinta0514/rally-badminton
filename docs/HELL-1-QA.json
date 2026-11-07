@@ -188,5 +188,15 @@
       "chargeTime": 0.36,
       "recovery": 0.62
     }
+  },
+  "releasePreparation": {
+    "version": "1.13.0",
+    "userApprovedMerge": true,
+    "tests": {
+      "passed": 749,
+      "failed": 0
+    },
+    "buildId": "6cd2e3a4ee267ef3",
+    "note": "之前preview和sourceHashes属于已验收强化候选；本次仅同步发布版本与公告，线上另核验。"
   }
 }
