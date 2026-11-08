@@ -28,6 +28,12 @@ document.getElementById('scenarios').addEventListener('click', event => {
 });
 document.getElementById('sound').onclick = () => { void audio.unlock(); replay(); document.getElementById('sound').textContent = '声音已开启 · 重播'; };
 document.getElementById('replay').onclick = replay;
+document.getElementById('replay-compact').onclick = () => { void audio.unlock(); replay(); };
+document.getElementById('panel-toggle').onclick = () => {
+  const controls = document.getElementById('panel-controls'), button = document.getElementById('panel-toggle');
+  controls.hidden = !controls.hidden; button.textContent = controls.hidden ? '展开面板' : '收起面板';
+  button.setAttribute('aria-expanded', String(!controls.hidden));
+};
 document.getElementById('pause').onclick = () => { paused = !paused; document.getElementById('pause').textContent = paused ? '继续' : '暂停'; };
 document.getElementById('camera').onclick = () => { close = !close; view.cameraSide = null; document.getElementById('camera').textContent = close ? '切到比赛镜头' : '切到触网近景'; };
 document.getElementById('side').onclick = () => { side = 1 - side; view.cameraSide = null; replay(); };
