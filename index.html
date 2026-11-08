@@ -17,9 +17,10 @@
   <link rel="stylesheet" href="./src/pwa.css">
   <link rel="stylesheet" href="./src/ui-court-white.css">
   <link rel="stylesheet" href="./src/shot-layout.css">
+  <link rel="stylesheet" href="./src/shot-buttons.css">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/three-addons/"}}</script>
 </head>
-<body data-screen="menu">
+<body data-screen="menu" data-shot-skin="glass">
   <canvas id="court" aria-label="立体羽毛球场"></canvas>
   <div class="screen-vignette"></div>
   <section id="match-finale" hidden aria-label="好友赛后彩蛋" aria-live="polite">
@@ -114,7 +115,7 @@
     <div class="joystick-wrap"><div id="joystick" class="joystick" aria-hidden="true"><span class="stick-cross"></span><span id="knob"></span></div><small>左侧任意处拖动<span>W A S D</span></small></div>
     <div class="assist-panel"><strong id="assist-status">按住击球键，拖动选落点</strong><small><i class="legend-dot landing"></i>预计落点 <i class="legend-dot intercept"></i>接球位置 <i class="legend-dot target"></i>你的目标</small></div>
     </div>
-    <div class="shots-wrap"><div class="aim-heading"><b id="aim-value">按住击球键拖动</b></div><div class="shot-buttons"><button data-shot="clear" class="shot-btn"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 18C4 2 20 2 21 18m-5-3 5 3 1-6"/></svg></span><strong>高远</strong><small>J</small></button><button data-shot="drop" class="shot-btn"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10c7-10 12-2 12 10m-4-4 4 4 4-4"/></svg></span><strong>吊球</strong><small>K</small></button><button data-shot="smash" class="shot-btn smash"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 2-10 12h7l-1 8L21 9h-8Z"/></svg></span><strong>杀球</strong><small>L</small></button></div><small class="shot-instruction"><span>↑ 更深 · ↓ 靠网</span><span id="shot-risk" data-risk="idle">左右选线 · 松手击球</span></small></div>
+    <div class="shots-wrap"><div class="aim-heading"><b id="aim-value">按住击球键拖动</b></div><div class="shot-buttons"><button data-shot="clear" class="shot-btn"><span class="key-face"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 18C4 2 20 2 21 18m-5-3 5 3 1-6"/></svg></span><strong>高远</strong><small>J</small><i class="key-charge" aria-hidden="true"></i><i class="key-direction" aria-hidden="true"></i><i class="key-nub" aria-hidden="true"></i></span></button><button data-shot="drop" class="shot-btn"><span class="key-face"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10c7-10 12-2 12 10m-4-4 4 4 4-4"/></svg></span><strong>吊球</strong><small>K</small><i class="key-charge" aria-hidden="true"></i><i class="key-direction" aria-hidden="true"></i><i class="key-nub" aria-hidden="true"></i></span></button><button data-shot="smash" class="shot-btn smash"><span class="key-face"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 2-10 12h7l-1 8L21 9h-8Z"/></svg></span><strong>杀球</strong><small>L</small><i class="key-charge" aria-hidden="true"></i><i class="key-direction" aria-hidden="true"></i><i class="key-nub" aria-hidden="true"></i></span></button></div><small class="shot-instruction"><span>↑ 更深 · ↓ 靠网</span><span id="shot-risk" data-risk="idle">左右选线 · 松手击球</span></small></div>
     <div id="gesture-pad" class="gesture-pad" hidden aria-hidden="true"><span class="gesture-up">深</span><span class="gesture-down">短</span><i id="gesture-dot"></i></div>
   </section>
   <div id="dialog-backdrop" class="dialog-backdrop" hidden>

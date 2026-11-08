@@ -1,0 +1,81 @@
+/* Glass shot keys. The outer hit target keeps its size and never animates. */
+body[data-shot-skin=glass] .shot-btn {
+  --key-accent:#c9e9ff;
+  overflow:visible; isolation:isolate; padding:0;
+  background:transparent!important; border:0!important; box-shadow:none!important;
+  filter:none!important; animation:none!important;
+}
+body[data-shot-skin=glass] .shot-btn::before,
+body[data-shot-skin=glass] .shot-btn::after { display:none; }
+body[data-shot-skin=glass] [data-shot=drop] { --key-accent:#b8f5db; }
+body[data-shot-skin=glass] [data-shot=smash] { --key-accent:#ffe2ac; }
+
+.key-face {
+  position:absolute!important; inset:0; display:flex; align-items:center; justify-content:center;
+  flex-direction:column; margin:0; border-radius:50%;
+  border:1px solid #f5fffc9c; color:#f4fff9; pointer-events:none;
+  background:linear-gradient(145deg,#f2fff35c,#cfe6e024 48%,#0d34326b);
+  box-shadow:inset 0 1px 1px #ffffff6b,inset 0 -1px 1px #ffffff1f,0 5px 18px #071d2926;
+  transition:transform 180ms cubic-bezier(.18,.8,.26,1.3),background 100ms,box-shadow 100ms;
+  text-shadow:0 1px 5px #062e31; line-height:1.1;
+}
+.key-face>span:first-child { margin-bottom:3px; display:block; }
+.key-face svg { width:23px; height:23px; fill:none; stroke:var(--key-accent); stroke-width:1.65; stroke-linecap:round; stroke-linejoin:round; display:block; }
+.key-face>strong { font-size:13px; font-weight:600; letter-spacing:.04em; }
+.key-face>small { font-size:8px; opacity:.5; margin-top:4px; }
+.key-face::after { content:''; position:absolute; inset:4px; border-radius:50%; border:1px solid #f4fffc17; }
+.key-charge { position:absolute; inset:-3px; border-radius:50%; pointer-events:none;
+  background:conic-gradient(from -90deg,var(--key-accent) calc(var(--charge,0)*1turn),transparent 0);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 0);
+  mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 0); opacity:0; transition:opacity 90ms;
+}
+.key-direction { position:absolute; left:50%; top:50%; width:1px; height:34px;
+  transform:rotate(var(--aim-angle,0deg)); transform-origin:50% 0; opacity:0;
+  background:linear-gradient(var(--key-accent),transparent); pointer-events:none;
+}
+.key-direction::before { content:''; position:absolute; top:36px; left:-3px; width:7px; height:7px;
+  border-radius:50%; background:var(--key-accent); box-shadow:0 0 0 3px #ffffff20; }
+.key-nub { position:absolute; width:8px; height:8px; border-radius:50%; background:var(--key-accent);
+  transform:translate(var(--aim-x,0px),var(--aim-y,0px)); opacity:0; box-shadow:0 0 0 5px #e7fff213; }
+body[data-shot-skin=glass] .shot-btn.charging .key-face {
+  transform:translateY(1.5px) scale(.95); background:linear-gradient(145deg,#def9eb2e,#103b3857);
+  box-shadow:inset 0 2px 8px #021f2940,inset 0 0 0 1px #ffffff3b,0 2px 8px #071d291a;
+  transition-duration:65ms;
+}
+.shot-btn.charging .key-charge { opacity:1; }
+.shot-btn[data-aiming=true] .key-nub,
+.shot-btn[data-aiming=true] .key-direction { opacity:1; }
+body[data-shot-skin=glass] .shot-btn.fired .key-face { animation:key-release 210ms cubic-bezier(.2,.7,.2,1); }
+body[data-shot-skin=glass] .shot-btn.smash .key-face { border-color:#ffe7b3b3; background:linear-gradient(145deg,#ffe7b04a,#ffdf9f14 52%,#18403d66); }
+body[data-shot-skin=glass] .shot-btn.smash.ready .key-face { border-color:#ffe2a8; box-shadow:inset 0 0 0 1px #ffe2a84d,0 4px 18px #082c2926; }
+body[data-shot-skin=glass] .shot-btn.smash.unavailable .key-face { border-color:#e0e9e85c; color:#e0e9e8ab; }
+body[data-shot-skin=glass] .shot-btn.smash.unavailable .key-face svg { opacity:.6; }
+body[data-shot-skin=glass] .shot-btn:focus-visible .key-face { outline:2px solid #ffffff; outline-offset:4px; }
+body[data-shot-skin=glass] .shot-instruction { color:#ecfff1ab; text-shadow:0 1px 4px #133b35; }
+@keyframes key-release {
+  0% { transform:translateY(1.5px) scale(.95); }
+  45% { transform:translateY(-.5px) scale(1.025); }
+  100% { transform:none; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .key-face,.key-charge { transition:none!important; }
+  body[data-shot-skin=glass] .shot-btn.fired .key-face { animation:none; }
+}
+
+/* The aiming pad is an outline, not a second white button over the glass key. */
+body[data-shot-skin=glass] .gesture-pad {
+  width:104px; height:104px;
+  background:#06211d29; border:1px solid #ecfff24d;
+  box-shadow:inset 0 0 0 1px #ffffff12,0 8px 22px #00110f33;
+}
+body[data-shot-skin=glass] .gesture-pad::before,
+body[data-shot-skin=glass] .gesture-pad::after { background:#eafff22e; }
+body[data-shot-skin=glass] .gesture-pad::before { width:80px; }
+body[data-shot-skin=glass] .gesture-pad::after { height:80px; }
+body[data-shot-skin=glass] .gesture-pad>span { color:#e9fff1c7; text-shadow:0 1px 4px #062e31; }
+body[data-shot-skin=glass] #gesture-dot {
+  width:14px; height:14px; background:#f6fff9; border-color:#ffffff;
+  box-shadow:0 0 0 5px #e7fff21a;
+}
+body[data-shot-skin=glass] #game-controls:has(.gesture-pad:not([hidden])) .shot-btn[data-aiming=true] .key-direction,
+body[data-shot-skin=glass] #game-controls:has(.gesture-pad:not([hidden])) .shot-btn[data-aiming=true] .key-nub { opacity:0; }
