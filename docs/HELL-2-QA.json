@@ -127,5 +127,140 @@
     "merged": false,
     "deployed": false,
     "versionChanged": false
+  },
+  "dive": {
+    "date": "2026-11-08",
+    "baseline": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
+    "sourceCommit": "3e41d9e1",
+    "integrationCommit": "fb9fa24e",
+    "buildId": "4e65bd7be5103a4e",
+    "fullTests": {
+      "passed": 757,
+      "failed": 0
+    },
+    "motionTests": 4,
+    "buildPassed": true,
+    "resources": {
+      "index.html": {
+        "matches": true,
+        "sha256": "049caa6d062c71964369b65d805aef22ca99f3c8d5433adc837ea4c5bf635dea"
+      },
+      "shared/game.js": {
+        "matches": true,
+        "sha256": "9de7b3063a425192171587c9538a8476d7bad28978e48a91a21009eb1d514daa"
+      },
+      "shared/hell-mode.js": {
+        "matches": true,
+        "sha256": "5e706868f34c776e892d00d532bd5c114cf50df111bba5a408f65a6b48b2552d"
+      },
+      "src/athlete.js": {
+        "matches": true,
+        "sha256": "65b5effaaf3ceef303b440d5820cdc168372131da8a5c26c49c60e0195e7aebc"
+      },
+      "src/athlete-import.js": {
+        "matches": true,
+        "sha256": "a8af63991931cb58a4ddbbef7afa0588ccf0e7d365a06b357de670a475925fb4"
+      },
+      "src/athlete-skin.js": {
+        "matches": true,
+        "sha256": "4eacc7f0e7e12a1b39c102547ba65d8a7b03c3080949f872baaefa9a9ccf889b"
+      },
+      "src/view.js": {
+        "matches": true,
+        "sha256": "aff99d9c1507185453fddff659ba809f98bdaa842ef76827487649238b871154"
+      },
+      "src/match-settings.js": {
+        "matches": true,
+        "sha256": "9b30ca252df8f88b727d3e0921a67c4ae56c2e03b93a233b6e21958aca825027"
+      },
+      "src/shot-buttons.js": {
+        "matches": true,
+        "sha256": "764b5e465a5515936d4954a6a746ebedb6e44d6c89ef3caa884cec4873ae379a"
+      },
+      "src/shot-buttons.css": {
+        "matches": true,
+        "sha256": "edbd6c041c5eeec72bbb9962347cb52831ae5b0e736d5205a1b0bd5278788670"
+      },
+      "src/style.css": {
+        "matches": true,
+        "sha256": "d59e85bd6aa5d9955d4f17cead0b4e60ac82fc4ff6b8e0dd6e18edfe5e7c6585"
+      },
+      "src/onboarding.css": {
+        "matches": true,
+        "sha256": "cc26ccd9a10fe9af6ec80d87d96d24b34a91fc6dfb27282750b24bb5f35406d2"
+      },
+      "src/pwa.css": {
+        "matches": true,
+        "sha256": "17c0b8fadd3afc18de635fc8d59ef468c223a43fddea55423d2b671689f0e150"
+      },
+      "src/shot-layout.css": {
+        "matches": true,
+        "sha256": "0a7ac1aa708a5e681f77bc04288054bcd6342cbc20fbc7700ffd25f3eee7003e"
+      },
+      "src/ui-court-white.css": {
+        "matches": true,
+        "sha256": "4b92ce739a4dc80ede1847904121be14c4c04ebcddbe115ef9057e71541c55a3"
+      },
+      "src/ui-dialogs.css": {
+        "matches": true,
+        "sha256": "a363ee5f80ba86c8ff21c9fb228dd83832afb0765e3c2ab9b63b3edde25e4d5d"
+      },
+      "src/ui-match.css": {
+        "matches": true,
+        "sha256": "c2bda83f9f916c4b161a4c37e47bef3310fc33f64073e9c3dba801564af65a67"
+      }
+    },
+    "browser": {
+      "verifiedBuildId": "4e65bd7be5103a4e",
+      "steps": [
+        "真实点击先跳过、地狱人机、挑战地狱人机",
+        "实读比赛0/2、0/5、无限体力与鱼跃说明",
+        "实读diveDuration=0.7",
+        "正式CourtView与GLB完整左右鱼跃回放、72帧30fps录制"
+      ],
+      "video": "artifacts/hell-2/dive/rescue-sequence.mp4",
+      "durationSeconds": 2.4,
+      "motionPreview": "http://127.0.0.1:3254/artifacts/hell-2/dive-preview.html",
+      "gamePreview": "http://127.0.0.1:3259/"
+    },
+    "limitations": [
+      "专业参考视频YouTube人机验证，未完成逐帧对照；动作是程序编排",
+      "实体手机和完整手动比赛未完成",
+      "自然度和玩家胜率待用户验收",
+      "回放页面与视频位于本机忽略目录，跨机器需另行保存"
+    ],
+    "automaticMatches": {
+      "medium": {
+        "matches": 200,
+        "playerWins": 0,
+        "bossWins": 200,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 85,
+          "cannon": 1823,
+          "rescue": 1557
+        },
+        "bossReturns": 3465,
+        "totalSeconds": 8477.47499999967,
+        "winRate": 0,
+        "skillRate": 1
+      },
+      "hard": {
+        "matches": 200,
+        "playerWins": 0,
+        "bossWins": 200,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 1,
+          "cannon": 3228,
+          "rescue": 2732
+        },
+        "bossReturns": 5961,
+        "totalSeconds": 12831.725000000533,
+        "winRate": 0,
+        "skillRate": 1
+      }
+    },
+    "note": "此前顶层buildId、resources、balance是鱼跃前历史候选，本节为本轮最终候选。动作代码在主线CSS整合前后相同，72帧视频证据可复用。"
   }
 }
