@@ -6,9 +6,9 @@
   "asOf": "2026-11-08",
   "baseline": {
     "branch": "main",
-    "head": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
-    "originMain": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
-    "releaseTag": "v1.13.0"
+    "head": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
+    "originMain": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
+    "releaseTag": "v1.14.0"
   },
   "activeTask": {
     "title": "SMASH-1 R4：杀球连贯性与关节检查，准备合并",
@@ -29,7 +29,7 @@
       "worktree": "/Users/xindong/Documents/开拍rally-smash-motion",
       "verifiedOn": "2026-11-08",
       "buildId": "b04f294f9765fca9",
-      "limitations": "正式模型ready且实际读取最终构建；无实体手机实测，不宣称完整表面碰撞或专业动捕验收。"
+      "limitations": "仍运行整合前快照，尚未重启核验；实体手机未测试。"
     }
   },
   "readNext": [
@@ -38,21 +38,23 @@
   ],
   "links": [
     "docs/tasks/UI-2.md",
-    "docs/UI-2-CHECKPOINT.md"
+    "docs/UI-2-CHECKPOINT.md",
+    "docs/tasks/HELL-2.md",
+    "docs/HELL-2-CHECKPOINT.md"
   ],
   "handoff": {
     "taskId": "SMASH-1",
     "branch": "feat/SMASH-1-natural-motion",
-    "baselineHead": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
+    "baselineHead": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
     "taskFile": "docs/tasks/SMASH-1.md",
     "worktree": "/Users/xindong/Documents/开拍rally-smash-motion",
-    "phase": "R4完整回归通过，最终录像与合并准备",
+    "phase": "已整合HELL-2主线，重新验证",
     "stopReason": "进行中；用户已认可前一动作并授权继续优化、测试通过后合并。",
     "nextAction": "核对最终原速/慢放实物，自审、提交PR，检查通过后按用户授权合并并核验生产部署。",
     "checkpoint": "docs/SMASH-1-CHECKPOINT.md",
-    "validation": "761/761测试，构建b04f294f9765fca9；4590组独立非杀球姿态/过渡逐字段一致。宽触点双侧骨长/腕角/翻转检查、正式GLB腕部表面及头部牵拉回归通过。",
+    "validation": "整合前761/761与构建b04f294f9765fca9通过；整合后需重跑，不沿用旧结果。",
     "scopeBoundary": "用户2026-11-08授权继续优化杀球、检查关节，测试通过后合并main；已核实main会自动发布。"
   },
-  "publication": "R4仍在本地；本轮获得提交、合并授权，准备推送PR。版本号和发布标签暂不变。"
+  "publication": "已保存本地提交98085908；正在整合最新main e1b3d2cf，保留地狱人机与鱼跃，不覆盖最新功能。"
 }
 -->

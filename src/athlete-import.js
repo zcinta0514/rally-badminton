@@ -97,10 +97,11 @@ export function installAthleteModel(visual, { scene }) {
       ['spine', .5, (pose.pelvisYaw+pose.chestYaw)/2], ['chest', 1, pose.chestYaw], ['neck', 1, pose.chestYaw]
     ]) {
       point(name, name === 'spineLow' ? low : joints[name]);
-      bones[name].quaternion.identity().slerp(trunk, tilt).multiply(yaw.setFromAxisAngle(UP, twist-pose.heading));
+      bones[name].quaternion.identity().slerp(trunk, pose.bodyTilt?1:tilt).multiply(yaw.setFromAxisAngle(UP, twist-pose.heading));
     }
     point('head', joints.head);
-    bones.head.quaternion.setFromEuler(new THREE.Euler(pose.headPitch || 0, pose.headYaw-pose.heading, 0));
+    if(pose.headUp)bones.head.quaternion.setFromUnitVectors(UP,direction.set(pose.headUp.x,pose.headUp.y,pose.headUp.z));
+    else bones.head.quaternion.setFromEuler(new THREE.Euler(pose.headPitch || 0, pose.headYaw-pose.heading, 0));
     for (const [side, sign] of [['left', -1], ['right', 1]]) {
       for (const [start, end, arm] of [['Shoulder','Elbow',true], ['Elbow','Wrist',true], ['Hip','Knee',false], ['Knee','Ankle',false]]) {
         const a = joints[side+start], b = joints[side+end], bone = bones[side+start];
