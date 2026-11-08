@@ -6,14 +6,14 @@
   "asOf": "2026-11-08",
   "baseline": {
     "branch": "main",
-    "head": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
-    "originMain": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
-    "releaseTag": "v1.14.0"
+    "head": "a8c4a8f25e014d6dad7072daa3568886819dfab9",
+    "originMain": "a8c4a8f25e014d6dad7072daa3568886819dfab9",
+    "releaseTag": "v1.15.0"
   },
   "activeTask": {
-    "title": "SMASH-1：杀球动作通过检查，准备合并",
+    "title": "SMASH-1：杀球动作已合并并上线",
     "scope": "保留R3肘领先与髋胸错峰，修复远触点肘腕翻转、引拍停顿及离地脚部补偿突变；修正手臂误绑定头部造成的腕部尖刺。",
-    "nextAction": "提交PR并核对CI，按用户授权合并main，验证Pages/Vercel生产资源与实际页面。",
+    "nextAction": "本任务功能已交付；用户可在正式游戏或新旧对比页检查实际手感。",
     "blockedBy": [],
     "documents": [
       "docs/tasks/SMASH-1.md"
@@ -22,14 +22,22 @@
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "1.15.0发布准备；用户已授权检查通过后合并。",
+    "releaseState": "1.15.0已合并、打标签并发布；Pages/Vercel生产资源核验通过。",
     "localPreview": {
       "task": "SMASH-1",
-      "url": "http://127.0.0.1:3257/?preview=smash&revision=release-1.15.0",
+      "url": "http://127.0.0.1:3256/?preview=smash&revision=1.15.0",
       "worktree": "/Users/xindong/Documents/开拍rally-smash-motion",
       "verifiedOn": "2026-11-08",
       "buildId": "218fbb52f2f88429",
-      "limitations": "正式人物、最终构建、原速和侧面慢放均已核验；无实体手机或完整表面碰撞审计。"
+      "limitations": "3256已重启为正式源码快照；最终画面及缓存更新另外以线上核验为准。实体手机和完整表面碰撞审计未执行。"
+    },
+    "production": {
+      "commit": "a8c4a8f25e014d6dad7072daa3568886819dfab9",
+      "pullRequest": "https://github.com/zcinta0514/rally-badminton/pull/20",
+      "release": "https://github.com/zcinta0514/rally-badminton/releases/tag/v1.15.0",
+      "pagesBuild": "fe9d7433146d69b2",
+      "vercelBuild": "218fbb52f2f88429",
+      "verifiedOn": "2026-11-08"
     }
   },
   "readNext": [
@@ -44,17 +52,17 @@
   ],
   "handoff": {
     "taskId": "SMASH-1",
-    "branch": "feat/SMASH-1-natural-motion",
-    "baselineHead": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
+    "branch": "docs/SMASH-1-release-result",
+    "baselineHead": "a8c4a8f25e014d6dad7072daa3568886819dfab9",
     "taskFile": "docs/tasks/SMASH-1.md",
     "worktree": "/Users/xindong/Documents/开拍rally-smash-motion",
-    "phase": "最终验证通过，提交合并",
-    "stopReason": "进行中；等待PR检查与主线发布核验。",
-    "nextAction": "提交PR并核对CI，按用户授权合并main，验证Pages/Vercel生产资源与实际页面。",
+    "phase": "已合并、上线并完成双站浏览器核验",
+    "stopReason": "SMASH-1已交付；保留本地预览、录像与证据。",
+    "nextAction": "本任务已完成；正式游戏和新旧对比均可查看。",
     "checkpoint": "docs/SMASH-1-CHECKPOINT.md",
-    "validation": "767/767完整测试，构建218fbb52f2f88429；9180组非杀球姿态及过渡与最新e1b3d2cf相同；11项服务资源一致，正式人物ready，原速/侧面慢放已检查，最新扑救与蒙皮回归通过。",
+    "validation": "767/767；Node22/24 CI通过；main测试和Pages部署成功。双站各13项资源与对应构建完全一致；Pages浏览器已通过正常空闲更新从1.14.0切到1.15.0并显示杀球公告，正式对比页双方模型ready。无实体手机或完整碰撞审计。 Vercel正式对比页实读218fbb52f2f88429，双方模型ready。",
     "scopeBoundary": "用户2026-11-08授权继续优化杀球、检查关节，测试通过后合并main；已核实main会自动发布。"
   },
-  "publication": "本地整合提交f90fc240继承main e1b3d2cf（v1.14.0）；1.15.0发布准备，尚未推送/合并。"
+  "publication": "PR #20已于2026-11-08合并main a8c4a8f2；v1.15.0标签与GitHub Release指向该提交。Pages fe9d7433146d69b2、Vercel 218fbb52f2f88429资源均已核验。"
 }
 -->
