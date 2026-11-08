@@ -1,7 +1,7 @@
 import { sampleShuttleFlight } from './shuttle-flight.js';
 
 export const HELL = Object.freeze({ targets: Object.freeze([2, 5]), chargeTime: .22, recovery: .18,
-  diveTime: .22, diveSpeed: 18, moveScale: 1.48, recoveryMoveScale: .85,
+  divePrepare: .08, diveTime: .22, diveDuration: .7, diveSpeed: 18, moveScale: 1.48, recoveryMoveScale: .85,
   reaction: .016, error: .02 });
 
 export function createHellChallenge() {
@@ -19,7 +19,7 @@ export function hellStatus(state) {
   const h = state?.challenge;
   if (!h || h.kind !== 'hell') return null;
   if (!['serve', 'rally', 'paused', 'countdown'].includes(state.phase)) return { key: 'idle', title: '地狱挑战', hint: '你得 2 分获胜 · 对手得 5 分获胜' };
-  if (h.rescue && !h.rescue.hit) return { key: 'rescue', title: '极限救球', hint: '扑救不限次数 · 连续调动对手' };
+  if (h.rescue && !h.rescue.hit) return { key: 'rescue', title: '鱼跃救球', hint: '蹬地伸拍 · 落地起身后可再次扑救' };
   if (h.warning) return { key: 'charge', title: '重炮蓄力', hint: '线路已锁定 · 提前站位，挡回后反攻' };
   if (h.active?.hitId === state.hitId && state.shuttle.lastHit === h.bossSide) {
     return h.active.kind === 'phantom'

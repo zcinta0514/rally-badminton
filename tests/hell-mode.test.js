@@ -85,8 +85,10 @@ test('rescue moves continuously to a reachable legal contact and leaves a recove
   assert.equal(s.challenge.counts.rescue,1);assert.equal(s.challenge.rescueUses,1);
   assert.ok(maxStep<=HELL.diveSpeed*dt+1e-6,`continuous displacement ${maxStep}`);
   assert.ok(Math.abs(s.lastShotInfo.aimX)<=2.29);assert.ok(predictLanding(s).time>=1.2);
+  const dive=s.challenge.rescue;
+  tick(s,[{},{}],Math.max(0,dive.at+.45-s.time));
   const position={x:s.players[1].x,z:s.players[1].z};
-  tick(s,[{},{x:1,z:1,shot:'smash'}],HELL.recovery/2);
+  tick(s,[{},{x:1,z:1,shot:'smash'}],.05);
   assert.equal(s.players[1].x,position.x);assert.equal(s.players[1].z,position.z);
   assert.ok(s.players[1].cooldown>0);
 });
@@ -136,7 +138,9 @@ test('real complete rallies exercise all three skills, telegraph cannon and allo
 
 test('spent rescue state clears after recovery and cannot immobilize the next cannon', () => {
   const s=createMatch({challenge:'hell'});s.phase='rally';s.shuttle.active=false;
-  s.challenge.rescue={hit:true};s.challenge.rescueUses=1;s.challenge.recoverUntil=.01;
+  const root={x:s.players[1].x,z:s.players[1].z};
+  s.challenge.rescue={hit:true,at:-.69,endsAt:.01,from:root,to:root,slideTo:root};
+  s.challenge.rescueUses=1;s.challenge.recoverUntil=.01;
   tick(s,[{},{}],.03);assert.equal(s.challenge.rescue,null);assert.equal(s.challenge.rescueUses,1);
   s.challenge.recoverUntil=s.time+1;const before=s.players[1].x;
   tick(s,[{},{x:1}],.2);assert.ok(s.players[1].x>before);

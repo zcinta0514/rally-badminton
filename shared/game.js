@@ -409,7 +409,8 @@ function playShot(state, side, request, serving = false) {
     if (h.rescue && !h.rescue.hit) {
       skill = 'rescue';
       target = getShotTarget(state, side, { shot: 'clear', aim: request.aim, aimDepth: -.15, charge: 0 });
-      h.rescue.hit = true; h.recoverUntil = state.time + HELL.recovery;
+      h.rescue.hit = true; h.rescue.contact = { x: ball.x, y: ball.y, z: ball.z };
+      h.rescue.hitAt = state.time; h.recoverUntil = h.rescue.endsAt;
       h.warning = null;
     } else if (h.warning && state.time - h.warning.at >= HELL.chargeTime && target.type === 'smash' && target.smashViable) {
       skill = 'cannon'; h.warning = null;
@@ -434,7 +435,7 @@ function playShot(state, side, request, serving = false) {
   player.stamina = Math.max(0, player.stamina - shotStaminaCost(role, type, request.charge, serving));
   player.swing = role.swingTime; player.cooldown = role.swingTime;
   player.pendingShot = null; player.lastShot = type;
-  if (skill === 'rescue') player.cooldown = HELL.recovery;
+  if (skill === 'rescue') player.cooldown = Math.max(0, h.recoverUntil - state.time);
   const rest = !serving && STAMINA_TUNING.shotRecovery[type];
   player.shotRecovery = rest ? { type, expiresAt: state.time + rest.duration, remaining: rest.budget } : null;
   if (player.action) Object.assign(player.action, { type, stage: 'contact', contact, quality: target.quality,
@@ -533,7 +534,7 @@ function stepLive(state, inputs, dt, firstSlice) {
   const speeds = [0, 0];
   try {
   state.time += dt;
-  if (state.challenge?.rescue?.hit && state.time >= state.challenge.recoverUntil) state.challenge.rescue = null;
+  if (state.challenge?.rescue && state.time >= state.challenge.rescue.endsAt) state.challenge.rescue = null;
   for (let side = 0; side < 2; side++) {
     const player = state.players[side];
     player.swing = Math.max(0, player.swing - dt);
@@ -554,15 +555,19 @@ function stepLive(state, inputs, dt, firstSlice) {
         player.vx = 0; player.vz = 0;
       } else {
         const h = state.challenge?.bossSide === side ? state.challenge : null;
-        if (h?.rescue && !h.rescue.hit) {
-          const dive = h.rescue, t = clamp((state.time - dive.at) / HELL.diveTime, 0, 1);
+        if (h?.rescue) {
+          const dive = h.rescue, age = state.time - dive.at;
+          const t = clamp((age - HELL.divePrepare) / HELL.diveTime, 0, 1);
+          const slide = clamp((age - HELL.divePrepare - HELL.diveTime) / .14, 0, 1);
+          const easeSlide = 1 - (1 - slide) ** 2;
           const oldX = player.x, oldZ = player.z;
-          player.x = dive.from.x + (dive.to.x - dive.from.x) * t;
-          player.z = dive.from.z + (dive.to.z - dive.from.z) * t;
+          player.x = dive.from.x + (dive.to.x - dive.from.x) * t + (dive.slideTo.x - dive.to.x) * easeSlide;
+          player.z = dive.from.z + (dive.to.z - dive.from.z) * t + (dive.slideTo.z - dive.to.z) * easeSlide;
           player.vx = (player.x - oldX) / dt; player.vz = (player.z - oldZ) / dt;
-          player.pendingShot ??= { shot: 'clear', aim: h.rescue.aim, aimDepth: -.15, charge: 0, remaining: .5 };
-          if (t === 1 && state.time - dive.at > HELL.diveTime + .12) { h.rescue = null; h.recoverUntil = state.time + HELL.recovery; }
-        } else if (h?.rescue?.hit && state.time < h.recoverUntil) { player.vx = 0; player.vz = 0; }
+          if (!dive.hit && age >= HELL.divePrepare && age < HELL.divePrepare + HELL.diveTime + .06)
+            player.pendingShot ??= { shot: 'clear', aim: dive.aim, aimDepth: -.15, charge: 0, remaining: .3 };
+          if (age >= HELL.divePrepare + HELL.diveTime + .06) player.pendingShot = null;
+        }
         else movePlayer(player, inputs[side], side, dt, state);
       }
       if (state.phase === 'serve') {
@@ -786,7 +791,7 @@ export function aiInput(state, side, difficulty = 'easy') {
     }
     return output;
   }
-  if (h && ((h.rescue && !h.rescue.hit) || (state.time < h.recoverUntil && h.rescue?.hit))) return output;
+  if (h?.rescue) return output;
   if (ball.lastHit === side) return { ...output, ...moveToward(player, ball.x * 0.15, direction(side) * 3.55, config.pace * 0.72) };
   let memory = state._ai[side];
   if (!memory || memory.hitId !== state.hitId) {
@@ -805,13 +810,20 @@ export function aiInput(state, side, difficulty = 'easy') {
     const landing = predictLanding(state);
     const legal = landing && landing.event === 'landing' && !landing.out && !landing.serviceFault && landing.side === side;
     const distance = Math.hypot(ball.x - player.x, ball.z - player.z);
-    if (legal && landing.time < .85 && landing.time > .12 && distance > TUNING.reach + .2
+    const diveContact = flightPoint(ball, Math.min(HELL.divePrepare + HELL.diveTime, landing?.time * .7 || 0));
+    if (legal && landing.time < .85 && landing.time > HELL.divePrepare + .12 && diveContact.y < 1.35 && distance > TUNING.reach + .2
+        && Math.hypot(diveContact.x-player.x,diveContact.z-player.z) > .5
         && Math.hypot(landing.x - player.x, landing.z - player.z) < HELL.diveSpeed * HELL.diveTime
         && !h.warning && !h.active && player.cooldown <= 0) {
-      const point = flightPoint(ball, Math.min(HELL.diveTime, landing.time * .6));
-      h.rescueUses++; h.rescue = { aim: memory.aim, at: state.time, from: { x: player.x, z: player.z },
+      const point = diveContact;
+      h.rescueUses++; h.rescue = { aim: memory.aim, at: state.time, endsAt: state.time + HELL.diveDuration,
+        point, from: { x: player.x, z: player.z },
         to: { x: clamp(point.x, -COURT.halfWidth + .16, COURT.halfWidth - .16),
           z: direction(side) * clamp(point.z * direction(side), .54, COURT.halfLength - .16) }, hit: false };
+      const dive = h.rescue, dx = dive.to.x - dive.from.x, dz = dive.to.z - dive.from.z, distance = Math.hypot(dx, dz);
+      dive.slideTo = { x: clamp(dive.to.x + dx / distance * .2, -COURT.halfWidth + .16, COURT.halfWidth - .16),
+        z: direction(side) * clamp((dive.to.z + dz / distance * .2) * direction(side), .54, COURT.halfLength - .16) };
+      h.recoverUntil = dive.endsAt;
       return output;
     }
     if (!h.warning) {

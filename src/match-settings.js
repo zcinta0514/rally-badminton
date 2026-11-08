@@ -15,7 +15,7 @@ export function describeMatch(state, side = 0, mode = 'ai') {
     '你：' + ROLES[state.players[side].role].label + '型，每分回满体力；对手无限体力、高手决策、移动加快。',
     '幻影球：一真三假，真球有实线尾迹，虚影过网前消散。',
     '重炮：提前蓄力并锁定线路；挡回后，利用对手回位减速反攻。',
-    '极限救球：每回合不限次数；扑救后只有极短恢复，持续拉开落点。',
+    '鱼跃救球：远处低球触发；落地、撑地起身共约0.7秒，起身后可再次扑救，次数不限。',
     '每次回球尽可能使用技能，高球可连续重炮，扑救不叠加主动技能。移动与击球按键沿用你的布局。',
   ].join('\n');
   const self = ROLES[state.players[side].role], other = ROLES[state.players[1 - side].role], rule = getScoringRules(state);
