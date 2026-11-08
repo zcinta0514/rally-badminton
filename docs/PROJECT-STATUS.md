@@ -56,11 +56,11 @@
     "baselineHead": "a8c4a8f25e014d6dad7072daa3568886819dfab9",
     "taskFile": "docs/tasks/SMASH-1.md",
     "worktree": "/Users/xindong/Documents/开拍rally-smash-motion",
-    "phase": "已合并、上线并核验；补记发布结果",
-    "stopReason": "功能完成；PR #20合并，双站生产资源一致，剩余仅本次发布结果文档。",
-    "nextAction": "将本发布结果文档合入主线，保留原在制目录及本地证据。",
+    "phase": "已合并、上线并完成双站浏览器核验",
+    "stopReason": "SMASH-1已交付；保留本地预览、录像与证据。",
+    "nextAction": "本任务已完成；正式游戏和新旧对比均可查看。",
     "checkpoint": "docs/SMASH-1-CHECKPOINT.md",
-    "validation": "767/767；Node22/24 CI通过；main测试和Pages部署成功。双站各13项资源与对应构建完全一致；Pages浏览器已通过正常空闲更新从1.14.0切到1.15.0并显示杀球公告，正式对比页双方模型ready。无实体手机或完整碰撞审计。",
+    "validation": "767/767；Node22/24 CI通过；main测试和Pages部署成功。双站各13项资源与对应构建完全一致；Pages浏览器已通过正常空闲更新从1.14.0切到1.15.0并显示杀球公告，正式对比页双方模型ready。无实体手机或完整碰撞审计。 Vercel正式对比页实读218fbb52f2f88429，双方模型ready。",
     "scopeBoundary": "用户2026-11-08授权继续优化杀球、检查关节，测试通过后合并main；已核实main会自动发布。"
   },
   "publication": "PR #20已于2026-11-08合并main a8c4a8f2；v1.15.0标签与GitHub Release指向该提交。Pages fe9d7433146d69b2、Vercel 218fbb52f2f88429资源均已核验。"
