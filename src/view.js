@@ -524,7 +524,9 @@ export class CourtView {
       this.impactMarker.material.color.setHex(state.rallyEnd.kind==='in'?0xb7e2cb:0xff9270);
     }
     if(this.netVisual){
-      updateNetVisual(this.netVisual,tail?state.rallyEnd:null,tail?.age||0);
+      const contacts = state.netContacts?.length ? state.netContacts
+        : state.rallyEnd?.kind === 'net' && state.rallyEnd.netImpact !== null ? [state.rallyEnd] : [];
+      updateNetVisual(this.netVisual, contacts, tail ? state.rallyEnd.at + tail.age : state.time);
       this.netAtRest=this.netVisual.atRest;
     }
     this.updateHints(state,info,freeze,reset,side);

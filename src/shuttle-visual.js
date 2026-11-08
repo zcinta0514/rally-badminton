@@ -1,3 +1,4 @@
+import { resolveNetImpact } from '../shared/net-physics.js';
 import * as THREE from 'three';
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
@@ -123,12 +124,19 @@ export function sampleRallyEnd(event, elapsed) {
   const net = event.kind === 'net';
   const incoming = unit(event.vx, event.vy, event.vz);
   const horizontal = unit(event.vx, 0, event.vz || -side);
-  const initialFall = clamp(event.vy, -1.5, 0);
+  const response = net ? resolveNetImpact(event) : null;
+  const initialFall = clamp(response?.rebound.y ?? event.vy, -1.6, 0);
+  const reboundX = response?.rebound.x ?? clamp(event.vx, -2, 2) * .24;
+  const reboundZ = response?.rebound.z ?? side * .8;
+  const pocket = t => response ? Math.sign(response.impulse.z) * Math.min(.028, Math.abs(response.impulse.z) * .3)
+    * (1 - Math.exp(-t * 90)) * Math.exp(-t * 35) : 0;
   const height = Math.max(0, event.y - FLOOR);
-  const fallTime = net ? (initialFall + Math.sqrt(initialFall**2 + 17*height)) / 8.5 : 0;
-  const fallingTime = Math.min(age, fallTime);
-  const landingX = event.x + (net ? clamp(event.vx, -2, 2)*.06*(1-Math.exp(-4*fallTime)) : 0);
-  const landingZ = event.z + (net ? side*.2*(1-Math.exp(-8*fallTime)) : 0);
+  const hold = response?.hold || 0;
+  const fallDuration = net ? (initialFall + Math.sqrt(initialFall**2 + 17*height)) / 8.5 : 0;
+  const fallTime = fallDuration + hold;
+  const fallingTime = Math.min(Math.max(0, age - hold), fallDuration);
+  const landingX = event.x + (net ? reboundX*.25*(1-Math.exp(-4*fallDuration)) : 0);
+  const landingZ = event.z + (net ? reboundZ*.25*(1-Math.exp(-4*fallDuration)) + pocket(fallDuration) : 0);
   const onFloorAge = Math.max(0, age - fallTime);
   const floorDirection = net ? unit(event.vx*.15, 0, side) : horizontal;
   const skid = (net ? .07 : .2) * (1 - Math.exp(-8*onFloorAge));
@@ -140,9 +148,9 @@ export function sampleRallyEnd(event, elapsed) {
     y: FLOOR + .012*tip + bounce,
     z: landingZ + floorDirection.z*skid,
   } : {
-    x: event.x + clamp(event.vx, -2, 2)*.06*(1-Math.exp(-4*fallingTime)),
+    x: event.x + reboundX*.25*(1-Math.exp(-4*fallingTime)),
     y: event.y + initialFall*fallingTime - 4.25*fallingTime**2,
-    z: event.z + side*.2*(1-Math.exp(-8*fallingTime)),
+    z: event.z + reboundZ*.25*(1-Math.exp(-4*fallingTime)) + pocket(fallingTime),
   };
   const down = unit(floorDirection.x*.18, -1, floorDirection.z*.18);
   const fallAxis = mixAxis(incoming, down, smooth(fallingTime/.22));

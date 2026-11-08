@@ -1,9 +1,11 @@
+import { resolveNetImpact } from '../shared/net-physics.js';
 import { isExcitingPoint, pointGrade } from './arena-feedback.js';
 import { normalizeArenaPreferences } from './arena-preferences.js';
 
 // Keep URLs relative to the module so hosted subpaths and offline builds agree.
 export const ARENA_AUDIO_SAMPLES = Object.freeze({
   hit: ['hit-1', 'hit-2', 'hit-3', 'smash-1'].map(name => new URL('./audio/' + name + '.wav', import.meta.url)),
+  net: ['net-mesh', 'net-tape'].map(name => new URL('./audio/' + name + '.wav', import.meta.url)),
   smash: [new URL('./audio/smash-1.wav', import.meta.url)],
   foot: ['step-1', 'step-2', 'step-3', 'step-4'].map(name => new URL('./audio/' + name + '.wav', import.meta.url)),
   applause: ['applause', 'applause-2', 'applause-3'].map(name => new URL('./audio/' + name + '.wav', import.meta.url)),
@@ -39,8 +41,13 @@ export function collectArenaSounds(state, memory) {
     if (state.pointId > memory.point && endingPhase(state.phase) && fresh(state.rallyEnd?.at, time, dt, .65)) {
       events.push({ type: 'score', exciting: isExcitingPoint(state) });
       if (state.rallyEnd.grade) Object.assign(events.at(-1), { grade: pointGrade(state), id: state.pointId, side: state.rallyEnd.winner });
-      if (Number.isFinite(state.rallyEnd.x)) events.push({ type: state.rallyEnd.kind === 'net' ? 'net' : 'floor', id: state.pointId, position: state.rallyEnd });
+      if (Number.isFinite(state.rallyEnd.x) && state.rallyEnd.kind !== 'net') events.push({ type: 'floor', id: state.pointId, position: state.rallyEnd });
     }
+    const contact = (state.netContacts || []).filter(e => e.id > (memory.net || 0)
+      && e.at <= time && fresh(e.at, time, dt, .18)).at(-1);
+    const response = resolveNetImpact(contact);
+    if (response) events.push({ type: 'net', id: contact.id, position: contact,
+      material: response.material, strength: Math.min(1, Math.hypot(...Object.values(response.impulse)) / .10) });
     if (moving && state.phase === 'rally' && samePoint && state.rally >= 8 && (memory.rally || 0) < 8) events.push({ type: 'tension', level: 1, id: state.hitId });
     if (moving && state.phase === 'rally' && samePoint && state.rally >= 12 && (memory.rally || 0) < 12) events.push({ type: 'tension', level: 2, id: state.hitId });
   }
@@ -51,7 +58,7 @@ export function collectArenaSounds(state, memory) {
   }
   // A duplicate display frame has no movement. Phase/ID changes at frozen time
   // still enter memory so pause and countdown cannot replay contacts on resume.
-  if (initialized && dt === 0 && state.phase === memory.phase && state.hitId === memory.hit && samePoint) return events;
+  if (initialized && dt === 0 && state.phase === memory.phase && state.hitId === memory.hit && samePoint && (state.netContactId || 0) === (memory.net || 0)) return events;
   const continuous = initialized && dt > 0 && dt <= .25 && moving && memory.moving && samePoint;
   const positions = state.players.map((p, side) => {
     const current = { x: p.x, z: p.z, vx: p.vx || 0, vz: p.vz || 0, grounded: grounded(p, time), actionId: p.action?.id };
@@ -80,6 +87,7 @@ export function collectArenaSounds(state, memory) {
     } else memory.travel[side] = 0;
     return current;
   });
+  memory.net = Math.max(memory.net || 0, state.netContactId || 0);
   Object.assign(memory, { hit: state.hitId, point: state.pointId, time, positions, moving, phase: state.phase, rally: state.rally });
   return events;
 }
@@ -130,7 +138,8 @@ export class ArenaAudio {
         })());
         return requests.get(url.href);
       }));
-      this.samples.set(kind, decoded.filter(result => result.status === 'fulfilled').map(result => result.value));
+      this.samples.set(kind, kind === 'net' ? decoded.map(result => result.status === 'fulfilled' ? result.value : null)
+        : decoded.filter(result => result.status === 'fulfilled').map(result => result.value));
     }));
     this.loaded = true;
   }
@@ -244,7 +253,8 @@ export class ArenaAudio {
     const buffers = this.samples.get(kind) || [];
     if (buffers.length) {
       let index = Number.isFinite(options?.id) ? ((Math.imul(options.id + 1, 2654435761) >>> 0) % buffers.length) : Math.floor(this.random() * buffers.length);
-      if (buffers.length > 1 && index === this.variants.get(kind)) index = (index + 1) % buffers.length;
+      if (kind === 'net') index = options.material === 'tape' ? Math.min(1, buffers.length - 1) : 0;
+      if (kind !== 'net' && buffers.length > 1 && index === this.variants.get(kind)) index = (index + 1) % buffers.length;
       this.variants.set(kind, index);
       this.playBuffer(buffers[index], { rate: 1, ...options });
     } else if (this.loaded && (kind === 'hit' || kind === 'smash')) {
@@ -292,8 +302,12 @@ export class ArenaAudio {
     for (const event of events) {
       if (event.type === 'hit') this.hit(event.shot, event);
       if (event.type === 'foot') this.sample('foot', { ...event, bus: 'movement', priority: 2, duration: .16, volume: .16 });
-      if (['brake', 'landing', 'swish', 'net', 'floor'].includes(event.type)) this.sample(event.type, {
-        ...event, bus: ['net', 'floor'].includes(event.type) ? 'hits' : 'movement', priority: 2, duration: .2, volume: .2,
+      if (event.type === 'net') {
+        this.duckCrowd(); this.sample('net', { ...event, bus: 'hits', priority: 5,
+          duration: event.material === 'tape' ? .22 : .16, volume: .20 + .40 * event.strength });
+      }
+      if (['brake', 'landing', 'swish', 'floor'].includes(event.type)) this.sample(event.type, {
+        ...event, bus: event.type === 'floor' ? 'hits' : 'movement', priority: 2, duration: .2, volume: .2,
       }); // Missing authentic material stays silent; manifest records the gaps.
       if (event.type === 'tension') this.sample('applause', { ...event, bus: 'crowd', priority: 1, group: 'anticipation', duration: .6, volume: event.level === 2 ? .14 : .08 });
       if (event.type === 'score') {

@@ -1,3 +1,4 @@
+import { validNetImpact, resolveNetImpact } from '../shared/net-physics.js';
 import { PeerMatch } from './peer-match.js';
 import { ROLES, RULES_VERSION } from '../shared/game.js';
 import { STAMINA_TUNING } from '../shared/stamina.js';
@@ -107,6 +108,12 @@ function validState(message, sessionId) {
     typeof state.message === 'string' && ['rally', 'hitId', 'pointId'].every(key => finite(state[key])) &&
     record(state.sideChange) && finite(state.sideChange.id) && finite(state.sideChange.at) &&
     Array.isArray(state.sideChange.ends) && state.sideChange.ends.length === 2 && state.sideChange.ends.every(end => end === 1 || end === -1) &&
+    Number.isSafeInteger(state.netContactId) && state.netContactId >= 0 &&
+    Array.isArray(state.netContacts) && state.netContacts.length <= 8 && state.netContacts.every((event, index) =>
+      record(event) && event.kind === 'net' && Number.isSafeInteger(event.id) && event.id > 0 && event.id <= state.netContactId &&
+      ['x', 'y', 'z', 'vx', 'vy', 'vz', 'at', 'hitId'].every(key => finite(event[key])) && slot(event.hitSide) &&
+      event.at <= state.time + 1e-7 && event.at >= 0 && validNetImpact(event.netImpact) && !!resolveNetImpact(event) &&
+      (index === 0 || event.id > state.netContacts[index - 1].id && event.at >= state.netContacts[index - 1].at)) &&
     (state.rallyEnd === null || record(state.rallyEnd) && ['at', 'x', 'y', 'z'].every(key => finite(state.rallyEnd[key]))) &&
     (state.lastShotInfo === null || record(state.lastShotInfo) && finite(state.lastShotInfo.at) && slot(state.lastShotInfo.side) &&
       record(state.lastShotInfo.quality) && typeof state.lastShotInfo.quality.reason === 'string') &&

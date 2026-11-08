@@ -291,3 +291,16 @@ test('complete standard21 simulation snapshots survive validation through shots,
   }
   assert.equal(state.phase,'over');assert.ok(phases.has('intermission'));assert.ok(phases.has('rally'));assert.ok(state.hitId>20);
 });
+
+test('peer transport rejects malformed or unbounded net-contact history before rendering', async t => {
+  for (const history of [{}, Array(9).fill({}), [{ kind: 'net', id: 1, x: 0, y: 1.2, z: 0, vx: 0, vy: 0, vz: -7, at: 0, hitId: 1, hitSide: 0, netImpact: {} }]]) {
+    await t.test(JSON.stringify(history).slice(0, 50), async t => {
+      const {bus,guestMessages,guestCloses} = await pair(t);
+      const message = structuredClone(guestMessages.find(item => item.type === 'state'));
+      message.seq++; message.state.netContactId = 1; message.state.netContacts = history;
+      const before = guestMessages.length;
+      bus.peers[0].connections[0].send(message); await flush();
+      assert.equal(guestMessages.length, before); assert.equal(guestCloses.length, 1);
+    });
+  }
+});

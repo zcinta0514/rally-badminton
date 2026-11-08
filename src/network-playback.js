@@ -119,6 +119,25 @@ function interpolate(a, b, alpha, packetSpanMs) {
     state.shuttle = { ...state.shuttle };
     for (const key of ['x', 'y', 'z', 'vx', 'vy', 'vz']) state.shuttle[key] = mix(a.shuttle[key], b.shuttle[key], alpha);
   }
+  const contacts = (b.netContacts || []).filter(e => e.at >= a.time - EPSILON && e.at <= b.time + EPSILON);
+  state.netContacts = (b.netContacts || []).filter(e => e.at <= time + EPSILON);
+  state.netContactId = state.netContacts.at(-1)?.id ?? a.netContactId ?? 0;
+  // Split at the real mesh/tape contact instead of interpolating through it.
+  if (!scored && contacts.length) {
+    const upcoming = contacts.find(e => e.at > time + EPSILON);
+    const previous = contacts.filter(e => e.at <= time + EPSILON).at(-1);
+    if (previous?.netImpact?.crosses && !(hitKnown && hitAt > previous.at && time >= hitAt)) {
+      const v = previous.netImpact.rebound;
+      const launch = { ...state.shuttle, ...previous, vx: v.x, vy: v.y, vz: v.z, active: true };
+      state.shuttle = { ...launch, ...sampleShuttleFlight(launch, Math.max(0, time - previous.at)) };
+    } else if (upcoming && !(hitKnown && time < hitAt)) {
+      const start = hitKnown && hitAt <= time ? hitAt : a.time;
+      const launch = hitKnown && hitAt <= time
+        ? { ...a.shuttle, ...contact, ...(b.lastShotInfo.outgoing || contactBall(contact, upcoming, upcoming.at - hitAt)) }
+        : a.shuttle;
+      if (launch.active || hit) state.shuttle = { ...launch, ...sampleShuttleFlight(launch, Math.max(0, time - start)), active: true };
+    }
+  }
   return state;
 }
 
@@ -221,7 +240,7 @@ export class NetworkPlayback {
 
   present(state) {
     if (this.pauseVisual && (frozenPhase(state.phase) || state.phase === 'over')) {
-      for (const key of ['time', 'players', 'shuttle', 'hitId', 'rally', 'lastShot', 'lastShotInfo', 'rallyEnd']) state[key] = copy(this.pauseVisual[key]);
+      for (const key of ['time', 'players', 'shuttle', 'hitId', 'rally', 'lastShot', 'lastShotInfo', 'rallyEnd', 'netContacts', 'netContactId']) state[key] = copy(this.pauseVisual[key]);
     }
     if (frozenPhase(state.phase) && this.lastFrame.state.phase === state.phase) {
       state.pause = copy(this.lastFrame.state.pause); state.timer = this.lastFrame.state.timer;
