@@ -6,11 +6,21 @@
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
   color: #243d31; background: #f7f8f3; font-synthesis: none; color-scheme: light;
   --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px); --safe-right: env(safe-area-inset-right, 0px);
   --ink: #243d31; --green: #37694c; --blue: #3e6454;
   --paper: #f7f8f3; --line: #d9dfd4; --muted: #647268; --lime: #dce7cd;
   --header-height: 72px; --menu-width: 40%;
 }
 * { box-sizing: border-box; }
+/* Home-screen landscape puts the island on one side only; older iOS builds also
+   report the island side as 0. Mirror the larger inset so left and right
+   rotations get identical clearance instead of exposing one edge. */
+@media (orientation: landscape) {
+  :root { --safe-left: max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px)); --safe-right: var(--safe-left); }
+}
+@media (display-mode: standalone) and (orientation: landscape) and (min-aspect-ratio: 2/1) {
+  :root { --safe-left: max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px), 62px); --safe-right: var(--safe-left); }
+}
 /* Keep the responsive type scale stable when iOS rotates the viewport. */
 html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 html,body { margin:0; width:100%; height:100dvh; min-height:100vh; overflow:hidden; overscroll-behavior:none; }
@@ -28,7 +38,7 @@ input[type=range] { -webkit-user-select:none; user-select:none; touch-action:non
 button,a { transition:background-color .16s,color .16s,border-color .16s,box-shadow .16s; }
 #court { position:fixed; inset:0; display:block; width:100vw; height:100dvh; touch-action:none; }
 .screen-vignette { position:fixed; inset:0; pointer-events:none; background:linear-gradient(#061c2426,transparent 24%,transparent 82%,#061c2426); }
-.topbar { position:fixed; inset:0 0 auto; z-index:6; height:var(--header-height); padding:0 max(32px,env(safe-area-inset-right)) 0 max(32px,env(safe-area-inset-left)); display:flex; align-items:center; gap:26px; background:white; border-bottom:1px solid var(--line); }
+.topbar { position:fixed; inset:0 0 auto; z-index:6; height:var(--header-height); padding:0 max(32px,var(--safe-right)) 0 max(32px,var(--safe-left)); display:flex; align-items:center; gap:26px; background:white; border-bottom:1px solid var(--line); }
 .brand { display:inline-flex; align-items:center; gap:10px; font-size:24px; line-height:1; font-weight:850; letter-spacing:1px; flex:0 0 auto; }
 .brand-mark { display:grid; place-items:center; width:42px; height:42px; color:white; background:var(--green); border-bottom:5px solid var(--blue); }
 .brand-mark svg { width:34px; height:34px; }
@@ -131,11 +141,11 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 }
 @media (max-height:500px) and (orientation:landscape) {
   :root { --header-height:46px; --menu-width:44%; }
-  .topbar { padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left)); }
+  .topbar { padding:0 max(16px,var(--safe-right)) 0 max(16px,var(--safe-left)); }
   .brand { font-size:19px; gap:7px; }.brand-mark { width:30px; height:30px; border-bottom-width:3px; }
   .brand-mark svg { width:26px; height:26px; }.brand small { font-size:7px; margin-top:4px; }
   .edition { font-size:10px; }.icon-btn { width:32px; height:32px; }
-  .menu-panel { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto minmax(0,1fr) auto; column-gap:8px; padding:10px 16px max(7px,env(safe-area-inset-bottom)); padding-left:max(16px,env(safe-area-inset-left)); }.menu-panel .eyebrow,.intro { display:none; }
+  .menu-panel { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto minmax(0,1fr) auto; column-gap:8px; padding:10px 16px max(7px,var(--safe-bottom)); padding-left:max(16px,var(--safe-left)); }.menu-panel .eyebrow,.intro { display:none; }
   .menu-heading,.setup,.menu-panel .entry-heading,.menu-panel>.entry-content { grid-column:1/-1; min-width:0; }
   .menu-panel .entry-heading { margin-bottom:6px; }
   .menu-panel .entry-heading h2 { font-size:22px; margin:5px 0; }
@@ -163,12 +173,12 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 }
 @media (max-height:360px) and (orientation:landscape) {
   :root { --header-height:42px; --menu-width:46%; }.edition { display:none; }
-  .menu-panel { padding-top:7px; padding-right:14px; padding-left:max(14px,env(safe-area-inset-left)); }.menu-panel h1 { font-size:24px; margin-bottom:6px; }
+  .menu-panel { padding-top:7px; padding-right:14px; padding-left:max(14px,var(--safe-left)); }.menu-panel h1 { font-size:24px; margin-bottom:6px; }
   .section-label,.role-note { display:none; }.role-grid { margin-bottom:7px; }.court-poster strong { font-size:22px; }
 }
 @media (orientation:portrait) {
   :root { --header-height:64px; --menu-width:100%; }
-  .topbar { padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left)); gap:12px; }
+  .topbar { padding:0 max(16px,var(--safe-right)) 0 max(16px,var(--safe-left)); gap:12px; }
   .edition { display:none; }.top-actions { gap:5px; }.brand { font-size:22px; }
   .brand-mark { width:36px; height:36px; }.icon-btn { width:32px; height:32px; }
   body[data-screen=menu] #court { left:0; top:0; width:100vw; height:100dvh; }
@@ -177,8 +187,8 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   body[data-screen=menu] #court { display:none; }
   body[data-screen=menu] .topbar { height: calc(var(--header-height) + var(--safe-top)); padding-top: var(--safe-top); }
   body[data-screen=menu] .menu-panel { top: calc(var(--header-height) + var(--safe-top)); }
-  .menu-panel { padding:28px 24px max(18px,env(safe-area-inset-bottom)); }
-  .menu-panel h1 { font-size:48px; margin:12px 0; }.intro { font-size:12px; margin-bottom:24px; }
+  .menu-panel { padding:28px 24px max(18px,var(--safe-bottom)); }
+  .menu-panel h1 { font-size:44px; margin:10px 0; }.intro { font-size:12px; margin-bottom:20px; }
   .role-card { padding:11px; }.role-note { margin-bottom:12px; }.launch-actions { padding-top:10px; }.launch-actions .primary-btn { min-height:48px; }
 }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none!important; animation:none!important; } }
@@ -191,8 +201,29 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 #home-actions .entry-copy small { font-size:12px; font-weight:400; opacity:.78; }
 @media (orientation:portrait) {
   .menu-panel[data-entry="home"] .setup { justify-content:flex-start; }
-  .menu-panel[data-entry="home"] #home-actions { padding-top:8px; }
-  #home-actions button { min-height:clamp(76px,13vh,112px); }
+  .menu-panel[data-entry="home"] #home-actions {
+    flex:1 1 auto;
+    min-height:0;
+    max-height:620px;
+    grid-template-rows:repeat(3,minmax(0,1fr));
+    gap:12px;
+    padding:12px 0 4px;
+  }
+  .menu-panel[data-entry="home"] #home-actions button { height:100%; min-height:0; padding:18px 20px; }
+  .menu-panel[data-entry="home"] #home-actions .entry-copy { gap:7px; }
+  .menu-panel[data-entry="home"] #home-actions .entry-copy strong { font-size:18px; }
+  .menu-panel[data-entry="home"] #home-actions .entry-copy small { font-size:12px; }
+}
+@media (orientation:portrait) and (max-height:700px) {
+  .menu-panel { padding:20px 20px max(14px,var(--safe-bottom)); }
+  .menu-panel h1 { font-size:38px; margin:8px 0 10px; }
+  .menu-heading .intro { margin-bottom:14px; }
+  .menu-panel[data-entry="home"] #home-actions { gap:8px; padding:8px 0 2px; }
+  .menu-panel[data-entry="home"] #home-actions button { padding:12px 16px; }
+  .menu-panel[data-entry="home"] #home-actions .entry-copy { gap:4px; }
+  .menu-panel[data-entry="home"] #home-actions .entry-copy strong { font-size:16px; }
+  .menu-panel[data-entry="home"] #home-actions .entry-copy small { font-size:11px; }
+  .menu-foot { margin-top:10px; }
 }
 @media (max-height:550px) and (orientation:landscape) {
   .menu-panel[data-entry="home"] .intro { display:block; margin:0; font-size:11px; }
