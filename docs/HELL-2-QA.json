@@ -262,5 +262,141 @@
       }
     },
     "note": "此前顶层buildId、resources、balance是鱼跃前历史候选，本节为本轮最终候选。动作代码在主线CSS整合前后相同，72帧视频证据可复用。"
+  },
+  "finalRefinement": {
+    "date": "2026-11-08",
+    "release": "1.14.0",
+    "baseline": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
+    "buildId": "467f23f96c060a9d",
+    "tests": {
+      "full": 758,
+      "passed": 758,
+      "targeted": 16
+    },
+    "behavior": "仅普通跑位难接低球触发；两次鱼跃间隔4秒，分间重置；高频幻影/重炮和2/5胜负不变。",
+    "motion": "单调Hermite连续关键段速度，前后脚错开收腿；生产GLB左右240Hz骨长/连续性/触球/表面离地检查。",
+    "automaticMatches": {
+      "medium": {
+        "matches": 200,
+        "playerWins": 0,
+        "bossWins": 200,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 1425,
+          "cannon": 1581,
+          "rescue": 19
+        },
+        "bossReturns": 3025,
+        "totalSeconds": 6661.9166666664105,
+        "winRate": 0,
+        "skillRate": 1
+      },
+      "hard": {
+        "matches": 200,
+        "playerWins": 0,
+        "bossWins": 200,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 1901,
+          "cannon": 2751,
+          "rescue": 25
+        },
+        "bossReturns": 4677,
+        "totalSeconds": 8882.391666666323,
+        "winRate": 0,
+        "skillRate": 1
+      }
+    },
+    "resources": [
+      {
+        "path": "shared/game.js",
+        "sha256": "2f05bfa0f673e3b7625bd4620354186146a963d6f6b25987b9b1024ff7b03262"
+      },
+      {
+        "path": "shared/hell-mode.js",
+        "sha256": "b48d8bbd5c16bf6b3033ae55c55478b5a798aae0bb50ca9c75920d206282233f"
+      },
+      {
+        "path": "src/athlete.js",
+        "sha256": "6d28c18496cec8bee530e999a45e40e6a6c6c8dd19ce0b51b5356a56b096c47a"
+      },
+      {
+        "path": "src/athlete-import.js",
+        "sha256": "a8af63991931cb58a4ddbbef7afa0588ccf0e7d365a06b357de670a475925fb4"
+      },
+      {
+        "path": "src/athlete-skin.js",
+        "sha256": "4eacc7f0e7e12a1b39c102547ba65d8a7b03c3080949f872baaefa9a9ccf889b"
+      },
+      {
+        "path": "src/view.js",
+        "sha256": "aff99d9c1507185453fddff659ba809f98bdaa842ef76827487649238b871154"
+      },
+      {
+        "path": "src/match-settings.js",
+        "sha256": "9b30ca252df8f88b727d3e0921a67c4ae56c2e03b93a233b6e21958aca825027"
+      },
+      {
+        "path": "src/release-notes.js",
+        "sha256": "9f067dfb4f52257bb267846f69c221f60480afdc30f7969c3cb7229a0f739985"
+      },
+      {
+        "path": "index.html",
+        "sha256": "4e9848cb42ebe06f2a03cdadadade18e6f4b62d530b31e19f04583fc83e15a3d"
+      },
+      {
+        "path": "src/model-preview.css",
+        "sha256": "2dda767c15e18e6a885e2a1b7d9c68bef6e6bf2d754430ee1136c9fbac286543"
+      },
+      {
+        "path": "src/ui-match.css",
+        "sha256": "c2bda83f9f916c4b161a4c37e47bef3310fc33f64073e9c3dba801564af65a67"
+      },
+      {
+        "path": "src/ui-court-white.css",
+        "sha256": "4b92ce739a4dc80ede1847904121be14c4c04ebcddbe115ef9057e71541c55a3"
+      },
+      {
+        "path": "src/ui-dialogs.css",
+        "sha256": "a363ee5f80ba86c8ff21c9fb228dd83832afb0765e3c2ab9b63b3edde25e4d5d"
+      },
+      {
+        "path": "src/style.css",
+        "sha256": "d59e85bd6aa5d9955d4f17cead0b4e60ac82fc4ff6b8e0dd6e18edfe5e7c6585"
+      },
+      {
+        "path": "src/net-drag-demo.css",
+        "sha256": "2c11075bb183ea15b7a2549bf48532fb2c6687ee4fb4e446bc6f871def767941"
+      },
+      {
+        "path": "src/onboarding.css",
+        "sha256": "cc26ccd9a10fe9af6ec80d87d96d24b34a91fc6dfb27282750b24bb5f35406d2"
+      },
+      {
+        "path": "src/shot-layout.css",
+        "sha256": "0a7ac1aa708a5e681f77bc04288054bcd6342cbc20fbc7700ffd25f3eee7003e"
+      },
+      {
+        "path": "src/shot-buttons.css",
+        "sha256": "edbd6c041c5eeec72bbb9962347cb52831ae5b0e736d5205a1b0bd5278788670"
+      },
+      {
+        "path": "src/pwa.css",
+        "sha256": "17c0b8fadd3afc18de635fc8d59ef468c223a43fddea55423d2b671689f0e150"
+      }
+    ],
+    "browser": "旧Service Worker首次仍返回4e65旧构建；清理本预览origin的RALLY缓存后实读467f新构建、1.14.0公告、4秒说明与比赛0/2、0/5。",
+    "media": {
+      "path": "artifacts/hell-2/dive/refined-rescue.mp4",
+      "frames": 72,
+      "fps": 30,
+      "durationSeconds": 2.4
+    },
+    "limitations": [
+      "400局为自动测试对手，不代表真人胜率",
+      "完整手动比赛、实体手机和专业视频逐帧对照未完成",
+      "视频在本地忽略目录，不是跨机器备份"
+    ],
+    "authorization": "用户明确要求测试通过即可合并，不再等待一次确认。"
   }
 }

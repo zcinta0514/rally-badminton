@@ -779,6 +779,25 @@ function chooseAIShot(state, side, level) {
   return chooseCandidate(state, side, level, candidates);
 }
 
+// Estimate running reach with a short preparation allowance and a 20 cm
+// contact margin. Save the dive when ordinary footwork has a viable contact.
+// Existing speed avoids needless dives while already approaching the ball.
+function canRunToIncoming(player, ball, landingTime) {
+  const role = ROLES[player.role], speed = role.speed * HELL.moveScale;
+  const acceleration = TUNING.acceleration * role.acceleration;
+  const initial = Math.min(speed, Math.hypot(player.vx, player.vz));
+  const toTop = (speed - initial) / acceleration;
+  for (let t = 0; t < landingTime; t += .025) {
+    const point = flightPoint(ball, t);
+    if (point.y < TUNING.minHitHeight || point.y > TUNING.maxHitHeight || point.z >= -.07 || player.cooldown > t) continue;
+    const runTime = Math.max(0, t - .06);
+    const accelerating = Math.min(runTime, toTop);
+    const travel = initial * accelerating + .5 * acceleration * accelerating ** 2 + speed * Math.max(0, runTime - toTop);
+    if (Math.hypot(point.x-player.x, point.z-player.z) <= TUNING.reach + role.reachBonus + travel - .2) return true;
+  }
+  return false;
+}
+
 export function aiInput(state, side, difficulty = 'easy') {
   if ((side !== 0 && side !== 1) || !['serve', 'rally'].includes(state.phase)) return { x: 0, z: 0, shot: null, aim: 0, aimDepth: 0, charge: 0 };
   const h = state.challenge?.bossSide === side ? state.challenge : null;
@@ -811,11 +830,14 @@ export function aiInput(state, side, difficulty = 'easy') {
     const legal = landing && landing.event === 'landing' && !landing.out && !landing.serviceFault && landing.side === side;
     const distance = Math.hypot(ball.x - player.x, ball.z - player.z);
     const diveContact = flightPoint(ball, Math.min(HELL.divePrepare + HELL.diveTime, landing?.time * .7 || 0));
-    if (legal && landing.time < .85 && landing.time > HELL.divePrepare + .12 && diveContact.y < 1.35 && distance > TUNING.reach + .2
+    if (legal && state.time >= h.nextDiveAt && landing.time < .85 && landing.time > HELL.divePrepare + .12
+        && diveContact.y < 1.35 && distance > TUNING.reach + .2
+        && !canRunToIncoming(player, ball, landing.time)
         && Math.hypot(diveContact.x-player.x,diveContact.z-player.z) > .5
         && Math.hypot(landing.x - player.x, landing.z - player.z) < HELL.diveSpeed * HELL.diveTime
         && !h.warning && !h.active && player.cooldown <= 0) {
       const point = diveContact;
+      h.nextDiveAt = state.time + HELL.diveInterval;
       h.rescueUses++; h.rescue = { aim: memory.aim, at: state.time, endsAt: state.time + HELL.diveDuration,
         point, from: { x: player.x, z: player.z },
         to: { x: clamp(point.x, -COURT.halfWidth + .16, COURT.halfWidth - .16),

@@ -9,7 +9,7 @@ const dt=1/240,dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z);
 function incoming(direction=1) {
   const s=createMatch({challenge:'hell'});s.phase='rally';s.service.active=false;
   Object.assign(s.players[1],{x:-1.8*direction,z:-3.8});
-  Object.assign(s.shuttle,{x:direction,y:1.5,z:-3.8,vx:0,vy:-1,vz:0,active:true,lastHit:0});
+  Object.assign(s.shuttle,{x:direction,y:1.05,z:-3.8,vx:0,vy:-1,vz:0,active:true,lastHit:0});
   return s;
 }
 
@@ -69,6 +69,16 @@ test('nearby low returns keep ordinary footwork instead of triggering a dive',()
   const s=incoming();s.players[1].x=.4;
   for(let i=0;i<120;i++)stepMatch(s,[{},aiInput(s,1,'hard')],dt);
   assert.equal(s.challenge.rescueUses,0);assert.equal(s.challenge.counts.rescue,0);
+});
+
+test('distant balls with running time use footwork and a recent dive cannot repeat',()=>{
+  const runnable=incoming();runnable.shuttle.y=2.5;
+  for(let i=0;i<120;i++)stepMatch(runnable,[{},aiInput(runnable,1,'hard')],dt);
+  assert.equal(runnable.challenge.rescueUses,0,'distance alone must not trigger a dive');
+  assert.ok(runnable.hitId>0,'ordinary footwork still returns the ball');
+  const recent=incoming();recent.challenge.nextDiveAt=HELL.diveInterval;
+  for(let i=0;i<120&&recent.phase==='rally';i++)stepMatch(recent,[{},aiInput(recent,1,'hard')],dt);
+  assert.equal(recent.challenge.rescueUses,0,'four-second spacing also applies to hard balls');
 });
 
 test('the production GLB surface stays above the court through either dive and rise',async()=>{

@@ -73,7 +73,7 @@ test('pause freezes live challenge timing and resumes without spending another s
 test('rescue moves continuously to a reachable legal contact and leaves a recovery opening', () => {
   const s=createMatch({challenge:'hell'});s.phase='rally';s.service.active=false;
   Object.assign(s.players[1],{x:-1.8,z:-3.8});
-  Object.assign(s.shuttle,{x:1,y:1.5,z:-3.8,vx:0,vy:-1,vz:0,active:true,lastHit:0});
+  Object.assign(s.shuttle,{x:1,y:1.05,z:-3.8,vx:0,vy:-1,vz:0,active:true,lastHit:0});
   let diving=false,maxStep=0;
   for(let frame=0;frame<120&&s.hitId===0;frame++){
     const input=aiInput(s,1,'hard'),before={x:s.players[1].x,z:s.players[1].z};
@@ -105,7 +105,7 @@ test('rescue cannot catch an out ball or reach an arbitrarily distant ball', () 
 
 test('real complete rallies exercise all three skills, telegraph cannon and allow consecutive active attacks', () => {
   const counts={phantom:0,cannon:0,rescue:0};let consecutive=0,bossReturns=0;
-  for(let seed=1;seed<=5;seed++){
+  for(let seed=1;seed<=200;seed++){
     const s=createMatch({challenge:'hell',seed});let previous=0,warning=null,lastAttackPoint=-1,lastAttackHit=-99;
     for(let frame=0;frame<60*150&&s.phase!=='over';frame++){
       const inputs=[aiInput(s,0,'medium'),aiInput(s,1,'hard')];
@@ -149,13 +149,13 @@ test('spent rescue state clears after recovery and cannot immobilize the next ca
 });
 
 
-test('rescues remain available after repeated use and pause preserves the use count', () => {
+test('spaced emergency rescues remain available after repeated use and pause preserves the use count', () => {
   const s=createMatch({challenge:'hell'});s.phase='rally';s.service.active=false;
   for(let attempt=0;attempt<6;attempt++){
-    s.shuttle.active=false;tick(s,[{},{}],.7);
+    s.shuttle.active=false;tick(s,[{},{}],HELL.diveInterval);
     s.challenge.active=null;s.hitId++;
     Object.assign(s.players[1],{x:-1.8,z:-3.8,cooldown:0,pendingShot:null});
-    Object.assign(s.shuttle,{x:1,y:1.5,z:-3.8,vx:0,vy:-1,vz:0,active:true,lastHit:0});
+    Object.assign(s.shuttle,{x:1,y:1.05,z:-3.8,vx:0,vy:-1,vz:0,active:true,lastHit:0});
     const before=s.hitId;
     for(let frame=0;frame<100&&s.hitId===before&&s.phase==='rally';frame++)stepMatch(s,[{},aiInput(s,1,'hard')],dt);
     assert.equal(s.challenge.rescueUses,attempt+1);

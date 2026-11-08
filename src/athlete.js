@@ -178,8 +178,21 @@ function sampleRescuePose(ready,player,side,time,dive) {
   const keys=[[0,.92,0],[.08,.73,.16],[.2,.66,1.15],[.3,.53,1.38],
     [.44,.37,1.42],[.52,.46,.9],[.7,.92,0]];
   const index=Math.min(keys.length-2,Math.max(0,keys.findIndex((key,i)=>i<keys.length-1&&age<keys[i+1][0])));
-  const a=keys[index],b=keys[index+1],weight=smooth((age-a[0])/(b[0]-a[0]));
-  const height=a[1]+(b[1]-a[1])*weight,angle=a[2]+(b[2]-a[2])*weight;
+  const a=keys[index],b=keys[index+1],weight=clamp((age-a[0])/(b[0]-a[0]),0,1);
+  // Monotone Hermite tangents carry momentum across phase boundaries without
+  // the stop/start of a separate smoothstep at every choreography key.
+  const curve=axis=>{
+    const slope=i=>{
+      if(i===0||i===keys.length-1)return 0;
+      const before=(keys[i][axis]-keys[i-1][axis])/(keys[i][0]-keys[i-1][0]);
+      const after=(keys[i+1][axis]-keys[i][axis])/(keys[i+1][0]-keys[i][0]);
+      return before*after<=0?0:2*before*after/(before+after);
+    };
+    const t=weight,t2=t*t,t3=t2*t,span=b[0]-a[0];
+    return (2*t3-3*t2+1)*a[axis]+(t3-2*t2+t)*span*slope(index)
+      +(-2*t3+3*t2)*b[axis]+(t3-t2)*span*slope(index+1);
+  };
+  const height=curve(1),angle=curve(2);
   const up=v(travel.x*Math.sin(angle),Math.cos(angle),travel.z*Math.sin(angle));
   const rotation=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(up.x,up.y,up.z));
   const rotate=p=>{const q=new THREE.Vector3(p.x,p.y,p.z).applyQuaternion(rotation);return v(q.x,q.y,q.z);};
@@ -189,10 +202,11 @@ function sampleRescuePose(ready,player,side,time,dive) {
   // The non-racket hand braces on the floor while the legs fold under the hip.
   // The free hand stays on the same world point from landing through push-off.
   const brace=smooth((age-.3)/.14)*(1-smooth((age-.56)/.14));
-  const stand=smooth((age-.44)/.26);
   for(const name of ['left','right']) {
     const hip=joints[name+'Hip'];
     const planted=ready.joints[name+'Ankle'];
+    const lead=(name==='left'?-1:1)*travel.x>0;
+    const stand=smooth((age-(lead ? .4 : .48))/(lead ? .25 : .22));
     let ankle=mix(joints[name+'Ankle'],planted,stand);
     ankle.y=Math.max(.085,ankle.y);
     const delta=sub(ankle,hip);
