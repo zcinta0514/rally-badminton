@@ -1,11 +1,11 @@
 import { sampleShuttleFlight } from './shuttle-flight.js';
 
-export const HELL = Object.freeze({ targets: Object.freeze([2, 5]), chargeTime: .36, recovery: .62,
-  diveTime: .25, diveSpeed: 12, rescueLimit: 2, moveScale: 1.28, recoveryMoveScale: .5,
-  reaction: .035, error: .06 });
+export const HELL = Object.freeze({ targets: Object.freeze([2, 5]), chargeTime: .22, recovery: .18,
+  diveTime: .22, diveSpeed: 18, moveScale: 1.48, recoveryMoveScale: .85,
+  reaction: .016, error: .02 });
 
 export function createHellChallenge() {
-  return { kind: 'hell', bossSide: 1, next: 'phantom', warning: null,
+  return { kind: 'hell', bossSide: 1, warning: null,
     active: null, rescue: null, rescueUses: 0, recoverUntil: 0,
     counts: { phantom: 0, cannon: 0, rescue: 0 } };
 }
@@ -19,7 +19,7 @@ export function hellStatus(state) {
   const h = state?.challenge;
   if (!h || h.kind !== 'hell') return null;
   if (!['serve', 'rally', 'paused', 'countdown'].includes(state.phase)) return { key: 'idle', title: '地狱挑战', hint: '你得 2 分获胜 · 对手得 5 分获胜' };
-  if (h.rescue && !h.rescue.hit) return { key: 'rescue', title: '极限救球', hint: '本回合最多两次 · 拉开落点再进攻' };
+  if (h.rescue && !h.rescue.hit) return { key: 'rescue', title: '极限救球', hint: '扑救不限次数 · 连续调动对手' };
   if (h.warning) return { key: 'charge', title: '重炮蓄力', hint: '线路已锁定 · 提前站位，挡回后反攻' };
   if (h.active?.hitId === state.hitId && state.shuttle.lastHit === h.bossSide) {
     return h.active.kind === 'phantom'

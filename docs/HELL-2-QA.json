@@ -1,0 +1,131 @@
+{
+  "task": "HELL-2",
+  "date": "2026-11-08",
+  "baseline": "0a0e9c7e8760e3547eff7829111ade146e16d391",
+  "branch": "feat/HELL-2-extreme",
+  "buildId": "714cf0e79750f033",
+  "tests": {
+    "targeted": 11,
+    "full": 753,
+    "failed": 0
+  },
+  "buildPassed": true,
+  "resources": {
+    "index.html": {
+      "matches": true,
+      "sha256": "3734c7c355215eb1ab849767cddc595c895f6e16a22c658b071ff250eb9f17d0"
+    },
+    "shared/game.js": {
+      "matches": true,
+      "sha256": "6f366d77b1e42836ef11da50b48058c363b70b8ab03b9c3ed21f638a45a6db08"
+    },
+    "shared/hell-mode.js": {
+      "matches": true,
+      "sha256": "a0f8ac79414f75681bd42fe4cb8e37d92ba9d73e6f594c24883ea4dad4a832cb"
+    },
+    "src/match-settings.js": {
+      "matches": true,
+      "sha256": "d2e59febe4ceb9956b9e40e6963db68adc812c30b1275de9e6ada0176f2f5ca1"
+    },
+    "src/shot-buttons.js": {
+      "matches": true,
+      "sha256": "764b5e465a5515936d4954a6a746ebedb6e44d6c89ef3caa884cec4873ae379a"
+    },
+    "src/shot-buttons.css": {
+      "matches": true,
+      "sha256": "edbd6c041c5eeec72bbb9962347cb52831ae5b0e736d5205a1b0bd5278788670"
+    },
+    "src/shot-layout.js": {
+      "matches": true,
+      "sha256": "84c63c1f46048c350bc92ae16fc9c15cc493db0f7bd51476f3e3b162ad9c41f7"
+    }
+  },
+  "browser": {
+    "verifiedBuildId": "714cf0e79750f033",
+    "checks": [
+      "首页进入准备页、扑救无限与2/5目标",
+      "真实进入比赛HUD 0/2和0/5、无限体力",
+      "极限参数及最新玻璃按钮加载",
+      "截图 artifacts/hell-2/match.webp"
+    ],
+    "limitations": [
+      "实体手机未测",
+      "截图后标签失效，完整手动比赛未完成",
+      "玩法强度待用户试玩"
+    ]
+  },
+  "balance": {
+    "method": "相同种子1..200、60Hz、每局上限180秒，生产规则自动对局，不能代表真人胜率。",
+    "before": {
+      "medium": {
+        "matches": 200,
+        "playerWins": 6,
+        "bossWins": 194,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 2009,
+          "cannon": 1122,
+          "rescue": 1553
+        },
+        "bossReturns": 4772,
+        "totalSeconds": 10325.024999999641,
+        "winRate": 0.03,
+        "skillRate": 0.9815590947191953
+      },
+      "hard": {
+        "matches": 200,
+        "playerWins": 137,
+        "bossWins": 63,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 2687,
+          "cannon": 1654,
+          "rescue": 1566
+        },
+        "bossReturns": 5907,
+        "totalSeconds": 11567.533333333859,
+        "winRate": 0.685,
+        "skillRate": 1
+      }
+    },
+    "after": {
+      "medium": {
+        "matches": 200,
+        "playerWins": 0,
+        "bossWins": 200,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 892,
+          "cannon": 1830,
+          "rescue": 807
+        },
+        "bossReturns": 3529,
+        "totalSeconds": 7564.7499999997,
+        "winRate": 0,
+        "skillRate": 1
+      },
+      "hard": {
+        "matches": 200,
+        "playerWins": 0,
+        "bossWins": 200,
+        "unfinished": 0,
+        "skills": {
+          "phantom": 1270,
+          "cannon": 3190,
+          "rescue": 887
+        },
+        "bossReturns": 5347,
+        "totalSeconds": 10532.699999999779,
+        "winRate": 0,
+        "skillRate": 1
+      }
+    },
+    "interpretation": "每次非发球回球均带技能。hard重炮每分钟8.58到18.17。更快移动与更短对局减少部分幻影和被迫扑救总数，不宣称每种技能每局数量都上升。"
+  },
+  "publication": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "versionChanged": false
+  }
+}

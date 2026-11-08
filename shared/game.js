@@ -412,12 +412,12 @@ function playShot(state, side, request, serving = false) {
       h.rescue.hit = true; h.recoverUntil = state.time + HELL.recovery;
       h.warning = null;
     } else if (h.warning && state.time - h.warning.at >= HELL.chargeTime && target.type === 'smash' && target.smashViable) {
-      skill = 'cannon'; h.warning = null; h.next = 'phantom';
+      skill = 'cannon'; h.warning = null;
       h.recoverUntil = state.time + HELL.recovery;
-    } else if (!h.warning && state.time >= h.recoverUntil) {
-      skill = 'phantom'; h.next = 'cannon';
+    } else {
+      skill = 'phantom'; h.warning = null;
       target = getShotTarget(state, side, { ...request, shot: 'drop', aimDepth: .65, charge: .2 });
-    } else h.warning = null;
+    }
   }
   const type = target.type;
   if (skill === 'cannon' || skill === 'rescue') {
@@ -561,7 +561,7 @@ function stepLive(state, inputs, dt, firstSlice) {
           player.z = dive.from.z + (dive.to.z - dive.from.z) * t;
           player.vx = (player.x - oldX) / dt; player.vz = (player.z - oldZ) / dt;
           player.pendingShot ??= { shot: 'clear', aim: h.rescue.aim, aimDepth: -.15, charge: 0, remaining: .5 };
-          if (t === 1 && state.time - dive.at > HELL.diveTime + .12) { h.rescue = null; h.recoverUntil = state.time + .5; }
+          if (t === 1 && state.time - dive.at > HELL.diveTime + .12) { h.rescue = null; h.recoverUntil = state.time + HELL.recovery; }
         } else if (h?.rescue?.hit && state.time < h.recoverUntil) { player.vx = 0; player.vz = 0; }
         else movePlayer(player, inputs[side], side, dt, state);
       }
@@ -793,7 +793,7 @@ export function aiInput(state, side, difficulty = 'easy') {
     const decision = chooseAIShot(state, side, level);
     // Phantom returns use a low contact and a flatter arc so all four balls
     // remain readable in the regular phone camera.
-    if (h && (h.next === 'phantom' || !smashOpportunity(state, side).highChance)) decision.shot = 'drop';
+    if (h && !smashOpportunity(state, side).highChance) decision.shot = 'drop';
     // Reaction delay and spatial prediction error remain difficulty-dependent.
     // Every reachable return is attempted; the common contact model causes errors.
     memory = state._ai[side] = { hitId: state.hitId, ready: state.time + config.reaction,
@@ -805,7 +805,7 @@ export function aiInput(state, side, difficulty = 'easy') {
     const landing = predictLanding(state);
     const legal = landing && landing.event === 'landing' && !landing.out && !landing.serviceFault && landing.side === side;
     const distance = Math.hypot(ball.x - player.x, ball.z - player.z);
-    if (h.rescueUses < HELL.rescueLimit && legal && landing.time < .65 && landing.time > .18 && distance > TUNING.reach + .2
+    if (legal && landing.time < .85 && landing.time > .12 && distance > TUNING.reach + .2
         && Math.hypot(landing.x - player.x, landing.z - player.z) < HELL.diveSpeed * HELL.diveTime
         && !h.warning && !h.active && player.cooldown <= 0) {
       const point = flightPoint(ball, Math.min(HELL.diveTime, landing.time * .6));
@@ -814,7 +814,7 @@ export function aiInput(state, side, difficulty = 'easy') {
           z: direction(side) * clamp(point.z * direction(side), .54, COURT.halfLength - .16) }, hit: false };
       return output;
     }
-    if (h.next === 'cannon' && !h.warning) {
+    if (!h.warning) {
       const chance = smashOpportunity(state, side);
       if (chance.highChance && chance.contactTime >= HELL.chargeTime && chance.contactTime < 1.4) {
         h.warning = { at: state.time, hitId: state.hitId, aim: memory.aim, aimDepth: .35 };

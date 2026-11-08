@@ -86,7 +86,7 @@ test('rescue moves continuously to a reachable legal contact and leaves a recove
   assert.ok(maxStep<=HELL.diveSpeed*dt+1e-6,`continuous displacement ${maxStep}`);
   assert.ok(Math.abs(s.lastShotInfo.aimX)<=2.29);assert.ok(predictLanding(s).time>=1.2);
   const position={x:s.players[1].x,z:s.players[1].z};
-  tick(s,[{},{x:1,z:1,shot:'smash'}],.4);
+  tick(s,[{},{x:1,z:1,shot:'smash'}],HELL.recovery/2);
   assert.equal(s.players[1].x,position.x);assert.equal(s.players[1].z,position.z);
   assert.ok(s.players[1].cooldown>0);
 });
@@ -112,7 +112,7 @@ test('real complete rallies exercise all three skills, telegraph cannon and allo
       if(s.hitId!==previous){
         previous=s.hitId;const shot=s.lastShotInfo;
         if(shot.side===1&&!shot.serving)bossReturns++;
-        assert.ok(s.challenge.rescueUses<=HELL.rescueLimit);
+        assert.ok(Number.isInteger(s.challenge.rescueUses));
         if(shot.skill){
           counts[shot.skill]++;
           if(shot.skill==='cannon'){
@@ -131,7 +131,7 @@ test('real complete rallies exercise all three skills, telegraph cannon and allo
   }
   for(const skill in counts)assert.ok(counts[skill]>0,`${skill} must occur in ordinary complete matches`);
   assert.ok(consecutive>0,'active skills can happen on adjacent boss returns');
-  assert.ok(Object.values(counts).reduce((a,b)=>a+b,0)/bossReturns>.8,'the boss uses skills on most returns');
+  assert.ok(Object.values(counts).reduce((a,b)=>a+b,0)/bossReturns===1,'every non-serve boss return uses a skill');
 });
 
 test('spent rescue state clears after recovery and cannot immobilize the next cannon', () => {
@@ -145,20 +145,38 @@ test('spent rescue state clears after recovery and cannot immobilize the next ca
 });
 
 
-test('two rescues are allowed per rally, a third is blocked, and pause preserves the remaining charge', () => {
+test('rescues remain available after repeated use and pause preserves the use count', () => {
   const s=createMatch({challenge:'hell'});s.phase='rally';s.service.active=false;
-  for(let attempt=0;attempt<3;attempt++){
+  for(let attempt=0;attempt<6;attempt++){
     s.shuttle.active=false;tick(s,[{},{}],.7);
     s.challenge.active=null;s.hitId++;
     Object.assign(s.players[1],{x:-1.8,z:-3.8,cooldown:0,pendingShot:null});
     Object.assign(s.shuttle,{x:1,y:1.5,z:-3.8,vx:0,vy:-1,vz:0,active:true,lastHit:0});
     const before=s.hitId;
     for(let frame=0;frame<100&&s.hitId===before&&s.phase==='rally';frame++)stepMatch(s,[{},aiInput(s,1,'hard')],dt);
-    assert.equal(s.challenge.rescueUses,Math.min(attempt+1,2));
-    assert.equal(s.challenge.counts.rescue,Math.min(attempt+1,2));
+    assert.equal(s.challenge.rescueUses,attempt+1);
+    assert.equal(s.challenge.counts.rescue,attempt+1);
     if(attempt===0){
       pauseMatch(s,0);stepMatch(s,[{},{}],1);assert.equal(s.challenge.rescueUses,1);
       resumeMatch(s);stepMatch(s,[{},{}],2);
     }
+  }
+});
+
+
+test('successive high incoming balls can trigger cannon without a phantom in between', () => {
+  const s=createMatch({challenge:'hell'});s.phase='rally';s.service.active=false;
+  for(let attempt=0;attempt<3;attempt++){
+    s.shuttle.active=false;tick(s,[{},{}],.7);
+    s.challenge.active=null;s.hitId++;
+    Object.assign(s.players[1],{x:0,z:-3.8,cooldown:0,pendingShot:null});
+    Object.assign(s.shuttle,{x:0,y:3.5,z:-3.8,vx:0,vy:0,vz:0,active:true,lastHit:0});
+    const before=s.hitId;let warned=false;
+    for(let frame=0;frame<120&&s.hitId===before&&s.phase==='rally';frame++){
+      const input=aiInput(s,1,'hard');warned ||= !!s.challenge.warning;
+      stepMatch(s,[{},input],dt);
+    }
+    assert.equal(warned,true);assert.equal(s.lastShotInfo.skill,'cannon');
+    assert.equal(s.challenge.counts.cannon,attempt+1);
   }
 });
