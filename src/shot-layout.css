@@ -34,7 +34,7 @@ body[data-shot-layout-editing=true] :is(#menu, #court-caption, .topbar, #hud, #c
 .shot-layout-key { position:absolute; transform:translate(-50%,-50%); pointer-events:auto; cursor:grab; touch-action:none;
   outline:1px dashed #eafff05c; outline-offset:5px; -webkit-user-select:none; user-select:none; }
 .shot-layout-key.dragging { cursor:grabbing; outline:2px solid #8ff0c6; outline-offset:6px; }
-.shot-layout-toolbar { position:absolute; z-index:2; top:max(10px,env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
+.shot-layout-toolbar { position:absolute; z-index:2; top:max(10px,var(--safe-top)); left:50%; transform:translateX(-50%);
   display:flex; align-items:center; gap:12px; max-width:calc(100vw - 24px); padding:6px 6px 6px 14px;
   border:1px solid #d9fff033; border-radius:16px; background:#0a2b26e8; box-shadow:0 10px 30px #00110f66; }
 .shot-layout-title { display:flex; flex-direction:column; gap:2px; min-width:0; }
@@ -47,10 +47,10 @@ body[data-shot-layout-editing=true] :is(#menu, #court-caption, .topbar, #hud, #c
 .shot-layout-actions { display:flex; align-items:center; gap:4px; flex:0 0 auto; }
 .shot-layout-actions .text-btn { color:#d6eee3; padding:7px 10px; white-space:nowrap; flex:0 0 auto; }
 .shot-layout-actions .primary-btn { min-height:34px; padding:7px 14px; border-radius:10px; font-size:12px; }
-.shot-layout-joystick { position:absolute; left:max(16px,env(safe-area-inset-left)); bottom:max(12px,env(safe-area-inset-bottom));
+.shot-layout-joystick { position:absolute; left:max(16px,var(--safe-left)); bottom:max(12px,var(--safe-bottom));
   width:96px; height:96px; border:1px dashed #c5f4e147; border-radius:50%; }
 .shot-layout-joystick i { position:absolute; inset:26px; border:1px solid #c5f4e13d; border-radius:50%; background:#dcfff40a; }
-.shot-layout-note { position:absolute; left:50%; bottom:max(12px,env(safe-area-inset-bottom)); transform:translateX(-50%);
+.shot-layout-note { position:absolute; left:50%; bottom:max(12px,var(--safe-bottom)); transform:translateX(-50%);
   margin:0; color:#a8c9bd; font-size:10px; white-space:nowrap; pointer-events:none; }
 .shot-layout-measure { position:fixed; inset:0; visibility:hidden; pointer-events:none; z-index:-1; }
 body[data-screen=match] .help-layout-entry { display:none; }
