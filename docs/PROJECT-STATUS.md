@@ -3,57 +3,58 @@
 <!-- project-brief
 {
   "statusVersion": 1,
-  "asOf": "2026-11-07",
+  "asOf": "2026-11-08",
   "baseline": {
     "branch": "main",
-    "head": "3826d33ba032813e7301086812569f8c136c7a43",
-    "originMain": "3826d33ba032813e7301086812569f8c136c7a43",
-    "releaseTag": "v1.12.0"
+    "head": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
+    "originMain": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
+    "releaseTag": "v1.13.0"
   },
   "activeTask": {
-    "title": "HELL-1：地狱人机首版",
-    "scope": "独立挑战：幻影球、重炮、极限救球；玩家2分/人机5分；替换首页训练入口。",
-    "nextAction": "完成1.13.0发布准备，合并主线并核验自动部署。",
+    "title": "HELL-2：极限地狱人机与完整鱼跃",
+    "scope": "高频幻影/重炮、协调鱼跃，仅普通跑位难接低球触发且间隔4秒；2/5规则。",
+    "nextAction": "核验最终运行资源与画面，PR检查通过后按授权合并并验证部署。",
     "blockedBy": [],
     "documents": [
-      "docs/tasks/HELL-1.md"
+      "docs/tasks/HELL-2.md"
     ],
-    "checkpoint": "docs/HELL-1-CHECKPOINT.md"
+    "checkpoint": "docs/HELL-2-CHECKPOINT.md"
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "用户已确认合并；1.13.0发布准备中，尚未部署。",
+    "releaseState": "1.14.0发布准备；用户已授权测试通过后合并。",
     "localPreview": {
-      "task": "HELL-1",
-      "url": "http://127.0.0.1:3248/",
-      "lanUrl": "http://192.168.68.235:3248/",
-      "worktree": "/Users/xindong/Documents/开拍rally-hell-ai",
-      "verifiedOn": "2026-11-07",
-      "buildId": "4339dc04457d109b",
-      "limitations": "用户玩法验收待确认；最终宿主截图UnknownVizError，具体证据与局限见检查点。"
+      "task": "HELL-2",
+      "url": "http://127.0.0.1:3259/",
+      "lanUrl": "http://192.168.1.105:3259/",
+      "worktree": "/Users/xindong/Documents/开拍rally-hell-extreme",
+      "verifiedOn": "2026-11-08",
+      "buildId": "467f23f96c060a9d",
+      "limitations": "完整手动对局、实体手机与专业视频逐帧对照未完成；用户已授权本轮检查通过后合并。",
+      "motionPreview": "http://127.0.0.1:3254/artifacts/hell-2/dive-preview.html"
     }
   },
   "readNext": [
-    "docs/tasks/HELL-1.md",
-    "docs/HELL-1-CHECKPOINT.md"
+    "docs/tasks/HELL-2.md",
+    "docs/HELL-2-CHECKPOINT.md"
   ],
   "links": [
     "docs/tasks/UI-2.md",
     "docs/UI-2-CHECKPOINT.md"
   ],
   "handoff": {
-    "taskId": "HELL-1",
-    "branch": "feat/HELL-1-challenge",
-    "baselineHead": "3826d33ba032813e7301086812569f8c136c7a43",
-    "taskFile": "docs/tasks/HELL-1.md",
-    "worktree": "/Users/xindong/Documents/开拍rally-hell-ai",
-    "phase": "用户确认合并，发布准备中",
-    "stopReason": "用户已确认合并；执行发布准备与主线合并。",
-    "nextAction": "完成1.13.0发布准备，合并主线并核验自动部署。",
-    "checkpoint": "docs/HELL-1-CHECKPOINT.md",
-    "validation": "本轮定向55/55、完整749/749与构建通过；浏览器实读4339dc04457d109b、入口动画和准备页规则；截图UnknownVizError；真人胜率未验收。",
-    "scopeBoundary": "用户于2026-11-07确认合并，允许推送、PR合并及自动发布；保留原人物在制目录。"
+    "taskId": "HELL-2",
+    "branch": "feat/HELL-2-extreme",
+    "baselineHead": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
+    "taskFile": "docs/tasks/HELL-2.md",
+    "worktree": "/Users/xindong/Documents/开拍rally-hell-extreme",
+    "phase": "最终调整与发布验证",
+    "stopReason": "最终实现、回归、资源与浏览器核验通过，准备推送和合并。",
+    "nextAction": "核验最终运行资源与画面，PR检查通过后按授权合并并验证部署。",
+    "checkpoint": "docs/HELL-2-CHECKPOINT.md",
+    "validation": "最终758/758；构建467f23f96c060a9d，19项服务资源匹配，浏览器新构建实际进入2/5比赛；重新录制左右72帧；自动400局完成，鱼跃0.63%/0.53%。",
+    "scopeBoundary": "用户已授权测试通过后推送、合并及主线自动部署。"
   },
-  "publication": "v1.12.0已发布：PR#9合并b0f9f84e，标签v1.12.0；GitHub Releases已补齐v1.4.0–v1.12.0且最新为v1.12.0；Pages构建e3f6043e1405a3a2、Vercel构建a7ae870879cdef42。两处正式版1.12.0、标题、公告、统计默认开启、标志与关键资源实际回读通过。"
+  "publication": "当前主线e96ff90f，最终调整尚未推送；1.14.0准备中。"
 }
 -->
