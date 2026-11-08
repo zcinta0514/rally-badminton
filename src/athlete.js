@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { makeAthleteModel } from './athlete-model.js';
+import { sampleSmashMotion } from './smash-motion.js';
 
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const smooth=n=>{n=clamp(n,0,1);return n*n*(3-2*n);};
@@ -43,6 +44,7 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
   let racketHead=turn(v(.47,1.52+stride*.035*run,-.54+stride*.1*run),heading);
   let localContact=null;
   let elapsed=0,pre=0,post=0;
+  const smash=type==='smash' && !action.serving ? sampleSmashMotion(action,time) : null;
   if(action) {
     elapsed=time-action.contactAt;
     pre=smooth((time-action.startedAt)/Math.max(.001,action.contactAt-action.startedAt));
@@ -52,23 +54,35 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
     racketRoll=elapsed<=0?-.8*Math.sin(pre*Math.PI)+.18*pre:(.18+1.15*post)*active;
     localContact=v((action.contact.x-player.x)*sign,action.contact.y,(action.contact.z-player.z)*sign);
     const low=localContact.y<1.25;
+    // Anticipate wide contacts instead of dragging a folded arm across the
+    // torso during the rules' shortest release window.
+    const smashSetup=smash?v(localContact.x-.35,0,localContact.z+.2):v();
+    const smashWindup=turn(add(v(.50,1.65,.68),smashSetup),heading);
     lunge=(low?.9:.4)*active;
     if(action.stage==='prepare') {
       const ready=smooth((time-action.startedAt)/.14);
       active=.55*ready;crouch=.13*ready;lunge*=ready;
       stroke=-.3*ready;racketRoll=-.45*ready;
-      racketHead=mix(racketHead,turn(type==='smash'?v(.38,1.92,.22):v(.53,1.2,-.15),heading),ready);
+      racketHead=mix(racketHead,smash?smashWindup:turn(type==='smash'?v(.38,1.92,.22):v(.53,1.2,-.15),heading),ready);
     } else {
-      const windup=turn(type==='smash'?v(.35,1.99,.42):type==='clear'?v(.62,1.62,.26):v(.55,.93,-.18),heading);
-      const follow=turn(type==='smash'?v(-.6,.85,-.6):type==='clear'?v(-.22,1.74,-.78):v(.53,1.05,-.86),heading);
+      const windup=smash?smashWindup:turn(type==='smash'?v(.35,1.99,.42):type==='clear'?v(.62,1.62,.26):v(.55,.93,-.18),heading);
+      const follow=turn(smash?v(-.20,.92,-1.0):type==='smash'?v(-.6,.85,-.6):type==='clear'?v(-.22,1.74,-.78):v(.53,1.05,-.86),heading);
       const ready=turn(v(.47,1.52,-.54),heading),duration=Math.max(.001,action.contactAt-action.startedAt);
       // Share tangents across impact and follow-through: the racket passes the
       // authoritative contact instead of easing to a stop on either side of it.
-      const contactVelocity=mul(sub(follow,windup),1.4/(duration+.2));
-      const recoverVelocity=mul(sub(ready,follow),.5/.22);
-      racketHead=elapsed<=0?curve(windup,localContact,v(),mul(contactVelocity,duration),(time-action.startedAt)/duration)
-        :elapsed<=.2?curve(localContact,follow,mul(contactVelocity,.2),mul(recoverVelocity,.2),elapsed/.2)
-          :curve(follow,ready,mul(recoverVelocity,.22),v(),(elapsed-.2)/.22);
+      const followTime=smash?Math.min(.24,(action.endsAt-action.contactAt)*.55):.2;
+      const recoveryTime=smash?Math.max(.001,action.endsAt-action.contactAt-followTime):.22;
+      const contactVelocity=smash?turn(v(-2.6,-2.4,-9),heading)
+        :mul(sub(follow,windup),1.4/(duration+followTime));
+      const recoverVelocity=mul(sub(ready,follow),.5/recoveryTime);
+      const release=.36,drop=turn(add(v(.52,1.30,.72),smashSetup),heading),dropVelocity=turn(v(.15,0,-1.2),heading);
+      const windupTime=(time-action.startedAt)/duration;
+      racketHead=smash && elapsed<=0
+        ?windupTime<release?curve(windup,drop,v(),mul(dropVelocity,duration*release),windupTime/release)
+          :curve(drop,localContact,mul(dropVelocity,duration*(1-release)),mul(contactVelocity,duration*(1-release)),(windupTime-release)/(1-release))
+        :elapsed<=0?curve(windup,localContact,v(),mul(contactVelocity,duration),windupTime)
+        :elapsed<=followTime?curve(localContact,follow,mul(contactVelocity,followTime),mul(recoverVelocity,followTime),elapsed/followTime)
+          :curve(follow,ready,mul(recoverVelocity,recoveryTime),v(),(elapsed-followTime)/recoveryTime);
       const jumpHeight=action.serving?0:Math.max(action.jumpHeight||0,clamp(localContact.y-2.5,0,.8));
       if(jumpHeight>.04) {
         const height=jumpHeight;
@@ -77,9 +91,18 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
       } else crouch=(low?.27:.045)*active;
     }
   }
+  const contactForAim=turn(localContact||v(),-heading);
+  const smashAim=smash?clamp(Math.atan2(.35-contactForAim.x,Math.max(.75,-contactForAim.z)),-.9,.9):0;
+  if(smash){
+    stroke=smash.chest+smashAim*smash.weight; racketRoll=smash.roll;
+    crouch=smash.crouch;
+    if(action.stage!=='prepare')jump=Math.max(action.jumpHeight||0,clamp(localContact.y-2.5,0,.8))*smash.flight;
+    lunge=0;
+  }
   const reach=localContact?unit(v(localContact.x,0,localContact.z)):v(0,0,-1);
   const reachDistance=localContact?Math.min(1.3,Math.hypot(localContact.x,localContact.z)):0;
   let lean=mul(reach,lunge*reachDistance*.35);
+  if(smash)lean=add(lean,turn(v(0,0,smash.lean),heading));
   const transition=options.transition,from=transition?.from,blend=transition?.weight??1;
   if(from){
     racketHead=mix(from.racketHead,racketHead,blend);
@@ -89,7 +112,9 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
     active=from.active+(active-from.active)*blend;
     lean=mix(from.lean||v(),lean,blend);
   }
-  const pelvisYaw=heading+stroke*.36+stride*.055*run,chestYaw=heading+stroke-stride*.11*run;
+  let pelvisTwist=smash?smash.hip+smashAim*smash.weight:stroke*.36;
+  if(from && (smash || from.actionType==='smash'))pelvisTwist=(from.pelvisYaw-from.heading)+(pelvisTwist-(from.pelvisYaw-from.heading))*blend;
+  const pelvisYaw=heading+pelvisTwist+stride*.055*run,chestYaw=heading+stroke-stride*.11*run;
   const rootHeight=.92+jump-crouch-(options.brake||0)-run*.055+Math.abs(stride)*.012*run;
   const pelvis=v(lean.x*.4+stride*.018*run,rootHeight,lean.z*.4);
   // Rotate a fixed-length trunk into the reach, keeping adult shoulder height
@@ -98,7 +123,7 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
   const chest=add(pelvis,trunk);
   const preliminaryShoulder=add(chest,turn(v(.245,.005,0),chestYaw));
   const reachDelta=sub(racketHead,preliminaryShoulder);
-  const armAndRacket=.32+.31+.54-.003;
+  const armAndRacket=smash?1.12:.32+.31+.54-.003;
   const horizontalReach=Math.sqrt(Math.max(.001,armAndRacket**2-reachDelta.y**2));
   const horizontalDistance=Math.hypot(reachDelta.x,reachDelta.z);
   // Move the pelvis with a visible planted lunge / airborne step. Never make
@@ -113,7 +138,8 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
   // A one-sided, rounded forehand clearance surface avoids the singularity of
   // radial sphere projection at the shoulder centre. Its parabola encloses
   // the required reach sphere, so the body makes one continuous side step.
-  const clearance=.361-length(perpendicular)**2/(2*.361);
+  const clearanceRadius=.361+(smash?.elbowWeight||0)*.12;
+  const clearance=clearanceRadius-length(perpendicular)**2/(2*clearanceRadius);
   shift=add(shift,mul(clearanceAxis,Math.min(0,across-clearance)));
   pelvis.x+=shift.x;pelvis.y+=shift.y;pelvis.z+=shift.z;
   chest.x+=shift.x;chest.y+=shift.y;chest.z+=shift.z;
@@ -122,13 +148,18 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
   for(const [name,s] of [['left',-1],['right',1]]) {
     const swing=stride*s;
     let ankle=add(turn(v(s*(.18+lateral*.13*run),.085+Math.max(0,lift*s)*.14*run,0),heading),mul(move,swing*stepSize));
+    if(smash){
+      const f=smash.feet[name];
+      ankle=turn(v(s*.18,.085+f.y,f.z),heading);
+    }
     if(action && lunge>.02) {
       const front=name==='right'?1:-.4;
       ankle=add(ankle,mul(reach,lunge*reachDistance*front));
     }
-    if(jump>0) ankle=add(ankle,v(s*Math.min(.035,jump*.12),jump+Math.min(.13,jump*.4),Math.min(.15,jump*.5)));
+    if(jump>0) ankle=add(ankle,v(s*Math.min(.035,jump*.12),jump+Math.min(.13,jump*(smash?(name==='right'?.32:.16):.4)),smash?0:Math.min(.15,jump*.5)));
     const hip=add(pelvis,turn(v(s*.145,-.045,0),pelvisYaw));
-    ankle=add(ankle,mul(shift,jump>0?.85:.25));
+    const footShift=smash?.85:jump>0?.85:.25;
+    ankle=add(ankle,mul(shift,footShift));
     if(options.feet?.[name]&&!action)ankle={...options.feet[name]};
     if(from)ankle=mix(from.joints[`${name}Ankle`],ankle,blend);
     const footDelta=sub(ankle,hip),footHorizontal=Math.hypot(footDelta.x,footDelta.z);
@@ -146,15 +177,45 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
   // fixed world pole flips when the swing crosses that pole's own axis.
   const armTurn=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(1,0,0),new THREE.Vector3(localArm.x,localArm.y,localArm.z));
   const elbowPlane=new THREE.Vector3(0,-1,.15).applyQuaternion(armTurn);
-  const pole=turn(v(elbowPlane.x,elbowPlane.y,elbowPlane.z),chestYaw);
+  const legacyPole=turn(v(elbowPlane.x,elbowPlane.y,elbowPlane.z),chestYaw);
+  // Author swivel in the transported reach frame. A world-space pole can
+  // align with a far contact and reverse the elbow despite valid bone lengths.
+  const elbowAngle=smash?.elbowSwivel??Math.atan(.15);
+  const authoredPlane=new THREE.Vector3(0,-Math.cos(elbowAngle),Math.sin(elbowAngle)).applyQuaternion(armTurn);
+  let pole=smash?turn(v(authoredPlane.x,authoredPlane.y,authoredPlane.z),chestYaw):legacyPole;
+  // A prepared release already starts in the authored throwing plane. Blend
+  // arm entry/cancellation; re-blending that loaded plane delays the elbow.
+  const loadedArm=smash && transition?.loadedSmash;
+  const armTransition=from && (smash || from.actionType==='smash') && !loadedArm;
+  if(armTransition)pole=mix(sub(from.joints.rightElbow,shoulder),pole,blend);
   // Solve the upper arm and combined forearm/shaft first, then the wrist.
   // The combined length limits wrist flexion while all three lengths stay exact.
-  const lowerReach=clamp(length(sub(racketHead,shoulder))+.28,.677,.849);
+  const shoulderDistance=length(sub(racketHead,shoulder));
+  const originalReach=clamp(shoulderDistance+.28,.677,.849);
+  // Retain some wrist bend during extension; reaching the straight-arm
+  // limit too early makes the wrist accelerate sharply. Keep both triangle
+  // inequalities so a close contact cannot stretch the upper arm.
+  const extension=.69+.15*smooth((shoulderDistance-.48)/.68);
+  const authoredReach=clamp(clamp(extension,shoulderDistance-.319,shoulderDistance+.319),.677,.849);
+  let lowerReach=smash?originalReach+(authoredReach-originalReach)*smash.elbowWeight:originalReach;
+  if(armTransition){
+    const previousReach=length(sub(from.racketHead,from.joints.rightElbow));
+    lowerReach=clamp(clamp(previousReach+(lowerReach-previousReach)*blend,
+      shoulderDistance-.319,shoulderDistance+.319),.677,.849);
+  }
   joints.rightElbow=bend(shoulder,racketHead,.32,lowerReach,pole);
-  joints.rightWrist=bend(joints.rightElbow,racketHead,.31,.54,sub(shoulder,joints.rightElbow));
+  let wristPole=sub(shoulder,joints.rightElbow);
+  if(smash){
+    const wristAxis=unit(sub(racketHead,joints.rightElbow));
+    const swivel=new THREE.Vector3(wristPole.x,wristPole.y,wristPole.z)
+      .applyAxisAngle(new THREE.Vector3(wristAxis.x,wristAxis.y,wristAxis.z),smash.wristSwivel);
+    wristPole=v(swivel.x,swivel.y,swivel.z);
+  }
+  if(armTransition)wristPole=mix(sub(from.joints.rightWrist,joints.rightElbow),wristPole,blend);
+  joints.rightWrist=bend(joints.rightElbow,racketHead,.31,.54,wristPole);
   const relaxedHand=turn(v(-.32,-.18,-.27-stride*.15*run),chestYaw);
-  const supportingHand=turn(v(-.4,.04+active*.18,-.32-active*.13),chestYaw);
-  joints.leftWrist=add(chest,mix(relaxedHand,supportingHand,action?smooth(active):0));
+  const supportingHand=turn(smash?v(...smash.hand):v(-.4,.04+active*.18,-.32-active*.13),chestYaw);
+  joints.leftWrist=add(chest,mix(relaxedHand,supportingHand,smash?smash.weight:action?smooth(active):0));
   if(from)joints.leftWrist=mix(from.joints.leftWrist,joints.leftWrist,blend);
   const leftDelta=sub(joints.leftWrist,joints.leftShoulder);
   if(length(leftDelta)>.628)joints.leftWrist=add(joints.leftShoulder,mul(unit(leftDelta),.628));
@@ -263,7 +324,9 @@ export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze
   if(previousPose&&(key!==visual.poseKey||visual.wasFrozen)){
     const striking=action&&action.stage!=='prepare';
     const canBlend=striking?time<action.contactAt:visual.wasFrozen||time-visual.poseTime<.25;
-    visual.poseTransition=canBlend?{from:previousPose,start:time,end:striking?action.contactAt:time+.2}:null;
+    const loadedSmash=striking&&action.type==='smash'&&previousPose.actionType==='smash'&&visual.poseKey?.endsWith(':prepare');
+    visual.poseTransition=canBlend?{from:previousPose,loadedSmash,start:time,end:striking
+      ?loadedSmash?Math.min(action.contactAt,time+.035):action.contactAt:time+.2}:null;
   }
   visual.wasFrozen=false;visual.poseKey=key;visual.poseTime=time;
   const transition=visual.poseTransition;
@@ -276,7 +339,7 @@ export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze
   const feet={};for(const name of ['left','right']){const f=motion.feet[name].world;feet[name]=v((f.x-player.x)*sign,f.y,(f.z-player.z)*sign);}
   const pose=sampleAthletePose(player,side,shuttle,time,{moveCycle:motion.cycle,brake:player.action?0:motion.brake,
     speed:motion.speed,velocity:motion.velocity,acceleration:motion.acceleration,heading:motion.heading,feet,
-    transition:transition&&blend<1?{from:transition.from,weight:blend}:null});
+    transition:transition&&blend<1?{from:transition.from,weight:blend,loadedSmash:transition.loadedSmash}:null});
   pose.feet={};
   for(const name of ['left','right']){
     const ankle=pose.joints[`${name}Ankle`],foot=motion.feet[name],world=v(player.x+ankle.x*sign,ankle.y,player.z+ankle.z*sign);

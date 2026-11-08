@@ -8,6 +8,27 @@ const MODEL_URL = new URL('./models/athlete.glb', import.meta.url);
 const REQUIRED = ['pelvis', 'spineLow', 'spine', 'chest', 'neck', 'head',
   ...['left', 'right'].flatMap(side => ['Shoulder', 'Elbow', 'Wrist', 'Hip', 'Knee', 'Ankle'].map(joint => side + joint))];
 
+function repairArmWeights(geometry, bones) {
+  const { skinIndex, skinWeight } = geometry.attributes;
+  const head = bones.findIndex(bone => bone.name === 'head');
+  const arms = new Set(bones.flatMap((bone, index) => /^(left|right)(Shoulder|Elbow|Wrist)$/.test(bone.name) ? [index] : []));
+  // The prepared asset mapped some unmapped hand influences to head. Correct
+  // only vertices dominated by an arm; never alter the cached GLB template.
+  for (let vertex = 0; vertex < skinWeight.count; vertex++) {
+    let armWeight = 0, headWeight = 0;
+    for (let slot = 0; slot < 4; slot++) {
+      const index = skinIndex.getComponent(vertex, slot), weight = skinWeight.getComponent(vertex, slot);
+      if (arms.has(index)) armWeight += weight;
+      if (index === head) headWeight += weight;
+    }
+    if (armWeight <= .5 || !headWeight) continue;
+    for (let slot = 0; slot < 4; slot++) {
+      skinWeight.setComponent(vertex, slot, skinIndex.getComponent(vertex, slot) === head ? 0 : skinWeight.getComponent(vertex, slot) / (1 - headWeight));
+    }
+    skinWeight.needsUpdate = true;
+  }
+}
+
 function disposeScene(scene) {
   const geometries = new Set(), materials = new Set(), textures = new Set(), skeletons = new Set();
   scene.traverse(object => {
@@ -53,6 +74,7 @@ export function installAthleteModel(visual, { scene }) {
   // Bake the export's Z-up transform before rebinding all primitives to one
   // flat skeleton. Bones now operate in the same player-local frame as the IK.
   for (const mesh of meshes) {
+    repairArmWeights(mesh.geometry, sourceBones);
     mesh.geometry.applyMatrix4(mesh.matrixWorld);
     mesh.position.set(0, 0, 0); mesh.quaternion.identity(); mesh.scale.set(1, 1, 1);
     if (palette[mesh.material.name] !== undefined) mesh.material.color.setHex(palette[mesh.material.name]);
