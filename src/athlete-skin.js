@@ -91,7 +91,7 @@ export function makeAthleteSkin(root,material,jersey,colors) {
     trunkRotation.setFromUnitVectors(UP,direction);
     for(const [name,index]of Object.entries(body)){
       const b=bones[index];point(b,joints[name]);
-      b.quaternion.identity().slerp(trunkRotation,name==='pelvis'?0:name==='spine'?.5:1);
+      b.quaternion.identity().slerp(trunkRotation,pose.bodyTilt?1:name==='pelvis'?0:name==='spine'?.5:1);
       const yaw=name==='pelvis'?pose.pelvisYaw:name==='chest'?pose.chestYaw:(pose.pelvisYaw+pose.chestYaw)/2;
       b.quaternion.multiply(turn.setFromAxisAngle(UP,yaw-pose.heading));
     }

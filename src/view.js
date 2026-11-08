@@ -501,7 +501,8 @@ export class CourtView {
     const athleteReset=!this.initialized||state.time<this.lastStateTime||
       (state.phase==='serve'&&this.lastPhase!=='serve')||(freeze&&state.pointId!==this.lastPoint);
     state.players.forEach((player,index)=>{
-      if(this.players[index])updateAthlete(this.players[index],player,index,shuttle,athleteTime,dt,index===side,athleteFreeze,athleteReset);
+      if(this.players[index])updateAthlete(this.players[index],player,index,shuttle,athleteTime,dt,index===side,athleteFreeze,athleteReset,
+        state.challenge?.bossSide===index?state.challenge.rescue:null);
     });
     const ballReset=reset||this.shuttlePosition.distanceToSquared(new THREE.Vector3(shuttle.x,shuttle.y,shuttle.z))>100;
     const position=tail?.position||shuttle;

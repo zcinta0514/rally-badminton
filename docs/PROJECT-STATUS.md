@@ -6,9 +6,9 @@
   "asOf": "2026-11-08",
   "baseline": {
     "branch": "main",
-    "head": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
-    "originMain": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
-    "releaseTag": "v1.13.0"
+    "head": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
+    "originMain": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
+    "releaseTag": "v1.14.0"
   },
   "activeTask": {
     "title": "NET-2：所有实际触网的声音、波动与球网互动",
@@ -22,7 +22,7 @@
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "最新主线 e96ff90f 的1.13.0发布版本保持；NET-2仅本地未验收候选，未推送或上线。"
+    "releaseState": "继承最新主线e1b3d2cf与1.14.0；NET-2仅本地候选，未推送或发布。"
   },
   "readNext": [
     "docs/tasks/NET-2.md",
@@ -30,22 +30,24 @@
   ],
   "links": [
     "docs/tasks/UI-2.md",
-    "docs/UI-2-CHECKPOINT.md"
+    "docs/UI-2-CHECKPOINT.md",
+    "docs/tasks/HELL-2.md",
+    "docs/HELL-2-CHECKPOINT.md"
   ],
   "handoff": {
     "taskId": "NET-2",
     "branch": "feat/NET-2-contact",
-    "baselineHead": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
+    "baselineHead": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
     "taskFile": "docs/tasks/NET-2.md",
     "worktree": "/Users/xindong/Documents/开拍rally-net-2-contact",
-    "phase": "本地候选，定向87/87通过，浏览器/完整回归待执行",
+    "phase": "整合最新主线HELL-2，准备重新验证",
     "stopReason": "进行中",
     "nextAction": "完成实际浏览器五组固定来球场景、完整回归与构建；交用户视听和玩法验收",
     "checkpoint": "docs/NET-2-CHECKPOINT.md",
-    "validation": "定向87/87通过；尚未进行用户视听、手机性能与玩法验收。",
+    "validation": "整合前766/766通过，旧构建浏览器两侧10场景通过，主入口受新手引导遮挡未完成；整合后须重新验证。",
     "scopeBoundary": "用户已确认所有实际触网，同时调整球碰网后的运动；本地开发预览，不发布。"
   },
-  "publication": "本轮未推送、未开PR、未合并、未部署；发布版本号保持基线。"
+  "publication": "本轮球网未推送、未开PR、未合并到main、未部署；继承主线1.14.0，不另定版本。"
 }
 -->
 
@@ -53,3 +55,5 @@
 ## 2026-11-08：NET-2 本地候选
 
 以联网核验的最新主线 e96ff90f 建立独立工作目录。原人物任务及未提交成果原样保留。详见任务卡与 NET-2-CHECKPOINT；当前以实际测试/服务证据为准。
+
+2026-11-08 开发期间主线合入 HELL-2（e1b3d2cf，v1.14.0），本任务完整整合该更新，保留新版扑救/人机、界面与发布信息。整合前的检查不能代替整合后结果。

@@ -32,6 +32,10 @@ export function bend(start,end,a,b,pole) {
 /** Pure pose sampler. Coordinates are player-local; side 0 faces local -z.
  * All animation time is authoritative match time, including pause and replay. */
 export function sampleAthletePose(player,side,shuttle,time,options={}) {
+  if (options.rescue && time >= options.rescue.at && time < options.rescue.endsAt) {
+    const ready = sampleAthletePose({...player,vx:0,vz:0,action:null},side,shuttle,time,{heading:options.heading});
+    return sampleRescuePose(ready,player,side,time,options.rescue);
+  }
   const sign=side===0?1:-1, speed=options.speed??Math.hypot(player.vx||0,player.vz||0);
   const run=clamp(speed/4,0,1), vx=(options.velocity?.x??player.vx??0)*sign, vz=(options.velocity?.z??player.vz??0)*sign;
   const heading=options.heading||0;
@@ -166,6 +170,82 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
   return {joints,racketHead,jump,crouch,actionType:type,active,heading,pelvisYaw,chestYaw,headYaw,racketRoll,stroke,lean};
 }
 
+// Authored gameplay choreography, not motion capture. The rule clock owns the
+// dive, contact, landing and get-up; render frequency never advances a phase.
+function sampleRescuePose(ready,player,side,time,dive) {
+  const age=time-dive.at,sign=side===0?1:-1;
+  const travel=unit(v((dive.to.x-dive.from.x)*sign,0,(dive.to.z-dive.from.z)*sign));
+  const keys=[[0,.92,0],[.08,.73,.16],[.2,.66,1.15],[.3,.53,1.38],
+    [.44,.37,1.42],[.52,.46,.9],[.7,.92,0]];
+  const index=Math.min(keys.length-2,Math.max(0,keys.findIndex((key,i)=>i<keys.length-1&&age<keys[i+1][0])));
+  const a=keys[index],b=keys[index+1],weight=clamp((age-a[0])/(b[0]-a[0]),0,1);
+  // Monotone Hermite tangents carry momentum across phase boundaries without
+  // the stop/start of a separate smoothstep at every choreography key.
+  const curve=axis=>{
+    const slope=i=>{
+      if(i===0||i===keys.length-1)return 0;
+      const before=(keys[i][axis]-keys[i-1][axis])/(keys[i][0]-keys[i-1][0]);
+      const after=(keys[i+1][axis]-keys[i][axis])/(keys[i+1][0]-keys[i][0]);
+      return before*after<=0?0:2*before*after/(before+after);
+    };
+    const t=weight,t2=t*t,t3=t2*t,span=b[0]-a[0];
+    return (2*t3-3*t2+1)*a[axis]+(t3-2*t2+t)*span*slope(index)
+      +(-2*t3+3*t2)*b[axis]+(t3-t2)*span*slope(index+1);
+  };
+  const height=curve(1),angle=curve(2);
+  const up=v(travel.x*Math.sin(angle),Math.cos(angle),travel.z*Math.sin(angle));
+  const rotation=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(up.x,up.y,up.z));
+  const rotate=p=>{const q=new THREE.Vector3(p.x,p.y,p.z).applyQuaternion(rotation);return v(q.x,q.y,q.z);};
+  const trail=.65*smooth(age/.12)*(1-smooth((age-.44)/.26));
+  const origin=ready.joints.pelvis,pelvis=add(mul(travel,-trail),v(0,height,0)),joints={};
+  for(const [name,p]of Object.entries(ready.joints))joints[name]=add(pelvis,rotate(sub(p,origin)));
+  // The non-racket hand braces on the floor while the legs fold under the hip.
+  // The free hand stays on the same world point from landing through push-off.
+  const brace=smooth((age-.3)/.14)*(1-smooth((age-.56)/.14));
+  for(const name of ['left','right']) {
+    const hip=joints[name+'Hip'];
+    const planted=ready.joints[name+'Ankle'];
+    const lead=(name==='left'?-1:1)*travel.x>0;
+    const stand=smooth((age-(lead ? .4 : .48))/(lead ? .25 : .22));
+    let ankle=mix(joints[name+'Ankle'],planted,stand);
+    ankle.y=Math.max(.085,ankle.y);
+    const delta=sub(ankle,hip);
+    if(length(delta)>.877)ankle=add(hip,mul(unit(delta),.877));
+    joints[name+'Ankle']=ankle;
+    joints[name+'Knee']=bend(hip,ankle,.45,.43,add(v(0,.15,-1),mul(travel,-.5)));
+  }
+  const support=v((dive.slideTo.x-player.x)*sign-.3,.13,(dive.slideTo.z-player.z)*sign-.12);
+  const contact=dive.contact||player.action?.contact||dive.point;
+  const target=v((contact.x-player.x)*sign,contact.y,(contact.z-player.z)*sign);
+  const contactAge=(dive.hitAt??player.action?.contactAt??dive.at+.23)-dive.at;
+  const reach=smooth(age/Math.max(.09,contactAge));
+  const recover=dive.hit?smooth((time-dive.hitAt-.04)/.25):smooth((age-.3)/.14);
+  let racketHead=mix(add(pelvis,rotate(sub(ready.racketHead,origin))),target,reach*(1-recover));
+  racketHead.y=Math.max(.09,racketHead.y);
+  const shoulder=joints.rightShoulder,delta=sub(racketHead,shoulder);
+  const maxHorizontal=Math.sqrt(Math.max(.001,1.167**2-delta.y**2));
+  const distance=Math.hypot(delta.x,delta.z);
+  // Move the body into the reach instead of stretching the arm or the shaft.
+  const shift=distance>maxHorizontal?mul(unit(v(delta.x,0,delta.z)),distance-maxHorizontal):v();
+  const relative=sub(delta,shift),across=dot(relative,travel),perpendicular=sub(relative,mul(travel,across));
+  const clearance=.37-length(perpendicular)**2/.74,clearanceShift=mul(travel,Math.min(0,across-clearance));
+  shift.x+=clearanceShift.x;shift.z+=clearanceShift.z;
+  for(const p of Object.values(joints)){p.x+=shift.x;p.z+=shift.z;}
+  let leftHand=mix(joints.leftWrist,support,brace);
+  leftHand.y=Math.max(.13,leftHand.y);
+  const leftDelta=sub(leftHand,joints.leftShoulder);
+  if(length(leftDelta)>.628)leftHand=add(joints.leftShoulder,mul(unit(leftDelta),.628));
+  joints.leftWrist=leftHand;
+  joints.leftElbow=bend(joints.leftShoulder,leftHand,.32,.31,v(-.5,-.2,.3));
+  const lowerReach=clamp(length(sub(racketHead,joints.rightShoulder))+.28,.677,.849);
+  joints.rightElbow=bend(joints.rightShoulder,racketHead,.32,lowerReach,v(0,-1,.3));
+  joints.rightWrist=bend(joints.rightElbow,racketHead,.31,.54,sub(joints.rightShoulder,joints.rightElbow));
+  const stage=age<.08?'push':age<.3?'flight':age<.44?'land':age<.56?'brace':'rise';
+  return {...ready,joints,racketHead,heading:0,pelvisYaw:0,chestYaw:0,headYaw:0,
+    headUp:up,bodyTilt:true,actionType:'rescue',rescueStage:stage,
+    jump:.12*Math.sin(Math.PI*clamp((age-.08)/.22,0,1)),active:1,racketRoll:0};
+}
+
 const JOINT_PARENTS={pelvis:null,spine:'pelvis',chest:'spine',neck:'chest',head:'neck',
   leftHip:'pelvis',leftKnee:'leftHip',leftAnkle:'leftKnee',rightHip:'pelvis',rightKnee:'rightHip',rightAnkle:'rightKnee',
   leftShoulder:'chest',leftElbow:'leftShoulder',leftWrist:'leftElbow',rightShoulder:'chest',rightElbow:'rightShoulder',rightWrist:'rightElbow'};
@@ -249,7 +329,7 @@ function motionFor(visual,player,side,time,freeze,reset) {
 }
 
 const UP=new THREE.Vector3(0,1,0), temp=new THREE.Vector3(), yawRotation=new THREE.Quaternion();
-export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze=false,reset=false) {
+export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze=false,reset=false,rescue=null) {
   const discard=reset||!visual.motion||side!==visual.motion.side||time<visual.motion.time||
     Math.hypot(player.x-visual.motion.position.x,player.z-visual.motion.position.z)>.9;
   if(freeze&&!discard&&visual.root.userData.pose){
@@ -257,10 +337,11 @@ export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze
     return visual.root.userData.pose;
   }
   const action=player.action&&time<=player.action.endsAt?player.action:null;
-  const key=action?`${action.id}:${action.stage==='prepare'?'prepare':'stroke'}`:'ready';
+  const diving=rescue&&time>=rescue.at&&time<rescue.endsAt;
+  const key=diving?`rescue:${rescue.at}`:action?`${action.id}:${action.stage==='prepare'?'prepare':'stroke'}`:'ready';
   if(discard){visual.poseTransition=null;visual.poseKey=null;visual.wasFrozen=false;}
   const previousPose=discard?null:visual.root.userData.pose;
-  if(previousPose&&(key!==visual.poseKey||visual.wasFrozen)){
+  if(previousPose&&!diving&&(key!==visual.poseKey||visual.wasFrozen)){
     const striking=action&&action.stage!=='prepare';
     const canBlend=striking?time<action.contactAt:visual.wasFrozen||time-visual.poseTime<.25;
     visual.poseTransition=canBlend?{from:previousPose,start:time,end:striking?action.contactAt:time+.2}:null;
@@ -276,7 +357,7 @@ export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze
   const feet={};for(const name of ['left','right']){const f=motion.feet[name].world;feet[name]=v((f.x-player.x)*sign,f.y,(f.z-player.z)*sign);}
   const pose=sampleAthletePose(player,side,shuttle,time,{moveCycle:motion.cycle,brake:player.action?0:motion.brake,
     speed:motion.speed,velocity:motion.velocity,acceleration:motion.acceleration,heading:motion.heading,feet,
-    transition:transition&&blend<1?{from:transition.from,weight:blend}:null});
+    rescue:diving?rescue:null,transition:transition&&blend<1?{from:transition.from,weight:blend}:null});
   pose.feet={};
   for(const name of ['left','right']){
     const ankle=pose.joints[`${name}Ankle`],foot=motion.feet[name],world=v(player.x+ankle.x*sign,ankle.y,player.z+ankle.z*sign);
@@ -299,7 +380,8 @@ export function applyAthletePose(visual,pose,{x,z,side=0,selected=false,ankleYaw
   visual.root.rotation.y=(side===0?0:Math.PI)+pose.heading;
   const joints={};for(const [name,p]of Object.entries(pose.joints))joints[name]=turn(p,-pose.heading);
   for(const [name,parent]of Object.entries(JOINT_PARENTS)){const p=joints[name],q=parent?joints[parent]:v();visual.bones[name].position.set(p.x-q.x,p.y-q.y,p.z-q.z);}
-  visual.bones.head.rotation.set(pose.headPitch||0,pose.headYaw-pose.heading,0);
+  if(pose.headUp)visual.bones.head.quaternion.setFromUnitVectors(UP,temp.set(pose.headUp.x,pose.headUp.y,pose.headUp.z));
+  else visual.bones.head.rotation.set(pose.headPitch||0,pose.headYaw-pose.heading,0);
   for(const name of ['left','right'])visual.bones[`${name}Ankle`].rotation.set(0,(ankleYaws[name]??pose.ankleYaw??pose.heading)-pose.heading,0);
   visual.skin.userData.updatePose(joints,pose);
   visual.shorts.rotation.y=pose.pelvisYaw-pose.heading;

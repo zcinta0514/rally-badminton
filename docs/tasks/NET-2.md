@@ -2,7 +2,7 @@
 
 2026-11-08 用户对齐：所有实际触网（下网、擦网过网、网带、挂网），同时优化球碰网后的运动。局部凹陷、波动外传、阻尼衰减，轻重分级；连续碰撞叠加。真实、克制，不用整网重播动画。
 
-基线：联网 fetch 后 origin/main `e96ff90fd2e902d91dab58f21a05c9ed1094d335`；最新标签 v1.13.0。独立 worktree `/Users/xindong/Documents/开拍rally-net-2-contact`，分支 `feat/NET-2-contact`。原人物制作目录与其未提交文件完整保留；只继承其球网模拟/网格和相关测试，再演进，没有复制人物实验。
+基线：初始为e96ff90f；开发期间主线更新后，联网核验并整合 origin/main `e1b3d2cf39e1e081edcbba65f89311ccea915ca6`（v1.14.0）。独立 worktree `/Users/xindong/Documents/开拍rally-net-2-contact`，分支 `feat/NET-2-contact`。原人物制作目录与其未提交文件完整保留；只继承其球网模拟/网格和相关测试，再演进，没有复制人物实验。
 
 改动范围：共享触网模型、权威比赛碰撞、网络插值、球网与球的显示、声音与素材溯源。这些环节必须一致，因此保留为一项可独立验收任务。固定来球预览使用正式 CourtView / stepMatch / ArenaAudio，不替换正式入口。
 
