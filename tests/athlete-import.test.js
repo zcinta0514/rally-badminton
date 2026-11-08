@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { cloneModel } from '../src/model-assets.js';
-import { makeAthlete, updateAthlete, applyAthletePose } from '../src/athlete.js';
+import { makeAthlete, updateAthlete, applyAthletePose, sampleAthletePose } from '../src/athlete.js';
 import { sampleFinalePose } from '../src/finale-pose.js';
 import { installAthleteModel, upgradeAthlete } from '../src/athlete-import.js';
 
@@ -154,6 +154,55 @@ test('the imported skin stays finite and bounded through running, smashes, lunge
       assertHealthySurface(visual, `side ${side} finale ${role} ${age}`);
     }
   }
+});
+
+test('the real skin has no wrist spikes throughout wide smashes and does not inherit head motion', () => {
+  const originalWeights = meshesIn(template.scene).map(mesh => Array.from(mesh.geometry.attributes.skinWeight.array));
+  for (const side of [0, 1]) {
+    const scene = new THREE.Scene(), visual = makeAthlete(scene, side), sign = side === 0 ? 1 : -1;
+    installAthleteModel(visual, model());
+    for (const [height, dx, dz] of [[3.2, 0, -1.44], [1.6, -1.44, 0], [2.84, 0, 1.44], [2.84, .35, -.2]]) {
+      const contact = { x: sign * dx, y: height, z: sign * (3.8 + dz) };
+      const action = { type: 'smash', stage: 'windup', startedAt: 1, contactAt: 1.2, endsAt: 1.62, contact, jumpHeight: height > 2.5 ? .55 : 0 };
+      for (let frame = 0; frame <= 40; frame++) {
+        const pose = sampleAthletePose({ x: 0, z: sign * 3.8, action }, side, contact, 1 + frame * .016);
+        applyAthletePose(visual, pose, { x: 0, z: sign * 3.8, side });
+        visual.root.updateMatrixWorld(true);
+        for (const mesh of meshesIn(visual.importedModel)) {
+          const { position, skinIndex, skinWeight } = mesh.geometry.attributes, index = mesh.geometry.index;
+          const wristWeight = vertex => [0, 1, 2, 3].reduce((sum, slot) => sum + (/Wrist$/.test(mesh.skeleton.bones[skinIndex.getComponent(vertex, slot)].name) ? skinWeight.getComponent(vertex, slot) : 0), 0);
+          const rest = [], posed = [];
+          for (let vertex = 0; vertex < position.count; vertex++) {
+            rest.push(new THREE.Vector3().fromBufferAttribute(position, vertex));
+            posed.push(mesh.getVertexPosition(vertex, new THREE.Vector3()));
+          }
+          for (let i = 0; i < index.count; i += 3) for (let edge = 0; edge < 3; edge++) {
+            const a = index.getX(i + edge), b = index.getX(i + (edge + 1) % 3);
+            // Detect the observed wrist needle, rather than treating normal
+            // linear-skinning deformation at a tightly bent elbow as a tear.
+            if (Math.max(wristWeight(a), wristWeight(b)) < .1) continue;
+            const before = rest[a].distanceTo(rest[b]), after = posed[a].distanceTo(posed[b]);
+            assert.ok(after < .08 || after < before * 2.5, `side ${side}, contact ${height}/${dx}/${dz}, frame ${frame}: skin edge ${before} → ${after}`);
+          }
+        }
+        if (frame === 10) {
+          const before = surfacePositions(visual);
+          applyAthletePose(visual, { ...pose, headYaw: pose.headYaw + .7 }, { x: 0, z: sign * 3.8, side });
+          const after = surfacePositions(visual);
+          let offset = 0;
+          for (const mesh of meshesIn(visual.importedModel)) {
+            const { skinIndex, skinWeight } = mesh.geometry.attributes;
+            for (let vertex = 0; vertex < skinWeight.count; vertex++, offset += 3) {
+              let armWeight = 0;
+              for (let slot = 0; slot < 4; slot++) if (/^(left|right)(Shoulder|Elbow|Wrist)$/.test(mesh.skeleton.bones[skinIndex.getComponent(vertex, slot)].name)) armWeight += skinWeight.getComponent(vertex, slot);
+              if (armWeight > .5) for (let axis = 0; axis < 3; axis++) assert.ok(Math.abs(before[offset + axis] - after[offset + axis]) < 1e-7, 'turning the head must not pull an arm vertex');
+            }
+          }
+        }
+      }
+    }
+  }
+  assert.deepEqual(meshesIn(template.scene).map(mesh => Array.from(mesh.geometry.attributes.skinWeight.array)), originalWeights, 'cached source geometry remains untouched');
 });
 
 test('an upgrade applies the existing paused pose before any following animation frame', async () => {

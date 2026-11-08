@@ -6,55 +6,55 @@
   "asOf": "2026-11-08",
   "baseline": {
     "branch": "main",
-    "head": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
-    "originMain": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
-    "releaseTag": "v1.13.0"
+    "head": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
+    "originMain": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
+    "releaseTag": "v1.14.0"
   },
   "activeTask": {
-    "title": "HELL-2：极限地狱人机与完整鱼跃",
-    "scope": "高频幻影/重炮、协调鱼跃，仅普通跑位难接低球触发且间隔4秒；2/5规则。",
-    "nextAction": "核验最终运行资源与画面，PR检查通过后按授权合并并验证部署。",
+    "title": "SMASH-1：杀球动作通过检查，准备合并",
+    "scope": "保留R3肘领先与髋胸错峰，修复远触点肘腕翻转、引拍停顿及离地脚部补偿突变；修正手臂误绑定头部造成的腕部尖刺。",
+    "nextAction": "提交PR并核对CI，按用户授权合并main，验证Pages/Vercel生产资源与实际页面。",
     "blockedBy": [],
     "documents": [
-      "docs/tasks/HELL-2.md"
+      "docs/tasks/SMASH-1.md"
     ],
-    "checkpoint": "docs/HELL-2-CHECKPOINT.md"
+    "checkpoint": "docs/SMASH-1-CHECKPOINT.md"
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "1.14.0发布准备；用户已授权测试通过后合并。",
+    "releaseState": "1.15.0发布准备；用户已授权检查通过后合并。",
     "localPreview": {
-      "task": "HELL-2",
-      "url": "http://127.0.0.1:3259/",
-      "lanUrl": "http://192.168.1.105:3259/",
-      "worktree": "/Users/xindong/Documents/开拍rally-hell-extreme",
+      "task": "SMASH-1",
+      "url": "http://127.0.0.1:3257/?preview=smash&revision=release-1.15.0",
+      "worktree": "/Users/xindong/Documents/开拍rally-smash-motion",
       "verifiedOn": "2026-11-08",
-      "buildId": "467f23f96c060a9d",
-      "limitations": "完整手动对局、实体手机与专业视频逐帧对照未完成；用户已授权本轮检查通过后合并。",
-      "motionPreview": "http://127.0.0.1:3254/artifacts/hell-2/dive-preview.html"
+      "buildId": "218fbb52f2f88429",
+      "limitations": "正式人物、最终构建、原速和侧面慢放均已核验；无实体手机或完整表面碰撞审计。"
     }
   },
   "readNext": [
-    "docs/tasks/HELL-2.md",
-    "docs/HELL-2-CHECKPOINT.md"
+    "docs/tasks/SMASH-1.md",
+    "docs/SMASH-1-CHECKPOINT.md"
   ],
   "links": [
     "docs/tasks/UI-2.md",
-    "docs/UI-2-CHECKPOINT.md"
+    "docs/UI-2-CHECKPOINT.md",
+    "docs/tasks/HELL-2.md",
+    "docs/HELL-2-CHECKPOINT.md"
   ],
   "handoff": {
-    "taskId": "HELL-2",
-    "branch": "feat/HELL-2-extreme",
-    "baselineHead": "e96ff90fd2e902d91dab58f21a05c9ed1094d335",
-    "taskFile": "docs/tasks/HELL-2.md",
-    "worktree": "/Users/xindong/Documents/开拍rally-hell-extreme",
-    "phase": "最终调整与发布验证",
-    "stopReason": "最终实现、回归、资源与浏览器核验通过，准备推送和合并。",
-    "nextAction": "核验最终运行资源与画面，PR检查通过后按授权合并并验证部署。",
-    "checkpoint": "docs/HELL-2-CHECKPOINT.md",
-    "validation": "最终758/758；构建467f23f96c060a9d，19项服务资源匹配，浏览器新构建实际进入2/5比赛；重新录制左右72帧；自动400局完成，鱼跃0.63%/0.53%。",
-    "scopeBoundary": "用户已授权测试通过后推送、合并及主线自动部署。"
+    "taskId": "SMASH-1",
+    "branch": "feat/SMASH-1-natural-motion",
+    "baselineHead": "e1b3d2cf39e1e081edcbba65f89311ccea915ca6",
+    "taskFile": "docs/tasks/SMASH-1.md",
+    "worktree": "/Users/xindong/Documents/开拍rally-smash-motion",
+    "phase": "最终验证通过，提交合并",
+    "stopReason": "进行中；等待PR检查与主线发布核验。",
+    "nextAction": "提交PR并核对CI，按用户授权合并main，验证Pages/Vercel生产资源与实际页面。",
+    "checkpoint": "docs/SMASH-1-CHECKPOINT.md",
+    "validation": "767/767完整测试，构建218fbb52f2f88429；9180组非杀球姿态及过渡与最新e1b3d2cf相同；11项服务资源一致，正式人物ready，原速/侧面慢放已检查，最新扑救与蒙皮回归通过。",
+    "scopeBoundary": "用户2026-11-08授权继续优化杀球、检查关节，测试通过后合并main；已核实main会自动发布。"
   },
-  "publication": "当前主线e96ff90f，最终调整尚未推送；1.14.0准备中。"
+  "publication": "本地整合提交f90fc240继承main e1b3d2cf（v1.14.0）；1.15.0发布准备，尚未推送/合并。"
 }
 -->
