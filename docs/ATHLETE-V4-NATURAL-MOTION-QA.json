@@ -1,0 +1,51 @@
+{
+  "asOf": "2026-09-20",
+  "state": "local-candidate-visual-acceptance-pending",
+  "baseline": "f245201408cae4e195243ec69e172b5d54c5e763",
+  "bones": 65,
+  "assetBytes": 8191024,
+  "sha256": {
+    "src/models/athlete-v4-court.glb": "6c2d7db805992be5cb2e4aef9930567ac5bfe71f3384c7fbf5986ae644206e93",
+    "src/v4-court-motion.js": "40101056e85d1ff5b18bf98498627c1574273d32d54e119d2a6254eb48bf06d2",
+    "src/athlete-v4-court-preview.js": "3214227107a9769b713e924aa9d03b3c8fb7b472468710daa54aa07b5fdcc4f0",
+    "src/athlete-v4-rigged-preview.js": "fd55f20a1c7dd17fbabd45bddf40ae03fb50661e854a8c411f00f5772c87bcf9",
+    "shared/v4-motion.js": "45c313eb8fec43fc17d071e19c81f80f5db91915cda4e4f332bcc47ca4e82f2a",
+    "shared/game.js": "a2386cb0d9cc3d283d4d52bb5c62246a92873a0210377b543b2edc793835006f",
+    "src/v4-motion-review.js": "af2b2f8907f7504a33535da2df3b13e80d6fa9f59f4f7c8b7ccfd8c6daa2695b",
+    "src/main.js": "6ec52c353bf6f22768ea7ad693cc8f11c3bbaa2c9d9ad793605cd09e99780e3c",
+    "src/view.js": "6061c4ee0a179339c0a92d284102203e68c06e449f6028736cbe50db65418bf7",
+    "src/pwa.js": "f2939e3d483405206cd3756959ed4734cde2d31116b6ea948baf672a3f4c4e71",
+    "scripts/build-v4-court-rig.py": "91890d419b97a7bda5d53cbdb8799969f66c7edebde9434e0ac4ec7f0f0e2588"
+  },
+  "validation": {
+    "courtTests": {
+      "pass": 6,
+      "fail": 0
+    },
+    "fullTests": {
+      "total": 629,
+      "pass": 626,
+      "fail": 3,
+      "unresolved": [
+        "legacy corrective transition requires missing garment morphs",
+        "legacy corrective export requires missing garment morphs",
+        "legacy QA fingerprint mismatches untouched raw study asset"
+      ]
+    },
+    "build": "passed: 0ba19f601933b455; 99 resources",
+    "browser": {
+      "backend": "Cindy sidebar",
+      "port": 3016,
+      "loadedBones": [
+        65,
+        65
+      ],
+      "assetHashVerified": true,
+      "serviceWorkerControlled": false,
+      "clockFallbackVerified": true
+    }
+  },
+  "visualAcceptance": false,
+  "formalCharacterReplaced": false,
+  "published": false
+}

@@ -76,6 +76,8 @@ npm run build
 
 构建导出自带 Three.js 和 PeerJS 的 `dist/` 静态包，默认启用手机直连。普通入口是 `/`，人物预览是 `/?preview=athlete`。本地服务启动时固定客户端资源，修改源码后需重启服务。
 
+开发与跨电脑接续见 [完整工作流](docs/WORKFLOW.md) 和 [跨电脑恢复指南](docs/CROSS-COMPUTER.md)。新窗口先运行 `npm run project:brief` 和 `npm run project:handoff -- --check`，以 [项目当前状态](docs/PROJECT-STATUS.md)、任务卡及检查点继续。人物工作按 [开发计划](docs/DEVELOPMENT-PLAN.md) 推进；计划目标不代表已实现。
+
 GitHub Pages 由仓库工作流更新。Vercel 与 GitHub 的连接、自动部署状态及两处路径配置见 [运行指南](docs/DEPLOYMENT.md) 与 [公开网站说明](docs/PUBLIC-WEBSITE.md)。
 
 | 目录 | 作用 |

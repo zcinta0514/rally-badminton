@@ -22,3 +22,7 @@ service-account*.json
 Thumbs.db
 .vscode/
 .idea/
+
+.cindy-worktrees/
+__pycache__/
+/github-result-*.json

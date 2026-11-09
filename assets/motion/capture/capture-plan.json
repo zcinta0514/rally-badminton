@@ -1,0 +1,489 @@
+{
+  "schemaVersion": 1,
+  "specVersion": "rally-capture/2.0",
+  "createdOn": "2026-10-03",
+  "status": "planned",
+  "taskId": "P1-3",
+  "qualitySpec": "docs/CAPTURE-QUALITY-GATES.md",
+  "shootPlan": "docs/CAPTURE-SHOOT-PLAN.md",
+  "units": {
+    "time": "s",
+    "length": "m",
+    "angle": "rad"
+  },
+  "courtEnds": {
+    "A": "primary player at +Z",
+    "B": "primary player at -Z"
+  },
+  "primaryPlayerRequirement": {
+    "handedness": "right",
+    "level": "professional",
+    "assignedPlayerId": null
+  },
+  "providerId": null,
+  "sessionIds": [],
+  "coverageFloor": {
+    "techniqueTakes": 36,
+    "rallyTakes": 6,
+    "totalRecordings": 42,
+    "developmentTakes": 24,
+    "holdoutTakes": 18,
+    "includesCalibration": false,
+    "includesRejectedAttempts": false,
+    "provesPopulationAccuracy": false
+  },
+  "calibrationChecklistIds": [
+    "C00",
+    "C01",
+    "C02",
+    "C03",
+    "C04",
+    "C05",
+    "C06",
+    "C07",
+    "C08",
+    "C09",
+    "C10"
+  ],
+  "splitPolicy": "Freeze complete takes before tuning; log rejected attempts and replacements; after tuning on holdout create new unseen validation batch.",
+  "plannedSlots": [
+    {
+      "id": "S-FH-SHORT-A-r01",
+      "conditionId": "S-FH-SHORT",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-FH-SHORT-A-r02",
+      "conditionId": "S-FH-SHORT",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-FH-SHORT-A-r03",
+      "conditionId": "S-FH-SHORT",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-FH-SHORT-B-r01",
+      "conditionId": "S-FH-SHORT",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-FH-SHORT-B-r02",
+      "conditionId": "S-FH-SHORT",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-FH-SHORT-B-r03",
+      "conditionId": "S-FH-SHORT",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-BH-SHORT-A-r01",
+      "conditionId": "S-BH-SHORT",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-BH-SHORT-A-r02",
+      "conditionId": "S-BH-SHORT",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-BH-SHORT-A-r03",
+      "conditionId": "S-BH-SHORT",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-BH-SHORT-B-r01",
+      "conditionId": "S-BH-SHORT",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-BH-SHORT-B-r02",
+      "conditionId": "S-BH-SHORT",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "S-BH-SHORT-B-r03",
+      "conditionId": "S-BH-SHORT",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-FH-BLOCK-A-r01",
+      "conditionId": "R-FH-BLOCK",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-FH-BLOCK-A-r02",
+      "conditionId": "R-FH-BLOCK",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-FH-BLOCK-A-r03",
+      "conditionId": "R-FH-BLOCK",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-FH-BLOCK-B-r01",
+      "conditionId": "R-FH-BLOCK",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-FH-BLOCK-B-r02",
+      "conditionId": "R-FH-BLOCK",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-FH-BLOCK-B-r03",
+      "conditionId": "R-FH-BLOCK",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-BH-BLOCK-A-r01",
+      "conditionId": "R-BH-BLOCK",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-BH-BLOCK-A-r02",
+      "conditionId": "R-BH-BLOCK",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-BH-BLOCK-A-r03",
+      "conditionId": "R-BH-BLOCK",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-BH-BLOCK-B-r01",
+      "conditionId": "R-BH-BLOCK",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-BH-BLOCK-B-r02",
+      "conditionId": "R-BH-BLOCK",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "R-BH-BLOCK-B-r03",
+      "conditionId": "R-BH-BLOCK",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-FH-CLEAR-A-r01",
+      "conditionId": "O-FH-CLEAR",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-FH-CLEAR-A-r02",
+      "conditionId": "O-FH-CLEAR",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-FH-CLEAR-A-r03",
+      "conditionId": "O-FH-CLEAR",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-FH-CLEAR-B-r01",
+      "conditionId": "O-FH-CLEAR",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-FH-CLEAR-B-r02",
+      "conditionId": "O-FH-CLEAR",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-FH-CLEAR-B-r03",
+      "conditionId": "O-FH-CLEAR",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-JUMP-SMASH-A-r01",
+      "conditionId": "O-JUMP-SMASH",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-JUMP-SMASH-A-r02",
+      "conditionId": "O-JUMP-SMASH",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-JUMP-SMASH-A-r03",
+      "conditionId": "O-JUMP-SMASH",
+      "courtEnd": "A",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-JUMP-SMASH-B-r01",
+      "conditionId": "O-JUMP-SMASH",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-JUMP-SMASH-B-r02",
+      "conditionId": "O-JUMP-SMASH",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "development",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "O-JUMP-SMASH-B-r03",
+      "conditionId": "O-JUMP-SMASH",
+      "courtEnd": "B",
+      "kind": "technique",
+      "split": "holdout",
+      "minStrictPrimaryContactEvents": 1,
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "Q-DRIVE-A-r01",
+      "conditionId": "Q-DRIVE",
+      "courtEnd": "A",
+      "kind": "rally",
+      "split": "holdout",
+      "minRealContactsBothPlayers": 8,
+      "minRealContactsPrimaryPlayer": 4,
+      "minStrictPrimaryContactEvents": 2,
+      "strictEventSelection": "preselected contacts on both sides of the technique transition",
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "Q-DRIVE-B-r01",
+      "conditionId": "Q-DRIVE",
+      "courtEnd": "B",
+      "kind": "rally",
+      "split": "holdout",
+      "minRealContactsBothPlayers": 8,
+      "minRealContactsPrimaryPlayer": 4,
+      "minStrictPrimaryContactEvents": 2,
+      "strictEventSelection": "preselected contacts on both sides of the technique transition",
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "Q-DEFENCE-CLEAR-A-r01",
+      "conditionId": "Q-DEFENCE-CLEAR",
+      "courtEnd": "A",
+      "kind": "rally",
+      "split": "holdout",
+      "minRealContactsBothPlayers": 8,
+      "minRealContactsPrimaryPlayer": 4,
+      "minStrictPrimaryContactEvents": 2,
+      "strictEventSelection": "preselected contacts on both sides of the technique transition",
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "Q-DEFENCE-CLEAR-B-r01",
+      "conditionId": "Q-DEFENCE-CLEAR",
+      "courtEnd": "B",
+      "kind": "rally",
+      "split": "holdout",
+      "minRealContactsBothPlayers": 8,
+      "minRealContactsPrimaryPlayer": 4,
+      "minStrictPrimaryContactEvents": 2,
+      "strictEventSelection": "preselected contacts on both sides of the technique transition",
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "Q-SMASH-NET-A-r01",
+      "conditionId": "Q-SMASH-NET",
+      "courtEnd": "A",
+      "kind": "rally",
+      "split": "holdout",
+      "minRealContactsBothPlayers": 8,
+      "minRealContactsPrimaryPlayer": 4,
+      "minStrictPrimaryContactEvents": 2,
+      "strictEventSelection": "preselected contacts on both sides of the technique transition",
+      "sourceTakeId": null,
+      "status": "planned"
+    },
+    {
+      "id": "Q-SMASH-NET-B-r01",
+      "conditionId": "Q-SMASH-NET",
+      "courtEnd": "B",
+      "kind": "rally",
+      "split": "holdout",
+      "minRealContactsBothPlayers": 8,
+      "minRealContactsPrimaryPlayer": 4,
+      "minStrictPrimaryContactEvents": 2,
+      "strictEventSelection": "preselected contacts on both sides of the technique transition",
+      "sourceTakeId": null,
+      "status": "planned"
+    }
+  ]
+}

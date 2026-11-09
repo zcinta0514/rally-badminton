@@ -1,0 +1,250 @@
+{
+  "clothing": {
+    "stage": "clothing",
+    "baseline_sha256": "e300cbc68a42b0117298b2551054bbefec12ea423af8f33f54f0725d6c75b2da",
+    "bytes": 1851416,
+    "sha256": "f965c0c0833f4fc3b2c011db4913ac5dcd636b0a4c6085640dd1247e4b6588c1",
+    "objects": 62,
+    "body_clearance": {
+      "V4 independent match jersey": {
+        "minimum_body_clearance_m": 0.0016685239984326472,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0054238769807852805,
+        "penetrating_face_samples": 0
+      },
+      "V4 jersey hem": {
+        "minimum_body_clearance_m": 0.027280366921331733,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.028569306363351643,
+        "penetrating_face_samples": 0
+      },
+      "V4 sport collar": {
+        "minimum_body_clearance_m": 0.007074223249219358,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.007371343279373832,
+        "penetrating_face_samples": 0
+      },
+      "V4 shorts hem R": {
+        "minimum_body_clearance_m": 0.028487791350926273,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.028288545698160306,
+        "penetrating_face_samples": 0
+      },
+      "V4 shorts hem L": {
+        "minimum_body_clearance_m": 0.027426295389886945,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.02904326398856938,
+        "penetrating_face_samples": 0
+      },
+      "V4 independent match shorts": {
+        "minimum_body_clearance_m": 0.005797557887490257,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.004856304288296087,
+        "penetrating_face_samples": 0
+      },
+      "V4 crew sock L": {
+        "minimum_body_clearance_m": 0.0014878832516842522,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0011394953588705903,
+        "penetrating_face_samples": 0
+      },
+      "V4 ribbed sock cuff L": {
+        "minimum_body_clearance_m": 0.0039864662976469845,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0032801158413349185,
+        "penetrating_face_samples": 0
+      },
+      "V4 crew sock R": {
+        "minimum_body_clearance_m": 0.0014879873269819655,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0008935102200666734,
+        "penetrating_face_samples": 0
+      },
+      "V4 ribbed sock cuff R": {
+        "minimum_body_clearance_m": 0.0039822296384954825,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0032264730707538547,
+        "penetrating_face_samples": 0
+      },
+      "V4 accessory patellar strap L": {
+        "minimum_body_clearance_m": 0.0018468087437213399,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0023678623110754415,
+        "penetrating_face_samples": 0
+      },
+      "V4 accessory terry wristband L": {
+        "minimum_body_clearance_m": 0.0030263082880992442,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0038908057322259992,
+        "penetrating_face_samples": 0
+      },
+      "V4 court shoe upper L": {
+        "minimum_body_clearance_m": 0.0020776068311079143,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.002182136138401347,
+        "penetrating_face_samples": 0
+      },
+      "V4 padded shoe collar L": {
+        "minimum_body_clearance_m": 0.0036993994217482395,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0032875599815227474,
+        "penetrating_face_samples": 0
+      },
+      "V4 court shoe upper R": {
+        "minimum_body_clearance_m": 0.002149160646013115,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.002173455160791704,
+        "penetrating_face_samples": 0
+      },
+      "V4 padded shoe collar R": {
+        "minimum_body_clearance_m": 0.0038875684958838974,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.003154966785587021,
+        "penetrating_face_samples": 0
+      }
+    },
+    "topology": {
+      "V4 independent match jersey": {
+        "nonadjacent_triangle_crossings": 0,
+        "nonmanifold_edges": 0,
+        "opening_loops": 4,
+        "crossing_examples": []
+      },
+      "V4 independent match shorts": {
+        "nonadjacent_triangle_crossings": 0,
+        "nonmanifold_edges": 0,
+        "opening_loops": 3,
+        "crossing_examples": []
+      },
+      "jersey_shorts_surface_contacts": 0
+    },
+    "triangles": 71798,
+    "primitives": 68,
+    "materials": 17,
+    "embedded_images": 0
+  },
+  "polished": {
+    "stage": "polished",
+    "baseline_sha256": "e300cbc68a42b0117298b2551054bbefec12ea423af8f33f54f0725d6c75b2da",
+    "bytes": 4288936,
+    "sha256": "c577d5bbe4a8fa9c2fa13f0289dda7d0867b1075eeeea0f1943993911c55bc09",
+    "objects": 41,
+    "body_clearance": {
+      "V4 independent match jersey": {
+        "minimum_body_clearance_m": 0.0016685239984326472,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0054238769807852805,
+        "penetrating_face_samples": 0
+      },
+      "V4 jersey hem": {
+        "minimum_body_clearance_m": 0.027280366921331733,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.028569306363351643,
+        "penetrating_face_samples": 0
+      },
+      "V4 sport collar": {
+        "minimum_body_clearance_m": 0.007074223249219358,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.007371343279373832,
+        "penetrating_face_samples": 0
+      },
+      "V4 shorts hem R": {
+        "minimum_body_clearance_m": 0.028487791350926273,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.028288545698160306,
+        "penetrating_face_samples": 0
+      },
+      "V4 shorts hem L": {
+        "minimum_body_clearance_m": 0.027426295389886945,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.02904326398856938,
+        "penetrating_face_samples": 0
+      },
+      "V4 independent match shorts": {
+        "minimum_body_clearance_m": 0.005797557887490257,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.004856304288296087,
+        "penetrating_face_samples": 0
+      },
+      "V4 crew sock L": {
+        "minimum_body_clearance_m": 0.0014878832516842522,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0011394953588705903,
+        "penetrating_face_samples": 0
+      },
+      "V4 ribbed sock cuff L": {
+        "minimum_body_clearance_m": 0.0039864662976469845,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0032801158413349185,
+        "penetrating_face_samples": 0
+      },
+      "V4 crew sock R": {
+        "minimum_body_clearance_m": 0.0014879873269819655,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0008935102200666734,
+        "penetrating_face_samples": 0
+      },
+      "V4 ribbed sock cuff R": {
+        "minimum_body_clearance_m": 0.0039822296384954825,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0032264730707538547,
+        "penetrating_face_samples": 0
+      },
+      "V4 accessory patellar strap L": {
+        "minimum_body_clearance_m": 0.0018468087437213399,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0023678623110754415,
+        "penetrating_face_samples": 0
+      },
+      "V4 accessory terry wristband L": {
+        "minimum_body_clearance_m": 0.0030263082880992442,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0038908057322259992,
+        "penetrating_face_samples": 0
+      },
+      "V4 court shoe upper L": {
+        "minimum_body_clearance_m": 0.0020776068311079143,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.002182136138401347,
+        "penetrating_face_samples": 0
+      },
+      "V4 padded shoe collar L": {
+        "minimum_body_clearance_m": 0.0036993994217482395,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.0032875599815227474,
+        "penetrating_face_samples": 0
+      },
+      "V4 court shoe upper R": {
+        "minimum_body_clearance_m": 0.002149160646013115,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.002173455160791704,
+        "penetrating_face_samples": 0
+      },
+      "V4 padded shoe collar R": {
+        "minimum_body_clearance_m": 0.0038875684958838974,
+        "penetrating_vertices": 0,
+        "minimum_face_sample_clearance_m": 0.003154966785587021,
+        "penetrating_face_samples": 0
+      }
+    },
+    "topology": {
+      "V4 independent match jersey": {
+        "nonadjacent_triangle_crossings": 0,
+        "nonmanifold_edges": 0,
+        "opening_loops": 4,
+        "crossing_examples": []
+      },
+      "V4 independent match shorts": {
+        "nonadjacent_triangle_crossings": 0,
+        "nonmanifold_edges": 0,
+        "opening_loops": 3,
+        "crossing_examples": []
+      },
+      "jersey_shorts_surface_contacts": 0
+    },
+    "triangles": 102946,
+    "primitives": 44,
+    "materials": 17,
+    "embedded_images": 4
+  }
+}

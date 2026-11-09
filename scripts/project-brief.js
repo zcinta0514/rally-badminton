@@ -97,7 +97,7 @@ function printList(label, values) {
 const branch = git(['branch', '--show-current']) || 'detached';
 const head = git(['rev-parse', 'HEAD']);
 const originMain = git(['rev-parse', '--verify', 'refs/remotes/origin/main'], {allowFailure: true}) || '不可用';
-const releaseTag = git(['describe', '--tags', '--abbrev=0'], {allowFailure: true}) || '无可达标签';
+const releaseTag = git(['describe', '--tags', '--abbrev=0', '--match', 'v[0-9]*'], {allowFailure: true}) || '无可达标签';
 const porcelain = git(['status', '--short']);
 const statusLines = porcelain ? porcelain.split('\n') : [];
 const modified = statusLines.filter(line => !line.startsWith('??')).length;

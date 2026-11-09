@@ -1,0 +1,201 @@
+{
+  "id": "p1-combined-03",
+  "status": "experimental; improved source deformation; runtime body/garment acceptance failed/pending",
+  "asset": "src/models/athlete-p1.glb",
+  "sha256": "864189e54cd3924504baa5461da1626b63ecd07e24ab826c3bf62423bc4b8856",
+  "skeletonVersion": "v4-71-p1-segmented-elbows-1",
+  "bones": 71,
+  "sourceBlend": "artifacts/p1-weight-repair/combined-03/athlete-p1.blend",
+  "sourceBlendSha256": "4de17df23d83f867ca117cb398d78aae18cb4accefc7870bdd79ae14b3974188",
+  "builder": "artifacts/p1-weight-repair/combined-03/build-p1-weight-repair.py",
+  "builderSha256": "868f7dfa08b07504e596d05b8f2aefd070cda28931134a1207c5fe29ca0386e7",
+  "baselineSha256": "d8307d3c8093f1540938b132be988486bf03a046acfa6ade63597f6b6ac93357",
+  "restRepair": {
+    "beforePairs": 66,
+    "afterPairs": 0,
+    "iterations": 1,
+    "changedVertices": 829,
+    "maximumDisplacementM": 0.0008240869899253276,
+    "footCapM": 0.006,
+    "headCapM": 0.0015,
+    "topologyPreserved": true,
+    "method": "Local three-ring tapered relaxation of crossing skin only; every morph receives the same rest delta. No removed skin or clothing expansion."
+  },
+  "gripRelaxDegrees": 0.5,
+  "soleProbes": [
+    {
+      "id": "P1_Sole_heel_L",
+      "side": "L",
+      "mesh": "V4 court outsole L",
+      "sourceVertex": 111,
+      "restWorld": [
+        -0.1959366649389267,
+        -0.13514500856399536,
+        0.006000000983476639
+      ],
+      "runtimeRule": "resolve and sample actual exported skinned vertex; never use marker alone as grounding proof"
+    },
+    {
+      "id": "P1_Sole_toe_L",
+      "side": "L",
+      "mesh": "V4 court outsole L",
+      "sourceVertex": 8,
+      "restWorld": [
+        -0.20830044150352478,
+        0.12851163744926453,
+        0.006150728091597557
+      ],
+      "runtimeRule": "resolve and sample actual exported skinned vertex; never use marker alone as grounding proof"
+    },
+    {
+      "id": "P1_Sole_heel_R",
+      "side": "R",
+      "mesh": "V4 court outsole R",
+      "sourceVertex": 113,
+      "restWorld": [
+        0.1959366649389267,
+        -0.13514500856399536,
+        0.006000000983476639
+      ],
+      "runtimeRule": "resolve and sample actual exported skinned vertex; never use marker alone as grounding proof"
+    },
+    {
+      "id": "P1_Sole_toe_R",
+      "side": "R",
+      "mesh": "V4 court outsole R",
+      "sourceVertex": 24,
+      "restWorld": [
+        0.20830044150352478,
+        0.12851163744926453,
+        0.006150728091597557
+      ],
+      "runtimeRule": "resolve and sample actual exported skinned vertex; never use marker alone as grounding proof"
+    }
+  ],
+  "gripSocket": "P1_GripSocket_R",
+  "actions": [
+    "V4_court-backhand",
+    "V4_court-clear",
+    "V4_court-drive",
+    "V4_court-drop",
+    "V4_court-smash",
+    "V4_lunge-lift",
+    "V4_mocap-backhand-1",
+    "V4_mocap-backhand-2",
+    "V4_mocap-backhand-4",
+    "V4_mocap-clear-133",
+    "V4_mocap-clear-140",
+    "V4_mocap-clear-151",
+    "V4_move-back",
+    "V4_move-back-left",
+    "V4_move-back-right",
+    "V4_move-forward",
+    "V4_move-forward-left",
+    "V4_move-forward-right",
+    "V4_move-left",
+    "V4_move-right",
+    "V4_ready",
+    "V4_scissor-clear",
+    "V4_underhand-serve"
+  ],
+  "sources": [
+    {
+      "kind": "body",
+      "license": "CC0-1.0",
+      "source": "Human Base Meshes v1.4.1",
+      "record": "scripts/build-athlete-v4-anatomy.py"
+    },
+    {
+      "kind": "motion",
+      "license": "CC0-1.0",
+      "source": "MultiSenseBadminton Sub11; six selected clear/backhand clips",
+      "record": "assets/motion/README.md"
+    },
+    {
+      "kind": "clothes-racket-rig-authored-clips",
+      "source": "existing RALLY V4 authored assets and this P1 derivative",
+      "record": "artifacts/p1/baseline/manifest.json"
+    }
+  ],
+  "qa": {
+    "body": "artifacts/p1-weight-repair/combined-03/motion-audit.json",
+    "bodyDense": "artifacts/p1-weight-repair/combined-03/motion-audit-60hz.json",
+    "authoring": "artifacts/p1-weight-repair/combined-03/authoring-qa.json",
+    "grip": "artifacts/p1-weight-repair/combined-03/grip-qa.json",
+    "sourceSamples": 281,
+    "bodyFailedSamples": 1,
+    "denseSamples": 554,
+    "denseBodyFailedSamples": 1,
+    "sourceArmFootFailedSamples": 0,
+    "runtimeBody": "artifacts/p1-weight-repair/combined-03/runtime-continuous-ik-body-qa.json",
+    "runtimeBodySamples": 77,
+    "runtimeBodyFailedSamples": 28,
+    "runtimeSurface": "artifacts/p1-weight-repair/combined-03/runtime-continuous-ik-surface-qa.json",
+    "runtimeSurfaceSamples": 77,
+    "runtimeSurfaceFailedSamples": 29,
+    "qualityAccepted": false,
+    "browser": "artifacts/p1-weight-repair/combined-03/browser-continuous-ik/report.json",
+    "fullReplay": "artifacts/p1-weight-repair/audit/relative-branch/probe-all48-final.json"
+  },
+  "parent": {
+    "id": "p1-movement-sample-03",
+    "sha256": "07273aa822cda78c023428fd91b4fd40b4f8e7e0fb8674e8c03f15cdf6f22158",
+    "sourceBlend": "artifacts/p1/candidate-03/athlete-p1.blend",
+    "sourceBlendSha256": "878e0cc9f44a12310408928831ebe40749a2a172f1fb41589e0728b8700af7b2"
+  },
+  "weightModules": {
+    "arm": {
+      "file": "artifacts/p1-weight-repair/combined-03/p1_arm_weights.py",
+      "sha256": "f240bec431b5bff58026d16033428dcf1f07aa1d3ac6ece3c807d2f9f7f137e1"
+    },
+    "foot": {
+      "file": "artifacts/p1-weight-repair/combined-03/p1_foot_weights.py",
+      "sha256": "6b07a4a6cb3ea1e96f9e48eb39897b326a52b28fb2029c17fd48dfd35c8d1b81"
+    }
+  },
+  "rotationGroups": [
+    {
+      "source": "V4_Forearm_L",
+      "helpers": [
+        {
+          "name": "P1_ElbowQuarter_L",
+          "fraction": 0.25
+        },
+        {
+          "name": "P1_Elbow_L",
+          "fraction": 0.5
+        },
+        {
+          "name": "P1_ElbowThreeQuarter_L",
+          "fraction": 0.75
+        }
+      ]
+    },
+    {
+      "source": "V4_Forearm_R",
+      "helpers": [
+        {
+          "name": "P1_ElbowQuarter_R",
+          "fraction": 0.25
+        },
+        {
+          "name": "P1_Elbow_R",
+          "fraction": 0.5
+        },
+        {
+          "name": "P1_ElbowThreeQuarter_R",
+          "fraction": 0.75
+        }
+      ]
+    }
+  ],
+  "weightRepair": {
+    "bodyAndGarmentGeometryUnchanged": true,
+    "originalActionCurvesUnchanged": true,
+    "addedElbowBones": 6,
+    "maximumInfluences": 4,
+    "elbowBlendBias": 0.0075,
+    "runtimeRule": "Continuously lift only relative final IK; diagnose full loops and recover residual offsets over 0.18 seconds; zero-time commits freeze recovery.",
+    "buildReport": "artifacts/p1-weight-repair/combined-03/build.json"
+  }
+}
