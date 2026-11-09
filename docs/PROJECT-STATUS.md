@@ -3,7 +3,7 @@
 <!-- project-brief
 {
   "statusVersion": 1,
-  "asOf": "2026-11-08",
+  "asOf": "2026-11-09",
   "baseline": {
     "branch": "main",
     "head": "83d3eecc3bac8b366d684fdf5bbe6085e617f490",
@@ -13,10 +13,8 @@
   "activeTask": {
     "title": "NET-2：所有实际触网的声音、波动与球网互动",
     "scope": "网布/网带碰撞、减速过网或回落、局部波动叠加、声音同步与网络显示",
-    "nextAction": "用户在触网预览比较轻重触网声音与波动、擦网两种球路、连续碰撞及暂停换边，再做正常对局和实体手机体验验收。",
-    "blockedBy": [
-      "用户视听、玩法及实体手机性能尚未验收；本地机器检查不代替这些验收。"
-    ],
+    "nextAction": "推送已验收分支，创建PR并在CI通过后合并，核验Pages与Vercel实际加载1.16.0。",
+    "blockedBy": [],
     "documents": [
       "docs/tasks/NET-2.md"
     ],
@@ -24,15 +22,15 @@
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "继承最新主线83d3eecc及1.15.0；NET-2仅本地候选，未推送或发布。",
+    "releaseState": "NET-2已获用户预览确认，准备1.16.0发布；未合并、未部署。",
     "localPreview": {
       "task": "NET-2",
       "url": "http://127.0.0.1:3276/src/net-review.html",
-      "lanUrl": "http://192.168.1.105:3276/src/net-review.html",
+      "lanUrl": "http://172.27.68.240:3276/src/net-review.html",
       "worktree": "/Users/xindong/Documents/开拍rally-net-2-contact",
-      "verifiedOn": "2026-11-08",
-      "buildId": "cc8e6ec8270d80cc",
-      "limitations": "布料拟音非球网实录；用户视听、玩法与实体手机性能未验收。"
+      "verifiedOn": "2026-11-09",
+      "buildId": "6e60658b89a2f975",
+      "limitations": "布料拟音非球网实录；实体手机长期性能由用户自行测试。"
     }
   },
   "readNext": [
@@ -53,14 +51,14 @@
     "baselineHead": "83d3eecc3bac8b366d684fdf5bbe6085e617f490",
     "taskFile": "docs/tasks/NET-2.md",
     "worktree": "/Users/xindong/Documents/开拍rally-net-2-contact",
-    "phase": "本地候选已验证，等待用户视听与玩法验收",
-    "stopReason": "已完成本轮实现与可执行验证，保留预览供用户检查。",
-    "nextAction": "用户在触网预览比较轻重触网声音与波动、擦网两种球路、连续碰撞及暂停换边，再做正常对局和实体手机体验验收。",
+    "phase": "最终发布候选通过，待PR与部署",
+    "stopReason": "正在执行接入与发布",
+    "nextAction": "推送已验收分支，创建PR并在CI通过后合并，核验Pages与Vercel实际加载1.16.0。",
     "checkpoint": "docs/NET-2-CHECKPOINT.md",
-    "validation": "781/781；构建cc8e6ec8270d80cc，107资源逐一匹配；两侧五场景实跑；最新主线整合后4例及普通比赛入口复验；最终手机尺寸折叠与重播通过。用户验收未完成。",
-    "scopeBoundary": "用户已确认所有实际触网，同时调整球碰网后的运动；本地开发预览，不发布。"
+    "validation": "最终781/781，root 6e60658b89a2f975 / Pages 256d1cbe0ca280d1；服务108项一致；独立Chromium两侧10场景及普通对局通过；用户预览确认接入。",
+    "scopeBoundary": "用户2026-11-09确认接入，执行本功能PR、合并及自动发布；原人物在制成果保留。"
   },
-  "publication": "本轮球网未推送、未开PR、未合并到main、未部署；继承主线1.15.0，不另定版本。"
+  "publication": "准备1.16.0，未推送、未开PR、未合并或部署。"
 }
 -->
 
@@ -74,3 +72,6 @@
 同日主线又合入SMASH-1（a8c4a8f2，v1.15.0），本分支继承最新杀球、关节稳定与正式入口更新。网的代码不替换新人物/杀球模块。
 
 最终纳入83d3eecc的1.15.0发布结果文档；该次整合仅文档变化，运行资源与最终构建不变。
+
+
+2026-11-09用户预览后确认接入，进入1.16.0发布准备；当日fetch核对主线仍为83d3eecc。

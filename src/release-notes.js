@@ -1,13 +1,13 @@
 // Player-facing release notes are intentionally separate from the build hash.
 // Internal-only changes can produce a new asset version without showing a new notice.
 export const RELEASE_NOTICE = Object.freeze({
-  id: '2026-11-08-smash-motion',
-  title: '杀球动作更新',
-  summary: '普通与起跳杀球更连贯舒展，转髋带动挥拍，落地后自然恢复。',
+  id: '2026-11-09-net-contact',
+  title: '球网反馈更新',
+  summary: '球碰到网时，触点附近会凹陷、波动，并响起对应的声音。',
   items: Object.freeze([
-    '杀球先由肘部前送，再带动手和拍头挥出；髋部先转，胸肩随后跟上。',
-    '引拍、随挥与落地缓冲连续衔接，较低触点采用更紧凑的发力动作。',
-    '修复远触点下的肘腕翻转与腕部拉长尖刺，保留原有触球判定和其他球种动作。',
-    '保留地狱人机强化与完整鱼跃救球、玻璃击球按钮、竖屏安全区及其他比赛模式。',
+    '轻触与重撞的声音、波动强度不同，网布和网带也有各自的反馈。',
+    '擦到网带可能减速过网继续回合，也可能回落；下网后球会短暂贴网，再回弹滑落。',
+    '连续触网会叠加波动，逐渐衰减停稳；暂停时球和球网一起停住。',
+    '好友对战双方请更新游戏后重新建房，使用相同的触网规则。',
   ]),
 });
