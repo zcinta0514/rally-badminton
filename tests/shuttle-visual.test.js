@@ -101,7 +101,7 @@ test('both net sides and all floor outcomes stay finite, bounded and determinist
    assert.ok(Math.hypot(p.x-e.x,p.z-e.z)<.5,'ending cannot become another long flight');
    assert.ok(Math.abs(Math.hypot(sample.axis.x,sample.axis.y,sample.axis.z)-1)<1e-8);
    assert.ok(sample.markOpacity>=0&&sample.markOpacity<=.6);
-   if(kind==='net')assert.ok(p.z*(side===0?1:-1)>=0,'net tail must stay on the hitting side');
+   if(kind==='net')assert.ok(p.z*(side===0?1:-1)>=(i<10?-.028:0),'only the first pocket may enter the deforming mesh; the rebound must return to the hitting side');
   }
   assert.ok(visual.sampleRallyEnd(e,e.duration).grounded);
   if(kind!=='net')assert.deepEqual(visual.sampleRallyEnd(e,.4).impact,{x:e.x,z:e.z});

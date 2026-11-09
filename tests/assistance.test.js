@@ -201,7 +201,8 @@ test('service contact holds the feet still throughout the windup', () => {
 });
 
 test('prediction agrees with independently calculated net height and the singles boundary', () => {
-  for (const offset of [-0.001, 0.001]) {
+  for (const offset of [-0.001, 0.060]) {
+    // Clear the real tape thickness + cork radius, rather than an infinitesimal line.
     // 0.5 seconds to net; gravity drop is 1.22625 m.
     const vz = -Math.expm1(.2) / (.2 * .5); // 1m in .5s with quadratic drag.
     const s = incoming({x: 0, y: 1.52 + 1.22625 + offset, z: 1, vz, vy: 0});

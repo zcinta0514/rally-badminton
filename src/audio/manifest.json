@@ -191,11 +191,44 @@
       "synthetic": true,
       "sha256": "90f3618a5caba9cf15611ebd3c568b8c5451e50aa65ccbaeaeabe8d16fb9debb",
       "bytes": 27984
+    },
+    {
+      "file": "net-mesh.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0013.wav",
+      "sourcePage": "https://bigsoundbank.com/cloth-s0013.html",
+      "sourceSha256": "7427de6e911d52a966c8a1106c160358f8703e71689637b7e86add909a8ff91e",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        0.103,
+        0.263
+      ],
+      "processing": "mono 22050Hz PCM16; 130Hz highpass; 3400Hz lowpass; 2ms attack / 60ms release; 0.8 peak limiter",
+      "sha256": "1c52c9f1c5533665b0922f2a0b3ae99c526c57b018fa02608533583f0d0b7913",
+      "bytes": 7298,
+      "netRecordingVerified": false,
+      "material": "cloth tear used as brief net-contact Foley, not an actual badminton-net recording"
+    },
+    {
+      "file": "net-tape.wav",
+      "source": "https://bigsoundbank.com/UPLOAD/bwf-en/0013.wav",
+      "sourcePage": "https://bigsoundbank.com/cloth-s0013.html",
+      "sourceSha256": "7427de6e911d52a966c8a1106c160358f8703e71689637b7e86add909a8ff91e",
+      "license": "CC0-1.0",
+      "cropSeconds": [
+        0.795,
+        1.015
+      ],
+      "processing": "mono 22050Hz PCM16; 130Hz highpass; 2600Hz lowpass; 2ms attack / 60ms release; 0.8 peak limiter",
+      "sha256": "69b1c45165b6ae421c947a6311544e224242f4cda5607cadc80dd8e3307700de",
+      "bytes": 9944,
+      "netRecordingVerified": false,
+      "material": "cloth tear used as brief net-contact Foley, not an actual badminton-net recording"
     }
   ],
   "gaps": [
     "4 verified takes for each serve/clear/drop/smash; current four impacts are generic badminton takes",
-    "Dedicated brake,landing,swish,shuttle-floor,net and stadium-ambient recordings"
+    "Dedicated brake,landing,swish,shuttle-floor and stadium-ambient recordings",
+    "Dedicated badminton mesh/tape impact recordings; current net samples are short cloth Foley crops, pending listening acceptance"
   ],
   "qualityAccepted": false
 }

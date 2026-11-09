@@ -3,66 +3,75 @@
 <!-- project-brief
 {
   "statusVersion": 1,
-  "asOf": "2026-11-08",
+  "asOf": "2026-11-09",
   "baseline": {
     "branch": "main",
-    "head": "a8c4a8f25e014d6dad7072daa3568886819dfab9",
-    "originMain": "a8c4a8f25e014d6dad7072daa3568886819dfab9",
+    "head": "83d3eecc3bac8b366d684fdf5bbe6085e617f490",
+    "originMain": "83d3eecc3bac8b366d684fdf5bbe6085e617f490",
     "releaseTag": "v1.15.0"
   },
   "activeTask": {
-    "title": "SMASH-1：杀球动作已合并并上线",
-    "scope": "保留R3肘领先与髋胸错峰，修复远触点肘腕翻转、引拍停顿及离地脚部补偿突变；修正手臂误绑定头部造成的腕部尖刺。",
-    "nextAction": "本任务功能已交付；用户可在正式游戏或新旧对比页检查实际手感。",
+    "title": "NET-2：所有实际触网的声音、波动与球网互动",
+    "scope": "网布/网带碰撞、减速过网或回落、局部波动叠加、声音同步与网络显示",
+    "nextAction": "推送已验收分支，创建PR并在CI通过后合并，核验Pages与Vercel实际加载1.16.0。",
     "blockedBy": [],
     "documents": [
-      "docs/tasks/SMASH-1.md"
+      "docs/tasks/NET-2.md"
     ],
-    "checkpoint": "docs/SMASH-1-CHECKPOINT.md"
+    "checkpoint": "docs/NET-2-CHECKPOINT.md"
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "1.15.0已合并、打标签并发布；Pages/Vercel生产资源核验通过。",
+    "releaseState": "NET-2已获用户预览确认，准备1.16.0发布；未合并、未部署。",
     "localPreview": {
-      "task": "SMASH-1",
-      "url": "http://127.0.0.1:3256/?preview=smash&revision=1.15.0",
-      "worktree": "/Users/xindong/Documents/开拍rally-smash-motion",
-      "verifiedOn": "2026-11-08",
-      "buildId": "218fbb52f2f88429",
-      "limitations": "3256已重启为正式源码快照；最终画面及缓存更新另外以线上核验为准。实体手机和完整表面碰撞审计未执行。"
-    },
-    "production": {
-      "commit": "a8c4a8f25e014d6dad7072daa3568886819dfab9",
-      "pullRequest": "https://github.com/zcinta0514/rally-badminton/pull/20",
-      "release": "https://github.com/zcinta0514/rally-badminton/releases/tag/v1.15.0",
-      "pagesBuild": "fe9d7433146d69b2",
-      "vercelBuild": "218fbb52f2f88429",
-      "verifiedOn": "2026-11-08"
+      "task": "NET-2",
+      "url": "http://127.0.0.1:3276/src/net-review.html",
+      "lanUrl": "http://172.27.68.240:3276/src/net-review.html",
+      "worktree": "/Users/xindong/Documents/开拍rally-net-2-contact",
+      "verifiedOn": "2026-11-09",
+      "buildId": "6e60658b89a2f975",
+      "limitations": "布料拟音非球网实录；实体手机长期性能由用户自行测试。"
     }
   },
   "readNext": [
-    "docs/tasks/SMASH-1.md",
-    "docs/SMASH-1-CHECKPOINT.md"
+    "docs/tasks/NET-2.md",
+    "docs/NET-2-CHECKPOINT.md"
   ],
   "links": [
     "docs/tasks/UI-2.md",
     "docs/UI-2-CHECKPOINT.md",
     "docs/tasks/HELL-2.md",
-    "docs/HELL-2-CHECKPOINT.md"
+    "docs/HELL-2-CHECKPOINT.md",
+    "docs/tasks/SMASH-1.md",
+    "docs/SMASH-1-CHECKPOINT.md"
   ],
   "handoff": {
-    "taskId": "SMASH-1",
-    "branch": "docs/SMASH-1-release-result",
-    "baselineHead": "a8c4a8f25e014d6dad7072daa3568886819dfab9",
-    "taskFile": "docs/tasks/SMASH-1.md",
-    "worktree": "/Users/xindong/Documents/开拍rally-smash-motion",
-    "phase": "已合并、上线并完成双站浏览器核验",
-    "stopReason": "SMASH-1已交付；保留本地预览、录像与证据。",
-    "nextAction": "本任务已完成；正式游戏和新旧对比均可查看。",
-    "checkpoint": "docs/SMASH-1-CHECKPOINT.md",
-    "validation": "767/767；Node22/24 CI通过；main测试和Pages部署成功。双站各13项资源与对应构建完全一致；Pages浏览器已通过正常空闲更新从1.14.0切到1.15.0并显示杀球公告，正式对比页双方模型ready。无实体手机或完整碰撞审计。 Vercel正式对比页实读218fbb52f2f88429，双方模型ready。",
-    "scopeBoundary": "用户2026-11-08授权继续优化杀球、检查关节，测试通过后合并main；已核实main会自动发布。"
+    "taskId": "NET-2",
+    "branch": "feat/NET-2-contact",
+    "baselineHead": "83d3eecc3bac8b366d684fdf5bbe6085e617f490",
+    "taskFile": "docs/tasks/NET-2.md",
+    "worktree": "/Users/xindong/Documents/开拍rally-net-2-contact",
+    "phase": "最终发布候选通过，待PR与部署",
+    "stopReason": "正在执行接入与发布",
+    "nextAction": "推送已验收分支，创建PR并在CI通过后合并，核验Pages与Vercel实际加载1.16.0。",
+    "checkpoint": "docs/NET-2-CHECKPOINT.md",
+    "validation": "最终781/781，root 6e60658b89a2f975 / Pages 256d1cbe0ca280d1；服务108项一致；独立Chromium两侧10场景及普通对局通过；用户预览确认接入。",
+    "scopeBoundary": "用户2026-11-09确认接入，执行本功能PR、合并及自动发布；原人物在制成果保留。"
   },
-  "publication": "PR #20已于2026-11-08合并main a8c4a8f2；v1.15.0标签与GitHub Release指向该提交。Pages fe9d7433146d69b2、Vercel 218fbb52f2f88429资源均已核验。"
+  "publication": "准备1.16.0，未推送、未开PR、未合并或部署。"
 }
 -->
+
+
+## 2026-11-08：NET-2 本地候选
+
+以联网核验的最新主线 e96ff90f 建立独立工作目录。原人物任务及未提交成果原样保留。详见任务卡与 NET-2-CHECKPOINT；当前以实际测试/服务证据为准。
+
+2026-11-08 开发期间主线合入 HELL-2（e1b3d2cf，v1.14.0），本任务完整整合该更新，保留新版扑救/人机、界面与发布信息。整合前的检查不能代替整合后结果。
+
+同日主线又合入SMASH-1（a8c4a8f2，v1.15.0），本分支继承最新杀球、关节稳定与正式入口更新。网的代码不替换新人物/杀球模块。
+
+最终纳入83d3eecc的1.15.0发布结果文档；该次整合仅文档变化，运行资源与最终构建不变。
+
+
+2026-11-09用户预览后确认接入，进入1.16.0发布准备；当日fetch核对主线仍为83d3eecc。

@@ -83,3 +83,15 @@ Processing, hashes and crops: manifest.json and scripts/prepare-arena-audio.py.
 The four badminton impacts do NOT establish four verified takes for each
 specific stroke. Brake, landing, swish, net, shuttle-floor and dedicated
 stadium ambience remain material gaps. The controller leaves those silent.
+
+NET-2 cloth Foley additions (2026-11-08)
+---------------------------------------
+net-mesh.wav and net-tape.wav: Joseph SARDIN, "Cloth" (#0013), CC0-1.0.
+Page: https://bigsoundbank.com/cloth-s0013.html
+Original: https://bigsoundbank.com/UPLOAD/bwf-en/0013.wav
+License: https://bigsoundbank.com/licenses.html (verified 2026-11-08).
+The source records short fabric tears, not a badminton net. These short, filtered
+cloth transients are used as material Foley; no claim of actual net recording or
+user listening acceptance. Crops, processing and source/output hashes: manifest.json.
+Reproduce with scripts/prepare-net-audio.py (download the source into its declared
+artifact directory first). No tone generators or metallic impacts are added.
