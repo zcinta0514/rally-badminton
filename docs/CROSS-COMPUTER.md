@@ -55,6 +55,8 @@ npm run project:handoff -- --check
 
 某些早期制作脚本记录过旧电脑的绝对路径（例如 `/tmp/clear-probe`、`/Users/xindong`）。保留原始文件用于审计；运行时按清单中的相对路径找到已恢复源，或使用脚本已有参数重新指定。清单只能恢复备份时实际存在的文件，不能恢复已消失的临时目录。检查点中引用而快照中缺失的外部路径，须先找回或重建，不能声明对应历史流程已复现。
 
+已核验的 C16 历史源虽然不再位于 `/tmp/clear-probe/C16/rebuild.blend`，但相同 SHA256 `a6495743380f04bc8708fb730f6ddc2f23686b0724460ab2a6c46626ff4ad13a` 已保存在 `swift-hamilton` 快照的 `production-stages/sole-contact-03/source-inputs/C16-source.blend`（冻结目录另有同内容副本）。需要该段时同时恢复 `--worktree swift-hamilton`，使用这个源路径。D01 和 D24 的原制作源也已按检查点指纹恢复核对。
+
 Blender 制作使用对应检查点要求的版本；旧流程同时存在 LBS 与 DQ 验证，不能替换软件后默认等价。专业动作自然度、手机玩法和运行时替换等原有未验收项不会因备份而自动通过。
 
 ## 4. 以后换电脑前
