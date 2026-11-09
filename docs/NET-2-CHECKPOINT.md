@@ -59,3 +59,15 @@
 - 默认headless图形后端的第一次浏览器尝试在点击等待中超时，画面时钟停在0.05秒，不能计为通过；显式使用ANGLE Metal图形后端后完整实跑通过。未修改游戏代码掩盖该环境问题。
 - 自审覆盖共享判分与预测、网带前后球路、双方网络显示、消息边界、音频去重与素材许可、暂停及几何归位；最新主线为HEAD祖先；没有改正式人物、地狱/杀球模块或场馆照明。原人物目录未提交成果保持原样。
 - 回退使用对最终合并提交的可审查revert；联机规则回到旧协议时双方需更新重建房间，不改写main历史。
+
+## 2026-11-09：已合并并核验正式发布
+
+- PR [#22](https://github.com/zcinta0514/rally-badminton/pull/22) squash合并，主线源码提交 `fec9ff39141b0c95d8d23d58c65abbb054ad5196`；v1.16.0标签与GitHub Release指向该提交。
+- 合并前最终PR快照READY、blockers为空，Node22/24测试构建与Vercel预览全部通过，review线程为0；本次前台跟进到合并，没有遗留后台调度。PR卡片为已合并/不在跟进。
+- main Node22/24测试构建成功（42576504851），Pages构建及部署成功（42576504836）；Vercel生产提交fec9ff39状态SUCCESS，部署G6Qjx6WQoKAiAxTkqrsk6UpTd8vG。
+- Pages实际构建 `256d1cbe0ca280d1`，Vercel实际构建 `6e60658b89a2f975`。两站各14项资源（HTML、runtime、SW、共享规则/球网物理、网格、网络插值及校验、声音、球显示、两份新增WAV、公告、正式人物GLB）与对应本地构建逐字节一致。证据 `artifacts/net-2/production-resources.json`。
+- 两处公开入口均用独立Chromium/Metal实跑重球下网及擦网过网×两侧共4例，声音/接触/几何/暂停/归位、手机尺寸、普通人机入口及现有玻璃/地狱/布局通过，无pageerror。证据 `production-pages-browser-qa.json`、`production-vercel-browser-qa.json`与对应日志。
+- Cindy侧栏Pages页面最初仍受旧1.15.0缓存控制，新worker安装后通过现有空闲自动更新流程切到1.16.0；实读buildId 256d1cbe0ca280d1、球网反馈公告、网物理模块及离线模式已就绪，并实际进入普通人机。未清空用户存储，也未将第一次网络200视为页面更新。
+- Vercel第一次Node直接fetch在TLS前ECONNRESET；同机curl与真实浏览器随后取得资源并完成上述比对/实跑，不把失败请求计作成功。
+- 清理计划已只读核对。保留本worktree的预览服务和本地证据；原主目录仍有其他人物任务的20个tracked修改及未跟踪成果，未切分支、pull、reset或清理。发布结果文档单独分支docs/NET-2-release-result，不改变已验收运行资源。
+- 实体手机长期性能未测；CC0布料拟音与游戏近似等限制继续有效。
