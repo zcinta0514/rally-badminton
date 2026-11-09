@@ -94,6 +94,7 @@ def create(root, output, chunk_bytes=1024**3):
         if any(w['name'] == label for w in manifest['worktrees']):
             raise ValueError('Duplicate worktree name: ' + label)
         before = git(path, 'status', '--porcelain=v1', '--untracked-files=no')
+        tracked = set(subprocess.check_output(['git', '-C', str(path), 'ls-files', '-z']).decode().split('\0'))
         w = {'name': label, 'head': check.stdout.strip(),
              'branch': fields.get('branch', '').removeprefix('refs/heads/'),
              'trackedStatus': before, 'files': {}, 'symlinks': {}}
@@ -110,7 +111,7 @@ def create(root, output, chunk_bytes=1024**3):
             for name in sorted(files):
                 p = base / name
                 rel = p.relative_to(path).as_posix()
-                if excluded(name):
+                if excluded(name) and not (rel in tracked and Path(name).suffix == '.log'):
                     manifest['excludedFiles'].append(label + '/' + rel)
                     continue
                 if p.is_symlink():

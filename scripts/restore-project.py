@@ -64,6 +64,10 @@ def load_snapshot(source):
             safe_name(p)
             if item['sha256'] not in manifest['objects']:
                 raise ValueError('Unknown object in manifest')
+        for p, sha in w.get('gitFiles', {}).items():
+            safe_name(p)
+            if not re.fullmatch('[a-f0-9]{64}', sha):
+                raise ValueError('Invalid Git-backed file checksum')
         for p, target in w['symlinks'].items():
             safe_name(p)
             if os.path.isabs(target) or '\\' in target:
@@ -169,10 +173,13 @@ def restore(source, destination=None, names=None, verify_only=False):
             # Restore deletions as well as modifications and untracked/ignored files.
             tracked = subprocess.check_output(['git', '-C', str(target), 'ls-files', '-z']).decode().split('\0')
             for p in filter(None, tracked):
-                if p not in w['files'] and p not in w['symlinks']:
+                if p not in w['files'] and p not in w['symlinks'] and p not in w.get('gitFiles', {}):
                     q = target/safe_name(p)
                     if q.is_symlink() or q.is_file():
                         q.unlink()
+            for p, sha in w.get('gitFiles', {}).items():
+                if digest(target/p) != sha:
+                    raise ValueError('Git-backed source file checksum mismatch: ' + p)
             for p, item in w['files'].items():
                 q = target/p
                 # Never traverse a checked-out symlink while restoring source files.

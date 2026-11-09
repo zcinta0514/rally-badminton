@@ -36,8 +36,9 @@ class RoundTrip(unittest.TestCase):
             git('remote', 'add', 'origin', 'https://github.com/example/fixture.git')
             (source/'tracked.txt').write_text('before')
             (source/'deleted.txt').write_text('delete me')
+            (source/'tracked.log').write_text('tracked historical evidence')
             (source/'.gitignore').write_text('artifacts/\nnode_modules/\n.env\n')
-            git('add', 'tracked.txt', 'deleted.txt', '.gitignore')
+            git('add', 'tracked.txt', 'deleted.txt', 'tracked.log', '.gitignore')
             git('commit', '-m', 'baseline')
             other = tmp/'other'
             git('worktree', 'add', '-b', 'other', str(other))
@@ -65,6 +66,7 @@ class RoundTrip(unittest.TestCase):
             self.assertEqual((destination/'primary/tracked.txt').read_text(), 'unfinished')
             self.assertFalse((destination/'primary/deleted.txt').exists())
             self.assertEqual((destination/'primary/artifacts/model.blend').read_bytes(), b'local authoring data')
+            self.assertEqual((destination/'primary/tracked.log').read_text(), 'tracked historical evidence')
             self.assertEqual((destination/'primary/alias').read_text(), 'unfinished')
             self.assertEqual((destination/'other/tracked.txt').read_text(), 'before')
             self.assertEqual(subprocess.check_output(['git', '-C', str(destination/'primary'), 'remote', 'get-url', 'origin'], text=True).strip(), data['repository'])
