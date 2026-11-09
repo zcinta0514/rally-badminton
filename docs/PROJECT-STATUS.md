@@ -6,14 +6,14 @@
   "asOf": "2026-11-09",
   "baseline": {
     "branch": "main",
-    "head": "83d3eecc3bac8b366d684fdf5bbe6085e617f490",
-    "originMain": "83d3eecc3bac8b366d684fdf5bbe6085e617f490",
-    "releaseTag": "v1.15.0"
+    "head": "fec9ff39141b0c95d8d23d58c65abbb054ad5196",
+    "originMain": "fec9ff39141b0c95d8d23d58c65abbb054ad5196",
+    "releaseTag": "v1.16.0"
   },
   "activeTask": {
-    "title": "NET-2：所有实际触网的声音、波动与球网互动",
+    "title": "NET-2：球网反馈已接入并发布",
     "scope": "网布/网带碰撞、减速过网或回落、局部波动叠加、声音同步与网络显示",
-    "nextAction": "推送已验收分支，创建PR并在CI通过后合并，核验Pages与Vercel实际加载1.16.0。",
+    "nextAction": "本轮接入完成；后续依据用户实际游戏反馈调整，实体手机长期性能由用户自行测试。",
     "blockedBy": [],
     "documents": [
       "docs/tasks/NET-2.md"
@@ -22,7 +22,7 @@
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
-    "releaseState": "NET-2已获用户预览确认，准备1.16.0发布；未合并、未部署。",
+    "releaseState": "PR #22已合并，v1.16.0已发布；Pages和Vercel资源及真实浏览器均已核验。",
     "localPreview": {
       "task": "NET-2",
       "url": "http://127.0.0.1:3276/src/net-review.html",
@@ -47,18 +47,18 @@
   ],
   "handoff": {
     "taskId": "NET-2",
-    "branch": "feat/NET-2-contact",
-    "baselineHead": "83d3eecc3bac8b366d684fdf5bbe6085e617f490",
+    "branch": "docs/NET-2-release-result",
+    "baselineHead": "fec9ff39141b0c95d8d23d58c65abbb054ad5196",
     "taskFile": "docs/tasks/NET-2.md",
     "worktree": "/Users/xindong/Documents/开拍rally-net-2-contact",
-    "phase": "最终发布候选通过，待PR与部署",
-    "stopReason": "正在执行接入与发布",
-    "nextAction": "推送已验收分支，创建PR并在CI通过后合并，核验Pages与Vercel实际加载1.16.0。",
+    "phase": "1.16.0正式发布已核验，补齐结果文档",
+    "stopReason": "功能接入与两处生产核验完成，保留预览及证据。",
+    "nextAction": "本轮接入完成；后续依据用户实际游戏反馈调整，实体手机长期性能由用户自行测试。",
     "checkpoint": "docs/NET-2-CHECKPOINT.md",
-    "validation": "最终781/781，root 6e60658b89a2f975 / Pages 256d1cbe0ca280d1；服务108项一致；独立Chromium两侧10场景及普通对局通过；用户预览确认接入。",
+    "validation": "781/781；PR与main Node22/24构建测试通过；两站14项关键资源一致、各4场景与普通比赛实跑通过；Pages旧缓存自动迁移至256d1cbe0ca280d1，Vercel 6e60658b89a2f975。",
     "scopeBoundary": "用户2026-11-09确认接入，执行本功能PR、合并及自动发布；原人物在制成果保留。"
   },
-  "publication": "准备1.16.0，未推送、未开PR、未合并或部署。"
+  "publication": "已合并PR #22，源码fec9ff39，标签及Release v1.16.0；Pages 256d1cbe0ca280d1 / Vercel 6e60658b89a2f975，已实读。"
 }
 -->
 
@@ -75,3 +75,6 @@
 
 
 2026-11-09用户预览后确认接入，进入1.16.0发布准备；当日fetch核对主线仍为83d3eecc。
+
+
+2026-11-09 NET-2接入完成并发布1.16.0，生产核验证据见NET-2-CHECKPOINT。发布结果文档单独回写，不改变运行资源。
