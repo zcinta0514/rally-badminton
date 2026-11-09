@@ -6,19 +6,15 @@
   "asOf": "2026-11-09",
   "baseline": {
     "branch": "main",
-    "head": "fec9ff39141b0c95d8d23d58c65abbb054ad5196",
-    "originMain": "fec9ff39141b0c95d8d23d58c65abbb054ad5196",
+    "head": "79fa35c326756e95e25cfe8d5c1e38c7fa3872a8",
+    "originMain": "79fa35c326756e95e25cfe8d5c1e38c7fa3872a8",
     "releaseTag": "v1.16.0"
   },
   "activeTask": {
-    "title": "NET-2：球网反馈已接入并发布",
-    "scope": "网布/网带碰撞、减速过网或回落、局部波动叠加、声音同步与网络显示",
-    "nextAction": "本轮接入完成；后续依据用户实际游戏反馈调整，实体手机长期性能由用户自行测试。",
-    "blockedBy": [],
-    "documents": [
-      "docs/tasks/NET-2.md"
-    ],
-    "checkpoint": "docs/NET-2-CHECKPOINT.md"
+    "title": "FLOW-1：完整工作流与跨电脑接续备份",
+    "scope": "上传协作规则、开发计划和恢复工具，保存全部有效工作目录及制作源。",
+    "nextAction": "核对 GitHub 全部 44 个附件的服务端 digest 和大小，确认后发布备份；人物任务保留原有未验收边界。",
+    "blockedBy": []
   },
   "runtime": {
     "formalAsset": "src/models/athlete.glb",
@@ -34,8 +30,9 @@
     }
   },
   "readNext": [
-    "docs/tasks/NET-2.md",
-    "docs/NET-2-CHECKPOINT.md"
+    "docs/tasks/FLOW-1.md",
+    "docs/FLOW-1-CHECKPOINT.md",
+    "docs/CROSS-COMPUTER.md"
   ],
   "links": [
     "docs/tasks/UI-2.md",
@@ -46,19 +43,17 @@
     "docs/SMASH-1-CHECKPOINT.md"
   ],
   "handoff": {
-    "taskId": "NET-2",
-    "branch": "docs/NET-2-release-result",
-    "baselineHead": "fec9ff39141b0c95d8d23d58c65abbb054ad5196",
-    "taskFile": "docs/tasks/NET-2.md",
-    "worktree": "/Users/xindong/Documents/开拍rally-net-2-contact",
-    "phase": "1.16.0正式发布已核验，补齐结果文档",
-    "stopReason": "功能接入与两处生产核验完成，保留预览及证据。",
-    "nextAction": "本轮接入完成；后续依据用户实际游戏反馈调整，实体手机长期性能由用户自行测试。",
-    "checkpoint": "docs/NET-2-CHECKPOINT.md",
-    "validation": "781/781；PR与main Node22/24构建测试通过；两站14项关键资源一致、各4场景与普通比赛实跑通过；Pages旧缓存自动迁移至256d1cbe0ca280d1，Vercel 6e60658b89a2f975。",
-    "scopeBoundary": "用户2026-11-09确认接入，执行本功能PR、合并及自动发布；原人物在制成果保留。"
+    "taskId": "FLOW-1",
+    "taskFile": "docs/tasks/FLOW-1.md",
+    "checkpoint": "docs/FLOW-1-CHECKPOINT.md",
+    "worktree": ".",
+    "branch": "chore/workflow-portable",
+    "phase": "本地完整恢复与新 clone 已验证，43.6 GB 附件上传中；远端完整性尚未验收",
+    "stopReason": "本轮进行中",
+    "validation": "整包 45,753 源对象哈希通过，primary 完整恢复及 20 项 tracked 状态一致；新 clone 安装、构建和 31 项工作流回归通过；GitHub 附件未全部上传完。见 FLOW-1-CHECKPOINT。",
+    "scopeBoundary": "用户已授权全部工作流及大型制作资源上传；不合并人物实验、不改游戏版本、不部署生产。"
   },
-  "publication": "已合并PR #22，源码fec9ff39，标签及Release v1.16.0；Pages 256d1cbe0ca280d1 / Vercel 6e60658b89a2f975，已实读。"
+  "publication": "正式版本保持 v1.16.0；本轮使用独立流程分支与专用资料快照 tag。"
 }
 -->
 

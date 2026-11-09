@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "unfilled-template",
+  "specVersion": "rally-capture/2.0",
+  "eventId": null,
+  "takeId": null,
+  "playerId": null,
+  "eventType": "racket-shuttle-contact",
+  "layer": null,
+  "provenance": "missing",
+  "gateStatus": "needs_evidence",
+  "scope": {
+    "strictContactCandidate": null,
+    "selectionRecordedAt": null,
+    "selectionReason": null
+  },
+  "contactStart": {
+    "estimate_s": null,
+    "lower_s": null,
+    "upper_s": null,
+    "U95_s": null,
+    "intervalIncludesEndpoints": null
+  },
+  "contactEnd": {
+    "estimate_s": null,
+    "lower_s": null,
+    "upper_s": null,
+    "U95_s": null,
+    "intervalIncludesEndpoints": null
+  },
+  "racketSurface": {
+    "handlePoseFileId": null,
+    "localSurfaceFileId": null,
+    "normalDefinitionFileId": null,
+    "deformationResidualFileId": null,
+    "measurementStatus": "missing"
+  },
+  "shuttleCork": {
+    "geometryFileId": null,
+    "trajectoryFileId": null,
+    "measurementStatus": "missing"
+  },
+  "evidence": {
+    "sourceFileIds": [],
+    "sourceChannelIds": [],
+    "frameRanges": [],
+    "syncReportFileId": null,
+    "calibrationIds": [],
+    "independentReferenceFileIds": [],
+    "annotationDisagreementFileId": null,
+    "missingIntervalsFileId": null
+  },
+  "uncertaintyBudget": {
+    "relativeSpeedUpperBound_mps": null,
+    "relativeSpeedEvidenceFileId": null,
+    "temporalContribution_m": null,
+    "totalContactU95_m": null,
+    "independentReferenceU95_m": null,
+    "method": null,
+    "correlationsEvidenceFileId": null,
+    "budgetReportFileId": null
+  },
+  "metricReportFileIds": [],
+  "reviewerId": null,
+  "reviewedAt": null
+}

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "kind": "unfilled-template",
+  "specVersion": "rally-capture/2.0",
+  "deliveryId": null,
+  "createdAt": null,
+  "providerId": null,
+  "assetStoreId": null,
+  "planFile": "capture-plan.json",
+  "qualitySpec": "docs/CAPTURE-QUALITY-GATES.md",
+  "gateStatus": "needs_evidence",
+  "rights": {
+    "status": "needs_evidence",
+    "evidenceIds": [],
+    "allowedUses": [],
+    "restrictions": []
+  },
+  "coordinateSystem": {
+    "sourceDefinitionFileId": null,
+    "sourceToRallyMatrix4x4": null,
+    "matrixConvention": null,
+    "rallyHandedness": "right",
+    "rallyUpAxis": "+Y",
+    "rallyOrigin": "court center on floor",
+    "rallySide0": "+Z",
+    "lengthUnit": "m",
+    "timeUnit": "s",
+    "angleUnit": "rad",
+    "quaternionOrder": "xyzw",
+    "verificationFileId": null
+  },
+  "masterClock": {
+    "clockId": null,
+    "definitionFileId": null,
+    "syncEvidenceFileIds": [],
+    "timestampUnit": "s"
+  },
+  "files": [],
+  "channels": [],
+  "calibrationIds": [],
+  "takes": [],
+  "rejectedAttempts": [],
+  "derivations": [],
+  "layerReviews": [
+    {
+      "layer": "L0",
+      "status": "needs_evidence",
+      "scopeTakeIds": [],
+      "scopeEventIds": [],
+      "reportFileIds": [],
+      "reviewerId": null,
+      "reviewedAt": null
+    },
+    {
+      "layer": "L1",
+      "status": "needs_evidence",
+      "scopeTakeIds": [],
+      "scopeEventIds": [],
+      "reportFileIds": [],
+      "reviewerId": null,
+      "reviewedAt": null
+    },
+    {
+      "layer": "L2",
+      "status": "needs_evidence",
+      "scopeTakeIds": [],
+      "scopeEventIds": [],
+      "reportFileIds": [],
+      "reviewerId": null,
+      "reviewedAt": null
+    },
+    {
+      "layer": "L3",
+      "status": "needs_evidence",
+      "scopeTakeIds": [],
+      "scopeEventIds": [],
+      "reportFileIds": [],
+      "reviewerId": null,
+      "reviewedAt": null
+    }
+  ],
+  "humanReviews": {
+    "coach": null,
+    "animationLead": null,
+    "measurementReviewer": null,
+    "userVisualAcceptance": null
+  }
+}

@@ -21,3 +21,6 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - name: Backup and restore regression
+        if: matrix.node == 22
+        run: python3 tests/project-backup.test.py

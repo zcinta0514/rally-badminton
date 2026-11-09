@@ -1,0 +1,102 @@
+{
+  "date": "2026-09-20",
+  "candidates_screened": 304,
+  "method": "Expert/Good annotations, retargeted calf proxy clearance, moderate ankle tilt and pelvis travel; final geometry and visual acceptance remain separate.",
+  "selected": [
+    {
+      "id": "mocap-clear-133",
+      "family": "clear",
+      "stroke": 133,
+      "minimumRetargetedCalfDistanceM": 0.1720776874153075,
+      "maximumShinTiltDegrees": 41.88731424641179,
+      "pelvisTravelM": 0.1258475075080949,
+      "peakHandSpeedMps": 7.557326655438298,
+      "maximumHandSpeedStepMps": 1.9973422456747763
+    },
+    {
+      "id": "mocap-clear-140",
+      "family": "clear",
+      "stroke": 140,
+      "minimumRetargetedCalfDistanceM": 0.25682408573797644,
+      "maximumShinTiltDegrees": 39.052192368834184,
+      "pelvisTravelM": 0.2618831387012154,
+      "peakHandSpeedMps": 6.464911251077541,
+      "maximumHandSpeedStepMps": 1.2781899175327407
+    },
+    {
+      "id": "mocap-clear-151",
+      "family": "clear",
+      "stroke": 151,
+      "minimumRetargetedCalfDistanceM": 0.18938452892602428,
+      "maximumShinTiltDegrees": 47.13360469523924,
+      "pelvisTravelM": 0.17317369159026438,
+      "peakHandSpeedMps": 6.636216243755638,
+      "maximumHandSpeedStepMps": 1.4738054559194458
+    },
+    {
+      "id": "mocap-backhand-1",
+      "family": "backhand",
+      "stroke": 1,
+      "minimumRetargetedCalfDistanceM": 0.21106322416368875,
+      "maximumShinTiltDegrees": 48.054426630607345,
+      "pelvisTravelM": 0.6405862997988638,
+      "peakHandSpeedMps": 3.7137405140200546,
+      "maximumHandSpeedStepMps": 1.0461835661506136
+    },
+    {
+      "id": "mocap-backhand-2",
+      "family": "backhand",
+      "stroke": 2,
+      "minimumRetargetedCalfDistanceM": 0.25619881701204844,
+      "maximumShinTiltDegrees": 47.66146394766957,
+      "pelvisTravelM": 0.5380708246151245,
+      "peakHandSpeedMps": 5.404939413539726,
+      "maximumHandSpeedStepMps": 1.6647925292911596
+    },
+    {
+      "id": "mocap-backhand-4",
+      "family": "backhand",
+      "stroke": 4,
+      "minimumRetargetedCalfDistanceM": 0.22343445138815662,
+      "maximumShinTiltDegrees": 50.389234554231535,
+      "pelvisTravelM": 0.5705965027889673,
+      "peakHandSpeedMps": 4.062619768856575,
+      "maximumHandSpeedStepMps": 0.9252770560750547
+    }
+  ],
+  "rejected_initial_clear_samples": [
+    {
+      "id": "mocap-clear-1",
+      "family": "clear",
+      "stroke": 1,
+      "minimumRetargetedCalfDistanceM": 0.0005098629753797713,
+      "maximumShinTiltDegrees": 48.39686807407297,
+      "pelvisTravelM": 0.27528353200654776,
+      "peakHandSpeedMps": 6.918085794778732,
+      "maximumHandSpeedStepMps": 1.7347991901967967,
+      "reason": "Initial annotation-order selection; replaced after proportion/stance screening before final delivery."
+    },
+    {
+      "id": "mocap-clear-4",
+      "family": "clear",
+      "stroke": 4,
+      "minimumRetargetedCalfDistanceM": 0.04979701287947926,
+      "maximumShinTiltDegrees": 47.04705852541485,
+      "pelvisTravelM": 0.3353485158458287,
+      "peakHandSpeedMps": 6.00660816635693,
+      "maximumHandSpeedStepMps": 1.4831807563947814,
+      "reason": "Initial annotation-order selection; replaced after proportion/stance screening before final delivery."
+    },
+    {
+      "id": "mocap-clear-5",
+      "family": "clear",
+      "stroke": 5,
+      "minimumRetargetedCalfDistanceM": 0.12374442897467723,
+      "maximumShinTiltDegrees": 52.02220720264908,
+      "pelvisTravelM": 0.6924232020845345,
+      "peakHandSpeedMps": 6.2803499191946255,
+      "maximumHandSpeedStepMps": 1.5817505993680876,
+      "reason": "Initial annotation-order selection; replaced after proportion/stance screening before final delivery."
+    }
+  ]
+}

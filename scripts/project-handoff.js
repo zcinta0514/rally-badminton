@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import {execFileSync} from 'node:child_process';
-import {readFileSync, realpathSync, statSync} from 'node:fs';
+import {readFileSync, realpathSync, statSync, writeFileSync} from 'node:fs';
 import {dirname, isAbsolute, join, relative, resolve, sep, win32} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -73,7 +73,7 @@ function readStatus(root, errors) {
 }
 
 /** Read local files and Git only; never fetch, write, checkout, or start a server. */
-export function inspectHandoff(repositoryRoot = scriptRoot) {
+export function inspectHandoff(repositoryRoot = scriptRoot, {adopt = false} = {}) {
   const errors = [];
   const warnings = [];
   let root;
@@ -96,9 +96,10 @@ export function inspectHandoff(repositoryRoot = scriptRoot) {
   const handoff = data.handoff || {};
   checkDocument(root, handoff.taskFile, 'handoff.taskFile', errors);
   checkDocument(root, handoff.checkpoint, 'handoff.checkpoint', errors);
-  if (typeof handoff.worktree === 'string' && handoff.worktree.trim()) {
+  if (!adopt && typeof handoff.worktree === 'string' && handoff.worktree.trim()) {
     try {
-      if (!isAbsolute(handoff.worktree) || realpathSync(handoff.worktree) !== root) {
+      if (handoff.worktree !== '.' &&
+          (!isAbsolute(handoff.worktree) || realpathSync(handoff.worktree) !== root)) {
         errors.push('handoff.worktree 与本脚本所在项目目录不一致：' + handoff.worktree);
       }
     } catch { errors.push('handoff.worktree 不存在或无法解析：' + handoff.worktree); }
@@ -111,7 +112,7 @@ export function inspectHandoff(repositoryRoot = scriptRoot) {
     actual.branch = git(root, ['branch', '--show-current']) || '(detached HEAD)';
     actual.head = git(root, ['rev-parse', 'HEAD']);
     actual.originMain = git(root, ['rev-parse', '--verify', 'refs/remotes/origin/main'], true);
-    actual.releaseTag = git(root, ['describe', '--tags', '--abbrev=0'], true);
+    actual.releaseTag = git(root, ['describe', '--tags', '--abbrev=0', '--match', 'v[0-9]*'], true);
     actual.status = git(root, ['status', '--short']);
     actual.worktrees = git(root, ['worktree', 'list']);
     actual.conflicts = git(root, ['diff', '--name-only', '--diff-filter=U', '-z'])
@@ -119,7 +120,7 @@ export function inspectHandoff(repositoryRoot = scriptRoot) {
     if (actual.conflicts.length) {
       errors.push('存在未解决的 Git 冲突：' + actual.conflicts.join('、'));
     }
-    if (handoff.branch && handoff.branch !== actual.branch) {
+    if (!adopt && handoff.branch && handoff.branch !== actual.branch) {
       errors.push('handoff.branch=' + handoff.branch + '，实际分支=' + actual.branch);
     }
     const baselineHead = data.baseline?.head;
@@ -204,13 +205,26 @@ export function formatHandoff({root, data, actual, errors, warnings}) {
 }
 
 export function runCli(args = process.argv.slice(2), repositoryRoot = scriptRoot) {
-  if (args.some(arg => arg !== '--check') || args.length > 1) {
-    process.stderr.write('用法：node scripts/project-handoff.js [--check]\n');
+  if (args.some(arg => !['--check', '--adopt'].includes(arg)) || args.length > 1) {
+    process.stderr.write('用法：node scripts/project-handoff.js [--check | --adopt]\n');
     return 2;
   }
-  const report = inspectHandoff(repositoryRoot);
+  const adopt = args.includes('--adopt');
+  const report = inspectHandoff(repositoryRoot, {adopt});
+  if (adopt) {
+    if (report.actual.branch === '(detached HEAD)') report.errors.push('接续绑定需要先切换到任务分支');
+    if (!report.errors.length) {
+      const path = join(report.root, statusFile);
+      const content = readFileSync(path, 'utf8');
+      report.data.handoff.worktree = '.';
+      report.data.handoff.branch = report.actual.branch;
+      writeFileSync(path, content.replace(/<!--\s*project-brief\s*[\s\S]*?\s*-->/,
+        '<!-- project-brief\n' + JSON.stringify(report.data, null, 2) + '\n-->'));
+      process.stdout.write('已绑定当前目录与任务分支；基线、任务、历史验证和授权范围未改。\n');
+    }
+  }
   process.stdout.write(formatHandoff(report));
-  return args.includes('--check') && report.errors.length ? 1 : 0;
+  return (adopt || args.includes('--check')) && report.errors.length ? 1 : 0;
 }
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {

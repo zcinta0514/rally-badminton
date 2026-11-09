@@ -120,6 +120,50 @@ test('a committed status document may retain its verified ancestor without a sel
   assert.equal(f.cli('--check').status, 0);
 });
 
+test('portable dot worktree survives a new clone location and still enforces branch identity', t => {
+  const f = fixture(t);
+  f.data.handoff.worktree = '.';
+  f.save();
+  assert.equal(f.cli('--check').status, 0);
+  f.git('switch', '-c', 'another-task');
+  assert.equal(f.cli('--check').status, 1);
+});
+
+test('data backup tags do not replace the game release baseline', t => {
+  const f = fixture(t);
+  f.git('add', 'docs/PROJECT-STATUS.md');
+  f.git('commit', '-m', 'data snapshot');
+  f.git('tag', 'workspace-backup-test');
+  assert.equal(inspectHandoff(f.root).actual.releaseTag, 'v0.0.1');
+});
+
+test('explicit adopt repairs only location and branch after checking ancestry and documents', t => {
+  const f = fixture(t);
+  f.data.handoff.worktree = '/missing/previous-computer';
+  f.save();
+  f.git('switch', '-c', 'continued-task');
+  const baseline = structuredClone(f.data.baseline);
+  const task = structuredClone(f.data.activeTask);
+  assert.equal(f.cli('--adopt').status, 0);
+  const report = inspectHandoff(f.root);
+  assert.deepEqual(report.errors, []);
+  assert.equal(report.data.handoff.worktree, '.');
+  assert.equal(report.data.handoff.branch, 'continued-task');
+  assert.deepEqual(report.data.baseline, baseline);
+  assert.deepEqual(report.data.activeTask, task);
+  assert.equal(report.data.handoff.validation, f.data.handoff.validation);
+});
+
+test('adopt refuses invalid baseline and missing evidence without writing status', t => {
+  const f = fixture(t);
+  f.data.baseline.head = '1'.repeat(40);
+  f.data.handoff.checkpoint = 'docs/missing.md';
+  f.save();
+  const before = readFileSync(join(f.root, 'docs/PROJECT-STATUS.md'));
+  assert.equal(f.cli('--adopt').status, 1);
+  assert.deepEqual(readFileSync(join(f.root, 'docs/PROJECT-STATUS.md')), before);
+});
+
 test('a new task branch can retain main as its verified source after updating handoff', t => {
   const f = fixture(t);
   f.git('switch', '-c', 'fix/P1-1A-elbow');
