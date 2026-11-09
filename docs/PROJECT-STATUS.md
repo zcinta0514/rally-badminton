@@ -13,7 +13,7 @@
   "activeTask": {
     "title": "FLOW-1：完整工作流与跨电脑接续备份",
     "scope": "上传协作规则、开发计划和恢复工具，保存全部有效工作目录及制作源。",
-    "nextAction": "完成整包回读和上传核验，按跨电脑指南恢复；人物任务仍保留原有未验收边界。",
+    "nextAction": "核对 GitHub 全部 44 个附件的服务端 digest 和大小，确认后发布备份；人物任务保留原有未验收边界。",
     "blockedBy": []
   },
   "runtime": {
@@ -48,9 +48,9 @@
     "checkpoint": "docs/FLOW-1-CHECKPOINT.md",
     "worktree": ".",
     "branch": "chore/workflow-portable",
-    "phase": "跨电脑工具已建立，完整资源待打包、回读和上传核验",
+    "phase": "本地完整恢复与新 clone 已验证，43.6 GB 附件上传中；远端完整性尚未验收",
     "stopReason": "本轮进行中",
-    "validation": "检查结果与上传回执见 FLOW-1-CHECKPOINT；未执行的检查不得标为通过。",
+    "validation": "整包 45,753 源对象哈希通过，primary 完整恢复及 20 项 tracked 状态一致；新 clone 安装、构建和 31 项工作流回归通过；GitHub 附件未全部上传完。见 FLOW-1-CHECKPOINT。",
     "scopeBoundary": "用户已授权全部工作流及大型制作资源上传；不合并人物实验、不改游戏版本、不部署生产。"
   },
   "publication": "正式版本保持 v1.16.0；本轮使用独立流程分支与专用资料快照 tag。"
