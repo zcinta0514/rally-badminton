@@ -31,7 +31,7 @@ gh release download workspace-backup-20261109 --repo zcinta0514/rally-badminton 
 python3 scripts/restore-project.py --source ../rally-backup --destination ../rally-restored
 ```
 
-`--destination` 必须是尚不存在的目录，程序不会覆盖旧项目。每个工作目录恢复为独立 Git clone，绑定其历史分支与 HEAD，保留未提交修改和已删除文件；`origin` 指向同一个 GitHub 仓库。恢复工具先验证每个下载分块和所有源对象，再开始创建项目。
+`--destination` 必须是尚不存在的目录，程序不会覆盖旧项目。每个工作目录恢复为单独的 Git clone，绑定其历史分支与 HEAD，保留未提交修改和已删除文件；`origin` 指向同一个 GitHub 仓库。为避免多份 Git 历史占用数十 GB，它们共享恢复目录内的 `.history.git` 对象库；请保留它，移动时移动整个恢复目录。恢复工具先验证每个下载分块和所有源对象，再开始创建项目。
 
 清单 `manifest.json` 的 `worktrees` 列出可选工作目录。只取回原人物制作目录时：
 

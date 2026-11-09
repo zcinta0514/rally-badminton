@@ -37,6 +37,33 @@ def excluded(name):
             Path(name).suffix in SKIP_SUFFIXES or name.endswith('.local'))
 
 
+def split_bundle(bundle, chunk_bytes):
+    parts = []
+    if bundle.stat().st_size <= chunk_bytes:
+        return parts
+    with open(bundle, 'rb') as inp:
+        number = 0
+        while True:
+            first = inp.read(min(chunk_bytes, 8*1024**2))
+            if not first:
+                break
+            p = bundle.with_name(bundle.name+'.part-'+str(number).zfill(4))
+            h = hashlib.sha256()
+            size = 0
+            with open(p, 'wb') as out:
+                data = first
+                while data:
+                    out.write(data)
+                    h.update(data)
+                    size += len(data)
+                    if size == chunk_bytes:
+                        break
+                    data = inp.read(min(chunk_bytes-size, 8*1024**2))
+            parts.append({'name': p.name, 'sha256': h.hexdigest(), 'bytes': size})
+            number += 1
+    return parts
+
+
 def create(root, output, chunk_bytes=1024**3):
     root = root.resolve()
     output = output.resolve()
@@ -50,6 +77,9 @@ def create(root, output, chunk_bytes=1024**3):
     subprocess.run(['git', '-C', str(root), 'bundle', 'verify', str(bundle)], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     manifest['bundle'] = {'name': bundle.name, 'sha256': digest(bundle), 'bytes': bundle.stat().st_size}
+    bundle_parts = split_bundle(bundle, chunk_bytes)
+    if bundle_parts:
+        manifest['bundle']['parts'] = bundle_parts
     unique = {}
     inode_cache = {}
     raw = git(root, 'worktree', 'list', '--porcelain')
@@ -167,7 +197,7 @@ def create(root, output, chunk_bytes=1024**3):
     (output/'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+'\n')
     (output/'SHA256SUMS').write_text(''.join(
         item['sha256']+'  '+item['name']+'\n'
-        for item in [manifest['bundle'], *manifest['archive']['parts']]) +
+        for item in [*manifest['bundle'].get('parts', [manifest['bundle']]), *manifest['archive']['parts']]) +
         digest(output/'manifest.json')+'  manifest.json\n')
     print('Snapshot complete:', output, flush=True)
 

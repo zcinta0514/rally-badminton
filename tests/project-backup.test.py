@@ -70,6 +70,10 @@ class RoundTrip(unittest.TestCase):
             self.assertEqual(subprocess.check_output(['git', '-C', str(destination/'primary'), 'remote', 'get-url', 'origin'], text=True).strip(), data['repository'])
             with self.assertRaises(ValueError):
                 restore.restore(output, destination)
+            moved = tmp/'moved'
+            destination.rename(moved)
+            subprocess.run(['git', '-C', str(moved/'primary'), 'cat-file', '-e', 'HEAD^{commit}'], check=True)
+            subprocess.run(['git', '-C', str(moved/'other'), 'cat-file', '-e', 'HEAD^{commit}'], check=True)
             part = output/data['archive']['parts'][0]['name']
             part.write_bytes(b'corrupt')
             with self.assertRaises(ValueError):

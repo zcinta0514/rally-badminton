@@ -43,7 +43,7 @@ def load_snapshot(source):
         expected[name] = sha
     if digest(source/'manifest.json') != expected.get('manifest.json'):
         raise ValueError('Manifest checksum mismatch')
-    for item in [manifest['bundle'], *manifest['archive']['parts']]:
+    for item in [*manifest['bundle'].get('parts', [manifest['bundle']]), *manifest['archive']['parts']]:
         name = safe_name(item['name'])
         if '/' in name or item['sha256'] != expected.get(name):
             raise ValueError('Archive checksum metadata mismatch: ' + name)
@@ -145,9 +145,23 @@ def restore(source, destination=None, names=None, verify_only=False):
         if verify_only:
             return manifest
         destination.mkdir(parents=True)
+        bundle = source/manifest['bundle']['name']
+        if manifest['bundle'].get('parts'):
+            bundle = cache/'history.bundle'
+            with open(bundle, 'wb') as out:
+                for item in manifest['bundle']['parts']:
+                    with open(source/item['name'], 'rb') as inp:
+                        shutil.copyfileobj(inp, out, 8*1024**2)
+            if digest(bundle) != manifest['bundle']['sha256']:
+                raise ValueError('Combined Git bundle checksum mismatch')
+        pool = destination/'.history.git'
+        subprocess.run(['git', 'clone', '--mirror', str(bundle), str(pool)], check=True)
+        subprocess.run(['git', '-C', str(pool), 'remote', 'set-url', 'origin', manifest['repository']], check=True)
         for w in selected:
             target = destination/w['name']
-            subprocess.run(['git', 'clone', '--no-checkout', str(source/manifest['bundle']['name']), str(target)], check=True)
+            subprocess.run(['git', 'clone', '--shared', '--no-checkout', str(pool), str(target)], check=True)
+            alternates = target/'.git/objects/info/alternates'
+            alternates.write_text(os.path.relpath(pool/'objects', target/'.git/objects')+'\n')
             subprocess.run(['git', '-C', str(target), 'switch', '--detach', w['head']], check=True)
             if w['branch']:
                 subprocess.run(['git', '-C', str(target), 'switch', '-C', w['branch']], check=True)
