@@ -36,9 +36,7 @@ export function initOnboarding({
     const node = create('button', className, text, id); node.type = 'button'; return node;
   };
 
-  const entry = button('新手入门', 'onboarding-entry');
-  const footer = document.querySelector('#menu .menu-foot');
-  footer?.insertBefore(entry, footer.querySelector('span:last-child'));
+  const entry = document.getElementById('onboarding-entry') ?? button('新手指南', 'onboarding-entry');
   const help = document.getElementById('help-dialog');
   const settings = create('div', 'onboarding-settings');
   const replay = button('查看新手入门', 'onboarding-replay');
