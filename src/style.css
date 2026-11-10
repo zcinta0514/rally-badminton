@@ -166,6 +166,20 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   .launch-actions .primary-btn>span { font-size:16px; }.launch-actions .secondary-btn>span { font-size:10px; letter-spacing:0; }
   .menu-panel>.pwa-entry { min-width:0; min-height:26px; padding:4px 0; border:0; font-size:10px; }
   .menu-panel>.pwa-entry small { display:none; }
+  .menu-panel[data-entry="home"] {
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:repeat(4,max-content);
+    align-content:start;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    touch-action:pan-y;
+  }
+  .menu-panel[data-entry="home"] .setup { min-height:0; justify-content:flex-start; }
+  .menu-panel:not([data-entry="home"]) .menu-foot-actions { display:none !important; }
+  .menu-foot-actions :is(.primary-btn,.secondary-btn) {
+    min-width:0;
+    padding-inline:8px;
+  }
   .menu-foot { margin-top:0; font-size:9px; }
   .menu-tip-desktop { display:none; }.menu-tip-compact { display:block; flex:0 0 auto; padding-top:4px; color:var(--green); font-size:10px; font-weight:650; line-height:14px; }
   .live-tag { top:15px; left:20px; }.court-poster { bottom:59px; right:20px; }
