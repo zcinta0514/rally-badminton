@@ -176,11 +176,15 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   }
   .menu-panel[data-entry="home"] .setup { min-height:0; justify-content:flex-start; }
   .menu-panel:not([data-entry="home"]) .menu-foot-actions { display:none !important; }
+  .menu-foot { margin-top:0; gap:2px; font-size:9px; }
+  .menu-foot-actions { display:flex; flex-wrap:wrap; gap:4px 6px; }
   .menu-foot-actions :is(.primary-btn,.secondary-btn) {
     min-width:0;
-    padding-inline:8px;
+    width:auto;
+    padding:4px 8px;
+    font-size:11px;
+    line-height:1.25;
   }
-  .menu-foot { margin-top:0; font-size:9px; }
   .menu-tip-desktop { display:none; }.menu-tip-compact { display:block; flex:0 0 auto; padding-top:4px; color:var(--green); font-size:10px; font-weight:650; line-height:14px; }
   .live-tag { top:15px; left:20px; }.court-poster { bottom:59px; right:20px; }
   .court-poster strong { font-size:24px; margin-top:5px; }.court-poster>span { font-size:8px; }
@@ -249,8 +253,11 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   #home-actions .entry-copy strong { font-size:14px; }
   #home-actions .entry-copy small { font-size:10px; }
 }
+@media (max-height:500px) and (orientation:landscape) {
+  .menu-panel[data-entry="home"] #home-actions { gap:4px; padding:4px 0; }
+  #home-actions button { min-height:44px; padding:5px 10px; }
+}
 @media (max-height:360px) and (orientation:landscape) {
-  #home-actions button { min-height:44px; padding:6px 10px; }
   .menu-panel[data-entry="home"] .intro { display:none; }
 }
 
@@ -287,3 +294,9 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 @keyframes hell-flame { from { transform:rotate(-12deg) scale(.8,.7); opacity:.35; } to { transform:rotate(10deg) scale(1,1.08); opacity:.75; } }
 @keyframes hell-heat { from { opacity:.4; } to { opacity:.85; } }
 @media(prefers-reduced-motion:reduce) { .hell-fire i,.hell-entry::after { animation:none; } .hell-fire i { opacity:.45; } }
+
+@media (max-height:280px) and (orientation:landscape) {
+  .menu-panel[data-entry="home"] { width:max(var(--menu-width), 300px); }
+  .menu-panel[data-entry="home"] #home-actions { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #home-actions .hell-entry { grid-column:1 / -1; }
+}
