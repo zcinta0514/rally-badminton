@@ -113,8 +113,10 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 .launch-actions .secondary-btn>span { font-size:12px; letter-spacing:1px; }
 .menu-tip-compact { display:none; }
 .menu-foot { display:flex; justify-content:space-between; gap:8px; flex:0 0 auto; color:var(--muted); font-size:10px; margin-top:16px; line-height:1.5; }
-.menu-foot { align-items:center; }
-.menu-foot-actions { display:flex; align-items:center; gap:4px; min-width:0; }
+.menu-foot { flex-direction:column; align-items:stretch; text-align:right; }
+.menu-foot-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; }
+.menu-foot-actions #open-beta-group { grid-column:1 / -1; }
+.menu-foot-actions :is(.primary-btn,.secondary-btn) { min-height:44px; justify-content:center; }
 .leaderboard-entry { flex:0 0 auto; margin:-5px 0; padding:5px 4px; background:transparent; color:var(--green); font-size:inherit; font-weight:750; line-height:inherit; white-space:nowrap; }
 .leaderboard-entry:hover { background:#e8ede7; }
 .court-caption { position:fixed; inset:var(--header-height) 0 0 var(--menu-width); pointer-events:none; color:white; overflow:hidden; }
