@@ -471,6 +471,23 @@ $('copy-invite').addEventListener('click',async()=>{
   try{await navigator.clipboard.writeText(invite);showToast('邀请链接已复制');}
   catch{window.prompt('复制链接发给球友：',invite);}
 });
+$('open-beta-group').addEventListener('click',()=>{
+  $('beta-copy-status').textContent='';
+  dialog('beta-group');
+  $('copy-beta-wechat').focus();
+});
+$('copy-beta-wechat').addEventListener('click',async()=>{
+  const wechat=$('beta-wechat');
+  const status=$('beta-copy-status');
+  try{
+    await navigator.clipboard.writeText(wechat.value);
+    status.textContent='微信号已复制';
+  }catch{
+    wechat.focus();
+    wechat.select();
+    status.textContent='请手动复制已选中的微信号';
+  }
+});
 $('sound').addEventListener('click',()=>{sound=!sound;syncSoundControls();showToast(sound?'声音已开启':'声音已关闭');});
 document.addEventListener('visibilitychange',()=>{
   if(finale.blocking)lastFrame=performance.now();
