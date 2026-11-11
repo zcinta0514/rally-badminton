@@ -115,8 +115,26 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 .menu-tip-compact { display:none; }
 .menu-foot { display:flex; justify-content:space-between; gap:8px; flex:0 0 auto; color:var(--muted); font-size:10px; margin-top:16px; line-height:1.5; }
 .menu-foot { flex-direction:column; align-items:stretch; text-align:right; }
-.menu-foot-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; width:min(100%,252px); margin-inline:auto; }
-.menu-foot-actions .secondary-btn { min-width:0; min-height:44px; justify-content:center; padding:5px 6px; font-size:12px; line-height:1.25; }
+.menu-foot-actions {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,88px),1fr));
+  gap:6px;
+  width:min(100%,232px);
+  margin-inline:auto;
+}
+/* Keep the label on one line and opt these controls out of mobile text inflation. */
+.menu-foot-actions .secondary-btn {
+  min-width:0;
+  height:44px;
+  min-height:44px;
+  justify-content:center;
+  padding:0 4px;
+  font-size:11px;
+  line-height:16px;
+  white-space:nowrap;
+  -webkit-text-size-adjust:none;
+  text-size-adjust:none;
+}
 .leaderboard-entry { flex:0 0 auto; margin:-5px 0; padding:5px 4px; background:transparent; color:var(--green); font-size:inherit; font-weight:750; line-height:inherit; white-space:nowrap; }
 .leaderboard-entry:hover { background:#e8ede7; }
 .court-caption { position:fixed; inset:var(--header-height) 0 0 var(--menu-width); pointer-events:none; color:white; overflow:hidden; }
@@ -248,7 +266,7 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 /* Keep home controls compact even if rotation updates the width before the height.
    Intrinsic row sizing still allows extra room for wrapped text. */
 @media (max-height:550px) and (orientation:landscape),
-       (pointer:coarse) and (600px <= width <= 960px) and (min-aspect-ratio:1/1) {
+       (pointer:coarse) and (550px <= width <= 960px) and (min-aspect-ratio:1/1) {
   .menu-panel[data-entry="home"] #home-actions {
     flex:0 0 auto;
     grid-auto-rows:minmax(clamp(44px,15svh,60px),auto);
@@ -256,8 +274,6 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
     margin-inline:auto;
   }
   .menu-panel[data-entry="home"] #home-actions button { min-height:44px; padding:5px 8px; }
-  .menu-panel[data-entry="home"] .menu-foot-actions { width:min(100%,232px); }
-  .menu-panel[data-entry="home"] .menu-foot-actions button { font-size:11px; }
 }
 @media (max-height:360px) and (orientation:landscape) {
   .menu-panel[data-entry="home"] .intro { display:none; }
@@ -269,6 +285,9 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 .hell-entry:active { transform:scale(.985); }
 .hell-entry em { font-size:9px; font-style:normal; font-weight:600; letter-spacing:1px; border:1px solid #9b4e3a66; border-radius:4px; padding:2px 5px; vertical-align:middle; }
 #home-actions .hell-entry-mark { font-size:19px; letter-spacing:3px; opacity:.65; }
+@media (max-width:600px) and (max-height:360px) and (orientation:landscape) {
+  #home-actions .hell-entry-mark { display:none; }
+}
 .hell-contract { display:flex; align-items:center; justify-content:space-around; padding:6px 8px 8px; border-bottom:1px solid var(--line); }
 .hell-contract>span { display:flex; flex-direction:column; gap:4px; font-size:11px; }
 .hell-contract strong { font-size:32px; line-height:1.1; font-weight:650; }.hell-contract strong small { font-size:12px; font-weight:400; }
