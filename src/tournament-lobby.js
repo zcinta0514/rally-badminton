@@ -1,3 +1,4 @@
+import { normalizeBrightness } from './arena-preferences.js';
 import * as THREE from 'three';
 import { makeAthlete, applyAthletePose, bend } from './athlete.js';
 import { upgradeAthlete } from './athlete-import.js';
@@ -157,6 +158,7 @@ export class TournamentLobby {
     this.scene.background = new THREE.Color(0x131c1b);
     this.scene.fog = new THREE.Fog(0x172220, 19, 45);
     this.camera = new THREE.PerspectiveCamera(43, 1, .08, 70);
+    this.brightness = normalizeBrightness();
     this.clock = 0; this.disposed = false; this.courtPalette = 'green';
     this.lightClock = 0; this.lightingStarted = false; this.lightLevels = sampleLobbyLighting(0);
     this.materials = {
@@ -402,7 +404,7 @@ export class TournamentLobby {
     this.layoutCamera(width, height, reducedMotion);
     const mapping = renderer.toneMapping, exposure = renderer.toneMappingExposure;
     try {
-      renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = this.brightness;
       renderer.render(this.scene, this.camera);
     } finally { renderer.toneMapping = mapping; renderer.toneMappingExposure = exposure; }
   }

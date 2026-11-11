@@ -36,7 +36,7 @@ test('render quality accepts only bounded finite pixel ratios and exposes measur
     matchKey: new THREE.DirectionalLight(), scene: new THREE.Scene(), getRendererMetrics: CourtView.prototype.getRendererMetrics,
   };
   CourtView.prototype.setQuality.call(view, { pixelRatio: .9, shadows: false });
-  assert.deepEqual(view.getRendererMetrics(), { pixelRatio: 1, shadows: false, shadowSize:512, calls: 99, triangles: 1234, geometries: 12, textures: 4 });
+  assert.deepEqual(view.getRendererMetrics(), { pixelRatio: 1, shadows: false, brightness:undefined, shadowSize:512, calls: 99, triangles: 1234, geometries: 12, textures: 4 });
   CourtView.prototype.setQuality.call(view, { pixelRatio: NaN });
   assert.equal(ratio, 1);
   CourtView.prototype.setQuality.call(view, { pixelRatio: 5, shadows: true });

@@ -1,31 +1,38 @@
 import * as THREE from 'three';
 import { ArenaFeedbackClock } from './arena-feedback.js';
 
-/** Small repeatable rubber-grain texture; works in Node and needs no image request. */
+/** Seamless rubber: small pores over a broader pressed-grain surface.
+ * Generated once, mip filtered; two existing texture samples, no extra draws.
+ */
 export function makeCourtMaterial(color = 0x096247) {
-  const size = 128, data = new Uint8Array(size * size * 4);
-  let seed = 93417;
-  for (let i = 0; i < size * size; i++) {
-    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
-    const grain = 234 + ((seed >>> 24) % 18);
-    data.set([grain, grain, grain, 255], i * 4);
+  const size=256, data=new Uint8Array(size*size*4), reliefData=new Uint8Array(data.length);
+  let seed=93417;
+  const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+  const grid=32, coarse=Float32Array.from({length:grid*grid},random);
+  const sample=(x,y)=>{
+    const u=x/size*grid,v=y/size*grid,ix=Math.floor(u),iy=Math.floor(v);
+    const fx=u-ix,fy=v-iy,tx=fx*fx*(3-2*fx),ty=fy*fy*(3-2*fy);
+    const at=(dx,dy)=>coarse[((iy+dy)%grid)*grid+(ix+dx)%grid];
+    return (at(0,0)*(1-tx)+at(1,0)*tx)*(1-ty)+(at(0,1)*(1-tx)+at(1,1)*tx)*ty;
+  };
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+    const grain=sample(x,y),fine=random(),pore=fine<.075,offset=(y*size+x)*4;
+    const albedo=Math.round(228+grain*20+fine*6-(pore?9:0));
+    data.set([albedo,albedo,albedo,255],offset);
+    // Bump reads red; roughness reads green. Independent data keeps the floor matte.
+    reliefData.set([Math.round(65+grain*115+fine*25-(pore?35:0)),Math.round(230+grain*25),0,255],offset);
   }
-  const texture = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
-  texture.name = 'fine-rubber-grain';
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(10, 20);
-  texture.generateMipmaps = true;
-  texture.minFilter = THREE.LinearMipmapLinearFilter;
-  texture.magFilter = THREE.LinearFilter;
-  texture.anisotropy = 4;
-  texture.needsUpdate = true;
-  // Height/roughness are linear data, separate from the colour grain. Subtle
-  // relief catches grazing light without turning rubber into glossy plastic.
-  const relief = texture.clone(); relief.colorSpace = THREE.NoColorSpace;
-  relief.name = 'rubber-micro-relief'; relief.needsUpdate = true;
-  return new THREE.MeshStandardMaterial({ color, map: texture, roughness: .98, metalness: 0,
-    bumpMap: relief, bumpScale: .006, roughnessMap: relief });
+  const configure=(pixels,name,colorSpace)=>{
+    const map=new THREE.DataTexture(pixels,size,size,THREE.RGBAFormat);
+    map.name=name;map.colorSpace=colorSpace;
+    map.wrapS=map.wrapT=THREE.RepeatWrapping;map.repeat.set(6,13);
+    map.generateMipmaps=true;map.minFilter=THREE.LinearMipmapLinearFilter;
+    map.magFilter=THREE.LinearFilter;map.anisotropy=4;map.needsUpdate=true;return map;
+  };
+  const texture=configure(data,'fine-rubber-grain',THREE.SRGBColorSpace);
+  const relief=configure(reliefData,'rubber-micro-relief',THREE.NoColorSpace);
+  return new THREE.MeshStandardMaterial({color,map:texture,roughness:.98,metalness:0,
+    bumpMap:relief,bumpScale:.008,roughnessMap:relief});
 }
 
 /** Inward-only envelope: low cameras see a closed hall; elevated cameras can

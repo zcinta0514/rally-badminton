@@ -642,6 +642,7 @@ try{
   matchSettings=bindMatchSettings(arenaAudio,{preferences:arenaPreferences,onChange:value=>{
     const paletteChanged=value.courtPalette!==arenaPreferences.courtPalette;
     arenaPreferences=value;
+    view.setLightingBrightness(value.brightness);
     if(paletteChanged)view.setCourtPalette(value.courtPalette);
     palettePicker?.setValue(value.courtPalette);
   }});
