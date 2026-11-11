@@ -62,6 +62,7 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
       const file = `${directory}/${item.name}`;
       if (item.isDirectory()) await walk(file);
       else if (/\.(js|css|html|svg|png)$/.test(item.name) ||
+        directory === 'src/fonts' && (/\.woff2$/i.test(item.name) || /^(LICENSE|NOTICE)[\w.-]*\.txt$/i.test(item.name)) ||
         (directory === 'src/models' || directory.startsWith('src/models/')) && (/\.glb$/i.test(item.name) || /^(LICENSE|NOTICE|ATTRIBUTION)[\w.-]*\.(txt|md)$/i.test(item.name)) ||
         directory === 'src/audio' && (/\.wav$/.test(item.name) || ['LICENSE.txt','FINALE-VOICE.txt','manifest.json'].includes(item.name))) await add('/' + file, file);
     }

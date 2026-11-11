@@ -4,7 +4,7 @@
 
 ![844×390 实际首页](images/tournament-lobby-phone.png)
 
-当前验收构建：`6e34e48c9c831166`。
+当前验收构建：`43dbbd447e368ee0`，本地预览：http://127.0.0.1:3321/ 。
 
 ## 已实现
 
@@ -13,17 +13,19 @@
 - 首页「单人对战 / 好友对战」。单人页进入「人机对战 / 地狱挑战」；返回遵循父级。好友建房、加入和既有规则配置沿用原流程。
 - 短页面转场与进入比赛的渐显；系统减少动态效果时关闭。菜单不再运行示范对局。
 - 准备表单整页滚动；声音与触感从首页顶部设置可用。保留主屏幕安装、操作说明、新手指南与内测群入口。
+- 标题使用由得意黑派生的 Rally Display，菜单和正文使用由 Noto Sans SC 派生的 Rally UI。两套字体自托管、随离线包缓存，包含 SIL OFL 授权与来源；字体子集约219KB，未覆盖的昵称字符回退到系统字体。
+- 球场柔和顶光、人物补光、侧后轮廓光和上墙洗光分层处理，看台保持较暗。首次入场用1秒由86%亮度平滑提亮，稳定后变化幅度不超过1%，周期31–71秒。减少动态效果时跳过入场提亮或冻结当前灯光；返回首页不重复播放。
 
 ## 实测证据
 
-浏览器验证由 `scripts/verify-tournament-lobby.mjs` 启动独立服务器并检查实时构建标识。输出在被 Git 忽略的 `artifacts/lobby/`，不是线上测试数据。
+浏览器验证由 `scripts/verify-tournament-lobby.mjs` 检查实时构建标识；本轮同时在独立服务器和用户预览端口3321复核。输出在被 Git 忽略的 `artifacts/lobby/`，不是线上测试数据。
 
 - 1440×900、844×390、667×375、390×844 首页：入口在视口内，主要触控目标至少44px，无横向溢出。
 - 两种横屏尺寸：单人选择、普通人机开局、地狱挑战开局、暂停退出、好友创建/加入准备、声音设置。
 - 竖屏准备页滚动和返回；减少动态效果路径；没有页面异常或 WebGL shader 错误。
-- 场馆测试 6/6；导航/联机控制回归 46/46；场馆、导航、销毁与发布元数据合计55/55通过。
-- 全量 node 测试 785/788。3项失败在改动前已存在：Windows创建文件/目录符号链接时报 EPERM（两个子测试及父级失败）。基线为778/781，未把这些失败写成通过。
-- PWA 构建通过，109项资源。原版107项。未压缩资源总量约3.92MB，对比原版约3.89MB，净增约29KB；没有新增模型、视频或外部字体下载。
+- 场馆测试10/10；字体打包与服务测试2/2；与导航、销毁、发布元数据合计61/61通过。浏览器16项检查通过，包含字体实际加载和应用。
+- 全量 node 测试 791/794。3项失败在改动前已存在：Windows创建文件/目录符号链接时报 EPERM（两个子测试及父级失败）。基线为778/781，未把这些失败写成通过。
+- PWA 构建通过，115项资源。新增字体及授权文件约228KB，没有新增模型、视频或运行时外部字体请求。场馆共6盏灯、1张阴影贴图。
 
 这些是 Windows 上 Chromium 的浏览器检查；不等于 iPhone 13 的真机性能、耗电、发热或 Safari 兼容性结论。
 
@@ -35,7 +37,7 @@
 
 ```powershell
 npm ci
-node --test tests/tournament-lobby.test.js tests/connection-recovery.test.js
+node --test tests/font-build.test.js tests/tournament-lobby.test.js tests/connection-recovery.test.js tests/view-dispose.test.js tests/release-notice.test.js tests/release-version.test.js
 npm run build
 # 将 Playwright 安装在隔离的 artifacts/qa，或设置 RALLY_PLAYWRIGHT_MODULE
 npm install --prefix artifacts/qa playwright --ignore-scripts --no-audit --no-fund

@@ -30,6 +30,16 @@ async function fits(selector,minHeight=0){
 try {
   await page.goto(process.env.RALLY_QA_URL || app.url,{waitUntil:'networkidle',timeout:60000});
   await page.locator('#loading').waitFor({state:'hidden',timeout:60000});
+  report.fonts=await page.evaluate(async()=>{
+    await document.fonts.ready;
+    return {faces:[...document.fonts].map(face=>({family:face.family,status:face.status})),
+      title:getComputedStyle(document.querySelector('.lobby-wordmark')).fontFamily,
+      menu:getComputedStyle(document.querySelector('#open-solo')).fontFamily};
+  });
+  for(const family of ['Rally UI','Rally Display'])
+    assert.ok(report.fonts.faces.some(face=>face.family===family&&face.status==='loaded'),family+' loaded');
+  assert.match(report.fonts.title,/Rally Display/);assert.match(report.fonts.menu,/Rally UI/);
+  checked('self-hosted title and UI fonts load and are applied');
   await page.waitForTimeout(1500);
   report.buildId=await page.evaluate(()=>globalThis.RALLY_CONFIG.buildId);
   assert.equal(report.buildId,expectedBuild.version,'served build matches current source snapshot');

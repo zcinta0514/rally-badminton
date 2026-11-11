@@ -1,0 +1,21 @@
+Self-hosted fonts for RALLY
+
+Rally Display is a renamed, two-glyph subset of Smiley Sans Oblique v2.0.1.
+Source: https://github.com/atelier-anchor/smiley-sans/releases/tag/v2.0.1
+Copyright (c) 2022--2024 atelierAnchor. SIL Open Font License 1.1.
+Reserved upstream names Smiley and 得意黑 are not used as derived font names.
+Full license: LICENSE-SmileySans.txt
+
+Rally UI is a renamed WOFF2 subset of Noto Sans SC, weight axis 400--650.
+Source: https://github.com/google/fonts/tree/main/ofl/notosanssc
+Copyright 2014--2021 Adobe. SIL Open Font License 1.1.
+Full license: LICENSE-NotoSansSC.txt
+
+Subsets include current game interface text; other characters use system fallback.
+No external font service is contacted at runtime. Rebuild with the repository's
+scripts/prepare-lobby-fonts.py (fonttools + brotli), using upstream TTF files.
+The source TTF files are development inputs, not deployment assets.
+
+SHA256 of source inputs used on 2026-11-11:
+NotoSansSC.ttf: a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da
+SmileySans-Oblique.ttf: b447d7e781f08bc95c4c9f23ba71ed2b8ebb639aa7184485c71c4ca5afcd25c4

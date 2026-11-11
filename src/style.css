@@ -1,6 +1,7 @@
 @import url('./ui-match.css');
 @import url('./ui-dialogs.css');
 @import url('./onboarding.css');
+@import url('./typography.css');
 
 :root {
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;

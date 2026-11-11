@@ -10,6 +10,22 @@ const HEADING = -2.55;
 const JOINTS = ['pelvis', 'spine', 'chest', 'neck', 'head',
   ...['left', 'right'].flatMap(side => ['Hip', 'Knee', 'Ankle', 'Shoulder', 'Elbow', 'Wrist'].map(name => side + name))];
 
+/** Light circuits ease up from an already readable frame, then drift by at most 1%.
+ * These are intensity changes only: no moving beams, colour cycling or flashing.
+ * Supplying the output object avoids frame allocations. Time is active lobby time.
+ */
+export function sampleLobbyLighting(time, out = {}) {
+  const elapsed = Math.max(0, Number.isFinite(time) ? time : 0);
+  const entry = Math.min(1, elapsed);
+  const settled = .86 + .14 * entry ** 3 * (entry * (entry * 6 - 15) + 10);
+  const age = Math.max(0, elapsed - 1), ramp = Math.min(1, age / 3);
+  const drift = ramp * ramp * (3 - 2 * ramp), tau = Math.PI * 2;
+  out.main = settled * (1 + drift * (.006 * Math.sin(age * tau / 31) + .003 * Math.sin(age * tau / 53)));
+  out.side = settled * (1 + drift * (.007 * Math.sin(age * tau / 41) - .003 * Math.sin(age * tau / 67)));
+  out.back = settled * (1 + drift * (.005 * Math.sin(age * tau / 47) + .003 * Math.sin(age * tau / 71)));
+  return out;
+}
+
 /** A quiet, planted waiting pose. The optional output keeps the lobby clock allocation-light. */
 export function sampleLobbyPose(time, out) {
   const pose = out || { joints: Object.fromEntries(JOINTS.map(name => [name, { x: 0, y: 0, z: 0 }])),
@@ -45,6 +61,12 @@ export function sampleLobbyPose(time, out) {
 
 const standard = (name, color, roughness, metalness = 0) => {
   const mat = new THREE.MeshStandardMaterial({ color, roughness, metalness }); mat.name = name; return mat;
+};
+
+const fixtureMaterial = (name, color) => {
+  const mat = standard(name, 0x060a08, .52, .1);
+  mat.emissive.setHex(color); mat.emissiveIntensity = 1.6;
+  return mat;
 };
 
 function box(parent, name, size, position, material, shadow = false) {
@@ -136,6 +158,7 @@ export class TournamentLobby {
     this.scene.fog = new THREE.Fog(0x172220, 19, 45);
     this.camera = new THREE.PerspectiveCamera(43, 1, .08, 70);
     this.clock = 0; this.disposed = false; this.courtPalette = 'green';
+    this.lightClock = 0; this.lightingStarted = false; this.lightLevels = sampleLobbyLighting(0);
     this.materials = {
       floor: standard('charcoal-rubber', 0x303734, .97), wall: standard('acoustic-wall', 0x2b3230, .94),
       panel: standard('wall-panels', 0x343b37, .90), metal: standard('powder-coated-steel', 0x59645b, .38, .7),
@@ -145,7 +168,9 @@ export class TournamentLobby {
       court: makeCourtMaterial(resolveCourtPalette('green').court), apron: standard('apron-rubber', 0x234b40, .97),
       bag: standard('woven-racket-bag', 0x20332e, .92), bagTrim: standard('bag-piping', 0xa0aa82, .73),
       towel: standard('cotton-towel', 0xd3d3bb, 1),
-      fixture: new THREE.MeshBasicMaterial({ color: 0xe1ead9, toneMapped: false }),
+      fixture: fixtureMaterial('court-strip-diffuser', 0xf2f1e9),
+      fixtureSide: fixtureMaterial('sideline-strip-diffuser', 0xe5edf0),
+      fixtureBack: fixtureMaterial('gallery-strip-diffuser', 0xe4e9e7),
     };
     this.materials.panel.bumpMap = surfaceGrain('acoustic'); this.materials.panel.bumpScale = .025;
     this.materials.wood.map = surfaceGrain('wood'); this.materials.wood.map.colorSpace = THREE.SRGBColorSpace;
@@ -184,7 +209,8 @@ export class TournamentLobby {
       }
       for (const x of [-5.6, .2, 5.6]) {
         b.add(m.metal, 'box', [x, 6.98, z], [3.1, .13, .29]);
-        b.add(m.fixture, 'box', [x, 6.9, z], [2.92, .025, .22]);
+        const diffuser = z <= -8 ? m.fixtureBack : x === .2 ? m.fixture : m.fixtureSide;
+        b.add(diffuser, 'box', [x, 6.9, z], [2.92, .025, .22]);
       }
     }
     for (const x of [-7.4, -2.5, 2.5, 7.4]) b.add(m.beam, 'box', [x, 7.97, 0], [.13, .10, 28]);
@@ -285,17 +311,57 @@ export class TournamentLobby {
   }
 
   buildLights() {
-    this.scene.add(new THREE.HemisphereLight(0xebeff0, 0x333735, 1.4));
-    const key = new THREE.DirectionalLight(0xfff7eb, 3.1); key.position.set(-2.8, 7.2, 4.6);
+    // Keep ambient light modest: local sources separate the foreground, court and gallery.
+    const ambient = new THREE.HemisphereLight(0xe6edf0, 0x343b37, .82);
+    ambient.name = 'lobby-indirect-light'; this.scene.add(ambient);
+    const key = new THREE.DirectionalLight(0xfff7ed, 1.75); key.position.set(-2.8, 7.2, 4.6);
+    key.name = 'lobby-shadow-key';
     key.target.position.set(2.1, 0, 2); key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024);
     Object.assign(key.shadow.camera, { left: -9, right: 9, top: 12, bottom: -12, near: .3, far: 25 });
     key.shadow.bias = -.0003; key.shadow.normalBias = .015; key.shadow.radius = 3;
     this.scene.add(key, key.target);
-    const fill = new THREE.DirectionalLight(0xc5dbd5, .85); fill.position.set(7, 5, -3); this.scene.add(fill);
-    const face = new THREE.SpotLight(0xfff4e8, 85, 13, .60, .95, 2);
-    face.name = 'lobby-athlete-soft-key'; face.position.set(5.3, 4.5, 8.3);
-    face.target.position.set(ATHLETE.x, .95, ATHLETE.z); this.scene.add(face, face.target);
+    // Broad feathered sources approximate the fixed ceiling strips. Only the key casts
+    // shadows; the three spatial fills add gradients without extra shadow-map renders.
+    const court = new THREE.SpotLight(0xf1f3ed, 210, 23, 1.05, 1, 2);
+    court.name = 'lobby-court-soft-top'; court.position.set(.2, 6.85, 1.0);
+    court.target.position.set(0, 0, -1.0); this.scene.add(court, court.target);
+    const athlete = new THREE.SpotLight(0xfff3e5, 53, 13, .68, 1, 2);
+    athlete.name = 'lobby-athlete-soft-key'; athlete.position.set(5.3, 4.5, 8.3);
+    athlete.target.position.set(ATHLETE.x, .95, ATHLETE.z); this.scene.add(athlete, athlete.target);
+    const rim = new THREE.SpotLight(0xdbe9f1, 100, 15, .90, 1, 2);
+    rim.name = 'lobby-sideline-soft-rim'; rim.position.set(6.8, 6.85, 1.8);
+    rim.target.position.set(4.1, .8, 4.6); this.scene.add(rim, rim.target);
+    const wall = new THREE.SpotLight(0xe4ede9, 68, 11, .70, 1, 2);
+    wall.name = 'lobby-gallery-wall-wash'; wall.position.set(-1, 6.8, -10.4);
+    // Keep this pool above the gallery: a low, broad wash would brighten every head.
+    wall.target.position.set(.5, 5.2, -13.7); this.scene.add(wall, wall.target);
+    this.lights = { ambient, key, court, athlete, rim, wall };
+    this.applyLighting();
+  }
+
+  applyLighting() {
+    const level = this.lightLevels;
+    this.lights.key.intensity = 1.75 * level.main;
+    this.lights.court.intensity = 210 * level.main;
+    this.lights.athlete.intensity = 53 * level.side;
+    this.lights.rim.intensity = 100 * level.side;
+    this.lights.wall.intensity = 68 * level.back;
+    this.materials.fixture.emissiveIntensity = 1.6 * level.main;
+    this.materials.fixtureSide.emissiveIntensity = 1.6 * level.side;
+    this.materials.fixtureBack.emissiveIntensity = 1.35 * level.back;
+  }
+
+  updateLighting(dt, reducedMotion) {
+    if (!Number.isFinite(dt) || dt <= 0) return;
+    if (reducedMotion) {
+      // Reduced-motion startup skips the entrance; toggling it later freezes exactly
+      // the currently visible light. A paused/hidden dt=0 never changes either state.
+      if (this.lightingStarted) return;
+      this.lightClock = 1;
+    } else this.lightClock += Math.min(.1, dt);
+    this.lightingStarted = true;
+    sampleLobbyLighting(this.lightClock, this.lightLevels); this.applyLighting();
   }
 
   setCourtPalette(name) {
@@ -320,6 +386,7 @@ export class TournamentLobby {
 
   render(renderer, dt, width, height, { reducedMotion = false } = {}) {
     if (this.disposed) return;
+    this.updateLighting(dt, reducedMotion);
     if (!reducedMotion && Number.isFinite(dt) && dt > 0) {
       this.clock += Math.min(.1, dt); sampleLobbyPose(this.clock, this.pose); this.applyPose();
     }

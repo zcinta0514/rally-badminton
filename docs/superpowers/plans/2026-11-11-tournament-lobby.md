@@ -45,4 +45,12 @@ The scene is real Three.js, not a raster backdrop. Arena silhouette and material
 
 ## Result
 
-Draft PR #33: https://github.com/zcinta0514/rally-badminton/pull/33 . Local preview http://127.0.0.1:3320/ serves verified build 6e34e48c9c831166. Spec and code reviews passed; user visual acceptance remains pending. No merge or production deployment.
+Draft PR #33: https://github.com/zcinta0514/rally-badminton/pull/33 . Local preview http://127.0.0.1:3321/ serves verified build 43dbbd447e368ee0. Spec and code reviews passed; user visual acceptance remains pending. No merge or production deployment.
+
+## Font and lighting feedback iteration
+
+- [x] Verify remote main and other worktrees before editing the existing PR branch; baseline remains 8164ed8. Preserve the independent character work.
+- [x] Self-host renamed OFL font subsets: Rally Display for the title and Rally UI for interface text. Include provenance and full licenses in root and Pages offline builds; verify font MIME and actual browser loading.
+- [x] Balance court, athlete, rim and upper-wall lighting; keep six lights and one shadow map. Add a one-second first-entry ramp and restrained long-cycle variation; freeze under reduced motion and while hidden.
+- [x] Independent code review, 61/61 targeted tests, production build and 16 browser checks on the actual restarted preview. Full suite 791/794 with the same three baseline Windows symlink errors.
+- [x] Update the existing Draft PR and preview screenshot. Keep version 1.17.0 for this unreleased iteration.

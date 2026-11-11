@@ -4,13 +4,99 @@ import * as THREE from 'three';
 import { readFile } from 'node:fs/promises';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { cloneModel } from '../src/model-assets.js';
-import { TournamentLobby, sampleLobbyPose } from '../src/tournament-lobby.js';
+import { TournamentLobby, sampleLobbyPose, sampleLobbyLighting } from '../src/tournament-lobby.js';
 import { resolveCourtPalette } from '../src/court-palettes.js';
 
 function renderer(callback = () => {}) {
   return { toneMapping: THREE.NoToneMapping, toneMappingExposure: .77,
     render: callback, setSize() { assert.fail('lobby must share the existing renderer size'); } };
 }
+
+const lightingSnapshot = lobby => ({ clock: lobby.lightClock,
+  lights: Object.fromEntries(Object.entries(lobby.lights).map(([name, light]) => [name, light.intensity])),
+  fixtures: ['fixture', 'fixtureSide', 'fixtureBack'].map(name => lobby.materials[name].emissiveIntensity) });
+
+test('lighting enters from a readable level once, then varies by less than 1.5% at a slow rate', () => {
+  const out = {}, first = sampleLobbyLighting(0);
+  assert.ok(first.main >= .84 && first.main <= .90, 'first frame is already lit');
+  let previous = first.main;
+  for (let frame = 1; frame <= 60; frame++) {
+    assert.equal(sampleLobbyLighting(frame / 60, out), out, 'sampler reuses its output');
+    assert.ok(out.main >= previous, 'entrance ramps smoothly without pulsing');
+    assert.ok(out.main - previous < .006, 'no sudden frame-to-frame brightness step');
+    previous = out.main;
+  }
+  assert.ok(out.main >= .999, 'entrance settles in about one second');
+  const past = {};
+  for (let frame = 0; frame <= 12_000; frame++) {
+    sampleLobbyLighting(2 + frame / 60, out);
+    for (const channel of ['main', 'side', 'back']) {
+      assert.ok(out[channel] >= .985 && out[channel] <= 1.015, `${channel} stays within the settled light budget`);
+      if (past[channel] !== undefined) assert.ok(Math.abs(out[channel] - past[channel]) < .00006, `${channel} changes slowly`);
+      past[channel] = out[channel];
+    }
+  }
+  assert.notEqual(sampleLobbyLighting(9).main, sampleLobbyLighting(19).main);
+});
+
+test('lighting remains spatially fixed, uses one shadow map, and keeps strip emitters in sync', () => {
+  const lobby = new TournamentLobby({ loadAthlete: false }), shared = renderer();
+  const lights = []; lobby.scene.traverse(object => { if (object.isLight) lights.push(object); });
+  assert.ok(lights.length <= 6, 'local soft lights remain within the phone budget');
+  assert.equal(lights.filter(light => light.castShadow).length, 1);
+  assert.ok(lobby.lights.court.isSpotLight && lobby.lights.wall.isSpotLight, 'local sources create real spatial falloff');
+  assert.ok(lobby.lights.court.penumbra >= .8 && lobby.lights.wall.penumbra >= .8);
+  assert.ok(lobby.lights.athlete.intensity < 85, 'avoid the former blown shirt');
+  const positions = lights.map(light => light.position.toArray());
+  const emitterVersions = ['fixture', 'fixtureSide', 'fixtureBack'].map(name => lobby.materials[name].version);
+  const first = lightingSnapshot(lobby);
+  for (let frame = 0; frame < 90; frame++) lobby.render(shared, 1 / 60, 844, 390);
+  const next = lightingSnapshot(lobby);
+  for (const [light, index] of [['court', 0], ['rim', 1], ['wall', 2]]) {
+    assert.ok(Math.abs(next.lights[light] / first.lights[light] - next.fixtures[index] / first.fixtures[index]) < 1e-10);
+  }
+  assert.deepEqual(lights.map(light => light.position.toArray()), positions, 'no moving light beams');
+  assert.deepEqual(['fixture', 'fixtureSide', 'fixtureBack'].map(name => lobby.materials[name].version), emitterVersions,
+    'brightness updates do not recompile materials');
+  lobby.dispose();
+});
+
+test('hidden and reduced-motion frames freeze lighting; bounded steps resume without restarting the entrance', () => {
+  const lobby = new TournamentLobby({ loadAthlete: false }), shared = renderer();
+  lobby.render(shared, .1, 844, 390);
+  let snapshot = lightingSnapshot(lobby);
+  for (const dt of [0, -1, NaN, Infinity]) {
+    lobby.render(shared, dt, 844, 390);
+    assert.deepEqual(lightingSnapshot(lobby), snapshot);
+  }
+  lobby.render(shared, 100, 844, 390);
+  assert.ok(Math.abs(lobby.lightClock - snapshot.clock - .1) < 1e-10, 'tab wake cannot jump the lighting clock');
+  for (let frame = 0; frame < 60; frame++) lobby.render(shared, 1 / 60, 844, 390);
+  snapshot = lightingSnapshot(lobby);
+  for (let frame = 0; frame < 30; frame++) {
+    lobby.render(shared, 0, 844, 390);
+    lobby.render(shared, .05, 844, 390, { reducedMotion: true });
+    assert.deepEqual(lightingSnapshot(lobby), snapshot);
+  }
+  lobby.render(shared, .05, 844, 390);
+  assert.ok(lobby.lightClock > snapshot.clock);
+  assert.ok(lobby.lights.court.intensity / snapshot.lights.court > .999, 'menu return continues the settled state');
+  lobby.dispose();
+});
+
+test('reduced-motion startup uses settled lighting immediately and never plays the entrance later', () => {
+  const lobby = new TournamentLobby({ loadAthlete: false }), shared = renderer();
+  lobby.render(shared, 1 / 60, 844, 390, { reducedMotion: true });
+  const snapshot = lightingSnapshot(lobby);
+  assert.ok(lobby.lightClock >= 1, 'skip the entrance for reduced motion');
+  for (let i = 0; i < 5; i++) {
+    lobby.render(shared, .1, 844, 390, { reducedMotion: true });
+    assert.deepEqual(lightingSnapshot(lobby), snapshot);
+  }
+  lobby.render(shared, .1, 844, 390);
+  assert.ok(lobby.lights.court.intensity / snapshot.lights.court > .999);
+  lobby.dispose();
+});
 
 test('waiting pose keeps both feet planted and the racket down through a breathing cycle', () => {
   const first = sampleLobbyPose(0);
