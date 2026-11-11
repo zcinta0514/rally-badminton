@@ -110,7 +110,7 @@ const peerRecords=peerMode?createPeerRecords():null;
 const leaderboard=createLeaderboard(peerMode?{document,getURL:()=>'',fetchImpl:async()=>({ok:true,json:async()=>peerRecords.list()})}:{document,getURL:()=>getLeaderboardURL(getWebSocketURL())});
 function preparePlayerProfile(){
   playerProfile??=createPlayerProfile();
-  setText('player-profile-note',playerProfile.persistent?(peerMode?'此名称显示在比分和本机好友榜中；战绩保存在当前浏览器。':'此名称会显示在比分和榜单中。战绩绑定当前浏览器；换设备或清除网站数据后不自动同步。'):'浏览器未允许保存身份。本页可正常记分，关闭后将无法接续此身份的战绩。');
+  setText('player-profile-note',playerProfile.persistent?(peerMode?'战绩仅保存在当前浏览器。':'战绩绑定本浏览器，不跨设备同步。'):'浏览器未允许保存身份。本页可正常记分，关闭后将无法接续此身份的战绩。');
   return playerProfile;
 }
 if(practiceOnly){
@@ -215,12 +215,13 @@ for(const [id,key,attr] of [['roles','role','role'],['friend-roles','friendRole'
   });
 }
 function syncEntrySettings(){
+  syncRulesControls();
+  $('friend-mode-note').hidden=settings.finale!=='father-son';
   groupChoice('hell-roles','hellRole',hellRole);
   groupChoice('ai-formats','format',settings.ruleset+':'+(settings.ruleset==='standard21'?21:settings.target));
   groupChoice('friend-formats','format',settings.friendRuleset+':'+(settings.friendRuleset==='standard21'?21:settings.friendTarget));
   const rule=getScoringRules({ruleset:settings.friendRuleset,target:settings.friendTarget});
   setText('friend-rules-note',settings.friendRuleset==='standard21'?'三局两胜 · 每局21分 · 净胜2分 · 30封顶':rule.target+'分单局 · 净胜2分 · '+rule.cap+'封顶');
-  setText('ai-summary',ROLES[settings.role].label+'型 · '+ROLES[settings.coachRole].label+'陪练 · '+names[settings.difficulty]+' · '+(settings.ruleset==='standard21'?'标准三局':settings.target+'分单局'));
 }
 function setFriendAction(action){
   friendAction=action==='join'?'join':'create';groupChoice('friend-tabs','action',friendAction);
@@ -230,11 +231,15 @@ function openEntry(stage){
   if(state||room||peerAttempt||connecting)return;
   entryStage=stage;dialog(null);$('menu').dataset.entry=stage;
   $('entry-home-heading').hidden=stage!=='home';$('entry-heading').hidden=stage==='home';
-  $('mode-setup').hidden=!['home','ai'].includes(stage);$('ai-setup').hidden=stage!=='ai';
+  $('mode-setup').hidden=!['home','solo','ai'].includes(stage);$('ai-setup').hidden=stage!=='ai';
   $('home-actions').hidden=stage!=='home';$('ai-start-controls').hidden=stage!=='ai';
+  $('solo-actions').hidden=stage!=='solo';
   $('hell-setup').hidden=stage!=='hell';$('friends-dialog').hidden=stage!=='friends';
-  const labels={ai:['人机对战','选择打法、陪练与赛制。'],hell:['地狱人机','识破技能，抓住两次机会。'],friends:['好友对战','创建或加入房间，确认规则后开始。'],home:['','']};
-  setText('entry-title',labels[stage][0]);setText('entry-description',labels[stage][1]);syncEntrySettings();
+  const labels={solo:'单人对战',ai:'人机对战',hell:'地狱挑战',friends:'好友对战',home:''};
+  setText('entry-back',['ai','hell'].includes(stage)?'← 返回单人对战':'← 返回首页');
+  setText('entry-title',labels[stage]);syncEntrySettings();
+  $('menu').scrollTop=0;
+  $(stage==='home'?'open-solo':'entry-back').focus({preventScroll:true});
 }
 for(const [id,friend]of [['ai-formats',false],['friend-formats',true]])$(id).addEventListener('click',event=>{
   const button=event.target.closest('button');if(!button||button.disabled)return;const [ruleset,target]=button.dataset.format.split(':');
@@ -242,13 +247,14 @@ for(const [id,friend]of [['ai-formats',false],['friend-formats',true]])$(id).add
   syncEntrySettings();
 });
 $('friend-tabs').addEventListener('click',event=>{const button=event.target.closest('button');if(button&&!button.disabled)setFriendAction(button.dataset.action);});
-$('entry-back').addEventListener('click',()=>{if(connecting||peerAttempt){exitToMenu();return;}closeHelpOrSetup();openEntry('home');});
+$('entry-back').addEventListener('click',()=>{if(connecting||peerAttempt){exitToMenu();return;}closeHelpOrSetup();openEntry(['ai','hell'].includes(entryStage)?'solo':'home');});
 syncEntrySettings();
 function selectAim(value){aim=value;lastShotRequest=null;}
 
 function setScreen(screen){
   if(screen!=='match')matchSettings?.close();
   document.body.dataset.screen=screen;
+  if(screen!=='match')document.body.dataset.entering='false';
   pwa.setMatchActive(screen==='match');
   $('menu').hidden=screen!=='menu';$('court-caption').hidden=screen!=='menu';
   $('hud').hidden=screen!=='match';$('game-controls').hidden=screen!=='match';$('pause').hidden=screen!=='match';
@@ -262,7 +268,10 @@ function enterMatch(){
   leaderboardReturn=null;leaderboard.cancel();
   lastPhase='';lastHit=state?.hitId||0;lastPoint=state?.pointId||0;arenaAudio.reset();view?.resetCrowd();
   rematchRequested=false;helpOpen=false;pendingShot=null;dragAim=null;dragDepth=0;gestureOrigin=null;selectedShot='clear';selectAim(0);accumulator=0;lastFrame=performance.now();
-  controls.reset();setScreen('match');dialog(null);unlockAudio();
+  const fromLobby=document.body.dataset.screen!=='match';
+  controls.reset();controls.setEnabled(false);setScreen('match');dialog(null);unlockAudio();
+  view?.beginMatchEntrance?.({side,online:mode==='online',phase:state?.phase,remaining:state?.timer,fromLobby});
+  document.body.dataset.entering=String(view?.entranceActive===true);
   const dots=document.querySelectorAll('.player-dot');
   dots[0].style.background=side===0?'#fb7959':'#b5ebc7';
   dots[1].style.background=side===1?'#fb7959':'#b5ebc7';
@@ -303,13 +312,14 @@ $('hell-roles').addEventListener('click',event=>{
 const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},side,dragAim??aim);
 function send(message){if(peerMode)peerSession?.send(message);else if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(['create','join','resumeSession'].includes(message.type)?{...message,rulesVersion:RULES_VERSION}:message));}
 function fireShot(request){
-  if(!state||!['serve','rally'].includes(state.phase))return;
+  if(view?.entranceActive||!state||!['serve','rally'].includes(state.phase))return;
   const selectedAim=resolveShotAim(request,aim);
   const input=worldInput({...controls.sample(),...request,aim:selectedAim});dragAim=null;dragDepth=0;
   selectedShot=request.shot;lastShotRequest={shot:request.shot,aim:selectedAim,aimDepth:request.aimDepth??0,charge:request.charge};
   if(mode==='online')send({type:'input',...input});else pendingShot=input;
 }
 function requestPause(){
+  if(view?.entranceActive)return;
   if(reconnecting){showConnectionRecovery();return;}
   if(!state||!['serve','rally','point','intermission'].includes(state.phase))return;
   pendingShot=null;controls.reset();
@@ -433,6 +443,7 @@ function closeHelpOrSetup(){
   if(peerAttempt){netGeneration++;peerAttempt.abort();peerAttempt=null;setRoomBusy(false);}
   helpOpen=false;if(state?.phase==='paused')dialog('pause-dialog');else dialog(null);
 }
+$('open-solo').addEventListener('click',()=>openEntry('solo'));
 $('start-ai').addEventListener('click',()=>openEntry('ai'));
 $('start-ai-confirm').addEventListener('click',startAI);
 $('start-hell').addEventListener('click',()=>openEntry('hell'));
@@ -459,7 +470,7 @@ $('rematch').addEventListener('click',()=>{
 for(const button of document.querySelectorAll('[data-close]'))button.addEventListener('click',closeHelpOrSetup);
 $('help').addEventListener('click',()=>{
   if(finale.blocking)return;
-  if(state?.phase==='countdown')return;
+  if(view?.entranceActive||state?.phase==='countdown')return;
   if(state&&['serve','rally','point','intermission'].includes(state.phase)){helpOpen=true;requestPause();return;}
   helpOpen=true;dialog('help-dialog');
 });
@@ -589,9 +600,9 @@ function updateUI(info,state){
   setText('assist-status',guidance);
   $('assist-status').dataset.kind=guidance==='按住击球键，拖动选落点'?'instruction':'live';
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
-  $('help').disabled=reconnecting||state.phase==='countdown'||finale.blocking;
-  controls.setEnabled(['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting&&!shotLayoutHold);
-  $('pause').disabled=!['serve','rally','point','intermission'].includes(state.phase);
+  $('help').disabled=view?.entranceActive||reconnecting||state.phase==='countdown'||finale.blocking;
+  controls.setEnabled(!view?.entranceActive&&['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting&&!shotLayoutHold);
+  $('pause').disabled=view?.entranceActive||!['serve','rally','point','intermission'].includes(state.phase);
   $('countdown').hidden=!['countdown','intermission'].includes(state.phase)||(state.phase==='intermission'&&view.rallyEnding);
   if(state.phase==='countdown')setText('countdown',Math.max(1,Math.ceil(state.timer)));
   if(state.phase==='intermission')setText('countdown',`换边准备 · ${Math.max(1,Math.ceil(state.timer))}`);
@@ -653,20 +664,18 @@ try{
   window.addEventListener('keydown',()=>{if(controls.activeShot?.key)gestureOrigin=null;});
   controls.setEnabled(false);
   $('loading').hidden=true;
-  let demo=createMatch({target:5,difficulty:'medium',seed:31});
   let pingTime=0;
   function frame(now){
     const elapsed=Math.max(0,(now-lastFrame)/1000);lastFrame=now;
     let renderMs=0,guidanceMs=0,uiMs=0;
     if(mode==='menu'||mode==='waiting'){
-      accumulator+=Math.min(elapsed,.1);
-      while(accumulator>=1/60){stepMatch(demo,[aiInput(demo,0,'medium'),aiInput(demo,1,'medium')],1/60);accumulator-=1/60;}
-      if(demo.phase==='over'&&view.lastPhase==='over'&&!view.rallyEnding)demo=createMatch({target:5,seed:Math.floor(now)});
       const renderStart=performance.now();
-      view.render(demo,0,Math.min(elapsed,.1));renderMs=performance.now()-renderStart;
+      view.renderLobby(Math.min(elapsed,.1));renderMs=performance.now()-renderStart;
     }else if(state){
+      view.advanceEntrance?.(elapsed,{hidden:document.hidden,phase:state.phase,remaining:state.timer});
+      document.body.dataset.entering=String(view.entranceActive===true);
       if(mode==='ai'){
-        if(shotLayoutHold){accumulator=0;}
+        if(shotLayoutHold||view.entranceActive){accumulator=0;}
         else if(state.phase==='paused'){stepMatch(state,[{},{}],elapsed);accumulator=0;}
         else{
           accumulator+=Math.min(elapsed,.15);
@@ -708,6 +717,7 @@ try{
       // Read-only diagnostics for reproducible browser QA and user bug reports.
       window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats,
         stateTime:state?.time??null,statePhase:state?.phase??null,
+        entrance:{active:view.entranceActive,progress:view.entrance?.progress??1,camera:view.camera?.position?.toArray()},
         challenge:state?.challenge?{...state.challenge,score:[...state.score],hitId:state.hitId,lastShot:state.lastShotInfo}:null,
         netDragPlaytest:state?.netDragSide===side&&mode==='ai',
         lastShot:state?.netDragSide===side?state.lastShotInfo:null};

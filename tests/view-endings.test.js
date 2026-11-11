@@ -7,7 +7,7 @@ import {createMatch,stepMatch} from '../shared/game.js';
 
 // Exercise the production scene update with only the final GPU draw stubbed.
 function makeView(){
- const view=Object.create(CourtView.prototype);view.scene=new THREE.Scene();
+ const view=Object.create(CourtView.prototype);view.ambient={};view.matchKey={};view.courtLights=[];view.scene=new THREE.Scene();
  view.players=[makeAthlete(view.scene,0),makeAthlete(view.scene,1)];view.makeShuttle();
  view.netGeometry=new THREE.BufferGeometry();view.netGeometry.setAttribute('position',new THREE.Float32BufferAttribute([0,.8,0,0,1.52,0],3));
  view.netAtRest=true;view.cameraSide=0;view.mode='menu';view.elapsed=0;

@@ -1,0 +1,22 @@
+/* Local OFL subsets; unknown player-name glyphs fall back to the system font. */
+@font-face {
+  font-family:'Rally UI'; src:url('./fonts/rally-ui.woff2') format('woff2');
+  font-style:normal; font-weight:400 650; font-display:swap;
+}
+@font-face {
+  font-family:'Rally Display'; src:url('./fonts/rally-display.woff2') format('woff2');
+  font-style:normal; font-weight:400 650; font-display:swap;
+  unicode-range:U+5F00,U+62CD;
+}
+@font-face {
+  font-family:'Rally Numerals'; src:url('./fonts/rally-numerals.woff2') format('woff2');
+  font-style:normal; font-weight:600; font-display:swap;
+}
+body {
+  font-family:'Rally UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-optical-sizing:auto;
+}
+.score-player b, .result-score {
+  font-family:'Rally Numerals','Rally UI',sans-serif;
+  font-weight:600; font-variant-numeric:tabular-nums; letter-spacing:.035em;
+}

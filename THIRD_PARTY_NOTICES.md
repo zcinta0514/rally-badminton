@@ -28,6 +28,15 @@ PeerJS uses its public PeerServer Cloud for connection signaling; this is an
 external service, not a private API key bundled with the game. Match simulation
 and game data run between the connected players' browsers.
 
+## Interface fonts
+
+The self-hosted Rally Display and Rally UI fonts are renamed subsets of
+[Noto Sans SC](https://github.com/google/fonts/tree/main/ofl/notosanssc).
+Rally Numerals is a renamed ASCII subset of
+[Barlow Condensed SemiBold](https://github.com/google/fonts/tree/main/ofl/barlowcondensed).
+All use SIL Open Font License 1.1, not MIT. Full licenses, sources and input hashes
+are retained in `src/fonts/`. No font CDN is used at runtime.
+
 ## Recorded game audio
 
 All recordings below are available under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).

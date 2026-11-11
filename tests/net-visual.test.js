@@ -74,6 +74,8 @@ test('high-detail net remains within the mobile draw and geometry budget', () =>
   assert.ok(net.group.children.every(mesh => !mesh.castShadow));
   const arena = makeArena(new THREE.Scene());
   assert.ok(arena.children.length <= 8, 'static venue detail remains instanced');
-  assert.ok(arena.children.every(mesh => mesh.isInstancedMesh && !mesh.castShadow));
+  assert.ok(arena.children.every(mesh => mesh.isInstancedMesh));
+  assert.deepEqual(arena.children.filter(mesh=>mesh.castShadow).map(mesh=>mesh.name).sort(),['arena-box:metal','arena-box:wood']);
+  assert.ok(arena.children.filter(mesh=>mesh.name.includes('head:')||mesh.name.includes('limb:')).every(mesh=>!mesh.castShadow),'spectators add no shadow draws');
   assert.equal(arena.getObjectByName('furniture-contact-shadows').count, 7);
 });

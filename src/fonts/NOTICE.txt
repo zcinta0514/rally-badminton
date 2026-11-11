@@ -1,0 +1,19 @@
+Self-hosted fonts for RALLY
+
+Rally Display and Rally UI are renamed WOFF2 subsets of Noto Sans SC,
+weight axis 400--650. Display contains the two Chinese title glyphs.
+Source: https://github.com/google/fonts/tree/main/ofl/notosanssc
+Copyright 2014--2021 Adobe. SIL Open Font License 1.1.
+Full license: LICENSE-NotoSansSC.txt
+Source SHA256: a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da
+
+Rally Numerals is a renamed ASCII subset of Barlow Condensed SemiBold.
+Source: https://github.com/google/fonts/tree/main/ofl/barlowcondensed
+Copyright 2017 The Barlow Project Authors. SIL Open Font License 1.1.
+Full license: LICENSE-Barlow.txt
+Source SHA256: 7b619d14bc2327509a9ef32b0890f709626f7ecc9ff61191c2a4314c5499d2d9
+
+Subsets preserve original glyph outlines. Unknown player-name characters use
+system fallback. No external font service is contacted at runtime.
+Rebuild: scripts/prepare-lobby-fonts.py NotoSansSC.ttf BarlowCondensed-SemiBold.ttf
+Requires fonttools and brotli. Source TTF files are development inputs only.

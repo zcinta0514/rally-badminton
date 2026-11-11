@@ -66,7 +66,7 @@ export function initOnboarding({
   const practice = button('开始人机对战', 'onboarding-practice', 'secondary-btn');
   const next = button('下一步 ↗', 'onboarding-next', 'primary-btn');
   actions.append(back, practice, next);
-  const note = create('p', 'onboarding-return-note', '内容可上下滑动；也可从首页「新手入门」重新查看。');
+  const note = create('p', 'onboarding-return-note', '内容可上下滑动；也可从首页「更多」里的「新手指南」重新查看。');
   modal.append(header, content, actions, note);
   document.body.append(modal);
 
@@ -76,7 +76,7 @@ export function initOnboarding({
       intro: '首次游玩建议：均衡型 · 入门难度 · 5 分制。',
       visual: ['人机对战', '好友对战'],
       lines: [
-        ['人机对战', '在首页选择打法、难度与赛制，再点「开始比赛」。'],
+        ['人机对战', '选择「单人对战」→「人机对战」，设置打法、难度与赛制后开始比赛。'],
         ['好友对战', '一方创建房间，另一方输入 5 位房间码加入；双方确认规则后开始。'],
       ],
       keyboard: '手机横屏，双手操控。规则与技巧可在「操作说明」查看。',

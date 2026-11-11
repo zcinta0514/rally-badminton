@@ -30,7 +30,9 @@ export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate
   entry.id = 'install-app'; entry.className = 'pwa-entry'; entry.type = 'button';
   entry.innerHTML = '<span>主屏幕版 <b aria-hidden="true">↗</b></span><small id="pwa-status" role="status" aria-live="polite"></small>';
   const menu = document.getElementById('menu');
-  menu?.insertBefore(entry, menu.querySelector('.menu-foot'));
+  const extras = menu?.querySelector('.menu-foot-actions');
+  if (extras) extras.appendChild(entry);
+  else menu?.insertBefore(entry, menu.querySelector('.menu-foot'));
   const status = entry.querySelector('#pwa-status');
   const dialog = document.createElement('dialog');
   dialog.id = 'pwa-dialog'; dialog.className = 'pwa-dialog'; dialog.setAttribute('aria-labelledby', 'pwa-title');

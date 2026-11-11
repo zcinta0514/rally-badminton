@@ -1,3 +1,4 @@
+import { MatchEntrance } from '../src/match-entrance.js';
 import { hellStatus } from '../shared/hell-mode.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -39,7 +40,7 @@ class Target {
   }
 }
 
-async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none', buildId='1111111111111111', sessionStorage=null} = {}) {
+async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none', buildId='1111111111111111', sessionStorage=null} = {}) {
   let now = 1000, nextId = 0, frame, controls, view, audio;
   let pwaOptions, onboardingOptions, updateSafeAtInit, onboardingAttempts = 0;
   const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [], usageEvents = [];
@@ -112,12 +113,16 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
       view = this; this.rallyEnding = false; this.crowdResets = 0; this.finaleClears = 0;
       this.finaleAnchors = [{ x: 170, y: 210 }, { x: 830, y: 260 }];
     }
-    setMode(mode) { this.mode = mode; }
+    setMode(mode) { this.mode = mode;if(mode!=='match')this.entrance?.cancel(); }
+    get entranceActive(){return this.entrance?.active===true;}
+    beginMatchEntrance(options){if(entrance){this.entrance=new MatchEntrance();this.entrance.begin(options);}}
+    advanceEntrance(dt,options){this.entrance?.advance(dt,options);}
     resetCrowd() { this.crowdResets++; }
     clearFinale() { this.finaleClears++; this.finale = null; }
     resize() {}
     setQuality() {}
     getRendererMetrics() { return { pixelRatio: 1, shadows: true, calls: 1 }; }
+    renderLobby(dt) { this.dt=dt; }
     render(state, side, dt, info) {
       this.drawn = structuredClone(state); this.side = side; this.dt = dt; this.lastPhase = state.phase;
       this.finale = info?.finale ? structuredClone(info.finale) : null;
@@ -286,6 +291,20 @@ test('the application refuses update preparation when settings cannot be transfe
   const f=await fixture('serve',{demoMode:true});
   assert.throws(()=>f.pwaOptions.onUpdateLock({version:'2222222222222222'}),/游戏设置/);
   assert.equal(f.document.body.dataset.screen,'menu');assert.equal(f.liveState,null);
+});
+
+test('solo navigation keeps ordinary and challenge preparation reachable and returns to their parent',async()=>{
+  const f=await fixture('serve',{demoMode:true,peerMode:true});
+  f.click('open-solo');assert.equal(f.element('menu').dataset.entry,'solo');
+  assert.equal(f.pwaOptions.isSafeToUpdate(),false);
+  f.click('start-ai');assert.equal(f.element('menu').dataset.entry,'ai');
+  f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'solo');
+  f.click('start-hell');assert.equal(f.element('menu').dataset.entry,'hell');
+  f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'solo');
+  f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'home');
+  f.click('open-friends');assert.equal(f.element('menu').dataset.entry,'friends');
+  f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'home');
+  assert.equal(f.liveState,null);
 });
 
 test('home modes open preparation first, and AI and friend match settings remain independent',async()=>{
@@ -846,4 +865,17 @@ test('an opponent disconnect stops an already playing finale voice on the still-
   assert.equal(f.element('match-finale').hidden,true);
   assert.ok(f.audio.stoppedVoices.length>stopped,'remote disconnect must stop the active voice');
   assert.equal(f.audio.stoppedVoices.at(-1),'finale');
+});
+
+
+test('local entrance freezes authoritative time and input, then releases both without a catch-up step',async()=>{
+  const f=await fixture('serve',{demoMode:true,entrance:true});f.startAI();
+  assert.equal(f.view.entranceActive,true);const start=f.liveState.time;
+  for(let i=0;i<15;i++)f.draw(100);
+  assert.equal(f.liveState.time,start);assert.equal(f.controls.enabled,false);
+  f.document.hidden=true;f.draw(10000);assert.ok(Math.abs(f.view.entrance.elapsed-1.5)<1e-9);
+  assert.equal(f.liveState.time,start);f.document.hidden=false;
+  for(let i=0;i<5;i++)f.draw(100);
+  assert.equal(f.view.entranceActive,false);assert.equal(f.controls.enabled,true);
+  assert.ok(f.liveState.time-start<.4,'hidden and entrance time never catch up into simulation');
 });

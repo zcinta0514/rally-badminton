@@ -1,0 +1,149 @@
+/* The tournament treatment is scoped to the lobby. Match hit areas stay owned
+   by the game controls; the real venue is rendered by TournamentLobby. */
+body[data-screen="menu"] {
+  --ink:#f2f2e9; --muted:#aab8af; --paper:#14221e; --surface:#20312b;
+  --line:#40544a; --soft:#273b31; --green:#c0dd94;
+  color:var(--ink); background:#101b18; color-scheme:dark;
+}
+body[data-screen="menu"] #court {
+  display:block; inset:0; width:100vw; height:100dvh; border:0; border-radius:0;
+}
+body[data-screen="menu"] .screen-vignette {
+  display:block; inset:0; pointer-events:none; z-index:1;
+  background:linear-gradient(90deg,#07100ee8 0%,#0b1512bb 22%,#0b151257 43%,transparent 65%),linear-gradient(0deg,#09120f77,transparent 24%);
+}
+body[data-screen="menu"] .topbar {
+  left:auto; right:0; width:auto; height:auto; min-height:0;
+  padding:max(20px,var(--safe-top)) max(28px,var(--safe-right)) 0 0;
+  background:none; border:0; z-index:10; pointer-events:none;
+}
+body[data-screen="menu"] .topbar .top-actions { pointer-events:auto; gap:8px; }
+body[data-screen="menu"] .topbar .brand,
+body[data-screen="menu"] .topbar .edition,
+body[data-screen="menu"] #camera-toggle,
+body[data-screen="menu"] #palette-toggle,
+body[data-screen="menu"] #court-caption { display:none; }
+body[data-screen="menu"] .topbar button {
+  color:#eeefe5; background:#12201c9c; border:1px solid #c8d3c62b;
+  box-shadow:none; border-radius:3px; min-width:44px; height:44px;
+}
+body[data-screen="menu"] #match-settings-toggle { display:inline-flex; align-items:center; justify-content:center; }
+body[data-screen="menu"] #match-settings-panel:not([hidden]) { display:block; top:66px; width:240px; max-height:calc(100dvh - 82px - var(--safe-bottom)); color:var(--ink); background:#16231ff5; border-color:var(--line); z-index:12; }
+body[data-screen="menu"] #match-settings-panel details,
+body[data-screen="menu"] #edit-shot-layout { display:none; }
+body[data-screen="menu"] #menu.menu-panel {
+  inset:0 auto 0 0; width:43%; max-width:610px; height:100dvh;
+  padding:max(40px,var(--safe-top)) 3vw max(22px,var(--safe-bottom)) max(5vw,var(--safe-left));
+  display:flex; flex-direction:column; gap:0; overflow-y:auto; overflow-x:hidden;
+  border:0; background:none; z-index:3; scrollbar-width:thin;
+}
+body[data-screen="menu"] #menu .menu-heading { margin:0; }
+body[data-screen="menu"] #menu .eyebrow { color:#a7b9ac; font-size:10px; letter-spacing:.3em; margin:0 0 12px; }
+body[data-screen="menu"] #menu h1 { display:block; margin:0; font-size:clamp(46px,6.4vw,94px); line-height:1; color:#f0f0e6; }
+body[data-screen="menu"] #menu h1 .lobby-wordmark { display:block; width:max-content; font-family:'Rally Display','Rally UI',sans-serif; font-weight:650; font-style:normal; letter-spacing:.06em; line-height:1.15; padding-right:.12em; color:#f0f0e6; transform:skewX(-6deg); transform-origin:left bottom; }
+body[data-screen="menu"] #menu h1 .lobby-latin { display:block; font-family:'Rally Numerals',sans-serif; font-size:.26em; line-height:2; letter-spacing:.38em; font-weight:600; margin-left:.12em; color:#c6d0c4; }
+.lobby-tagline { margin:20px 0 0; font-size:14px; letter-spacing:.3em; color:#b8c5ba; }
+body[data-screen="menu"] #menu #menu-intro,
+body[data-screen="menu"] #menu .menu-tip-compact { display:none; }
+body[data-screen="menu"] #menu[data-entry="home"] #mode-setup,
+body[data-screen="menu"] #menu[data-entry="solo"] #mode-setup { flex:1; display:flex; justify-content:center; padding:16px 0; }
+body[data-screen="menu"] #menu #home-actions,
+body[data-screen="menu"] #menu #solo-actions { display:flex; flex-direction:column; flex:0 0 auto; width:100%; max-width:440px; gap:12px; padding:0; margin:0; background:transparent; }
+body[data-screen="menu"] #menu .lobby-action {
+  position:relative; width:100%; min-height:64px; padding:14px 20px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  background:transparent; border:0; border-left:3px solid transparent; border-radius:0;
+  box-shadow:none; text-align:left; color:#eeeee4; line-height:1.25;
+  font-family:inherit; font-size:clamp(22px,2.5vw,36px); font-weight:450; letter-spacing:.10em;
+  transition:background 150ms ease,color 150ms ease,border-color 150ms ease;
+}
+body[data-screen="menu"] #menu .lobby-action:first-child { border-left-color:#b8dc88; background:linear-gradient(90deg,#b3d78b21,transparent); }
+body[data-screen="menu"] #menu .lobby-action:hover,
+body[data-screen="menu"] #menu .lobby-action:focus-visible { background:linear-gradient(90deg,#b3d78b36,transparent); border-left-color:#c5e69a; }
+body[data-screen="menu"] button:focus-visible { outline:2px solid #d6efac; outline-offset:3px; }
+body[data-screen="menu"] #menu .lobby-action:active { transform:none; color:#d1efa8; }
+body[data-screen="menu"] #menu .lobby-action .entry-copy { display:flex; flex-direction:column; gap:8px; }
+body[data-screen="menu"] #menu .lobby-action strong { font-size:inherit; }
+body[data-screen="menu"] #menu .lobby-action small { font-size:12px; color:#adbcaf; font-weight:400; }
+body[data-screen="menu"] #menu .menu-foot { flex-shrink:0; width:100%; margin:0; padding-top:14px; border:0; display:flex; flex-direction:column; align-items:flex-start; gap:12px; color:#7e9387; font-size:10px; }
+body[data-screen="menu"] #menu .menu-foot-actions { display:flex; flex-flow:row wrap; align-items:center; justify-content:flex-start; width:100%; gap:0 18px; }
+body[data-screen="menu"] #menu .menu-foot-actions button { width:auto; min-height:44px; padding:6px 0; background:none; border:0; border-radius:0; box-shadow:none; color:#bdc9bf; font-size:12px; }
+body[data-screen="menu"] #menu .pwa-entry { font-size:11px; color:#a8b8ac; }
+body[data-screen="menu"] #menu:not([data-entry="home"]):not([data-entry="solo"]) { width:46%; max-width:600px; background:linear-gradient(90deg,#101d19fa,#101d19e8 88%,#101d1900); padding-right:30px; }
+body[data-screen="menu"] #menu .entry-heading { margin:0 0 18px; }
+body[data-screen="menu"] #menu .entry-heading h2 { margin:16px 0 8px; font-size:28px; font-weight:550; letter-spacing:.06em; color:#f2f2e9; }
+body[data-screen="menu"] #menu .entry-heading p { font-size:12px; line-height:1.6; color:var(--muted); }
+body[data-screen="menu"] #entry-back { min-height:44px; padding:4px 0; margin:0; color:#c0cbbf; font-size:12px; }
+body[data-screen="menu"] #menu .setup { padding:0; flex:0 0 auto; min-height:auto; }
+body[data-screen="menu"] #menu .setup-fields { padding:0; flex:none; min-height:auto; overflow:visible; }
+body[data-screen="menu"] #menu .entry-heading,
+body[data-screen="menu"] #menu .entry-content { flex-shrink:0; }
+body[data-screen="menu"] #menu:not([data-entry="home"]) .menu-foot,
+body[data-screen="menu"] #menu:not([data-entry="home"]) #install-app { display:none; }
+body[data-screen="menu"] #menu .launch-actions { background:transparent; }
+body[data-screen="menu"] #menu #ai-start-controls { display:flex; flex-direction:column; align-items:stretch; margin-top:14px; }
+body[data-screen="menu"] #menu .role-card,
+body[data-screen="menu"] #menu .segments,
+body[data-screen="menu"] #menu input { background:#13221c; color:#e0e7dd; border-color:#405347; border-radius:4px; box-shadow:none; }
+body[data-screen="menu"] #menu .segments button { min-height:38px; color:#b9c8bc; border-radius:2px; }
+body[data-screen="menu"] #menu .segments .selected,
+body[data-screen="menu"] #menu .role-card.selected { background:#314837; color:#e1f1c5; border-color:#9cb77c; box-shadow:none; }
+body[data-screen="menu"] #menu .primary-btn,
+body[data-screen="menu"] #menu .secondary-btn { border-radius:3px; box-shadow:none; }
+body[data-screen="menu"] #menu .primary-btn { background:#c2dc9b; color:#152218; border:1px solid #c2dc9b; min-height:44px; }
+body[data-screen="menu"] #menu .secondary-btn { background:#25392d; color:#e3eadc; border-color:#4b6451; }
+body[data-screen="menu"] #menu .rules-note,
+body[data-screen="menu"] #menu .role-note,
+body[data-screen="menu"] #menu .dialog-foot { color:#a9b9ac; }
+body[data-screen="menu"] #menu .hell-contract,
+body[data-screen="menu"] #menu .hell-skills article { background:#1a2c23; color:#c9d8c6; border-color:#3d5141; }
+body[data-screen="menu"] .ui-flight-layer { display:none; }
+body[data-screen="menu"] .loading { background:#101b18; color:#e7ecdf; }
+.lobby-reveal { position:fixed; inset:0; z-index:80; pointer-events:none; background:#0c1712; animation:lobby-reveal 380ms ease-out both; }
+@keyframes lobby-reveal { from { opacity:.9; } to { opacity:0; } }
+@media (max-height:600px) and (orientation:landscape) {
+  body[data-screen="menu"] #menu.menu-panel { padding: max(22px,var(--safe-top)) 20px max(12px,var(--safe-bottom)) max(32px,var(--safe-left)); width:43%; }
+  body[data-screen="menu"] #menu h1 { font-size:52px; }
+  body[data-screen="menu"] #menu .eyebrow { font-size:8px; margin-bottom:7px; }
+  .lobby-tagline { font-size:11px; margin-top:8px; }
+  body[data-screen="menu"] #menu .lobby-action { font-size:25px; min-height:50px; padding:9px 14px; }
+  body[data-screen="menu"] #menu #home-actions,body[data-screen="menu"] #menu #solo-actions { gap:6px; }
+  body[data-screen="menu"] #menu .menu-foot { gap:2px; padding-top:4px; }
+  body[data-screen="menu"] #menu .menu-foot-actions { gap:0 14px; }
+  body[data-screen="menu"] #menu .menu-foot-actions button { font-size:11px; }
+  body[data-screen="menu"] .topbar { padding:12px max(18px,var(--safe-right)) 0 0; }
+  body[data-screen="menu"] #menu:not([data-entry="home"]):not([data-entry="solo"]) { width:51%; padding-right:24px; }
+  body[data-screen="menu"] #menu .entry-heading { margin-bottom:10px; }
+  body[data-screen="menu"] #menu .entry-heading h2 { font-size:24px; margin-top:5px; }
+}
+@media (max-height:390px) and (orientation:landscape) {
+  body[data-screen="menu"] #menu h1 { font-size:52px; }
+  body[data-screen="menu"] #menu .eyebrow { display:none; }
+  body[data-screen="menu"] #menu .lobby-action { min-height:46px; font-size:23px; }
+  body[data-screen="menu"] #menu .menu-foot-actions { gap:0 10px; }
+  body[data-screen="menu"] #menu .menu-foot-actions button { font-size:11px; }
+}
+@media (orientation:portrait) {
+  body[data-screen="menu"] .screen-vignette { background:linear-gradient(90deg,#09140ce8, #09140c77 70%,#09140c11),linear-gradient(0deg,#0b1712dd,transparent 65%); }
+  body[data-screen="menu"] #menu.menu-panel { width:90%; padding:max(88px,var(--safe-top)) 24px max(24px,var(--safe-bottom)); max-width:none; }
+  body[data-screen="menu"] #menu h1 { font-size:72px; }
+  body[data-screen="menu"] #menu .lobby-action { font-size:28px; }
+  body[data-screen="menu"] #menu:not([data-entry="home"]):not([data-entry="solo"]) { width:100%; max-width:none; padding-right:24px; }
+  body[data-screen="menu"] .topbar { padding: max(16px,var(--safe-top)) max(18px,var(--safe-right)) 0 0; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body[data-screen="menu"] #menu .lobby-action { transition:none; }
+  .lobby-reveal { display:none; animation:none; }
+}
+body[data-screen="menu"] #menu [hidden] { display:none !important; }
+/* Secondary actions stay available in a single, keyboard-operable disclosure. */
+body[data-screen="menu"] #menu .eyebrow { display:none; }
+body[data-screen="menu"] .lobby-more { position:relative; width:100%; border:0; }
+body[data-screen="menu"] .lobby-more summary { cursor:pointer; min-height:44px; display:flex; align-items:center; width:max-content; gap:18px; color:#b0bfb3; font-size:12px; list-style:none; }
+body[data-screen="menu"] .lobby-more summary::-webkit-details-marker { display:none; }
+body[data-screen="menu"] .lobby-more summary::after { content:'＋'; }
+body[data-screen="menu"] .lobby-more[open] summary::after { content:'−'; }
+body[data-screen="menu"] #menu .lobby-more .menu-foot-actions { position:absolute; bottom:48px; left:0; z-index:15; display:flex; flex-direction:column; align-items:stretch; flex-wrap:nowrap; width:230px; max-width:calc(100vw - 64px); max-height:60dvh; overflow:auto; padding:10px 18px; background:#14231ff5; border:1px solid #3a4d3f; box-shadow:0 12px 32px #0005; }
+body[data-screen="menu"] #menu .lobby-more button { text-align:left; flex-shrink:0; }
+.lobby-version { font-size:10px; color:#84958a; padding:8px 0; }
+body #hud .score-player b, body .dialog .result-score { font-family:'Rally Numerals','Rally UI',sans-serif; font-weight:600; font-variant-numeric:tabular-nums; }

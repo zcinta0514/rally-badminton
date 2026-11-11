@@ -5,18 +5,21 @@ import { normalizeCourtPalette, resolveCourtPalette } from './court-palettes.js'
 import { makeAthlete, updateAthlete, applyAthletePose } from './athlete.js';
 import { upgradeAthlete } from './athlete-import.js';
 import { sampleFinalePose } from './finale-pose.js';
-import { makeArena, makeCourtMaterial, resetArenaCrowd, updateArenaCrowd } from './arena.js';
+import { makeArena, makeHallShell, makeCourtMaterial, resetArenaCrowd, updateArenaCrowd } from './arena.js';
 import { makeNetVisual, updateNetVisual } from './net-visual.js';
 import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
 import { COURT } from '../shared/game.js';
 import { StaminaHUD } from './stamina-hud.js';
 import { phantomPositions } from '../shared/hell-mode.js';
+import { TournamentLobby } from './tournament-lobby.js';
+import { MatchEntrance, applyEntranceCamera, entranceEase } from './match-entrance.js';
+import { makeContactShadow, shuttleShadowSample } from './contact-shadow.js';
 
 // Venue-wide colours. The court floor, apron and accent strip come from the
 // selected court palette instead; see court-palettes.js.
 const COLORS = {
-  background: 0x101e29,
-  floor: 0x132b34,
+  background: 0x131c1b,
+  floor: 0x303734,
   line: 0xf0f5e7,
   coral: 0xfb7959,
   mint: 0xb7e2cb,
@@ -67,24 +70,36 @@ export class CourtView {
     this.scene.fog = new THREE.Fog(COLORS.background, 32, 65);
     this.camera = new THREE.PerspectiveCamera(45,1,0.1,100);
     this.cameraSide = null;
+    this.entrance = new MatchEntrance();this.entranceFrom = null;this.entranceTo = this.camera.clone();
     this.cameraSettings = normalizeCameraSettings();
     // One shadowed soft key plus a cheap opposite fill gives bodies and rackets
     // readable depth from either end of the court. Fixtures remain unlit meshes.
-    this.scene.add(new THREE.HemisphereLight(0xe4f0fb, 0x43584f, 1.35));
-    const sunlight = new THREE.DirectionalLight(0xffefd6, 2.65);
-    sunlight.position.set(-6, 15, 4);
+    this.ambient = new THREE.HemisphereLight(0xe6edf0, 0x343b37, .68);this.scene.add(this.ambient);
+    const sunlight = new THREE.DirectionalLight(0xf6f2e9, 1.3);
+    sunlight.position.set(-3.5, 12, 2);
     sunlight.castShadow = true;
-    sunlight.shadow.mapSize.set(1024, 1024);
+    sunlight.shadow.mapSize.set(2048, 2048);
     Object.assign(sunlight.shadow.camera, { left: -10, right: 10, top: 12, bottom: -12, near: 1, far: 35 });
     sunlight.shadow.bias = -0.0004;
-    sunlight.shadow.normalBias = 0.018;
-    this.scene.add(sunlight);
-    const fill = new THREE.DirectionalLight(0xc3e2f4, .8);
+    sunlight.shadow.normalBias = 0.009;
+    this.scene.add(sunlight);this.matchKey = sunlight;
+    const fill = new THREE.DirectionalLight(0xe1eaf0, .32);
     fill.position.set(8, 9, -6); this.scene.add(fill);
+    // Symmetric feathered fixtures keep both ends readable. Gameplay lighting
+    // is steady; only the lobby has an entrance ramp. No extra shadow passes.
+    this.courtLights = [];
+    for (const end of [-1, 1]) {
+      const top = new THREE.SpotLight(0xf1f3ed, 240, 24, 1.04, 1, 2);
+      top.name = 'match-court-soft-top'; top.position.set(end * 1.8, 8, end * 4.5);
+      top.target.position.set(0, 0, end * 3.2); this.scene.add(top, top.target);this.courtLights.push(top);
+    }
     this.makeCourt();
     this.players = [makeAthlete(this.scene, 0), makeAthlete(this.scene, 1)];
     for (const player of this.players) void upgradeAthlete(player);
     this.mode = 'menu';
+    this.lobby = new TournamentLobby();
+    this.lobby.setCourtPalette(this.courtPalette);
+    this.reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');
     this.staminaHUD = new StaminaHUD();
     this.staminaProjection = new THREE.Vector3();
     this.makeShuttle();
@@ -95,7 +110,7 @@ export class CourtView {
     Object.assign(this.edgeIndicator.style,{position:'fixed',zIndex:'6',pointerEvents:'none',
       transform:'translate(-50%,-50%)',padding:'6px 10px',borderRadius:'20px',
       border:'1px solid #ffe6a899',background:'#123c36ed',color:'#fff0be',
-      font:'600 11px Arial,sans-serif',whiteSpace:'nowrap',boxShadow:'0 2px 10px #082c2960'});
+      font:'500 11px "Rally UI",sans-serif',whiteSpace:'nowrap',boxShadow:'0 2px 10px #082c2960'});
     this.edgeIndicator.hidden=true;
     document.body.appendChild(this.edgeIndicator);
     this.initialized = false;
@@ -139,7 +154,7 @@ export class CourtView {
     }
     for (const z of [-4.34, 4.34]) box(scene, lineWidth, 0.008, 4.72, lineMat, 0, lineY, z);
 
-    const postMat = material(0xd4e6cf, { roughness: 0.5 });
+    const postMat = material(0x89988d, { roughness: 0.4, metalness: .45 });
     for (const x of [-3.23, 3.23]) {
       box(scene, 0.2, 0.07, 0.28, darkMat, x, 0.03, 0, true);
       box(scene, 0.066, 1.6, 0.066, postMat, x, 0.8, 0, true);
@@ -154,6 +169,7 @@ export class CourtView {
     // Kept live so the local settings panel can recolour the venue in place.
     this.courtMaterials = { court: courtMat, apron: apronMat, edge: edgeMat, dark: darkMat };
     this.arena = makeArena(scene);
+    this.hallShell = makeHallShell(scene);
   }
 
   makeShuttle() {
@@ -171,12 +187,8 @@ export class CourtView {
     this.direction = new THREE.Vector3();
     this.groundMarker = new THREE.Group();
     this.scene.add(this.groundMarker);
-    this.groundRing = ring(this.groundMarker, .062, .012, 0x224c43, .18);
-    this.groundRing.position.y = .029;
-    this.groundDot = new THREE.Mesh(new THREE.CircleGeometry(.045, 24), new THREE.MeshBasicMaterial({ color: 0x163b35, transparent: true, opacity: .33, depthWrite: false }));
-    this.groundDot.rotation.x = -Math.PI / 2;
+    this.groundDot = makeContactShadow(this.groundMarker,{name:"shuttle-soft-shadow"});
     this.groundDot.position.y = .030;
-    this.groundMarker.add(this.groundDot);
     const trailGeo = new THREE.BufferGeometry();
     this.trailPositions = new Float32Array(18 * 3);
     trailGeo.setAttribute('position', new THREE.BufferAttribute(this.trailPositions, 3));
@@ -276,9 +288,38 @@ export class CourtView {
     resetArenaCrowd(this.arena);
   }
 
+  get entranceActive(){return this.entrance?.active===true;}
+
+  beginMatchEntrance(options={}) {
+    this.entrance.begin({...options,reducedMotion:this.reducedMotion?.matches===true});
+    this.updateCamera(options.side??0);
+    this.entranceFrom=this.lobby.camera.clone();
+    this.entranceFrom.aspect=this.width/this.height;this.entranceFrom.updateProjectionMatrix();
+    this.entranceTo.copy(this.camera);
+    this.applyEntrance();
+    return this.entranceActive;
+  }
+
+  advanceEntrance(dt,options={}) {
+    this.entrance.advance(dt,{...options,reducedMotion:this.reducedMotion?.matches===true});
+  }
+
+  applyEntrance() {
+    const progress=this.entranceActive?this.entrance.progress:1,t=entranceEase(progress);
+    if(this.entranceFrom)applyEntranceCamera(this.camera,this.entranceFrom,this.entranceTo,progress);
+    this.ambient.intensity=.55+.13*t;this.matchKey.intensity=1.05+.25*t;
+    this.courtLights.forEach((light,index)=>{
+      const end=index===0?-1:1;
+      light.target.position.set(end*5.8*(1-t),0,end*(6-2.8*t));
+      light.intensity=115+125*t;light.angle=1.2-.16*t;
+      light.target.updateMatrixWorld(true);
+    });
+  }
+
   setMode(mode) {
     if(this.mode===mode)return;
     this.mode=mode;
+    if(mode!=="match"){this.entrance?.cancel();this.entranceFrom=null;}
     this.resetCrowd();
     if (mode !== 'match') this.staminaHUD?.hide();
     if(mode!=='match')this.edgeIndicator.hidden=true;
@@ -290,6 +331,7 @@ export class CourtView {
     this.width=Math.max(1,bounds.width||window.innerWidth);
     this.height=Math.max(1,bounds.height||window.innerHeight);
     this.renderer.setSize(this.width,this.height,false);
+    if(this.entranceFrom){this.entranceFrom.aspect=this.width/this.height;this.entranceFrom.updateProjectionMatrix();}
     this.hudBounds=document.querySelector('#hud')?.getBoundingClientRect();
     this.staminaHUD?.refreshObstacles();
     this.updateCamera(this.cameraSide??0);
@@ -303,6 +345,7 @@ export class CourtView {
 
   setCourtPalette(name) {
     this.courtPalette = normalizeCourtPalette(name);
+    this.lobby?.setCourtPalette(this.courtPalette);
     const palette = resolveCourtPalette(this.courtPalette);
     if (this.courtMaterials) {
       this.courtMaterials.court.color.setHex(palette.court);
@@ -349,6 +392,7 @@ export class CourtView {
     camera.up.set(0,1,0);
     camera.lookAt(0,0,0);camera.updateProjectionMatrix();camera.updateMatrixWorld();
     this.cameraSide=side;
+    this.entranceTo?.copy(camera);
   }
 
   updateHints(state, info, freeze, reset, side = 0) {
@@ -478,6 +522,13 @@ export class CourtView {
     this.renderer.render(this.scene,camera);
   }
 
+  renderLobby(dt=1/60) {
+    this.staminaHUD?.hide();
+    this.edgeIndicator.hidden=true;
+    this.lobby.render(this.renderer,globalThis.document?.hidden?0:dt,this.width,this.height,
+      {reducedMotion:this.reducedMotion?.matches===true});
+  }
+
   render(state, side=0, dt=1/60, info={}) {
     if(!state?.players||!state.shuttle)return;
     updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
@@ -485,6 +536,7 @@ export class CourtView {
     this.clearFinale();
     dt=clamp(Number.isFinite(dt)?dt:1/60,0,.06);
     if(this.cameraSide!==side)this.updateCamera(side);
+    this.applyEntrance();
     const reset=!this.initialized||state.pointId!==this.lastPoint||state.time<this.lastStateTime||
       (state.phase==='serve'&&this.lastPhase!=='serve');
     const freeze=['paused','countdown','over'].includes(state.phase);
@@ -515,9 +567,10 @@ export class CourtView {
     if(tail)this.shuttle.rotateY(tail.roll);
     this.shuttle.visible=!!tail||state.phase!=='over'||shuttle.active;
     this.groundMarker.visible=this.shuttle.visible;
-    this.groundMarker.position.set(position.x,0,position.z);
-    // This small, muted disk is only the current vertical shadow; cyan is the forecast.
-    this.groundDot.material.opacity=clamp(.33-position.y*.018,.13,.33);
+    const shadow=shuttleShadowSample(position.y);
+    this.groundMarker.position.set(position.x+shadow.x,0,position.z+shadow.z);
+    this.groundDot.scale.set(shadow.width,shadow.depth,1);
+    this.groundDot.material.opacity=shadow.opacity;
     this.impactMarker.visible=!!tail&&tail.grounded&&tail.markOpacity>.001;
     if(tail){
       this.impactMarker.position.set(tail.impact.x,.034,tail.impact.z);
@@ -580,9 +633,15 @@ export class CourtView {
       points.needsUpdate=true;this.cannonLine.computeLineDistances();
     }
     this.trail.material.opacity=h?.active?.kind==='phantom'&&h.active.hitId===state.hitId? .95 : .35;
+    if(this.entranceActive){
+      this.staminaHUD?.hide();this.edgeIndicator.hidden=true;
+      for(const hint of [this.landingHint,this.interceptHint,this.targetHint,this.readyHint])hint.group.visible=false;
+      for(const player of this.players){player.halo.visible=false;player.selected.visible=false;}
+    }else for(const player of this.players)player.halo.visible=true;
     this.renderer.render(this.scene,this.camera);
   }
   dispose() {
+    this.lobby?.dispose();
     for (const player of this.players || []) player.disposed = true;
     if (this.onVisibilityChange) globalThis.document?.removeEventListener('visibilitychange', this.onVisibilityChange);
     this.edgeIndicator.remove();
@@ -591,6 +650,7 @@ export class CourtView {
     const textures = new Set();
     const skeletons = new Set();
     this.scene.traverse((object) => {
+      object.shadow?.dispose();
       if (object.isSkinnedMesh && object.skeleton) skeletons.add(object.skeleton);
       if (object.geometry) geometries.add(object.geometry);
       if (object.material) for (const mat of Array.isArray(object.material) ? object.material : [object.material]) materials.add(mat);
