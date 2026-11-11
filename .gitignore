@@ -4,6 +4,7 @@ dist/
 .npm-cache/
 .cache/
 artifacts/
+scripts/character/__pycache__/
 data/
 releases/
 .env

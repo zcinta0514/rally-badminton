@@ -5,6 +5,7 @@ contourpy==1.4.0
 cycler==0.12.1
 flatbuffers==25.12.19
 fonttools==4.68.0
+imageio-ffmpeg==0.8.1
 kiwisolver==1.5.1
 matplotlib==3.11.2
 mediapipe==1.2.2

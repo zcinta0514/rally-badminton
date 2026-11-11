@@ -1,4 +1,4 @@
-"""Import the existing GLB into a separate editable inspection scene, never overwrite it."""
+"""Import a glTF/GLB into a separate editable inspection scene, never overwrite the input."""
 import json
 import sys
 from pathlib import Path
@@ -17,7 +17,7 @@ report = {
                  'vertices': len(o.data.vertices) if o.type == 'MESH' else None,
                  'bones': len(o.data.bones) if o.type == 'ARMATURE' else None}
                 for o in bpy.context.scene.objects],
-    'note': 'Imported runtime GLB for inspection, not recovered original authoring source.'
+    'note': 'Imported glTF/GLB for inspection, not an original authoring .blend file.'
 }
 destination.parent.mkdir(parents=True, exist_ok=True)
 bpy.ops.wm.save_as_mainfile(filepath=str(destination))
