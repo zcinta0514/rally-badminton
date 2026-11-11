@@ -33,14 +33,22 @@ export function describeMatch(state, side = 0, mode = 'ai') {
   ].join(String.fromCharCode(10));
 }
 
-export function bindMatchSettings(audio, { document = globalThis.document, preferences = readArenaPreferences(), onChange = () => {} } = {}) {
+export function bindMatchSettings(audio, { document = globalThis.document, preferences = readArenaPreferences(), menuAudio, onChange = () => {} } = {}) {
   const button = document.querySelector('#match-settings-toggle'), panel = document.querySelector('#match-settings-panel');
   let settings = normalizeArenaPreferences(preferences);
   const close = () => { panel.hidden = true; button.setAttribute('aria-expanded', 'false'); };
   const inputs = [...panel.querySelectorAll('[data-volume]')];
   const brightness = panel.querySelector('#arena-brightness');
-  const apply = () => {
+  const track = panel.querySelector('#arena-music-track');
+  const localOption = track?.querySelector('option[value="local"]');
+  const file = panel.querySelector('#arena-music-file');
+  const apply = (useLocal = menuAudio?.usingLocal) => {
     audio.setPreferences(settings);
+    menuAudio?.setPreferences(settings, useLocal);
+    if (track && menuAudio) {
+      localOption.disabled = localOption.hidden = !menuAudio.localUrl;
+      track.value = menuAudio.usingLocal ? 'local' : settings.musicTrack;
+    }
     if(brightness){brightness.value=Math.round(settings.brightness*100);brightness.nextElementSibling.value=brightness.value+'%';}
     for (const input of inputs) { input.value = Math.round(settings[input.dataset.volume] * 100); input.nextElementSibling.value = input.value + '%'; }
     onChange({ ...settings });
@@ -52,7 +60,18 @@ export function bindMatchSettings(audio, { document = globalThis.document, prefe
   brightness?.addEventListener('input',()=>{
     settings=normalizeArenaPreferences({...settings,brightness:Number(brightness.value)/100});apply();saveArenaPreferences(settings);
   });
-  panel.querySelector('#arena-reset').addEventListener('click', () => { settings = normalizeArenaPreferences(null); apply(); saveArenaPreferences(settings); });
+  track?.addEventListener('change', () => {
+    if (track.value === 'local') { apply(true); return; }
+    settings = normalizeArenaPreferences({ ...settings, musicTrack: track.value });
+    apply(false);
+    saveArenaPreferences(settings);
+  });
+  panel.querySelector('#arena-choose-music')?.addEventListener('click', () => file?.click());
+  file?.addEventListener('change', () => {
+    if (file.files?.[0] && menuAudio?.importLocal(file.files[0])) apply(true);
+    file.value = '';
+  });
+  panel.querySelector('#arena-reset').addEventListener('click', () => { settings = normalizeArenaPreferences(null); apply(false); saveArenaPreferences(settings); });
   panel.addEventListener('keydown', event => { if (event.key === 'Escape') { event.stopPropagation(); close(); button.focus(); } });
   panel.addEventListener('pointerdown', event => event.stopPropagation());
   document.addEventListener('pointerdown', event => { if (!panel.hidden && !panel.contains(event.target) && !button.contains(event.target)) close(); });

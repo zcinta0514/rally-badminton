@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { RELEASE_NOTICE } from '../src/release-notes.js';
+import { parseMediaRange } from './media-range.js';
 
 export const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -64,7 +65,7 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
       else if (/\.(js|css|html|svg|png)$/.test(item.name) ||
         directory === 'src/fonts' && (/\.woff2$/i.test(item.name) || /^(LICENSE|NOTICE)[\w.-]*\.txt$/i.test(item.name)) ||
         (directory === 'src/models' || directory.startsWith('src/models/')) && (/\.glb$/i.test(item.name) || /^(LICENSE|NOTICE|ATTRIBUTION)[\w.-]*\.(txt|md)$/i.test(item.name)) ||
-        directory === 'src/audio' && (/\.wav$/.test(item.name) || ['LICENSE.txt','FINALE-VOICE.txt','manifest.json'].includes(item.name))) await add('/' + file, file);
+        directory === 'src/audio' && (/\.(wav|mp3)$/.test(item.name) || ['LICENSE.txt','FINALE-VOICE.txt','LOBBY-MUSIC.txt','manifest.json'].includes(item.name))) await add('/' + file, file);
     }
   }
   for (const dir of ['src', 'shared', 'icons']) await walk(dir);
@@ -86,7 +87,7 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   const setRuntime = value => assets.set(publicURL('/runtime-config.js'), Buffer.from(`globalThis.RALLY_CONFIG=Object.freeze(${JSON.stringify(value)});\n`));
   const makeInventory = () => [...assets].sort(([a], [b]) => a.localeCompare(b)).map(([url, bytes]) => ({url,hash:digest(bytes)}));
   setRuntime(runtime);
-  const template = await readFile(path.join(root, 'scripts/service-worker.js'), 'utf8');
+  const template = parseMediaRange.toString() + '\n' + await readFile(path.join(root, 'scripts/service-worker.js'), 'utf8');
   // The ID covers every source byte and configuration before its own injection.
   // Rehash the final runtime bytes for integrity, without a self-hash cycle.
   const version = digest(JSON.stringify(makeInventory()) + template).slice(0, 16);

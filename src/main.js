@@ -3,6 +3,7 @@ import { hellStatus } from '../shared/hell-mode.js';
 import { CourtView } from './view.js';
 import { Controls } from './controls.js';
 import { ArenaAudio } from './arena-audio.js';
+import { MenuAudio, interfaceSound } from './menu-audio.js';
 import { createHaptics } from './haptics.js';
 import { MatchFinale } from './match-finale.js';
 import { createUsageAnalytics } from './analytics.js';
@@ -83,6 +84,8 @@ const finale=new MatchFinale();
 let sound=restoredUpdatePreferences?.sound??true;
 let selectedShot='clear',dragDepth=0,lastShotRequest=null,gestureOrigin=null;
 const showToast=text=>{clearTimeout(toastTimer);$('toast').textContent=text;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,3800);};
+const menuAudio=new MenuAudio({media:$('lobby-music-player'),getContext:()=>arenaAudio.context,
+  preferences:arenaPreferences,onError:showToast});
 const shotLayout=bindShotLayout({showToast,onClose:()=>{shotLayoutHold=false;accumulator=0;lastFrame=performance.now();controls?.reset();}});
 for(const trigger of document.querySelectorAll('[data-open-shot-layout]'))trigger.addEventListener('click',()=>{closeHelpOrSetup();shotLayout?.open();});
 const openShotLayoutInMatch=()=>{
@@ -179,6 +182,21 @@ function showFinale(frame){
 // Retry inside the next real gesture; a running or muted device needs no work.
 document.addEventListener('pointerdown',unlockAudio);
 document.addEventListener('keydown',unlockAudio);
+// Use the native click for touch, mouse and keyboard so one activation gets one sound.
+function menuGesture(event, kind){
+  if(!sound||!event.isTrusted)return;
+  unlockAudio();menuAudio.activate();
+  if(kind)menuAudio.playClick(kind);
+}
+document.addEventListener('click',event=>{
+  if(event.target?.closest?.('#sound'))return;
+  menuGesture(event,interfaceSound(event.target));
+},true);
+document.addEventListener('change',event=>{
+  if(event.target?.matches?.('#match-settings-panel input[type="range"], #arena-music-track, input[type="checkbox"]'))menuGesture(event,'tap');
+});
+window.addEventListener('pagehide',()=>menuAudio.setVisible(false));
+window.addEventListener('pageshow',()=>menuAudio.setVisible(!document.hidden));
 
 function groupChoice(container,attribute,value){
   for(const button of $(container).querySelectorAll('button')){
@@ -194,7 +212,7 @@ function syncRulesControls(){
   setText('rules-note',standard?'21 分 · 赢两分，30 封顶 · 三局两胜 · 局间休息 4 秒':`达到 ${rules.target} 分且净胜 ${rules.winBy} 分获胜 · ${rules.cap} 分封顶 · 对角发球`);
 }
 function syncSoundControls(){
-  arenaAudio.setEnabled(sound);$('sound').dataset.muted=String(!sound);
+  arenaAudio.setEnabled(sound);menuAudio.setEnabled(sound);$('sound').dataset.muted=String(!sound);
   $('sound').setAttribute('aria-label',sound?'关闭声音':'开启声音');
 }
 if(restoredUpdatePreferences){
@@ -255,6 +273,7 @@ function selectAim(value){aim=value;lastShotRequest=null;}
 function setScreen(screen){
   if(screen!=='match')matchSettings?.close();
   document.body.dataset.screen=screen;
+  menuAudio.setScene(screen==='match'?'match':'lobby');
   if(screen!=='match')document.body.dataset.entering='false';
   pwa.setMatchActive(screen==='match');
   $('menu').hidden=screen!=='menu';$('court-caption').hidden=screen!=='menu';
@@ -498,10 +517,11 @@ $('copy-beta-wechat').addEventListener('click',async()=>{
     status.textContent='请手动复制已选中的微信号';
   }
 });
-$('sound').addEventListener('click',()=>{sound=!sound;syncSoundControls();showToast(sound?'声音已开启':'声音已关闭');});
+$('sound').addEventListener('click',event=>{sound=!sound;syncSoundControls();menuGesture(event,'confirm');showToast(sound?'声音已开启':'声音已关闭');});
 document.addEventListener('visibilitychange',()=>{
   if(finale.blocking)lastFrame=performance.now();
   arenaAudio.setVisible(!document.hidden);
+  menuAudio.setVisible(!document.hidden);
   if(!document.hidden||!state||state.phase==='over')return;
   if(shotLayoutHold){controls?.reset();pendingShot=null;return;}
   controls?.reset();pendingShot=null;
@@ -628,6 +648,7 @@ function updateUI(info,state){
   if(state.phase==='over'&&resultPending&&!view.rallyEnding&&!finale.blocking){
     resultPending=false;dialog('result-dialog');
   }
+  if(state.phase==='over'&&!resultPending&&!finale.blocking&&!arenaAudio.voices?.size)menuAudio.setScene('result');
   if(state.phase==='paused'){
     setText('pause-time',Math.ceil(state.pause.remaining));
     $('resume').disabled=mode==='online'&&(reconnecting||room?.players.some(p=>!p?.connected));
@@ -639,7 +660,7 @@ function updateUI(info,state){
 try{
   view=new CourtView($('court'),{courtPalette:arenaPreferences.courtPalette});
   bindCameraSettings(view);
-  matchSettings=bindMatchSettings(arenaAudio,{preferences:arenaPreferences,onChange:value=>{
+  matchSettings=bindMatchSettings(arenaAudio,{preferences:arenaPreferences,menuAudio,onChange:value=>{
     const paletteChanged=value.courtPalette!==arenaPreferences.courtPalette;
     arenaPreferences=value;
     view.setLightingBrightness(value.brightness);

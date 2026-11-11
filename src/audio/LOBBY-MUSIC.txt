@@ -1,0 +1,10 @@
+开拍 RALLY · 原创大厅音乐
+
+开场热身 (lobby-warmup.mp3): 80 BPM, 48 seconds.
+赛场高光 (lobby-highlights.mp3): 88 BPM, approximately 44 seconds.
+
+Original note arrangements and synthesized recordings for this project. No
+third-party recordings or melodies were sampled. Source and regeneration
+instructions: scripts/render-lobby-music.py. Both tracks are distributed under
+the repository's MIT license. The optional local audio picker does not upload
+or distribute the selected recording.
