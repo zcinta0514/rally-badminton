@@ -11,6 +11,7 @@
 - 唯一可编辑计划：本目录 docs/character-program/。
 - 实施 worktree：C:/Users/Administrator/.codex/worktrees/rally-char-00/rally-dev。
 - 分支：codex/char-00-feasibility。
+- 工具实现提交 6a16805 已推送；[Draft PR #32](https://github.com/zcinta0514/rally-badminton/pull/32) 已创建。未合并、未部署；大工具与本地证据只有本机副本。
 - 已核验并合入主线：8164ed8（1.16.6，手机旋转布局修复）；本分支整合提交 6949f10。直连 fetch 失败后，复用 Windows 已启用代理进行单次命令 fetch 成功，未改全局 Git 配置。启动下一轮仍需核对远端和并行任务。
 - 原 C:/Users/Administrator/Documents/ChatGPT/开拍/rally-dev 为另一个首页任务，不要在那里写人物改动。
 - 原 character-program 文档入口改为本目录指针；其中 local/ 仍存便携 Blender、venv、模型和样例，不属于部署或已推送备份。

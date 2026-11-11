@@ -31,7 +31,7 @@
 - 人物 worktree：`C:/Users/Administrator/.codex/worktrees/rally-char-00/rally-dev`，分支 `codex/char-00-feasibility`。运行时源码和模型保持基线；准备工具在 `scripts/character/`。
 - 本目录保存人物计划，不替代游戏仓库的全局 `docs/PROJECT-STATUS.md`。
 - 已建立独立 worktree 和 `docs/tasks/CHAR-00.md`；旧工作区文档保留跳转指针，本机工具仍存旧目录的 `local/`。
-- 文档和准备脚本可随人物分支本地提交；尚未推送，不声称已完成异地备份。真实提交状态以 Git 为准。
+- 文档和准备脚本已推送人物分支，建立 [Draft PR #32](https://github.com/zcinta0514/rally-badminton/pull/32)；大工具、源包、.blend 和本地证据仍未异地备份。没有合并或部署。
 - 未来原始视频、`.blend`、动捕数据与验证录像需另设资产目录和清单，保存来源、版本、SHA256 与备份位置；不得把“Git 已提交”当成忽略文件也已备份。
 
 ## 工作节奏
