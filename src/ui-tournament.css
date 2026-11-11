@@ -40,8 +40,8 @@ body[data-screen="menu"] #menu.menu-panel {
 body[data-screen="menu"] #menu .menu-heading { margin:0; }
 body[data-screen="menu"] #menu .eyebrow { color:#a7b9ac; font-size:10px; letter-spacing:.3em; margin:0 0 12px; }
 body[data-screen="menu"] #menu h1 { display:block; margin:0; font-size:clamp(46px,6.4vw,94px); line-height:1; color:#f0f0e6; }
-body[data-screen="menu"] #menu h1 .lobby-wordmark { display:block; font-family:'Rally Display','Rally UI',sans-serif; font-weight:400; font-style:normal; letter-spacing:.025em; line-height:1.08; padding-right:.12em; color:#f0f0e6; }
-body[data-screen="menu"] #menu h1 .lobby-latin { display:block; font-size:.22em; line-height:2; letter-spacing:.46em; font-weight:500; margin-left:.12em; color:#d7ded4; }
+body[data-screen="menu"] #menu h1 .lobby-wordmark { display:block; width:max-content; font-family:'Rally Display','Rally UI',sans-serif; font-weight:650; font-style:normal; letter-spacing:.06em; line-height:1.15; padding-right:.12em; color:#f0f0e6; transform:skewX(-6deg); transform-origin:left bottom; }
+body[data-screen="menu"] #menu h1 .lobby-latin { display:block; font-family:'Rally Numerals',sans-serif; font-size:.26em; line-height:2; letter-spacing:.38em; font-weight:600; margin-left:.12em; color:#c6d0c4; }
 .lobby-tagline { margin:20px 0 0; font-size:14px; letter-spacing:.3em; color:#b8c5ba; }
 body[data-screen="menu"] #menu #menu-intro,
 body[data-screen="menu"] #menu .menu-tip-compact { display:none; }
@@ -54,7 +54,7 @@ body[data-screen="menu"] #menu .lobby-action {
   display:flex; align-items:center; justify-content:space-between; gap:16px;
   background:transparent; border:0; border-left:3px solid transparent; border-radius:0;
   box-shadow:none; text-align:left; color:#eeeee4; line-height:1.25;
-  font-family:inherit; font-size:clamp(22px,2.5vw,36px); font-weight:500; letter-spacing:.06em;
+  font-family:inherit; font-size:clamp(22px,2.5vw,36px); font-weight:450; letter-spacing:.10em;
   transition:background 150ms ease,color 150ms ease,border-color 150ms ease;
 }
 body[data-screen="menu"] #menu .lobby-action:first-child { border-left-color:#b8dc88; background:linear-gradient(90deg,#b3d78b21,transparent); }
@@ -136,3 +136,14 @@ body[data-screen="menu"] .loading { background:#101b18; color:#e7ecdf; }
   .lobby-reveal { display:none; animation:none; }
 }
 body[data-screen="menu"] #menu [hidden] { display:none !important; }
+/* Secondary actions stay available in a single, keyboard-operable disclosure. */
+body[data-screen="menu"] #menu .eyebrow { display:none; }
+body[data-screen="menu"] .lobby-more { position:relative; width:100%; border:0; }
+body[data-screen="menu"] .lobby-more summary { cursor:pointer; min-height:44px; display:flex; align-items:center; width:max-content; gap:18px; color:#b0bfb3; font-size:12px; list-style:none; }
+body[data-screen="menu"] .lobby-more summary::-webkit-details-marker { display:none; }
+body[data-screen="menu"] .lobby-more summary::after { content:'＋'; }
+body[data-screen="menu"] .lobby-more[open] summary::after { content:'−'; }
+body[data-screen="menu"] #menu .lobby-more .menu-foot-actions { position:absolute; bottom:48px; left:0; z-index:15; display:flex; flex-direction:column; align-items:stretch; flex-wrap:nowrap; width:230px; max-width:calc(100vw - 64px); max-height:60dvh; overflow:auto; padding:10px 18px; background:#14231ff5; border:1px solid #3a4d3f; box-shadow:0 12px 32px #0005; }
+body[data-screen="menu"] #menu .lobby-more button { text-align:left; flex-shrink:0; }
+.lobby-version { font-size:10px; color:#84958a; padding:8px 0; }
+body #hud .score-player b, body .dialog .result-score { font-family:'Rally Numerals','Rally UI',sans-serif; font-weight:600; font-variant-numeric:tabular-nums; }

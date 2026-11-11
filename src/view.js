@@ -71,17 +71,24 @@ export class CourtView {
     this.cameraSettings = normalizeCameraSettings();
     // One shadowed soft key plus a cheap opposite fill gives bodies and rackets
     // readable depth from either end of the court. Fixtures remain unlit meshes.
-    this.scene.add(new THREE.HemisphereLight(0xe4f0fb, 0x43584f, 1.35));
-    const sunlight = new THREE.DirectionalLight(0xffefd6, 2.65);
-    sunlight.position.set(-6, 15, 4);
+    this.scene.add(new THREE.HemisphereLight(0xe5eceb, 0x343b36, .82));
+    const sunlight = new THREE.DirectionalLight(0xf7f3e8, 1.65);
+    sunlight.position.set(-3.5, 12, 2);
     sunlight.castShadow = true;
     sunlight.shadow.mapSize.set(1024, 1024);
     Object.assign(sunlight.shadow.camera, { left: -10, right: 10, top: 12, bottom: -12, near: 1, far: 35 });
     sunlight.shadow.bias = -0.0004;
     sunlight.shadow.normalBias = 0.018;
     this.scene.add(sunlight);
-    const fill = new THREE.DirectionalLight(0xc3e2f4, .8);
+    const fill = new THREE.DirectionalLight(0xd8e5eb, .45);
     fill.position.set(8, 9, -6); this.scene.add(fill);
+    // Symmetric feathered fixtures keep both ends readable. Gameplay lighting
+    // is steady; only the lobby has an entrance ramp. No extra shadow passes.
+    for (const end of [-1, 1]) {
+      const top = new THREE.SpotLight(0xf1f2eb, 220, 24, 1.04, 1, 2);
+      top.name = 'match-court-soft-top'; top.position.set(end * 1.8, 8, end * 4.5);
+      top.target.position.set(0, 0, end * 3.2); this.scene.add(top, top.target);
+    }
     this.makeCourt();
     this.players = [makeAthlete(this.scene, 0), makeAthlete(this.scene, 1)];
     for (const player of this.players) void upgradeAthlete(player);
@@ -143,7 +150,7 @@ export class CourtView {
     }
     for (const z of [-4.34, 4.34]) box(scene, lineWidth, 0.008, 4.72, lineMat, 0, lineY, z);
 
-    const postMat = material(0xd4e6cf, { roughness: 0.5 });
+    const postMat = material(0x89988d, { roughness: 0.4, metalness: .45 });
     for (const x of [-3.23, 3.23]) {
       box(scene, 0.2, 0.07, 0.28, darkMat, x, 0.03, 0, true);
       box(scene, 0.066, 1.6, 0.066, postMat, x, 0.8, 0, true);

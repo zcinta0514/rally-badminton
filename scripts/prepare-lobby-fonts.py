@@ -1,7 +1,7 @@
 """Build self-hosted OFL font subsets; source binaries stay outside deployment.
 
-Requires fonttools and brotli. Pass the downloaded Noto Sans SC variable TTF and
-Smiley Sans Oblique TTF. See src/fonts/NOTICE.txt for sources and licenses.
+Requires fonttools and brotli. Pass Noto Sans SC variable TTF and Barlow Condensed
+SemiBold TTF. See src/fonts/NOTICE.txt for sources and licenses.
 """
 import argparse
 import hashlib
@@ -38,7 +38,7 @@ def export(source, output, family, text, variable=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('noto')
-    parser.add_argument('smiley')
+    parser.add_argument('barlow')
     args = parser.parse_args()
     files = [ROOT / 'index.html', *sorted((ROOT / 'src').rglob('*.js')),
              *sorted((ROOT / 'shared').rglob('*.js'))]
@@ -48,4 +48,5 @@ if __name__ == '__main__':
     target = ROOT / 'src' / 'fonts'
     target.mkdir(parents=True, exist_ok=True)
     export(args.noto, target / 'rally-ui.woff2', 'Rally UI', text, variable=True)
-    export(args.smiley, target / 'rally-display.woff2', 'Rally Display', '开拍')
+    export(args.noto, target / 'rally-display.woff2', 'Rally Display', '开拍', variable=True)
+    export(args.barlow, target / 'rally-numerals.woff2', 'Rally Numerals', ''.join(chr(c) for c in range(32, 127)))

@@ -30,13 +30,12 @@ and game data run between the connected players' browsers.
 
 ## Interface fonts
 
-The self-hosted `src/fonts/rally-display.woff2` is a renamed two-glyph subset of
-[Smiley Sans v2.0.1](https://github.com/atelier-anchor/smiley-sans/releases/tag/v2.0.1).
-`src/fonts/rally-ui.woff2` is a renamed variable subset of
+The self-hosted Rally Display and Rally UI fonts are renamed subsets of
 [Noto Sans SC](https://github.com/google/fonts/tree/main/ofl/notosanssc).
-Both are SIL Open Font License 1.1, not MIT. Full licenses, sources and input hashes
-are retained in `src/fonts/`. Derived families are named Rally Display and Rally UI
-to respect the upstream reserved font names. No font CDN is used at runtime.
+Rally Numerals is a renamed ASCII subset of
+[Barlow Condensed SemiBold](https://github.com/google/fonts/tree/main/ofl/barlowcondensed).
+All use SIL Open Font License 1.1, not MIT. Full licenses, sources and input hashes
+are retained in `src/fonts/`. No font CDN is used at runtime.
 
 ## Recorded game audio
 

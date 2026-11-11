@@ -118,7 +118,9 @@ test('lobby has a regulation court, closed roof, distinct materials and an isola
   assert.equal(court.geometry.parameters.depth, 13.4);
   assert.ok(court.material.roughness >= .95);
   assert.ok(lobby.scene.getObjectByName('lobby-roof'));
-  assert.ok(lobby.materials.metal.metalness > .5);
+  assert.ok(lobby.materials.metal.metalness > court.material.metalness, 'coated steel remains distinct from rubber');
+  assert.ok(court.material.bumpMap && court.material.bumpScale > 0 && court.material.bumpScale < .01);
+  assert.equal(court.material.bumpMap.colorSpace, THREE.NoColorSpace, 'surface data is linear');
   assert.ok(lobby.materials.wood.roughness < court.material.roughness);
   const wood = lobby.materials.wood.color.getHex();
   lobby.setCourtPalette('blue');

@@ -36,7 +36,7 @@ try {
       title:getComputedStyle(document.querySelector('.lobby-wordmark')).fontFamily,
       menu:getComputedStyle(document.querySelector('#open-solo')).fontFamily};
   });
-  for(const family of ['Rally UI','Rally Display'])
+  for(const family of ['Rally UI','Rally Display','Rally Numerals'])
     assert.ok(report.fonts.faces.some(face=>face.family===family&&face.status==='loaded'),family+' loaded');
   assert.match(report.fonts.title,/Rally Display/);assert.match(report.fonts.menu,/Rally UI/);
   checked('self-hosted title and UI fonts load and are applied');
@@ -50,6 +50,12 @@ try {
     await fits('#open-solo',44);await fits('#open-friends',44);await fits('#match-settings-toggle',44);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
     checked(name+' home choices fit and have 44px touch targets');
+    assert.equal(await page.locator('#onboarding-entry').isVisible(),false,'secondary actions start collapsed');
+    await page.locator('.lobby-more summary').click();
+    await fits('#onboarding-entry',44);await fits('#open-beta-group',44);await fits('#install-app',44);
+    await shot(name+'-more');
+    await page.locator('.lobby-more summary').click();
+    checked(name+' More disclosure keeps guide, community and install accessible');
   }
   for(const [flowName,width,height] of [['phone',844,390],['short-phone',667,375]]) {
   await page.setViewportSize({width,height});await page.waitForTimeout(300);
@@ -63,6 +69,7 @@ try {
   await page.locator('#start-ai').click();await page.locator('#start-ai-confirm').scrollIntoViewIfNeeded();await shot(flowName+'-ai-setup');
   await page.locator('#start-ai-confirm').click();await page.locator('#hud').waitFor({state:'visible'});await page.waitForTimeout(600);await shot(flowName+'-match');
   assert.equal(await page.locator('body').getAttribute('data-screen'),'match');
+  assert.match(await page.locator('#score-self').evaluate(e=>getComputedStyle(e).fontFamily),/Rally Numerals/);
   await page.locator('#pause').click();await page.locator('#leave-game').click();
   await page.locator('#open-solo').waitFor({state:'visible'});await page.waitForTimeout(500);await shot(flowName+'-returned-home');
   checked(flowName+' solo, ordinary preparation, actual challenge and AI matches, pause-return');

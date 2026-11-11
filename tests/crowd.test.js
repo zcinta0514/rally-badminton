@@ -37,11 +37,11 @@ function startReaction(arena, state, before) {
   assert.ok(changed(arena, before).length > 0, 'a new exciting point must move spectators');
 }
 
-test('a new exciting point moves twelve upper bodies in the existing six batches and restores exact rest matrices', () => {
+test('a new exciting point moves only twelve upper bodies while all furniture finishes remain fixed', () => {
   const arena = makeArena(), before = snapshot(arena), state = live();
   assert.deepEqual(arena.children.map(mesh => [mesh.name, mesh.count]), [
-    ['arena-box:solid', 820], ['arena-box:light', 14], ['arena-head:solid', 172],
-    ['arena-limb:solid', 334], ['arena-bag:solid', 4], ['furniture-contact-shadows', 7],
+    ['arena-box:solid', 700], ['arena-box:light', 14], ['arena-box:metal', 112], ['arena-head:solid', 172],
+    ['arena-limb:solid', 334], ['arena-box:wood', 8], ['arena-bag:solid', 4], ['furniture-contact-shadows', 7],
   ]);
   startReaction(arena, state, before);
   const crowd = arena.userData.crowd;

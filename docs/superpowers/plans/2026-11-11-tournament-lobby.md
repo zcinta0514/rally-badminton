@@ -45,7 +45,7 @@ The scene is real Three.js, not a raster backdrop. Arena silhouette and material
 
 ## Result
 
-Draft PR #33: https://github.com/zcinta0514/rally-badminton/pull/33 . Local preview http://127.0.0.1:3321/ serves verified build 43dbbd447e368ee0. Spec and code reviews passed; user visual acceptance remains pending. No merge or production deployment.
+Draft PR #33: https://github.com/zcinta0514/rally-badminton/pull/33 . Local preview http://127.0.0.1:3333/ serves verified build c3bf4f38d8b6f6fc. Spec and code reviews passed; user visual acceptance remains pending. No merge or production deployment.
 
 ## Font and lighting feedback iteration
 

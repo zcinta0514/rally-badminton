@@ -20,7 +20,12 @@ export function makeCourtMaterial(color = 0x096247) {
   texture.magFilter = THREE.LinearFilter;
   texture.anisotropy = 4;
   texture.needsUpdate = true;
-  return new THREE.MeshStandardMaterial({ color, map: texture, roughness: .98, metalness: 0 });
+  // Height/roughness are linear data, separate from the colour grain. Subtle
+  // relief catches grazing light without turning rubber into glossy plastic.
+  const relief = texture.clone(); relief.colorSpace = THREE.NoColorSpace;
+  relief.name = 'rubber-micro-relief'; relief.needsUpdate = true;
+  return new THREE.MeshStandardMaterial({ color, map: texture, roughness: .98, metalness: 0,
+    bumpMap: relief, bumpScale: .006, roughnessMap: relief });
 }
 
 /** Instanced venue kept outside the playable floor; no spectator skeletons or shadows. */
@@ -38,10 +43,17 @@ export function makeArena(scene) {
   };
   const solid = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .92, metalness: 0 });
   const unlit = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const finishes = {
+    solid, light: unlit,
+    wood: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .72 }),
+    metal: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .46, metalness: .45 }),
+  };
   const transform = new THREE.Object3D();
   const place = (kind, color, x, y, z, sx, sy, sz, ry = 0, rx = 0, rz = 0, light = false, frame = null) => {
-    const key = `${kind}:${light ? 'light' : 'solid'}`;
-    if (!batches.has(key)) batches.set(key, { kind, light, items: [] });
+    const finish = light ? 'light' : color === 0x88785d ? 'wood'
+      : [0x35454b, 0x7c9198].includes(color) ? 'metal' : 'solid';
+    const key = `${kind}:${finish}`;
+    if (!batches.has(key)) batches.set(key, { kind, light, finish, items: [] });
     transform.position.set(x, y, z); transform.rotation.set(rx, ry, rz); transform.scale.set(sx, sy, sz);
     transform.updateMatrix();
     const matrix = transform.matrix.clone();
@@ -186,7 +198,7 @@ export function makeArena(scene) {
   arena.userData.seatedPeople = seatedPeople;
 
   for (const [name, batch] of batches) {
-    const mesh = new THREE.InstancedMesh(geometries[batch.kind], batch.light ? unlit : solid, batch.items.length);
+    const mesh = new THREE.InstancedMesh(geometries[batch.kind], finishes[batch.finish], batch.items.length);
     mesh.name = `arena-${name}`;
     mesh.castShadow = false; mesh.receiveShadow = false;
     batch.items.forEach((item, index) => { mesh.setMatrixAt(index, item.matrix); mesh.setColorAt(index, item.color); });

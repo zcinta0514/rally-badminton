@@ -161,8 +161,8 @@ export class TournamentLobby {
     this.lightClock = 0; this.lightingStarted = false; this.lightLevels = sampleLobbyLighting(0);
     this.materials = {
       floor: standard('charcoal-rubber', 0x303734, .97), wall: standard('acoustic-wall', 0x2b3230, .94),
-      panel: standard('wall-panels', 0x343b37, .90), metal: standard('powder-coated-steel', 0x59645b, .38, .7),
-      beam: standard('roof-steel', 0x1b2422, .56, .5), wood: standard('oiled-ash-bench', 0x977044, .58),
+      panel: standard('wall-panels', 0x343b37, .95), metal: standard('powder-coated-steel', 0x59645b, .46, .45),
+      beam: standard('roof-steel', 0x1b2422, .56, .5), wood: standard('oiled-ash-bench', 0x977044, .72),
       seat: standard('moulded-seats', 0x3e5147, .66), crowd: standard('spectator-fabric', 0xffffff, .93),
       accent: standard('tournament-green', 0x78b98b, .72), line: standard('painted-court-lines', 0xe7ecd8, .96),
       court: makeCourtMaterial(resolveCourtPalette('green').court), apron: standard('apron-rubber', 0x234b40, .97),
@@ -172,7 +172,7 @@ export class TournamentLobby {
       fixtureSide: fixtureMaterial('sideline-strip-diffuser', 0xe5edf0),
       fixtureBack: fixtureMaterial('gallery-strip-diffuser', 0xe4e9e7),
     };
-    this.materials.panel.bumpMap = surfaceGrain('acoustic'); this.materials.panel.bumpScale = .025;
+    this.materials.panel.bumpMap = surfaceGrain('acoustic'); this.materials.panel.bumpScale = .009;
     this.materials.wood.map = surfaceGrain('wood'); this.materials.wood.map.colorSpace = THREE.SRGBColorSpace;
     this.materials.wood.bumpMap = this.materials.wood.map; this.materials.wood.bumpScale = .008;
     this.buildHall(); this.buildCourt(); this.buildWaitingArea(); this.buildLights();
@@ -312,9 +312,9 @@ export class TournamentLobby {
 
   buildLights() {
     // Keep ambient light modest: local sources separate the foreground, court and gallery.
-    const ambient = new THREE.HemisphereLight(0xe6edf0, 0x343b37, .82);
+    const ambient = new THREE.HemisphereLight(0xe6edf0, 0x343b37, .68);
     ambient.name = 'lobby-indirect-light'; this.scene.add(ambient);
-    const key = new THREE.DirectionalLight(0xfff7ed, 1.75); key.position.set(-2.8, 7.2, 4.6);
+    const key = new THREE.DirectionalLight(0xf6f2e9, 1.3); key.position.set(-2.8, 7.2, 4.6);
     key.name = 'lobby-shadow-key';
     key.target.position.set(2.1, 0, 2); key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024);
@@ -326,10 +326,10 @@ export class TournamentLobby {
     const court = new THREE.SpotLight(0xf1f3ed, 210, 23, 1.05, 1, 2);
     court.name = 'lobby-court-soft-top'; court.position.set(.2, 6.85, 1.0);
     court.target.position.set(0, 0, -1.0); this.scene.add(court, court.target);
-    const athlete = new THREE.SpotLight(0xfff3e5, 53, 13, .68, 1, 2);
+    const athlete = new THREE.SpotLight(0xf1eee5, 40, 13, .68, 1, 2);
     athlete.name = 'lobby-athlete-soft-key'; athlete.position.set(5.3, 4.5, 8.3);
     athlete.target.position.set(ATHLETE.x, .95, ATHLETE.z); this.scene.add(athlete, athlete.target);
-    const rim = new THREE.SpotLight(0xdbe9f1, 100, 15, .90, 1, 2);
+    const rim = new THREE.SpotLight(0xe1eaf0, 90, 15, .90, 1, 2);
     rim.name = 'lobby-sideline-soft-rim'; rim.position.set(6.8, 6.85, 1.8);
     rim.target.position.set(4.1, .8, 4.6); this.scene.add(rim, rim.target);
     const wall = new THREE.SpotLight(0xe4ede9, 68, 11, .70, 1, 2);
@@ -342,10 +342,10 @@ export class TournamentLobby {
 
   applyLighting() {
     const level = this.lightLevels;
-    this.lights.key.intensity = 1.75 * level.main;
+    this.lights.key.intensity = 1.3 * level.main;
     this.lights.court.intensity = 210 * level.main;
-    this.lights.athlete.intensity = 53 * level.side;
-    this.lights.rim.intensity = 100 * level.side;
+    this.lights.athlete.intensity = 40 * level.side;
+    this.lights.rim.intensity = 90 * level.side;
     this.lights.wall.intensity = 68 * level.back;
     this.materials.fixture.emissiveIntensity = 1.6 * level.main;
     this.materials.fixtureSide.emissiveIntensity = 1.6 * level.side;
