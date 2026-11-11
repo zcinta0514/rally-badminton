@@ -244,6 +244,20 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   #home-actions button { min-height:44px; padding:5px 8px; gap:4px; white-space:normal; }
   .menu-panel[data-entry="home"] #home-actions .entry-copy small .tag { display:none; }
 }
+/* Keep home controls compact even if rotation updates the width before the height.
+   Intrinsic row sizing still allows extra room for wrapped text. */
+@media (max-height:550px) and (orientation:landscape),
+       (pointer:coarse) and (600px <= width <= 960px) and (min-aspect-ratio:1/1) {
+  .menu-panel[data-entry="home"] #home-actions {
+    flex:0 0 auto;
+    grid-auto-rows:minmax(clamp(44px,15svh,60px),auto);
+    width:min(100%,360px);
+    margin-inline:auto;
+  }
+  .menu-panel[data-entry="home"] #home-actions button { min-height:44px; padding:5px 8px; }
+  .menu-panel[data-entry="home"] .menu-foot-actions { width:min(100%,232px); }
+  .menu-panel[data-entry="home"] .menu-foot-actions button { font-size:11px; }
+}
 @media (max-height:360px) and (orientation:landscape) {
   .menu-panel[data-entry="home"] .intro { display:none; }
 }
