@@ -39,13 +39,20 @@ try {
     await page.screenshot({path:path.join(output,page===host?'room-host-ready.png':'room-guest-ready.png')});
   }
   report.checks.push('Create and join a real room with two identities; rules and ready controls remain readable at 844x375 and 667x375');
+  // Record state and visibility in the same browser task. Separate remote
+  // reads can straddle the end of the short entrance on a busy WebGL runner.
+  for(const page of pages)await page.evaluate(()=>{
+    window.__roomEntrance=[];
+    new MutationObserver(()=>{
+      if(document.body.dataset.entering==='true')window.__roomEntrance.push(getComputedStyle(document.querySelector('#game-controls')).visibility);
+    }).observe(document.body,{attributes:true,attributeFilter:['data-entering']});
+  });
   await host.locator('#ready-room').click();await guest.locator('#ready-room').click();
-  for(const page of pages){
-    assert.equal(await page.locator('body').getAttribute('data-entering'),'true');
-    assert.equal(await page.locator('#game-controls').isVisible(),false);
-  }
   await guest.screenshot({path:path.join(output,'room-guest-entrance.png')});
-  for(const page of pages){await page.locator('#hud').waitFor({state:'visible'});assert.equal(await page.locator('body').getAttribute('data-entering'),'false');}
+  for(const page of pages){
+    await page.locator('#hud').waitFor({state:'visible'});assert.equal(await page.locator('body').getAttribute('data-entering'),'false');
+    const visibility=await page.evaluate(()=>window.__roomEntrance);assert.ok(visibility.length>0,'entrance observed');assert.ok(visibility.every(value=>value==='hidden'),'controls hidden throughout observed entrance');
+  }
   report.checks.push('Both player sides animate within the existing ready countdown and release the HUD before play');
   await host.waitForTimeout(3500);
   await host.locator('[data-shot=clear]').dispatchEvent('pointerdown',{pointerId:1,pointerType:'touch',clientX:700,clientY:220,bubbles:true});

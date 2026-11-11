@@ -90,6 +90,16 @@ body :is(.camera-panel,.palette-panel,.match-settings-panel) { background:#14221
 body :is(.camera-panel,.palette-panel,.match-settings-panel) :is(strong,label,output,small,summary) { color:inherit; }
 body .shot-layout-settings { background:#25392d; color:#e3eadc; border-color:#40544a; border-radius:3px; }
 body .shot-layout-settings:hover { background:#314837; }
+body .shot-layout-editor { background:linear-gradient(180deg,#14221e,#101b18); }
+body .shot-layout-toolbar { border-color:#40544a; border-radius:3px; background:#14221ef7; box-shadow:0 12px 30px #0004; }
+@media (max-width:600px) {
+  .shot-layout-toolbar { width:calc(100% - 24px); display:grid; grid-template-columns:1fr auto; gap:6px 10px; padding:10px; }
+  .shot-layout-title { grid-column:1/-1; }
+  .shot-layout-title small,.shot-layout-status { display:none; }
+  .shot-layout-presets { justify-self:start; }
+  .shot-layout-actions { justify-self:end; }
+  .shot-layout-toolbar .shot-layout-actions button,.shot-layout-presets button { min-height:36px; }
+}
 body .scoreboard { background:#14221ee8; border:1px solid #61745b66; border-radius:3px; box-shadow:none; color:#f0f0e6; }
 body .scoreboard :is(.match-label,.score-player small) { color:#b3c2af; }
 body .scoreboard .score-player { color:#f0f0e6; border-color:#40544a; }
@@ -136,7 +146,7 @@ body .hell-status span { color:#c6cdb9; }
   body[data-screen=menu] #menu .community-entry { font-size:11px; }
 }
 @media (orientation:portrait), (max-width:580px) {
-  body[data-screen=menu] #menu.menu-panel:is([data-entry=ai],[data-entry=friends],[data-entry=hell]) { width:100%; padding:78px 24px 24px; background:#101d19ed; }
+  body[data-screen=menu] #menu.menu-panel:is([data-entry=ai],[data-entry=friends],[data-entry=hell]) { top:max(72px,calc(var(--safe-top) + 60px)); height:auto; width:100%; padding:12px 24px 24px; background:#101d19ed; scroll-padding-block:12px; }
   body[data-screen=menu] #menu .preparation-grid { grid-template-columns:1fr; gap:20px; }
   body[data-screen=menu] #menu #start-ai-confirm { width:100%; }
   body[data-screen=menu] #menu .entry-heading { gap:20px; }
@@ -146,6 +156,15 @@ body .hell-status span { color:#c6cdb9; }
   body[data-screen=menu] #menu .role-card strong { font-size:12px; }
   body[data-screen=menu] #menu .role-card.selected::after { display:none; }
   body[data-screen=menu] #menu .role-icon { display:none; }
+}
+
+/* Keep all match actions on screen even on a 320px portrait viewport. */
+@media (max-width:360px) {
+  body[data-screen=match] .topbar { gap:4px; }
+  body[data-screen=match] .topbar .brand { display:none; }
+  body[data-screen=match] .topbar .top-actions { gap:4px; }
+  body[data-screen=match] :is(.camera-toggle,.palette-toggle,.match-settings-toggle) { white-space:nowrap; padding:5px; font-size:10px; }
+  body[data-screen=match] .camera-toggle { margin-left:0; }
 }
 
 @media (hover:hover) {
