@@ -25,6 +25,7 @@
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/three-addons/"}}</script>
 </head>
 <body data-screen="menu" data-shot-skin="glass">
+  <audio id="lobby-music-player" preload="none" loop></audio>
   <canvas id="court" aria-label="立体羽毛球场"></canvas>
   <div class="screen-vignette"></div>
   <section id="match-finale" hidden aria-label="好友赛后彩蛋" aria-live="polite">
@@ -62,6 +63,14 @@
     <button id="edit-shot-layout" class="shot-layout-settings" type="button"><span>调整击球键位置</span></button>
     <details><summary>本场规则 · 只读</summary><p id="match-settings-summary"></p><small>打法、难度与计分在下一场开局前选择。</small></details>
     <label for="arena-master">总音量</label><div class="arena-volume"><input id="arena-master" data-volume="master" type="range" min="0" max="100" value="60"><output>60%</output></div>
+    <label for="arena-music">背景音乐</label><div class="arena-volume"><input id="arena-music" data-volume="music" type="range" min="0" max="100" value="25"><output>25%</output></div>
+    <label for="arena-music-track">大厅曲目</label>
+    <select id="arena-music-track"><option value="rotation">赛事歌单循环</option><option value="local" disabled hidden>本机音频</option></select>
+    <small id="arena-music-current" aria-live="polite" hidden></small>
+    <button id="arena-choose-music" class="shot-layout-settings" type="button">选择本机音频</button>
+    <input id="arena-music-file" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg,.flac" hidden aria-label="选择本机音频">
+    <small>本机音频仅在当前页面使用。</small>
+    <label for="arena-ui">界面音效</label><div class="arena-volume"><input id="arena-ui" data-volume="ui" type="range" min="0" max="100" value="45"><output>45%</output></div>
     <label for="arena-hits">击球</label><div class="arena-volume"><input id="arena-hits" data-volume="hits" type="range" min="0" max="100" value="100"><output>100%</output></div>
     <label for="arena-movement">移动</label><div class="arena-volume"><input id="arena-movement" data-volume="movement" type="range" min="0" max="100" value="65"><output>65%</output></div>
     <label for="arena-crowd">观众</label><div class="arena-volume"><input id="arena-crowd" data-volume="crowd" type="range" min="0" max="100" value="50"><output>50%</output></div>
@@ -142,7 +151,7 @@
       <details class="lobby-more"><summary>更多</summary><div class="menu-foot-actions">
         <button id="onboarding-entry" class="secondary-btn" type="button">新手指南</button>
         <button id="open-leaderboard" type="button" hidden>排行榜</button>
-      <span class="lobby-version">正式版 1.18.0</span>
+      <span class="lobby-version">正式版 1.19.0</span>
       </div></details>
     </div>
   </main>

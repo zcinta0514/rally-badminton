@@ -8,9 +8,10 @@ import { WebSocketServer } from 'ws';
 import { Rooms } from './rooms.js';
 import { Leaderboard } from './leaderboard.js';
 import { createPwaBuild, validateWebSocketURL } from '../scripts/build-pwa.js';
+import { parseMediaRange } from '../scripts/media-range.js';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const mime={'.woff2':'font/woff2','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.wav':'audio/wav','.glb':'model/gltf-binary','.json':'application/json; charset=utf-8','.txt':'text/plain; charset=utf-8','.md':'text/plain; charset=utf-8','.webmanifest':'application/manifest+json; charset=utf-8'};
+const mime={'.woff2':'font/woff2','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.wav':'audio/wav','.mp3':'audio/mpeg','.glb':'model/gltf-binary','.json':'application/json; charset=utf-8','.txt':'text/plain; charset=utf-8','.md':'text/plain; charset=utf-8','.webmanifest':'application/manifest+json; charset=utf-8'};
 
 export function createServer({port=0,host='127.0.0.1',tls=null,allowedOrigins=[],allowMissingOrigin=true,wsUrl='',peerMode=true,leaderboardPath=null,leaderboardOnError,assetRoot=root}={}){
   const originSet=new Set(allowedOrigins.map(value=>{
@@ -45,6 +46,15 @@ export function createServer({port=0,host='127.0.0.1',tls=null,allowedOrigins=[]
     const body=pathname==='/sw.js'?build?.worker:build?.assets.get(pathname);
     if(!body){res.writeHead(404);res.end('Not found');return;}
     if(pathname==='/sw.js')res.setHeader('Service-Worker-Allowed','/');
+    if(pathname.endsWith('.mp3')){
+      res.setHeader('Accept-Ranges','bytes');
+      const range=parseMediaRange(req.headers.range,body.length);
+      if(range){
+        const slice=range.status===206?body.subarray(range.start,range.end+1):Buffer.alloc(0);
+        res.writeHead(range.status,{'Content-Type':mime['.mp3'],'Content-Range':range.contentRange,'Content-Length':slice.length,'Cache-Control':'no-cache'});
+        res.end(req.method==='HEAD'?undefined:slice);return;
+      }
+    }
     res.writeHead(200,{'Content-Type':pathname==='/'?mime['.html']:mime[path.extname(pathname)]||'application/octet-stream','Content-Length':body.length,'Cache-Control':'no-cache','ETag':`"${build.version}-${pathname}"`});
     res.end(req.method==='HEAD'?undefined:body);
   };

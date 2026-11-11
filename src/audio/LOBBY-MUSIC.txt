@@ -1,0 +1,27 @@
+开拍 RALLY · 大厅音乐
+
+赛事歌单
+
+bwf-superseries.mp3 — OSIM BWF World Superseries Anthem (original)
+bwf-superseries-remix.mp3 — OSIM BWF World Superseries Anthem (official remix)
+Music credits: Rasmus Berg, Nicholas Kvaran and E. Thornhal.
+Source: the tournament site's original audio downloads, archived by the Internet Archive.
+Original: https://web.archive.org/web/20130322144820id_/http://osimbwfwss.com/file_download.aspx?id=38527
+Remix: https://web.archive.org/web/20130322144749id_/http://osimbwfwss.com/file_download.aspx?id=38526
+
+know-the-game.mp3 — Know The Game, Stéphane Huguenin (Kosinus, KOS671, track 31).
+Catalog: https://www.universalproductionmusic.com/de-de/discover/albums/19205/edm
+Audio: https://stream.music.cdn.unippm.com/KOS/KOS671/Know_The_Game/KOS_671_31_Know_The_Game_Huguenin_1175192.mp3
+
+The project owner confirmed permission for the game to use the event recordings.
+The three tracks retain their full arrangements and were level-matched and encoded
+as 64 kb/s MP3 for the lobby. These recordings are outside the repository MIT license.
+
+原创曲目
+
+开场热身 (lobby-warmup.mp3): 80 BPM, 48 seconds.
+赛场高光 (lobby-highlights.mp3): 88 BPM, approximately 44 seconds.
+
+Source and regeneration instructions: scripts/render-lobby-music.py. These two
+original tracks are distributed under the repository's MIT license. The optional
+local audio picker does not upload or distribute the selected recording.

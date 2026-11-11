@@ -239,6 +239,19 @@ self.addEventListener('activate', event => {
   })());
 });
 
+async function serveMediaRange(request, key, response) {
+  const header = request.headers?.get('Range');
+  if (!header || !key.endsWith('.mp3')) return response;
+  const bytes = await response.clone().arrayBuffer();
+  const range = parseMediaRange(header, bytes.byteLength);
+  if (!range) return response;
+  const body = range.status === 206 ? bytes.slice(range.start, range.end + 1) : null;
+  return new Response(body, {status: range.status, headers: {
+    'Content-Type': 'audio/mpeg', 'Accept-Ranges': 'bytes', 'Content-Range': range.contentRange,
+    'Content-Length': String(body?.byteLength || 0),
+  }});
+}
+
 self.addEventListener('fetch', event => {
   const request = event.request;
   if (request.method !== 'GET') return;
@@ -265,14 +278,14 @@ self.addEventListener('fetch', event => {
     if (!(await caches.keys()).includes(name)) return cacheFailure();
     const cache = await caches.open(name);
     const cached = await cache.match(key);
-    if (cached) return cached;
+    if (cached) return serveMediaRange(request, key, cached);
     if (version !== VERSION) return cacheFailure();
     const asset = ASSETS.find(asset => asset.url === key);
     if (!asset) return fetch(request);
     try {
       // Eviction is recoverable only using bytes from this exact version.
       const repaired = await verifiedDownload(asset);
-      await cache.put(key, repaired.clone()); return repaired;
+      await cache.put(key, repaired.clone()); return serveMediaRange(request, key, repaired);
     } catch {
       return cacheFailure();
     }
