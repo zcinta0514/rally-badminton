@@ -203,9 +203,14 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   touch-action:pan-y;
 }
 .menu-panel[data-entry="home"] > * { flex-shrink:0; }
-.menu-panel[data-entry="home"] .setup { flex:0 0 auto; justify-content:flex-start; }
-.menu-panel[data-entry="home"] #home-actions { grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; padding:8px 0; }
-#home-actions .hell-entry { grid-column:1 / -1; }
+.menu-panel[data-entry="home"] .setup { flex:1 0 auto; justify-content:flex-start; }
+.menu-panel[data-entry="home"] #home-actions {
+  flex:1 0 auto;
+  grid-template-columns:minmax(0,1fr);
+  grid-auto-rows:1fr;
+  gap:6px;
+  padding:8px 0;
+}
 #home-actions button { min-height:clamp(64px,10vh,96px); padding:14px 18px; text-align:left; }
 #home-actions .entry-copy { min-width:0; display:flex; flex-direction:column; gap:5px; font-size:inherit; letter-spacing:0; }
 #home-actions .entry-copy strong { font-size:17px; }
