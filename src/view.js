@@ -16,8 +16,8 @@ import { TournamentLobby } from './tournament-lobby.js';
 // Venue-wide colours. The court floor, apron and accent strip come from the
 // selected court palette instead; see court-palettes.js.
 const COLORS = {
-  background: 0x101e29,
-  floor: 0x132b34,
+  background: 0x131c1b,
+  floor: 0x303734,
   line: 0xf0f5e7,
   coral: 0xfb7959,
   mint: 0xb7e2cb,
@@ -71,8 +71,8 @@ export class CourtView {
     this.cameraSettings = normalizeCameraSettings();
     // One shadowed soft key plus a cheap opposite fill gives bodies and rackets
     // readable depth from either end of the court. Fixtures remain unlit meshes.
-    this.scene.add(new THREE.HemisphereLight(0xe5eceb, 0x343b36, .82));
-    const sunlight = new THREE.DirectionalLight(0xf7f3e8, 1.65);
+    this.scene.add(new THREE.HemisphereLight(0xe6edf0, 0x343b37, .68));
+    const sunlight = new THREE.DirectionalLight(0xf6f2e9, 1.3);
     sunlight.position.set(-3.5, 12, 2);
     sunlight.castShadow = true;
     sunlight.shadow.mapSize.set(1024, 1024);
@@ -80,12 +80,12 @@ export class CourtView {
     sunlight.shadow.bias = -0.0004;
     sunlight.shadow.normalBias = 0.018;
     this.scene.add(sunlight);
-    const fill = new THREE.DirectionalLight(0xd8e5eb, .45);
+    const fill = new THREE.DirectionalLight(0xe1eaf0, .32);
     fill.position.set(8, 9, -6); this.scene.add(fill);
     // Symmetric feathered fixtures keep both ends readable. Gameplay lighting
     // is steady; only the lobby has an entrance ramp. No extra shadow passes.
     for (const end of [-1, 1]) {
-      const top = new THREE.SpotLight(0xf1f2eb, 220, 24, 1.04, 1, 2);
+      const top = new THREE.SpotLight(0xf1f3ed, 240, 24, 1.04, 1, 2);
       top.name = 'match-court-soft-top'; top.position.set(end * 1.8, 8, end * 4.5);
       top.target.position.set(0, 0, end * 3.2); this.scene.add(top, top.target);
     }
@@ -106,7 +106,7 @@ export class CourtView {
     Object.assign(this.edgeIndicator.style,{position:'fixed',zIndex:'6',pointerEvents:'none',
       transform:'translate(-50%,-50%)',padding:'6px 10px',borderRadius:'20px',
       border:'1px solid #ffe6a899',background:'#123c36ed',color:'#fff0be',
-      font:'600 11px Arial,sans-serif',whiteSpace:'nowrap',boxShadow:'0 2px 10px #082c2960'});
+      font:'500 11px "Rally UI",sans-serif',whiteSpace:'nowrap',boxShadow:'0 2px 10px #082c2960'});
     this.edgeIndicator.hidden=true;
     document.body.appendChild(this.edgeIndicator);
     this.initialized = false;

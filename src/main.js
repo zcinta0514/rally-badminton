@@ -110,7 +110,7 @@ const peerRecords=peerMode?createPeerRecords():null;
 const leaderboard=createLeaderboard(peerMode?{document,getURL:()=>'',fetchImpl:async()=>({ok:true,json:async()=>peerRecords.list()})}:{document,getURL:()=>getLeaderboardURL(getWebSocketURL())});
 function preparePlayerProfile(){
   playerProfile??=createPlayerProfile();
-  setText('player-profile-note',playerProfile.persistent?(peerMode?'此名称显示在比分和本机好友榜中；战绩保存在当前浏览器。':'此名称会显示在比分和榜单中。战绩绑定当前浏览器；换设备或清除网站数据后不自动同步。'):'浏览器未允许保存身份。本页可正常记分，关闭后将无法接续此身份的战绩。');
+  setText('player-profile-note',playerProfile.persistent?(peerMode?'战绩仅保存在当前浏览器。':'战绩绑定本浏览器，不跨设备同步。'):'浏览器未允许保存身份。本页可正常记分，关闭后将无法接续此身份的战绩。');
   return playerProfile;
 }
 if(practiceOnly){
@@ -215,12 +215,13 @@ for(const [id,key,attr] of [['roles','role','role'],['friend-roles','friendRole'
   });
 }
 function syncEntrySettings(){
+  syncRulesControls();
+  $('friend-mode-note').hidden=settings.finale!=='father-son';
   groupChoice('hell-roles','hellRole',hellRole);
   groupChoice('ai-formats','format',settings.ruleset+':'+(settings.ruleset==='standard21'?21:settings.target));
   groupChoice('friend-formats','format',settings.friendRuleset+':'+(settings.friendRuleset==='standard21'?21:settings.friendTarget));
   const rule=getScoringRules({ruleset:settings.friendRuleset,target:settings.friendTarget});
   setText('friend-rules-note',settings.friendRuleset==='standard21'?'三局两胜 · 每局21分 · 净胜2分 · 30封顶':rule.target+'分单局 · 净胜2分 · '+rule.cap+'封顶');
-  setText('ai-summary',ROLES[settings.role].label+'型 · '+ROLES[settings.coachRole].label+'陪练 · '+names[settings.difficulty]+' · '+(settings.ruleset==='standard21'?'标准三局':settings.target+'分单局'));
 }
 function setFriendAction(action){
   friendAction=action==='join'?'join':'create';groupChoice('friend-tabs','action',friendAction);
@@ -234,9 +235,9 @@ function openEntry(stage){
   $('home-actions').hidden=stage!=='home';$('ai-start-controls').hidden=stage!=='ai';
   $('solo-actions').hidden=stage!=='solo';
   $('hell-setup').hidden=stage!=='hell';$('friends-dialog').hidden=stage!=='friends';
-  const labels={solo:['单人对战','从日常练习，到极限挑战。'],ai:['人机对战','选择打法、陪练与赛制。'],hell:['地狱挑战','识破技能，抓住两次机会。'],friends:['好友对战','创建或加入房间，确认规则后开始。'],home:['','']};
+  const labels={solo:'单人对战',ai:'人机对战',hell:'地狱挑战',friends:'好友对战',home:''};
   setText('entry-back',['ai','hell'].includes(stage)?'← 返回单人对战':'← 返回首页');
-  setText('entry-title',labels[stage][0]);setText('entry-description',labels[stage][1]);syncEntrySettings();
+  setText('entry-title',labels[stage]);syncEntrySettings();
   $('menu').scrollTop=0;
   $(stage==='home'?'open-solo':'entry-back').focus({preventScroll:true});
 }

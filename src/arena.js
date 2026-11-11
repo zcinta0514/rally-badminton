@@ -51,7 +51,7 @@ export function makeArena(scene) {
   const transform = new THREE.Object3D();
   const place = (kind, color, x, y, z, sx, sy, sz, ry = 0, rx = 0, rz = 0, light = false, frame = null) => {
     const finish = light ? 'light' : color === 0x88785d ? 'wood'
-      : [0x35454b, 0x7c9198].includes(color) ? 'metal' : 'solid';
+      : [0x59645b, 0x829084].includes(color) ? 'metal' : 'solid';
     const key = `${kind}:${finish}`;
     if (!batches.has(key)) batches.set(key, { kind, light, finish, items: [] });
     transform.position.set(x, y, z); transform.rotation.set(rx, ry, rz); transform.scale.set(sx, sy, sz);
@@ -63,7 +63,7 @@ export function makeArena(scene) {
     return item;
   };
   const box = (color, x, y, z, sx, sy, sz, ry = 0) => place('box', color, x, y, z, sx, sy, sz, ry);
-  const metal = 0x35454b, seat = 0x264c58, wall = 0x132733, trim = 0x43706c;
+  const metal = 0x59645b, seat = 0x3e5147, wall = 0x2b3230, trim = 0x596a5e;
   const seatedPeople = [];
   const contactShadows = [];
   // Every part uses this same local frame, including knees, shoes and hair.
@@ -80,7 +80,7 @@ export function makeArena(scene) {
     const foot = footY - seatY;
     track(part('box', shirt, 0, .34, .015, .36, .48, .25), 'torso');
     track(part('head', skin, 0, .74, -.005, .126, .155, .126), 'head');
-    track(part('head', 0x253038, 0, .80, .018, .128, .095, .128), 'hair');
+    track(part('head', 0x27312d, 0, .80, .018, .128, .095, .128), 'hair');
     for (const side of [-1, 1]) {
       if (role === 'spectator') {
         track(part('limb', shirt, side * .205, .29, -.075, .062, .35, .062, -.25, side * -.12), 'arm', side);
@@ -89,11 +89,11 @@ export function makeArena(scene) {
         part('limb', skin, side * .224, .205, -.145, .044, .27, .044, -Math.PI / 2);
         part('head', skin, side * .224, .20, -.282, .05, .04, .068);
       }
-      part('box', 0x293840, side * .10, .075, -.15, .14, .15, .38);
+      part('box', 0x29332e, side * .10, .075, -.15, .14, .15, .38);
       const shinTop = .075, shinBottom = foot + .09;
-      part('limb', 0x293840, side * .10, (shinTop + shinBottom) / 2, -.345,
+      part('limb', 0x29332e, side * .10, (shinTop + shinBottom) / 2, -.345,
         .061, shinTop - shinBottom, .061);
-      part('box', 0x485860, side * .10, foot + .035, -.405, .145, .07, .25);
+      part('box', 0x485149, side * .10, foot + .035, -.405, .145, .07, .25);
     }
     if (role !== 'spectator') part('box', skin, 0, .726, -.13, .032, .046, .039);
     seatedPeople.push({ role, x, z, seatY, footY, yaw });
@@ -112,19 +112,19 @@ export function makeArena(scene) {
   // either player's camera. Side furniture starts beyond the net posts.
   for (const end of [-1, 1]) {
     box(wall, 0, 1.5, end * 13.4, 23, 3.4, .16);
-    box(0x1f414b, 0, .3, end * 12.7, 14, .65, .7);
+    box(0x303b34, 0, .3, end * 12.7, 14, .65, .7);
     box(trim, 0, 2.7, end * 13.28, 21, .05, .04);
     for (let column = -4; column <= 4; column++) {
-      box(0x203f4a, column * 2.35, 1.46, end * 13.24, .055, 2.35, .08);
+      box(0x39433c, column * 2.35, 1.46, end * 13.24, .055, 2.35, .08);
     }
     // Discrete overhead strip fixtures suggest the hall without extra lights.
     for (const x of [-5, 0, 5]) {
-      box(0x304853, x, 3.02, end * 13.20, 2.48, .14, .095);
+      box(0x353e38, x, 3.02, end * 13.20, 2.48, .14, .095);
       place('box', 0xe6ecdc, x, 3.02, end * 13.14, 2.3, .05, .035, 0, 0, 0, true);
     }
     for (let row = 0; row < 3; row++) {
       const z = end * (9.55 + row * .92), level = row * .28;
-      box(0x20343d, 0, (level - .20) / 2, z, 11, level + .20, .87);
+      box(0x252d29, 0, (level - .20) / 2, z, 11, level + .20, .87);
       for (let column = 0; column < 14; column++) {
         const x = (column - 6.5) * .7;
         box(seat, x, .41 + level, z, .48, .075, .42);
@@ -133,7 +133,7 @@ export function makeArena(scene) {
         if ((column + row * 3) % 11 === 0) continue;
         const facing = end < 0 ? Math.PI : 0;
         const skin = [0xc99a76, 0xa47758, 0xddb28e, 0x785748][(column + row) % 4];
-        const shirt = [0x607e88, 0x9b7761, 0x42635d, 0x9fa6a3, 0x405771, 0x865959][(column * 3 + row) % 6];
+        const shirt = [0x737c72, 0x8b7460, 0x456058, 0xa3977e, 0x5d686c, 0x536759][(column * 3 + row) % 6];
         seated({ x, seatY: .4475 + level, z, yaw: facing, shirt, skin, footY: level,
           reacts: column === 2 || column === 10 });
       }
@@ -148,14 +148,14 @@ export function makeArena(scene) {
   for (const side of [-1, 1]) {
     // Bring the equipment aisle up to shoe/bench level; the surrounding hall
     // base in CourtView is lower than the raised playing apron.
-    box(0x132b34, side * 7.775, -.10, 0, 5.85, .20, 26.7);
+    box(0x303734, side * 7.775, -.10, 0, 5.85, .20, 26.7);
     box(wall, side * 10.7, 1.5, 0, .14, 3.4, 26.7);
-    for (let i = -3; i <= 3; i++) box(0x24434d, side * 10.59, 1.5, i * 3.5, .08, 3.2, .09);
+    for (let i = -3; i <= 3; i++) box(0x39433c, side * 10.59, 1.5, i * 3.5, .08, 3.2, .09);
     // Low wall skirting and ceiling-line fixtures add depth but stay outside the
     // court sightline. These share existing instanced batches, with no new lights.
-    box(0x36565b, side * 10.55, .10, 0, .07, .15, 26.5);
+    box(0x4b5a4f, side * 10.55, .10, 0, .07, .15, 26.5);
     for (const z of [-8.4, -2.8, 2.8, 8.4]) {
-      box(0x2b4652, side * 10.54, 3.03, z, .11, .12, 3.45);
+      box(0x353e38, side * 10.54, 3.03, z, .11, .12, 3.45);
       place('box', side < 0 ? 0xc3dfe7 : 0xe3ddc8, side * 10.47, 3.03, z, .028, .045, 3.24, 0, 0, 0, true);
     }
     // Four low benches with legs, backs, a bag and a folded towel.
@@ -179,20 +179,20 @@ export function makeArena(scene) {
   const chairX = -4.13;
   contactShadows.push({ x: chairX, z: 0, sx: .58, sz: .58 });
   for (const x of [chairX - .25, chairX + .25]) for (const z of [-.30, .30]) {
-    box(0x7c9198, x, .78, z, .055, 1.58, .055);
+    box(0x829084, x, .78, z, .055, 1.58, .055);
   }
-  box(0x314f5b, chairX, 1.55, 0, .64, .11, .69);
-  box(0x314f5b, chairX - .29, 1.87, 0, .075, .59, .68);
-  for (let step = 0; step < 5; step++) box(0x7c9198, chairX, .17 + step * .29, .32, .56, .045, .06);
-  for (const z of [-.32, .32]) box(0x7c9198, chairX, 1.90, z, .63, .045, .045);
+  box(0x3e5147, chairX, 1.55, 0, .64, .11, .69);
+  box(0x3e5147, chairX - .29, 1.87, 0, .075, .59, .68);
+  for (let step = 0; step < 5; step++) box(0x829084, chairX, .17 + step * .29, .32, .56, .045, .06);
+  for (const z of [-.32, .32]) box(0x829084, chairX, 1.90, z, .63, .045, .045);
   // Raised front footrest is separate from the side access ladder.
-  box(0x7c9198, chairX + .415, 1.13, 0, .38, .045, .62);
+  box(0x829084, chairX + .415, 1.13, 0, .38, .045, .62);
   seated({ x: chairX, seatY: 1.605, z: 0, yaw: -Math.PI / 2,
-    shirt: 0x729baa, skin: 0xc99a76, footY: 1.1525, role: 'umpire' });
+    shirt: 0x7e9180, skin: 0xc99a76, footY: 1.1525, role: 'umpire' });
   for (const side of [-1, 1]) {
     const x = side * 4.45, z = -side * 6.7, yaw = side * Math.PI / 2;
     lowChair(x, z, yaw);
-    seated({ x, seatY: .4475, z, yaw, shirt: 0x577b89,
+    seated({ x, seatY: .4475, z, yaw, shirt: 0x617665,
       skin: side < 0 ? 0x997051 : 0xd0a382, role: 'line-judge' });
   }
   arena.userData.seatedPeople = seatedPeople;

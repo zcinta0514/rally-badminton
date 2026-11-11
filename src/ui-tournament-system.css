@@ -1,0 +1,172 @@
+/* One visual system for preparation, room dialogs and the live court.
+   Shot hit areas, layout presets and gesture coordinates are owned by the
+   control system; only their surfaces and interaction colours change here. */
+body {
+  --ink:#f2f2e9; --muted:#aab8af; --paper:#14221e; --surface:#20312b;
+  --line:#40544a; --soft:#273b31; --green:#c0dd94;
+  --button-face:#c2dc9b; --button-edge:#9cb77c;
+  color:var(--ink); color-scheme:dark; background:#101b18;
+}
+body button:focus-visible,body summary:focus-visible,body input:focus-visible { outline:2px solid #d6efac; outline-offset:3px; }
+body .primary-btn,body .secondary-btn,body .dialog .primary-btn,body .dialog .secondary-btn { border-radius:3px; box-shadow:none; font-weight:550; }
+body .primary-btn,body .dialog .primary-btn { background:#c2dc9b; color:#152218; border:1px solid #c2dc9b; }
+body .secondary-btn,body .dialog .secondary-btn { background:#25392d; color:#e3eadc; border:1px solid #4b6451; }
+body .primary-btn:hover { background:#d1e9ad; }
+body .secondary-btn:hover { background:#314837; }
+body .text-btn { color:#c5d4c2; }
+body input:not([type=range]):not([type=checkbox]),body .dialog input { color:var(--ink); background:#101d19; border:1px solid #40544a; border-radius:3px; box-shadow:none; }
+body input::placeholder { color:#8e9f92; }
+body .segments { background:#10201a; border-radius:3px; }
+body .segments button { color:#afbeb1; border-radius:2px; }
+body .segments button.selected { color:#e1f1c5; background:#314837; box-shadow:inset 0 -2px #b8d88e; }
+
+/* Home: the community entrance is always exposed, separate from More. */
+body[data-screen=menu] #menu .menu-foot { position:relative; flex-direction:row; align-items:center; gap:26px; }
+body[data-screen=menu] #menu .community-entry { width:auto; flex:none; min-height:44px; padding:0; border:0; background:none; color:#d5dfcc; white-space:nowrap; font-size:12px; line-height:16px; -webkit-text-size-adjust:none; text-size-adjust:none; }
+body[data-screen=menu] #menu .community-entry:hover { color:#d6efac; }
+body[data-screen=menu] .lobby-more { width:auto; position:static; }
+body[data-screen=menu] #menu .lobby-more .menu-foot-actions { left:0; right:auto; }
+
+/* Preparation is a two-column decision surface, not a narrow settings list. */
+body[data-screen=menu] #menu.menu-panel:is([data-entry=ai],[data-entry=friends],[data-entry=hell]) {
+  width:min(88vw,960px); max-width:none; padding:40px 36px 28px max(5vw,var(--safe-left));
+  background:linear-gradient(90deg,#101d19fa,#101d19ee 92%,#101d1900);
+}
+body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading { display:flex; align-items:center; gap:30px; margin:0 0 24px; min-height:44px; }
+body[data-screen=menu] #menu .entry-heading h2 { margin:0; font-size:28px; font-weight:500; }
+body[data-screen=menu] #menu .preparation-grid { display:grid; grid-template-columns:minmax(180px,.8fr) minmax(280px,1.3fr); gap:32px; }
+.preparation-player,.preparation-rules { min-width:0; }
+body[data-screen=menu] #menu .setup-heading { font-size:12px; font-weight:450; color:var(--muted); margin:0 0 12px; }
+body[data-screen=menu] #menu .role-grid { display:grid; grid-template-columns:1fr; gap:8px; margin:0; }
+body[data-screen=menu] #menu .role-card { display:flex; align-items:center; gap:14px; min-height:52px; padding:10px 16px; border:1px solid #405347; }
+body[data-screen=menu] #menu .role-card strong { font-size:15px; font-weight:500; margin:0; }
+body[data-screen=menu] #menu .role-icon { height:22px; }
+body[data-screen=menu] #menu .role-card.selected::after { right:14px; top:50%; transform:translateY(-50%); color:#c2dc9b; }
+body[data-screen=menu] #menu .setup-row { display:grid; grid-template-columns:1fr; gap:7px; border:0; padding:0; margin:0 0 16px; }
+body[data-screen=menu] #menu .field-label { color:var(--muted); font-size:12px; font-weight:450; }
+body[data-screen=menu] #menu .segments { padding:0; gap:4px; background:transparent; border:0; }
+body[data-screen=menu] #menu .segments button { min-height:44px; font-size:13px; padding:6px; border:1px solid #405347; border-radius:2px; background:#16271f; }
+body[data-screen=menu] #menu .segments button.selected { background:#314837; border-color:#9cb77c; color:#e1f1c5; box-shadow:inset 0 -2px #b8d88e; }
+body[data-screen=menu] #menu .format-choices { flex-wrap:nowrap; }
+body[data-screen=menu] #menu .format-choices button { flex:1; }
+body[data-screen=menu] #menu .format-choices button:last-child { flex:1.5; }
+body[data-screen=menu] #menu .rules-note { min-height:0; margin:8px 0 0; font-size:11px; line-height:1.6; }
+.setup-reference { margin-top:12px; color:var(--muted); font-size:11px; }
+.setup-reference summary { cursor:pointer; min-height:44px; display:flex; align-items:center; gap:8px; list-style:none; }
+.setup-reference summary::before { content:'＋'; }
+.setup-reference[open] summary::before { content:'−'; }
+.setup-reference summary::-webkit-details-marker { display:none; }
+body[data-screen=menu] #menu .setup-reference .role-note { display:block; min-height:0; margin:0 0 8px; }
+body[data-screen=menu] #menu #ai-start-controls { align-items:flex-end; border-top:1px solid #40544a; padding-top:16px; margin-top:20px; }
+body[data-screen=menu] #menu #start-ai-confirm { width:calc((100% - 32px) * 1.3 / 2.1); min-height:48px; }
+body[data-screen=menu] #menu .entry-content { overflow:visible; padding:0; }
+body[data-screen=menu] #menu #friend-tabs { width:100%; border-bottom:1px solid #40544a; margin-bottom:20px; gap:24px; }
+body[data-screen=menu] #menu #friend-tabs button { flex:none; min-width:104px; padding:8px 0; background:transparent; border:0; box-shadow:none; border-bottom:2px solid transparent; border-radius:0; }
+body[data-screen=menu] #menu #friend-tabs button.selected { border-bottom-color:#c2dc9b; color:#e1f1c5; }
+body[data-screen=menu] #menu .input-label { color:var(--muted); margin:0 0 8px; font-size:12px; font-weight:450; }
+body[data-screen=menu] #menu #player-name { height:44px; font-size:15px; }
+body[data-screen=menu] #menu #player-profile-note { margin:8px 0 20px; font-size:11px; line-height:1.5; }
+body[data-screen=menu] #menu .room-mode-picker { margin:16px 0; padding:0; background:none; border:0; }
+body[data-screen=menu] #menu .room-mode-picker .setup-row { margin:0; }
+body[data-screen=menu] #menu #friend-mode-note { display:block; font-size:11px; margin-top:8px; color:#e7c49b; }
+body[data-screen=menu] #menu #create-room { margin:16px 0 0; width:100%; min-height:48px; }
+body[data-screen=menu] #menu .join-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; margin:0; }
+body[data-screen=menu] #menu #join-room { margin:0; width:auto; min-height:48px; padding:10px 20px; }
+body[data-screen=menu] #menu #room-code { font-family:'Rally Numerals','Rally UI',sans-serif; font-size:24px; letter-spacing:.12em; min-height:48px; }
+body[data-screen=menu] #menu #room-code::placeholder { font-family:'Rally UI',sans-serif; font-size:13px; letter-spacing:0; }
+body[data-screen=menu] #menu #friends-network-note { display:block; margin:12px 0 0; font-size:11px; }
+
+/* The same matte surfaces continue through rooms, pause, results and settings. */
+body #dialog-backdrop { background:#060d0ab8; }
+body #dialog-backdrop .dialog { background:#14221efc; border:1px solid #40544a; border-top:2px solid #b8d88e; border-radius:4px; color:var(--ink); box-shadow:0 20px 70px #0006; scrollbar-color:#516454 #14221e; }
+body #dialog-backdrop .dialog h2 { font-weight:500; letter-spacing:.04em; }
+body #dialog-backdrop .dialog .eyebrow { display:none; }
+body #dialog-backdrop .dialog .close-dialog { background:#25392d; color:#e3eadc; border-color:#40544a; min-width:44px; min-height:44px; border-radius:3px; }
+body #dialog-backdrop .dialog .room-code,body #dialog-backdrop .dialog .pause-clock { color:#d6e7b5; background:transparent; border-color:#40544a; font-family:'Rally Numerals','Rally UI',sans-serif; }
+body #dialog-backdrop .dialog :is(.rule-note,.room-mode-summary,.waiting-status,.lobby-players) { color:#b9c9b9; background:transparent; border-color:#40544a; }
+body .topbar .icon-btn,body[data-screen=match] :is(.camera-toggle,.palette-toggle,.match-settings-toggle) { background:#14221ee8; color:#e5eadf; border:1px solid #61745b66; border-radius:3px; box-shadow:none; }
+body[data-screen=match] .topbar button { min-height:36px; }
+body :is(.camera-panel,.palette-panel,.match-settings-panel) { background:#14221ef7; color:#e5eadf; border:1px solid #40544a; border-radius:3px; box-shadow:0 12px 30px #0004; }
+body :is(.camera-panel,.palette-panel,.match-settings-panel) :is(strong,label,output,small,summary) { color:inherit; }
+body .shot-layout-settings { background:#25392d; color:#e3eadc; border-color:#40544a; border-radius:3px; }
+body .shot-layout-settings:hover { background:#314837; }
+body .scoreboard { background:#14221ee8; border:1px solid #61745b66; border-radius:3px; box-shadow:none; color:#f0f0e6; }
+body .scoreboard :is(.match-label,.score-player small) { color:#b3c2af; }
+body .scoreboard .score-player { color:#f0f0e6; border-color:#40544a; }
+body .scoreboard .score-player b { color:#deebba; }
+body .hud .match-note { color:#bccbb7; text-shadow:0 1px 4px #07120b; }
+body .hud .match-note strong { color:#edf2df; }
+body .assist-panel>strong { background:#14221ee8; color:#dae6ce; border-left:2px solid #b8d88e; border-radius:0; box-shadow:none; }
+body .joystick { border:1px solid #b3c6a766; background:#14221e99; box-shadow:inset 0 0 0 5px #c2dc9b08; }
+body #knob { background:#b8c9ab66; border:1px solid #d5e5c4aa; box-shadow:none; }
+body .stick-cross::before,body .stick-cross::after { background:#b3c6a744; }
+body .joystick-wrap>small { color:#bacbb2; text-shadow:0 1px 4px #07120b; }
+body .aim-heading { background:transparent; border:0; box-shadow:none; }
+body .aim-heading b { color:#dce8ce; text-shadow:0 1px 4px #07120b; }
+body[data-shot-skin=glass] .shot-btn { --key-accent:#c6d9b2; }
+body[data-shot-skin=glass] [data-shot=drop] { --key-accent:#b9d6c4; }
+body[data-shot-skin=glass] [data-shot=smash] { --key-accent:#e5d3a3; }
+body[data-shot-skin=glass] .key-face { background:linear-gradient(145deg,#334638dd,#14221ee8); border-color:#a2b49399; color:#edf1e4; box-shadow:inset 0 1px #dae8c622,0 4px 16px #0003; text-shadow:none; }
+body[data-shot-skin=glass] .shot-btn.smash .key-face { background:linear-gradient(145deg,#494b36dd,#1c2920e8); border-color:#d5c39399; }
+body[data-shot-skin=glass] .shot-btn.charging .key-face { background:#314837ed; box-shadow:inset 0 0 0 1px #c2dc9b77; }
+body[data-shot-skin=glass] .shot-btn.smash.ready .key-face { border-color:#f0d791; box-shadow:0 0 0 2px #e7d39833; }
+body[data-shot-skin=glass] .shot-btn.smash.unavailable .key-face { border-color:#82917e66; color:#bcc7b5aa; }
+body .hell-status { background:#14221ef0; border-color:#a48f65; border-radius:3px; }
+body .hell-status b { color:#ead29f; }
+body .hell-status span { color:#c6cdb9; }
+@media (max-height:600px) and (orientation:landscape) {
+  body[data-screen=menu] #menu.menu-panel:is([data-entry=ai],[data-entry=friends],[data-entry=hell]) { width:calc(100% - 64px); padding:12px 20px 14px max(24px,var(--safe-left)); }
+  body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading { margin-bottom:10px; gap:24px; }
+  body[data-screen=menu] #menu .entry-heading h2 { font-size:23px; }
+  body[data-screen=menu] #menu .preparation-grid { grid-template-columns:minmax(165px,.8fr) minmax(270px,1.3fr); gap:24px; }
+  body[data-screen=menu] #menu .setup-heading { margin-bottom:8px; }
+  body[data-screen=menu] #menu .role-grid { gap:6px; }
+  body[data-screen=menu] #menu .role-card { min-height:44px; padding:7px 12px; }
+  body[data-screen=menu] #menu .setup-row { gap:5px; margin-bottom:9px; }
+  body[data-screen=menu] #menu .segments button { font-size:12px; }
+  body[data-screen=menu] #menu .rules-note { margin-top:5px; font-size:10px; }
+  .setup-reference { margin-top:2px; }
+  body[data-screen=menu] #menu #ai-start-controls { padding-top:10px; margin-top:10px; }
+  body[data-screen=menu] #menu #start-ai-confirm { min-height:44px; width:calc((100% - 24px) * 1.3 / 2.1); }
+  body[data-screen=menu] #menu #friend-tabs { margin-bottom:12px; }
+  body[data-screen=menu] #menu .room-mode-picker { margin:10px 0; }
+  body[data-screen=menu] #menu #create-room { min-height:44px; margin-top:10px; }
+  body[data-screen=menu] #menu #friends-network-note { margin-top:8px; font-size:10px; }
+  body[data-screen=menu] #menu .menu-foot { gap:20px; }
+  body[data-screen=menu] #menu .community-entry { font-size:11px; }
+}
+@media (orientation:portrait), (max-width:580px) {
+  body[data-screen=menu] #menu.menu-panel:is([data-entry=ai],[data-entry=friends],[data-entry=hell]) { width:100%; padding:78px 24px 24px; background:#101d19ed; }
+  body[data-screen=menu] #menu .preparation-grid { grid-template-columns:1fr; gap:20px; }
+  body[data-screen=menu] #menu #start-ai-confirm { width:100%; }
+  body[data-screen=menu] #menu .entry-heading { gap:20px; }
+  body[data-screen=menu] #menu .entry-heading h2 { font-size:24px; }
+  body[data-screen=menu] #menu .role-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  body[data-screen=menu] #menu .role-card { justify-content:center; padding:10px 6px; gap:6px; }
+  body[data-screen=menu] #menu .role-card strong { font-size:12px; }
+  body[data-screen=menu] #menu .role-card.selected::after { display:none; }
+  body[data-screen=menu] #menu .role-icon { display:none; }
+}
+
+@media (hover:hover) {
+  body button.primary-btn:hover:not(:disabled),body .dialog button.primary-btn:hover:not(:disabled) { background:#d1e9ad; }
+  body button.secondary-btn:hover:not(:disabled),body .dialog button.secondary-btn:hover:not(:disabled),body .role-card:not(.selected):hover,body .icon-btn:hover { background:#314837; border-color:#a9bba0; }
+  body .segments button:not(.selected):hover { background:#263e2e; }
+}
+body .shuttle-edge-indicator { color:#ead29f !important; border-color:#a48f65 !important; }
+
+body[data-screen=match] .brand { color:#e6ecdc; }
+body[data-screen=match] .brand small { color:#c0d2b5; }
+body[data-screen=match] .brand-mark { background:#45634c; border-bottom-color:#a3bd83; }
+
+/* Native dialogs are outside the shared backdrop but use the same palette. */
+body :is(.onboarding-dialog,.pwa-dialog,.release-dialog) { color:#f2f2e9; background:#14221e; border:1px solid #40544a; border-top:2px solid #b8d88e; border-radius:4px; }
+body :is(.onboarding-dialog,.pwa-dialog,.release-dialog)::backdrop { background:#060d0ab8; }
+body :is(.onboarding-dialog,.pwa-dialog,.release-dialog) h2 { font-weight:500; letter-spacing:.03em; }
+body :is(.onboarding-intro,.onboarding-keyboard,.onboarding-return-note,.pwa-note,.pwa-close,.release-close) { color:#aab8af; }
+body :is(.onboarding-progress,.onboarding-instructions strong,.pwa-eyebrow) { color:#c0dd94; }
+body .onboarding-visual,body .pwa-cache-detail { background:#1d3026; border-color:#40544a; }
+body .onboarding-visual span { background:#314837; color:#e1f1c5; border-color:#829873; font-weight:550; }
+body .pwa-actions button { background:#25392d; color:#e3eadc; border-color:#4b6451; }
+body .pwa-actions #pwa-install,body .release-dialog .release-dismiss { background:#c2dc9b; color:#152218; border-color:#c2dc9b; }
+body #dialog-backdrop .dialog .result-score { color:#deebba; }
