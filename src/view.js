@@ -1,4 +1,5 @@
 import { normalizeBrightness } from './arena-preferences.js';
+import { FlightGuideView } from './flight-guide-view.js';
 import * as THREE from 'three';
 import { fitCourtViewport, getShuttleEdgeHint } from './court-layout.js';
 import { normalizeCameraSettings } from './camera-settings.js';
@@ -105,6 +106,7 @@ export class CourtView {
     this.staminaProjection = new THREE.Vector3();
     this.makeShuttle();
     this.makeHints();
+    this.flightGuide = new FlightGuideView(this.scene);
     this.edgeIndicator=document.createElement('div');
     this.edgeIndicator.className='shuttle-edge-indicator';
     this.edgeIndicator.setAttribute('aria-hidden','true');
@@ -322,7 +324,7 @@ export class CourtView {
     this.mode=mode;
     if(mode!=="match"){this.entrance?.cancel();this.entranceFrom=null;}
     this.resetCrowd();
-    if (mode !== 'match') this.staminaHUD?.hide();
+    if (mode !== 'match') {this.staminaHUD?.hide();this.flightGuide?.clear();}
     if(mode!=='match')this.edgeIndicator.hidden=true;
     this.resize();
   }
@@ -550,7 +552,7 @@ export class CourtView {
   render(state, side=0, dt=1/60, info={}) {
     if(!state?.players||!state.shuttle)return;
     updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
-    if(info.finale){this.staminaHUD?.hide();this.renderFinale(state,info.finale,side);return;}
+    if(info.finale){this.flightGuide?.clear();this.staminaHUD?.hide();this.renderFinale(state,info.finale,side);return;}
     this.clearFinale();
     dt=clamp(Number.isFinite(dt)?dt:1/60,0,.06);
     if(this.cameraSide!==side)this.updateCamera(side);
@@ -602,6 +604,7 @@ export class CourtView {
       this.netAtRest=this.netVisual.atRest;
     }
     this.updateHints(state,info,freeze,reset,side);
+    this.flightGuide?.update(state,side,info,{freeze,reset,dt,hidden:this.mode!=='match'||this.entranceActive});
     const showEdge=this.mode==='match'&&shuttle.active&&['rally','paused','countdown'].includes(state.phase);
     const edge=showEdge?getShuttleEdgeHint(shuttle,this.layout,{hud:this.hudBounds}):null;
     this.edgeIndicator.hidden=!edge;

@@ -249,7 +249,7 @@ function movePlayer(player, input, side, dt, state) {
 function flightPoint(ball, time) {
   return { ...sampleShuttleFlight(ball, time), time };
 }
-function liveFlightPoint(ball, time) {
+export function liveFlightPoint(ball, time) {
   const contact = netCrossing(ball);
   const point = contact?.netImpact?.crosses && time >= contact.time
     ? sampleShuttleFlight(afterNet(contact, ball), time - contact.time) : sampleShuttleFlight(ball, time);
