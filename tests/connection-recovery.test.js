@@ -7,6 +7,7 @@ import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 import { webcrypto } from 'node:crypto';
 import * as game from '../shared/game.js';
+import {MenuAudio,interfaceSound} from '../src/menu-audio.js';
 import {readArenaPreferences} from '../src/arena-preferences.js';
 import {describeRole} from '../src/match-settings.js';
 import {matchPressure} from '../src/arena-feedback.js';
@@ -136,7 +137,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     sample() { return { x: 0, z: 0, prepare: null, charge: 0 }; }
   }
   const context = vm.createContext({
-    ...game, captureMotion, presentLocal, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
+    ...game, MenuAudio, interfaceSound, captureMotion, presentLocal, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
     getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
     createUsageAnalytics:()=>({configured:true,enabled:true,

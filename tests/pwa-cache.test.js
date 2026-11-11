@@ -45,6 +45,25 @@ test('offline worker serves full local app, vendor and query navigation from its
   assert.equal(await f.event('fetch',{request:{method:'GET',url:'https://other.example/src/main.js'}}),undefined);
   assert.deepEqual(f.calls(),{skipCalls:0,claimCalls:0});
 });
+test('offline playback serves byte ranges from the verified MP3 on the Pages subpath', async () => {
+  const f = await fixture({ basePath: '/rally-badminton/' });
+  await f.event('install');
+  await f.event('activate');
+  f.setOffline(true);
+  const asset = '/rally-badminton/src/audio/bwf-superseries.mp3';
+  const bytes = f.build.assets.get(asset);
+  const fetchRange = range => f.event('fetch', {
+    request: new Request('https://rally.example' + asset, { headers: { Range: range } }),
+  });
+  const partial = await fetchRange('bytes=0-1');
+  assert.equal(partial.status, 206);
+  assert.equal(partial.headers.get('Content-Type'), 'audio/mpeg');
+  assert.equal(partial.headers.get('Content-Range'), `bytes 0-1/${bytes.length}`);
+  assert.deepEqual(Buffer.from(await partial.arrayBuffer()), bytes.subarray(0, 2));
+  const invalid = await fetchRange(`bytes=${bytes.length}-`);
+  assert.equal(invalid.status, 416);
+  assert.equal(invalid.headers.get('Content-Range'), `bytes */${bytes.length}`);
+});
 test('a corrupted resource rejects installation and preserves the previous complete version', async () => {
   const f=await fixture();await f.caches.open(f.build.cachePrefix+'previous');f.setAltered('/vendor/three.core.js');
   await assert.rejects(f.event('install'),/changed during download/);

@@ -1,7 +1,7 @@
 # Flight guides implementation plan
 
 Goal: playable incoming cyan and held-shot pink dashed arcs, preview first.
-Base: GitHub connector verified main e8b74bb (1.18.0); separate audio candidate remains independent.
+Base: initially e8b74bb; integrated verified main 12f1f721 (audio 1.19.0) before merge. Final flight release is 1.20.0.
 Architecture: pure presentation guidance samples shared flight physics. One reusable Three.js line-segment buffer renders the chosen guide. No authority or network protocol change.
 
 - [x] Add behavioral tests: opponent-only incoming, both sides, held serve, reachable future contact, release, pause/reset and phantom suppression.
