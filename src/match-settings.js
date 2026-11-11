@@ -38,14 +38,19 @@ export function bindMatchSettings(audio, { document = globalThis.document, prefe
   let settings = normalizeArenaPreferences(preferences);
   const close = () => { panel.hidden = true; button.setAttribute('aria-expanded', 'false'); };
   const inputs = [...panel.querySelectorAll('[data-volume]')];
+  const brightness = panel.querySelector('#arena-brightness');
   const apply = () => {
     audio.setPreferences(settings);
+    if(brightness){brightness.value=Math.round(settings.brightness*100);brightness.nextElementSibling.value=brightness.value+'%';}
     for (const input of inputs) { input.value = Math.round(settings[input.dataset.volume] * 100); input.nextElementSibling.value = input.value + '%'; }
     onChange({ ...settings });
   };
   button.addEventListener('click', () => { panel.hidden = !panel.hidden; button.setAttribute('aria-expanded', String(!panel.hidden)); });
   for (const input of inputs) input.addEventListener('input', () => {
     settings = normalizeArenaPreferences({ ...settings, [input.dataset.volume]: Number(input.value) / 100 }); apply(); saveArenaPreferences(settings);
+  });
+  brightness?.addEventListener('input',()=>{
+    settings=normalizeArenaPreferences({...settings,brightness:Number(brightness.value)/100});apply();saveArenaPreferences(settings);
   });
   panel.querySelector('#arena-reset').addEventListener('click', () => { settings = normalizeArenaPreferences(null); apply(); saveArenaPreferences(settings); });
   panel.addEventListener('keydown', event => { if (event.key === 'Escape') { event.stopPropagation(); close(); button.focus(); } });

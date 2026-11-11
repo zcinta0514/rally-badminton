@@ -1,3 +1,4 @@
+import { normalizeBrightness } from './arena-preferences.js';
 import * as THREE from 'three';
 import { fitCourtViewport, getShuttleEdgeHint } from './court-layout.js';
 import { normalizeCameraSettings } from './camera-settings.js';
@@ -61,7 +62,7 @@ export class CourtView {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.0;
+    this.renderer.toneMappingExposure = normalizeBrightness();
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -356,6 +357,13 @@ export class CourtView {
     return this.courtPalette;
   }
 
+  setLightingBrightness(value) {
+    const brightness=normalizeBrightness(value);
+    this.renderer.toneMappingExposure=brightness;
+    this.lobby.brightness=brightness;
+    return brightness;
+  }
+
   setQuality({ pixelRatio, shadows, shadowSize } = {}) {
     if (Number.isFinite(pixelRatio)) {
       const ratio=clamp(pixelRatio,1,2);
@@ -382,7 +390,7 @@ export class CourtView {
   getRendererMetrics() {
     const { render, memory } = this.renderer.info;
     return { pixelRatio: this.renderer.getPixelRatio(), shadows: this.renderer.shadowMap.enabled,
-      shadowSize:this.matchKey.shadow.mapSize.x, calls: render.calls, triangles: render.triangles, geometries: memory.geometries, textures: memory.textures };
+      brightness:this.renderer.toneMappingExposure, shadowSize:this.matchKey.shadow.mapSize.x, calls: render.calls, triangles: render.triangles, geometries: memory.geometries, textures: memory.textures };
   }
 
   updateCamera(side) {
