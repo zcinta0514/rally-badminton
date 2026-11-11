@@ -50,7 +50,7 @@ test('offline playback serves byte ranges from the verified MP3 on the Pages sub
   await f.event('install');
   await f.event('activate');
   f.setOffline(true);
-  const asset = '/rally-badminton/src/audio/lobby-warmup.mp3';
+  const asset = '/rally-badminton/src/audio/bwf-superseries.mp3';
   const bytes = f.build.assets.get(asset);
   const fetchRange = range => f.event('fetch', {
     request: new Request('https://rally.example' + asset, { headers: { Range: range } }),

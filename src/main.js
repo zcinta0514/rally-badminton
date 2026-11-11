@@ -85,7 +85,10 @@ let sound=restoredUpdatePreferences?.sound??true;
 let selectedShot='clear',dragDepth=0,lastShotRequest=null,gestureOrigin=null;
 const showToast=text=>{clearTimeout(toastTimer);$('toast').textContent=text;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,3800);};
 const menuAudio=new MenuAudio({media:$('lobby-music-player'),getContext:()=>arenaAudio.context,
-  preferences:arenaPreferences,onError:showToast});
+  preferences:arenaPreferences,onError:showToast,onTrack:title=>{
+    const label=$('arena-music-current');
+    if(label){label.textContent=title;label.hidden=false;}
+  }});
 const shotLayout=bindShotLayout({showToast,onClose:()=>{shotLayoutHold=false;accumulator=0;lastFrame=performance.now();controls?.reset();}});
 for(const trigger of document.querySelectorAll('[data-open-shot-layout]'))trigger.addEventListener('click',()=>{closeHelpOrSetup();shotLayout?.open();});
 const openShotLayoutInMatch=()=>{

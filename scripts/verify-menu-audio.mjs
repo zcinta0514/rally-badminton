@@ -51,51 +51,66 @@ try {
     await ready();
     assert.equal(await music.getAttribute('src'), null);
     await tap(settings);
-    await playing('lobby-warmup.mp3');
+    await playing('bwf-superseries.mp3');
     assert.equal(await countClicks(), 1, 'one touch creates one sound on first activation');
-    await track.selectOption('highlights');
-    await playing('lobby-highlights.mp3');
+    assert.equal(await track.inputValue(), 'rotation');
+    for (const next of ['know-the-game.mp3', 'bwf-superseries-remix.mp3', 'bwf-superseries.mp3']) {
+      await music.evaluate(audio => { audio.currentTime = audio.duration - .15; });
+      await playing(next);
+    }
+    await track.selectOption('know-the-game');
+    await playing('know-the-game.mp3');
+    assert.equal(await music.evaluate(audio => audio.loop), true);
     await page.locator('#arena-choose-music').scrollIntoViewIfNeeded();
     await page.screenshot({ path: `${output}/${width}x${height}-settings.png` });
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('rally.arena.v1')).musicTrack), 'highlights');
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('rally.arena.v1')).musicTrack), 'know-the-game');
     await page.locator('#arena-music-file').setInputFiles('src/audio/lobby-warmup.mp3');
     await playing('blob:');
     assert.equal(await track.inputValue(), 'local');
-    await track.selectOption('highlights');
-    await playing('lobby-highlights.mp3');
+    await track.selectOption('know-the-game');
+    await playing('know-the-game.mp3');
     await track.selectOption('local');
     await playing('blob:');
-    await track.selectOption('highlights');
+    await track.selectOption('know-the-game');
 
     await page.reload();
     await ready();
     await tap(settings);
-    await playing('lobby-highlights.mp3');
-    assert.equal(await track.inputValue(), 'highlights');
+    await playing('know-the-game.mp3');
+    assert.equal(await track.inputValue(), 'know-the-game');
     const ui = page.locator('#arena-ui');
     await ui.fill('0');
     const clicks = await countClicks();
     await tap(settings);
     assert.equal(await countClicks(), clicks);
-    await playing('lobby-highlights.mp3');
+    await playing('know-the-game.mp3');
     await tap(settings);
     await ui.fill('45');
     await page.locator('#arena-music').fill('0');
     await paused();
     await page.locator('#arena-music').fill('25');
-    await playing('lobby-highlights.mp3');
+    await playing('know-the-game.mp3');
     await tap(settings);
     await tap('#sound');
     await paused();
     await tap('#sound');
-    await playing('lobby-highlights.mp3');
+    await playing('know-the-game.mp3');
 
     if (width !== 390) {
+      await page.evaluate(() => {
+        const observer = new MutationObserver(() => {
+          if (document.body.dataset.screen !== 'match') return;
+          window.musicPausedAtEntry = document.getElementById('lobby-music-player').paused;
+          observer.disconnect();
+        });
+        observer.observe(document.body, { attributes: true, attributeFilter: ['data-screen'] });
+      });
       await tap('#open-solo');
       await tap('#start-ai');
       await tap('#start-ai-confirm');
       await page.locator('#hud').waitFor({ state: 'visible' });
+      assert.equal(await page.evaluate(() => window.musicPausedAtEntry), true, 'music stops in the match entry task');
       await paused();
       const beforeServe = await countClicks();
       const key = await page.locator('[data-shot=clear]').boundingBox();
@@ -108,9 +123,9 @@ try {
       await tap('#pause');
       await paused();
       await tap('#leave-game');
-      await playing('lobby-highlights.mp3');
+      await playing('know-the-game.mp3');
     }
-    report.checks.push(`${width}×${height}: touch audio, switching, local file, saved selection and mute`);
+    report.checks.push(`${width}×${height}: playlist wrap, switching, local file, saved selection and mute`);
     console.log(report.checks.at(-1));
     await context.close();
   }

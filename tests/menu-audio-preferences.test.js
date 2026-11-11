@@ -6,7 +6,7 @@ test('old arena preferences receive separate music and interface defaults', () =
   const preferences = normalizeArenaPreferences({ master: .4, courtPalette: 'purple' });
   assert.equal(preferences.music, .25);
   assert.equal(preferences.ui, .45);
-  assert.equal(preferences.musicTrack, 'warmup');
+  assert.equal(preferences.musicTrack, 'rotation');
   assert.equal(preferences.master, .4);
   assert.equal(preferences.courtPalette, 'purple');
 });
@@ -16,5 +16,5 @@ test('music and interface levels can be muted separately and only built-in IDs a
   assert.equal(saved.music, 0);
   assert.equal(saved.ui, 1);
   assert.equal(saved.musicTrack, 'highlights');
-  assert.equal(normalizeArenaPreferences({ musicTrack: 'blob:local' }).musicTrack, 'warmup');
+  assert.equal(normalizeArenaPreferences({ musicTrack: 'blob:local' }).musicTrack, 'rotation');
 });

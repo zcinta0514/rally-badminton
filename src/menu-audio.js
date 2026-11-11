@@ -1,9 +1,6 @@
 import { normalizeArenaPreferences } from './arena-preferences.js';
+import { LOBBY_ROTATION, LOBBY_TRACKS } from './lobby-tracks.js';
 
-const tracks = {
-  warmup: new URL('./audio/lobby-warmup.mp3', import.meta.url).href,
-  highlights: new URL('./audio/lobby-highlights.mp3', import.meta.url).href,
-};
 const clicks = {
   tap: [590, 275, .055],
   confirm: [790, 460, .076],
@@ -13,11 +10,13 @@ const clicks = {
 // Menu sounds share the arena's unlocked context, but use their own gain. The
 // arena gain is silent in the lobby and on pause and would mute menu feedback.
 export class MenuAudio {
-  constructor({ media, getContext, preferences, onError = () => {} }) {
+  constructor({ media, getContext, preferences, onError = () => {}, onTrack = () => {} }) {
     this.media = media;
     this.getContext = getContext;
     this.preferences = normalizeArenaPreferences(preferences);
     this.onError = onError;
+    this.onTrack = onTrack;
+    this.rotationIndex = 0;
     this.scene = 'lobby';
     this.visible = true;
     this.enabled = true;
@@ -28,6 +27,11 @@ export class MenuAudio {
     this.lastClick = -Infinity;
     this.media?.addEventListener('error', () => {
       if (this.media.error) this.onError('无法播放这首曲子，请切换曲目或选择其他音频。');
+    });
+    this.media?.addEventListener('ended', () => {
+      if (this.usingLocal || this.preferences.musicTrack !== 'rotation' || !this.media.ended) return;
+      this.rotationIndex = (this.rotationIndex + 1) % LOBBY_ROTATION.length;
+      this.sync();
     });
   }
 
@@ -41,7 +45,7 @@ export class MenuAudio {
   setScene(scene) {
     if (this.scene === scene) return;
     this.scene = scene;
-    this.sync(scene === 'match' ? .7 : 0);
+    this.sync();
   }
 
   setEnabled(enabled) {
@@ -85,19 +89,13 @@ export class MenuAudio {
     this.sync();
   }
 
-  sync(fadeOut = 0) {
+  sync() {
     const context = this.getContext();
     if (!this.media || !context || !this.activated) return;
-    clearTimeout(this.pauseTimer);
     const volume = this.preferences.master * this.preferences.music;
     if (!this.enabled || !this.visible || !volume || this.scene === 'match') {
-      if (fadeOut && this.enabled && this.visible && volume && this.musicGain && !this.media.paused) {
-        this.setGain(this.musicGain, 0, fadeOut);
-        this.pauseTimer = setTimeout(() => this.media.pause(), fadeOut * 1000);
-      } else {
-        this.media.pause();
-        if (this.musicGain) this.setGain(this.musicGain, 0);
-      }
+      this.media.pause();
+      if (this.musicGain) this.setGain(this.musicGain, 0);
       return;
     }
     try {
@@ -107,12 +105,17 @@ export class MenuAudio {
         context.createMediaElementSource(this.media).connect(this.musicGain);
         this.musicGain.connect(context.destination);
       }
-      const source = this.usingLocal ? this.localUrl : tracks[this.preferences.musicTrack];
+      const rotation = !this.usingLocal && this.preferences.musicTrack === 'rotation';
+      const id = rotation ? LOBBY_ROTATION[this.rotationIndex] : this.preferences.musicTrack;
+      const track = LOBBY_TRACKS[id];
+      const source = this.usingLocal ? this.localUrl : new URL(`./audio/${track.file}`, import.meta.url).href;
+      this.media.loop = !rotation;
       if (source !== this.source) {
         this.media.pause();
         this.setGain(this.musicGain, 0);
         this.media.src = source;
         this.source = source;
+        this.onTrack(this.usingLocal ? '本机音频' : track.title);
       }
       this.setGain(this.musicGain, volume, .25);
       if (this.media.paused) void this.media.play().catch(() => {});

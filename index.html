@@ -65,7 +65,8 @@
     <label for="arena-master">总音量</label><div class="arena-volume"><input id="arena-master" data-volume="master" type="range" min="0" max="100" value="60"><output>60%</output></div>
     <label for="arena-music">背景音乐</label><div class="arena-volume"><input id="arena-music" data-volume="music" type="range" min="0" max="100" value="25"><output>25%</output></div>
     <label for="arena-music-track">大厅曲目</label>
-    <select id="arena-music-track"><option value="warmup">开场热身</option><option value="highlights">赛场高光</option><option value="local" disabled hidden>本机音频</option></select>
+    <select id="arena-music-track"><option value="rotation">赛事歌单循环</option><option value="local" disabled hidden>本机音频</option></select>
+    <small id="arena-music-current" aria-live="polite" hidden></small>
     <button id="arena-choose-music" class="shot-layout-settings" type="button">选择本机音频</button>
     <input id="arena-music-file" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg,.flac" hidden aria-label="选择本机音频">
     <small>本机音频仅在当前页面使用。</small>

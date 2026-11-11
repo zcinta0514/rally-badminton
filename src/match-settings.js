@@ -1,5 +1,6 @@
 import { ROLES, getScoringRules, getDifficultyProfile, staminaEffects, movementStaminaRate, shotStaminaCost } from '../shared/game.js';
 import { normalizeArenaPreferences, saveArenaPreferences, readArenaPreferences } from './arena-preferences.js';
+import { LOBBY_TRACKS } from './lobby-tracks.js';
 import { STAMINA_TUNING } from '../shared/stamina.js';
 
 export function describeRole(role) {
@@ -41,6 +42,12 @@ export function bindMatchSettings(audio, { document = globalThis.document, prefe
   const brightness = panel.querySelector('#arena-brightness');
   const track = panel.querySelector('#arena-music-track');
   const localOption = track?.querySelector('option[value="local"]');
+  if (localOption) for (const [id, { title }] of Object.entries(LOBBY_TRACKS)) {
+    const option = document.createElement('option');
+    option.value = id;
+    option.textContent = title;
+    track.insertBefore(option, localOption);
+  }
   const file = panel.querySelector('#arena-music-file');
   const apply = (useLocal = menuAudio?.usingLocal) => {
     audio.setPreferences(settings);
