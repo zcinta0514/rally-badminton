@@ -7,12 +7,25 @@ const require=createRequire(import.meta.url),{chromium}=require(process.env.RALL
 await mkdir('artifacts/flight-guide',{recursive:true});
 const app=process.env.RALLY_QA_URL?null:createServer({port:0,host:'127.0.0.1',peerMode:true});await app?.listen();
 const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--enable-unsafe-swiftshader']});
-const report={checks:[],errors:[],build:(await createPwaBuild()).version,environment:'Windows Chrome mobile/touch emulation; not a physical phone'};
+const report={checks:[],errors:[],visuals:[],build:(await createPwaBuild()).version,environment:'Windows Chrome mobile/touch emulation; not a physical phone'};
 try{
  for(const [width,height] of [[844,390],[568,320]]){
   const context=await browser.newContext({viewport:{width,height},hasTouch:true,isMobile:true,serviceWorkers:'block',reducedMotion:'reduce'});
   await context.addInitScript(()=>{localStorage.setItem('rally.onboarding.seen','1');localStorage.setItem('rally.usage.enabled','off');});
   const page=await context.newPage();page.setDefaultTimeout(30000);page.on('pageerror',e=>report.errors.push(e.message));
+  page.on('console',m=>{if(m.type()==='error'&&/shader|WebGL/i.test(m.text()))report.errors.push(m.text());});
+  const capturePalettes=async kind=>{
+   for(const palette of ['green','blue','purple','pink']){
+    await page.evaluate(p=>qaView.setCourtPalette(p),palette);
+    await page.evaluate(()=>new Promise(requestAnimationFrame));
+    await page.screenshot({path:`artifacts/flight-guide/${width}-${kind}-${palette}.png`});
+   }
+   await page.evaluate(()=>{qaView.setCourtPalette('pink');qaView.setLightingBrightness(1.8);});
+   await page.evaluate(()=>new Promise(requestAnimationFrame));
+   await page.screenshot({path:`artifacts/flight-guide/${width}-${kind}-bright.png`});
+   await page.evaluate(()=>{qaView.setCourtPalette('green');qaView.setLightingBrightness(1.25);});
+   report.visuals.push(`${width}: ${kind}, four court palettes plus 180% brightness`);
+  };
   await page.goto(process.env.RALLY_QA_URL||app.url);await page.locator('#loading').waitFor({state:'hidden'});
   assert.equal(await page.evaluate(()=>RALLY_CONFIG.buildId),report.build);
   await page.evaluate(async()=>{
@@ -34,12 +47,13 @@ try{
   const before=await page.evaluate(()=>[...qaView.flightGuide.positions]);
   await page.mouse.move(box.x+box.width/2+32,box.y+box.height/2-18,{steps:5});
   await page.waitForTimeout(150);const after=await page.evaluate(()=>[...qaView.flightGuide.positions]);assert.notDeepEqual(before,after);
-  await page.screenshot({path:`artifacts/flight-guide/${width}-aim.png`});await page.mouse.up();
+  await page.screenshot({path:`artifacts/flight-guide/${width}-aim.png`});await capturePalettes('aim');await page.mouse.up();
   await page.waitForFunction(()=>rallyDiagnostics.statePhase==='rally');
   await page.waitForFunction(()=>!qaView.flightGuide.line.visible||qaView.flightGuide.line.userData.kind==='incoming');
   await page.evaluate(()=>{window.qaIncoming=true;});
   await page.waitForFunction(()=>qaView.flightGuide.line.visible&&qaView.flightGuide.line.userData.kind==='incoming');
   await page.screenshot({path:`artifacts/flight-guide/${width}-incoming.png`});
+  await capturePalettes('incoming');
   for(const shot of ['clear','drop','smash']){
    const b=await page.locator(`[data-shot=${shot}]`).boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();
    await page.waitForFunction(()=>qaView.flightGuide.line.visible&&qaView.flightGuide.line.userData.kind==='aim');
