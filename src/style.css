@@ -165,15 +165,6 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   .launch-actions .primary-btn>span { font-size:16px; }.launch-actions .secondary-btn>span { font-size:10px; letter-spacing:0; }
   .menu-panel>.pwa-entry { min-width:0; min-height:26px; padding:4px 0; border:0; font-size:10px; }
   .menu-panel>.pwa-entry small { display:none; }
-  .menu-panel[data-entry="home"] {
-    grid-template-columns:minmax(0,1fr);
-    grid-template-rows:repeat(4,max-content);
-    align-content:start;
-    overflow-y:auto;
-    overscroll-behavior:contain;
-    touch-action:pan-y;
-  }
-  .menu-panel[data-entry="home"] .setup { min-height:0; justify-content:flex-start; }
   .menu-panel:not([data-entry="home"]) .menu-foot-actions { display:none !important; }
   .menu-foot { margin-top:0; gap:2px; font-size:9px; }
   .menu-tip-desktop { display:none; }.menu-tip-compact { display:block; flex:0 0 auto; padding-top:4px; color:var(--green); font-size:10px; font-weight:650; line-height:14px; }
@@ -204,17 +195,29 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none!important; animation:none!important; } }
 
-/* Three substantial entry cards keep the home balanced with the live court. */
-.menu-panel[data-entry="home"] #home-actions { grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; padding:8px 0; }
-#home-actions .hell-entry { grid-column:1 / -1; }
+/* The lobby can scroll independently while the court preview remains fixed. */
+.menu-panel[data-entry="home"] {
+  display:flex;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+}
+.menu-panel[data-entry="home"] > * { flex-shrink:0; }
+.menu-panel[data-entry="home"] .setup { flex:1 0 auto; justify-content:flex-start; }
+.menu-panel[data-entry="home"] #home-actions {
+  flex:1 0 auto;
+  grid-template-columns:minmax(0,1fr);
+  grid-auto-rows:1fr;
+  gap:6px;
+  padding:8px 0;
+}
 #home-actions button { min-height:clamp(64px,10vh,96px); padding:14px 18px; text-align:left; }
 #home-actions .entry-copy { min-width:0; display:flex; flex-direction:column; gap:5px; font-size:inherit; letter-spacing:0; }
 #home-actions .entry-copy strong { font-size:17px; }
 #home-actions .entry-copy small { font-size:12px; font-weight:400; opacity:.78; }
 @media (orientation:portrait) {
-  .menu-panel[data-entry="home"] { overflow-y:auto; touch-action:pan-y; }
-  .menu-panel[data-entry="home"] .setup { flex:0 0 auto; justify-content:flex-start; }
-  .menu-panel[data-entry="home"] #home-actions { padding:12px 0; }
+  .menu-panel[data-entry="home"] .intro { margin-bottom:12px; }
+  .menu-panel[data-entry="home"] #home-actions { padding:8px 0; }
   #home-actions button { min-height:68px; padding:12px; }
 }
 @media (orientation:portrait) and (max-height:700px) {
@@ -239,7 +242,7 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 @media (max-height:500px) and (orientation:landscape) {
   .menu-panel[data-entry="home"] #home-actions { gap:4px; padding:4px 0; }
   #home-actions button { min-height:44px; padding:5px 8px; gap:4px; white-space:normal; }
-  #home-actions .entry-copy small .tag { display:none; }
+  .menu-panel[data-entry="home"] #home-actions .entry-copy small .tag { display:none; }
 }
 @media (max-height:360px) and (orientation:landscape) {
   .menu-panel[data-entry="home"] .intro { display:none; }
@@ -280,5 +283,5 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
 @media(prefers-reduced-motion:reduce) { .hell-fire i,.hell-entry::after { animation:none; } .hell-fire i { opacity:.45; } }
 
 @media (max-height:280px) and (orientation:landscape) {
-  .menu-panel[data-entry="home"] { width:max(var(--menu-width), 300px); }
+  body[data-screen="menu"]:has(#menu[data-entry="home"]) { --menu-width:max(46%, 300px); }
 }
