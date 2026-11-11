@@ -8,7 +8,7 @@ import { createPwaBuild, exportPwaBuild } from '../scripts/build-pwa.js';
 import { createServer } from '../server/index.js';
 import { modelBuildRoot, modelGlb } from './helpers/model-fixture.js';
 
-const addons = ['loaders/GLTFLoader.js','utils/BufferGeometryUtils.js','utils/SkeletonUtils.js'];
+const addons = ['loaders/GLTFLoader.js','utils/BufferGeometryUtils.js','utils/SkeletonUtils.js','lines/LineSegments2.js','lines/LineSegmentsGeometry.js','lines/LineMaterial.js'];
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 
 test('both deployment paths package a generated GLB and the closed, same-version Three addon graph', async t => {
@@ -37,7 +37,7 @@ test('both deployment paths package a generated GLB and the closed, same-version
       }
       assert.equal(build.inventory.find(item=>item.url===url).hash,sha(bytes));
     }
-    assert.equal([...build.assets.keys()].filter(url=>url.includes('/vendor/three-addons/')).length,3,'do not package all examples');
+    assert.equal([...build.assets.keys()].filter(url=>url.includes('/vendor/three-addons/')).length,6,'do not package all examples');
     assert.equal(build.inventory.find(item=>item.url===modelURL).hash,sha(modelGlb()));
     assert.ok(build.assets.has(basePath+'src/analytics-frame.js'));
     const exported = await exportPwaBuild({root,basePath,outputDir:path.join(root,'exported')});

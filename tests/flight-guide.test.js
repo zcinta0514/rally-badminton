@@ -50,3 +50,37 @@ test('renderer freezes during pause, clears on reset/release and reuses GPU buff
  v.update(s,0,{});assert.equal(v.line.visible,false);
  v.update(s,0,{prepare:'clear'},{hidden:true});assert.equal(v.line.visible,false);
 });
+
+test('rapid direction, shot and receiver changes never accumulate or bridge old paths',()=>{
+ const scene=new THREE.Scene(),v=new FlightGuideView(scene),geometry=v.line.geometry;
+ const positions=geometry.attributes.instanceStart.data;
+ let previousCount=0,shortened=false;
+ for(let i=0;i<240;i++){
+  const side=i%2,s=i%5===0?createMatch():incoming(side);
+  if(s.phase==='serve')s.server=side;
+  s.pointId=Math.floor(i/24);s.hitId=i;
+  const info=i%4===0?{}:{prepare:['clear','drop','smash'][i%3],aim:(i%7-3)/3,aimDepth:(i%5-2)/2,charge:(i%11)/10};
+  v.update(s,side,info,{reset:i%24===0,dt:.016});
+  assert.equal(v.line.geometry,geometry);assert.equal(geometry.attributes.instanceStart.data,positions);
+  assert.equal(scene.children.filter(o=>o.name==='flight-guide').length,1);
+  assert.equal(v.line.children.length,1,'one backing, never a second trajectory');
+  const g=getFlightGuide(s,side,info);
+  if(!g){assert.equal(v.line.visible,false);continue;}
+  const count=geometry.instanceCount;
+  assert.ok(Number.isInteger(count)&&count>0&&count<=v.positions.length/6);
+  if(count<previousCount)shortened=true;
+  previousCount=count;
+  const bounds=['x','y','z'].map(k=>[Math.min(...g.points.map(p=>k==='y'?Math.max(.04,p[k]):p[k])),Math.max(...g.points.map(p=>k==='y'?Math.max(.04,p[k]):p[k]))]);
+  for(let n=0;n<count;n++){
+   const k=n*6;
+   assert.ok(Math.hypot(v.positions[k+3]-v.positions[k],v.positions[k+4]-v.positions[k+1],v.positions[k+5]-v.positions[k+2])<=.281,'no stray connector between dashes');
+   for(let j=0;j<6;j++){
+    const value=v.positions[k+j],[min,max]=bounds[j%3];
+    assert.ok(Number.isFinite(value)&&value>=min-1e-5&&value<=max+1e-5,'only the current guide is drawn');
+   }
+  }
+  if(i%9===0){s.phase='point';v.update(s,side,{});assert.equal(v.line.visible,false);}
+ }
+ assert.ok(shortened,'exercise replacing a longer path with a shorter one');
+ v.clear();assert.equal(v.line.visible,false);
+});

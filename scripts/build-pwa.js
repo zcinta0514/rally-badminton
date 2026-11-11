@@ -74,7 +74,8 @@ export async function createPwaBuild({ root = projectRoot, wsUrl = '', basePath 
   await add('/vendor/three.LICENSE.txt', 'node_modules/three/LICENSE');
   // This is the complete addon graph for our pinned Three version. Keep it
   // beside the matching core; the model build test checks every relative import.
-  for (const file of ['loaders/GLTFLoader.js', 'utils/SkeletonUtils.js', 'utils/BufferGeometryUtils.js']) {
+  for (const file of ['loaders/GLTFLoader.js', 'utils/SkeletonUtils.js', 'utils/BufferGeometryUtils.js',
+    'lines/LineSegments2.js', 'lines/LineSegmentsGeometry.js', 'lines/LineMaterial.js']) {
     await add('/vendor/three-addons/' + file, 'node_modules/three/examples/jsm/' + file);
   }
   await add('/vendor/peerjs.min.js', 'node_modules/peerjs/dist/peerjs.min.js');
