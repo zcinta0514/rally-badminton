@@ -118,6 +118,7 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
     resize() {}
     setQuality() {}
     getRendererMetrics() { return { pixelRatio: 1, shadows: true, calls: 1 }; }
+    renderLobby(dt) { this.dt=dt; }
     render(state, side, dt, info) {
       this.drawn = structuredClone(state); this.side = side; this.dt = dt; this.lastPhase = state.phase;
       this.finale = info?.finale ? structuredClone(info.finale) : null;
@@ -286,6 +287,20 @@ test('the application refuses update preparation when settings cannot be transfe
   const f=await fixture('serve',{demoMode:true});
   assert.throws(()=>f.pwaOptions.onUpdateLock({version:'2222222222222222'}),/游戏设置/);
   assert.equal(f.document.body.dataset.screen,'menu');assert.equal(f.liveState,null);
+});
+
+test('solo navigation keeps ordinary and challenge preparation reachable and returns to their parent',async()=>{
+  const f=await fixture('serve',{demoMode:true,peerMode:true});
+  f.click('open-solo');assert.equal(f.element('menu').dataset.entry,'solo');
+  assert.equal(f.pwaOptions.isSafeToUpdate(),false);
+  f.click('start-ai');assert.equal(f.element('menu').dataset.entry,'ai');
+  f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'solo');
+  f.click('start-hell');assert.equal(f.element('menu').dataset.entry,'hell');
+  f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'solo');
+  f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'home');
+  f.click('open-friends');assert.equal(f.element('menu').dataset.entry,'friends');
+  f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'home');
+  assert.equal(f.liveState,null);
 });
 
 test('home modes open preparation first, and AI and friend match settings remain independent',async()=>{

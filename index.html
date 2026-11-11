@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="./src/ui-court-white.css">
   <link rel="stylesheet" href="./src/shot-layout.css">
   <link rel="stylesheet" href="./src/shot-buttons.css">
+  <link rel="stylesheet" href="./src/ui-tournament.css">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/three-addons/"}}</script>
 </head>
 <body data-screen="menu" data-shot-skin="glass">
@@ -68,8 +69,9 @@
     <div id="palette-options" class="palette-options" role="group" aria-label="选择球场配色"></div>
   </aside>
   <main id="menu" class="menu-panel" data-entry="home">
-    <div class="menu-heading" id="entry-home-heading"><div class="eyebrow"><span></span>BADMINTON</div>
-    <h1 aria-label="开拍 RALLY · 比赛 MATCH"><span class="zh">开拍 <span class="latin">RALLY</span></span><span class="sep" aria-hidden="true">·</span><br><span class="zh mode">比赛 <span class="latin">MATCH</span></span></h1>
+    <div class="menu-heading" id="entry-home-heading"><div class="eyebrow">BADMINTON CLUB</div>
+    <h1 aria-label="开拍 RALLY"><span class="lobby-wordmark">开拍</span><span class="lobby-latin">RALLY</span></h1>
+    <p class="lobby-tagline">即刻上场</p>
     <p id="menu-intro" class="intro">5 / 11 / 21 分 · 对角发球</p></div>
     <div id="entry-heading" class="entry-heading" hidden><button id="entry-back" class="text-btn">← 返回首页</button><h2 id="entry-title"></h2><p id="entry-description"></p></div><div class="setup" id="mode-setup">
       <div class="setup-fields" id="ai-setup" hidden><div class="section-label"><b>01</b><span>打法与赛制</span></div>
@@ -87,9 +89,14 @@
       <div class="setup-row" hidden><span class="field-label">比赛规则</span><div id="rulesets" class="segments" role="group" aria-label="比赛规则"><button data-ruleset="quick" class="selected" aria-pressed="true">单局快赛</button><button data-ruleset="standard21" aria-pressed="false">标准计分</button></div></div>
       <div class="setup-row"><span class="field-label">比赛形式</span><div id="ai-formats" class="segments format-choices" role="group" aria-label="人机比赛形式"><button data-format="quick:5" class="selected" aria-pressed="true">5 分</button><button data-format="quick:11" aria-pressed="false">11 分</button><button data-format="quick:21" aria-pressed="false">21 分</button><button data-format="standard21:21" aria-pressed="false">标准三局</button></div></div><p id="rules-note" class="rules-note">达到 5 分且净胜 2 分获胜 · 10 分封顶 · 对角发球</p></div>
       <span class="menu-tip-compact">上下滑动查看更多设置</span>
-      <div class="launch-actions" id="home-actions"><button id="start-ai" class="primary-btn" aria-label="人机对战"><span class="entry-copy"><strong>人机对战</strong><small><span class="tag" aria-hidden="true">AI MATCH</span>选择打法、难度与赛制</small></span><span aria-hidden="true">↗</span></button>
-      <button id="start-hell" class="secondary-btn hell-entry" aria-label="地狱人机"><span class="entry-copy"><strong>地狱人机 <em>挑战</em></strong><small><span class="tag" aria-hidden="true">HELL MATCH</span>你得 2 分，就能赢</small></span><span class="hell-fire" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="hell-entry-mark" aria-hidden="true">Ⅱ / Ⅴ</span></button>
-      <button id="open-friends" class="secondary-btn" aria-label="好友对战"><span class="entry-copy"><strong>好友对战</strong><small><span class="tag" aria-hidden="true">FRIENDS</span>创建或加入房间</small></span><span aria-hidden="true">＋</span></button></div><div class="launch-actions" id="ai-start-controls" hidden><p id="ai-summary" class="rules-note"></p><button id="start-ai-confirm" class="primary-btn">开始比赛 ↗</button></div>
+      <div class="launch-actions" id="home-actions">
+        <button id="open-solo" class="lobby-action" type="button"><span>单人对战</span><span aria-hidden="true">›</span></button>
+        <button id="open-friends" class="lobby-action" type="button" aria-label="好友对战"><span>好友对战</span><span aria-hidden="true">›</span></button>
+      </div>
+      <div class="launch-actions" id="solo-actions" hidden>
+        <button id="start-ai" class="lobby-action" type="button" aria-label="人机对战"><span class="entry-copy"><strong>人机对战</strong><small>选择打法、难度与赛制</small></span><span aria-hidden="true">›</span></button>
+        <button id="start-hell" class="lobby-action" type="button" aria-label="地狱挑战"><span class="entry-copy"><strong>地狱挑战</strong><small>你得 2 分，就能赢</small></span><span aria-hidden="true">›</span></button>
+      </div><div class="launch-actions" id="ai-start-controls" hidden><p id="ai-summary" class="rules-note"></p><button id="start-ai-confirm" class="primary-btn">开始比赛 ↗</button></div>
     </div>
     <section id="hell-setup" class="entry-content hell-setup" hidden>
       <div class="hell-contract"><span>你的目标<strong>2 <small>分</small></strong></span><b>VS</b><span>对手的目标<strong>5 <small>分</small></strong></span></div>
@@ -104,7 +111,7 @@
         <button id="onboarding-entry" class="secondary-btn" type="button">新手指南</button>
         <button id="open-leaderboard" type="button" hidden>排行榜</button>
       </div>
-      <span>正式版 1.16.6</span>
+      <span>正式版 1.17.0 <span class="lobby-preview-label">· 球馆预览</span></span>
     </div>
   </main>
   <aside id="court-caption" class="court-caption"><div class="live-tag"><i></i> 球场预览</div><div class="court-strip"><b>01</b><span>比赛场地</span><span>RALLY COURT</span></div></aside>

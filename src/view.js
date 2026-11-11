@@ -11,6 +11,7 @@ import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
 import { COURT } from '../shared/game.js';
 import { StaminaHUD } from './stamina-hud.js';
 import { phantomPositions } from '../shared/hell-mode.js';
+import { TournamentLobby } from './tournament-lobby.js';
 
 // Venue-wide colours. The court floor, apron and accent strip come from the
 // selected court palette instead; see court-palettes.js.
@@ -85,6 +86,9 @@ export class CourtView {
     this.players = [makeAthlete(this.scene, 0), makeAthlete(this.scene, 1)];
     for (const player of this.players) void upgradeAthlete(player);
     this.mode = 'menu';
+    this.lobby = new TournamentLobby();
+    this.lobby.setCourtPalette(this.courtPalette);
+    this.reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');
     this.staminaHUD = new StaminaHUD();
     this.staminaProjection = new THREE.Vector3();
     this.makeShuttle();
@@ -303,6 +307,7 @@ export class CourtView {
 
   setCourtPalette(name) {
     this.courtPalette = normalizeCourtPalette(name);
+    this.lobby?.setCourtPalette(this.courtPalette);
     const palette = resolveCourtPalette(this.courtPalette);
     if (this.courtMaterials) {
       this.courtMaterials.court.color.setHex(palette.court);
@@ -478,6 +483,13 @@ export class CourtView {
     this.renderer.render(this.scene,camera);
   }
 
+  renderLobby(dt=1/60) {
+    this.staminaHUD?.hide();
+    this.edgeIndicator.hidden=true;
+    this.lobby.render(this.renderer,globalThis.document?.hidden?0:dt,this.width,this.height,
+      {reducedMotion:this.reducedMotion?.matches===true});
+  }
+
   render(state, side=0, dt=1/60, info={}) {
     if(!state?.players||!state.shuttle)return;
     updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
@@ -583,6 +595,7 @@ export class CourtView {
     this.renderer.render(this.scene,this.camera);
   }
   dispose() {
+    this.lobby?.dispose();
     for (const player of this.players || []) player.disposed = true;
     if (this.onVisibilityChange) globalThis.document?.removeEventListener('visibilitychange', this.onVisibilityChange);
     this.edgeIndicator.remove();

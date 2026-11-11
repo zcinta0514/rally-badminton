@@ -230,11 +230,15 @@ function openEntry(stage){
   if(state||room||peerAttempt||connecting)return;
   entryStage=stage;dialog(null);$('menu').dataset.entry=stage;
   $('entry-home-heading').hidden=stage!=='home';$('entry-heading').hidden=stage==='home';
-  $('mode-setup').hidden=!['home','ai'].includes(stage);$('ai-setup').hidden=stage!=='ai';
+  $('mode-setup').hidden=!['home','solo','ai'].includes(stage);$('ai-setup').hidden=stage!=='ai';
   $('home-actions').hidden=stage!=='home';$('ai-start-controls').hidden=stage!=='ai';
+  $('solo-actions').hidden=stage!=='solo';
   $('hell-setup').hidden=stage!=='hell';$('friends-dialog').hidden=stage!=='friends';
-  const labels={ai:['人机对战','选择打法、陪练与赛制。'],hell:['地狱人机','识破技能，抓住两次机会。'],friends:['好友对战','创建或加入房间，确认规则后开始。'],home:['','']};
+  const labels={solo:['单人对战','从日常练习，到极限挑战。'],ai:['人机对战','选择打法、陪练与赛制。'],hell:['地狱挑战','识破技能，抓住两次机会。'],friends:['好友对战','创建或加入房间，确认规则后开始。'],home:['','']};
+  setText('entry-back',['ai','hell'].includes(stage)?'← 返回单人对战':'← 返回首页');
   setText('entry-title',labels[stage][0]);setText('entry-description',labels[stage][1]);syncEntrySettings();
+  $('menu').scrollTop=0;
+  $(stage==='home'?'open-solo':'entry-back').focus({preventScroll:true});
 }
 for(const [id,friend]of [['ai-formats',false],['friend-formats',true]])$(id).addEventListener('click',event=>{
   const button=event.target.closest('button');if(!button||button.disabled)return;const [ruleset,target]=button.dataset.format.split(':');
@@ -242,7 +246,7 @@ for(const [id,friend]of [['ai-formats',false],['friend-formats',true]])$(id).add
   syncEntrySettings();
 });
 $('friend-tabs').addEventListener('click',event=>{const button=event.target.closest('button');if(button&&!button.disabled)setFriendAction(button.dataset.action);});
-$('entry-back').addEventListener('click',()=>{if(connecting||peerAttempt){exitToMenu();return;}closeHelpOrSetup();openEntry('home');});
+$('entry-back').addEventListener('click',()=>{if(connecting||peerAttempt){exitToMenu();return;}closeHelpOrSetup();openEntry(['ai','hell'].includes(entryStage)?'solo':'home');});
 syncEntrySettings();
 function selectAim(value){aim=value;lastShotRequest=null;}
 
@@ -433,6 +437,7 @@ function closeHelpOrSetup(){
   if(peerAttempt){netGeneration++;peerAttempt.abort();peerAttempt=null;setRoomBusy(false);}
   helpOpen=false;if(state?.phase==='paused')dialog('pause-dialog');else dialog(null);
 }
+$('open-solo').addEventListener('click',()=>openEntry('solo'));
 $('start-ai').addEventListener('click',()=>openEntry('ai'));
 $('start-ai-confirm').addEventListener('click',startAI);
 $('start-hell').addEventListener('click',()=>openEntry('hell'));
@@ -653,17 +658,13 @@ try{
   window.addEventListener('keydown',()=>{if(controls.activeShot?.key)gestureOrigin=null;});
   controls.setEnabled(false);
   $('loading').hidden=true;
-  let demo=createMatch({target:5,difficulty:'medium',seed:31});
   let pingTime=0;
   function frame(now){
     const elapsed=Math.max(0,(now-lastFrame)/1000);lastFrame=now;
     let renderMs=0,guidanceMs=0,uiMs=0;
     if(mode==='menu'||mode==='waiting'){
-      accumulator+=Math.min(elapsed,.1);
-      while(accumulator>=1/60){stepMatch(demo,[aiInput(demo,0,'medium'),aiInput(demo,1,'medium')],1/60);accumulator-=1/60;}
-      if(demo.phase==='over'&&view.lastPhase==='over'&&!view.rallyEnding)demo=createMatch({target:5,seed:Math.floor(now)});
       const renderStart=performance.now();
-      view.render(demo,0,Math.min(elapsed,.1));renderMs=performance.now()-renderStart;
+      view.renderLobby(Math.min(elapsed,.1));renderMs=performance.now()-renderStart;
     }else if(state){
       if(mode==='ai'){
         if(shotLayoutHold){accumulator=0;}
