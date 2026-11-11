@@ -1,3 +1,4 @@
+import { captureMotion, presentLocal } from './local-presentation.js';
 import { hellStatus } from '../shared/hell-mode.js';
 import { CourtView } from './view.js';
 import { Controls } from './controls.js';
@@ -664,7 +665,7 @@ try{
   window.addEventListener('keydown',()=>{if(controls.activeShot?.key)gestureOrigin=null;});
   controls.setEnabled(false);
   $('loading').hidden=true;
-  let pingTime=0;
+  let pingTime=0,previousMotion=null;
   function frame(now){
     const elapsed=Math.max(0,(now-lastFrame)/1000);lastFrame=now;
     let renderMs=0,guidanceMs=0,uiMs=0;
@@ -681,6 +682,7 @@ try{
           accumulator+=Math.min(elapsed,.15);
           while(accumulator>=1/60){
             const input=worldInput(controls.sample());if(pendingShot){Object.assign(input,pendingShot);pendingShot=null;}
+            previousMotion=captureMotion(state);
             stepMatch(state,[input,aiInput(state,1,state.challenge?'hard':settings.difficulty)],1/60);accumulator-=1/60;
           }
         }
@@ -689,7 +691,7 @@ try{
         if(now-lastSend>1000/30){lastSend=now;if(['serve','rally'].includes(state.phase)&&!reconnecting)send({type:'input',...worldInput(controls.sample())});}
         if(now-pingTime>2000){pingTime=now;send({type:'ping',at:Date.now()});}
       }
-      const displayed=mode==='online'?(playback.sample(now)||state):state;
+      const displayed=mode==='online'?(playback.sample(now)||state):presentLocal(state,previousMotion,accumulator*60);
       const guidanceStart=performance.now();const info=shotGuidance(displayed);guidanceMs=performance.now()-guidanceStart;
       const finaleFrame=mode==='online'?finale.update({dt:elapsed,serverNow:now-(playback.clockOffset??0)-playback.bufferMs,
         phase:displayed.phase,rallyEnding:view.rallyEnding,visible:!document.hidden}):null;

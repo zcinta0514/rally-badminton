@@ -4,10 +4,13 @@ const percentile=(values,q)=>values.length?[...values].sort((a,b)=>a-b)[Math.min
 // not GPU execution. Network samples are deliberately not inputs to this policy.
 export class PerformanceMonitor {
   constructor({devicePixelRatio=1}={}){
-    this.maxPixelRatio=Math.max(1,Math.min(Number(devicePixelRatio)||1,1.6));
-    this.levels=[{pixelRatio:this.maxPixelRatio,shadows:true},
-      {pixelRatio:Math.max(1,this.maxPixelRatio*.84),shadows:true},
-      {pixelRatio:Math.max(1,this.maxPixelRatio*.7),shadows:false}];
+    this.maxPixelRatio=Math.max(1,Math.min(Number(devicePixelRatio)||1,2));
+    // Preserve sharp edges first: reduce shadow work before render resolution.
+    this.levels=[{pixelRatio:this.maxPixelRatio,shadows:true,shadowSize:2048},
+      {pixelRatio:this.maxPixelRatio,shadows:true,shadowSize:1024},
+      {pixelRatio:Math.max(1,this.maxPixelRatio*.8),shadows:true,shadowSize:1024},
+      {pixelRatio:Math.max(1,this.maxPixelRatio*.65),shadows:false,shadowSize:1024}];
+    this.targetFrameMs=1000/60;
     this.level=0;this.samples=[];this.window=[];this.windowMs=0;
     this.slowMs=0;this.fastMs=0;
   }
@@ -17,9 +20,11 @@ export class PerformanceMonitor {
     this.samples.push(sample);if(this.samples.length>180)this.samples.shift();
     this.window.push(sample);this.windowMs+=frameMs;
     if(this.windowMs<1000)return;
-    const median=percentile(this.window.map(x=>x.frameMs),.5);
-    if(median>23){this.slowMs+=this.windowMs;this.fastMs=0;}
-    else if(median<18.5){this.fastMs+=this.windowMs;this.slowMs=0;}
+    const frames=this.window.map(x=>x.frameMs),median=percentile(frames,.5),tail=percentile(frames,.95);
+    // Detect a sustained faster screen cadence; never infer it from one short frame.
+    if(median<11.8)this.targetFrameMs=Math.min(this.targetFrameMs,median<7.5?1000/144:1000/120);
+    if(median>this.targetFrameMs*1.38||tail>this.targetFrameMs*1.8){this.slowMs+=this.windowMs;this.fastMs=0;}
+    else if(median<this.targetFrameMs*1.1&&tail<this.targetFrameMs*1.4){this.fastMs+=this.windowMs;this.slowMs=0;}
     else {this.slowMs=0;this.fastMs=0;}
     if(this.slowMs>=2500){this.level=Math.min(this.levels.length-1,this.level+1);this.slowMs=0;this.fastMs=0;}
     // Hysteresis: recover only after a sustained healthy period, one step at a time.

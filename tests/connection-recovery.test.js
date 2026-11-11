@@ -1,3 +1,4 @@
+import {captureMotion,presentLocal} from '../src/local-presentation.js';
 import { MatchEntrance } from '../src/match-entrance.js';
 import { hellStatus } from '../shared/hell-mode.js';
 import test from 'node:test';
@@ -135,7 +136,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     sample() { return { x: 0, z: 0, prepare: null, charge: 0 }; }
   }
   const context = vm.createContext({
-    ...game, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
+    ...game, captureMotion, presentLocal, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
     getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
     createUsageAnalytics:()=>({configured:true,enabled:true,

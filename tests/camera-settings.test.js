@@ -33,14 +33,14 @@ test('render quality accepts only bounded finite pixel ratios and exposes measur
   let ratio = 1.6;
   const view = {
     renderer: { setPixelRatio(value) { ratio = value; }, getPixelRatio() { return ratio; }, shadowMap: { enabled: true }, info: { render: { calls: 99, triangles: 1234 }, memory: { geometries: 12, textures: 4 } } },
-    scene: new THREE.Scene(), getRendererMetrics: CourtView.prototype.getRendererMetrics,
+    matchKey: new THREE.DirectionalLight(), scene: new THREE.Scene(), getRendererMetrics: CourtView.prototype.getRendererMetrics,
   };
   CourtView.prototype.setQuality.call(view, { pixelRatio: .9, shadows: false });
-  assert.deepEqual(view.getRendererMetrics(), { pixelRatio: .9, shadows: false, calls: 99, triangles: 1234, geometries: 12, textures: 4 });
+  assert.deepEqual(view.getRendererMetrics(), { pixelRatio: 1, shadows: false, shadowSize:512, calls: 99, triangles: 1234, geometries: 12, textures: 4 });
   CourtView.prototype.setQuality.call(view, { pixelRatio: NaN });
-  assert.equal(ratio, .9);
+  assert.equal(ratio, 1);
   CourtView.prototype.setQuality.call(view, { pixelRatio: 5, shadows: true });
-  assert.equal(ratio, 1.6);
+  assert.equal(ratio, 2);
   assert.equal(view.renderer.shadowMap.enabled, true);
 });
 
@@ -50,6 +50,24 @@ test('local camera preferences survive a reload and storage denial stays usable'
   saveCameraSettings({ pitchDegrees: 36, zoom: .91 }, storage);
   assert.deepEqual(readCameraSettings(storage), { pitchDegrees: 36, zoom: .91 });
   assert.doesNotThrow(() => saveCameraSettings(CAMERA_DEFAULTS, { setItem() { throw new Error('private'); } }));
+});
+
+test('shadow quality reallocates both scenes and invalidates both material variants only on toggles',()=>{
+  const scene=new THREE.Scene(),lobbyScene=new THREE.Scene();
+  const mats=[new THREE.MeshStandardMaterial(),new THREE.MeshStandardMaterial()];
+  scene.add(new THREE.Mesh(new THREE.BoxGeometry(),mats[0]));
+  lobbyScene.add(new THREE.Mesh(new THREE.BoxGeometry(),mats[1]));
+  const keys=[new THREE.DirectionalLight(),new THREE.DirectionalLight()];let disposed=0;
+  for(const key of keys){key.shadow.mapSize.set(2048,2048);key.shadow.map={dispose(){disposed++;}};}
+  const view={scene,lobby:{scene:lobbyScene,lights:{key:keys[1]}},matchKey:keys[0],
+    renderer:{shadowMap:{enabled:true}},getRendererMetrics(){return {};}};
+  CourtView.prototype.setQuality.call(view,{shadowSize:1024});
+  assert.equal(disposed,2);assert.ok(keys.every(key=>key.shadow.map===null&&key.shadow.mapSize.x===1024));
+  assert.ok(mats.every(mat=>mat.version===0));
+  CourtView.prototype.setQuality.call(view,{shadows:false});
+  assert.ok(mats.every(mat=>mat.version===1));
+  CourtView.prototype.setQuality.call(view,{shadows:false,shadowSize:1024});
+  assert.equal(disposed,2);assert.ok(mats.every(mat=>mat.version===1));
 });
 
 test('pitch and zoom change the projection while both sides remain level and the full court remains on screen', () => {

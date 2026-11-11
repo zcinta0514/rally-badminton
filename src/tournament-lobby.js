@@ -338,19 +338,23 @@ export class TournamentLobby {
     // Keep this pool above the gallery: a low, broad wash would brighten every head.
     wall.target.position.set(.5, 5.2, -13.7); this.scene.add(wall, wall.target);
     this.lights = { ambient, key, court, athlete, rim, wall };
+    // The planted breathing pose barely moves its shadow. Refresh at 30 Hz while
+    // camera, lighting and character animation still render at display cadence.
+    key.shadow.autoUpdate = false;
+    this.shadowElapsed = Infinity;
     this.applyLighting();
   }
 
   applyLighting() {
     const level = this.lightLevels;
-    this.lights.key.intensity = 1.3 * level.main;
-    this.lights.court.intensity = 210 * level.main;
-    this.lights.athlete.intensity = 40 * level.side;
-    this.lights.rim.intensity = 90 * level.side;
-    this.lights.wall.intensity = 68 * level.back;
-    this.materials.fixture.emissiveIntensity = 1.6 * level.main;
-    this.materials.fixtureSide.emissiveIntensity = 1.6 * level.side;
-    this.materials.fixtureBack.emissiveIntensity = 1.35 * level.back;
+    this.lights.key.intensity = 1.15 * level.main;
+    this.lights.court.intensity = 185 * level.main;
+    this.lights.athlete.intensity = 32 * level.side;
+    this.lights.rim.intensity = 72 * level.side;
+    this.lights.wall.intensity = 60 * level.back;
+    this.materials.fixture.emissiveIntensity = 1.10 * level.main;
+    this.materials.fixtureSide.emissiveIntensity = 1.10 * level.side;
+    this.materials.fixtureBack.emissiveIntensity = 1.0 * level.back;
   }
 
   updateLighting(dt, reducedMotion) {
@@ -388,13 +392,17 @@ export class TournamentLobby {
   render(renderer, dt, width, height, { reducedMotion = false } = {}) {
     if (this.disposed) return;
     this.updateLighting(dt, reducedMotion);
+    this.shadowElapsed += Number.isFinite(dt) ? Math.max(0,dt) : 0;
+    if(this.shadowElapsed>=1/30){
+      this.lights.key.shadow.needsUpdate=true;this.shadowElapsed=0;
+    }
     if (!reducedMotion && Number.isFinite(dt) && dt > 0) {
       this.clock += Math.min(.1, dt); sampleLobbyPose(this.clock, this.pose); this.applyPose();
     }
     this.layoutCamera(width, height, reducedMotion);
     const mapping = renderer.toneMapping, exposure = renderer.toneMappingExposure;
     try {
-      renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.08;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
       renderer.render(this.scene, this.camera);
     } finally { renderer.toneMapping = mapping; renderer.toneMappingExposure = exposure; }
   }
