@@ -58,10 +58,10 @@ export class CourtView {
     this.canvas = canvas;
     this.courtPalette = normalizeCourtPalette(courtPalette);
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.06;
+    this.renderer.toneMappingExposure = 1.0;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -74,8 +74,8 @@ export class CourtView {
     this.cameraSettings = normalizeCameraSettings();
     // One shadowed soft key plus a cheap opposite fill gives bodies and rackets
     // readable depth from either end of the court. Fixtures remain unlit meshes.
-    this.ambient = new THREE.HemisphereLight(0xe6edf0, 0x343b37, .68);this.scene.add(this.ambient);
-    const sunlight = new THREE.DirectionalLight(0xf6f2e9, 1.3);
+    this.ambient = new THREE.HemisphereLight(0xe6edf0, 0x343b37, .76);this.scene.add(this.ambient);
+    const sunlight = new THREE.DirectionalLight(0xf6f2e9, 1.15);
     sunlight.position.set(-3.5, 12, 2);
     sunlight.castShadow = true;
     sunlight.shadow.mapSize.set(2048, 2048);
@@ -89,7 +89,7 @@ export class CourtView {
     // is steady; only the lobby has an entrance ramp. No extra shadow passes.
     this.courtLights = [];
     for (const end of [-1, 1]) {
-      const top = new THREE.SpotLight(0xf1f3ed, 240, 24, 1.04, 1, 2);
+      const top = new THREE.SpotLight(0xf1f3ed, 185, 24, 1.04, 1, 2);
       top.name = 'match-court-soft-top'; top.position.set(end * 1.8, 8, end * 4.5);
       top.target.position.set(0, 0, end * 3.2); this.scene.add(top, top.target);this.courtLights.push(top);
     }
@@ -307,11 +307,11 @@ export class CourtView {
   applyEntrance() {
     const progress=this.entranceActive?this.entrance.progress:1,t=entranceEase(progress);
     if(this.entranceFrom)applyEntranceCamera(this.camera,this.entranceFrom,this.entranceTo,progress);
-    this.ambient.intensity=.55+.13*t;this.matchKey.intensity=1.05+.25*t;
+    this.ambient.intensity=.63+.13*t;this.matchKey.intensity=.95+.20*t;
     this.courtLights.forEach((light,index)=>{
       const end=index===0?-1:1;
       light.target.position.set(end*5.8*(1-t),0,end*(6-2.8*t));
-      light.intensity=115+125*t;light.angle=1.2-.16*t;
+      light.intensity=110+75*t;light.angle=1.2-.16*t;
       light.target.updateMatrixWorld(true);
     });
   }
@@ -356,15 +356,25 @@ export class CourtView {
     return this.courtPalette;
   }
 
-  setQuality({ pixelRatio, shadows } = {}) {
-    if (Number.isFinite(pixelRatio)) this.renderer.setPixelRatio(clamp(pixelRatio, .75, 1.6));
-    if (typeof shadows === 'boolean' && shadows !== this.renderer.shadowMap.enabled) {
-      this.renderer.shadowMap.enabled = shadows;
-      this.scene.traverse((object) => {
-        for (const mat of Array.isArray(object.material) ? object.material : [object.material]) {
-          if (mat) mat.needsUpdate = true;
-        }
+  setQuality({ pixelRatio, shadows, shadowSize } = {}) {
+    if (Number.isFinite(pixelRatio)) {
+      const ratio=clamp(pixelRatio,1,2);
+      if(this.renderer.getPixelRatio()!==ratio)this.renderer.setPixelRatio(ratio);
+    }
+    if(typeof shadows==='boolean'&&shadows!==this.renderer.shadowMap.enabled){
+      this.renderer.shadowMap.enabled=shadows;
+      // Both scenes share the renderer, but each owns shader material variants.
+      const materials=new Set();
+      for(const scene of [this.scene,this.lobby?.scene])scene?.traverse(object=>{
+        for(const mat of [].concat(object.material||[]))materials.add(mat);
       });
+      for(const mat of materials)mat.needsUpdate=true;
+      if(shadows&&this.lobby)this.lobby.lights.key.shadow.needsUpdate=true;
+    }
+    if(shadowSize===1024||shadowSize===2048)for(const light of [this.matchKey,this.lobby.lights.key]){
+      if(light.shadow.mapSize.x===shadowSize)continue;
+      light.shadow.map?.dispose();light.shadow.map=null;
+      light.shadow.mapSize.set(shadowSize,shadowSize);light.shadow.needsUpdate=true;
     }
     return this.getRendererMetrics();
   }
@@ -372,7 +382,7 @@ export class CourtView {
   getRendererMetrics() {
     const { render, memory } = this.renderer.info;
     return { pixelRatio: this.renderer.getPixelRatio(), shadows: this.renderer.shadowMap.enabled,
-      calls: render.calls, triangles: render.triangles, geometries: memory.geometries, textures: memory.textures };
+      shadowSize:this.matchKey.shadow.mapSize.x, calls: render.calls, triangles: render.triangles, geometries: memory.geometries, textures: memory.textures };
   }
 
   updateCamera(side) {

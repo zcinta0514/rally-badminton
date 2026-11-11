@@ -8,19 +8,19 @@ function record(monitor,{frameMs=16.67,renderMs=3,count=180,visible=true}={}){
 test('frame intervals and CPU submission are separately summarized',()=>{
   const monitor=new PerformanceMonitor({devicePixelRatio:2});record(monitor);
   const data=monitor.summary();assert.ok(data.fps>59&&data.fps<61);assert.equal(data.renderMs,3);
-  assert.equal(data.guidanceMs,.2);assert.equal(data.uiMs,.3);assert.equal(data.quality.pixelRatio,1.6);
+  assert.equal(data.guidanceMs,.2);assert.equal(data.uiMs,.3);assert.equal(data.quality.pixelRatio,2);
 });
 test('sustained slow frames reduce drawing quality while hidden gaps do not',()=>{
   const monitor=new PerformanceMonitor({devicePixelRatio:2});
   record(monitor,{frameMs:1500,renderMs:40,count:100,visible:false});
-  assert.equal(monitor.summary().quality.pixelRatio,1.6);
+  assert.equal(monitor.summary().quality.pixelRatio,2);
   record(monitor,{frameMs:32,renderMs:15,count:220});
-  assert.ok(monitor.summary().quality.pixelRatio<1.6);
+  assert.ok(monitor.summary().quality.pixelRatio<2);
 });
 test('network jitter alone cannot change quality and recovery is conservative',()=>{
   const monitor=new PerformanceMonitor({devicePixelRatio:2});
-  record(monitor,{count:1000});assert.equal(monitor.summary().quality.pixelRatio,1.6);
-  record(monitor,{frameMs:35,renderMs:15,count:220});const low=monitor.summary().quality.pixelRatio;
+  record(monitor,{count:1000});assert.equal(monitor.summary().quality.pixelRatio,2);
+  record(monitor,{frameMs:35,renderMs:15,count:400});const low=monitor.summary().quality.pixelRatio;
   record(monitor,{count:60});assert.equal(monitor.summary().quality.pixelRatio,low);
   record(monitor,{count:2000});assert.ok(monitor.summary().quality.pixelRatio>=low);
 });
@@ -36,4 +36,25 @@ test('diagnostics include direct channel state when transport stats are availabl
     {pixelRatio:1,shadows:true,calls:5},
     {connected:true,signalingConnected:false,candidatePairs:[{currentRoundTripTime:.043}]});
   assert.match(text,/直连通道 已连接/);assert.match(text,/信令 断开/);assert.match(text,/WebRTC RTT 43 ms/);
+});
+
+ test('first sustained overload retains resolution and reduces shadow bandwidth',()=>{
+   const monitor=new PerformanceMonitor({devicePixelRatio:3});
+   record(monitor,{frameMs:32,count:100});
+   assert.equal(monitor.summary().quality.pixelRatio,2);
+   assert.equal(monitor.summary().quality.shadowSize,1024);
+   assert.equal(monitor.summary().quality.shadows,true);
+ });
+ test('120 Hz cadence raises the performance target without imposing a frame cap',()=>{
+   const monitor=new PerformanceMonitor({devicePixelRatio:2});
+   record(monitor,{frameMs:8.33,count:400});
+   record(monitor,{frameMs:16.67,count:200});
+   assert.equal(monitor.summary().quality.shadowSize,1024);
+ });
+
+test('recurring frame drops lower shadow cost even with a healthy median',()=>{
+ const monitor=new PerformanceMonitor({devicePixelRatio:2});
+ for(let i=0;i<240;i++)monitor.record({frameMs:i%10===0?33.4:16.67});
+ assert.equal(monitor.summary().quality.shadowSize,1024);
+ assert.equal(monitor.summary().quality.pixelRatio,2);
 });
