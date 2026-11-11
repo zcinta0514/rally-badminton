@@ -1,0 +1,64 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { mkdir,writeFile,copyFile } from 'node:fs/promises';
+import path from 'node:path';
+import { createServer } from '../server/index.js';
+import { projectRoot,createPwaBuild } from './build-pwa.js';
+
+const require=createRequire(import.meta.url);
+const {chromium}=require(process.env.RALLY_PLAYWRIGHT_MODULE || '../artifacts/qa/node_modules/playwright');
+const output=path.join(projectRoot,'artifacts','entrance');await mkdir(output,{recursive:true});
+const app=process.env.RALLY_QA_URL?null:createServer({port:0,host:'127.0.0.1',peerMode:true,leaderboardPath:path.join(output,'qa-leaderboard.json')});
+await app?.listen();
+const browser=await chromium.launch({executablePath:process.env.RALLY_BROWSER_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--enable-unsafe-swiftshader']});
+const videoStarted=Date.now();
+const context=await browser.newContext({viewport:{width:844,height:390},hasTouch:true,isMobile:true,serviceWorkers:'block',recordVideo:{dir:output,size:{width:844,height:390}}});
+await context.addInitScript(()=>{localStorage.setItem('rally.onboarding.seen','1');localStorage.setItem('rally.usage.enabled','off');});
+const page=await context.newPage();page.setDefaultTimeout(25000);
+const report={checks:[],errors:[],environment:'Windows Chromium mobile/touch emulation, software WebGL; not iPhone hardware'};
+page.on('pageerror',error=>report.errors.push(error.message));
+const check=name=>{report.checks.push(name);console.log('PASS '+name);};
+const start=async()=>{await page.locator('#open-solo').click();await page.locator('#start-ai').click();await page.locator('#start-ai-confirm').click();};
+const leave=async()=>{await page.locator('#pause').click();await page.locator('#leave-game').click();};
+try{
+  await page.goto(process.env.RALLY_QA_URL||app.url);await page.locator('#loading').waitFor({state:'hidden'});
+  const expected=await createPwaBuild();report.buildId=await page.evaluate(()=>RALLY_CONFIG.buildId);assert.equal(report.buildId,expected.version);
+  await page.waitForTimeout(500);report.clipStartSeconds=(Date.now()-videoStarted)/1000;await start();
+  assert.equal(await page.locator('body').getAttribute('data-entering'),'true');
+  await page.waitForFunction(()=>rallyDiagnostics.entrance?.active);
+  const initial=await page.evaluate(()=>rallyDiagnostics);assert.equal(initial.stateTime,0);
+  assert.equal(await page.locator('#game-controls').isVisible(),false);
+  await page.screenshot({path:path.join(output,'entrance-early.png')});
+  await page.waitForFunction(()=>rallyDiagnostics.entrance?.progress>.35&&rallyDiagnostics.entrance?.active);
+  const middle=await page.evaluate(()=>rallyDiagnostics);assert.equal(middle.stateTime,0);
+  assert.ok(middle.entrance.camera[1]>initial.entrance.camera[1]);
+  await page.screenshot({path:path.join(output,'entrance-rising.png')});
+  await page.locator('#hud').waitFor({state:'visible'});await page.waitForTimeout(550);
+  await page.screenshot({path:path.join(output,'entrance-settled.png')});
+  assert.equal(await page.locator('body').getAttribute('data-entering'),'false');
+  report.samples={initial,middle,settled:await page.evaluate(()=>rallyDiagnostics)};
+  check('844x390: camera rises, authoritative time stays zero and controls stay hidden until settled');
+  const key=page.locator('[data-shot=clear]'),box=await key.boundingBox();
+  await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();
+  await page.waitForTimeout(180);assert.equal(await key.evaluate(e=>e.classList.contains('charging')),true);
+  await page.mouse.up();await page.waitForFunction(()=>rallyDiagnostics.statePhase==='rally');
+  check('controls recover after entrance; press, charge and release starts a real rally');
+  await page.waitForTimeout(800);await leave();
+  await page.setViewportSize({width:667,height:375});await start();
+  await page.waitForFunction(()=>document.body.dataset.entering==='true');
+  await page.setViewportSize({width:390,height:844});
+  await page.locator('#hud').waitFor({state:'visible'});await page.screenshot({path:path.join(output,'entrance-rotated.png')});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  await page.setViewportSize({width:667,height:375});await page.screenshot({path:path.join(output,'entrance-short-phone.png')});await leave();
+  check('667x375 entrance survives portrait rotation and returns to a usable landscape match');
+  await page.emulateMedia({reducedMotion:'reduce'});await start();
+  assert.equal(await page.locator('body').getAttribute('data-entering'),'false');
+  await page.locator('#hud').waitFor({state:'visible'});await leave();
+  check('reduced motion enters directly without camera sweep or lighting ramp');
+  assert.deepEqual(report.errors,[]);check('no uncaught browser errors');
+}catch(error){report.failure=error.stack;await page.screenshot({path:path.join(output,'failure.png')}).catch(()=>{});throw error;}
+finally{
+  const video=page.video();await context.close();
+  if(video)await copyFile(await video.path(),path.join(output,'match-entrance-review.webm'));
+  await writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');await browser.close();await app?.close();
+}

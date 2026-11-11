@@ -1,3 +1,4 @@
+import { makeContactShadow } from './contact-shadow.js';
 import * as THREE from 'three';
 import { makeAthleteModel } from './athlete-model.js';
 import { sampleSmashMotion } from './smash-motion.js';
@@ -323,8 +324,9 @@ export function makeAthlete(scene,index) {
   const ground=new THREE.Group();scene.add(ground);
   function ring(radius,width,color,opacity){const r=mesh(ground,new THREE.RingGeometry(radius-width,radius,40),new THREE.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false,side:THREE.DoubleSide}));r.rotation.x=-Math.PI/2;r.position.y=.034;return r;}
   const halo=ring(.38,.026,index===0?0xfb785a:0x9cddcc,.55),selected=ring(.46,.035,0xffdf8c,.85);
-  const shadow=mesh(ground,new THREE.CircleGeometry(.3,32),new THREE.MeshBasicMaterial({color:0x163c37,transparent:true,opacity:.23,depthWrite:false}));shadow.rotation.x=-Math.PI/2;shadow.position.y=.028;
-  return {root,bones,skeleton,...model,ground,halo,selected,shadow,moveCycle:0,previousSpeed:0,stop:0,index,motion:null};
+  const shadow=makeContactShadow(ground,{opacity:.22,name:'athlete-body-contact'});
+  const footShadows=['left','right'].map(name=>makeContactShadow(ground,{texture:shadow.material.map,opacity:.4,name:name+'-foot-contact'}));
+  return {root,bones,skeleton,...model,ground,halo,selected,shadow,footShadows,moveCycle:0,previousSpeed:0,stop:0,index,motion:null};
 }
 
 function motionFor(visual,player,side,time,freeze,reset) {
@@ -456,7 +458,16 @@ export function applyAthletePose(visual,pose,{x,z,side=0,selected=false,ankleYaw
   visual.hands.right.quaternion.copy(visual.racket.quaternion);
   const leftForearm=sub(joints.leftWrist,joints.leftElbow);
   visual.hands.left.quaternion.setFromUnitVectors(UP,temp.set(leftForearm.x,leftForearm.y,leftForearm.z).normalize());
-  visual.selected.visible=selected;visual.halo.material.opacity=selected?.75:.36;visual.shadow.scale.setScalar(1-pose.jump*.22);visual.shadow.material.opacity=.23-pose.jump*.12;
+  visual.selected.visible=selected;visual.halo.material.opacity=selected?.75:.36;const elevation=Math.max(0,pose.jump||0);
+  visual.shadow.scale.set(.95+elevation*.4,.72+elevation*.3,1);visual.shadow.material.opacity=.22/(1+elevation*2);
+  const sign=side===0?1:-1;
+  visual.footShadows.forEach((shadow,index)=>{
+    const ankle=pose.joints[index===0?'leftAnkle':'rightAnkle'];
+    const lift=Math.max(0,ankle.y-.085);
+    shadow.position.set(ankle.x*sign,.029,ankle.z*sign);
+    shadow.scale.set(.24+lift*.2,.42+lift*.25,1);
+    shadow.material.opacity=.46*Math.exp(-lift*8);
+  });
   visual.root.userData.pose=pose;
   return pose;
 }

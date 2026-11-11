@@ -19,7 +19,7 @@ new MutationObserver(() => {
   const next=document.body.dataset.screen;
   if (next===screen) return;
   clearMotion(); screen=next;
-  if (reducedMotion.matches || document.hidden) return;
+  if (reducedMotion.matches || document.hidden || document.body.dataset.entering==='true') return;
   reveal=document.createElement('div');
   reveal.className='lobby-reveal';reveal.setAttribute('aria-hidden','true');
   const layer=reveal;

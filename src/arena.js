@@ -28,6 +28,30 @@ export function makeCourtMaterial(color = 0x096247) {
     bumpMap: relief, bumpScale: .006, roughnessMap: relief });
 }
 
+/** Inward-only envelope: low cameras see a closed hall; elevated cameras can
+ * see through the exterior without a roof clipping across the playable court.
+ * One draw, no new shadow pass (the lighting rig is inside the implied roof). */
+export function makeHallShell(scene) {
+  const positions=[],normals=[],colors=[],indices=[];
+  const add=(width,height,rotation,position,color)=>{
+    const plane=new THREE.PlaneGeometry(width,height);
+    plane.rotateX(rotation[0]);plane.rotateY(rotation[1]);plane.translate(...position);
+    const offset=positions.length/3,c=new THREE.Color(color);
+    positions.push(...plane.attributes.position.array);normals.push(...plane.attributes.normal.array);
+    for(let i=0;i<plane.attributes.position.count;i++)colors.push(c.r,c.g,c.b);
+    indices.push(...Array.from(plane.index.array,index=>index+offset));plane.dispose();
+  };
+  add(22,8.1,[0,0],[0,4,-14],0x2b3230);
+  add(22,8.1,[0,Math.PI],[0,4,14],0x2b3230);
+  add(28,8.1,[0,Math.PI/2],[-11,4,0],0x2b3230);
+  add(28,8.1,[0,-Math.PI/2],[11,4,0],0x2b3230);
+  add(22,28,[Math.PI/2,0],[0,8.05,0],0x1b2422);
+  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+  geometry.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.setIndex(indices);
+  const shell=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.94,side:THREE.FrontSide}));
+  shell.name='inward-hall-envelope';shell.receiveShadow=true;scene.add(shell);return shell;
+}
+
 /** Instanced venue kept outside the playable floor; no spectator skeletons or shadows. */
 export function makeArena(scene) {
   const arena = new THREE.Group();
@@ -200,7 +224,7 @@ export function makeArena(scene) {
   for (const [name, batch] of batches) {
     const mesh = new THREE.InstancedMesh(geometries[batch.kind], finishes[batch.finish], batch.items.length);
     mesh.name = `arena-${name}`;
-    mesh.castShadow = false; mesh.receiveShadow = false;
+    mesh.castShadow = ["metal", "wood"].includes(batch.finish); mesh.receiveShadow = batch.finish !== "light";
     batch.items.forEach((item, index) => { mesh.setMatrixAt(index, item.matrix); mesh.setColorAt(index, item.color); });
     mesh.instanceMatrix.needsUpdate = true;
     mesh.computeBoundingSphere();

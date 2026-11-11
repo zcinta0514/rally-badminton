@@ -191,6 +191,7 @@ test('production view integrates crowd updates and resets them on menu, visibili
     const view = Object.create(CourtView.prototype); view.scene = new THREE.Scene(); view.makeCourt();
     view.players = [makeAthlete(view.scene, 0), makeAthlete(view.scene, 1)]; view.makeShuttle();
     view.cameraSide = 0; view.mode = 'match'; view.elapsed = 0; view.edgeIndicator = { hidden: true };
+    view.ambient={};view.matchKey={};view.courtLights=[];
     view.updateHints = () => {}; view.resize = () => {}; view.renderer = { render() {} };
     const before = snapshot(view.arena), state = live(); state.shuttle.active = false;
     view.render(state, 0, frame); point(state, { phase: 'over' });

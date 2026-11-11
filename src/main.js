@@ -254,6 +254,7 @@ function selectAim(value){aim=value;lastShotRequest=null;}
 function setScreen(screen){
   if(screen!=='match')matchSettings?.close();
   document.body.dataset.screen=screen;
+  if(screen!=='match')document.body.dataset.entering='false';
   pwa.setMatchActive(screen==='match');
   $('menu').hidden=screen!=='menu';$('court-caption').hidden=screen!=='menu';
   $('hud').hidden=screen!=='match';$('game-controls').hidden=screen!=='match';$('pause').hidden=screen!=='match';
@@ -267,7 +268,10 @@ function enterMatch(){
   leaderboardReturn=null;leaderboard.cancel();
   lastPhase='';lastHit=state?.hitId||0;lastPoint=state?.pointId||0;arenaAudio.reset();view?.resetCrowd();
   rematchRequested=false;helpOpen=false;pendingShot=null;dragAim=null;dragDepth=0;gestureOrigin=null;selectedShot='clear';selectAim(0);accumulator=0;lastFrame=performance.now();
-  controls.reset();setScreen('match');dialog(null);unlockAudio();
+  const fromLobby=document.body.dataset.screen!=='match';
+  controls.reset();controls.setEnabled(false);setScreen('match');dialog(null);unlockAudio();
+  view?.beginMatchEntrance?.({side,online:mode==='online',phase:state?.phase,remaining:state?.timer,fromLobby});
+  document.body.dataset.entering=String(view?.entranceActive===true);
   const dots=document.querySelectorAll('.player-dot');
   dots[0].style.background=side===0?'#fb7959':'#b5ebc7';
   dots[1].style.background=side===1?'#fb7959':'#b5ebc7';
@@ -308,13 +312,14 @@ $('hell-roles').addEventListener('click',event=>{
 const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},side,dragAim??aim);
 function send(message){if(peerMode)peerSession?.send(message);else if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(['create','join','resumeSession'].includes(message.type)?{...message,rulesVersion:RULES_VERSION}:message));}
 function fireShot(request){
-  if(!state||!['serve','rally'].includes(state.phase))return;
+  if(view?.entranceActive||!state||!['serve','rally'].includes(state.phase))return;
   const selectedAim=resolveShotAim(request,aim);
   const input=worldInput({...controls.sample(),...request,aim:selectedAim});dragAim=null;dragDepth=0;
   selectedShot=request.shot;lastShotRequest={shot:request.shot,aim:selectedAim,aimDepth:request.aimDepth??0,charge:request.charge};
   if(mode==='online')send({type:'input',...input});else pendingShot=input;
 }
 function requestPause(){
+  if(view?.entranceActive)return;
   if(reconnecting){showConnectionRecovery();return;}
   if(!state||!['serve','rally','point','intermission'].includes(state.phase))return;
   pendingShot=null;controls.reset();
@@ -465,7 +470,7 @@ $('rematch').addEventListener('click',()=>{
 for(const button of document.querySelectorAll('[data-close]'))button.addEventListener('click',closeHelpOrSetup);
 $('help').addEventListener('click',()=>{
   if(finale.blocking)return;
-  if(state?.phase==='countdown')return;
+  if(view?.entranceActive||state?.phase==='countdown')return;
   if(state&&['serve','rally','point','intermission'].includes(state.phase)){helpOpen=true;requestPause();return;}
   helpOpen=true;dialog('help-dialog');
 });
@@ -595,9 +600,9 @@ function updateUI(info,state){
   setText('assist-status',guidance);
   $('assist-status').dataset.kind=guidance==='按住击球键，拖动选落点'?'instruction':'live';
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
-  $('help').disabled=reconnecting||state.phase==='countdown'||finale.blocking;
-  controls.setEnabled(['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting&&!shotLayoutHold);
-  $('pause').disabled=!['serve','rally','point','intermission'].includes(state.phase);
+  $('help').disabled=view?.entranceActive||reconnecting||state.phase==='countdown'||finale.blocking;
+  controls.setEnabled(!view?.entranceActive&&['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting&&!shotLayoutHold);
+  $('pause').disabled=view?.entranceActive||!['serve','rally','point','intermission'].includes(state.phase);
   $('countdown').hidden=!['countdown','intermission'].includes(state.phase)||(state.phase==='intermission'&&view.rallyEnding);
   if(state.phase==='countdown')setText('countdown',Math.max(1,Math.ceil(state.timer)));
   if(state.phase==='intermission')setText('countdown',`换边准备 · ${Math.max(1,Math.ceil(state.timer))}`);
@@ -667,8 +672,10 @@ try{
       const renderStart=performance.now();
       view.renderLobby(Math.min(elapsed,.1));renderMs=performance.now()-renderStart;
     }else if(state){
+      view.advanceEntrance?.(elapsed,{hidden:document.hidden,phase:state.phase,remaining:state.timer});
+      document.body.dataset.entering=String(view.entranceActive===true);
       if(mode==='ai'){
-        if(shotLayoutHold){accumulator=0;}
+        if(shotLayoutHold||view.entranceActive){accumulator=0;}
         else if(state.phase==='paused'){stepMatch(state,[{},{}],elapsed);accumulator=0;}
         else{
           accumulator+=Math.min(elapsed,.15);
@@ -710,6 +717,7 @@ try{
       // Read-only diagnostics for reproducible browser QA and user bug reports.
       window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats,
         stateTime:state?.time??null,statePhase:state?.phase??null,
+        entrance:{active:view.entranceActive,progress:view.entrance?.progress??1,camera:view.camera?.position?.toArray()},
         challenge:state?.challenge?{...state.challenge,score:[...state.score],hitId:state.hitId,lastShot:state.lastShotInfo}:null,
         netDragPlaytest:state?.netDragSide===side&&mode==='ai',
         lastShot:state?.netDragSide===side?state.lastShotInfo:null};

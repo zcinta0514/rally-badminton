@@ -177,7 +177,8 @@ export class TournamentLobby {
     this.materials.wood.bumpMap = this.materials.wood.map; this.materials.wood.bumpScale = .008;
     this.buildHall(); this.buildCourt(); this.buildWaitingArea(); this.buildLights();
     this.athlete = makeAthlete(this.scene, 0); this.athlete.root.name = 'lobby-waiting-athlete';
-    this.athlete.ground.visible = false;
+    this.athlete.halo.visible = false; this.athlete.selected.visible = false;
+    this.athlete.shadow.visible = false;
     this.pose = sampleLobbyPose(0); this.applyPose(); recolorAthlete(this.athlete);
     this.athleteReady = loadAthlete ? upgradeAthlete(this.athlete, athleteLoader ? { loader: athleteLoader } : {}).then(ready => {
       if (!this.disposed && ready) { recolorAthlete(this.athlete); this.applyPose(); }
@@ -317,7 +318,7 @@ export class TournamentLobby {
     const key = new THREE.DirectionalLight(0xf6f2e9, 1.3); key.position.set(-2.8, 7.2, 4.6);
     key.name = 'lobby-shadow-key';
     key.target.position.set(2.1, 0, 2); key.castShadow = true;
-    key.shadow.mapSize.set(1024, 1024);
+    key.shadow.mapSize.set(2048, 2048);
     Object.assign(key.shadow.camera, { left: -9, right: 9, top: 12, bottom: -12, near: .3, far: 25 });
     key.shadow.bias = -.0003; key.shadow.normalBias = .015; key.shadow.radius = 3;
     this.scene.add(key, key.target);

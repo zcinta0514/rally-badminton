@@ -1,3 +1,4 @@
+import { MatchEntrance } from '../src/match-entrance.js';
 import { hellStatus } from '../shared/hell-mode.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -39,7 +40,7 @@ class Target {
   }
 }
 
-async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none', buildId='1111111111111111', sessionStorage=null} = {}) {
+async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none', buildId='1111111111111111', sessionStorage=null} = {}) {
   let now = 1000, nextId = 0, frame, controls, view, audio;
   let pwaOptions, onboardingOptions, updateSafeAtInit, onboardingAttempts = 0;
   const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [], usageEvents = [];
@@ -112,7 +113,10 @@ async function fixture(phase = 'serve', {demoMode=false, peerMode=false, search=
       view = this; this.rallyEnding = false; this.crowdResets = 0; this.finaleClears = 0;
       this.finaleAnchors = [{ x: 170, y: 210 }, { x: 830, y: 260 }];
     }
-    setMode(mode) { this.mode = mode; }
+    setMode(mode) { this.mode = mode;if(mode!=='match')this.entrance?.cancel(); }
+    get entranceActive(){return this.entrance?.active===true;}
+    beginMatchEntrance(options){if(entrance){this.entrance=new MatchEntrance();this.entrance.begin(options);}}
+    advanceEntrance(dt,options){this.entrance?.advance(dt,options);}
     resetCrowd() { this.crowdResets++; }
     clearFinale() { this.finaleClears++; this.finale = null; }
     resize() {}
@@ -861,4 +865,17 @@ test('an opponent disconnect stops an already playing finale voice on the still-
   assert.equal(f.element('match-finale').hidden,true);
   assert.ok(f.audio.stoppedVoices.length>stopped,'remote disconnect must stop the active voice');
   assert.equal(f.audio.stoppedVoices.at(-1),'finale');
+});
+
+
+test('local entrance freezes authoritative time and input, then releases both without a catch-up step',async()=>{
+  const f=await fixture('serve',{demoMode:true,entrance:true});f.startAI();
+  assert.equal(f.view.entranceActive,true);const start=f.liveState.time;
+  for(let i=0;i<15;i++)f.draw(100);
+  assert.equal(f.liveState.time,start);assert.equal(f.controls.enabled,false);
+  f.document.hidden=true;f.draw(10000);assert.ok(Math.abs(f.view.entrance.elapsed-1.5)<1e-9);
+  assert.equal(f.liveState.time,start);f.document.hidden=false;
+  for(let i=0;i<5;i++)f.draw(100);
+  assert.equal(f.view.entranceActive,false);assert.equal(f.controls.enabled,true);
+  assert.ok(f.liveState.time-start<.4,'hidden and entrance time never catch up into simulation');
 });

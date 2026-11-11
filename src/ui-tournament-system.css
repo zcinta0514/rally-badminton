@@ -170,3 +170,9 @@ body .onboarding-visual span { background:#314837; color:#e1f1c5; border-color:#
 body .pwa-actions button { background:#25392d; color:#e3eadc; border-color:#4b6451; }
 body .pwa-actions #pwa-install,body .release-dialog .release-dismiss { background:#c2dc9b; color:#152218; border-color:#c2dc9b; }
 body #dialog-backdrop .dialog .result-score { color:#deebba; }
+
+/* The entrance never leaves live hit targets behind an invisible HUD. */
+body[data-entering=true] :is(#hud,#game-controls,.topbar,.player-stamina-layer,#countdown) { visibility:hidden; pointer-events:none; }
+body[data-screen=match]:not([data-entering=true]) :is(#hud,#game-controls) { animation:match-chrome-in 180ms ease-out; }
+@keyframes match-chrome-in { from { opacity:0; } to { opacity:1; } }
+@media(prefers-reduced-motion:reduce) { body[data-screen=match] :is(#hud,#game-controls) { animation:none; } }

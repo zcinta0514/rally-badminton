@@ -40,7 +40,13 @@ try {
   }
   report.checks.push('Create and join a real room with two identities; rules and ready controls remain readable at 844x375 and 667x375');
   await host.locator('#ready-room').click();await guest.locator('#ready-room').click();
-  for(const page of pages)await page.locator('#hud').waitFor({state:'visible'});
+  for(const page of pages){
+    assert.equal(await page.locator('body').getAttribute('data-entering'),'true');
+    assert.equal(await page.locator('#game-controls').isVisible(),false);
+  }
+  await guest.screenshot({path:path.join(output,'room-guest-entrance.png')});
+  for(const page of pages){await page.locator('#hud').waitFor({state:'visible'});assert.equal(await page.locator('body').getAttribute('data-entering'),'false');}
+  report.checks.push('Both player sides animate within the existing ready countdown and release the HUD before play');
   await host.waitForTimeout(3500);
   await host.locator('[data-shot=clear]').dispatchEvent('pointerdown',{pointerId:1,pointerType:'touch',clientX:700,clientY:220,bubbles:true});
   await host.locator('[data-shot=clear]').dispatchEvent('pointerup',{pointerId:1,pointerType:'touch',clientX:700,clientY:220,bubbles:true});

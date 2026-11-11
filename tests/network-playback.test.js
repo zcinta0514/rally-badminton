@@ -220,7 +220,7 @@ test('a gap hiding multiple contacts freezes the entire prior frame instead of a
 });
 
 function sceneView() {
-  const view = Object.create(CourtView.prototype); view.scene = new THREE.Scene();
+  const view = Object.create(CourtView.prototype); view.ambient={};view.matchKey={};view.courtLights=[]; view.scene = new THREE.Scene();
   view.players = [makeAthlete(view.scene, 0), makeAthlete(view.scene, 1)]; view.makeShuttle();
   view.netGeometry = new THREE.BufferGeometry();
   view.netGeometry.setAttribute('position', new THREE.Float32BufferAttribute([0, .8, 0, 0, 1.52, 0], 3));
