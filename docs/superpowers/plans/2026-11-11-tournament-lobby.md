@@ -26,7 +26,7 @@
 - [x] Update index.html brand and menu. Main actions at least 44px touch targets, readable at 844x390 and 667x375; short screens scroll only setup content. Check 390x844 portrait fallback. Keyboard-visible focus and prefers-reduced-motion required.
 - [x] Browser QA script scripts/verify-tournament-lobby.mjs captures 1440x900, 844x390, 667x375, portrait, AI setup, challenge setup and actual match. Assert visible elements in viewport, no horizontal overflow, all routes functional, pause/return works, source build ID matches, no uncaught page errors. Document software-rendered browser results separately from device performance.
 - [x] Run node tests and production build, independent spec review then code-quality review. Fix findings. Capture final screenshots from restarted server snapshot.
-- [ ] Set next feature version 1.17.0 consistently, update release notes/docs, commit, create Draft PR, open actual local sample in Codex. Request user visual acceptance before any merge; no production deployment in this task.
+- [x] Set next feature version 1.17.0 consistently, update release notes/docs, commit, create Draft PR, open actual local sample in Codex. Request user visual acceptance before any merge; no production deployment in this task.
 
 ## Verification commands
 
@@ -42,3 +42,7 @@ node scripts/verify-tournament-lobby.mjs
 ## Acceptance
 
 The scene is real Three.js, not a raster backdrop. Arena silhouette and materials are differentiated; foreground feet/bench contact is grounded. Main choices read clearly over the background. Solo, challenge and friend preparation remain accessible. Returning from a match restores the lobby. Tests/build and actual phone-sized browser checks are recorded honestly. Version and preview source are verified before presenting.
+
+## Result
+
+Draft PR #33: https://github.com/zcinta0514/rally-badminton/pull/33 . Local preview http://127.0.0.1:3320/ serves verified build 6e34e48c9c831166. Spec and code reviews passed; user visual acceptance remains pending. No merge or production deployment.
