@@ -155,7 +155,7 @@ body #dialog-backdrop #waiting-dialog {
   background:linear-gradient(90deg,#b3d78b21,transparent 72%);
 }
 body #dialog-backdrop #waiting-dialog h2 { margin:0; padding:0; font-size:22px; font-weight:550; }
-#waiting-dialog #leave-waiting { min-height:44px; margin:0; padding:6px 8px; text-decoration:none; }
+#waiting-dialog #leave-waiting { flex:none; width:auto; min-height:44px; margin:0; padding:6px 8px; text-decoration:none; }
 #waiting-dialog .waiting-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.3fr); gap:16px; margin-top:8px; }
 #waiting-dialog .field-label { color:var(--muted); }
 body #dialog-backdrop #waiting-dialog .room-code { margin:6px 0 0; padding:8px 4px; border:1px solid var(--line); border-radius:3px; font-size:34px; }
