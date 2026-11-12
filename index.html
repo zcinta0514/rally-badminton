@@ -86,7 +86,7 @@
     <div class="menu-heading" id="entry-home-heading"><div class="eyebrow">BADMINTON CLUB</div>
     <h1 aria-label="开拍 RALLY"><span class="lobby-wordmark">开拍</span><span class="lobby-latin">RALLY</span></h1>
     <p id="menu-intro" class="intro">5 / 11 / 21 分 · 对角发球</p></div>
-    <div id="entry-heading" class="entry-heading" hidden><h2 id="entry-title"></h2><button id="entry-back" class="text-btn" type="button">← 返回首页</button></div><div class="setup" id="mode-setup">
+    <div id="entry-heading" class="entry-heading" hidden><button id="entry-back" class="text-btn" type="button">← 返回首页</button><h2 id="entry-title"></h2></div><div class="setup" id="mode-setup">
       <div class="setup-fields preparation-grid" id="ai-setup" hidden>
         <section class="preparation-player" aria-labelledby="your-style"><h3 id="your-style" class="setup-heading">你的打法</h3>
           <div class="role-grid" id="roles" role="group" aria-label="角色打法">
@@ -195,14 +195,14 @@
 
     <section id="waiting-dialog" class="dialog" hidden aria-labelledby="waiting-title">
       <header class="waiting-heading">
+        <button id="leave-waiting" class="text-btn" type="button">← 退出房间</button>
         <h2 id="waiting-title">好友房间</h2>
-        <button id="leave-waiting" class="text-btn" type="button">退出房间</button>
       </header>
       <div class="waiting-grid">
         <div class="waiting-invite">
           <span class="field-label">房间码</span>
           <div id="waiting-code" class="room-code">—</div>
-          <button id="copy-invite" class="secondary-btn" type="button">复制邀请链接 <span aria-hidden="true">↗</span></button>
+          <button id="copy-invite" class="text-btn" type="button">复制邀请链接 <span aria-hidden="true">↗</span></button>
         </div>
         <div class="waiting-match">
           <p id="waiting-status" class="waiting-status" role="status">等待对手加入</p>
