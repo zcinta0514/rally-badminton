@@ -30,7 +30,7 @@ export async function modelBuildRoot(t) {
   t.after(() => rm(root,{recursive:true,force:true}));
   const files = ['index.html','manifest.webmanifest','src','shared','icons','scripts/service-worker.js',
     'node_modules/three/build','node_modules/three/LICENSE',
-    ...['loaders/GLTFLoader.js','utils/BufferGeometryUtils.js','utils/SkeletonUtils.js','lines/LineSegments2.js','lines/LineSegmentsGeometry.js','lines/LineMaterial.js'].map(file=>'node_modules/three/examples/jsm/'+file),
+    ...['loaders/GLTFLoader.js','utils/BufferGeometryUtils.js','utils/SkeletonUtils.js'].map(file=>'node_modules/three/examples/jsm/'+file),
     'node_modules/peerjs/dist/peerjs.min.js','node_modules/peerjs/LICENSE',
     'node_modules/@msgpack/msgpack/LICENSE','node_modules/eventemitter3/LICENSE','node_modules/peerjs-js-binarypack/LICENSE',
     'node_modules/webrtc-adapter/LICENSE.md','node_modules/sdp/LICENSE'];

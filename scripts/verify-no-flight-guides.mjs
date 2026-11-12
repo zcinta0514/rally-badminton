@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {mkdir,writeFile} from 'node:fs/promises';
+const {chromium}=createRequire(import.meta.url)(process.env.RALLY_PLAYWRIGHT_MODULE||'playwright');
+const url=process.env.RALLY_QA_URL||'http://127.0.0.1:3350/';
+await mkdir('artifacts/no-flight-guides',{recursive:true});
+const browser=await chromium.launch({headless:true,executablePath:process.env.RALLY_BROWSER_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--enable-unsafe-swiftshader']});
+const report={url,checks:[],errors:[],environment:'Windows Chrome phone emulation, not a physical device'};
+try{for(const [width,height] of [[844,390],[568,320]]){
+ const context=await browser.newContext({viewport:{width,height},hasTouch:true,isMobile:true,serviceWorkers:'block'});
+ await context.addInitScript(()=>{localStorage.setItem('rally.onboarding.seen','1');localStorage.setItem('rally.usage.enabled','off');});
+ const p=await context.newPage();p.setDefaultTimeout(60000);p.on('pageerror',e=>report.errors.push(e.message));
+ await p.goto(url);await p.locator('#loading').waitFor({state:'hidden'});
+ assert.match(await p.locator('.lobby-version').textContent(),/1\.20\.2/);
+ report.build=await p.evaluate(()=>RALLY_CONFIG.buildId);
+ assert.equal(await p.locator('#arena-flight-guides').count(),0);
+ await p.evaluate(async base=>{const {CourtView}=await import(new URL('src/view.js',base).href),render=CourtView.prototype.render;
+  CourtView.prototype.render=function(...args){const r=render.apply(this,args);window.qaView=this;return r;};
+ },url);
+ await p.locator('#open-solo').click();await p.locator('#start-ai').click();await p.locator('#start-ai-confirm').click();await p.locator('#hud').waitFor({state:'visible'});
+ const b=await p.locator('[data-shot=clear]').boundingBox();await p.mouse.move(b.x+b.width/2,b.y+b.height/2);await p.mouse.down();
+ await p.waitForFunction(()=>qaView.targetHint.group.visible);
+ const before=await p.evaluate(()=>qaView.targetHint.group.position.x);
+ await p.mouse.move(b.x+b.width/2+28,b.y+b.height/2-12,{steps:4});await p.waitForFunction(x=>qaView.targetHint.group.position.x!==x,before);
+ assert.equal(await p.evaluate(()=>!qaView.flightGuide&&!qaView.scene.getObjectByName('flight-guide')),true);
+ await p.screenshot({path:`artifacts/no-flight-guides/${width}-held.png`});await p.mouse.up();
+ await p.waitForFunction(()=>rallyDiagnostics.statePhase==='rally');await p.waitForTimeout(400);
+ assert.equal(await p.evaluate(()=>!qaView.flightGuide&&!qaView.scene.getObjectByName('flight-guide')),true);
+ await p.locator('#pause').click();await p.locator('#pause-dialog').waitFor({state:'visible'});await p.locator('#leave-game').click();await p.locator('#menu').waitFor({state:'visible'});
+ assert.equal(await p.evaluate(()=>qaView.targetHint.group.visible),false);
+ report.checks.push(`${width}x${height}: original floor aim follows drag, serve releases, no aerial guides or switch, pause/exit clear hints`);
+ console.log(report.checks.at(-1));await context.close();
+}assert.deepEqual(report.errors,[]);
+}finally{await writeFile('artifacts/no-flight-guides/report.json',JSON.stringify(report,null,2));await browser.close();}
