@@ -23,17 +23,29 @@ test('held serve responds to aim and release, without mutating authority',()=>{
  const a=getFlightGuide(s,0,{prepare:'clear',aim:-.7,charge:.2});
  const b=getFlightGuide(s,0,{prepare:'clear',aim:.7,charge:.8});
  assert.equal(a.kind,'aim');assert.ok(a.points.at(-1).x<b.points.at(-1).x);
- assert.equal(a.points.at(-1).y,0);assert.equal(getFlightGuide(s,0,{}),null);
+ assert.ok(a.points.at(-1).y>0,'short intention does not draw a promised landing');assert.equal(getFlightGuide(s,0,{}),null);
  assert.equal(JSON.stringify(s),before);
 });
-test('early held input originates at reachable interception, not opponent ball',()=>{
+test('early held input keeps incoming guide until contact is available',()=>{
  const s=incoming(),info={prepare:'drop',aim:.4,charge:.3};
  info.availability=getShotAvailability(s,0,{shot:'drop'});
  info.intercept=getInterceptAdvice(s,0,{shot:'drop'});
- const g=getFlightGuide(s,0,info);assert.equal(g.kind,'aim');
+ const g=getFlightGuide(s,0,info);assert.equal(g.kind,'incoming');
  assert.ok(g.points[0].z>0);
  info.intercept={status:'unreachable'};info.availability={canHit:false};
  assert.equal(getFlightGuide(s,0,info).kind,'incoming');
+ s.players[0].x=s.shuttle.x;s.players[0].z=s.shuttle.z;
+ delete info.availability;
+ assert.equal(getFlightGuide(s,0,info).kind,'aim');
+});
+
+test('disabled guides remain hidden through updates and pause, then can be restored',()=>{
+ const v=new FlightGuideView(new THREE.Scene()),s=createMatch();
+ v.update(s,0,{prepare:'clear'});assert.equal(v.line.visible,true);
+ v.setEnabled(false);assert.equal(v.line.visible,false);
+ v.update(s,0,{prepare:'clear'});assert.equal(v.line.visible,false);
+ v.update(s,0,{prepare:'clear'},{freeze:true});assert.equal(v.line.visible,false);
+ v.setEnabled(true);v.update(s,0,{prepare:'clear'});assert.equal(v.line.visible,true);
 });
 test('point end and phantom ambiguity suppress guides',()=>{
  const s=incoming();s.phase='point';assert.equal(getFlightGuide(s,0,{}),null);

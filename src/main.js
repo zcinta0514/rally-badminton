@@ -667,6 +667,7 @@ try{
     const paletteChanged=value.courtPalette!==arenaPreferences.courtPalette;
     arenaPreferences=value;
     view.setLightingBrightness(value.brightness);
+    view.flightGuide.setEnabled(value.flightGuides);
     if(paletteChanged)view.setCourtPalette(value.courtPalette);
     palettePicker?.setValue(value.courtPalette);
   }});

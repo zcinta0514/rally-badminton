@@ -8,6 +8,7 @@ import {getFlightGuide} from './flight-guide.js';
  * Both draws share one fixed instance buffer; no GPU allocations during rallies. */
 export class FlightGuideView {
  constructor(scene) {
+  this.enabled=true;
   this.positions=new Float32Array(768*3);this.colors=new Float32Array(768*3);
   const geometry=new LineSegmentsGeometry().setPositions(this.positions).setColors(this.colors);
   geometry.attributes.instanceStart.data.setUsage(THREE.DynamicDrawUsage);
@@ -20,7 +21,9 @@ export class FlightGuideView {
   this.line.name='flight-guide';this.line.frustumCulled=false;this.line.visible=false;scene.add(this.line);
  }
  clear(){this.line.visible=false;this.key=null;this.age=0;}
+ setEnabled(enabled){this.enabled=enabled!==false;if(!this.enabled)this.clear();}
  update(state,side,info,{freeze=false,reset=false,hidden=false,dt=0}={}) {
+  if(!this.enabled){this.clear();return;}
   if(reset||this.side!==side)this.clear();this.side=side;
   if(hidden||!['serve','rally','paused','countdown'].includes(state.phase)){this.clear();return;}
   if(freeze)return;

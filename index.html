@@ -58,6 +58,8 @@
   </aside>
   <aside id="match-settings-panel" class="match-settings-panel" hidden aria-label="比赛设置">
     <div class="arena-settings-heading"><strong>比赛设置</strong><button id="arena-reset">恢复默认</button></div>
+    <label><input id="arena-flight-guides" type="checkbox" checked> 球路辅助线</label>
+    <small>可随时关闭。接球时提示来球，能击球后显示短段出球方向。</small>
     <label for="arena-brightness">灯光亮度</label><div class="arena-volume"><input id="arena-brightness" type="range" min="80" max="180" step="5" value="125" aria-describedby="arena-brightness-note"><output for="arena-brightness">125%</output></div>
     <small id="arena-brightness-note">首页与比赛同步调整，自动记住选择。</small>
     <button id="edit-shot-layout" class="shot-layout-settings" type="button"><span>调整击球键位置</span></button>
@@ -151,7 +153,7 @@
       <details class="lobby-more"><summary>更多</summary><div class="menu-foot-actions">
         <button id="onboarding-entry" class="secondary-btn" type="button">新手指南</button>
         <button id="open-leaderboard" type="button" hidden>排行榜</button>
-      <span class="lobby-version">正式版 1.20.1</span>
+      <span class="lobby-version">正式版 1.20.2</span>
       </div></details>
     </div>
   </main>

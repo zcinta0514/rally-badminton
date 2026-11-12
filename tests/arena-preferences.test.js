@@ -7,6 +7,14 @@ function fixture() {
   return { values, storage: { getItem: (key) => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) } };
 }
 
+test('flight guide opt-out persists and older saves keep their other preferences',()=>{
+ const f=fixture();saveArenaPreferences({master:.3,flightGuides:false},f.storage);
+ assert.equal(readArenaPreferences(f.storage).flightGuides,false);
+ assert.equal(readArenaPreferences(f.storage).master,.3);
+ assert.equal(normalizeArenaPreferences({master:.3}).flightGuides,true);
+ assert.equal(normalizeArenaPreferences({flightGuides:'false'}).flightGuides,true);
+});
+
 test('the court palette is stored with the rest of the local arena preferences', () => {
   const f = fixture();
   saveArenaPreferences({ ...ARENA_DEFAULTS, courtPalette: 'purple' }, f.storage);

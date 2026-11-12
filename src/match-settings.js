@@ -40,6 +40,7 @@ export function bindMatchSettings(audio, { document = globalThis.document, prefe
   const close = () => { panel.hidden = true; button.setAttribute('aria-expanded', 'false'); };
   const inputs = [...panel.querySelectorAll('[data-volume]')];
   const brightness = panel.querySelector('#arena-brightness');
+  const flightGuides = panel.querySelector('#arena-flight-guides');
   const track = panel.querySelector('#arena-music-track');
   const localOption = track?.querySelector('option[value="local"]');
   if (localOption) for (const [id, { title }] of Object.entries(LOBBY_TRACKS)) {
@@ -51,6 +52,7 @@ export function bindMatchSettings(audio, { document = globalThis.document, prefe
   const file = panel.querySelector('#arena-music-file');
   const apply = (useLocal = menuAudio?.usingLocal) => {
     audio.setPreferences(settings);
+    if(flightGuides)flightGuides.checked=settings.flightGuides;
     menuAudio?.setPreferences(settings, useLocal);
     if (track && menuAudio) {
       localOption.disabled = localOption.hidden = !menuAudio.localUrl;
@@ -66,6 +68,9 @@ export function bindMatchSettings(audio, { document = globalThis.document, prefe
   });
   brightness?.addEventListener('input',()=>{
     settings=normalizeArenaPreferences({...settings,brightness:Number(brightness.value)/100});apply();saveArenaPreferences(settings);
+  });
+  flightGuides?.addEventListener('change',()=>{
+    settings=normalizeArenaPreferences({...settings,flightGuides:flightGuides.checked});apply();saveArenaPreferences(settings);
   });
   track?.addEventListener('change', () => {
     if (track.value === 'local') { apply(true); return; }
