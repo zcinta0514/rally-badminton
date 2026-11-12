@@ -69,7 +69,6 @@ body[data-screen="menu"] #menu .menu-foot { flex-shrink:0; width:100%; margin:0;
 body[data-screen="menu"] #menu .menu-foot-actions { display:flex; flex-flow:row wrap; align-items:center; justify-content:flex-start; width:100%; gap:0 18px; }
 body[data-screen="menu"] #menu .menu-foot-actions button { width:auto; min-height:44px; padding:6px 0; background:none; border:0; border-radius:0; box-shadow:none; color:#bdc9bf; font-size:12px; }
 body[data-screen="menu"] #menu .pwa-entry { font-size:11px; color:#a8b8ac; }
-body[data-screen="menu"] #menu:not([data-entry="home"]):not([data-entry="solo"]) { width:46%; max-width:600px; background:linear-gradient(90deg,#101d19fa,#101d19e8 88%,#101d1900); padding-right:30px; }
 body[data-screen="menu"] #menu .entry-heading { margin:0 0 18px; }
 body[data-screen="menu"] #menu .entry-heading h2 { margin:16px 0 8px; font-size:28px; font-weight:550; letter-spacing:.06em; color:#f2f2e9; }
 body[data-screen="menu"] #menu .entry-heading p { font-size:12px; line-height:1.6; color:var(--muted); }
@@ -81,7 +80,6 @@ body[data-screen="menu"] #menu .entry-content { flex-shrink:0; }
 body[data-screen="menu"] #menu:not([data-entry="home"]) .menu-foot,
 body[data-screen="menu"] #menu:not([data-entry="home"]) #install-app { display:none; }
 body[data-screen="menu"] #menu .launch-actions { background:transparent; }
-body[data-screen="menu"] #menu #ai-start-controls { display:flex; flex-direction:column; align-items:stretch; margin-top:14px; }
 body[data-screen="menu"] #menu .role-card,
 body[data-screen="menu"] #menu .segments,
 body[data-screen="menu"] #menu input { background:#13221c; color:#e0e7dd; border-color:#405347; border-radius:4px; box-shadow:none; }
@@ -112,7 +110,6 @@ body[data-screen="menu"] .loading { background:#101b18; color:#e7ecdf; }
   body[data-screen="menu"] #menu .menu-foot-actions { gap:0 14px; }
   body[data-screen="menu"] #menu .menu-foot-actions button { font-size:11px; }
   body[data-screen="menu"] .topbar { padding:12px max(18px,var(--safe-right)) 0 0; }
-  body[data-screen="menu"] #menu:not([data-entry="home"]):not([data-entry="solo"]) { width:51%; padding-right:24px; }
   body[data-screen="menu"] #menu .entry-heading { margin-bottom:10px; }
   body[data-screen="menu"] #menu .entry-heading h2 { font-size:24px; margin-top:5px; }
 }
@@ -128,7 +125,6 @@ body[data-screen="menu"] .loading { background:#101b18; color:#e7ecdf; }
   body[data-screen="menu"] #menu.menu-panel { width:90%; padding:max(88px,var(--safe-top)) 24px max(24px,var(--safe-bottom)); max-width:none; }
   body[data-screen="menu"] #menu h1 { font-size:72px; }
   body[data-screen="menu"] #menu .lobby-action { font-size:28px; }
-  body[data-screen="menu"] #menu:not([data-entry="home"]):not([data-entry="solo"]) { width:100%; max-width:none; padding-right:24px; }
   body[data-screen="menu"] .topbar { padding: max(16px,var(--safe-top)) max(18px,var(--safe-right)) 0 0; }
 }
 @media (prefers-reduced-motion:reduce) {

@@ -1,10 +1,10 @@
 // Player-facing release notes, separate from the asset build hash.
 export const RELEASE_NOTICE = Object.freeze({
-  id: '2026-11-12-restore-court-guidance',
-  title: '恢复原来的球场提示',
-  summary: '移除空中球路虚线，回到原来的比赛画面。',
+  id: '2026-11-12-compact-mode-ui',
+  title: '模式界面更紧凑',
+  summary: '在球馆内选择打法、设置比赛或创建好友房间。',
   items: Object.freeze([
-    '不再显示来球与出球预期虚线，保留原有地面落点和接球位置提示。',
-    '移动、击球规则、音乐与灯光设置保持原有行为。',
+    '人机、地狱挑战和好友对战沿用首页的配色，设置面板周围可以看到球馆。',
+    '横屏并排显示开赛设置，窄屏可上下滚动。',
   ]),
 });

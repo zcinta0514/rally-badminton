@@ -363,7 +363,7 @@ function handleNetwork(message){
       const connected=message.players.filter(p=>p?.connected).length;
       const ready=message.ready||[];const parent=message.rules?.finale==='father-son';
       const lineup=message.players.map((p,index)=>p?(p.name+' · '+ROLES[p.role].label+'型 · '+(!p.connected?'已断开':ready.includes(index)?'已准备':'未准备')):'等待对手加入').join('\n');
-      setText('waiting-players',lineup);setText('waiting-rules',(message.ruleset==='standard21'?'标准三局 · 每局21分':message.target+'分单局')+' · '+(parent?'父子局':'普通对局'));
+      setText('waiting-players',lineup);setText('waiting-rules',(message.ruleset==='standard21'?'标准三局 · 每局21分':message.target+'分单局'));
       setText('waiting-consent',parent?'父子局：败者跪拜叫爸爸，约3秒不可跳过。双方确认并准备后开始比赛。':'确认本房间规则，双方准备后倒数 3 秒开始比赛。');
       $('ready-room').disabled=connected!==2||ready.includes(side)||!message.readyRequired;
       setText('ready-room',connected!==2?'等待对手加入':ready.includes(side)?'已准备，等待对手':parent?'同意父子局并准备':'确认规则并准备');
