@@ -345,8 +345,8 @@ body[data-screen=match]:not([data-entering=true]) :is(#hud,#game-controls) { ani
 @keyframes match-chrome-in { from { opacity:0; } to { opacity:1; } }
 @media(prefers-reduced-motion:reduce) { body[data-screen=match] :is(#hud,#game-controls) { animation:none; } }
 
-/* Shared frameless buttons. Keep their existing hit areas and use text/colour
-   feedback instead of a persistent box, including navigation and dialogs. */
+/* Remove enclosing button frames; intentional one-sided dividers are restored
+   below. Keep the existing hit areas, including navigation and dialogs. */
 body button {
   border-color:transparent !important;
   background:transparent !important;
@@ -360,6 +360,19 @@ body button:is(.selected,[aria-pressed=true],[aria-expanded=true]):not(.shot-btn
   color:#d6efac !important;
   text-decoration:underline;
   text-underline-offset:6px;
+}
+/* A divider or accent is useful hierarchy, not an enclosing button frame. */
+body[data-screen=menu] #menu .launch-actions .lobby-action + .lobby-action {
+  border-top:1px solid #aab8af40 !important;
+}
+body[data-screen=menu] #menu .lobby-action:first-child,
+body[data-screen=menu] #menu .entry-submit .primary-btn,
+body #dialog-backdrop #waiting-dialog #ready-room {
+  border-left-color:#b8dc88 !important;
+}
+body[data-screen=menu] #menu .segments button.selected {
+  box-shadow:inset 0 -2px var(--green) !important;
+  text-decoration:none;
 }
 body button:focus-visible {
   outline:none;
