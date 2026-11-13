@@ -145,8 +145,8 @@ body[data-screen=menu] #menu :is(#player-name,#room-code) {
 }
 body[data-screen=menu] #menu .entry-content { flex:none; overflow:visible; padding:0; }
 body[data-screen=menu] #menu #player-name { height:44px; font-size:16px; }
-body[data-screen=menu] #menu #player-profile-note { margin:4px 0 8px; font-size:11px; line-height:1.5; }
-body[data-screen=menu] #menu #friend-join-options { margin-top:6px; }
+body[data-screen=menu] #menu #player-profile-note { margin:6px 0 0; font-size:11px; line-height:1.5; }
+body[data-screen=menu] #menu :is(#friend-join-options,#friend-create-options) { margin-top:6px; }
 body[data-screen=menu] #menu .room-mode-picker { margin:6px 0 0; padding:0; background:none; border:0; }
 body[data-screen=menu] #menu #friend-mode-note { display:block; font-size:11px; margin-top:5px; color:#e7c49b; }
 body[data-screen=menu] #menu #room-code { font-family:'Rally Numerals','Rally UI',sans-serif; font-size:18px; letter-spacing:.12em; min-height:44px; }

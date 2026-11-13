@@ -130,7 +130,6 @@
       <div id="friend-form" hidden>
         <label class="input-label" for="player-name">你的昵称</label>
         <input id="player-name" maxlength="16" placeholder="输入昵称" autocomplete="nickname" aria-describedby="player-profile-note" required>
-        <small id="player-profile-note" class="dialog-foot profile-note" role="status"></small>
         <div id="friend-create-options" hidden>
           <div class="setup-row"><span class="field-label">比赛形式</span><div id="friend-formats" class="segments format-choices" role="group" aria-label="好友比赛形式"><button data-format="quick:5" class="selected" aria-pressed="true">5 分</button><button data-format="quick:11" aria-pressed="false">11 分</button><button data-format="quick:21" aria-pressed="false">21 分</button><button data-format="standard21:21" aria-pressed="false">标准三局</button></div></div>
           <p id="friend-rules-note" class="rules-note entry-rules" aria-live="polite"></p>
@@ -145,6 +144,7 @@
           <button id="create-room" class="primary-btn" type="button" hidden>创建房间</button>
           <button id="join-room" class="primary-btn" type="button" hidden>加入房间</button>
         </div>
+        <small id="player-profile-note" class="dialog-foot profile-note" role="status"></small>
         <details class="setup-reference" id="friend-more">
           <summary>更多房间设置</summary>
           <div class="setup-row"><span class="field-label">你的打法</span><div id="friend-roles" class="segments" role="group" aria-label="好友自己的打法"><button data-friend-role="balanced" class="selected" aria-pressed="true">均衡</button><button data-friend-role="swift" aria-pressed="false">灵巧</button><button data-friend-role="power" aria-pressed="false">力量</button></div></div>
