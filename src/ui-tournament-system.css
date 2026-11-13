@@ -344,3 +344,41 @@ body[data-entering=true] :is(#hud,#game-controls,.topbar,.player-stamina-layer,#
 body[data-screen=match]:not([data-entering=true]) :is(#hud,#game-controls) { animation:match-chrome-in 180ms ease-out; }
 @keyframes match-chrome-in { from { opacity:0; } to { opacity:1; } }
 @media(prefers-reduced-motion:reduce) { body[data-screen=match] :is(#hud,#game-controls) { animation:none; } }
+
+/* Shared frameless buttons. Keep their existing hit areas and use text/colour
+   feedback instead of a persistent box, including navigation and dialogs. */
+body button {
+  border-color:transparent !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  outline:none !important;
+}
+body :is(.primary-btn,.secondary-btn,.pwa-actions button,.release-dismiss,.onboarding-next) {
+  color:var(--ink) !important;
+}
+body button:is(.selected,[aria-pressed=true],[aria-expanded=true]):not(.shot-btn) {
+  color:#d6efac !important;
+  text-decoration:underline;
+  text-underline-offset:6px;
+}
+body button:focus-visible {
+  outline:none;
+  text-decoration:underline;
+  text-underline-offset:6px;
+  text-decoration-thickness:2px;
+}
+body button:active:not(:disabled) { opacity:.72; }
+@media(hover:hover) {
+  body button:hover:not(:disabled) { color:#d6efac !important; }
+}
+/* The shot surface still shows charge/availability; its decorative rings do not. */
+body[data-shot-skin=glass] .shot-btn .key-face {
+  border-color:transparent !important;
+  box-shadow:none !important;
+}
+body[data-shot-skin=glass] .key-face::after { border:0; }
+body[data-shot-skin=glass] .shot-btn:focus-visible .key-face {
+  outline:none;
+  text-decoration:underline;
+  text-underline-offset:4px;
+}
