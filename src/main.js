@@ -102,7 +102,7 @@ const openShotLayoutInMatch=()=>{
 $('edit-shot-layout')?.addEventListener('click',openShotLayoutInMatch);
 const playback=new NetworkPlayback();
 const performanceMonitor=new PerformanceMonitor({devicePixelRatio:window.devicePixelRatio});
-const pwa=initPWA({fullscreenButton:$('fullscreen'),showToast,onUpdateLock:({version}={})=>{
+const pwa=initPWA({fullscreenButton:$('fullscreen'),landscapeButton:$('landscape'),showToast,onUpdateLock:({version}={})=>{
     saveUpdatePreferences({version,settings,sound,arena:arenaPreferences},updatePreferencesStorage);controls?.reset();
   },
   isSafeToUpdate:({allowHidden=false}={})=>entryStage==='home'&&isUpdateSafe({ready:Boolean(controls&&view)&&$('loading').hidden,visible:allowHidden||!document.hidden,mode,state,room,
