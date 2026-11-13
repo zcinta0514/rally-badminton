@@ -693,10 +693,17 @@ function updateUI(info,state){
       setText('pause-description',state.reconnect?'连接中断，等待球友恢复。超时则中断，不计胜负。':doubles&&mode==='online'?'全员连接后，四人确认继续比赛。':mode==='ai'?'每人每场可暂停一次，最多 30 秒。':peerMode?'每人每场一次，最多 30 秒；双方准备后继续，请保持游戏在前台。':'每人每场一次；双方准备后继续，断线对手可在倒计时内重连。');
       dialog(helpOpen?'help-dialog':'pause-dialog');
     }else if(state.phase==='over'){
-      setText('result-title',state.challenge&&state.endReason==='scored'?(state.winner===team?'地狱挑战通关':'挑战失败'):state.winner===null?'本局结束':state.winner===team?'本局获胜':'本局失利');
-      setText('result-score',state.ruleset==='standard21'?`局数 ${state.games[team]} : ${state.games[1-team]}`:`${state.score[team]} : ${state.score[1-team]}`);
+      const resultScope=state.ruleset==='standard21'?'本场':'本局';
+      setText('result-title',state.challenge&&state.endReason==='scored'?(state.winner===team?'地狱挑战通关':'挑战失败'):state.winner===null?`${resultScope}结束`:state.winner===team?`${resultScope}获胜`:`${resultScope}失利`);
+      const resultScores=state.ruleset==='standard21'?state.games:state.score;
+      $('result-dialog').dataset.outcome=state.winner===null?'neutral':state.winner===team?'win':'loss';
+      setText('result-mode',state.challenge?'地狱挑战':`${matchType} · ${state.ruleset==='standard21'?'三局两胜':`${state.target} 分制`}`);
+      setText('result-name-self',nameSelf);setText('result-name-other',nameOther);
+      setText('result-score-self',resultScores[team]);setText('result-score-other',resultScores[1-team]);
+      setText('result-score-label',state.ruleset==='standard21'?'最终局数':state.endReason==='scored'?'最终比分':'结束时比分');
+      $('result-score').setAttribute('aria-label',`${nameSelf} ${resultScores[team]} 比 ${resultScores[1-team]} ${nameOther}${state.ruleset==='standard21'?'，局数':''}`);
       const resultReason=relativeMessage(state.message).replace(/\s*·\s*(?:局数\s*)?\d+\s*:\s*\d+$/,'');
-      setText('result-reason',resultReason+(state.ruleset==='standard21'?` · 本局比分 ${state.score[team]}:${state.score[1-team]}`:''));setText('rematch',state.challenge?'再次挑战 ↗':'再来一局 ↗');
+      setText('result-reason',resultReason+(state.ruleset==='standard21'?` · 最后一局 ${state.score[team]}:${state.score[1-team]}`:''));setText('rematch',state.challenge?'再次挑战 ↗':'再来一局 ↗');
       rematchRequested=false;helpOpen=false;resultPending=true;dialog(null);
     }else if(!helpOpen)dialog(null);
   }

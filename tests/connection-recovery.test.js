@@ -432,10 +432,47 @@ for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
     landScoringShuttle(state, 0); f.draw(0);
     assert.equal(state.phase, 'over');
     assert.deepEqual(f.visibleDialogs(), ['result-dialog']);
-    assert.equal(f.element('result-score').textContent, `${cap} : ${cap - 1}`);
+    assert.equal(f.element('result-score-self').textContent, cap);
+    assert.equal(f.element('result-score-other').textContent, cap - 1);
+    assert.equal(f.element('result-score-label').textContent, '最终比分');
     assert.doesNotMatch(f.element('match-label').textContent, /加球中|下一分获胜/);
   });
 }
+
+test('results keep local teams, game totals and neutral endings distinct', async () => {
+  const f=await fixture('serve',{demoMode:true});
+  f.settings.format='doubles'; f.startAI(); f.draw(0);
+  const state=f.liveState;
+  state.ruleset='standard21'; state.games=[1,2]; state.score=[18,21];
+  state.phase='over'; state.winner=1; state.endReason='scored'; state.message='远场获胜';
+  f.draw(0);
+  assert.equal(f.element('result-dialog').dataset.outcome,'loss');
+  assert.equal(f.element('result-name-self').textContent,'你与队友');
+  assert.equal(f.element('result-name-other').textContent,'入门陪练');
+  assert.equal(f.element('result-score-self').textContent,1);
+  assert.equal(f.element('result-score-other').textContent,2);
+  assert.equal(f.element('result-score-label').textContent,'最终局数');
+  assert.match(f.element('result-reason').textContent,/最后一局 18:21/);
+  assert.equal(f.element('result-mode').textContent,'人机双打 · 三局两胜');
+  f.click('rematch'); f.draw(0);
+  assert.equal(f.liveState.format,'doubles');
+  assert.equal(f.element('result-dialog').hidden,true);
+  f.liveState.phase='over'; f.liveState.winner=null; f.liveState.endReason='abandoned';
+  f.draw(0);
+  assert.equal(f.element('result-dialog').dataset.outcome,'neutral');
+  assert.equal(f.element('result-title').textContent,'本局结束');
+  assert.equal(f.element('result-score-label').textContent,'结束时比分');
+});
+
+test('online results put the visiting player on the left', async () => {
+  const f=await fixture('serve',{slot:1});
+  completeScoredMatch(f.state,1); f.snapshot(f.state); f.draw(200); f.draw(5000);
+  assert.equal(f.element('result-dialog').dataset.outcome,'win');
+  assert.equal(f.element('result-name-self').textContent,f.room.players[1].name);
+  assert.equal(f.element('result-name-other').textContent,f.room.players[0].name);
+  assert.equal(f.element('result-score-self').textContent,5);
+  assert.equal(f.element('result-score-other').textContent,2);
+});
 
 test('standard HUD retains game counts and hides deuce hints during a completed game break', async () => {
   const f = await fixture('serve', { demoMode: true });
