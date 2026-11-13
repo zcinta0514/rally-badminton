@@ -428,3 +428,10 @@ body[data-shot-skin=glass] .shot-btn:focus-visible .key-face {
   text-decoration:underline;
   text-underline-offset:4px;
 }
+
+body[data-screen=menu] #menu .segments.selection-motion { position:relative; }
+body[data-screen=menu] #menu .segments.selection-motion button.selected { box-shadow:none !important; }
+.selection-indicator {
+  position:absolute; left:0; bottom:0; height:2px;
+  background:var(--green); pointer-events:none;
+}

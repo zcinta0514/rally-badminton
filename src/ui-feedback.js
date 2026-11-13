@@ -7,14 +7,16 @@ function clearMotion() {
   entryAnimation?.cancel(); entryAnimation=null;
   reveal?.remove(); reveal=null;
 }
-new MutationObserver(() => {
+new MutationObserver(records => {
+  if (!records.some(r => (r.target === menu && r.attributeName === 'data-entry') ||
+      (r.target.id === 'friend-form' && r.attributeName === 'hidden'))) return;
   entryAnimation?.cancel();
   if (reducedMotion.matches || document.hidden || menu.hidden) return;
   entryAnimation=menu.animate([
-    {opacity:.5,transform:'translateX(-7px)'},
-    {opacity:1,transform:'translateX(0)'},
-  ],{duration:180,easing:'ease-out'});
-}).observe(menu,{attributes:true,attributeFilter:['data-entry']});
+    {opacity:.65,transform:'translateY(5px)'},
+    {opacity:1,transform:'translateY(0)'},
+  ],{duration:160,easing:'ease-out'});
+}).observe(menu,{subtree:true,attributes:true,attributeFilter:['data-entry','hidden']});
 new MutationObserver(() => {
   const next=document.body.dataset.screen;
   if (next===screen) return;
