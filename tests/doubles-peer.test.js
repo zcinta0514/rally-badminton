@@ -33,3 +33,11 @@ test('leaving a lobby rotates its private seat credential before another player 
 test('recovery during a resume countdown preserves the original rally phase',()=>{
  const f=fixture();full(f);for(let i=0;i<4;i++)f.match.receive(i,ready);f.match.state.phase='rally';f.match.receive(0,{type:'pause'});for(let i=0;i<4;i++)f.match.receive(i,{type:'resume'});assert.equal(f.match.state.pause.previousPhase,'rally');f.match.disconnect(3);assert.equal(f.match.state.pause.previousPhase,'rally');
 });
+
+test('disconnect and recovery publish cleared rematch consent to every voter',()=>{
+ const f=fixture();full(f);for(let i=0;i<4;i++)f.match.receive(i,ready);f.match.state.phase='over';f.match.state.winner=0;f.match.announce();const token=f.messages[3].findLast(m=>m.type==='room').token;
+ for(let i=0;i<2;i++)f.match.receive(i,{type:'rematch'});f.match.disconnect(3);
+ assert.deepEqual(f.messages[0].findLast(m=>m.type==='rematch').ready,[]);f.match.reconnect('test-session',token);
+ assert.deepEqual(f.messages[3].findLast(m=>m.type==='rematch').ready,[]);
+ for(let i=0;i<4;i++)f.match.receive(i,{type:'rematch'});assert.equal(f.match.matchId,2);
+});

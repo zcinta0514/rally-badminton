@@ -210,7 +210,7 @@ export class PeerMatch {
     const slot=this.tokens.indexOf(token);
     if(this.count!==4 || this.closed || this.abandoned || sessionId!==this.sessionId || slot<0 || !this.disconnected.has(slot) || this.players[slot]?.connected) throw Error('重连凭证无效或座位已过期');
     this.disconnected.delete(slot);this.players[slot].connected=true;
-    this.announce();this.broadcast();return slot;
+    this.announce();this.readiness('rematch',this.rematch);this.readiness('resumeReady',this.resumeReady);this.broadcast();return slot;
   }
 
   freeze(slot) {
@@ -240,6 +240,7 @@ export class PeerMatch {
     else this.players[slot].connected = false;
     this.inputs = Array.from({length:this.count}, () => ({})); this.resumeReady.clear(); this.rematch.clear();
     this.startReady.clear();
+    if(this.count===4)this.readiness('rematch',this.rematch);
     if (this.state && this.state.phase !== 'over') {
       this.abandoned = true;
       finishMatch(this.state, null, leaving ? '球友已离开，本局结束' : '球友连接已断开，本局结束，请重新约战', leaving ? 'quit' : 'disconnect');
@@ -252,7 +253,7 @@ export class PeerMatch {
     this.tick();
     if(this.count===4 && !this.abandoned) {
       this.players[slot].connected=false;this.disconnected.set(slot,this.now()+30000);
-      this.startReady.clear();this.rematch.clear();this.freeze(slot);this.announce();this.broadcast();return;
+      this.startReady.clear();this.rematch.clear();this.readiness('rematch',this.rematch);this.freeze(slot);this.announce();this.broadcast();return;
     }
     this.depart(slot, false);
   }

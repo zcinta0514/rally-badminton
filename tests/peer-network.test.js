@@ -336,3 +336,14 @@ test('format omitted on join discovers a doubles invitation and malformed readin
  const guest=await api.openPeerRoom({...options,playerId:'guest',type:'join',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>guestMessages.push(m),onClose:e=>closes.push(e)});t.after(()=>guest.close());
  assert.equal(guestMessages[0].format,'doubles');const bad=structuredClone(guestMessages[0]);bad.ready={};bus.peers[0].connections[0].send(bad);await flush();assert.equal(closes.length,1);
 });
+
+test('private seat recovery replaces a half-open channel and ignores its late close',async t=>{
+ const bus=transportBus(),messages=[[],[]],closes=[];
+ const host=await api.openPeerRoom({...options,type:'create',format:'doubles',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>messages[0].push(m)});t.after(()=>host.close());
+ const guest=await api.openPeerRoom({...options,playerId:'guest',type:'join',format:'doubles',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>messages[1].push(m),onClose:e=>closes.push(e)});t.after(()=>guest.close());
+ const oldHost=bus.peers[0].connections[0],oldGuest=bus.peers[1].connections[0];oldGuest.open=false;oldGuest.closed=true;oldGuest.emit('close');
+ assert.equal(oldHost.open,true);await new Promise(resolve=>setTimeout(resolve,700));await flush();
+ assert.equal(closes.length,0);assert.equal(messages[0].findLast(m=>m.type==='room').players[1].connected,true);
+ assert.ok(messages[1].some(m=>m.type==='reconnecting'));assert.equal(messages[1].findLast(m=>m.type==='room').reconnect.slots.length,0);
+ oldHost.emit('close');await flush();assert.equal(messages[0].findLast(m=>m.type==='room').players[1].connected,true);assert.equal(messages[0].findLast(m=>m.type==='room').reconnect.slots.length,0);
+});

@@ -341,8 +341,18 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
               try {
                 if(message.resume) {
                   if(!record(message.resume) || !credential(message.resume.token) || message.resume.sessionId!==match.sessionId) throw Error('重连凭证无效');
+                  match.tick();
                   seat=match.tokens.indexOf(message.resume.token);
-                  if(seat<0 || !match.disconnected.has(seat) || match.players[seat]?.connected || match.abandoned) throw Error('重连座位无效');
+                  if(seat<0 || seat===match.hostSlot || !match.players[seat] || match.abandoned ||
+                    !match.players[seat].connected && !match.disconnected.has(seat)) throw Error('重连座位无效');
+                  // A guest can detect loss before the host's old RTC channel does.
+                  // Only possession of this session's private seat token permits
+                  // replacement. Detach old routing before any close callback.
+                  for(const [previous,token] of [...seatConnections]) {
+                    if(token!==message.resume.token)continue;
+                    seatConnections.delete(previous);previous.close();
+                  }
+                  if(match.players[seat].connected)match.disconnect(seat);
                 } else {
                   seat=match.players.findIndex(p=>p===null);
                   if(seat<0 || match.state || match.abandoned) throw Error('房间已满或比赛已开始');
