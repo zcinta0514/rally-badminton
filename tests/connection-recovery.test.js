@@ -305,6 +305,17 @@ test('solo navigation keeps ordinary and challenge preparation reachable and ret
   f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'solo');
   f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'home');
   f.click('open-friends');assert.equal(f.element('menu').dataset.entry,'friends');
+  assert.equal(f.element('friend-form').hidden,true);
+  f.chooseSetting('friend-tabs','create');
+  assert.equal(f.element('friend-create-options').hidden,false);
+  assert.equal(f.element('friend-join-options').hidden,true);
+  f.click('entry-back');
+  assert.equal(f.element('menu').dataset.entry,'friends');
+  assert.equal(f.element('friend-form').hidden,true);
+  f.chooseSetting('friend-tabs','join');
+  assert.equal(f.element('friend-create-options').hidden,true);
+  assert.equal(f.element('friend-join-options').hidden,false);
+  f.click('entry-back');
   f.click('entry-back');assert.equal(f.element('menu').dataset.entry,'home');
   assert.equal(f.liveState,null);
 });
@@ -314,7 +325,7 @@ test('home modes open preparation first, and AI and friend match settings remain
   f.click('start-ai');assert.equal(f.liveState,null);assert.equal(f.element('ai-setup').hidden,false);assert.equal(f.element('home-actions').hidden,true);
   assert.equal(f.pwaOptions.isSafeToUpdate(),false,'editing preparation cannot be interrupted by an automatic reload');
   f.chooseSetting('roles','power');f.chooseSetting('ai-formats','standard21:21');
-  f.click('entry-back');f.click('open-friends');
+  f.click('entry-back');f.click('open-friends');f.chooseSetting('friend-tabs','create');
   f.chooseSetting('friend-roles','swift');f.chooseSetting('friend-formats','quick:11');
   assert.equal(f.settings.role,'power');assert.equal(f.settings.ruleset,'standard21');
   assert.equal(f.settings.friendRole,'swift');assert.equal(f.settings.friendTarget,11);

@@ -52,7 +52,7 @@ const updatePreferencesStorage=getUpdatePreferencesStorage(window);
 const restoredUpdatePreferences=restoreUpdatePreferences(globalThis.RALLY_CONFIG?.buildId,updatePreferencesStorage);
 let arenaPreferences=restoredUpdatePreferences?.arena??readArenaPreferences(),matchSettings;
 const settings={role:'balanced',coachRole:'balanced',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'easy',target:5,ruleset:'quick',...restoredUpdatePreferences?.settings,finale:'none'};
-let entryStage='home',friendAction='create';
+let entryStage='home',friendAction='choose';
 let mode='menu',state=null,side=0,room=null,socket=null,netGeneration=0;
 let hellRole=settings.role;
 let peerSession=null,peerAttempt=null,peerDisconnected=false;
@@ -245,10 +245,24 @@ function syncEntrySettings(){
   const rule=getScoringRules({ruleset:settings.friendRuleset,target:settings.friendTarget});
   setText('friend-rules-note',settings.friendRuleset==='standard21'?'三局两胜 · 每局21分 · 净胜2分 · 30封顶':rule.target+'分单局 · 净胜2分 · '+rule.cap+'封顶');
 }
+function syncEntryHeading(){
+  const friendForm=entryStage==='friends'&&friendAction!=='choose';
+  const labels={solo:'单人对战',ai:'人机对战',hell:'地狱挑战',friends:'好友对战',home:''};
+  setText('entry-title',friendForm?(friendAction==='create'?'创建房间':'加入房间'):labels[entryStage]);
+  setText('entry-back',friendForm?'← 返回好友对战':['ai','hell'].includes(entryStage)?'← 返回单人对战':'← 返回首页');
+  $('menu').scrollTop=0;
+  $(entryStage==='home'?'open-solo':'entry-back').focus({preventScroll:true});
+}
 function setFriendAction(action){
-  friendAction=action==='join'?'join':'create';groupChoice('friend-tabs','action',friendAction);
-  $('friend-create-options').hidden=$('create-room').hidden=friendAction!=='create';
-  $('friend-join-options').hidden=$('join-room').hidden=friendAction!=='join';
+  friendAction=action;
+  const choosing=action==='choose';
+  const creating=action==='create';
+  $('friend-tabs').hidden=!choosing;
+  $('friend-form').hidden=choosing;
+  $('friend-create-options').hidden=$('friend-create-details').hidden=$('create-room').hidden=!creating;
+  $('friend-join-options').hidden=$('join-room').hidden=action!=='join';
+  $('friend-more').open=false;
+  if(entryStage==='friends')syncEntryHeading();
 }
 function openEntry(stage){
   if(state||room||peerAttempt||connecting)return;
@@ -258,11 +272,11 @@ function openEntry(stage){
   $('home-actions').hidden=stage!=='home';$('ai-start-controls').hidden=stage!=='ai';
   $('solo-actions').hidden=stage!=='solo';
   $('hell-setup').hidden=stage!=='hell';$('friends-dialog').hidden=stage!=='friends';
-  const labels={solo:'单人对战',ai:'人机对战',hell:'地狱挑战',friends:'好友对战',home:''};
-  setText('entry-back',['ai','hell'].includes(stage)?'← 返回单人对战':'← 返回首页');
-  setText('entry-title',labels[stage]);syncEntrySettings();
-  $('menu').scrollTop=0;
-  $(stage==='home'?'open-solo':'entry-back').focus({preventScroll:true});
+  $('ai-more').open=false;
+  $('hell-more').open=false;
+  $('friend-more').open=false;
+  syncEntrySettings();
+  syncEntryHeading();
 }
 for(const [id,friend]of [['ai-formats',false],['friend-formats',true]])$(id).addEventListener('click',event=>{
   const button=event.target.closest('button');if(!button||button.disabled)return;const [ruleset,target]=button.dataset.format.split(':');
@@ -270,7 +284,12 @@ for(const [id,friend]of [['ai-formats',false],['friend-formats',true]])$(id).add
   syncEntrySettings();
 });
 $('friend-tabs').addEventListener('click',event=>{const button=event.target.closest('button');if(button&&!button.disabled)setFriendAction(button.dataset.action);});
-$('entry-back').addEventListener('click',()=>{if(connecting||peerAttempt){exitToMenu();return;}closeHelpOrSetup();openEntry(['ai','hell'].includes(entryStage)?'solo':'home');});
+$('entry-back').addEventListener('click',()=>{
+  if(connecting||peerAttempt){exitToMenu({entry:'friends'});return;}
+  closeHelpOrSetup();
+  if(entryStage==='friends'&&friendAction!=='choose'){setFriendAction('choose');return;}
+  openEntry(['ai','hell'].includes(entryStage)?'solo':'home');
+});
 syncEntrySettings();
 function selectAim(value){aim=value;lastShotRequest=null;}
 
@@ -300,7 +319,7 @@ function enterMatch(){
   dots[0].style.background=side===0?'#fb7959':'#b5ebc7';
   dots[1].style.background=side===1?'#fb7959':'#b5ebc7';
 }
-function exitToMenu(){
+function exitToMenu({entry='home'}={}){
   usage.endMatch('quit');
   clearFinale();finale.reset();
   resultPending=false;
@@ -312,7 +331,9 @@ function exitToMenu(){
   arenaAudio.reset();
   playback.reset();lastRtt=null;peerStats=null;lastPeerStats=0;peerStatsPending=false;
   $('countdown').hidden=true;$('hell-status').hidden=true;setScreen('menu');dialog(null);history.replaceState(null,'',location.pathname+(netDragPlaytest?'?netDrag=1':''));
-  openEntry('home');queueMicrotask(()=>onboarding.maybeShow());
+  if(entry==='friends')setFriendAction('choose');
+  openEntry(entry);
+  if(entry==='home')queueMicrotask(()=>onboarding.maybeShow());
 }
 function startAI(){
   if(peerAttempt||peerSession)exitToMenu();
@@ -473,7 +494,7 @@ $('start-ai').addEventListener('click',()=>openEntry('ai'));
 $('start-ai-confirm').addEventListener('click',startAI);
 $('start-hell').addEventListener('click',()=>openEntry('hell'));
 $('start-hell-confirm').addEventListener('click',startHell);
-$('open-friends').addEventListener('click',()=>{settings.finale='none';groupChoice('friend-modes','finale','none');setFriendAction('create');dialog(practiceOnly?'lan-dialog':'friends-dialog');});
+$('open-friends').addEventListener('click',()=>{settings.finale='none';groupChoice('friend-modes','finale','none');setFriendAction('choose');dialog(practiceOnly?'lan-dialog':'friends-dialog');});
 $('open-leaderboard').addEventListener('click',()=>openLeaderboard('menu'));
 $('result-leaderboard').addEventListener('click',()=>openLeaderboard('result'));
 $('close-leaderboard').addEventListener('click',closeLeaderboard);
@@ -484,7 +505,8 @@ $('join-room').addEventListener('click',()=>roomAction('join'));
 $('room-code').addEventListener('keydown',event=>{if(event.key==='Enter')roomAction('join');});
 $('pause').addEventListener('click',requestPause);
 $('resume').addEventListener('click',()=>{if(mode==='online')send({type:'resume'});else if(state)resumeMatch(state);});
-for(const id of ['leave-game','back-menu','leave-waiting'])$(id).addEventListener('click',exitToMenu);
+for(const id of ['leave-game','back-menu'])$(id).addEventListener('click',exitToMenu);
+$('leave-waiting').addEventListener('click',()=>exitToMenu({entry:'friends'}));
 $('rematch').addEventListener('click',()=>{
   if(finale.blocking)return;
   if(peerMode&&peerDisconnected){exitToMenu();dialog('friends-dialog');return;}
