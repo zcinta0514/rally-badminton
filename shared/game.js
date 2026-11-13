@@ -661,7 +661,7 @@ function stepLive(state, inputs, dt, firstSlice) {
   if (state.phase === 'rally') for (const side of contactOrder(state)) {
     const before = state.hitId;
     attemptShot(state, side);
-    if (state.format === 'doubles' && state.hitId !== before) { state._contactTie++; break; }
+    if (state.format === 'doubles' && state.hitId !== before) { const team=playerTeam(state,side);state._contactTieByTeam??=[state._contactTie,state._contactTie];state._contactTieByTeam[team]++;break; }
   }
   } finally {
     const liveDt = state.pointId !== pointId ? clamp(state.rallyEnd.at - start, 0, dt) : dt;
@@ -781,7 +781,13 @@ function chooseCandidate(state, side, level, candidates) {
   const player = state.players[side];
   const reservePressure = clamp(1 - player.stamina / (2 * shotStaminaCost(ROLES[player.role], 'smash')), 0, 1);
   // Fatigue shifts preference toward economical returns without banning attacks.
-  const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score - repeatPenalty(history, candidate)
+  const coverage = candidate => {
+    if(state.format!=='doubles')return 0;
+    const target=getShotTarget(state,side,candidate),opponents=state.players.filter((_,slot)=>playerTeam(state,slot)!==playerTeam(state,side));
+    // Reward space according to the nearer defender, never just one opponent.
+    return 2.5*Math.min(...opponents.map(p=>Math.hypot(target.aimX-p.x,target.aimZ-p.z)/(ROLES[p.role].speed*staminaEffects(p,ROLES[p.role]).speedScale)));
+  };
+  const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score + coverage(candidate) - repeatPenalty(history, candidate)
     - reservePressure * (candidate.shot === 'smash' ? 1.2 : candidate.shot === 'clear' ? .3 : 0) }));
   const best = Math.max(...scored.map(candidate => candidate.score));
   const viable = scored.filter(candidate => candidate.score > -5);
@@ -830,6 +836,10 @@ function chooseAIShot(state, side, level) {
     { shot: 'clear', aim: alternate, aimDepth: 0.05 + (random(state) - 0.5) * 0.35, score: 1.6 },
     { shot: 'drop', aim: alternate, aimDepth: -0.08 + (random(state) - 0.5) * 0.35, score: 1.55 },
   ];
+  if(state.format==='doubles')candidates.push(
+    {shot:'drop',aim:0,aimDepth:-.2,score:dropScore},
+    {shot:'clear',aim:0,aimDepth:.25,score:clearScore},
+    {shot:'smash',aim:0,aimDepth:.15,score:smashScore});
   return chooseCandidate(state, side, level, candidates);
 }
 

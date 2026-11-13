@@ -132,3 +132,26 @@ test('partner pause consumes the team quota and preserves team attribution',()=>
   assert.equal(game.pauseMatch(s,slot%2),false);
  }
 });
+
+test('tie priority rotates independently during an alternating two-team rally',()=>{
+ const s=create(),hits=[];
+ for(const team of [0,1,0,1,0,1]) {
+  s.phase='rally';s.service.active=false;
+  Object.assign(s.shuttle,{active:true,lastHit:1-team,x:0,y:1.3,z:team===0?3:-3,vx:0,vy:0,vz:0});
+  for(const slot of [team,team+2])Object.assign(s.players[slot],{x:slot<2?-.4:.4,z:s.shuttle.z,cooldown:0,action:null,pendingShot:{shot:'clear',aim:0,aimDepth:0,charge:0,remaining:.3,contactAt:s.time+.01}});
+  game.stepMatch(s,[],.02);hits.push(s.shuttle.lastHitPlayer);
+ }
+ assert.notEqual(hits[0],hits[2]);assert.notEqual(hits[1],hits[3]);
+});
+
+test('hard doubles shot selection responds to the second defender covering space',()=>{
+ const decisions=x=>Array.from({length:30},(_,seed)=>{
+  const s=game.createMatch({format:'doubles',seed:seed+1});s.phase='rally';s.service.active=false;
+  Object.assign(s.shuttle,{active:true,lastHit:1,x:0,y:2.2,z:3,vx:0,vy:0,vz:0});
+  Object.assign(s.players[0],{x:0,z:3});Object.assign(s.players[2],{x:-2,z:6});
+  Object.assign(s.players[1],{x:-2,z:-4});Object.assign(s.players[3],{x,z:-4});
+  game.aiInput(s,0,'hard');s.time=.1;game.aiInput(s,0,'hard');
+  return {shot:s._ai[0].shot,aim:s._ai[0].aim,depth:s._ai[0].aimDepth};
+ });
+ assert.notDeepEqual(decisions(2),decisions(-2.5));
+});

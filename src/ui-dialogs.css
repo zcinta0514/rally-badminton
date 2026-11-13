@@ -589,3 +589,13 @@
 @keyframes court-ui-spin {
   to { transform: rotate(360deg); }
 }
+
+/* Doubles preparation stays scrollable on short landscape phones. */
+#doubles-room-options {display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;margin:10px 0;}
+#doubles-room-options[hidden],#doubles-practice-options[hidden] {display:none;}
+#doubles-room-options select {min-height:36px;width:100%;border:1px solid #dbe2dc;border-radius:8px;background:white;color:#153b2c;padding:5px 8px;font:inherit;}
+#doubles-room-options label {margin:0;font-size:12px;}
+#waiting-players {white-space:pre-line;line-height:1.7;font-size:12px;}
+#waiting-dialog {max-height:calc(100dvh - 24px);overflow-y:auto;}
+#ai-lineup button,#friend-lineup button {white-space:nowrap;}
+@media(max-height:430px) and (orientation:landscape){#waiting-dialog{padding:14px 20px;}#waiting-dialog .room-code{font-size:26px;margin:6px 0;}#waiting-dialog p{margin:6px 0;}#waiting-dialog h2{font-size:20px;}}

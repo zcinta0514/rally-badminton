@@ -16,7 +16,9 @@ function allowedPreferences(settings, sound, arena) {
       !['easy', 'medium', 'hard'].includes(settings.difficulty) ||
       ![5, 11, 21].includes(settings.target) ||
       !['quick', 'standard21'].includes(settings.ruleset)) return null;
-  return { settings: { role: settings.role, ...(settings.coachRole === undefined ? {} : {coachRole: settings.coachRole}),
+  const extra={};
+  for(const [key,values] of Object.entries({format:['singles','doubles'],friendFormat:['singles','doubles'],teammateRole:['balanced','swift','power'],teammateDifficulty:['easy','medium','hard']}))if(values.includes(settings[key]))extra[key]=settings[key];
+  return { settings: { ...extra, role: settings.role, ...(settings.coachRole === undefined ? {} : {coachRole: settings.coachRole}),
     ...(settings.friendRole === undefined ? {} : {friendRole:settings.friendRole}),
     ...(settings.friendTarget === undefined ? {} : {friendTarget:settings.friendTarget}),
     ...(settings.friendRuleset === undefined ? {} : {friendRuleset:settings.friendRuleset}),

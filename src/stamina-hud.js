@@ -39,7 +39,7 @@ export class StaminaHUD {
   constructor(document = globalThis.document) {
     this.document = document; this.obstacles = [];
     this.root = document.createElement('div'); this.root.className = 'player-stamina-layer';
-    this.bars = [0, 1].map(side => {
+    this.bars = [0, 1, 2, 3].map(side => {
       const element = document.createElement('div'); element.className = 'player-stamina';
       element.dataset.side = side; element.setAttribute('role', 'meter');
       element.setAttribute('aria-valuemin', '0'); element.setAttribute('aria-valuemax', '100');
@@ -53,11 +53,12 @@ export class StaminaHUD {
     this.obstacles = [...this.document.querySelectorAll('.shot-buttons,.shot-instruction,.movement-panel,.hud')]
       .map(e => e.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0);
   }
-  update(state, side, project, bounds, enabled = true) {
+  update(state, side, project, bounds, enabled = true, names = null) {
     this.root.hidden = !enabled || state.phase === 'over';
     if (this.root.hidden) return;
     const positions = state.players.map(p => project(p.x, 0, p.z));
     this.bars.forEach((bar, index) => {
+      if(!state.players[index]){bar.element.hidden=true;return;}
       const p = positions[index], own = index === side, display = staminaDisplay(state.players[index], state.phase, own);
       bar.element.hidden = p.depth < -1 || p.depth > 1;
       let y = p.y + 16;
@@ -69,8 +70,12 @@ export class StaminaHUD {
       bar.element.dataset.fatigued = String(display.fatigued);
       bar.element.title = '当前最高移动速度 ' + display.speed.toFixed(2) + 'm/s' + (display.fatigued ? ' · 疲劳增加强攻与压线失误风险' : ' · 控球稳定');
       bar.element.setAttribute('aria-valuetext', display.percent + '%；' + bar.element.title);
-      bar.fill.style.width = display.fraction * 100 + '%'; bar.label.textContent = display.label;
-      bar.element.setAttribute('aria-label', (own ? '你的' : '对手') + '体力');
+      bar.fill.style.width = display.fraction * 100 + '%';
+      const identity=state.format==='doubles'?(own?'你':index%2===side%2?'队友':`对手 ${index<2?1:2}`):'';
+      const name=names?.[index];
+      bar.label.textContent = name?(own?'你 · ':'')+Array.from(name).slice(0,8).join('')+' · '+display.percent+'%':(identity?identity+' · ':'')+display.label;
+      if(name)bar.element.title=name+' · '+bar.element.title;
+      bar.element.setAttribute('aria-label', (own ? '你的' : index%2===side%2?'队友':'对手') + '体力');
       bar.element.setAttribute('aria-valuenow', String(display.percent));
     });
   }

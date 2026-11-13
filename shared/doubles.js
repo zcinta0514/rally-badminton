@@ -31,7 +31,8 @@ export function contactOrder(state) {
   if(ta!==tb) return ta-tb;
   const da=Math.hypot(pa.x-state.shuttle.x,pa.z-state.shuttle.z),db=Math.hypot(pb.x-state.shuttle.x,pb.z-state.shuttle.z);
   if(Math.abs(da-db)>1e-8) return da-db;
-  return ((a/2|0)-(state._contactTie%2)+2)%2-((b/2|0)-(state._contactTie%2)+2)%2 || a-b;
+  const priority=team=>(state._contactTieByTeam?.[team]??state._contactTie)%2;
+  return ((a/2|0)-priority(a%2)+2)%2-((b/2|0)-priority(b%2)+2)%2 || a-b;
  });
 }
 /** Team commitment persists for a flight, but an unreachable primary can be rescued. */
