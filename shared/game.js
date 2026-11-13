@@ -458,14 +458,19 @@ function playShot(state, side, request, serving = false) {
       skill = 'cannon'; h.warning = null;
       h.recoverUntil = state.time + HELL.recovery;
     } else {
-      skill = 'phantom'; h.warning = null;
-      target = getShotTarget(state, side, { ...request, shot: 'drop', aimDepth: .65, charge: .2 });
+      const opponent = state.players[1 - side];
+      // Situational variations retain readable phantom trails and real contact.
+      skill = opponent.z > 4.2 ? 'netDrop'
+        : Math.abs(opponent.vx) > 1.8 && ball.y > 1.2 ? 'drive' : 'phantom';
+      h.warning = null;
+      target = getShotTarget(state, side, { ...request, shot: 'drop',
+        aimDepth: skill === 'netDrop' ? -1 : skill === 'drive' ? 1 : .65, charge: .2 });
     }
   }
   const type = target.type;
-  if (skill === 'cannon' || skill === 'rescue') {
+  if (skill === 'cannon' || skill === 'rescue' || skill === 'drive') {
     const duration = skill === 'rescue' ? Math.max(1.25, target.duration * .85)
-      : Math.max(.48, minimumNetDuration(ball, target.aimX, target.aimZ, .14), target.duration * .82);
+      : Math.max(.48, minimumNetDuration(ball, target.aimX, target.aimZ, .14), target.duration * (skill === 'drive' ? .9 : .82));
     const launch = horizontalLaunch(ball, { x: target.aimX, z: target.aimZ }, duration);
     target = { ...target, ...launch, vy: (TUNING.gravity * duration * duration / 2 - ball.y) / duration, duration };
   }
@@ -854,10 +859,10 @@ function canRunToIncoming(player, ball, landingTime) {
   for (let t = 0; t < landingTime; t += .025) {
     const point = liveFlightPoint(ball, t);
     if (point.y < TUNING.minHitHeight || point.y > TUNING.maxHitHeight || point.z >= -.07 || player.cooldown > t) continue;
-    const runTime = Math.max(0, t - .06);
+    const runTime = Math.max(0, t - .09);
     const accelerating = Math.min(runTime, toTop);
     const travel = initial * accelerating + .5 * acceleration * accelerating ** 2 + speed * Math.max(0, runTime - toTop);
-    if (Math.hypot(point.x-player.x, point.z-player.z) <= TUNING.reach + role.reachBonus + travel - .2) return true;
+    if (Math.hypot(point.x-player.x, point.z-player.z) <= TUNING.reach + role.reachBonus + travel - .3) return true;
   }
   return false;
 }
@@ -899,8 +904,8 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     const legal = landing && landing.event === 'landing' && !landing.out && !landing.serviceFault && landing.side === side;
     const distance = Math.hypot(ball.x - player.x, ball.z - player.z);
     const diveContact = liveFlightPoint(ball, Math.min(HELL.divePrepare + HELL.diveTime, landing?.time * .7 || 0));
-    if (legal && state.time >= h.nextDiveAt && landing.time < .85 && landing.time > HELL.divePrepare + .12
-        && diveContact.y < 1.35 && distance > TUNING.reach + .2
+    if (legal && state.time >= h.nextDiveAt && landing.time < .95 && landing.time > HELL.divePrepare + .12
+        && diveContact.y < 1.45 && distance > TUNING.reach + .2
         && !canRunToIncoming(player, ball, landing.time)
         && Math.hypot(diveContact.x-player.x,diveContact.z-player.z) > .5
         && Math.hypot(landing.x - player.x, landing.z - player.z) < HELL.diveSpeed * HELL.diveTime

@@ -1,13 +1,13 @@
 import { sampleShuttleFlight } from './shuttle-flight.js';
 
 export const HELL = Object.freeze({ targets: Object.freeze([2, 5]), chargeTime: .22, recovery: .18,
-  divePrepare: .08, diveTime: .22, diveDuration: .7, diveSpeed: 18, diveInterval: 4, moveScale: 1.48, recoveryMoveScale: .85,
+  divePrepare: .08, diveTime: .22, diveDuration: .7, diveSpeed: 18, diveInterval: 3, moveScale: 1.57, recoveryMoveScale: .85,
   reaction: .016, error: .02 });
 
 export function createHellChallenge() {
   return { kind: 'hell', bossSide: 1, warning: null,
     active: null, rescue: null, rescueUses: 0, recoverUntil: 0, nextDiveAt: 0,
-    counts: { phantom: 0, cannon: 0, rescue: 0 } };
+    counts: { phantom: 0, cannon: 0, rescue: 0, netDrop: 0, drive: 0 } };
 }
 
 export function resetHellRally(challenge) {
@@ -22,7 +22,7 @@ export function hellStatus(state) {
   if (h.rescue && !h.rescue.hit) return { key: 'rescue', title: '鱼跃救球', hint: '难接低球才扑救 · 抓住起身空当' };
   if (h.warning) return { key: 'charge', title: '重炮蓄力', hint: '线路已锁定 · 提前站位，挡回后反攻' };
   if (h.active?.hitId === state.hitId && state.shuttle.lastHit === h.bossSide) {
-    return h.active.kind === 'phantom'
+    return ['phantom', 'netDrop', 'drive'].includes(h.active.kind)
       ? { key: 'phantom', title: '四重幻影', hint: '追踪实线真球 · 虚影过网前消散' }
       : h.active.kind === 'cannon'
         ? { key: 'cannon', title: '重炮来袭', hint: '稳住回球 · 对手随后回位减速' }
@@ -35,12 +35,12 @@ export function hellStatus(state) {
 // Presentation only: fake flight points never enter collision, prediction or AI.
 export function phantomPositions(state) {
   const h = state?.challenge, fx = h?.active;
-  if (fx?.kind !== 'phantom' || fx.hitId !== state.hitId || state.phase !== 'rally' || !state.shuttle.active) return [];
+  if (!['phantom', 'netDrop', 'drive'].includes(fx?.kind) || fx.hitId !== state.hitId || state.phase !== 'rally' || !state.shuttle.active) return [];
   const age = state.time - fx.at;
   if (age < 0 || age >= fx.fadeAt) return [];
   const point = sampleShuttleFlight(fx.launch, age);
   const spread = Math.sin(Math.min(1, age / fx.fadeAt) * Math.PI / 2);
-  const opacity = .48 * Math.min(1, (fx.fadeAt - age) / .16);
+  const opacity = .60 * Math.min(1, (fx.fadeAt - age) / .16);
   return [-1, 1, 2].map((lane, index) => ({ x: point.x + lane * .62 * spread,
     y: Math.max(.12, point.y + (index - 1) * .22 * spread), z: point.z + (index - 1) * .38 * spread, opacity }));
 }
