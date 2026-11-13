@@ -21,12 +21,36 @@ body .segments button { color:#afbeb1; border-radius:2px; }
 body .segments button.selected { color:#e1f1c5; background:#314837; box-shadow:inset 0 -2px #b8d88e; }
 
 /* Home: the community entrance is always exposed, separate from More. */
-body[data-screen=menu] #menu .menu-foot { flex-direction:row; }
-body[data-screen=menu] .topbar .top-actions :is(.icon-btn,#match-settings-toggle) { border:0; background:none; color:var(--ink); }
-body[data-screen=menu] .topbar .top-actions :is(.icon-btn,#match-settings-toggle):hover { color:var(--green); }
+body[data-screen=menu] #menu .menu-foot { position:relative; flex-direction:row; align-items:center; gap:26px; }
 body[data-screen=menu] #menu .community-entry { width:auto; flex:none; min-height:44px; padding:0; border:0; background:none; color:#d5dfcc; white-space:nowrap; font-size:12px; line-height:16px; -webkit-text-size-adjust:none; text-size-adjust:none; }
 body[data-screen=menu] #menu .community-entry:hover { color:#d6efac; }
 body[data-screen=menu] .lobby-more { width:auto; position:static; }
+body[data-screen=menu] #menu .lobby-more .menu-foot-actions { left:0; right:auto; }
+
+/* Lay out the preparation pages over the lobby scene without a panel. */
+body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) {
+  --entry-gutter:max(16px,var(--safe-left),var(--safe-right));
+  --entry-top:max(68px,calc(var(--safe-top) + 52px));
+  inset:var(--entry-top) 0 max(12px,var(--safe-bottom));
+  width:min(580px,calc(100% - 2 * var(--entry-gutter)));
+  max-width:none;
+  height:auto;
+  margin-inline:auto;
+  padding:0;
+  background:none;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+  text-shadow:0 1px 4px #07100e;
+}
+body[data-screen=menu] #menu.menu-panel:not([data-entry=home])::before,
+body[data-screen=menu] #menu.menu-panel:not([data-entry=home])::after { content:""; flex:1 0 0; }
+body[data-screen=menu] #menu[data-entry=solo] #mode-setup {
+  flex:0 0 auto;
+  align-items:center;
+  padding:0;
+}
+body[data-screen=menu] #menu[data-entry=solo] #solo-actions { width:min(100%,280px); gap:4px; }
+body[data-screen=menu] #menu[data-entry=solo] .lobby-action { font-size:20px; min-height:48px; }
 
 /* Center the title independently of the text link used to go back. */
 body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading,
@@ -95,7 +119,22 @@ body[data-screen=menu] #menu .rules-note { min-height:0; margin:6px 0 0; font-si
 .setup-reference summary::-webkit-details-marker { display:none; }
 body[data-screen=menu] #menu .setup-reference .role-note { display:block; min-height:0; margin:0; }
 body[data-screen=menu] #menu .entry-submit { grid-column:1/-1; justify-self:center; width:min(100%,220px); margin:4px auto 0; }
-body[data-screen=menu] #menu .entry-submit .primary-btn { justify-content:center; min-height:44px; margin:0; padding:8px 12px; }
+body[data-screen=menu] #menu .entry-submit .primary-btn,
+body #dialog-backdrop #waiting-dialog #ready-room {
+  justify-content:center;
+  min-height:44px;
+  padding:8px 12px;
+  color:var(--ink);
+  background:linear-gradient(90deg,#b3d78b29,transparent);
+  border:0;
+  border-left:3px solid #b8dc88;
+  border-radius:0;
+  font-size:15px;
+  text-shadow:0 1px 4px #07100e;
+}
+body[data-screen=menu] #menu .entry-submit .primary-btn { margin:0; }
+body[data-screen=menu] #menu .entry-submit .primary-btn:hover,
+body #dialog-backdrop #waiting-dialog #ready-room:hover { background:linear-gradient(90deg,#b3d78b46,transparent); }
 body[data-screen=menu] #menu :is(#player-name,#room-code) {
   background:#09140e60;
   border:0;
@@ -144,6 +183,7 @@ body #dialog-backdrop #waiting-dialog {
   border:0;
   background:none;
   box-shadow:none;
+  text-shadow:0 1px 4px #07100e;
 }
 body #dialog-backdrop #waiting-dialog h2 { margin:0; padding:0; font-size:22px; font-weight:550; }
 #waiting-dialog #copy-invite { margin-inline:auto; }
@@ -157,7 +197,7 @@ body #dialog-backdrop #waiting-dialog .room-code { margin:6px 0 0; padding:8px 4
 #waiting-dialog .room-mode-summary { font-size:11px; }
 #waiting-dialog .rule-note { padding:0; font-size:11px; line-height:1.5; }
 #waiting-dialog .rule-note + .rule-note { margin-top:4px; }
-#waiting-dialog #ready-room { justify-content:center; width:min(100%,220px); min-height:44px; margin:12px auto 0; padding:8px 12px; }
+#waiting-dialog #ready-room { width:min(100%,220px); margin:12px auto 0; }
 #waiting-dialog #ready-room:disabled { display:none; }
 @media (orientation:portrait), (max-width:480px) {
   #waiting-dialog .waiting-grid { grid-template-columns:1fr; gap:12px; }
@@ -202,9 +242,20 @@ body[data-shot-skin=glass] .shot-btn.smash.unavailable .key-face { border-color:
 body .hell-status { background:#14221ef0; border-color:#a48f65; border-radius:3px; }
 body .hell-status b { color:#ead29f; }
 body .hell-status span { color:#c6cdb9; }
+@media (max-height:600px) and (orientation:landscape) {
+  body[data-screen=menu] #menu .menu-foot { gap:20px; }
+  body[data-screen=menu] #menu .community-entry { font-size:11px; }
+}
 @media (min-width:521px) and (max-width:960px) and (orientation:landscape) {
-  body[data-screen=menu] #menu.menu-panel { --lobby-gutter:max(62px,calc(max(var(--safe-left),var(--safe-right)) + 46px)); --lobby-top:max(12px,var(--safe-top)); }
-  body[data-screen=menu] .topbar .top-actions { flex-direction:column; align-items:flex-end; gap:3px; }
+  body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) {
+    --entry-gutter:max(68px,calc(max(var(--safe-left),var(--safe-right)) + 50px));
+    --entry-top:max(12px,var(--safe-top));
+  }
+  body[data-screen=menu]:has(#menu:not([data-entry=home])) .topbar .top-actions {
+    flex-direction:column;
+    align-items:flex-end;
+    gap:3px;
+  }
 }
 @media (max-width:640px) and (orientation:landscape) {
   body[data-screen=menu] #menu :is(#friend-formats,#ai-formats) button { font-size:11px; padding-inline:1px; }
