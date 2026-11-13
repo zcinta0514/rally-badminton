@@ -417,3 +417,74 @@ body button:not(.shot-btn):active:not(:disabled) { opacity:.72; }
 @media(hover:hover) {
   body button:not(.shot-btn):hover:not(:disabled) { color:#d6efac !important; }
 }
+
+/* Results share the open, ruled composition of match preparation. */
+body #dialog-backdrop #result-dialog {
+  flex:0 1 720px; width:720px; display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(180px,1fr);
+  gap:32px; padding:28px 32px; border:0; border-radius:0;
+  background:linear-gradient(115deg,#14221efa,#101d19f5);
+  box-shadow:0 20px 70px #0003;
+}
+#result-dialog .result-summary,#result-dialog .result-actions { min-width:0; }
+#result-dialog .result-kicker,#result-dialog .result-actions-label {
+  color:#9bab9d; font-size:11px; line-height:1.5; letter-spacing:.08em;
+}
+body #dialog-backdrop #result-dialog h2 {
+  margin:6px 0 18px; padding:0; font-size:30px; line-height:1.25;
+}
+#result-dialog[data-outcome=win] #result-title { color:#d6e7b5; }
+#result-dialog .result-scoreboard {
+  padding:14px 0 12px; border-block:1px solid #b7c7ab30;
+}
+#result-dialog .result-team-names {
+  display:grid; grid-template-columns:1fr 1fr; gap:32px;
+  text-align:center; color:#c1cdbf; font-size:12px; line-height:1.5;
+}
+#result-dialog .result-team-names span { min-width:0; overflow-wrap:anywhere; }
+body #dialog-backdrop #result-dialog .result-score {
+  display:grid; grid-template-columns:1fr 32px 1fr; align-items:center;
+  margin:8px 0 4px; padding:0; border:0; font-size:64px;
+  line-height:1.05; letter-spacing:0; color:#e2e9d9;
+}
+#result-dialog .result-colon { color:#7c8e7d; font-size:32px; font-weight:400; }
+#result-dialog[data-outcome=win] #result-score-self,
+#result-dialog[data-outcome=loss] #result-score-other { color:#d6e7b5; }
+#result-dialog .result-score-label { text-align:center; color:#9bab9d; font-size:10px; line-height:1.5; letter-spacing:.12em; }
+#result-dialog #result-reason { margin:12px 0 0; color:#afbfaf; font-size:12px; line-height:1.6; overflow-wrap:anywhere; }
+#result-dialog .result-actions { align-self:center; padding-left:28px; border-left:1px solid #b7c7ab30; }
+#result-dialog .result-actions-label { display:block; margin-bottom:8px; }
+body #dialog-backdrop #result-dialog :is(.primary-btn,.secondary-btn,.text-btn) {
+  position:relative; width:100%; min-height:48px; margin:0; padding:12px 0;
+  border:0; border-radius:0; text-align:left; line-height:1.5;
+}
+body #dialog-backdrop #result-dialog .primary-btn { font-size:18px; font-weight:550; white-space:normal; }
+#result-dialog #rematch::before,#result-dialog #rematch::after {
+  content:''; position:absolute; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,#c3cec060,#c3cec018 85%,transparent);
+  pointer-events:none;
+}
+#result-dialog #rematch::before { top:0; opacity:.55; }
+#result-dialog #rematch::after {
+  bottom:0; transform:scaleX(.8); transform-origin:left;
+  transition:transform 320ms cubic-bezier(.22,.61,.36,1),opacity 320ms ease;
+}
+#result-dialog #rematch:is(:hover,:focus-visible)::after { transform:scaleX(1); }
+body #dialog-backdrop #result-dialog .secondary-btn { font-size:13px; font-weight:500; }
+body #dialog-backdrop #result-dialog .text-btn { color:#afbfaf; font-size:13px; }
+#result-dialog .result-record { margin:10px 0 0; text-align:left; font-size:11px; line-height:1.5; overflow-wrap:anywhere; }
+@media (orientation:landscape) and (max-height:500px) {
+  body #dialog-backdrop #result-dialog { padding:20px 24px; gap:24px; }
+  body #dialog-backdrop #result-dialog h2 { margin:4px 0 12px; font-size:26px; }
+  #result-dialog .result-scoreboard { padding:10px 0 8px; }
+  body #dialog-backdrop #result-dialog .result-score { font-size:54px; }
+  #result-dialog .result-actions { padding-left:24px; }
+}
+@media (max-width:540px) and (orientation:portrait) {
+  body #dialog-backdrop #result-dialog { grid-template-columns:minmax(0,1fr); gap:20px; padding:24px; }
+  #result-dialog .result-actions { padding:0; border:0; }
+  #result-dialog .result-actions-label { display:none; }
+}
+@media (prefers-reduced-motion:reduce) {
+  #result-dialog #rematch::after { transition:none; }
+}
