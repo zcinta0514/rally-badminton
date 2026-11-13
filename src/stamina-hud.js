@@ -71,7 +71,7 @@ export class StaminaHUD {
       bar.element.title = '当前最高移动速度 ' + display.speed.toFixed(2) + 'm/s' + (display.fatigued ? ' · 疲劳增加强攻与压线失误风险' : ' · 控球稳定');
       bar.element.setAttribute('aria-valuetext', display.percent + '%；' + bar.element.title);
       bar.fill.style.width = display.fraction * 100 + '%';
-      const identity=state.format==='doubles'?(own?'你':index%2===side%2?'队友':`对手 ${index<2?1:2}`):'';
+      const identity=state.format==='doubles'?(own?'你':index%2===side%2?'人机队友':({easy:'入门',medium:'进阶',hard:'高手'}[state.difficulty]||'人机')+'陪练'):'';
       const name=names?.[index];
       bar.label.textContent = name?(own?'你 · ':'')+Array.from(name).slice(0,8).join('')+' · '+display.percent+'%':(identity?identity+' · ':'')+display.label;
       if(name)bar.element.title=name+' · '+bar.element.title;
