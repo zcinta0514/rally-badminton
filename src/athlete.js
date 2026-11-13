@@ -45,6 +45,7 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
   const move=unit(v(vx,0,vz));
   const action=player.action && time<=player.action.endsAt ? player.action : null;
   const type=action?.type??null;
+  const preparing=action?.stage==='prepare';
   let active=0,jump=0,crouch=0,lunge=0,stroke=0,racketRoll=0;
   let racketHead=turn(v(.47,1.52+stride*.035*run,-.54+stride*.1*run),heading);
   let localContact=null;
@@ -61,10 +62,12 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
     const low=localContact.y<1.25;
     // Anticipate wide contacts instead of dragging a folded arm across the
     // torso during the rules' shortest release window.
-    const smashSetup=smash?v(localContact.x-.35,0,localContact.z+.2):v();
+    // While the button is held the predicted shuttle can be across the court.
+    // Keep the preparation at the player and aim the swing on release.
+    const smashSetup=smash&&!preparing?v(localContact.x-.35,0,localContact.z+.2):v();
     const smashWindup=turn(add(v(.50,1.65,.68),smashSetup),heading);
     lunge=(low?.9:.4)*active;
-    if(action.stage==='prepare') {
+    if(preparing) {
       const ready=smooth((time-action.startedAt)/.14);
       active=.55*ready;crouch=.13*ready;lunge*=ready;
       stroke=-.3*ready;racketRoll=-.45*ready;
@@ -97,11 +100,11 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
     }
   }
   const contactForAim=turn(localContact||v(),-heading);
-  const smashAim=smash?clamp(Math.atan2(.35-contactForAim.x,Math.max(.75,-contactForAim.z)),-.9,.9):0;
+  const smashAim=smash&&!preparing?clamp(Math.atan2(.35-contactForAim.x,Math.max(.75,-contactForAim.z)),-.9,.9):0;
   if(smash){
     stroke=smash.chest+smashAim*smash.weight; racketRoll=smash.roll;
     crouch=smash.crouch;
-    if(action.stage!=='prepare')jump=Math.max(action.jumpHeight||0,clamp(localContact.y-2.5,0,.8))*smash.flight;
+    if(!preparing)jump=Math.max(action.jumpHeight||0,clamp(localContact.y-2.5,0,.8))*smash.flight;
     lunge=0;
   }
   const reach=localContact?unit(v(localContact.x,0,localContact.z)):v(0,0,-1);
@@ -188,10 +191,7 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
   const elbowAngle=smash?.elbowSwivel??Math.atan(.15);
   const authoredPlane=new THREE.Vector3(0,-Math.cos(elbowAngle),Math.sin(elbowAngle)).applyQuaternion(armTurn);
   let pole=smash?turn(v(authoredPlane.x,authoredPlane.y,authoredPlane.z),chestYaw):legacyPole;
-  // A prepared release already starts in the authored throwing plane. Blend
-  // arm entry/cancellation; re-blending that loaded plane delays the elbow.
-  const loadedArm=smash && transition?.loadedSmash;
-  const armTransition=from && (smash || from.actionType==='smash') && !loadedArm;
+  const armTransition=from && (smash || from.actionType==='smash');
   if(armTransition)pole=mix(sub(from.joints.rightElbow,shoulder),pole,blend);
   // Solve the upper arm and combined forearm/shaft first, then the wrist.
   // The combined length limits wrist flexion while all three lengths stay exact.
@@ -408,7 +408,7 @@ export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze
     const striking=action&&action.stage!=='prepare';
     const canBlend=striking?time<action.contactAt:visual.wasFrozen||time-visual.poseTime<.25;
     const loadedSmash=striking&&action.type==='smash'&&previousPose.actionType==='smash'&&visual.poseKey?.endsWith(':prepare');
-    visual.poseTransition=canBlend?{from:previousPose,loadedSmash,start:time,end:striking
+    visual.poseTransition=canBlend?{from:previousPose,start:time,end:striking
       ?loadedSmash?Math.min(action.contactAt,time+.035):action.contactAt:time+.2}:null;
   }
   visual.wasFrozen=false;visual.poseKey=key;visual.poseTime=time;
@@ -422,7 +422,7 @@ export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze
   const feet={};for(const name of ['left','right']){const f=motion.feet[name].world;feet[name]=v((f.x-player.x)*sign,f.y,(f.z-player.z)*sign);}
   const pose=sampleAthletePose(player,side,shuttle,time,{moveCycle:motion.cycle,brake:player.action?0:motion.brake,
     speed:motion.speed,velocity:motion.velocity,acceleration:motion.acceleration,heading:motion.heading,feet,
-    rescue:diving?rescue:null,transition:transition&&blend<1?{from:transition.from,weight:blend,loadedSmash:transition.loadedSmash}:null});
+    rescue:diving?rescue:null,transition:transition&&blend<1?{from:transition.from,weight:blend}:null});
   pose.feet={};
   for(const name of ['left','right']){
     const ankle=pose.joints[`${name}Ankle`],foot=motion.feet[name],world=v(player.x+ankle.x*sign,ankle.y,player.z+ankle.z*sign);
