@@ -21,80 +21,47 @@ body .segments button { color:#afbeb1; border-radius:2px; }
 body .segments button.selected { color:#e1f1c5; background:#314837; box-shadow:inset 0 -2px #b8d88e; }
 
 /* Home: the community entrance is always exposed, separate from More. */
-body[data-screen=menu] #menu .menu-foot { position:relative; flex-direction:row; align-items:center; gap:26px; }
+body[data-screen=menu] #menu .menu-foot { flex-direction:row; }
+body[data-screen=menu] .topbar .top-actions :is(.icon-btn,#match-settings-toggle) { border:0; background:none; color:var(--ink); }
+body[data-screen=menu] .topbar .top-actions :is(.icon-btn,#match-settings-toggle):hover { color:var(--green); }
 body[data-screen=menu] #menu .community-entry { width:auto; flex:none; min-height:44px; padding:0; border:0; background:none; color:#d5dfcc; white-space:nowrap; font-size:12px; line-height:16px; -webkit-text-size-adjust:none; text-size-adjust:none; }
 body[data-screen=menu] #menu .community-entry:hover { color:#d6efac; }
 body[data-screen=menu] .lobby-more { width:auto; position:static; }
-body[data-screen=menu] #menu .lobby-more .menu-foot-actions { left:0; right:auto; }
 
-/* Keep the venue visible around each mode's preparation panel. */
-body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) {
-  --entry-left:max(clamp(16px,4vw,56px),calc(var(--safe-left) + 8px));
-  --entry-top:max(clamp(12px,12dvh,120px),var(--safe-top));
-  --entry-width:640px;
-  inset:var(--entry-top) auto auto var(--entry-left);
-  width:min(var(--entry-width),calc(100% - var(--entry-left) - max(80px,calc(var(--safe-right) + 60px))));
-  max-width:none;
-  height:max-content;
-  max-height:calc(100dvh - var(--entry-top) - max(12px,var(--safe-bottom)));
-  padding:16px 20px;
-  background:linear-gradient(110deg,#1c2e25f7,#101d19f2);
-  border:1px solid var(--line);
-  border-radius:4px;
-  box-shadow:0 12px 40px #08110b66;
-  scrollbar-color:#516454 transparent;
-  scroll-padding-block:12px;
-  overscroll-behavior:contain;
-}
-body[data-screen=menu] #menu.menu-panel[data-entry=solo] { --entry-width:396px; }
+/* Center the title independently of the text link used to go back. */
 body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading,
 #waiting-dialog .waiting-heading {
-  display:flex;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
   align-items:center;
-  gap:16px;
+  gap:6px;
   min-height:44px;
-  border-bottom:1px solid var(--line);
 }
-body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading { margin:0 0 12px; }
-body[data-screen=menu] #menu .entry-heading h2 { margin:0; font-size:24px; font-weight:550; line-height:1.2; }
+body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading { margin:0 0 8px; }
+body[data-screen=menu] #menu .entry-heading h2 { margin:0; font-size:clamp(20px,4.6vw,32px); font-weight:550; line-height:1.2; text-align:center; }
 body[data-screen=menu] #menu #entry-back,
 #waiting-dialog :is(#leave-waiting,#copy-invite) {
-  flex:none;
+  justify-self:start;
   width:auto;
   min-height:44px;
   margin:0;
   padding:6px 0;
   background:none;
   text-decoration:none;
+  font-size:11px;
 }
 body[data-screen=menu] #menu #entry-back:hover,
 #waiting-dialog :is(#leave-waiting,#copy-invite):hover { color:#d6efac; }
-body[data-screen=menu] #menu[data-entry=solo] #mode-setup { padding:0; }
-body[data-screen=menu] #menu[data-entry=solo] .lobby-action { font-size:20px; min-height:48px; }
-body[data-screen=menu] #menu .preparation-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.65fr); gap:20px; }
+body[data-screen=menu] #menu .preparation-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:clamp(14px,4vw,40px);
+  row-gap:4px;
+}
 body[data-screen=menu] #menu .preparation-grid > * { min-width:0; }
-body[data-screen=menu] #menu .setup-heading,
 body[data-screen=menu] #menu .field-label,
 body[data-screen=menu] #menu .input-label { color:var(--muted); font-size:12px; font-weight:500; }
-body[data-screen=menu] #menu :is(.setup-heading,.input-label) { margin:0 0 6px; }
-body[data-screen=menu] #menu .role-grid { display:grid; grid-template-columns:1fr; gap:0; margin:0; }
-body[data-screen=menu] #menu .role-card {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-height:44px;
-  padding:6px 8px;
-  border:0;
-  border-bottom:1px solid var(--line);
-  border-radius:0;
-  background:transparent;
-  color:var(--muted);
-}
-body[data-screen=menu] #menu .role-card strong { font-size:13px; font-weight:500; margin:0; }
-body[data-screen=menu] #menu .role-icon { display:block; height:18px; }
-body[data-screen=menu] #menu .role-icon svg { width:18px; height:18px; }
-body[data-screen=menu] #menu .role-card.selected { color:#e1f1c5; background:transparent; }
-body[data-screen=menu] #menu .role-card.selected::after { display:block; position:static; margin-left:auto; }
+body[data-screen=menu] #menu .input-label { margin:0 0 6px; }
 body[data-screen=menu] #menu .setup-row { display:grid; grid-template-columns:4.3em minmax(0,1fr); align-items:center; gap:8px; border:0; padding:0; margin:0; font-size:12px; }
 body[data-screen=menu] #menu .setup-row + .setup-row { margin-top:5px; }
 body[data-screen=menu] #menu .segments {
@@ -103,7 +70,6 @@ body[data-screen=menu] #menu .segments {
   background:transparent;
   border:0;
   border-radius:0;
-  box-shadow:inset 0 -1px var(--line);
 }
 body[data-screen=menu] #menu .segments button {
   min-height:44px;
@@ -128,37 +94,38 @@ body[data-screen=menu] #menu .rules-note { min-height:0; margin:6px 0 0; font-si
 .setup-reference[open] summary::before { content:'−'; }
 .setup-reference summary::-webkit-details-marker { display:none; }
 body[data-screen=menu] #menu .setup-reference .role-note { display:block; min-height:0; margin:0; }
-body[data-screen=menu] #menu #ai-start-controls { display:block; margin:8px 0 0; padding:0; }
-body[data-screen=menu] #menu :is(#start-ai-confirm,#start-hell-confirm,#create-room,#join-room) { min-height:44px; padding:8px 12px; }
-body[data-screen=menu] #menu .entry-content { overflow:visible; padding:0; }
-body[data-screen=menu] #menu #friend-tabs { margin-bottom:10px; }
+body[data-screen=menu] #menu .entry-submit { grid-column:1/-1; justify-self:center; width:min(100%,220px); margin:4px auto 0; }
+body[data-screen=menu] #menu .entry-submit .primary-btn { justify-content:center; min-height:44px; margin:0; padding:8px 12px; }
+body[data-screen=menu] #menu :is(#player-name,#room-code) {
+  background:#09140e60;
+  border:0;
+  border-bottom:1px solid #829586;
+  border-radius:0;
+}
+body[data-screen=menu] #menu .entry-content { flex:none; overflow:visible; padding:0; }
+body[data-screen=menu] #menu #friend-tabs { width:min(100%,260px); margin:0 auto 6px; }
 body[data-screen=menu] #menu #player-name { height:44px; font-size:16px; }
 body[data-screen=menu] #menu #player-profile-note { margin:4px 0 8px; font-size:11px; line-height:1.5; }
 body[data-screen=menu] #menu .room-mode-picker { margin:6px 0 0; padding:0; background:none; border:0; }
 body[data-screen=menu] #menu #friend-mode-note { display:block; font-size:11px; margin-top:5px; color:#e7c49b; }
-body[data-screen=menu] #menu #create-room { margin:8px 0 0; }
-body[data-screen=menu] #menu .join-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; margin:0; }
-body[data-screen=menu] #menu #join-room { margin:0; width:auto; }
 body[data-screen=menu] #menu #room-code { font-family:'Rally Numerals','Rally UI',sans-serif; font-size:18px; letter-spacing:.12em; min-height:44px; }
 body[data-screen=menu] #menu #room-code::placeholder { font-family:'Rally UI',sans-serif; font-size:13px; letter-spacing:0; }
 body[data-screen=menu] #menu #friends-network-note { display:block; margin:6px 0 0; font-size:11px; }
 body[data-screen=menu] #menu .hell-contract {
   gap:8px;
   padding:10px 8px;
-  background:#13221c;
-  border:1px solid var(--line);
-  border-radius:3px;
+  background:none;
+  border:0;
   text-align:center;
 }
 body[data-screen=menu] #menu .hell-contract strong { color:#deebba; font-family:'Rally Numerals','Rally UI',sans-serif; }
 body[data-screen=menu] #menu .hell-contract small { font-family:'Rally UI',sans-serif; }
 body[data-screen=menu] #menu .hell-setup .setup-row { margin-top:8px; }
 body[data-screen=menu] #menu .hell-skills { gap:0; margin:0; }
-body[data-screen=menu] #menu .hell-skills article { padding:6px 0; border:0; border-bottom:1px solid var(--line); border-radius:0; background:transparent; }
+body[data-screen=menu] #menu .hell-skills article { padding:3px 0; border:0; border-radius:0; background:transparent; }
 body[data-screen=menu] #menu .hell-skills article:first-child { padding-top:0; }
 body[data-screen=menu] #menu .hell-skills b { color:var(--ink); font-weight:550; }
 body[data-screen=menu] #menu .hell-skills p { color:var(--muted); opacity:1; }
-body[data-screen=menu] #menu #start-hell-confirm { margin:8px 0 0; }
 
 /* The same matte surfaces continue through rooms, pause, results and settings. */
 body #dialog-backdrop { background:#060d0ab8; }
@@ -169,28 +136,29 @@ body #dialog-backdrop .dialog .close-dialog { background:#25392d; color:#e3eadc;
 body #dialog-backdrop .dialog .room-code,body #dialog-backdrop .dialog .pause-clock { color:#d6e7b5; background:transparent; border-color:#40544a; font-family:'Rally Numerals','Rally UI',sans-serif; }
 body #dialog-backdrop .dialog :is(.rule-note,.room-mode-summary,.waiting-status,.lobby-players) { color:#b9c9b9; background:transparent; border-color:#40544a; }
 body[data-screen=menu]:has(#waiting-dialog:not([hidden])) #menu { visibility:hidden; }
-body #dialog-backdrop:has(#waiting-dialog:not([hidden])) { background:#060d0a70; backdrop-filter:none; }
+body #dialog-backdrop:has(#waiting-dialog:not([hidden])) { background:none; backdrop-filter:none; }
 body #dialog-backdrop #waiting-dialog {
   flex-basis:548px;
   width:548px;
   padding:14px;
-  border-top:1px solid var(--line);
-  background:linear-gradient(110deg,#1c2e25f7,#101d19f2);
+  border:0;
+  background:none;
+  box-shadow:none;
 }
 body #dialog-backdrop #waiting-dialog h2 { margin:0; padding:0; font-size:22px; font-weight:550; }
-#waiting-dialog #copy-invite { text-align:left; }
-#waiting-dialog #copy-invite span { margin-left:4px; }
-#waiting-dialog .waiting-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.3fr); gap:16px; margin-top:8px; }
+#waiting-dialog #copy-invite { margin-inline:auto; }
+#waiting-dialog .waiting-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:8px; }
+#waiting-dialog .waiting-invite { text-align:center; }
 #waiting-dialog .field-label { color:var(--muted); }
-body #dialog-backdrop #waiting-dialog .room-code { margin:6px 0 0; padding:8px 4px; border:1px solid var(--line); border-radius:3px; font-size:34px; }
+body #dialog-backdrop #waiting-dialog .room-code { margin:6px 0 0; padding:8px 4px; border:0; font-size:34px; }
 #waiting-dialog :is(.waiting-status,.lobby-players,.rule-note) { margin:0; overflow-wrap:anywhere; }
 #waiting-dialog .waiting-status { text-align:left; font-size:12px; }
 #waiting-dialog .lobby-players { margin:6px 0; font-size:12px; line-height:1.5; }
 #waiting-dialog .room-mode-summary { font-size:11px; }
 #waiting-dialog .rule-note { padding:0; font-size:11px; line-height:1.5; }
 #waiting-dialog .rule-note + .rule-note { margin-top:4px; }
-#waiting-dialog #ready-room { min-height:44px; margin:8px 0 0; padding:8px 12px; }
-body #dialog-backdrop #ready-room:disabled { background:#25392d; color:var(--muted); border-color:var(--line); }
+#waiting-dialog #ready-room { justify-content:center; width:min(100%,220px); min-height:44px; margin:12px auto 0; padding:8px 12px; }
+#waiting-dialog #ready-room:disabled { display:none; }
 @media (orientation:portrait), (max-width:480px) {
   #waiting-dialog .waiting-grid { grid-template-columns:1fr; gap:12px; }
 }
@@ -234,36 +202,17 @@ body[data-shot-skin=glass] .shot-btn.smash.unavailable .key-face { border-color:
 body .hell-status { background:#14221ef0; border-color:#a48f65; border-radius:3px; }
 body .hell-status b { color:#ead29f; }
 body .hell-status span { color:#c6cdb9; }
-@media (max-height:600px) and (orientation:landscape) {
-  body[data-screen=menu] #menu .menu-foot { gap:20px; }
-  body[data-screen=menu] #menu .community-entry { font-size:11px; }
-  body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) { --entry-top:max(12px,var(--safe-top)); padding:10px 14px; }
-  body[data-screen=menu] #menu.menu-panel:not([data-entry=home],[data-entry=solo]) { --entry-width:clamp(510px,67vw,640px); }
-  body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading { margin-bottom:8px; }
+@media (min-width:521px) and (max-width:960px) and (orientation:landscape) {
+  body[data-screen=menu] #menu.menu-panel { --lobby-gutter:max(62px,calc(max(var(--safe-left),var(--safe-right)) + 46px)); --lobby-top:max(12px,var(--safe-top)); }
+  body[data-screen=menu] .topbar .top-actions { flex-direction:column; align-items:flex-end; gap:3px; }
 }
-@media (min-width:521px) and (max-width:920px) and (orientation:landscape) {
-  body[data-screen=menu]:has(#menu:not([data-entry=home])) .topbar .top-actions { flex-direction:column; align-items:flex-end; }
-}
-@media (min-width:521px) and (max-width:640px) and (orientation:landscape) {
-  body[data-screen=menu] #menu :is(.friend-setup .preparation-player,.hell-setup) .setup-row { grid-template-columns:1fr; gap:4px; }
+@media (max-width:640px) and (orientation:landscape) {
+  body[data-screen=menu] #menu :is(#friend-formats,#ai-formats) button { font-size:11px; padding-inline:1px; }
+  body[data-screen=menu] #menu .setup-row { gap:4px; }
 }
 @media (orientation:portrait), (max-width:520px) {
-  body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) {
-    --entry-top:max(72px,calc(var(--safe-top) + 60px));
-    --entry-left:max(12px,var(--safe-left));
-    width:min(var(--entry-width),calc(100% - var(--entry-left) - max(12px,var(--safe-right))));
-    padding:12px;
-  }
-  body[data-screen=menu] #menu .preparation-grid { grid-template-columns:1fr; gap:12px; }
-  body[data-screen=menu] #menu .entry-heading h2 { font-size:20px; }
-  body[data-screen=menu] #menu .role-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
-  body[data-screen=menu] #menu .role-card { justify-content:center; padding:6px 4px; gap:4px; }
-  body[data-screen=menu] #menu .role-card.selected::after { margin-left:0; }
+  body[data-screen=menu] #menu .preparation-grid { grid-template-columns:1fr; gap:10px; }
 }
-@media (max-width:360px) {
-  body[data-screen=menu] #menu .role-icon { display:none; }
-}
-
 /* Keep all match actions on screen even on a 320px portrait viewport. */
 @media (max-width:360px) {
   body[data-screen=match] .topbar { gap:4px; }
@@ -277,7 +226,7 @@ body .hell-status span { color:#c6cdb9; }
   body button.primary-btn:hover:not(:disabled),body .dialog button.primary-btn:hover:not(:disabled) { background:#d1e9ad; }
   body button.secondary-btn:hover:not(:disabled),body .dialog button.secondary-btn:hover:not(:disabled),body .role-card:not(.selected):hover,body .icon-btn:hover { background:#314837; border-color:#a9bba0; }
   body .segments button:not(.selected):hover { background:#263e2e; }
-  body[data-screen=menu] #menu :is(.segments button,.role-card):not(.selected):hover:not(:disabled) {
+  body[data-screen=menu] #menu .segments button:not(.selected):hover:not(:disabled) {
     color:var(--ink);
     background:transparent;
   }

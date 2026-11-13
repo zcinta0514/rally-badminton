@@ -27,6 +27,39 @@ test('grounded smash does not slide its feet through the airborne scissor trajec
     for(const f of Object.values(m.feet))assert.ok(f.y===0 && f.z===0);
   }
 });
+
+test('holding smash with a distant incoming shuttle keeps the rig grounded at the player',async()=>{
+  const {createMatch,stepMatch}=await import('../shared/game.js');
+  for(const side of [0,1]){
+    const state=createMatch(),sign=side===0?1:-1;
+    state.phase='rally';state.service.active=false;state.time=1;
+    const p=state.players[side];
+    Object.assign(p,{x:0,z:3.8*sign,vx:0,vz:0});
+    Object.assign(state.shuttle,{x:2.5*sign,y:4.7,z:-4.5*sign,
+      vx:-2*sign,vy:2,vz:9*sign,active:true,lastHit:1-side});
+    const inputs=[{},{}];
+    inputs[side]={prepare:'smash',charge:1};
+    let loadedPose;
+    for(let frame=0;frame<60;frame++){
+      stepMatch(state,inputs,1/60);
+      assert.equal(p.action.stage,'prepare');
+      const pose=sampleAthletePose(p,side,state.shuttle,state.time);
+      const {pelvis,leftAnkle,rightAnkle}=pose.joints;
+      assert.ok(Math.hypot(pelvis.x,pelvis.z)<.35,'the rig must stay over its court position');
+      assert.equal(pose.jump,0);
+      assert.equal(leftAnkle.y,.085);
+      assert.equal(rightAnkle.y,.085);
+      if(frame===12)loadedPose=pose;
+      if(frame>12){
+        assert.deepEqual(pose.joints,loadedPose.joints,'the loaded stance must stay steady as the shuttle moves');
+        assert.deepEqual(pose.racketHead,loadedPose.racketHead);
+      }
+    }
+    stepMatch(state,[{},{}],1/60);
+    assert.equal(p.action,null);
+    assert.equal(state.hitId,0);
+  }
+});
 test('smash racket travels through exact mirrored contact with continuous impact velocity',()=>{
   const h=1e-5;
   for(const side of [0,1]){

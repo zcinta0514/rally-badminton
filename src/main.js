@@ -247,7 +247,8 @@ function syncEntrySettings(){
 }
 function setFriendAction(action){
   friendAction=action==='join'?'join':'create';groupChoice('friend-tabs','action',friendAction);
-  $('friend-create-options').hidden=friendAction!=='create';$('friend-join-options').hidden=friendAction!=='join';
+  $('friend-create-options').hidden=$('create-room').hidden=friendAction!=='create';
+  $('friend-join-options').hidden=$('join-room').hidden=friendAction!=='join';
 }
 function openEntry(stage){
   if(state||room||peerAttempt||connecting)return;
@@ -357,7 +358,6 @@ function handleNetwork(message){
     currentPlayerId=message.players[side]?.playerId||null;
     setText('waiting-code',message.code);
     setText('waiting-mode',message.rules?.finale==='father-son'?'父子局 · 赛后互动不可跳过':'普通对局 · 无赛后互动');
-    setText('waiting-status',message.players.filter(Boolean).length===2?'● 对手已加入，可以准备':'● 房间已创建，等待对手加入');
     history.replaceState(null,'',`?room=${encodeURIComponent(message.code)}`);
     if(!state){mode='waiting';
       const connected=message.players.filter(p=>p?.connected).length;
@@ -367,7 +367,9 @@ function handleNetwork(message){
       setText('waiting-consent',parent?'父子局：败者跪拜叫爸爸，约3秒不可跳过。双方确认并准备后开始比赛。':'确认本房间规则，双方准备后倒数 3 秒开始比赛。');
       $('ready-room').disabled=connected!==2||ready.includes(side)||!message.readyRequired;
       setText('ready-room',connected!==2?'等待对手加入':ready.includes(side)?'已准备，等待对手':parent?'同意父子局并准备':'确认规则并准备');
-      if(connected!==2&&message.players[1])setText('waiting-status','对手已断开，请重新创建房间');
+      setText('waiting-status', connected===2
+        ? (ready.includes(side)?'已准备，等待对手':'对手已加入，可以准备')
+        : (message.players[1]?'对手已断开，请重新创建房间':'等待对手加入'));
       dialog('waiting-dialog');}
   }else if(message.type==='state'){
     if(message.state?.rulesVersion!==RULES_VERSION){showToast('比赛规则已更新，请双方联网刷新后重新建房');controls.setEnabled(false);return;}
@@ -447,8 +449,8 @@ function setRoomBusy(busy,type){
   connecting=busy;
   $('create-room').disabled=busy;$('join-room').disabled=busy;
   for(const id of ['friend-modes','friend-roles','friend-formats','friend-tabs'])for(const choice of $(id).querySelectorAll('button'))choice.disabled=busy;
-  setText('create-room',busy&&type==='create'?'正在创建…':'创建房间 ＋');
-  setText('join-room',busy&&type==='join'?'正在连接…':'加入 ↗');
+  setText('create-room',busy&&type==='create'?'正在创建…':'创建房间');
+  setText('join-room',busy&&type==='join'?'正在连接…':'加入房间');
 }
 function peerClosed(error){
   clearFinale();
