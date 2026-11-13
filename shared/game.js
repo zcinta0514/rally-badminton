@@ -218,6 +218,7 @@ function changeEnds(state, reason) {
 }
 
 export function pauseMatch(state, side) {
+  side = playerTeam(state, side);
   if ((side !== 0 && side !== 1) || !['serve', 'rally', 'point', 'intermission'].includes(state.phase) || state.pause.used[side] >= 1) return false;
   for (const p of state.players) { p.recoveryWait = 0; p.staminaRate = 0; p.staminaStatus = 'idle'; }
   state.pause.by = side; state.pause.previousPhase = state.phase;
@@ -878,7 +879,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     if (h && !smashOpportunity(state, side).highChance) decision.shot = 'drop';
     // Reaction delay and spatial prediction error remain difficulty-dependent.
     // Every reachable return is attempted; the common contact model causes errors.
-    memory = state._ai[side] = { hitId: state.hitId, ready: state.time + config.reaction,
+    memory = state._ai[side] = { hitId: state.hitId, ready: state.format === 'doubles' ? state._doublesAI[playerTeam(state, side)].ready : state.time + config.reaction,
       errorX: (random(state) - 0.5) * config.error * 2, errorZ: (random(state) - 0.5) * config.error * 2,
       shot: decision.shot, aim: decision.aim, aimDepth: decision.aimDepth };
   }

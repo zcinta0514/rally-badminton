@@ -101,3 +101,34 @@ test('same-team slots share identical shot geometry and fatigue drift',()=>{
  const b=game.getShotTarget(s,2,{shot:'clear',aim:.7,aimDepth:.5,charge:1});
  assert.equal(a.vz,b.vz);assert.equal(a.vx,b.vx);
 });
+test('AI rescues reachable ball beside idle human instead of yielding until floor',()=>{
+ const s=incoming();s.players[0].x=0;s.players[2].x=.65;
+ for(let i=0;i<60&&s.hitId===0&&s.phase==='rally';i++) {
+  const input=game.aiInput(s,2,'hard',[{}]);game.stepMatch(s,[{},{},input],1/120);
+ }
+ assert.equal(s.shuttle.lastHitPlayer,2);assert.ok(s.hitId>0);
+});
+test('each difficulty pays one reaction delay and a reassignment pays only one',()=>{
+ for(const difficulty of ['easy','medium','hard']) {
+  const s=incoming();s.players[0].x=0;s.players[2].x=.65;
+  const delay=game.getDifficultyProfile(difficulty).reaction;
+  assert.equal(game.aiInput(s,2,difficulty,[{}]).shot,null);
+  s.time=delay-.001;assert.equal(game.aiInput(s,2,difficulty,[{}]).shot,null);
+  s.time=delay;assert.ok(game.aiInput(s,2,difficulty,[{}]).shot);
+ }
+ const s=incoming();s.players[0].x=0;s.players[2].x=.65;
+ game.aiInput(s,2,'hard',[{prepare:'clear'}]);s.time=.1;
+ assert.equal(game.aiInput(s,2,'hard',[{}]).shot,null);
+ s.time=.17;assert.ok(game.aiInput(s,2,'hard',[{}]).shot);
+});
+test('reachable human actual approach still claims reception without held controls',()=>{
+ const s=incoming();s.players[0].x=-1;s.players[0].vx=2;s.players[2].x=.65;
+ game.aiInput(s,2,'hard',[{}]);assert.equal(s._doublesAI[0].primary,0);
+});
+test('partner pause consumes the team quota and preserves team attribution',()=>{
+ for(const slot of [2,3]) {
+  const s=create();assert.equal(game.pauseMatch(s,slot),true);assert.equal(s.pause.by,slot%2);assert.equal(s.pause.used[slot%2],1);
+  game.resumeMatch(s);for(let i=0;i<9;i++)game.stepMatch(s,[],.25);
+  assert.equal(game.pauseMatch(s,slot%2),false);
+ }
+});

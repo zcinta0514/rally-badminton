@@ -41,29 +41,47 @@ export function doublesAssignment(state,slot,config,inputs,advice) {
  const incoming=state.shuttle.lastHit!==team;
  const members=[team,team+2];
  const plans=members.map(i=>({slot:i,...advice(state,i)}));
- const viable=plan=>['ready','approach'].includes(plan.status);
- const rank=plan=>plan.status==='ready'?0:plan.status==='approach'?(plan.point?.time??10):100;
- let memory=state._doublesAI[team];
- if(!memory||memory.hitId!==state.hitId) {
-  const sorted=[...plans].sort((a,b)=>rank(a)-rank(b)||Math.hypot(state.players[a.slot].x-state.shuttle.x,state.players[a.slot].z-state.shuttle.z)-Math.hypot(state.players[b.slot].x-state.shuttle.x,state.players[b.slot].z-state.shuttle.z));
-  memory=state._doublesAI[team]={hitId:state.hitId,primary:sorted[0].slot,ready:state.time+config.reaction};
+ const viable = plan => ['ready', 'approach'].includes(plan.status);
+ const isHuman = plan => inputs != null && Object.hasOwn(inputs, plan.slot) && inputs[plan.slot] != null;
+ const hasHumanIntent = plan => {
+  if (!isHuman(plan) || !viable(plan)) return false;
+  const input = inputs[plan.slot], player = state.players[plan.slot];
+  const point = plan.point || state.shuttle, dx = point.x - player.x, dz = point.z - player.z;
+  return Boolean(input.prepare || input.shot || player.pendingShot?.contactAt !== undefined ||
+   ['prepare', 'windup'].includes(player.action?.stage) ||
+   (input.x || 0) * dx + (input.z || 0) * dz > .05 || player.vx * dx + player.vz * dz > .05);
+ };
+ const eligible = plan => viable(plan) && (!isHuman(plan) || hasHumanIntent(plan));
+ const rank = plan => !eligible(plan) ? 100 : plan.status === 'ready' ? 0 : (plan.point?.time ?? 10);
+ let memory = state._doublesAI[team];
+ if (!memory || memory.hitId !== state.hitId) {
+  const sorted = [...plans].sort((a,b) => rank(a) - rank(b) ||
+   Math.hypot(state.players[a.slot].x-state.shuttle.x,state.players[a.slot].z-state.shuttle.z) -
+   Math.hypot(state.players[b.slot].x-state.shuttle.x,state.players[b.slot].z-state.shuttle.z));
+  memory = state._doublesAI[team] = { hitId: state.hitId, primary: sorted[0].slot, assignedAt: state.time };
  }
- if(incoming) {
-  if(state.service?.active) memory.primary=state.receiverPlayer;
+ const previousPrimary = memory.primary;
+ if (incoming) {
+  if (state.service?.active) memory.primary = state.receiverPlayer;
   else {
-   const human=plans.find(plan=>{
-    const input=inputs?.[plan.slot]; if(!input||!viable(plan)) return false;
-    const q=state.players[plan.slot],point=plan.point||state.shuttle;
-    return input.prepare||input.shot||((input.x||0)*(point.x-q.x)+(input.z||0)*(point.z-q.z)>.05);
-   });
-   const committed=state.players[memory.primary].pendingShot?.contactAt!==undefined && viable(plans.find(plan=>plan.slot===memory.primary));
-   if(human && !committed) memory.primary=human.slot;
-   else if(!viable(plans.find(plan=>plan.slot===memory.primary))) {
-    const rescue=plans.find(viable); if(rescue) memory.primary=rescue.slot;
+   const human = plans.find(hasHumanIntent);
+   const current = plans.find(plan => plan.slot === memory.primary);
+   const committed = state.players[memory.primary].pendingShot?.contactAt !== undefined && viable(current);
+   if (human && !committed) memory.primary = human.slot;
+   else if (!eligible(current)) {
+    const rescue = plans.find(eligible);
+    if (rescue) memory.primary = rescue.slot;
    }
   }
  }
- if(incoming&&memory.primary===slot&&viable(plans.find(plan=>plan.slot===slot))) return state.time<memory.ready?{x:0,z:0,shot:null}:null;
+ if (memory.primary !== previousPrimary) memory.assignedAt = state.time;
+ // Both coordination and shot selection use this same deadline. A switch pays
+ // one reaction interval; it does not start another interval in aiInput.
+ const ready = memory.assignedAt + config.reaction;
+ if (incoming && memory.primary === slot && viable(plans.find(plan => plan.slot === slot))) {
+  memory.ready = ready;
+  return state.time < ready ? { x: 0, z: 0, shot: null } : null;
+ }
  // Attack: primary at the net and partner behind. Defence: split the width.
  const attacking=!incoming&&['smash','drop'].includes(state.lastShot);
  const hitter=state.shuttle.lastHitPlayer;
