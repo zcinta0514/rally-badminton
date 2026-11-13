@@ -1,10 +1,14 @@
+import { separateTeammates, contactOrder, doublesAssignment } from './doubles.js';
 import { NET_PHYSICS, resolveNetImpact } from './net-physics.js';
 import { HELL, createHellChallenge, resetHellRally } from './hell-mode.js';
 import { contactQuality, contactDrift } from './shot-quality.js';
 import { sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 10;
+export const RULES_VERSION = 11;
+export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
+const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
+const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
 
 /** Shared, serializable rules. Coordinates are metres; side 0 plays at positive z. */
 export const COURT = Object.freeze({ halfWidth: 2.59, halfLength: 6.7, netHeight: 1.52 });
@@ -48,7 +52,7 @@ const PLAYER_ASSIST = {
 };
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const finite = (v, fallback = 0) => Number.isFinite(v) ? v : fallback;
-const direction = side => side === 0 ? 1 : -1;
+const direction = side => side % 2 === 0 ? 1 : -1;
 const roleOf = role => Object.hasOwn(ROLES, role) ? role : 'balanced';
 const difficultyOf = value => value === 'normal' ? 'medium' : Object.hasOwn(AI, value) ? value : 'easy';
 const assistLevelOf = value => Object.hasOwn(PLAYER_ASSIST, value) ? value : 'none';
@@ -88,12 +92,13 @@ export function getScoringRules({ ruleset = 'quick', target = 5 } = {}) {
 }
 
 export function createMatch({ target = 5, roles = ['balanced', 'balanced'], difficulty = 'easy', seed = 1, ruleset = 'quick',
-  playerAssist = 'none', assistSide = 0, netDragSide = null, challenge = null } = {}) {
+  playerAssist = 'none', assistSide = 0, netDragSide = null, challenge = null, format = 'singles', teammateDifficulty = 'medium' } = {}) {
   ruleset = challenge === 'hell' ? 'quick' : ruleset === 'standard21' ? 'standard21' : 'quick';
   playerAssist = assistLevelOf(playerAssist);
   assistSide = assistSide === 0 || assistSide === 1 ? assistSide : 0;
   const state = {
-    rulesVersion: RULES_VERSION,
+    rulesVersion: RULES_VERSION, format: format === 'doubles' ? 'doubles' : 'singles', teammateDifficulty: difficultyOf(teammateDifficulty),
+    serverPlayer: 0, receiverPlayer: 1, servicePositions: [0, 0, 1, 1], _contactTie: 0,
     ...(challenge === 'hell' ? { challenge: createHellChallenge() } : {}),
     ...((netDragSide === 0 || netDragSide === 1) ? { netDragSide } : {}),
     phase: 'serve', time: 0, timer: 0, target: getScoringRules({ ruleset, target }).target,
@@ -101,13 +106,13 @@ export function createMatch({ target = 5, roles = ['balanced', 'balanced'], diff
     sideChange: { id: 0, at: 0, reason: null, ends: [1, -1] }, _deciderChanged: false,
     score: [0, 0], server: 0, winner: null, endReason: null, message: '你来发球 · 点击任意击球键',
     rally: 0, hitId: 0, pointId: 0, rallyEnd: null, netContactId: 0, netContacts: [], lastShot: 'clear', lastShotInfo: null, difficulty: difficultyOf(difficulty),
-    players: [0, 1].map(side => {
+    players: (format === 'doubles' ? [0, 1, 2, 3] : [0, 1]).map(side => {
       const role = roleOf(roles?.[side]);
       return { x: 0, z: direction(side) * 3.8, vx: 0, vz: 0, role,
         stamina: ROLES[role].maxStamina, staminaRate: 0, recoveryWait: 0, staminaStatus: 'idle',
         swing: 0, lastShot: 'clear', cooldown: 0, pendingShot: null, action: null, actionId: 0, shotRecovery: null };
     }),
-    shuttle: { x: 0, y: 1.1, z: 3.4, vx: 0, vy: 0, vz: 0, active: false, lastHit: null },
+    shuttle: { x: 0, y: 1.1, z: 3.4, vx: 0, vy: 0, vz: 0, active: false, lastHit: null, lastHitPlayer: null },
     pause: { by: null, remaining: TUNING.pauseLimit, used: [0, 0], previousPhase: null },
     _rng: (finite(seed, 1) >>> 0) || 1, _serveAge: 0, _savedTimer: 0,
     assist: { level: playerAssist, side: playerAssist === 'none' ? null : assistSide },
@@ -118,10 +123,10 @@ export function createMatch({ target = 5, roles = ['balanced', 'balanced'], diff
 }
 
 function attachServe(state) {
-  const player = state.players[state.server];
+  const player = state.players[serverSlot(state)];
   Object.assign(state.shuttle, { x: player.x, y: 1.08,
     z: player.z - direction(state.server) * 0.32, vx: 0, vy: 0, vz: 0,
-    active: false, lastHit: null });
+    active: false, lastHit: null, lastHitPlayer: null });
 }
 function startServe(state) {
   if (state.challenge) {
@@ -139,13 +144,18 @@ function startServe(state) {
   state.phase = 'serve'; state.timer = 0; state.rally = 0; state._serveAge = 0;
   state.rallyEnd = null; state.netContacts = [];
   state.message = `${state.server === 0 ? '近场' : '远场'}发球 · 点击击球键`;
+  if (state.format === 'doubles') {
+    const parity = state.score[state.server] % 2;
+    state.serverPlayer = state.players.findIndex((_, slot) => slot % 2 === state.server && state.servicePositions[slot] === parity);
+    state.receiverPlayer = state.players.findIndex((_, slot) => slot % 2 !== state.server && state.servicePositions[slot] === parity);
+  } else { state.serverPlayer = state.server; state.receiverPlayer = 1 - state.server; }
   const sign = direction(state.server) * (state.score[state.server] % 2 ? -1 : 1);
   state.service = { side: state.server, court: state.score[state.server] % 2 ? 'left' : 'right',
     sourceSign: sign, active: false,
-    targetBox: { minX: sign > 0 ? -COURT.halfWidth : 0, maxX: sign > 0 ? 0 : COURT.halfWidth,
-      minZ: state.server === 0 ? -COURT.halfLength : 1.98, maxZ: state.server === 0 ? -1.98 : COURT.halfLength } };
-  for (let side = 0; side < 2; side++) {
-    Object.assign(state.players[side], { x: (side === state.server ? sign : -sign) * 0.85,
+    targetBox: { minX: sign > 0 ? -courtWidth(state) : 0, maxX: sign > 0 ? 0 : courtWidth(state),
+      minZ: state.server === 0 ? -(state.format === 'doubles' ? 5.94 : COURT.halfLength) : 1.98, maxZ: state.server === 0 ? -1.98 : (state.format === 'doubles' ? 5.94 : COURT.halfLength) } };
+  for (let side = 0; side < state.players.length; side++) {
+    Object.assign(state.players[side], { x: (state.format === 'doubles' ? direction(side) * (state.servicePositions[side] ? -1 : 1) : (side === state.server ? sign : -sign)) * 0.85,
       z: direction(side) * 3.8, vx: 0, vz: 0,
       swing: 0, cooldown: 0, pendingShot: null, action: null, recoveryWait: 0, staminaRate: 0, staminaStatus: 'idle', shotRecovery: null });
   }
@@ -164,6 +174,9 @@ export function finishMatch(state, winner, reason = '本局结束', endReason = 
 }
 function awardPoint(state, winner, reason, impact) {
   if (state.phase !== 'rally') return;
+  if (state.format === 'doubles' && state.server === winner) {
+    for (let slot = winner; slot < 4; slot += 2) state.servicePositions[slot] = 1 - state.servicePositions[slot];
+  }
   state.score[winner]++; state.pointId++; state.server = winner;
   state.rallyEnd = { id: state.pointId, ...impact, winner, duration: TUNING.pointWait };
   state.shuttle.active = false; state.timer = TUNING.pointWait;
@@ -205,6 +218,7 @@ function changeEnds(state, reason) {
 }
 
 export function pauseMatch(state, side) {
+  side = playerTeam(state, side);
   if ((side !== 0 && side !== 1) || !['serve', 'rally', 'point', 'intermission'].includes(state.phase) || state.pause.used[side] >= 1) return false;
   for (const p of state.players) { p.recoveryWait = 0; p.staminaRate = 0; p.staminaStatus = 'idle'; }
   state.pause.by = side; state.pause.previousPhase = state.phase;
@@ -240,7 +254,7 @@ function movePlayer(player, input, side, dt, state) {
     (effort > .01 && !reversing ? fatigue.accelerationScale : 1) * dt / (difference || 1));
   player.vx += dx * change; player.vz += dz * change;
   const nextX = player.x + player.vx * dt, nextZ = player.z + player.vz * dt;
-  player.x = clamp(nextX, -COURT.halfWidth + TUNING.playerMargin, COURT.halfWidth - TUNING.playerMargin);
+  player.x = clamp(nextX, -courtWidth(state) + TUNING.playerMargin, courtWidth(state) - TUNING.playerMargin);
   player.z = direction(side) * clamp(nextZ * direction(side), TUNING.netMargin, COURT.halfLength - TUNING.playerMargin);
   if (nextX !== player.x) player.vx = 0;
   if (nextZ !== player.z) player.vz = 0;
@@ -293,7 +307,7 @@ export function predictLanding(state) {
   }
   const time = Math.max(0, (ball.vy + Math.sqrt(ball.vy ** 2 + 2 * TUNING.gravity * Math.max(0, ball.y))) / TUNING.gravity);
   const point = { ...flightPoint(ball, time), time: time + offset, y: 0 };
-  const out = Math.abs(point.x) > COURT.halfWidth || Math.abs(point.z) > COURT.halfLength;
+  const out = Math.abs(point.x) > courtWidth(state) || Math.abs(point.z) > COURT.halfLength;
   const fault = serviceFault(state, point), side = point.z >= 0 ? 0 : 1;
   return { ...point, event: 'landing', out, serviceFault: fault, side, winner: out || fault ? 1 - ball.lastHit : 1 - side };
 }
@@ -318,27 +332,27 @@ function shotDepth(type, charge, aimDepth, serving, role) {
 
 /** Preview uses exactly the same target and launch solution as actual contact. */
 export function getShotTarget(state, side, request = {}, { netDrag = state?.netDragSide === side } = {}) {
-  if (side !== 0 && side !== 1) return null;
+  if (playerTeam(state, side) === null) return null;
   const input = inputOf(request), ball = state.shuttle, player = state.players[side], role = ROLES[player.role], assist = assistFor(state, side);
-  const serving = state.phase === 'serve' && state.server === side;
+  const serving = state.phase === 'serve' && serverSlot(state) === side;
   const requested = input.shot || input.prepare || 'clear';
   const type = requested === 'smash' && serving ? 'clear' : requested;
   const fallbackReason = type !== requested ? '发球采用合法下手高远球' : '';
-  let aimX = input.aim * (COURT.halfWidth - 0.3);
+  let aimX = input.aim * (courtWidth(state) - 0.3);
   // Opt-in local playtest: preserve neutral, sideways and backward drags.
   // Forward drag continuously extends the front-court drop into a lift.
   const lift = netDrag && !serving && type === 'drop'
     && ball.z * direction(side) > 0 && ball.z * direction(side) <= 2.2
     && ball.y <= 1.9 ? Math.max(0, input.aimDepth) : 0;
-  const normalDepth = shotDepth(type, input.charge, input.aimDepth, serving, role);
+  const normalDepth = Math.min(serving && state.format === 'doubles' ? 5.7 : Infinity, shotDepth(type, input.charge, input.aimDepth, serving, role));
   const liftDepth = shotDepth(type, input.charge, 0, false, role);
   const aimZ = -direction(side) * (lift > 0 ? liftDepth + (6.05 - liftDepth) * lift : normalDepth);
   if (serving) {
-    const sign = direction(side) * (state.score[side] % 2 ? -1 : 1);
+    const sign = direction(side) * (state.score[playerTeam(state, side)] % 2 ? -1 : 1);
     aimX = -sign * 0.85 + input.aim * 0.55;
   }
   const quality = contactQuality({player, ball, role, ...input, shot: type, serving, assist: assist.level});
-  const drift = contactDrift({quality, player, ball, role, aimX, aimDepth: input.aimDepth, side, shot: type, charge: input.charge});
+  const drift = contactDrift({quality, player, ball, role, aimX, aimDepth: input.aimDepth, side: playerTeam(state, side), shot: type, charge: input.charge});
   const distance = Math.hypot(aimX - ball.x, aimZ - ball.z);
   const minDuration = minimumNetDuration(ball, aimX, aimZ, type === 'smash' ? 0.12 : type === 'drop' ? 0.18 : 0.28);
   const shotSpeed = role.shotSpeed?.[type] || 1;
@@ -377,13 +391,14 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
 /** The same eligibility gate used for real contact, never a future promise. */
 export function getShotAvailability(state, side, request = {}) {
   const player = state.players?.[side], ball = state.shuttle, role = player ? ROLES[player.role] : ROLES.balanced;
-  if (!player || (side !== 0 && side !== 1)) return { canHit: false, canClear: false, canDrop: false, canSmash: false, reason: '无效球员', reasonCode: 'invalid' };
+  if (!player || (playerTeam(state, side) === null)) return { canHit: false, canClear: false, canDrop: false, canSmash: false, reason: '无效球员', reasonCode: 'invalid' };
   const assist = assistFor(state, side);
-  const serving = state.phase === 'serve' && state.server === side;
+  const serving = state.phase === 'serve' && serverSlot(state) === side;
   const distance = Math.hypot(ball.x - player.x, ball.z - player.z);
   let reason = '', reasonCode = '';
   if (!(state.phase === 'rally' && ball.active) && !serving) { reason = '等待对方发球或比赛继续'; reasonCode = 'inactive'; }
-  else if (!serving && ball.lastHit !== 1 - side) { reason = '等待对手回球'; reasonCode = 'turn'; }
+  else if (!serving && ball.lastHit !== 1 - playerTeam(state, side)) { reason = '等待对手回球'; reasonCode = 'turn'; }
+  else if (!serving && state.format === 'doubles' && state.service?.active && side !== state.receiverPlayer) { reason = '等待指定接发球员'; reasonCode = 'receiver'; }
   else if (!serving && ball.z * direction(side) <= 0.07) { reason = '来球尚未进入己方半场'; reasonCode = 'half'; }
   else if (player.cooldown > 0) { reason = '挥拍恢复中'; reasonCode = 'cooldown'; }
   else if (!serving && distance > TUNING.reach + role.reachBonus + assist.reachBonus) { reason = '靠近来球后击球'; reasonCode = 'reach'; }
@@ -402,7 +417,8 @@ export function getInterceptAdvice(state, side, request = {}) {
   const available = getShotAvailability(state, side, request), landing = predictLanding(state);
   const base = { canHit: available.canHit, canSmash: available.canSmash, futureCanSmash: false, landing, point: null, reason: available.reason };
   if (available.canHit) return { ...base, status: 'ready', point: { x: state.shuttle.x, y: state.shuttle.y, z: state.shuttle.z, time: 0 } };
-  if (!landing || state.phase !== 'rally' || state.shuttle.lastHit === side || !state.players[side]) return { ...base, status: 'inactive' };
+  if (available.reasonCode === 'receiver') return { ...base, status: 'inactive' };
+  if (!landing || state.phase !== 'rally' || state.shuttle.lastHit === playerTeam(state, side) || !state.players[side]) return { ...base, status: 'inactive' };
   if (landing.event === 'net' || landing.out || landing.serviceFault) return { ...base, status: 'out', reason: landing.event === 'net' ? '来球将触网' : '预计出界，可观察落点' };
   const player = state.players[side], role = ROLES[player.role], assist = assistFor(state, side);
   const fatigue = staminaEffects(player, role).speedScale;
@@ -410,7 +426,7 @@ export function getInterceptAdvice(state, side, request = {}) {
   for (let time = 0.035; time < landing.time; time += 0.035) {
     const point = liveFlightPoint(state.shuttle, time);
     if (point.z * direction(side) <= 0.07 || point.y < TUNING.minHitHeight - assist.lowHeightBonus || point.y > TUNING.maxHitHeight + assist.highHeightBonus) continue;
-    const x = clamp(point.x, -COURT.halfWidth + TUNING.playerMargin, COURT.halfWidth - TUNING.playerMargin);
+    const x = clamp(point.x, -courtWidth(state) + TUNING.playerMargin, courtWidth(state) - TUNING.playerMargin);
     const z = direction(side) * clamp(point.z * direction(side), TUNING.netMargin, COURT.halfLength - TUNING.playerMargin);
     const travel = Math.hypot(x - player.x, z - player.z);
     nearest = point;
@@ -455,7 +471,7 @@ function playShot(state, side, request, serving = false) {
   }
   const contact = { x: ball.x, y: ball.y, z: ball.z };
   ball.vx = target.vx; ball.vy = target.vy; ball.vz = target.vz;
-  ball.active = true; ball.lastHit = side;
+  ball.active = true; ball.lastHit = playerTeam(state, side); ball.lastHitPlayer = side;
   if (state.service) state.service.active = serving;
   const staminaBefore = player.stamina;
   player.stamina = Math.max(0, player.stamina - shotStaminaCost(role, type, request.charge, serving));
@@ -476,7 +492,7 @@ function playShot(state, side, request, serving = false) {
         fadeAt: Math.max(.005, Math.min(.65, netTime * .86)) };
     }
   }
-  state.lastShotInfo = {hitId: state.hitId, side, at: state.time, type, requested: target.requested,
+  state.lastShotInfo = {hitId: state.hitId, side: playerTeam(state, side), playerSlot: side, at: state.time, type, requested: target.requested,
     aimX: target.aimX, aimZ: target.aimZ, x: target.x, z: target.z, quality: target.quality,
     serving, contact, outgoing: { vx: ball.vx, vy: ball.vy, vz: ball.vz }, charge: request.charge, staminaBefore, staminaAfter: player.stamina, ...(skill ? { skill } : {})};
   state.message = target.fallbackReason || `${shotName(type)} · ${state.rally} 拍${target.quality.risk >= 0.16 ? ` · ${target.quality.reason}` : ''}`;
@@ -565,12 +581,12 @@ function attemptShot(state, side) {
 
 function stepLive(state, inputs, dt, firstSlice) {
   const start = state.time, phase = state.phase, hitId = state.hitId, pointId = state.pointId;
-  const previous = state.players.map(p => ({ action: p.action ? { ...p.action } : null, cooldown: p.cooldown }));
-  const speeds = [0, 0];
+  const previous = state.players.map(p => ({ x: p.x, z: p.z, action: p.action ? { ...p.action } : null, cooldown: p.cooldown }));
+  const speeds = state.players.map(() => 0);
   try {
   state.time += dt;
   if (state.challenge?.rescue && state.time >= state.challenge.rescue.endsAt) state.challenge.rescue = null;
-  for (let side = 0; side < 2; side++) {
+  for (let side = 0; side < state.players.length; side++) {
     const player = state.players[side];
     player.swing = Math.max(0, player.swing - dt);
     player.cooldown = Math.max(0, player.cooldown - dt);
@@ -578,7 +594,7 @@ function stepLive(state, inputs, dt, firstSlice) {
     if (player.pendingShot) {
       player.pendingShot.remaining -= dt;
       if (player.pendingShot.remaining <= 0) {
-        if (player.pendingShot.shot === 'smash' && state.phase === 'rally' && state.shuttle.lastHit !== side) {
+        if (player.pendingShot.shot === 'smash' && state.phase === 'rally' && state.shuttle.lastHit !== playerTeam(state, side)) {
           state.message = '未接到球 · 先跑位，等球下降再击球';
         }
         player.pendingShot = null;
@@ -586,7 +602,7 @@ function stepLive(state, inputs, dt, firstSlice) {
       }
     }
     if (state.phase === 'serve' || state.phase === 'rally') {
-      if (state.phase === 'serve' && state.players[state.server].pendingShot?.contactAt !== undefined) {
+      if (state.phase === 'serve' && state.players[serverSlot(state)].pendingShot?.contactAt !== undefined) {
         player.vx = 0; player.vz = 0;
       } else {
         const h = state.challenge?.bossSide === side ? state.challenge : null;
@@ -606,8 +622,8 @@ function stepLive(state, inputs, dt, firstSlice) {
         else movePlayer(player, inputs[side], side, dt, state);
       }
       if (state.phase === 'serve') {
-        const sign = state.service.sourceSign * (side === state.server ? 1 : -1);
-        player.x = sign * clamp(player.x * sign, 0.22, COURT.halfWidth - TUNING.playerMargin);
+        const sign = state.format === 'doubles' ? direction(side) * (state.servicePositions[side] ? -1 : 1) : state.service.sourceSign * (side === state.server ? 1 : -1);
+        player.x = sign * clamp(player.x * sign, 0.22, courtWidth(state) - TUNING.playerMargin);
         player.z = direction(side) * clamp(player.z * direction(side), 2.3, COURT.halfLength - TUNING.playerMargin);
       }
       speeds[side] = Math.hypot(player.vx, player.vz);
@@ -624,6 +640,7 @@ function stepLive(state, inputs, dt, firstSlice) {
       } else if (!inputs[side].prepare && player.action?.stage === 'prepare' && !player.pendingShot) player.action = null;
     }
   }
+  separateTeammates(state, previous);
   if (state.phase === 'point' || state.phase === 'intermission') {
     state.timer = Math.max(0, state.timer - dt);
     if (state.timer <= 0.00001) {
@@ -634,19 +651,21 @@ function stepLive(state, inputs, dt, firstSlice) {
   }
   if (state.phase === 'serve') {
     state._serveAge += dt; attachServe(state);
-    attemptShot(state, state.server);
+    attemptShot(state, serverSlot(state));
     return;
   }
   // Ball and match clock must describe the same instant at contact. The prior
   // slice already checked its endpoint; do not launch and then advance a new
   // fast shot through a slice whose time was counted before that contact.
   integrateShuttle(state, dt);
-  if (state.phase === 'rally') for (let side = 0; side < 2; side++) {
+  if (state.phase === 'rally') for (const side of contactOrder(state)) {
+    const before = state.hitId;
     attemptShot(state, side);
+    if (state.format === 'doubles' && state.hitId !== before) { const team=playerTeam(state,side);state._contactTieByTeam??=[state._contactTie,state._contactTie];state._contactTieByTeam[team]++;break; }
   }
   } finally {
     const liveDt = state.pointId !== pointId ? clamp(state.rallyEnd.at - start, 0, dt) : dt;
-    for (let side = 0; side < 2; side++) {
+    for (let side = 0; side < state.players.length; side++) {
       const player = state.players[side], role = ROLES[player.role];
       const moving = speeds[side] / role.speed, effort = Math.max(moving, Math.hypot(inputs[side].x, inputs[side].z));
       const blockedUntil = Math.max(start + previous[side].cooldown, previous[side].action?.endsAt || start,
@@ -666,29 +685,29 @@ function stepLive(state, inputs, dt, firstSlice) {
         const t = clamp((effort - .1) / .3, 0, 1);
         recovery = role.recovery * (1 - t * t * (3 - 2 * t)) * recovering;
         const rest = player.shotRecovery;
-        if (rest && state.shuttle.lastHit === side) {
+        if (rest && state.shuttle.lastHit === playerTeam(state, side)) {
           const duration = Math.max(0, Math.min(start + liveDt, rest.expiresAt) - (start + liveDt - recovering));
           const tuning = STAMINA_TUNING.shotRecovery[rest.type];
           const extra = Math.min(rest.remaining, role.recovery * tuning.boost * (1 - t * t * (3 - 2 * t)) * duration);
           recovery += extra; rest.remaining -= extra;
         }
       }
-      if (player.shotRecovery && (player.shotRecovery.expiresAt <= start + liveDt || state.shuttle.lastHit !== side || phase !== 'rally')) player.shotRecovery = null;
+      if (player.shotRecovery && (player.shotRecovery.expiresAt <= start + liveDt || state.shuttle.lastHit !== playerTeam(state, side) || phase !== 'rally')) player.shotRecovery = null;
       const drain = ['serve', 'rally'].includes(phase) ? movementStaminaRate(role, speeds[side]) * liveDt : 0;
       const before = player.stamina;
       player.stamina = clamp(before + recovery - drain, 0, role.maxStamina);
       player.staminaRate = liveDt > 0 ? (player.stamina - before) / liveDt : 0;
       player.staminaStatus = player.staminaRate > .001 ? 'recovering' : player.staminaRate < -.001 ? 'draining' :
         !blocked && eligible > 0 && player.recoveryWait < .35 ? 'waiting' : 'idle';
-      if (state.hitId !== hitId && state.lastShotInfo?.side === side) {
+      if (state.hitId !== hitId && state.lastShotInfo?.playerSlot === side) {
         state.lastShotInfo.staminaBefore = clamp(state.lastShotInfo.staminaBefore + recovery - drain, 0, role.maxStamina);
         state.lastShotInfo.staminaAfter = player.stamina;
         player.staminaStatus = 'draining';
       }
-      if (state.lastShotInfo?.side === side && state.time - state.lastShotInfo.at < .18) player.staminaStatus = 'draining';
+      if (state.lastShotInfo?.playerSlot === side && state.time - state.lastShotInfo.at < .18) player.staminaStatus = 'draining';
       if (state.challenge?.bossSide === side) {
         player.stamina = role.maxStamina; player.staminaRate = 0; player.staminaStatus = 'infinite';
-        if (state.lastShotInfo?.side === side) state.lastShotInfo.staminaAfter = role.maxStamina;
+        if (state.lastShotInfo?.playerSlot === side) state.lastShotInfo.staminaAfter = role.maxStamina;
       }
       if (state.phase !== 'rally' && state.challenge?.bossSide !== side) { player.recoveryWait = 0; player.staminaRate = 0; player.staminaStatus = 'idle'; }
     }
@@ -714,7 +733,7 @@ export function stepMatch(state, inputs = [{}, {}], dt = 1 / 60) {
     }
     return state;
   }
-  const normalized = [inputOf(inputs?.[0]), inputOf(inputs?.[1])];
+  const normalized = state.players.map((_, slot) => inputOf(inputs?.[slot]));
   // A stalled tab must not leap through a full rally when it wakes up.
   let remaining = Math.min(dt, 0.25), firstSlice = true;
   while (remaining > 0.000001 && state.phase !== 'over') {
@@ -762,7 +781,13 @@ function chooseCandidate(state, side, level, candidates) {
   const player = state.players[side];
   const reservePressure = clamp(1 - player.stamina / (2 * shotStaminaCost(ROLES[player.role], 'smash')), 0, 1);
   // Fatigue shifts preference toward economical returns without banning attacks.
-  const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score - repeatPenalty(history, candidate)
+  const coverage = candidate => {
+    if(state.format!=='doubles')return 0;
+    const target=getShotTarget(state,side,candidate),opponents=state.players.filter((_,slot)=>playerTeam(state,slot)!==playerTeam(state,side));
+    // Reward space according to the nearer defender, never just one opponent.
+    return 2.5*Math.min(...opponents.map(p=>Math.hypot(target.aimX-p.x,target.aimZ-p.z)/(ROLES[p.role].speed*staminaEffects(p,ROLES[p.role]).speedScale)));
+  };
+  const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score + coverage(candidate) - repeatPenalty(history, candidate)
     - reservePressure * (candidate.shot === 'smash' ? 1.2 : candidate.shot === 'clear' ? .3 : 0) }));
   const best = Math.max(...scored.map(candidate => candidate.score));
   const viable = scored.filter(candidate => candidate.score > -5);
@@ -794,7 +819,7 @@ function chooseAIShot(state, side, level) {
       { shot: 'smash', aim: lineRoll * 0.9, aimDepth: 0.2 + (random(state) - 0.5) * 0.3, score: 1.7 },
     ]);
   }
-  const opponent = state.players[1 - side];
+  const opponent = state.players[1 - playerTeam(state, side)];
   const openSide = Math.abs(opponent.x) > 0.25 ? -Math.sign(opponent.x) : Math.sign(lineRoll) || 1;
   const alternateSide = -openSide;
   const opponentDepth = Math.abs(opponent.z);
@@ -811,6 +836,10 @@ function chooseAIShot(state, side, level) {
     { shot: 'clear', aim: alternate, aimDepth: 0.05 + (random(state) - 0.5) * 0.35, score: 1.6 },
     { shot: 'drop', aim: alternate, aimDepth: -0.08 + (random(state) - 0.5) * 0.35, score: 1.55 },
   ];
+  if(state.format==='doubles')candidates.push(
+    {shot:'drop',aim:0,aimDepth:-.2,score:dropScore},
+    {shot:'clear',aim:0,aimDepth:.25,score:clearScore},
+    {shot:'smash',aim:0,aimDepth:.15,score:smashScore});
   return chooseCandidate(state, side, level, candidates);
 }
 
@@ -833,20 +862,25 @@ function canRunToIncoming(player, ball, landingTime) {
   return false;
 }
 
-export function aiInput(state, side, difficulty = 'easy') {
-  if ((side !== 0 && side !== 1) || !['serve', 'rally'].includes(state.phase)) return { x: 0, z: 0, shot: null, aim: 0, aimDepth: 0, charge: 0 };
+/** inputs is an optional sparse array of observed HUMAN controls, indexed by player slot. */
+export function aiInput(state, side, difficulty = 'easy', inputs = null) {
+  if ((playerTeam(state, side) === null) || !['serve', 'rally'].includes(state.phase)) return { x: 0, z: 0, shot: null, aim: 0, aimDepth: 0, charge: 0 };
   const h = state.challenge?.bossSide === side ? state.challenge : null;
   const level = h ? 'hard' : difficultyOf(difficulty), config = h ? { ...AI.hard, reaction: HELL.reaction, error: HELL.error } : AI[level], player = state.players[side], ball = state.shuttle, role = ROLES[player.role];
   const output = { x: 0, z: 0, shot: null, aim: 0, aimDepth: 0, charge: 0.3 };
   if (state.phase === 'serve') {
-    if (state.server === side && state._serveAge > config.serveDelay + config.reaction) {
+    if (serverSlot(state) === side && state._serveAge > config.serveDelay + config.reaction) {
       output.shot = 'clear'; output.aim = (random(state) - 0.5) * (level === 'easy' ? 0.6 : 1.5);
       output.aimDepth = level === 'hard' ? (random(state) - 0.5) * 0.4 : 0;
     }
     return output;
   }
+  if (state.format === 'doubles') {
+    const assignment = doublesAssignment(state, side, config, inputs, getInterceptAdvice);
+    if (assignment) return { ...output, ...assignment };
+  }
   if (h?.rescue) return output;
-  if (ball.lastHit === side) return { ...output, ...moveToward(player, ball.x * 0.15, direction(side) * 3.55, config.pace * 0.72) };
+  if (ball.lastHit === playerTeam(state, side)) return { ...output, ...moveToward(player, ball.x * 0.15, direction(side) * 3.55, config.pace * 0.72) };
   let memory = state._ai[side];
   if (!memory || memory.hitId !== state.hitId) {
     const decision = chooseAIShot(state, side, level);
@@ -855,7 +889,7 @@ export function aiInput(state, side, difficulty = 'easy') {
     if (h && !smashOpportunity(state, side).highChance) decision.shot = 'drop';
     // Reaction delay and spatial prediction error remain difficulty-dependent.
     // Every reachable return is attempted; the common contact model causes errors.
-    memory = state._ai[side] = { hitId: state.hitId, ready: state.time + config.reaction,
+    memory = state._ai[side] = { hitId: state.hitId, ready: state.format === 'doubles' ? state._doublesAI[playerTeam(state, side)].ready : state.time + config.reaction,
       errorX: (random(state) - 0.5) * config.error * 2, errorZ: (random(state) - 0.5) * config.error * 2,
       shot: decision.shot, aim: decision.aim, aimDepth: decision.aimDepth };
   }
@@ -875,10 +909,10 @@ export function aiInput(state, side, difficulty = 'easy') {
       h.nextDiveAt = state.time + HELL.diveInterval;
       h.rescueUses++; h.rescue = { aim: memory.aim, at: state.time, endsAt: state.time + HELL.diveDuration,
         point, from: { x: player.x, z: player.z },
-        to: { x: clamp(point.x, -COURT.halfWidth + .16, COURT.halfWidth - .16),
+        to: { x: clamp(point.x, -courtWidth(state) + .16, courtWidth(state) - .16),
           z: direction(side) * clamp(point.z * direction(side), .54, COURT.halfLength - .16) }, hit: false };
       const dive = h.rescue, dx = dive.to.x - dive.from.x, dz = dive.to.z - dive.from.z, distance = Math.hypot(dx, dz);
-      dive.slideTo = { x: clamp(dive.to.x + dx / distance * .2, -COURT.halfWidth + .16, COURT.halfWidth - .16),
+      dive.slideTo = { x: clamp(dive.to.x + dx / distance * .2, -courtWidth(state) + .16, courtWidth(state) - .16),
         z: direction(side) * clamp((dive.to.z + dz / distance * .2) * direction(side), .54, COURT.halfLength - .16) };
       h.recoverUntil = dive.endsAt;
       return output;
@@ -896,7 +930,7 @@ export function aiInput(state, side, difficulty = 'easy') {
   const discriminant = ball.vy * ball.vy + 2 * TUNING.gravity * (ball.y - contactHeight);
   const contactTime = discriminant > 0 ? Math.max(0, (ball.vy + Math.sqrt(discriminant)) / TUNING.gravity) : 0;
   const contactPoint = liveFlightPoint(ball, contactTime);
-  const targetX = clamp(contactPoint.x + memory.errorX, -COURT.halfWidth + 0.15, COURT.halfWidth - 0.15);
+  const targetX = clamp(contactPoint.x + memory.errorX, -courtWidth(state) + 0.15, courtWidth(state) - 0.15);
   const targetZ = direction(side) * clamp(contactPoint.z * direction(side) + memory.errorZ, 0.7, COURT.halfLength - 0.25);
   Object.assign(output, moveToward(player, targetX, targetZ, config.pace));
   const horizontal = Math.hypot(ball.x - player.x, ball.z - player.z);

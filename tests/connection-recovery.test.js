@@ -1,3 +1,4 @@
+import {practiceInputs,localTeam,lineupNames} from '../src/match-lineup.js';
 import {captureMotion,presentLocal} from '../src/local-presentation.js';
 import { MatchEntrance } from '../src/match-entrance.js';
 import { hellStatus } from '../shared/hell-mode.js';
@@ -137,7 +138,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     sample() { return { x: 0, z: 0, prepare: null, charge: 0 }; }
   }
   const context = vm.createContext({
-    ...game, MenuAudio, interfaceSound, captureMotion, presentLocal, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
+    ...game, practiceInputs,localTeam,lineupNames, MenuAudio, interfaceSound, captureMotion, presentLocal, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
     getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
     createUsageAnalytics:()=>({configured:true,enabled:true,
@@ -265,7 +266,7 @@ test('automatic update transfers selected controls and mute once without preserv
   f.pwaOptions.onUpdateLock({version:'2222222222222222'});
   assert.equal(values.size,1,'preparation must save a verified transfer before refreshing');
   const restored=await fixture('serve',{demoMode:true,buildId:'2222222222222222',sessionStorage});
-  assert.deepEqual({...restored.settings},{role:'power',coachRole:'swift',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'hard',target:11,ruleset:'standard21',finale:'none'});
+  assert.deepEqual({...restored.settings},{format:'singles',friendFormat:'singles',teammateRole:'balanced',teammateDifficulty:'medium',role:'power',coachRole:'swift',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'hard',target:11,ruleset:'standard21',finale:'none'});
   for(const [group,value] of [['roles','power'],['coach-roles','swift'],['difficulties','hard'],['targets',21],['rulesets','standard21']])assert.equal(restored.choice(group,value).attributes['aria-pressed'],'true');
   assert.equal(restored.element('targets').attributes['aria-disabled'],'true');assert.equal(restored.choice('targets',11).disabled,true);
   assert.match(restored.element('role-note').textContent,/速度 4.05.*体力 112/);assert.match(restored.element('rules-note').textContent,/三局两胜/);
@@ -274,7 +275,7 @@ test('automatic update transfers selected controls and mute once without preserv
   restored.chooseSetting('rulesets','quick');assert.equal(restored.choice('targets',11).disabled,false);assert.equal(restored.choice('targets',11).attributes['aria-pressed'],'true');
   assert.equal(values.size,0);
   const ordinary=await fixture('serve',{demoMode:true,buildId:'2222222222222222',sessionStorage});
-  assert.deepEqual({...ordinary.settings},{role:'balanced',coachRole:'balanced',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'easy',target:5,ruleset:'quick',finale:'none'});assert.equal(ordinary.sound,true);
+  assert.deepEqual({...ordinary.settings},{format:'singles',friendFormat:'singles',teammateRole:'balanced',teammateDifficulty:'medium',role:'balanced',coachRole:'balanced',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'easy',target:5,ruleset:'quick',finale:'none'});assert.equal(ordinary.sound,true);
 });
 
 test('independent player and coach choices create all nine AI lineups and isolate hell mode from ordinary coach choices', async () => {

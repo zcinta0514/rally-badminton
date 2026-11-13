@@ -304,3 +304,46 @@ test('peer transport rejects malformed or unbounded net-contact history before r
     });
   }
 });
+
+test('doubles transport binds three guests, changes empty seats, and recovers a private reserved seat',async t=>{
+ const bus=transportBus(), messages=[[],[],[],[]];const sessions=[];
+ const host=await api.openPeerRoom({...options,type:'create',format:'doubles',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>messages[0].push(m)});sessions.push(host);t.after(()=>sessions.forEach(s=>s.close()));
+ host.send({type:'lobby',seat:2});
+ for(let i=1;i<4;i++)sessions.push(await api.openPeerRoom({...options,playerId:`guest${i}`,type:'join',format:'doubles',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>messages[i].push(m)}));
+ await flush();assert.equal(messages[3].findLast(m=>m.type==='room').players.length,4);
+ const slots=messages.map(ms=>ms.findLast(m=>m.type==='room').slot);assert.equal(new Set(slots).size,4);assert.equal(slots[0],2);
+ const ack={type:'ready',format:'doubles',target:5,ruleset:'quick',finale:'none'};sessions.forEach(s=>s.send(ack));await flush();
+ assert.ok(messages.every(ms=>ms.some(m=>m.type==='state'&&m.state.format==='doubles')));
+ bus.peers[1].connections[0].close();await flush();assert.equal(messages[0].findLast(m=>m.type==='state').reconnect.slots.length,1);
+ await new Promise(resolve=>setTimeout(resolve,650));await flush();assert.equal(messages[0].findLast(m=>m.type==='room').reconnect.slots.length,0);
+ assert.equal(messages[1].findLast(m=>m.type==='room').slot,slots[1]);
+});
+
+test('doubles guests cannot steal a disconnected seat by public identity or another seat token',async t=>{
+ const bus=transportBus(),messages=[],closed=[];const host=await api.openPeerRoom({...options,type:'create',format:'doubles',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>messages.push(m),onClose:e=>closed.push(e)});t.after(()=>host.close());
+ const guest=await api.openPeerRoom({...options,playerId:'reserved',type:'join',format:'doubles',code:'ABCDE',peerFactory:bus.peerFactory});t.after(()=>guest.close());guest.close();await flush();
+ const room=messages.findLast(m=>m.type==='room'),attacker=bus.peerFactory();t.after(()=>attacker.destroy());await flush();
+ for(const resume of [{sessionId:room.sessionId,token:'a'.repeat(32)},{sessionId:room.sessionId,token:room.token}]){
+  const replies=[],channel=attacker.connect(bus.peers[0].id,{serialization:'json',reliable:true});channel.on('data',m=>replies.push(m));channel.on('open',()=>channel.send({type:'rally-hello',version:RULES_VERSION,format:'doubles',profile:{...options,playerId:'reserved'},resume}));await flush();assert.equal(replies[0].type,'rally-reject');channel.close();
+ }
+ await assert.rejects(api.openPeerRoom({...options,playerId:'reserved',type:'join',format:'doubles',code:'ABCDE',peerFactory:bus.peerFactory}),/身份/);
+ assert.equal(closed.length,0);assert.equal(messages.findLast(m=>m.type==='room').players[1].connected,false);
+});
+
+test('format omitted on join discovers a doubles invitation and malformed readiness cannot reach UI',async t=>{
+ const bus=transportBus(),hostMessages=[],guestMessages=[],closes=[];
+ const host=await api.openPeerRoom({...options,type:'create',format:'doubles',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>hostMessages.push(m)});t.after(()=>host.close());
+ const guest=await api.openPeerRoom({...options,playerId:'guest',type:'join',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>guestMessages.push(m),onClose:e=>closes.push(e)});t.after(()=>guest.close());
+ assert.equal(guestMessages[0].format,'doubles');const bad=structuredClone(guestMessages[0]);bad.ready={};bus.peers[0].connections[0].send(bad);await flush();assert.equal(closes.length,1);
+});
+
+test('private seat recovery replaces a half-open channel and ignores its late close',async t=>{
+ const bus=transportBus(),messages=[[],[]],closes=[];
+ const host=await api.openPeerRoom({...options,type:'create',format:'doubles',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>messages[0].push(m)});t.after(()=>host.close());
+ const guest=await api.openPeerRoom({...options,playerId:'guest',type:'join',format:'doubles',code:'ABCDE',peerFactory:bus.peerFactory,onMessage:m=>messages[1].push(m),onClose:e=>closes.push(e)});t.after(()=>guest.close());
+ const oldHost=bus.peers[0].connections[0],oldGuest=bus.peers[1].connections[0];oldGuest.open=false;oldGuest.closed=true;oldGuest.emit('close');
+ assert.equal(oldHost.open,true);await new Promise(resolve=>setTimeout(resolve,700));await flush();
+ assert.equal(closes.length,0);assert.equal(messages[0].findLast(m=>m.type==='room').players[1].connected,true);
+ assert.ok(messages[1].some(m=>m.type==='reconnecting'));assert.equal(messages[1].findLast(m=>m.type==='room').reconnect.slots.length,0);
+ oldHost.emit('close');await flush();assert.equal(messages[0].findLast(m=>m.type==='room').players[1].connected,true);assert.equal(messages[0].findLast(m=>m.type==='room').reconnect.slots.length,0);
+});

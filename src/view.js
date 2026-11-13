@@ -1,3 +1,4 @@
+import { localTeam } from './match-lineup.js';
 import { normalizeBrightness } from './arena-preferences.js';
 import * as THREE from 'three';
 import { fitCourtViewport, getShuttleEdgeHint } from './court-layout.js';
@@ -438,16 +439,16 @@ export class CourtView {
     if (!live) { clear(); return; }
     const displayDelta = this.hintDisplayTime === null ? 0 : clamp(displayTime - this.hintDisplayTime, 0, .05);
     this.hintDisplayTime = displayTime;
-    const sign = side === 0 ? 1 : -1;
+    const team=localTeam(state,side),sign=team===0?1:-1;
     const onHalf = (point, halfSign) => !!point && Number.isFinite(point.x) && Number.isFinite(point.z) &&
-      Math.abs(point.x) <= COURT.halfWidth && Math.abs(point.z) <= COURT.halfLength && point.z * halfSign > 0;
+      Math.abs(point.x) <= (state.format==='doubles'?3.05:COURT.halfWidth) && Math.abs(point.z) <= COURT.halfLength && point.z * halfSign > 0;
     const show = (marker, point, enabled) => {
       marker.group.visible = !!enabled;
       if (enabled) marker.group.position.set(point.x, marker.floorY, point.z);
     };
     const landing = info?.landing;
-    const incoming = state.phase === 'rally' && state.shuttle.active && state.shuttle.lastHit === 1 - side;
-    const safeArrival = incoming && landing?.event === 'landing' && landing.side === side &&
+    const incoming = state.phase === 'rally' && state.shuttle.active && state.shuttle.lastHit === 1 - team;
+    const safeArrival = incoming && landing?.event === 'landing' && landing.side === team &&
       !landing.out && !landing.serviceFault && onHalf(landing, sign);
     show(this.landingHint, landing, safeArrival);
     if (safeArrival) {
@@ -502,7 +503,7 @@ export class CourtView {
     this.targetHint.riskRing.material.color.setHex(risk > .55 ? 0xff775e : risk > .25 ? 0xffc77d : 0xffb1c6);
     this.targetHint.riskRing.material.opacity = 1;
     const player = state.players?.[side], available = info?.availability;
-    const canServe = state.phase === 'serve' && state.server === side;
+    const canServe = state.phase === 'serve' && (state.serverPlayer??state.server) === side;
     show(this.readyHint, player, !!available?.canHit && (safeArrival || canServe) && onHalf(player, sign));
     // A warm foot arc means a smash can be played now, not merely at a future interception.
     this.readyHint.circle.material.color.setHex(available?.canSmash ? 0xff9b56 : 0x8feee1);
@@ -553,7 +554,10 @@ export class CourtView {
     if(info.finale){this.staminaHUD?.hide();this.renderFinale(state,info.finale,side);return;}
     this.clearFinale();
     dt=clamp(Number.isFinite(dt)?dt:1/60,0,.06);
-    if(this.cameraSide!==side)this.updateCamera(side);
+    const team=localTeam(state,side);
+    if(this.cameraSide!==team)this.updateCamera(team);
+    while(this.players.length<state.players.length){const athlete=makeAthlete(this.scene,this.players.length%2);this.players.push(athlete);void upgradeAthlete(athlete);}
+    this.players.forEach((athlete,index)=>{athlete.root.visible=index<state.players.length;athlete.ground.visible=index<state.players.length;});
     this.applyEntrance();
     const reset=!this.initialized||state.pointId!==this.lastPoint||state.time<this.lastStateTime||
       (state.phase==='serve'&&this.lastPhase!=='serve');
@@ -571,7 +575,7 @@ export class CourtView {
     const athleteReset=!this.initialized||state.time<this.lastStateTime||
       (state.phase==='serve'&&this.lastPhase!=='serve')||(freeze&&state.pointId!==this.lastPoint);
     state.players.forEach((player,index)=>{
-      if(this.players[index])updateAthlete(this.players[index],player,index,shuttle,athleteTime,dt,index===side,athleteFreeze,athleteReset,
+      if(this.players[index])updateAthlete(this.players[index],player,localTeam(state,index),shuttle,athleteTime,dt,index===side,athleteFreeze,athleteReset,
         state.challenge?.bossSide===index?state.challenge.rescue:null);
     });
     const ballReset=reset||this.shuttlePosition.distanceToSquared(new THREE.Vector3(shuttle.x,shuttle.y,shuttle.z))>100;
@@ -631,7 +635,7 @@ export class CourtView {
     this.staminaHUD?.update(state, side, (x, y, z) => {
       const point = this.staminaProjection.set(x, y, z).project(this.camera);
       return { x: (point.x + 1) * this.width / 2, y: (1 - point.y) * this.height / 2, depth: point.z };
-    }, { left: 0, right: this.width, top: 0, bottom: this.height }, this.mode === 'match');
+    }, { left: 0, right: this.width, top: 0, bottom: this.height }, this.mode === 'match', info.playerNames);
     const ghosts = phantomPositions(state), h = state.challenge, boss = state.players[1];
     this.phantoms.forEach((ghost,index) => {
       const point = ghosts[index];ghost.visible = this.mode === 'match' && !!point;

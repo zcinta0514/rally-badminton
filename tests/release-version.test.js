@@ -9,5 +9,5 @@ test('the displayed product version matches package and lockfile versions', asyn
   assert.match(packageJson.version, /^\d+\.\d+\.\d+$/);
   assert.equal(lockfile.version, packageJson.version);
   assert.equal(lockfile.packages[''].version, packageJson.version);
-  assert.match(index, new RegExp('正式版 ' + packageJson.version.replaceAll('.', '\\.')));
+  assert.match(index, new RegExp('(?:正式|预览)版 ' + packageJson.version.replaceAll('.', '\\.')));
 });

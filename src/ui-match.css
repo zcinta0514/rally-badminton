@@ -201,3 +201,5 @@ body:not([data-screen=match]) .player-stamina-layer,body[data-finale=true] .play
   .aim-heading b { font-size:10px; }.shot-instruction { font-size:9px; }
   #game-controls:has(.gesture-pad:not([hidden])) .aim-heading { transform:translate(48px,-36px); width:calc(100% - 48px); }
 }
+
+.player-stamina span {max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}

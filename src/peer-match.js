@@ -6,9 +6,8 @@ const MAX_CATCHUP_MS = 500;
 const INPUT_TIMEOUT_MS = 250;
 const SHOT_INTERVAL_MS = 100;
 const SHOTS = new Set(['clear', 'drop', 'smash']);
-const MESSAGES = new Set(['ready', 'input', 'ping', 'pause', 'suspend', 'resume', 'rematch', 'leave']);
+const MESSAGES = new Set(['lobby', 'ready', 'input', 'ping', 'pause', 'suspend', 'resume', 'rematch', 'leave']);
 const clamp = (value, min, max) => Number.isFinite(value) ? Math.max(min, Math.min(max, value)) : 0;
-const validSlot = slot => slot === 0 || slot === 1;
 const scoreWinner = state => state.score[0] === state.score[1] ? null : state.score[0] > state.score[1] ? 0 : 1;
 const clone = value => structuredClone(value);
 
@@ -32,14 +31,18 @@ function newSessionId() {
 /** A browser-hosted authority; the transport owns its clock timer and peer connections. */
 export class PeerMatch {
   constructor({ code, host, target = 5, ruleset = 'quick', finale = 'none', send, now = () => performance.now(),
-    seed = () => Math.floor(Math.random() * 0xffffffff) + 1, sessionId, readyRequired = false } = {}) {
+    seed = () => Math.floor(Math.random() * 0xffffffff) + 1, sessionId, readyRequired = false, format = 'singles' } = {}) {
     this.code = typeof code === 'string' ? code.trim().toUpperCase() : '';
     this.sessionId = typeof sessionId === 'string' && sessionId.length > 0 && sessionId.length <= 128 ? sessionId : newSessionId();
     this.ruleset = ruleset === 'standard21' ? 'standard21' : 'quick';
-    this.rules = Object.freeze({ finale: finale === 'father-son' ? 'father-son' : 'none' });
+    this.rules = Object.freeze({ finale: format !== 'doubles' && finale === 'father-son' ? 'father-son' : 'none' });
     this.target = this.ruleset === 'standard21' ? 21 : [5, 11, 21].includes(target) ? target : 5;
-    this.players = [profileOf(host), null];
-    this.readyRequired = readyRequired === true; this.startReady = new Set();
+    this.format = format === 'doubles' ? 'doubles' : 'singles';
+    this.count = this.format === 'doubles' ? 4 : 2;
+    this.hostSlot = 0; this.tokens = Array.from({length:this.count}, () => newSessionId());
+    this.disconnected = new Map(); this.recoveryPaused = false;
+    this.players = Array(this.count).fill(null); this.players[0] = profileOf(host);
+    this.readyRequired = readyRequired === true || this.count === 4; this.startReady = new Set();
     this.state = null;
     this.abandoned = false;
     this.send = send;
@@ -51,9 +54,9 @@ export class PeerMatch {
     this.snapshotSeq = 0;
     this.matchId = 1;
     this.matchEndedAt = null;
-    this.inputs = [{}, {}];
-    this.lastInput = [-Infinity, -Infinity];
-    this.lastShot = [-Infinity, -Infinity];
+    this.inputs = Array.from({length:this.count}, () => ({}));
+    this.lastInput = Array(this.count).fill(-Infinity);
+    this.lastShot = Array(this.count).fill(-Infinity);
     this.resumeReady = new Set();
     this.rematch = new Set();
     this.closed = false;
@@ -66,8 +69,8 @@ export class PeerMatch {
 
   announce() {
     if (this.closed) return;
-    for (let slot = 0; slot < 2; slot++) this.emit(slot, {
-      type: 'room', code: this.code, slot, token: null, target: this.target,
+    for (let slot = 0; slot < this.count; slot++) this.emit(slot, {
+      type: 'room', code: this.code, slot, token: this.count === 4 ? this.tokens[slot] : null, ...(this.count === 4 ? {format:this.format,reconnect:this.reconnectStatus(),abandoned:this.abandoned} : {}), target: this.target,
       ruleset: this.ruleset, rules: this.rules, players: this.players, sessionId: this.sessionId,
       ...(this.readyRequired ? { readyRequired: true, ready: [...this.startReady].sort() } : {}),
     });
@@ -75,23 +78,26 @@ export class PeerMatch {
 
   join(guest) {
     if (this.closed) throw new Error('房间已关闭，请重新约战');
-    if (!this.players[0]?.connected) throw new Error('房主已离开，房间已结束');
-    if (this.players[1] || this.state) throw new Error('房间已满或比赛已开始');
-    this.players[1] = profileOf(guest);
+    if (!this.players[this.hostSlot]?.connected) throw new Error('房主已离开，房间已结束');
+    const seat = this.players.findIndex(player => player === null);
+    if (seat < 0 || this.state) throw new Error('房间已满或比赛已开始');
+    if(this.abandoned) throw Error('房间已结束');
+    if(this.count===4 && guest?.playerId && this.players.some(player=>player?.playerId===guest.playerId)) throw Error('该玩家身份已在房间中');
+    this.players[seat] = profileOf(guest); this.startReady.clear();
     if (!this.readyRequired) this.startMatch();
     this.announce();
     this.broadcast();
-    return true;
+    return this.count === 4 ? seat : true;
   }
 
   startMatch() {
     this.abandoned = false;
     this.matchEndedAt = null;
-    this.state = createMatch({ target: this.target, ruleset: this.ruleset,
+    this.state = createMatch({ format:this.format, target: this.target, ruleset: this.ruleset,
       roles: this.players.map(player => player.role), seed: this.seed() });
-    this.inputs = [{}, {}];
-    this.lastInput = [-Infinity, -Infinity];
-    this.lastShot = [-Infinity, -Infinity];
+    this.inputs = Array.from({length:this.count}, () => ({}));
+    this.lastInput = Array(this.count).fill(-Infinity);
+    this.lastShot = Array(this.count).fill(-Infinity);
     this.resumeReady.clear();
     this.rematch.clear();
     this.lastTick = Math.max(this.lastTick, this.now());
@@ -104,17 +110,17 @@ export class PeerMatch {
     const serverTime = this.lastTick - this.accumulator;
     if (this.state.phase === 'over' && this.matchEndedAt === null) this.matchEndedAt = serverTime;
     const message = { type: 'state', state: this.state, seq: ++this.snapshotSeq, matchId: this.matchId,
-      serverTime, matchEndedAt: this.matchEndedAt, leaderboard: null, sessionId: this.sessionId, abandoned: this.abandoned };
-    for (let slot = 0; slot < 2; slot++) this.emit(slot, message);
+      serverTime, matchEndedAt: this.matchEndedAt, leaderboard: null, sessionId: this.sessionId, abandoned: this.abandoned, ...(this.count === 4 ? {reconnect:this.reconnectStatus()} : {}) };
+    for (let slot = 0; slot < this.count; slot++) this.emit(slot, message);
   }
 
   readiness(type, ready) {
     const message = { type, ready: [...ready].sort() };
-    for (let slot = 0; slot < 2; slot++) this.emit(slot, message);
+    for (let slot = 0; slot < this.count; slot++) this.emit(slot, message);
   }
 
   receive(slot, message) {
-    if (this.closed || !validSlot(slot) || !this.players[slot]?.connected || !message ||
+    if (this.closed || !Number.isInteger(slot) || slot < 0 || slot >= this.count || !this.players[slot]?.connected || !message ||
       typeof message !== 'object' || Array.isArray(message) || !MESSAGES.has(message.type)) return;
     this.tick();
     if (message.type === 'ping') {
@@ -122,12 +128,27 @@ export class PeerMatch {
       return;
     }
     if (message.type === 'leave') { this.depart(slot, true); return; }
+    if(this.abandoned) {this.emit(slot,{type:'error',message:'本局已中止，请重新创建房间'});return;}
+    if (message.type === 'lobby') {
+      if (this.count !== 4 || this.state) return;
+      if (message.role !== undefined && !Object.hasOwn(ROLES,message.role)) return;
+      const seat = message.seat ?? slot;
+      if (!Number.isInteger(seat) || seat < 0 || seat >= 4) return;
+      if (seat !== slot && this.players[seat]) {this.emit(slot,{type:'error',message:'该位置已有人，请选择空位'});return;}
+      if (message.role !== undefined) this.players[slot].role = message.role;
+      if (seat !== slot) {
+        this.players[seat]=this.players[slot];this.players[slot]=null;
+        [this.tokens[seat],this.tokens[slot]]=[this.tokens[slot],this.tokens[seat]];
+        if(this.hostSlot===slot)this.hostSlot=seat;
+      }
+      this.startReady.clear();this.announce();return;
+    }
     if (message.type === 'ready') {
       if (this.state || !this.readyRequired) return;
       if (!this.players.every(player => player?.connected)) { this.emit(slot, {type:'error',message:'等待球友加入后再准备'}); return; }
       if (!confirmsRoomRules(message, this)) { this.emit(slot, {type:'error',message:'请确认本房间的比分和对局类型'}); return; }
       this.startReady.add(slot); this.announce();
-      if (this.startReady.size === 2) { this.startMatch(); startRoomCountdown(this.state); this.broadcast(); }
+      if (this.startReady.size === this.count) { this.startMatch(); startRoomCountdown(this.state); this.broadcast(); }
       return;
     }
     const state = this.state;
@@ -154,7 +175,7 @@ export class PeerMatch {
       if (!pauseMatch(state, slot)) {
         this.emit(slot, { type: 'error', message: '本局暂停已用过，或当前不能暂停' }); return;
       }
-      this.resumeReady.clear(); this.inputs = [{}, {}];
+      this.resumeReady.clear(); this.inputs = Array.from({length:this.count}, () => ({}));
       this.readiness('resumeReady', this.resumeReady); this.broadcast();
     } else if (message.type === 'suspend') {
       this.freeze(slot); this.broadcast();
@@ -166,23 +187,42 @@ export class PeerMatch {
         this.emit(slot, { type: 'error', message: '对方已断开，请重新约战' }); return;
       }
       this.resumeReady.add(slot); this.readiness('resumeReady', this.resumeReady);
-      if (this.resumeReady.size === 2) resumeMatch(state);
-      this.inputs = [{}, {}]; this.broadcast();
+      if (this.resumeReady.size === this.count) { this.recoveryPaused = false; resumeMatch(state); }
+      this.inputs = Array.from({length:this.count}, () => ({})); this.broadcast();
     } else if (message.type === 'rematch' && state.phase === 'over') {
       if (!this.players.every(player => player?.connected)) {
         this.emit(slot, { type: 'error', message: '对方已离开，请重新约战' }); return;
       }
       this.rematch.add(slot); this.readiness('rematch', this.rematch);
-      if (this.rematch.size === 2) {
+      if (this.rematch.size === this.count) {
         this.matchId++; this.startMatch(); if (this.readyRequired) startRoomCountdown(this.state);
         this.readiness('resumeReady', this.resumeReady); this.broadcast();
       }
     }
   }
 
+  reconnectStatus() {
+    return {slots:[...this.disconnected.keys()].sort(),remainingMs:this.disconnected.size ? Math.max(0,Math.min(...this.disconnected.values())-this.now()) : 0};
+  }
+
+  reconnect(sessionId, token) {
+    this.tick();
+    const slot=this.tokens.indexOf(token);
+    if(this.count!==4 || this.closed || this.abandoned || sessionId!==this.sessionId || slot<0 || !this.disconnected.has(slot) || this.players[slot]?.connected) throw Error('重连凭证无效或座位已过期');
+    this.disconnected.delete(slot);this.players[slot].connected=true;
+    this.announce();this.readiness('rematch',this.rematch);this.readiness('resumeReady',this.resumeReady);this.broadcast();return slot;
+  }
+
   freeze(slot) {
+    if (this.count === 4 && this.state && this.state.phase !== 'over') {
+      const state=this.state;
+      if(!['paused','countdown'].includes(state.phase)) {state.pause.previousPhase=state.phase;state._savedTimer=state.timer;}
+      state.phase='paused';state.timer=30;state.pause.remaining=30;
+      state.message='比赛暂停 · 等待四人重新准备';this.recoveryPaused=true;
+      this.inputs=Array.from({length:4},()=>({}));this.resumeReady.clear();this.readiness('resumeReady',this.resumeReady);return;
+    }
     if (!this.state) { this.startReady.clear(); this.announce(); }
-    this.resumeReady.clear(); this.inputs = [{}, {}];
+    this.resumeReady.clear(); this.inputs = Array.from({length:this.count}, () => ({}));
     this.readiness('resumeReady', this.resumeReady);
     const state = this.state;
     if (!state || state.phase === 'over' || state.phase === 'paused') return;
@@ -195,11 +235,12 @@ export class PeerMatch {
   }
 
   depart(slot, leaving) {
-    if (this.closed || !validSlot(slot) || !this.players[slot]?.connected) return;
-    if (leaving) this.players[slot] = null;
+    if (this.closed || !Number.isInteger(slot) || slot < 0 || slot >= this.count || !this.players[slot]?.connected) return;
+    if (leaving) {this.players[slot] = null; if(this.count===4)this.tokens[slot]=newSessionId();}
     else this.players[slot].connected = false;
-    this.inputs = [{}, {}]; this.resumeReady.clear(); this.rematch.clear();
+    this.inputs = Array.from({length:this.count}, () => ({})); this.resumeReady.clear(); this.rematch.clear();
     this.startReady.clear();
+    if(this.count===4)this.readiness('rematch',this.rematch);
     if (this.state && this.state.phase !== 'over') {
       this.abandoned = true;
       finishMatch(this.state, null, leaving ? '球友已离开，本局结束' : '球友连接已断开，本局结束，请重新约战', leaving ? 'quit' : 'disconnect');
@@ -208,8 +249,13 @@ export class PeerMatch {
   }
 
   disconnect(slot) {
-    if (this.closed || !validSlot(slot) || !this.players[slot]?.connected) return;
-    this.tick(); this.depart(slot, false);
+    if (this.closed || !Number.isInteger(slot) || slot < 0 || slot >= this.count || !this.players[slot]?.connected) return;
+    this.tick();
+    if(this.count===4 && !this.abandoned) {
+      this.players[slot].connected=false;this.disconnected.set(slot,this.now()+30000);
+      this.startReady.clear();this.rematch.clear();this.readiness('rematch',this.rematch);this.freeze(slot);this.announce();this.broadcast();return;
+    }
+    this.depart(slot, false);
   }
 
   tick() {
@@ -220,6 +266,15 @@ export class PeerMatch {
       const now = Number.isFinite(reading) ? Math.max(this.lastTick, reading) : this.lastTick;
       const elapsed = now - this.lastTick;
       this.lastTick = now;
+      if(this.count===4 && this.disconnected.size) {
+        if([...this.disconnected.values()].some(deadline=>now>=deadline)) {
+          if(!this.state || this.state.phase!=='over')this.abandoned=true;this.disconnected.clear();
+          if(this.state && this.state.phase!=='over') finishMatch(this.state,null,'重连超时，本局中止','disconnect');
+          this.announce();this.broadcast();
+        } else this.broadcast();
+        this.accumulator=0;return;
+      }
+      if(this.recoveryPaused && this.state?.phase==='paused') {this.accumulator=0;return;}
       if (elapsed > MAX_CATCHUP_MS) {
         // A background phone must not replay minutes of unobserved gameplay on wake.
         this.accumulator = 0;
@@ -227,7 +282,7 @@ export class PeerMatch {
         return;
       }
       this.accumulator += elapsed;
-      for (let slot = 0; slot < 2; slot++) {
+      for (let slot = 0; slot < this.count; slot++) {
         if (now - this.lastInput[slot] > INPUT_TIMEOUT_MS) this.inputs[slot] = {};
       }
       let snapshotDue = false;
@@ -247,7 +302,7 @@ export class PeerMatch {
 
   close() {
     if (this.closed) return;
-    this.closed = true; this.send = null; this.state = null; this.players = [null, null];
-    this.inputs = [{}, {}]; this.resumeReady.clear(); this.rematch.clear(); this.accumulator = 0;
+    this.closed = true; this.send = null; this.state = null; this.players = Array(this.count).fill(null);
+    this.inputs = Array.from({length:this.count}, () => ({})); this.resumeReady.clear(); this.rematch.clear(); this.accumulator = 0;
   }
 }
