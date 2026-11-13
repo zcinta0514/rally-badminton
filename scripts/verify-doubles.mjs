@@ -40,11 +40,11 @@ try{
  await p.locator('#leave-game').click();check('844x390: one fixed human + three AI, real serve/return, four visible athletes, local pause');
  await p.setViewportSize({width:667,height:375});await p.locator('#open-solo').click();await p.locator('#start-ai').click();
  await p.locator('#start-ai-confirm').click();await readyGame(p);await p.screenshot({path:out+'/practice-667.png'});
- await p.setViewportSize({width:390,height:844});await p.screenshot({path:out+'/practice-portrait.png'});
+ await p.setViewportSize({width:390,height:844});await p.screenshot({path:out+'/practice-portrait.png'});await p.setViewportSize({width:667,height:375});
  await p.locator('#pause').click();await p.locator('#leave-game').click();await p.setViewportSize({width:844,height:390});
  await p.locator('#open-solo').click();await p.locator('#start-ai').click();await p.locator('#ai-lineup [data-lineup=singles]').click();await p.locator('#start-ai-confirm').click();await readyGame(p);
  assert.equal(await p.evaluate(()=>qaView.players.filter(a=>a.root.visible).length),2);
- await p.locator('#pause').click();await p.locator('#leave-game').click();check('667x375 and portrait playable; returning to singles hides extra athletes');
+ await p.locator('#pause').click();await p.locator('#leave-game').click();check('667x375 gameplay and portrait layout inspected; returning to singles hides extra athletes');
  for(let i=0;i<4;i++){await pages[i].locator('#open-friends').click();await pages[i].locator('#player-name').fill('双打测试'+(i+1));await pages[i].locator('#friend-lineup [data-lineup=doubles]').click();}
  await pages[0].locator('#create-room').click();await pages[0].locator('#waiting-dialog').waitFor({state:'visible'});
  const code=(await pages[0].locator('#waiting-code').innerText()).trim();
@@ -71,6 +71,10 @@ try{
  const ended=await pages[0].evaluate(()=>({winner:qaState.winner,endReason:qaState.endReason}));assert.equal(ended.winner,null);assert.equal(ended.endReason,'disconnect');
  check('30-second unrecoverable disconnect ends without a winner');
  assert.deepEqual(report.errors,[]);
+ }catch(error){
+ report.failure=error.message;
+ report.clients=await Promise.all(pages.map(p=>p.evaluate(()=>({diagnostics:window.rallyDiagnostics,phase:window.qaState?.phase,message:window.qaState?.message,reconnect:window.qaState?.reconnect,pause:window.qaState?.pause,peerDestroyed:window.qaPeer?.destroyed,channels:window.qaPeer?Object.values(qaPeer.connections).flat().map(c=>({open:c.open,id:c.connectionId})):[]})).catch(e=>({error:e.message}))));
+ throw error;
 }finally{
  await writeFile(out+'/report.json',JSON.stringify(report,null,2));await browser.close();await app.close();
 }

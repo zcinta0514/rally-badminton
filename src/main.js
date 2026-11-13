@@ -156,7 +156,7 @@ function closeLeaderboard(){
   dialog(from==='result'&&state?.phase==='over'?'result-dialog':null);
 }
 function showConnectionRecovery(){
-  helpOpen=false;
+  helpOpen=false;$('pause-rule-note').hidden=state?.format==='doubles';
   setText('pause-title','连接中断');setText('pause-time',recoveryRemainingMs===null?'—':Math.ceil(recoveryRemainingMs/1000));
   setText('pause-description',reconnectError?`连接恢复失败：${reconnectError}。可返回首页继续人机，或重新约战。`:state?.format==='doubles'?'正在恢复原位置，最多等待30秒。超时结束本场，不计胜负。':'正在尝试恢复连接。可直接返回首页；离线人机不需要比赛服务器。');
   setText('resume','等待连接恢复…');$('resume').disabled=true;
@@ -664,6 +664,7 @@ function updateUI(info,state){
   if(state.phase!==lastPhase){
     lastPhase=state.phase;
     if(state.phase==='paused'){
+      $('pause-rule-note').hidden=Boolean(state.reconnect);
       setText('pause-title','比赛暂停');
       setText('resume','继续比赛 ↗');
       setText('pause-description',state.reconnect?'连接中断，等待球友恢复。超时则中断，不计胜负。':doubles&&mode==='online'?'全员连接后，四人确认继续比赛。':mode==='ai'?'每人每场可暂停一次，最多 30 秒。':peerMode?'每人每场一次，最多 30 秒；双方准备后继续，请保持游戏在前台。':'每人每场一次；双方准备后继续，断线对手可在倒计时内重连。');
