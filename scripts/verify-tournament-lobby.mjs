@@ -77,10 +77,10 @@ try {
   await page.locator('#pause').click();await page.locator('#leave-game').click();
   await page.locator('#open-solo').click();
   await page.locator('#start-ai').click();await fits('#start-ai-confirm',44);
-  for(const id of ['roles','coach-roles','difficulties','ai-formats']) await fits('#'+id);
+  for(const id of ['roles','difficulties','ai-formats']) await fits('#'+id);
   assert.match(await page.locator('#rules-note').innerText(),/净胜/);
   assert.equal(await page.locator('#difficulty-note').isVisible(),false);
-  await page.locator('.setup-reference summary').click();await page.locator('#difficulty-note').waitFor({state:'visible'});await page.locator('.setup-reference summary').click();
+  await page.locator('#ai-more summary').click();await page.locator('#difficulty-note').waitFor({state:'visible'});await page.locator('#coach-roles').scrollIntoViewIfNeeded();await fits('#coach-roles',44);await page.locator('#ai-more summary').click();
   await shot(flowName+'-ai-setup');
   await page.locator('#start-ai-confirm').click();await page.locator('#hud').waitFor({state:'visible'});await page.waitForTimeout(600);await shot(flowName+'-match');
   assert.equal(await page.locator('body').getAttribute('data-screen'),'match');

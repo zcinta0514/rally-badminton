@@ -10,7 +10,7 @@ import {inspectHandoff, formatHandoff} from '../scripts/project-handoff.js';
 const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 function fixture(t) {
-  const root = realpathSync(mkdtempSync(join(tmpdir(), 'rally-handoff-')));
+  const root = realpathSync.native(mkdtempSync(join(tmpdir(), 'rally-handoff-')));
   t.after(() => rmSync(root, {recursive: true, force: true}));
   const git = (...args) => execFileSync('git', args, {cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']}).trim();
   git('init', '-b', 'main');
