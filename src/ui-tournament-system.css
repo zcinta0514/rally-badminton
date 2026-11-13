@@ -347,7 +347,7 @@ body[data-screen=match]:not([data-entering=true]) :is(#hud,#game-controls) { ani
 
 /* Remove enclosing button frames; intentional one-sided dividers are restored
    below. Keep the existing hit areas, including navigation and dialogs. */
-body button {
+body button:not(.shot-btn) {
   border-color:transparent !important;
   background:transparent !important;
   box-shadow:none !important;
@@ -407,24 +407,13 @@ body[data-screen=menu] #menu .segments button.selected {
   box-shadow:inset 0 -2px var(--green) !important;
   text-decoration:none;
 }
-body button:focus-visible {
+body button:not(.shot-btn):focus-visible {
   outline:none;
   text-decoration:underline;
   text-underline-offset:6px;
   text-decoration-thickness:2px;
 }
-body button:active:not(:disabled) { opacity:.72; }
+body button:not(.shot-btn):active:not(:disabled) { opacity:.72; }
 @media(hover:hover) {
-  body button:hover:not(:disabled) { color:#d6efac !important; }
-}
-/* The shot surface still shows charge/availability; its decorative rings do not. */
-body[data-shot-skin=glass] .shot-btn .key-face {
-  border-color:transparent !important;
-  box-shadow:none !important;
-}
-body[data-shot-skin=glass] .key-face::after { border:0; }
-body[data-shot-skin=glass] .shot-btn:focus-visible .key-face {
-  outline:none;
-  text-decoration:underline;
-  text-underline-offset:4px;
+  body button:not(.shot-btn):hover:not(:disabled) { color:#d6efac !important; }
 }
