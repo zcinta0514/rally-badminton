@@ -8,8 +8,6 @@ const validPoints = value => Array.isArray(value) && value.length === 2
 const cleanName = value => typeof value === 'string' ? Array.from(value.slice(0, 256)
   .replace(/[\u0000-\u001f\u007f-\u009f\u200e\u200f\u202a-\u202e\u2066-\u2069]/g, '').trim()).slice(0, 16).join('') || '球友' : '球友';
 const recordKey = record => JSON.stringify([record.sessionId, String(record.matchId)]);
-const validPlayers = players => Array.isArray(players) && players.length === 2
-  && [players[0], players[1]].every(player => validId(player?.playerId));
 const DRAW_REASONS = new Set(['暂停超时 · 平分，本局不计胜负', '暂停次数已用完，本局按当前比分结束']);
 const validDraw = state => state?.winner === null && validPoints(state.score)
   && state.score[0] === state.score[1] && DRAW_REASONS.has(state.message);
@@ -70,18 +68,22 @@ function identityDigest(bytes) {
 }
 
 export function createPeerRecords(options = {}) {
+  const format=options.format==='doubles'?'doubles':'singles', count=format==='doubles'?4:2;
+  const storageKey=format==='doubles'?'rally.peer-results.doubles.v1':STORAGE_KEY;
+  const validRoster=players=>Array.isArray(players) && players.length===count && players.every(player=>validId(player?.playerId));
+  const uniqueRoster=players=>new Set(players.map(p=>p.playerId)).size===count;
   let storage = options.storage, writable = false, records = [];
   if (!Object.hasOwn(options, 'storage')) { try { storage = globalThis.localStorage; } catch { /* Browser privacy mode. */ } }
   try {
     writable = typeof storage?.getItem === 'function' && typeof storage?.setItem === 'function';
-    const raw = storage?.getItem(STORAGE_KEY);
+    const raw = storage?.getItem(storageKey);
     if (raw !== null && raw !== undefined) {
       if (typeof raw !== 'string' || raw.length > MAX_STORAGE_LENGTH) throw Error('Invalid local records');
       const saved = JSON.parse(raw), seen = new Set();
       if (saved?.version !== 1 || !Array.isArray(saved.records) || saved.records.length > MAX_RECORDS) throw Error('Invalid local records');
       const restored = saved.records.map(record => {
-        if (!record || !validToken(record.sessionId) || !validMatchId(record.matchId) || !validPlayers(record.players)
-          || record.players[0].playerId === record.players[1].playerId || !record.players.some(player => player.playerId === record.selfId)
+        if (!record || !validToken(record.sessionId) || !validMatchId(record.matchId) || !validRoster(record.players)
+          || !uniqueRoster(record.players) || !record.players.some(player => player.playerId === record.selfId)
           || ![0, 1, null].includes(record.winner) || !validPoints(record.points)
           || (record.winner !== null && record.points[0] + record.points[1] === 0)
           || seen.has(recordKey(record))) throw Error('Invalid local match');
@@ -95,7 +97,7 @@ export function createPeerRecords(options = {}) {
   let storageMode = writable ? 'local' : 'local-memory';
   function persist() {
     if (writable) {
-      try { storage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, records })); storageMode = 'local'; }
+      try { storage.setItem(storageKey, JSON.stringify({ version: 1, records })); storageMode = 'local'; }
       catch { storageMode = 'local-memory'; }
     }
     return { status: storageMode };
@@ -113,14 +115,15 @@ export function createPeerRecords(options = {}) {
       const excluded = reason => ({ status: 'excluded', reason });
       if (!input || !validToken(input.sessionId) || !validMatchId(input.matchId)) return excluded('invalid_match');
       const { sessionId, matchId, players, state, selfId } = input;
+      if((state?.format || 'singles')!==format) return excluded('wrong_format');
       // A peer may leave after the final snapshot. Keep the previously settled
       // result even when the next room announcement no longer contains them.
       const saved=records.find(record=>recordKey(record)===recordKey(input));
       if(saved)return saved.selfId===selfId?{status:storageMode}:excluded('missing_identity');
       if (state?.phase !== 'over' || (![0, 1].includes(state.winner) && !validDraw(state)) || input.abandoned || state.abandoned || state.quit
         || ['quit', 'abandoned', 'disconnect'].includes(state.endReason)) return excluded('abandoned');
-      if (!validPlayers(players) || !validId(selfId) || !players.some(player => player.playerId === selfId)) return excluded('missing_identity');
-      if (players[0].playerId === players[1].playerId) return excluded('same_player');
+      if (!validRoster(players) || !validId(selfId) || !players.some(player => player.playerId === selfId)) return excluded('missing_identity');
+      if (!uniqueRoster(players)) return excluded('same_player');
       const points = matchPoints(state);
       if (!points || (state.winner !== null && points[0] + points[1] === 0)) return excluded('invalid_score');
       records.push({ sessionId, matchId, selfId, winner: state.winner, points,
@@ -130,7 +133,8 @@ export function createPeerRecords(options = {}) {
     },
     list() {
       const players = new Map();
-      for (const record of records) record.players.forEach((player, side) => {
+      for (const record of records) record.players.forEach((player, seat) => {
+        const side=format==='doubles'?seat%2:seat;
         const row = players.get(player.playerId) || { playerId: player.playerId, name: player.name, matches: 0, wins: 0, losses: 0, draws: 0, points: 0 };
         row.name = player.name; row.matches++; row.points += record.points[side];
         if (record.winner === null) row.draws++;

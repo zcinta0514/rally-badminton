@@ -261,3 +261,11 @@ test('scoring immediately before pause never combines the preceding ball with a 
   assert.deepEqual(paused.shuttle, state.shuttle); near(paused.time, state.time);
   near(view.players[0].root.position.x, paused.players[0].x, 'new scored frame resets the frozen body anchor');
 }));
+
+test('doubles playback anchors slot two contact and stamina to the hitter rather than team zero',()=>{
+ const state=createMatch({format:'doubles'});state.serverPlayer=2;state.players[2].x=state.players[0].x;state.players[2].z=state.players[0].z;
+ const frames=[copy(state)];for(let frame=1;frame<=10;frame++){stepMatch(state,[{},{},frame===1?{shot:'clear',charge:.4}:{},{}],1/120);if(frame%6===0||frame===10)frames.push(copy(state));}
+ assert.equal(state.lastShotInfo.playerSlot,2);const before=frames.find(frame=>frame.players[2].action?.stage==='windup');assert.ok(before);
+ const player=playback(),after=copy(state),at=after.players[2].action.contactAt;receive(player,before,before.time*1000,1);receive(player,after,after.time*1000,2);
+ const sample=player.sample(at*1000+160);assert.equal(sample.hitId,1);assert.equal(sample.shuttle.lastHitPlayer,2);for(const axis of ['x','y','z'])near(sample.shuttle[axis],after.players[2].action.contact[axis]);
+});

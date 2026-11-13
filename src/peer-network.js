@@ -18,6 +18,9 @@ const PHASES = new Set(['serve', 'rally', 'point', 'intermission', 'paused', 'co
 const record = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const finite = Number.isFinite;
 const slot = value => value === 0 || value === 1;
+const playerSlot = value => Number.isInteger(value) && value >= 0 && value < 4;
+const validReconnect = value => record(value) && Array.isArray(value.slots) && value.slots.length <= 4 && value.slots.every(playerSlot) && new Set(value.slots).size===value.slots.length && finite(value.remainingMs) && value.remainingMs>=0 && value.remainingMs<=30000;
+const credential = value => typeof value === 'string' && /^[a-f0-9-]{32,36}$/.test(value);
 const nullableSlot = value => value === null || slot(value);
 const scorePair = value => Array.isArray(value) && value.length === 2 && value.every(n => Number.isInteger(n) && n >= 0);
 
@@ -66,8 +69,9 @@ function withinLimit(value, maximum) {
 
 function commandOf(message) {
   if (!withinLimit(message, MAX_INPUT) || typeof message.type !== 'string') return null;
+  if(message.type === 'lobby') return (message.seat === undefined || playerSlot(message.seat)) && (message.role === undefined || typeof message.role === 'string' && Object.hasOwn(ROLES,message.role)) && (message.seat !== undefined || message.role !== undefined) ? {type:'lobby',...(message.seat !== undefined ? {seat:message.seat}:{}),...(message.role !== undefined ? {role:message.role}:{})} : null;
   if (message.type === 'ready') return [5,11,21].includes(message.target) && ['quick','standard21'].includes(message.ruleset) &&
-    ['none','father-son'].includes(message.finale) ? {type:'ready',target:message.target,ruleset:message.ruleset,finale:message.finale} : null;
+    ['none','father-son'].includes(message.finale) ? {type:'ready',target:message.target,ruleset:message.ruleset,finale:message.finale,...(message.format === 'doubles' ? {format:'doubles'} : {})} : null;
   if (COMMANDS.has(message.type)) return { type: message.type };
   if (message.type === 'ping') return finite(message.at) ? { type: 'ping', at: message.at } : null;
   if (message.type !== 'input') return null;
@@ -86,19 +90,22 @@ function commandOf(message) {
 }
 
 function validRoom(message, code) {
-  return message.type === 'room' && message.code === code && message.slot === 1 &&
+  const doubles=message.format==='doubles', count=doubles?4:2, validSeat=doubles?playerSlot:slot;
+  if(doubles && (!validReconnect(message.reconnect) || message.rules?.finale!=='none' || !Array.isArray(message.ready) || new Set(message.ready).size!==message.ready.length))return false;
+  return message.type === 'room' && message.code === code && (doubles ? validSeat(message.slot) && credential(message.token) : message.slot === 1) &&
     typeof message.sessionId === 'string' && message.sessionId.length > 0 && message.sessionId.length <= 128 &&
     ['quick', 'standard21'].includes(message.ruleset) && [5, 11, 21].includes(message.target) &&
     (message.rules === undefined || record(message.rules) && ['none', 'father-son'].includes(message.rules.finale)) &&
-    (message.readyRequired === undefined || message.readyRequired === true && Array.isArray(message.ready) && message.ready.length <= 2 && message.ready.every(slot)) &&
-    Array.isArray(message.players) && message.players.length === 2 && message.players.every(player => player === null ||
+    (message.readyRequired === undefined || message.readyRequired === true && Array.isArray(message.ready) && message.ready.length <= count && message.ready.every(validSeat)) &&
+    Array.isArray(message.players) && message.players.length === count && message.players.every(player => player === null ||
       record(player) && typeof player.name === 'string' && player.name.length <= 64 &&
       Object.hasOwn(ROLES, player.role) && typeof player.connected === 'boolean' &&
       (player.playerId === null || typeof player.playerId === 'string' && /^[a-zA-Z0-9_-]{1,64}$/.test(player.playerId)));
 }
 
-function validState(message, sessionId) {
-  const state = message.state;
+function validState(message, sessionId, format = 'singles') {
+  const state = message.state, doubles=format==='doubles', count=doubles?4:2;
+  if(doubles && (!validReconnect(message.reconnect) || !record(state) || state.format!=='doubles' || !playerSlot(state.serverPlayer) || !playerSlot(state.receiverPlayer) || state.lastShotInfo !== null && !playerSlot(state.lastShotInfo?.playerSlot) || state.shuttle?.lastHitPlayer !== null && !playerSlot(state.shuttle?.lastHitPlayer))) return false;
   return message.sessionId === sessionId && Number.isSafeInteger(message.seq) && message.seq > 0 &&
     Number.isSafeInteger(message.matchId) && message.matchId > 0 && finite(message.serverTime) && record(state) &&
     state.rulesVersion === RULES_VERSION && PHASES.has(state.phase) && finite(state.time) && finite(state.timer) &&
@@ -117,7 +124,7 @@ function validState(message, sessionId) {
     (state.rallyEnd === null || record(state.rallyEnd) && ['at', 'x', 'y', 'z'].every(key => finite(state.rallyEnd[key]))) &&
     (state.lastShotInfo === null || record(state.lastShotInfo) && finite(state.lastShotInfo.at) && slot(state.lastShotInfo.side) &&
       record(state.lastShotInfo.quality) && typeof state.lastShotInfo.quality.reason === 'string') &&
-    Array.isArray(state.players) && state.players.length === 2 && state.players.every(player => record(player) &&
+    Array.isArray(state.players) && state.players.length === count && state.players.every(player => record(player) &&
       ['x', 'z', 'vx', 'vz', 'stamina', 'staminaRate', 'recoveryWait', 'swing', 'cooldown', 'actionId'].every(key => finite(player[key])) && Object.hasOwn(ROLES, player.role) &&
       (player.shotRecovery === null || record(player.shotRecovery) && Object.hasOwn(STAMINA_TUNING.shotRecovery, player.shotRecovery.type) &&
         finite(player.shotRecovery.expiresAt) && finite(player.shotRecovery.remaining) && player.shotRecovery.remaining >= 0 &&
@@ -158,10 +165,12 @@ async function defaultPeerFactory(signal) {
 }
 
 /** Public cloud performs pairing only; slot 0 runs the authoritative match. */
-export async function openPeerRoom({ type, code, name, role, playerId, target = 5, ruleset = 'quick', finale = 'none', readyRequired = false,
+export async function openPeerRoom({ type, code, name, role, playerId, target = 5, ruleset = 'quick', finale = 'none', readyRequired = false, format,
   onMessage = () => {}, onClose = () => {}, onStatus = () => {}, signal, peerFactory } = {}) {
   if (type !== 'create' && type !== 'join') throw new Error('请选择创建房间或加入房间');
   const isHost = type === 'create';
+  if(format !== undefined && !['singles','doubles'].includes(format)) throw Error('无效对局类型');
+  let roomFormat = format || 'singles';
   let roomCode = isHost ? code ? normalizeRoomCode(code) : generateRoomCode() : normalizeRoomCode(code);
   if (signal?.aborted) throw new Error('已取消连接');
   const factory = peerFactory || await defaultPeerFactory(signal);
@@ -171,6 +180,8 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
   return new Promise((resolve, reject) => {
     let peer, match, connection, tickTimer, openTimer;
     let ended = false, settled = false, joined = false, accepted = false, sessionId = null, attempts = 0;
+    let seatToken = null, recovering = false, recoveryTimer, retryTimer, recoveryDeadline=0;
+    const seatConnections = new Map();
     const timers = new Set(), listeners = new Set(), connections = new Set(), attemptedCodes = new Set();
     const stats = { sent: 0, received: 0, dropped: 0 };
     const status = message => { if (!ended) { try { onStatus(message); } catch {} } };
@@ -216,10 +227,10 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
     const sendData = (current, message) => {
       if (ended || !current?.open) return false;
       const bytes = current.dataChannel?.bufferedAmount || 0, queued = current.bufferSize || 0;
-      if (bytes > HARD_BUFFER || queued > 64) { fail(new Error('直连数据积压，连接已结束，请检查 Wi-Fi 后重新约战')); return false; }
+      if (bytes > HARD_BUFFER || queued > 64) { if(roomFormat==='doubles' && settled){current.close();return false;} fail(new Error('直连数据积压，连接已结束，请检查 Wi-Fi 后重新约战')); return false; }
       if ((message.type === 'state' || message.type === 'input') && (bytes > SOFT_BUFFER || queued > 0)) { stats.dropped++; return false; }
       try { current.send(message); stats.sent++; return true; }
-      catch { fail(new Error('手机直连已断开，请重新约战')); return false; }
+      catch { if(roomFormat==='doubles' && settled)current.close();else fail(new Error('手机直连已断开，请重新约战')); return false; }
     };
     const session = {
       isHost,
@@ -227,17 +238,18 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
         if (ended || !settled) return false;
         const command = commandOf(message); if (!command) return false;
         if (isHost) {
-          try { match.receive(0, command); } catch { fail(new Error('比赛运行失败，请重新约战')); return false; }
+          try { match.receive(match.hostSlot, command); } catch { fail(new Error('比赛运行失败，请重新约战')); return false; }
           if (command.type === 'leave') cleanup();
           return true;
         }
+        if(recovering) return false;
         const sent = sendData(connection, command);
         if (command.type === 'leave') cleanup();
         return sent;
       },
       close() { cleanup(); },
       async getStats() {
-        const result = { ...stats, isHost, code: roomCode, connected: !ended && !!connection?.open,
+        const result = { ...stats, isHost, code: roomCode, connected: !ended && (isHost && roomFormat==='doubles' ? [...seatConnections.keys()].some(current=>current.open) : !!connection?.open),
           signalingConnected: !ended && !!peer?.open && !peer?.disconnected,
           bufferedAmount: connection?.dataChannel?.bufferedAmount || 0 };
         try {
@@ -250,7 +262,26 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
       },
     };
 
+    function retryConnection() {
+      if(ended || !recovering) return;
+      deliver({type:'reconnecting',remainingMs:Math.max(0,recoveryDeadline-performance.now())});
+      try {if(peer.disconnected) peer.reconnect?.();}catch{}
+      try {if(!connection || !connections.has(connection))acceptConnection(peer.connect(PREFIX + roomCode,{serialization:'json',reliable:true,label:'rally-v2'}));}catch{}
+      retryTimer=later(retryConnection,1000);
+    }
     function channelLost(current) {
+      if(roomFormat==='doubles' && settled) {
+        connections.delete(current);
+        if(isHost) {
+          const token=seatConnections.get(current);seatConnections.delete(current);
+          const seat=match.tokens.indexOf(token);
+          if(seat>=0) match.disconnect(seat);
+        } else if(connection===current) {
+          connection=null;accepted=false;
+          if(!recovering) {recovering=true;recoveryDeadline=performance.now()+30000;deliver({type:'reconnecting',remainingMs:30000});status('连接中断，30 秒内自动重连');recoveryTimer=later(()=>fail(new Error('重连超时，本局中止')),30000);retryTimer=later(retryConnection,400);}
+        }
+        return;
+      }
       connections.delete(current);
       if (connection !== current) return;
       if (isHost && !joined) { connection = null; return; }
@@ -261,14 +292,14 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
     function acceptConnection(current) {
       if (connections.size >= 8) { current.close(); return; }
       connections.add(current);
-      const extra = isHost && (!!connection || !match);
-      if (!extra) connection = current;
+      const extra = isHost && (roomFormat === 'doubles' ? !match : !!connection || !match);
+      if (!extra && (!isHost || roomFormat !== 'doubles')) connection = current;
       let helloSeen = false, opened = false, rejected = false, closeTimer;
       const channelListeners = [];
       const onChannel = (event, handler) => channelListeners.push(listen(current, event, handler));
       let receivedAt = performance.now(), receivedCount = 0;
       const handshakeTimer = later(() => {
-        if (extra || isHost && !helloSeen) { current.close(); return; }
+        if (extra || isHost && !helloSeen || recovering) { current.close(); return; }
         fail(new Error('手机直连握手超时，请确认双方连接同一 Wi-Fi 或热点后重试'));
       }, HANDSHAKE_TIMEOUT);
       const rejectChannel = message => {
@@ -292,6 +323,7 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
         if (++receivedCount > 150) { current.close(); return; }
         if (!withinLimit(message, isHost ? MAX_INPUT : MAX_MESSAGE)) {
           if (isHost && !helloSeen) rejectChannel('无法识别的直连握手');
+          else if(isHost && roomFormat==='doubles') current.close();
           else fail(new Error('收到无效比赛消息，房间已结束'));
           return;
         }
@@ -303,6 +335,26 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
             if (match.rules.finale === 'father-son' && message.finale !== 'father-son') {
               rejectChannel('父子局需要双方更新游戏，请联网刷新后重试；普通对局可继续使用'); return;
             }
+            if(roomFormat==='doubles' && message.format && message.format!=='doubles' || message.format==='doubles' && roomFormat!=='doubles') {rejectChannel('房间对局类型不匹配');return;}
+            if(roomFormat==='doubles') {
+              let seat;
+              try {
+                if(message.resume) {
+                  if(!record(message.resume) || !credential(message.resume.token) || message.resume.sessionId!==match.sessionId) throw Error('重连凭证无效');
+                  seat=match.tokens.indexOf(message.resume.token);
+                  if(seat<0 || !match.disconnected.has(seat) || match.players[seat]?.connected || match.abandoned) throw Error('重连座位无效');
+                } else {
+                  seat=match.players.findIndex(p=>p===null);
+                  if(seat<0 || match.state || match.abandoned) throw Error('房间已满或比赛已开始');
+                }
+                seatConnections.set(current,match.tokens[seat]);helloSeen=true;cancel(handshakeTimer);
+                if(!sendData(current,{type:'rally-accept',version:VERSION,format:'doubles'}))return;
+                if(message.resume)match.reconnect(message.resume.sessionId,message.resume.token);
+                else match.join(publicProfile(message.profile));
+                joined=true;status('四人房间连接已建立');
+              }catch(error){seatConnections.delete(current);rejectChannel(error.message);}
+              return;
+            }
             helloSeen = true; cancel(handshakeTimer);
             if (!sendData(current, { type: 'rally-accept', version: VERSION })) return;
             try { joined = true; match.join(publicProfile(message.profile)); status('手机直连已建立'); }
@@ -310,25 +362,28 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
             return;
           }
           const command = commandOf(message); if (!command) return;
-          try { match.receive(1, command); } catch { fail(new Error('比赛运行失败，请重新约战')); return; }
+          try { const seat=roomFormat==='doubles'?match.tokens.indexOf(seatConnections.get(current)):1; match.receive(seat, command); } catch { fail(new Error('比赛运行失败，请重新约战')); return; }
           if (command.type === 'leave') channelLost(current);
         } else {
           if (message.type === 'rally-reject') { fail(new Error(typeof message.message === 'string' ? message.message.slice(0, 160) : '对方拒绝了连接')); return; }
           if (!accepted) {
             if (message.type !== 'rally-accept' || message.version !== VERSION) { fail(new Error('双方直连协议不同或握手无效，请联网刷新后重试')); return; }
-            accepted = true; return;
+            if(format && (message.format || 'singles')!==format) {fail(new Error('房间对局类型不匹配'));return;}
+            roomFormat=message.format==='doubles'?'doubles':'singles';accepted = true; return;
           }
           if (message.type === 'room') {
-            if (!validRoom(message, roomCode) || readyRequired && message.readyRequired !== true || sessionId && message.sessionId !== sessionId ||
-              !settled && !message.players.every(player => player?.connected)) { fail(new Error('收到无效房间信息，请退出后重新约战')); return; }
-            sessionId = message.sessionId; cancel(handshakeTimer);
+            if (!validRoom(message, roomCode) || (message.format || 'singles')!==roomFormat || readyRequired && message.readyRequired !== true || sessionId && message.sessionId !== sessionId ||
+              roomFormat !== 'doubles' && !settled && !message.players.every(player => player?.connected)) { fail(new Error('收到无效房间信息，请退出后重新约战')); return; }
+            sessionId = message.sessionId; seatToken = message.token; cancel(handshakeTimer);
+            if(recovering){recovering=false;cancel(recoveryTimer);cancel(retryTimer);status('已恢复连接，请四人准备继续');}
             deliver(message); complete(); status('手机直连已建立'); return;
           }
           if (!settled) { fail(new Error('直连握手缺少房间信息，请重试')); return; }
-          if (message.type === 'state' && validState(message, sessionId) ||
+          if (message.type === 'state' && validState(message, sessionId, roomFormat) ||
               message.type === 'pong' && finite(message.at) ||
-              ['resumeReady', 'rematch'].includes(message.type) && Array.isArray(message.ready) && message.ready.length <= 2 && message.ready.every(slot => slot === 0 || slot === 1) ||
+              ['resumeReady', 'rematch'].includes(message.type) && Array.isArray(message.ready) && message.ready.length <= (roomFormat==='doubles'?4:2) && message.ready.every(roomFormat==='doubles'?playerSlot:slot) ||
               message.type === 'error' && typeof message.message === 'string' && message.message.length <= 160) deliver(message);
+          else if(isHost && roomFormat==='doubles') current.close();
           else fail(new Error('收到无效比赛消息，房间已结束'));
         }
       });
@@ -336,7 +391,7 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
         if (opened || ended) return; opened = true;
         if (extra) { rejectChannel('房间已满或比赛已开始'); return; }
         // Advertise support separately from the host's selected room mode.
-        if (!isHost) sendData(current, { type: 'rally-hello', version: VERSION, profile, finale: 'father-son' });
+        if (!isHost) sendData(current, { type: 'rally-hello', version: VERSION, profile, finale: 'father-son',...(format ? {format}:{}),...(recovering && seatToken ? {resume:{sessionId,token:seatToken}}:{}) });
       };
       onChannel('open', openedChannel);
       if (current.open) openedChannel();
@@ -361,6 +416,7 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
           if (attemptedCodes.has(roomCode)) { fail(new Error('房间码生成失败，请重新创建')); return; }
           register(); return;
         }
+        if(roomFormat==='doubles' && settled && ['network','disconnected','socket-error','socket-closed','server-error','peer-unavailable','webrtc'].includes(error?.type)){if(recovering && ['peer-unavailable','webrtc'].includes(error?.type))connection?.close();status('配对服务暂时不可用，正在恢复连接');return;}
         if (connection?.open && joined || connection?.open && accepted && settled) {
           if (['network', 'disconnected', 'socket-error', 'socket-closed', 'server-error'].includes(error?.type)) {
             status('公共配对服务已断开，现有手机直连继续'); return;
@@ -373,6 +429,7 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
         fail(serviceError(error));
       });
       on('disconnected', () => {
+        if(roomFormat==='doubles' && settled) {status('配对服务已断开，正在恢复');later(()=>{try{peer.reconnect?.();}catch{}},500);return;}
         if (connection?.open && (joined || settled && accepted)) status('公共配对服务已断开，现有手机直连继续');
         else fail(new Error('公共配对服务已断开，请重新创建或加入房间'));
       });
@@ -382,8 +439,8 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
         if (registered || ended) return; registered = true;
         if (isHost) {
           try {
-            match = new PeerMatch({ code: roomCode, host: profile, target, ruleset, finale, readyRequired,
-              send: (slot, message) => slot === 0 ? deliver(message) : sendData(connection, message) });
+            match = new PeerMatch({ code: roomCode, host: profile, target, ruleset, finale, readyRequired, format:roomFormat,
+              send: (slot, message) => slot === match.hostSlot ? deliver(message) : roomFormat==='doubles' ? sendData([...seatConnections].find(([,token])=>token===match.tokens[slot])?.[0],message) : sendData(connection, message) });
             match.announce();
             if (ended) return;
             tickTimer = setInterval(() => { try { match.tick(); } catch { fail(new Error('比赛运行失败，请重新约战')); } }, 1000 / 60);

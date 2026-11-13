@@ -54,7 +54,7 @@ function interpolate(a, b, alpha, packetSpanMs) {
   const newPoint = b.pointId !== a.pointId;
   const hitAt = newHit && Number.isFinite(b.lastShotInfo?.at) ? b.lastShotInfo.at : Infinity;
   const rawPointAt = newPoint && Number.isFinite(b.rallyEnd?.at) ? b.rallyEnd.at : Infinity;
-  const contact = newHit ? b.players[b.lastShotInfo?.side]?.action?.contact : null;
+  const contact = newHit ? b.players[b.lastShotInfo?.playerSlot ?? b.lastShotInfo?.side]?.action?.contact : null;
   const hitKnown = b.hitId === a.hitId + 1 && contact && hitAt >= a.time - EPSILON && hitAt <= b.time + EPSILON;
   // An immediate net fault can be timestamped earlier within the same physics
   // slice as its hit. Preserve the event payload, but never show a score first.
@@ -83,7 +83,7 @@ function interpolate(a, b, alpha, packetSpanMs) {
     const next = b.players[side], player = copy(base.players[side]);
     for (const key of ['x', 'z', 'vx', 'vz', 'stamina', 'swing', 'cooldown']) player[key] = mix(previous[key], next[key], motionAlpha);
     const shot = b.lastShotInfo;
-    if (hitKnown && shot.side === side && Number.isFinite(shot.staminaBefore) && Number.isFinite(shot.staminaAfter)) {
+    if (hitKnown && (shot.playerSlot ?? shot.side) === side && Number.isFinite(shot.staminaBefore) && Number.isFinite(shot.staminaAfter)) {
       player.stamina = !hit
         ? mix(previous.stamina, shot.staminaBefore, clamp((time - a.time) / Math.max(EPSILON, hitAt - a.time), 0, 1))
         : mix(shot.staminaAfter, next.stamina, clamp((time - hitAt) / Math.max(EPSILON, b.time - hitAt), 0, 1));
@@ -109,6 +109,7 @@ function interpolate(a, b, alpha, packetSpanMs) {
       const duration = endTime - hitAt, launch = contactBall(contact, endpoint, duration);
       state.shuttle = flightBetween(launch, endpoint, duration, (time - hitAt) / Math.max(EPSILON, duration));
       state.shuttle.active = true; state.shuttle.lastHit = b.lastShotInfo.side;
+      if(b.lastShotInfo.playerSlot !== undefined) state.shuttle.lastHitPlayer = b.lastShotInfo.playerSlot;
     }
   } else if (a.shuttle.active && newPoint) {
     const endpoint = { ...a.shuttle, ...b.rallyEnd };
