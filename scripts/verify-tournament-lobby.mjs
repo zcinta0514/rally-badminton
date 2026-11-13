@@ -76,8 +76,8 @@ try {
   await page.waitForFunction(()=>globalThis.rallyDiagnostics?.challenge?.kind==='hell');
   await page.locator('#pause').click();await page.locator('#leave-game').click();
   await page.locator('#open-solo').click();
-  await page.locator('#start-ai').click();await fits('#start-ai-confirm',44);
-  for(const id of ['roles','difficulties','ai-formats']) await fits('#'+id);
+  await page.locator('#start-ai').click();await page.locator('#start-ai-confirm').scrollIntoViewIfNeeded();await fits('#start-ai-confirm',44);
+  for(const id of ['roles','difficulties','ai-formats']) {await page.locator('#'+id).scrollIntoViewIfNeeded();await fits('#'+id);}
   assert.match(await page.locator('#rules-note').innerText(),/净胜/);
   assert.equal(await page.locator('#difficulty-note').isVisible(),false);
   await page.locator('#ai-more summary').click();await page.locator('#difficulty-note').waitFor({state:'visible'});await page.locator('#coach-roles').scrollIntoViewIfNeeded();await fits('#coach-roles',44);await page.locator('#ai-more summary').click();
@@ -90,13 +90,13 @@ try {
   await page.locator('#pause').click();await shot(flowName+'-pause');await page.locator('#leave-game').click();
   await page.locator('#open-solo').waitFor({state:'visible'});await page.waitForTimeout(500);await shot(flowName+'-returned-home');
   checked(flowName+' solo, ordinary preparation, actual challenge and AI matches, pause-return');
-  await page.locator('#open-friends').click();await page.locator('#player-name').fill('球馆测试');
-  await fits('#create-room',44);await fits('#player-name',44);await shot(flowName+'-create');
+  await page.locator('#open-friends').click();await page.locator('#friend-tabs [data-action="create"]').click();await page.locator('#player-name').fill('球馆测试');
+  await page.locator('#create-room').scrollIntoViewIfNeeded();await fits('#create-room',44);await page.locator('#player-name').scrollIntoViewIfNeeded();await fits('#player-name',44);await shot(flowName+'-create');
   assert.equal(await page.locator('#friend-mode-note').isVisible(),false);
-  await page.locator('[data-finale="father-son"]').click();assert.equal(await page.locator('#friend-mode-note').isVisible(),true);
+  await page.locator('#friend-more summary').click();await page.locator('[data-finale="father-son"]').click();assert.equal(await page.locator('#friend-mode-note').isVisible(),true);
   await page.locator('[data-finale="none"]').click();
-  await page.locator('#friend-tabs [data-action="join"]').click();await page.locator('#room-code').scrollIntoViewIfNeeded();await shot(flowName+'-friends');
-  await page.locator('#entry-back').click();checked('friend create/join preparation and return');
+  await page.locator('#entry-back').click();await page.locator('#friend-tabs [data-action="join"]').click();await page.locator('#room-code').scrollIntoViewIfNeeded();await shot(flowName+'-friends');
+  await page.locator('#entry-back').click();await page.locator('#entry-back').click();checked('friend create/join preparation and return');
   await page.locator('#match-settings-toggle').click();await page.locator('#arena-master').waitFor({state:'visible'});
   await page.locator('#match-settings-toggle').click();checked('lobby audio settings reachable');
   }

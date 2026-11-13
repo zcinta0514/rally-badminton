@@ -149,7 +149,7 @@ test('missing task documents, absolute paths and symlinks escaping the repositor
     ['missing checkpoint', f => {f.data.handoff.checkpoint = 'docs/missing.md';}],
     ['absolute path', f => {f.data.handoff.taskFile = join(f.root, 'docs/TASK.md');}],
     ['parent escape', f => {f.data.handoff.checkpoint = '../outside.md';}],
-    ['symlink escape', f => {symlinkSync(join(sourceRoot, 'package.json'), join(f.root, 'docs/outside.md')); f.data.handoff.taskFile = 'docs/outside.md';}],
+    ['symlink escape', f => {symlinkSync(sourceRoot, join(f.root, 'docs/outside'), process.platform === 'win32' ? 'junction' : 'dir'); f.data.handoff.taskFile = 'docs/outside/package.json';}],
   ];
   for (const [name, mutate] of cases) await t.test(name, t => {
     const f = fixture(t);
@@ -162,7 +162,7 @@ test('missing task documents, absolute paths and symlinks escaping the repositor
 test('equivalent symlink worktree paths resolve to the same repository', t => {
   const f = fixture(t);
   const link = join(f.root, 'same-worktree');
-  symlinkSync(f.root, link);
+  symlinkSync(f.root, link, process.platform === 'win32' ? 'junction' : 'dir');
   f.data.handoff.worktree = link;
   f.save();
   assert.deepEqual(inspectHandoff(link).errors, []);
