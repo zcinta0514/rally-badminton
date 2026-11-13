@@ -32,7 +32,9 @@ body[data-screen=menu] {
   --entry-gutter:max(clamp(20px,4vw,52px),var(--safe-left));
   --entry-width:min(390px,calc(52vw - 2 * var(--entry-gutter)));
   --entry-left:max(var(--entry-gutter),calc((52vw - var(--entry-width)) / 2));
-  --entry-edge:max(12px,var(--safe-top),var(--safe-bottom));
+  --entry-edge:max(12px,var(--safe-bottom));
+  --entry-nav-top:max(8px,var(--safe-top));
+  --entry-content-top:calc(var(--entry-nav-top) + 48px);
 }
 body[data-screen=menu]:has(#menu:not([data-entry=home])) .screen-vignette::after {
   content:"";
@@ -41,7 +43,7 @@ body[data-screen=menu]:has(#menu:not([data-entry=home])) .screen-vignette::after
   background:linear-gradient(90deg,#07100e50 38%,transparent 56%);
 }
 body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) {
-  inset:var(--entry-edge) auto var(--entry-edge) var(--entry-left);
+  inset:var(--entry-content-top) auto var(--entry-edge) var(--entry-left);
   width:var(--entry-width);
   max-width:none;
   height:auto;
@@ -60,17 +62,33 @@ body[data-screen=menu] #menu :is(#solo-actions,.friend-actions) {
   padding:0;
 }
 body[data-screen=menu] #menu:not([data-entry=home]) .lobby-action { font-size:20px; min-height:48px; }
-body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading,
-#waiting-dialog .waiting-heading {
+body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading {
   display:flex;
   align-items:center;
-  gap:12px;
   min-height:44px;
+  margin:0 0 4px;
 }
-body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading { margin:0 0 4px; }
 body[data-screen=menu] #menu .entry-heading h2 { margin:0; font-size:clamp(20px,3.6vw,28px); font-weight:550; line-height:1.2; }
-body[data-screen=menu] #menu #entry-back,
-#waiting-dialog :is(#leave-waiting,#copy-invite) {
+body[data-screen=menu] .entry-navigation {
+  position:fixed;
+  z-index:11;
+  top:var(--entry-nav-top);
+  left:max(12px,var(--safe-left));
+  min-height:44px;
+  margin:0;
+  padding:6px 10px;
+  border:1px solid #61745b66;
+  border-radius:3px;
+  background:#14221ee8;
+  color:var(--ink);
+  font-size:12px;
+  text-decoration:none;
+}
+#entry-back,#leave-waiting { display:none; }
+body[data-screen=menu]:has(#menu:not([data-entry=home])):not(:has(#dialog-backdrop:not([hidden]))) #entry-back,
+body[data-screen=menu] #dialog-backdrop:has(#waiting-dialog:not([hidden])) #leave-waiting { display:block; }
+body[data-screen=menu] .entry-navigation:hover { color:#d6efac; }
+#waiting-dialog #copy-invite {
   flex:none;
   width:auto;
   min-height:44px;
@@ -80,8 +98,7 @@ body[data-screen=menu] #menu #entry-back,
   text-decoration:none;
   font-size:11px;
 }
-body[data-screen=menu] #menu #entry-back:hover,
-#waiting-dialog :is(#leave-waiting,#copy-invite):hover { color:#d6efac; }
+#waiting-dialog #copy-invite:hover { color:#d6efac; }
 
 body[data-screen=menu] #menu .field-label,
 body[data-screen=menu] #menu .input-label { color:var(--muted); font-size:12px; font-weight:500; }
@@ -180,6 +197,7 @@ body #dialog-backdrop .dialog :is(.rule-note,.room-mode-summary,.waiting-status,
 body[data-screen=menu]:has(#waiting-dialog:not([hidden])) #menu { visibility:hidden; }
 body #dialog-backdrop:has(#waiting-dialog:not([hidden])) {
   justify-content:flex-start;
+  padding-top:var(--entry-content-top);
   padding-left:var(--entry-left);
   background:none;
   backdrop-filter:none;
@@ -187,6 +205,7 @@ body #dialog-backdrop:has(#waiting-dialog:not([hidden])) {
 body #dialog-backdrop #waiting-dialog {
   flex:0 1 390px;
   max-width:var(--entry-width);
+  max-height:calc(100dvh - var(--entry-content-top) - max(16px,var(--safe-bottom)));
   padding:4px 8px 4px 0;
   border:0;
   background:none;
@@ -254,6 +273,14 @@ body .hell-status span { color:#c6cdb9; }
   body[data-screen=menu] #menu .menu-foot { gap:20px; }
   body[data-screen=menu] #menu .community-entry { font-size:11px; }
 }
+@media (max-height:360px) and (orientation:landscape) {
+  body[data-screen=menu] #menu:not([data-entry=home]) .entry-heading { min-height:28px; margin-bottom:0; }
+  body[data-screen=menu] #menu .setup-row + .setup-row { margin-top:0; }
+  body[data-screen=menu] #menu .entry-submit { margin-top:4px; }
+  body[data-screen=menu] #menu .input-label { margin-bottom:2px; }
+  body[data-screen=menu] #menu :is(#friend-join-options,#friend-create-options) { margin-top:4px; }
+  body[data-screen=menu] #menu .entry-rules { margin-top:4px; }
+}
 @media (max-width:640px) and (orientation:landscape) {
   body[data-screen=menu] #menu :is(#friend-formats,#ai-formats) button { font-size:11px; padding-inline:1px; }
   body[data-screen=menu] #menu .setup-row { gap:4px; }
@@ -269,12 +296,19 @@ body .hell-status span { color:#c6cdb9; }
   body #dialog-backdrop:has(#waiting-dialog:not([hidden])) { justify-content:center; padding-inline:var(--entry-gutter); }
 }
 
+@media (max-width:380px) and (orientation:portrait) {
+  body[data-screen=menu]:has(#menu:not([data-entry=home])) .topbar .top-actions { gap:4px; }
+  body[data-screen=menu] .entry-navigation { width:44px; padding:0; font-size:0; }
+  body[data-screen=menu] .entry-navigation::before { content:"←" / ""; font-size:20px; }
+}
 /* Keep all match actions on screen even on a 320px portrait viewport. */
 @media (max-width:360px) {
-  body[data-screen=match] .topbar { gap:4px; }
+  body[data-screen=match] .topbar { gap:3px; left:max(4px,var(--safe-left)); right:max(4px,var(--safe-right)); }
   body[data-screen=match] .topbar .brand { display:none; }
-  body[data-screen=match] .topbar .top-actions { gap:4px; }
-  body[data-screen=match] :is(.camera-toggle,.palette-toggle,.match-settings-toggle) { white-space:nowrap; padding:5px; font-size:10px; }
+  body[data-screen=match] .topbar .top-actions { gap:3px; }
+  body[data-screen=match] .topbar .icon-btn:not(.display-btn) { width:26px; }
+  body[data-screen=match] .topbar .display-btn { padding-inline:3px; }
+  body[data-screen=match] :is(.camera-toggle,.palette-toggle,.match-settings-toggle) { white-space:nowrap; padding:4px; font-size:10px; }
   body[data-screen=match] .camera-toggle { margin-left:0; }
 }
 

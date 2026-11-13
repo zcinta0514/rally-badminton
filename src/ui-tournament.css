@@ -72,7 +72,6 @@ body[data-screen="menu"] #menu .pwa-entry { font-size:11px; color:#a8b8ac; }
 body[data-screen="menu"] #menu .entry-heading { margin:0 0 18px; }
 body[data-screen="menu"] #menu .entry-heading h2 { margin:16px 0 8px; font-size:28px; font-weight:550; letter-spacing:.06em; color:#f2f2e9; }
 body[data-screen="menu"] #menu .entry-heading p { font-size:12px; line-height:1.6; color:var(--muted); }
-body[data-screen="menu"] #entry-back { min-height:44px; padding:4px 0; margin:0; color:#c0cbbf; font-size:12px; }
 body[data-screen="menu"] #menu .setup { padding:0; flex:0 0 auto; min-height:auto; }
 body[data-screen="menu"] #menu .setup-fields { padding:0; flex:none; min-height:auto; overflow:visible; }
 body[data-screen="menu"] #menu .entry-heading,

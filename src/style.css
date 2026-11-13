@@ -24,7 +24,7 @@
 }
 /* Keep the responsive type scale stable when iOS rotates the viewport. */
 html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
-html,body { margin:0; width:100%; height:100dvh; min-height:100vh; overflow:hidden; overscroll-behavior:none; }
+html,body { margin:0; width:100%; height:100vh; height:100dvh; overflow:hidden; overscroll-behavior:none; }
 body { background: var(--paper); touch-action:manipulation; -webkit-user-select:none; user-select:none; }
 body[data-screen=match],body[data-screen=match] * { -webkit-touch-callout:none; }
 button,input { font:inherit; }
@@ -203,7 +203,7 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   .edition { display:none; }.top-actions { gap:5px; }.brand { font-size:22px; }
   .brand-mark { width:36px; height:36px; }.icon-btn { width:32px; height:32px; }
   body[data-screen=menu] #court { left:0; top:0; width:100vw; height:100dvh; }
-  body[data-screen=menu] .court-caption,body[data-screen=menu] #rotate-note { display:none; }
+  body[data-screen=menu] .court-caption { display:none; }
   /* The portrait lobby is an opaque sheet; hiding the 3D canvas removes any dark edge behind it. */
   body[data-screen=menu] #court { display:none; }
   body[data-screen=menu] .topbar { height: calc(var(--header-height) + var(--safe-top)); padding-top: var(--safe-top); }
