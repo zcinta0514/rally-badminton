@@ -27,7 +27,13 @@ body[data-screen=menu] #menu .community-entry:hover { color:#d6efac; }
 body[data-screen=menu] .lobby-more { width:auto; position:static; }
 body[data-screen=menu] #menu .lobby-more .menu-foot-actions { left:0; right:auto; }
 
-/* Continue the left-hand menu over the same court scene. */
+/* Center each preparation view within the left side of the court. */
+body[data-screen=menu] {
+  --entry-gutter:max(clamp(20px,4vw,52px),var(--safe-left));
+  --entry-width:min(390px,calc(52vw - 2 * var(--entry-gutter)));
+  --entry-left:max(var(--entry-gutter),calc((52vw - var(--entry-width)) / 2));
+  --entry-edge:max(12px,var(--safe-top),var(--safe-bottom));
+}
 body[data-screen=menu]:has(#menu:not([data-entry=home])) .screen-vignette::after {
   content:"";
   position:absolute;
@@ -35,9 +41,8 @@ body[data-screen=menu]:has(#menu:not([data-entry=home])) .screen-vignette::after
   background:linear-gradient(90deg,#07100e50 38%,transparent 56%);
 }
 body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) {
-  --entry-left:max(clamp(20px,4vw,52px),var(--safe-left));
-  inset:max(24px,var(--safe-top)) auto max(12px,var(--safe-bottom)) var(--entry-left);
-  width:min(390px,calc(52vw - var(--entry-left)));
+  inset:var(--entry-edge) auto var(--entry-edge) var(--entry-left);
+  width:var(--entry-width);
   max-width:none;
   height:auto;
   padding:4px 8px 4px 0;
@@ -45,6 +50,8 @@ body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) {
   touch-action:pan-y;
   text-shadow:0 1px 5px #07100e;
 }
+body[data-screen=menu] #menu.menu-panel:not([data-entry=home])::before,
+body[data-screen=menu] #menu.menu-panel:not([data-entry=home])::after { content:""; flex:1 0 0; }
 body[data-screen=menu] #menu[data-entry=solo] #mode-setup { flex:0 0 auto; padding:0; }
 body[data-screen=menu] #menu :is(#solo-actions,.friend-actions) {
   display:flex;
@@ -105,7 +112,9 @@ body[data-screen=menu] #menu .format-choices { flex-wrap:nowrap; }
 body[data-screen=menu] #menu .format-choices button { flex:1; }
 body[data-screen=menu] #menu .format-choices button:last-child { flex:1.65; }
 body[data-screen=menu] #menu .rules-note { min-height:0; margin:6px 0 0; font-size:11px; line-height:1.5; }
-.setup-reference { margin-top:2px; color:var(--muted); font-size:11px; }
+body[data-screen=menu] #menu .entry-rules { color:#d6dfd4; font-size:12px; line-height:1.45; }
+body[data-screen=menu] #menu .challenge-skills-note { margin-bottom:4px; }
+.setup-reference { margin-top:2px; color:var(--muted); font-size:12px; }
 .setup-reference summary { cursor:pointer; min-height:44px; display:flex; align-items:center; gap:8px; list-style:none; }
 .setup-reference summary::before { content:'＋'; }
 .setup-reference[open] summary::before { content:'−'; }
@@ -171,13 +180,13 @@ body #dialog-backdrop .dialog :is(.rule-note,.room-mode-summary,.waiting-status,
 body[data-screen=menu]:has(#waiting-dialog:not([hidden])) #menu { visibility:hidden; }
 body #dialog-backdrop:has(#waiting-dialog:not([hidden])) {
   justify-content:flex-start;
-  padding-left:max(clamp(20px,4vw,52px),var(--safe-left));
+  padding-left:var(--entry-left);
   background:none;
   backdrop-filter:none;
 }
 body #dialog-backdrop #waiting-dialog {
   flex:0 1 390px;
-  max-width:min(390px,calc(52vw - max(clamp(20px,4vw,52px),var(--safe-left))));
+  max-width:var(--entry-width);
   padding:4px 8px 4px 0;
   border:0;
   background:none;
@@ -245,20 +254,19 @@ body .hell-status span { color:#c6cdb9; }
   body[data-screen=menu] #menu .menu-foot { gap:20px; }
   body[data-screen=menu] #menu .community-entry { font-size:11px; }
 }
-@media (max-height:600px) and (orientation:landscape) {
-  body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) { top:max(12px,var(--safe-top)); }
-}
 @media (max-width:640px) and (orientation:landscape) {
   body[data-screen=menu] #menu :is(#friend-formats,#ai-formats) button { font-size:11px; padding-inline:1px; }
   body[data-screen=menu] #menu .setup-row { gap:4px; }
 }
 @media (orientation:portrait), (max-width:520px) {
-  body[data-screen=menu]:has(#menu:not([data-entry=home])) .screen-vignette::after { background:#07100e40; }
-  body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) {
-    top:max(68px,calc(var(--safe-top) + 52px));
-    width:min(390px,calc(100% - var(--entry-left) - max(12px,var(--safe-right))));
+  body[data-screen=menu] {
+    --entry-gutter:max(16px,var(--safe-left),var(--safe-right));
+    --entry-width:min(390px,calc(100vw - 2 * var(--entry-gutter)));
+    --entry-left:calc((100vw - var(--entry-width)) / 2);
   }
-  body #dialog-backdrop #waiting-dialog { width:min(390px,100%); max-width:100%; }
+  body[data-screen=menu]:has(#menu:not([data-entry=home])) .screen-vignette::after { background:#07100e40; }
+  body[data-screen=menu] #menu.menu-panel:not([data-entry=home]) { top:max(68px,calc(var(--safe-top) + 52px)); }
+  body #dialog-backdrop:has(#waiting-dialog:not([hidden])) { justify-content:center; padding-inline:var(--entry-gutter); }
 }
 
 /* Keep all match actions on screen even on a 320px portrait viewport. */
