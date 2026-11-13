@@ -104,7 +104,7 @@ test('rescue cannot catch an out ball or reach an arbitrarily distant ball', () 
 });
 
 test('real complete rallies exercise all three skills, telegraph cannon and allow consecutive active attacks', () => {
-  const counts={phantom:0,cannon:0,rescue:0};let consecutive=0,bossReturns=0;
+  const counts={phantom:0,cannon:0,rescue:0,netDrop:0,drive:0};let consecutive=0,bossReturns=0;
   for(let seed=1;seed<=200;seed++){
     const s=createMatch({challenge:'hell',seed});let previous=0,warning=null,lastAttackPoint=-1,lastAttackHit=-99;
     for(let frame=0;frame<60*150&&s.phase!=='over';frame++){
@@ -122,7 +122,7 @@ test('real complete rallies exercise all three skills, telegraph cannon and allo
             assert.equal(shot.aimX,warning.aim*(2.59-.3));
             assert.equal(predictLanding(s).event,'landing');
           }
-          if(['phantom','cannon'].includes(shot.skill)){
+          if(['phantom','cannon','netDrop','drive'].includes(shot.skill)){
             if(lastAttackPoint===s.pointId&&s.hitId-lastAttackHit===2)consecutive++;
             lastAttackPoint=s.pointId;lastAttackHit=s.hitId;
           }
@@ -182,5 +182,24 @@ test('successive high incoming balls can trigger cannon without a phantom in bet
     }
     assert.equal(warned,true);assert.equal(s.lastShotInfo.skill,'cannon');
     assert.equal(s.challenge.counts.cannon,attempt+1);
+  }
+});
+
+test('situational variations retain legal flights and readable visual fakes', () => {
+  for (const [kind, opponent] of [['netDrop',{z:5}],['drive',{z:3,vx:3}]]) {
+    const s=createMatch({challenge:'hell'});s.phase='rally';s.service.active=false;
+    Object.assign(s.players[0],opponent);
+    Object.assign(s.players[1],{x:0,z:-3.8});
+    Object.assign(s.shuttle,{x:0,y:1.5,z:-3.8,vx:0,vy:-1,vz:0,active:true,lastHit:0});
+    // Keep the tactical condition alive until the racket contacts the shuttle.
+    for(let frame=0;frame<30&&!s.lastShotInfo;frame++) {
+      Object.assign(s.players[0],opponent);
+      stepMatch(s,[{},{shot:'clear',aim:.6}],dt);
+    }
+    assert.equal(s.lastShotInfo.skill,kind);
+    assert.equal(s.challenge.counts[kind],1);
+    const landing=predictLanding(s);
+    assert.equal(landing.event,'landing');assert.equal(landing.out,false);
+    assert.equal(phantomPositions(s).length,3);
   }
 });

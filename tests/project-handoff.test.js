@@ -10,7 +10,7 @@ import {inspectHandoff, formatHandoff} from '../scripts/project-handoff.js';
 const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 function fixture(t) {
-  const root = realpathSync(mkdtempSync(join(tmpdir(), 'rally-handoff-')));
+  const root = realpathSync.native(mkdtempSync(join(tmpdir(), 'rally-handoff-')));
   t.after(() => rmSync(root, {recursive: true, force: true}));
   const git = (...args) => execFileSync('git', args, {cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']}).trim();
   git('init', '-b', 'main');
@@ -149,7 +149,7 @@ test('missing task documents, absolute paths and symlinks escaping the repositor
     ['missing checkpoint', f => {f.data.handoff.checkpoint = 'docs/missing.md';}],
     ['absolute path', f => {f.data.handoff.taskFile = join(f.root, 'docs/TASK.md');}],
     ['parent escape', f => {f.data.handoff.checkpoint = '../outside.md';}],
-    ['symlink escape', f => {symlinkSync(join(sourceRoot, 'package.json'), join(f.root, 'docs/outside.md')); f.data.handoff.taskFile = 'docs/outside.md';}],
+    ['symlink escape', f => {symlinkSync(sourceRoot, join(f.root, 'docs/outside'), process.platform === 'win32' ? 'junction' : 'dir'); writeFileSync(join(f.root, '.git/info/exclude'), 'docs/outside/\n'); f.data.handoff.taskFile = 'docs/outside/package.json';}],
   ];
   for (const [name, mutate] of cases) await t.test(name, t => {
     const f = fixture(t);
@@ -161,8 +161,10 @@ test('missing task documents, absolute paths and symlinks escaping the repositor
 
 test('equivalent symlink worktree paths resolve to the same repository', t => {
   const f = fixture(t);
-  const link = join(f.root, 'same-worktree');
-  symlinkSync(f.root, link);
+  const aliasRoot = mkdtempSync(join(tmpdir(), 'rally-alias-'));
+  t.after(() => rmSync(aliasRoot, {recursive: true, force: true}));
+  const link = join(aliasRoot, 'same-worktree');
+  symlinkSync(f.root, link, process.platform === 'win32' ? 'junction' : 'dir');
   f.data.handoff.worktree = link;
   f.save();
   assert.deepEqual(inspectHandoff(link).errors, []);

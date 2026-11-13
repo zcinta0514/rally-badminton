@@ -35,7 +35,7 @@ function checkDocument(root, value, label, errors) {
   }
   const absolute = resolve(root, value);
   try {
-    if (!isWithin(root, absolute) || !isWithin(root, realpathSync(absolute))) {
+    if (!isWithin(root, absolute) || !isWithin(root, realpathSync.native(absolute))) {
       errors.push(label + ' 指向仓库外部：' + value);
     } else if (!statSync(absolute).isFile()) {
       errors.push(label + ' 不是文件：' + value);
@@ -54,7 +54,7 @@ function requireString(object, key, prefix, errors) {
 function readStatus(root, errors) {
   try {
     const path = join(root, statusFile);
-    if (!isWithin(root, realpathSync(path))) {
+    if (!isWithin(root, realpathSync.native(path))) {
       errors.push(statusFile + ' 不得指向仓库外部');
       return {};
     }
@@ -77,7 +77,7 @@ export function inspectHandoff(repositoryRoot = scriptRoot) {
   const errors = [];
   const warnings = [];
   let root;
-  try { root = realpathSync(repositoryRoot); } catch {
+  try { root = realpathSync.native(repositoryRoot); } catch {
     return {root: resolve(repositoryRoot), data: {}, actual: {}, errors: ['项目目录不存在'], warnings};
   }
   const data = readStatus(root, errors);
@@ -98,7 +98,7 @@ export function inspectHandoff(repositoryRoot = scriptRoot) {
   checkDocument(root, handoff.checkpoint, 'handoff.checkpoint', errors);
   if (typeof handoff.worktree === 'string' && handoff.worktree.trim()) {
     try {
-      if (!isAbsolute(handoff.worktree) || realpathSync(handoff.worktree) !== root) {
+      if (!isAbsolute(handoff.worktree) || realpathSync.native(handoff.worktree) !== root) {
         errors.push('handoff.worktree 与本脚本所在项目目录不一致：' + handoff.worktree);
       }
     } catch { errors.push('handoff.worktree 不存在或无法解析：' + handoff.worktree); }
@@ -106,7 +106,7 @@ export function inspectHandoff(repositoryRoot = scriptRoot) {
 
   const actual = {};
   try {
-    const gitRoot = realpathSync(git(root, ['rev-parse', '--show-toplevel']));
+    const gitRoot = realpathSync.native(git(root, ['rev-parse', '--show-toplevel']));
     if (gitRoot !== root) errors.push('脚本目录不是该 Git 工作树根目录：' + gitRoot);
     actual.branch = git(root, ['branch', '--show-current']) || '(detached HEAD)';
     actual.head = git(root, ['rev-parse', 'HEAD']);
@@ -213,6 +213,6 @@ export function runCli(args = process.argv.slice(2), repositoryRoot = scriptRoot
   return args.includes('--check') && report.errors.length ? 1 : 0;
 }
 
-if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
+if (process.argv[1] && realpathSync.native(process.argv[1]) === realpathSync.native(fileURLToPath(import.meta.url))) {
   process.exitCode = runCli();
 }

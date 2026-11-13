@@ -654,7 +654,7 @@ export class CourtView {
       points.setXYZ(0,boss.x,.055,boss.z);points.setXYZ(1,h.warning.aim*(COURT.halfWidth-.3),.055,4.8);
       points.needsUpdate=true;this.cannonLine.computeLineDistances();
     }
-    this.trail.material.opacity=h?.active?.kind==='phantom'&&h.active.hitId===state.hitId? .95 : .35;
+    this.trail.material.opacity=['phantom','netDrop','drive'].includes(h?.active?.kind)&&h.active.hitId===state.hitId? .95 : .35;
     if(this.entranceActive){
       this.staminaHUD?.hide();this.edgeIndicator.hidden=true;
       for(const hint of [this.landingHint,this.interceptHint,this.targetHint,this.readyHint])hint.group.visible=false;
