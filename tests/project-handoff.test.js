@@ -149,7 +149,7 @@ test('missing task documents, absolute paths and symlinks escaping the repositor
     ['missing checkpoint', f => {f.data.handoff.checkpoint = 'docs/missing.md';}],
     ['absolute path', f => {f.data.handoff.taskFile = join(f.root, 'docs/TASK.md');}],
     ['parent escape', f => {f.data.handoff.checkpoint = '../outside.md';}],
-    ['symlink escape', f => {symlinkSync(sourceRoot, join(f.root, 'docs/outside'), process.platform === 'win32' ? 'junction' : 'dir'); f.data.handoff.taskFile = 'docs/outside/package.json';}],
+    ['symlink escape', f => {symlinkSync(sourceRoot, join(f.root, 'docs/outside'), process.platform === 'win32' ? 'junction' : 'dir'); writeFileSync(join(f.root, '.git/info/exclude'), 'docs/outside/\n'); f.data.handoff.taskFile = 'docs/outside/package.json';}],
   ];
   for (const [name, mutate] of cases) await t.test(name, t => {
     const f = fixture(t);
@@ -161,7 +161,9 @@ test('missing task documents, absolute paths and symlinks escaping the repositor
 
 test('equivalent symlink worktree paths resolve to the same repository', t => {
   const f = fixture(t);
-  const link = join(f.root, 'same-worktree');
+  const aliasRoot = mkdtempSync(join(tmpdir(), 'rally-alias-'));
+  t.after(() => rmSync(aliasRoot, {recursive: true, force: true}));
+  const link = join(aliasRoot, 'same-worktree');
   symlinkSync(f.root, link, process.platform === 'win32' ? 'junction' : 'dir');
   f.data.handoff.worktree = link;
   f.save();
