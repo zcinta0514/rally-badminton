@@ -361,14 +361,47 @@ body button:is(.selected,[aria-pressed=true],[aria-expanded=true]):not(.shot-btn
   text-decoration:underline;
   text-underline-offset:6px;
 }
-/* A divider or accent is useful hierarchy, not an enclosing button frame. */
-body[data-screen=menu] #menu .launch-actions .lobby-action + .lobby-action {
-  border-top:1px solid #aab8af40 !important;
-}
-body[data-screen=menu] #menu .lobby-action:first-child,
+/* Open-ended rules frame the rhythm of each entry without enclosing it.
+   The lower rule extends gently on intent; no permanent first-row accent. */
+body[data-screen=menu] #menu .lobby-action,
 body[data-screen=menu] #menu .entry-submit .primary-btn,
 body #dialog-backdrop #waiting-dialog #ready-room {
-  border-left-color:#b8dc88 !important;
+  position:relative;
+  border-color:transparent !important;
+  text-decoration:none;
+}
+body[data-screen=menu] #menu .lobby-action::before,
+body[data-screen=menu] #menu .lobby-action::after,
+body[data-screen=menu] #menu .entry-submit .primary-btn::before,
+body[data-screen=menu] #menu .entry-submit .primary-btn::after,
+body #dialog-backdrop #waiting-dialog #ready-room::before,
+body #dialog-backdrop #waiting-dialog #ready-room::after {
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  height:1px;
+  pointer-events:none;
+  background:linear-gradient(90deg,#c3cec080,#c3cec033 72%,transparent);
+}
+body[data-screen=menu] #menu :is(.lobby-action,.entry-submit .primary-btn)::before,
+body #dialog-backdrop #waiting-dialog #ready-room::before { top:0; opacity:.35; }
+body[data-screen=menu] #menu :is(.lobby-action,.entry-submit .primary-btn)::after,
+body #dialog-backdrop #waiting-dialog #ready-room::after {
+  bottom:0;
+  opacity:.45;
+  transform:scaleX(.8);
+  transform-origin:left center;
+  transition:transform 320ms cubic-bezier(.22,.61,.36,1),opacity 320ms ease;
+}
+body[data-screen=menu] #menu :is(.lobby-action,.entry-submit .primary-btn):is(:focus-visible,:active)::after,
+body #dialog-backdrop #waiting-dialog #ready-room:is(:focus-visible,:active)::after {
+  transform:scaleX(1);
+  opacity:1;
+}
+@media(hover:hover) {
+  body[data-screen=menu] #menu :is(.lobby-action,.entry-submit .primary-btn):hover::after,
+  body #dialog-backdrop #waiting-dialog #ready-room:hover::after { transform:scaleX(1); opacity:1; }
 }
 body[data-screen=menu] #menu .segments button.selected {
   box-shadow:inset 0 -2px var(--green) !important;
