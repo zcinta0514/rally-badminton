@@ -17,12 +17,13 @@ export function displayAction({standalone, fullscreenEnabled, canRequest}) {
   return standalone ? 'standalone' : fullscreenEnabled && canRequest ? 'fullscreen' : 'install';
 }
 
-export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate = () => false, onUpdateLock = () => {} } = {}) {
+export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {}, isSafeToUpdate = () => false, onUpdateLock = () => {} } = {}) {
   const demoMode = globalThis.RALLY_CONFIG?.demoMode === true;
   const peerMode = globalThis.RALLY_CONFIG?.peerMode === true;
   let matchActive = false, registration = null, installPrompt = null, cached = false, version = '', failure = false, checking = false;
   const supported = globalThis.isSecureContext && 'serviceWorker' in navigator;
   const standaloneQuery = matchMedia('(display-mode: standalone)');
+  const landscapeQuery = matchMedia('(orientation: landscape)');
   const isStandalone = () => standaloneQuery.matches || navigator.standalone === true;
   const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
   const inWeChat = /MicroMessenger/i.test(navigator.userAgent);
@@ -95,7 +96,7 @@ export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate
     onStatus(value) { updateState=value.state; updateUI(); }
   }) : null;
   const action = () => displayAction({standalone:isStandalone(), fullscreenEnabled:document.fullscreenEnabled, canRequest:typeof document.documentElement.requestFullscreen === 'function'});
-  const close = () => { dialog.close(); entry.focus({preventScroll:true}); };
+  const close = () => dialog.close();
   dialog.querySelector('.pwa-close').addEventListener('click', close);
   dialog.addEventListener('click', event => { if (event.target === dialog) { const rect=dialog.getBoundingClientRect(); if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)close(); } });
   function updateUI() {
@@ -125,31 +126,68 @@ export function initPWA({ fullscreenButton, showToast = () => {}, isSafeToUpdate
     checkButton.hidden = !supported; checkButton.disabled = checking || matchActive;
     checkButton.textContent = checking ? '检查中…' : failure ? '重试缓存' : '检查更新';
     if (fullscreenButton) {
-      const label = document.fullscreenElement ? '退出全屏' : action() === 'fullscreen' ? '全屏' : action() === 'standalone' ? '独立窗口说明' : '主屏幕安装说明';
-      fullscreenButton.title = label; fullscreenButton.setAttribute('aria-label', label);
+      const label = document.fullscreenElement ? '退出全屏' : isStandalone() ? '独立窗口' : '全屏';
+      fullscreenButton.textContent = label;
     }
   }
-  function openInstall() {
-    if (matchActive) { showToast(isStandalone() ? '已在独立窗口中；请手动横置手机' : '主屏幕安装说明在首页；请先结束本场比赛'); return; }
+  function openInstall(fullscreenUnavailable = false) {
+    if (matchActive) { showToast(isStandalone() ? '已在独立窗口中' : '当前浏览器无法全屏。赛后可从首页添加到主屏幕。'); return; }
     dialog.querySelector('#pwa-title').textContent = isStandalone() ? '已从主屏幕打开' : '从主屏幕开拍';
-    dialog.querySelector('#pwa-intro').textContent = isStandalone() ? '当前以独立窗口运行。' : inWeChat ? '先在微信右上角菜单选择用 Safari 打开此网页，再按下面步骤操作。' : '添加后，从手机主屏幕的“开拍”图标进入。';
+    const intro = isStandalone() ? '当前以独立窗口运行，浏览器地址栏和工具栏已隐藏。' :
+      inWeChat ? '先在微信右上角菜单选择用系统浏览器打开，再按下面步骤操作。' :
+      '从主屏幕的“开拍”图标进入，可隐藏浏览器地址栏和工具栏。';
+    dialog.querySelector('#pwa-intro').textContent = (fullscreenUnavailable ? '当前浏览器无法直接全屏。' : '') + intro;
     const steps = dialog.querySelector('#pwa-steps'); steps.replaceChildren();
-    const lines = isStandalone() ? [] : isIOS || inWeChat ? ['在 Safari 打开此游戏，轻点分享（或“更多”→分享）。','选择“添加到主屏幕”。','如显示“作为网页 App 打开”，将它启用，再轻点“添加”。'] : ['使用浏览器的“安装应用”或“添加到主屏幕”菜单。','安装后从“开拍”图标打开。浏览器未提供安装时，可以继续在网页中游玩。'];
+    const lines = isStandalone() ? [] : isIOS ? ['在 Safari 打开此游戏，轻点分享（或“更多”→分享）。','选择“添加到主屏幕”。','如显示“作为网页 App 打开”，将它启用，再轻点“添加”。'] : ['使用浏览器的“安装应用”或“添加到主屏幕”菜单。','安装后从“开拍”图标打开。浏览器未提供安装时，可以继续在网页中游玩。'];
     for (const line of lines) { const li = document.createElement('li'); li.textContent = line; steps.append(li); }
     updateUI(); if (!dialog.open) dialog.showModal();
   }
-  entry.addEventListener('click', openInstall);
-  fullscreenButton?.addEventListener('click', async () => {
-    if (action() !== 'fullscreen' && !document.fullscreenElement) { openInstall(); return; }
+  entry.addEventListener('click', () => openInstall());
+  let displayPending = false;
+  async function changeDisplay(wantsLandscape) {
+    if (displayPending) return;
+    displayPending = true;
     try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else {
-        await document.documentElement.requestFullscreen();
-        try { await screen.orientation?.lock?.('landscape'); } catch { /* Manual rotation remains supported. */ }
+      if (!wantsLandscape && document.fullscreenElement) {
+        try { await document.exitFullscreen(); showToast('已退出全屏'); }
+        catch { showToast('暂时无法退出全屏，请使用浏览器的退出全屏操作。'); }
+        return;
       }
-    } catch { showToast('浏览器未允许全屏；可在首页查看主屏幕安装说明，手机请手动横置'); }
-    updateUI();
-  });
+      if (wantsLandscape && landscapeQuery.matches) {
+        showToast('当前已是横屏');
+        return;
+      }
+      const display = action();
+      if (!wantsLandscape && display !== 'fullscreen') {
+        openInstall(display === 'install');
+        return;
+      }
+      if (display === 'fullscreen' && !document.fullscreenElement) {
+        try { await document.documentElement.requestFullscreen(); }
+        catch {
+          if (!wantsLandscape) { openInstall(true); return; }
+        }
+      }
+      const fullscreen = document.fullscreenElement;
+      if (wantsLandscape || matchMedia('(pointer: coarse)').matches) {
+        try {
+          if (typeof screen.orientation?.lock === 'function') {
+            await screen.orientation.lock('landscape');
+            showToast(fullscreen ? '已进入横屏全屏' : '已切换横屏');
+            return;
+          }
+        } catch { /* The browser may require manual rotation. */ }
+      }
+      if (!landscapeQuery.matches && (wantsLandscape || matchMedia('(pointer: coarse)').matches)) {
+        showToast((fullscreen ? '已全屏。' : '') + '请关闭系统方向锁定，再横置手机。');
+      } else if (fullscreen) showToast('已进入全屏');
+    } finally {
+      displayPending = false;
+      updateUI();
+    }
+  }
+  fullscreenButton?.addEventListener('click', () => changeDisplay(false));
+  landscapeButton?.addEventListener('click', () => changeDisplay(true));
   document.addEventListener('fullscreenchange', updateUI);
   standaloneQuery.addEventListener?.('change', updateUI);
   window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); installPrompt = event; updateUI(); });

@@ -469,52 +469,6 @@
   white-space: normal;
 }
 
-#rotate-note {
-  position: fixed;
-  z-index: 10;
-  right: max(14px, var(--safe-right));
-  bottom: max(12px, var(--safe-bottom));
-  left: max(14px, var(--safe-left));
-  display: none;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border: 1px solid var(--line, #dbe2dc);
-  border-left: 4px solid var(--green, #008650);
-  border-radius: 4px;
-  background: #fff;
-  color: var(--ink, #122b25);
-  pointer-events: none;
-}
-
-#rotate-note > span {
-  color: var(--green, #008650);
-  font-size: 30px;
-  line-height: 1;
-}
-
-#rotate-note p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-#rotate-note strong,
-#rotate-note small {
-  display: block;
-}
-
-#rotate-note strong {
-  font-size: 13px;
-  font-weight: 750;
-}
-
-#rotate-note small {
-  margin-top: 2px;
-  color: var(--muted, #64746a);
-  font-size: 11px;
-}
-
 @media (hover: hover) {
   .dialog .primary-btn:hover:not(:disabled) { background: #006f42; }
   .dialog .secondary-btn:hover:not(:disabled) { background: #edf3fa; }
@@ -576,10 +530,6 @@
   .dialog .help-item p { font-size: 13px; }
   .dialog .help-item strong { font-size: 14px; }
   .dialog .room-code { letter-spacing: 4px; }
-}
-
-@media (orientation: portrait) {
-  #rotate-note { display: flex; }
 }
 
 @media (prefers-reduced-motion: reduce) {
