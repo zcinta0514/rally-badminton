@@ -41,7 +41,8 @@
     <button id="camera-toggle" class="camera-toggle" aria-expanded="false" aria-controls="camera-panel" title="调整视角">视角 <span aria-hidden="true">⌄</span></button>
     <div class="top-actions">
       <button id="sound" class="icon-btn" aria-label="关闭声音" title="声音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4Z"/><path class="sound-on" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path class="sound-off" d="m16 9 5 6m0-6-5 6"/></svg></button>
-      <button id="fullscreen" class="icon-btn" aria-label="全屏" title="全屏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></svg></button>
+      <button id="landscape" class="icon-btn display-btn" type="button">横屏</button>
+      <button id="fullscreen" class="icon-btn display-btn" type="button">全屏</button>
       <button id="help" class="icon-btn" aria-label="操作说明" title="操作说明"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 8.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16h.01"/></svg></button>
       <button id="palette-toggle" class="palette-toggle" aria-expanded="false" aria-controls="palette-panel" title="更换球场配色">配色<i id="palette-current" aria-hidden="true"></i></button>
       <button id="match-settings-toggle" class="match-settings-toggle" aria-expanded="false" aria-controls="match-settings-panel">设置</button>
@@ -85,7 +86,8 @@
   <main id="menu" class="menu-panel" data-entry="home">
     <div class="menu-heading" id="entry-home-heading"><div class="eyebrow">BADMINTON CLUB</div>
     <h1 aria-label="开拍 RALLY"><span class="lobby-wordmark">开拍</span><span class="lobby-latin">RALLY</span></h1>
-    <p id="menu-intro" class="intro">5 / 11 / 21 分 · 对角发球</p></div>
+    <p id="menu-intro" class="intro">5 / 11 / 21 分 · 对角发球</p>
+    <p class="landscape-hint">请横置手机游玩，或点击右上角「横屏」。</p></div>
     <div id="entry-heading" class="entry-heading" hidden><button id="entry-back" class="text-btn">← 返回首页</button><h2 id="entry-title"></h2></div><div class="setup" id="mode-setup">
       <div class="setup-fields preparation-grid" id="ai-setup" hidden>
         <section class="preparation-player" aria-labelledby="your-style"><h3 id="your-style" class="setup-heading">你的打法</h3>
@@ -151,7 +153,7 @@
       <details class="lobby-more"><summary>更多</summary><div class="menu-foot-actions">
         <button id="onboarding-entry" class="secondary-btn" type="button">新手指南</button>
         <button id="open-leaderboard" type="button" hidden>排行榜</button>
-      <span class="lobby-version">正式版 1.20.3</span>
+      <span class="lobby-version">正式版 1.20.5</span>
       </div></details>
     </div>
   </main>
@@ -192,7 +194,6 @@
     <section id="help-dialog" class="dialog help-dialog" hidden aria-labelledby="help-title"><button class="close-dialog" data-close aria-label="关闭">×</button><div class="eyebrow">玩法指南</div><h2 id="help-title">操作说明</h2><div class="help-layout-entry"><button class="secondary-btn" type="button" data-open-shot-layout>调整击球键位置 <span>↗</span></button><p class="rules-note">手机：可拖动高远、吊球、杀球三个键到顺手的位置，也可以直接用「原位」或「弧形」预设。</p></div><div class="help-item"><b>01</b><p><strong>移动与跑位</strong>在左半屏空白处按下，摇杆出现在手指位置；拖动移动，松手停止。方向与屏幕一致，右手可同时击球。己方地面的青圈为来球预计落点，琥珀圈为建议接球位置。脚下提示亮起时可击球，杀球按钮亮起时可下压；球落地前需到位。</p></div><div class="help-item"><b>02</b><p><strong>击球与选线</strong>按住高远、吊球或杀球按钮拖动：左拖击向左场区，右拖击向右场区；上拖落点更深，下拖更靠网。斜拖同时改变左右与深浅。地面粉圈为瞄准目标，外圈越大表示控制风险越高，不保证最终落点。松手击球，按住越久蓄力越多。</p></div><div class="help-item"><b>03</b><p><strong>高点与杀球</strong>出现「可杀球」时出手；高球会配合起跳，低球或远球有伸臂与跨步。站稳、触点高时更可靠。低点击杀、极限够球、大力压线可能下网或出界；保守高远球容错更宽。</p></div><div class="help-item"><b>04</b><p><strong>发球与计分</strong>发球需从正确左右发球区打向对角区，发球时保持站稳。快赛达到目标分且净胜 2 分获胜：5、11、21 分制分别在 10、20、30 分封顶；9 平、19 平、29 平时下一分获胜。标准计分为三局两胜、每局 21 分、净胜 2 分、30 分封顶，局间休息简化。</p></div><div class="help-item"><b>05</b><p><strong>键位与暂停</strong>电脑：WASD／方向键移动，J／K／L 击球，Z／X／C 选线。每人每场可暂停一次，30 秒超时由领先方获胜，平分不计胜负。</p></div><details class="usage-settings"><summary>基础使用统计与隐私</summary><p>开拍使用 51LA 基础统计了解访问量、访客规模，以及开局、完赛、中断及体验降级事件。51LA 会处理访问时间、IP、浏览器、设备、来源站点等访问信息，并通过浏览器标识估算访客；不代表实名人数。游戏不向统计服务传入昵称、玩家密钥、房间码或邀请参数，不开启屏幕录制。</p><label><input id="usage-enabled" type="checkbox">允许基础使用统计</label><p id="usage-status" role="status"></p><p>关闭后停止发送并清除本机待上传记录，不影响游玩；也尊重浏览器的“不跟踪”设置。联网失败时最多暂存 100 条、7 天内的开局、完赛、中断及降级事件，恢复网络或下次打开时尝试补传。统计后台由作者账号登录查看。</p></details><button class="primary-btn" data-close>关闭</button></section>
   </div>
   <div id="countdown" class="countdown" hidden aria-live="polite">3</div>
-  <div id="rotate-note" class="rotate-note"><span>⤾</span><p><strong>建议横屏游玩</strong><small>横屏视野更开阔；左手移动，右手击球。</small></p></div>
   <div id="toast" role="status" class="toast" hidden></div>
   <div id="loading" class="loading"><span class="spinner"></span> 正在进入球场…</div>
   <script type="module" src="./src/entry.js"></script>

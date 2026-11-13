@@ -127,7 +127,6 @@ button.secondary-btn:active:not(:disabled), .dialog button.secondary-btn:active:
 .onboarding-intro { color: var(--muted); }
 #toast { border: 1px solid #3f5d4b; border-radius: 13px; background: #2b4435; color: #fffef9; box-shadow: 0 6px 22px #243d3128; }
 #countdown { border: 1px solid var(--line); border-radius: 20px; color: var(--ink); background: var(--paper); font-weight: 500; box-shadow: var(--panel-shadow); }
-#rotate-note { border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
 
 /* Live match: opaque light surfaces keep contrast against every court palette. */
 body[data-screen=match] .topbar { color: var(--ink); }

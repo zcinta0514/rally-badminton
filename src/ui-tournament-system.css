@@ -160,10 +160,12 @@ body .hell-status span { color:#c6cdb9; }
 
 /* Keep all match actions on screen even on a 320px portrait viewport. */
 @media (max-width:360px) {
-  body[data-screen=match] .topbar { gap:4px; }
+  body[data-screen=match] .topbar { gap:3px; left:max(4px,var(--safe-left)); right:max(4px,var(--safe-right)); }
   body[data-screen=match] .topbar .brand { display:none; }
-  body[data-screen=match] .topbar .top-actions { gap:4px; }
-  body[data-screen=match] :is(.camera-toggle,.palette-toggle,.match-settings-toggle) { white-space:nowrap; padding:5px; font-size:10px; }
+  body[data-screen=match] .topbar .top-actions { gap:3px; }
+  body[data-screen=match] .topbar .icon-btn:not(.display-btn) { width:26px; }
+  body[data-screen=match] .topbar .display-btn { padding-inline:3px; }
+  body[data-screen=match] :is(.camera-toggle,.palette-toggle,.match-settings-toggle) { white-space:nowrap; padding:4px; font-size:10px; }
   body[data-screen=match] .camera-toggle { margin-left:0; }
 }
 
