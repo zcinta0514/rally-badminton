@@ -496,21 +496,17 @@
   .dialog .help-item { padding: 12px 0; }
   #toast { bottom: max(12px, var(--safe-bottom)); padding: 10px 14px; }
   /* Keep both room actions visible together on short phone screens. */
-  #dialog-backdrop #friends-dialog,
-  #dialog-backdrop #waiting-dialog { padding: 14px 24px; }
+  #dialog-backdrop #friends-dialog { padding: 14px 24px; }
   #friends-dialog .eyebrow, #friends-dialog > p,
-  #friends-dialog > .dialog-foot,
-  #waiting-dialog .eyebrow, #waiting-dialog > p { display: none; }
-  #friends-dialog h2, #waiting-dialog h2 { margin: 0 40px 6px 0; font-size: 24px; }
+  #friends-dialog > .dialog-foot { display: none; }
+  #friends-dialog h2 { margin: 0 40px 6px 0; font-size: 24px; }
   #friends-dialog .input-label { margin: 6px 0 4px; font-size: 11px; }
   #friends-dialog input { height: 40px; min-height: 40px; padding: 8px 12px; }
-  #friends-dialog .primary-btn, #friends-dialog .secondary-btn,
-  #waiting-dialog .primary-btn { min-height: 40px; padding: 8px 14px; margin-top: 8px; }
+  #friends-dialog .primary-btn, #friends-dialog .secondary-btn { min-height: 40px; padding: 8px 14px; margin-top: 8px; }
   #friends-dialog .join-row .secondary-btn { margin: 0; }
   #friends-dialog .divider { margin: 8px 0; }
   #friends-dialog .room-mode-picker { margin-top:8px; }
   #friends-dialog #friends-network-note { display: block; margin-top: 6px; font-size: 11px; line-height: 1.4; }
-  #waiting-dialog .room-code { margin: 8px 0; padding: 10px 8px; }
 }
 
 @media (max-height:360px) and (orientation:landscape) {
@@ -541,11 +537,11 @@
 }
 
 /* Doubles preparation stays scrollable on short landscape phones. */
-#doubles-room-options {display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;margin:10px 0;}
+#doubles-room-options {display:grid;gap:5px;margin:8px 0;}
+#doubles-room-options .setup-row {display:grid;grid-template-columns:4.3em minmax(0,1fr);align-items:center;gap:8px;}
 #doubles-room-options[hidden],#doubles-practice-options[hidden] {display:none;}
-#doubles-room-options select {min-height:36px;width:100%;border:1px solid #dbe2dc;border-radius:8px;background:white;color:#153b2c;padding:5px 8px;font:inherit;}
+#doubles-room-options select {min-height:44px;min-width:0;width:100%;border:0;border-bottom:1px solid #829586;border-radius:0;background:#101d19;color:var(--ink);padding:5px 8px;font:inherit;font-size:12px;}
 #doubles-room-options label {margin:0;font-size:12px;}
 #waiting-players {white-space:pre-line;line-height:1.7;font-size:12px;}
 #waiting-dialog {max-height:calc(100dvh - 24px);overflow-y:auto;}
 #ai-lineup button,#friend-lineup button {white-space:nowrap;}
-@media(max-height:430px) and (orientation:landscape){#waiting-dialog{padding:14px 20px;}#waiting-dialog .room-code{font-size:26px;margin:6px 0;}#waiting-dialog p{margin:6px 0;}#waiting-dialog h2{font-size:20px;}}

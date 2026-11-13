@@ -20,6 +20,12 @@ try{
   await c.addInitScript(()=>{localStorage.setItem('rally.onboarding.seen','1');localStorage.setItem('rally.usage.enabled','off');});
   const p=await c.newPage();pages.push(p);p.setDefaultTimeout(30000);p.on('pageerror',e=>report.errors.push(e.message));
   await p.goto(app.url);await p.locator('#loading').waitFor({state:'hidden'});
+  assert.deepEqual(await p.evaluate(()=>{
+   const ids=[...document.querySelectorAll('[id]')].map(el=>el.id);
+   return ids.filter((id,index)=>ids.indexOf(id)!==index);
+  }),[],'merged markup must retain unique controls');
+  assert.equal(await p.locator('#dialog-backdrop > #pause-dialog').count(),1);
+  assert.equal(await p.locator('#waiting-dialog #room-role').count(),1);
   await p.evaluate(async()=>{
    await import('/vendor/peerjs.min.js');const Original=globalThis.Peer||globalThis.peerjs.Peer;
    globalThis.Peer=class extends Original{constructor(...args){super(...args);globalThis.qaPeer=this;}};
@@ -30,7 +36,17 @@ try{
  report.build=await pages[0].evaluate(()=>RALLY_CONFIG.buildId);assert.equal(report.build,(await createPwaBuild()).version);
  // Actual local controls and three independently moving AI, then return to singles.
  const p=pages[0];await p.locator('#open-solo').click();await p.locator('#start-ai').click();await p.locator('#ai-lineup [data-lineup=doubles]').click();
+ for(const [width,height] of [[844,390],[667,375],[390,844]]){
+  await p.setViewportSize({width,height});await p.locator('#menu').evaluate(el=>el.scrollTop=0);
+  assert.equal(await p.locator('#ai-more').evaluate(el=>el.open),false);
+  const back=await p.locator('#entry-back').boundingBox();assert.ok(back.x<30&&back.y<30);
+  const menu=await p.locator('#menu').boundingBox();if(width>height)assert.ok(menu.x+menu.width<width*.56);
+  await p.screenshot({path:out+`/setup-${width}.png`});
+  await p.locator('#start-ai-confirm').scrollIntoViewIfNeeded();assert.ok((await p.locator('#start-ai-confirm').boundingBox()).height>=44);
+ }
+ await p.setViewportSize({width:844,height:390});await p.locator('#ai-more summary').click();
  await p.locator('#teammate-difficulties [data-partner-difficulty=hard]').click();
+ await p.locator('#ai-more summary').click();
  await p.locator('#start-ai-confirm').click();await readyGame(p);
  assert.equal(await p.evaluate(()=>qaState.players.length),4);
  await p.locator('[data-shot=clear]').click();await p.waitForFunction(()=>rallyDiagnostics.hitId>=2,null,{timeout:20000});
@@ -45,10 +61,17 @@ try{
  await p.locator('#open-solo').click();await p.locator('#start-ai').click();await p.locator('#ai-lineup [data-lineup=singles]').click();await p.locator('#start-ai-confirm').click();await readyGame(p);
  assert.equal(await p.evaluate(()=>qaView.players.filter(a=>a.root.visible).length),2);
  await p.locator('#pause').click();await p.locator('#leave-game').click();check('667x375 gameplay and portrait layout inspected; returning to singles hides extra athletes');
- for(let i=0;i<4;i++){await pages[i].locator('#open-friends').click();await pages[i].locator('#player-name').fill('双打测试'+(i+1));await pages[i].locator('#friend-lineup [data-lineup=doubles]').click();}
+ for(let i=0;i<4;i++){
+  await pages[i].locator('#open-friends').click();assert.equal(await pages[i].locator('#friend-form').isVisible(),false);
+  await pages[i].locator(`#friend-tabs [data-action=${i===0?'create':'join'}]`).click();
+  await pages[i].locator('#entry-back').click();assert.equal(await pages[i].locator('#friend-tabs').isVisible(),true);
+  await pages[i].locator(`#friend-tabs [data-action=${i===0?'create':'join'}]`).click();
+  await pages[i].locator('#player-name').fill('双打测试'+(i+1));await pages[i].locator('#friend-lineup [data-lineup=doubles]').click();
+  await pages[i].screenshot({path:out+`/friend-${i===0?'create':'join'}-${i}.png`});
+ }
  await pages[0].locator('#create-room').click();await pages[0].locator('#waiting-dialog').waitFor({state:'visible'});
  const code=(await pages[0].locator('#waiting-code').innerText()).trim();
- for(let i=1;i<4;i++){await pages[i].locator('#friend-tabs [data-action=join]').click();await pages[i].locator('#room-code').fill(code);await pages[i].locator('#join-room').click();await pages[i].locator('#waiting-dialog').waitFor({state:'visible'});}
+ for(let i=1;i<4;i++){await pages[i].locator('#room-code').fill(code);await pages[i].locator('#join-room').click();await pages[i].locator('#waiting-dialog').waitFor({state:'visible'});}
  for(const p of pages)assert.equal(await p.locator('#ready-room').isEnabled(),true);
  await pages[1].screenshot({path:out+'/lobby-667.png'});
  for(const p of pages)await p.locator('#ready-room').click();

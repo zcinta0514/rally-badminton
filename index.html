@@ -83,30 +83,30 @@
     <div class="palette-heading"><strong>球场配色</strong><small>即时生效 · 仅本机可见</small></div>
     <div id="palette-options" class="palette-options" role="group" aria-label="选择球场配色"></div>
   </aside>
+  <button id="entry-back" class="text-btn entry-navigation" type="button">← 返回首页</button>
   <main id="menu" class="menu-panel" data-entry="home">
     <div class="menu-heading" id="entry-home-heading"><div class="eyebrow">BADMINTON CLUB</div>
     <h1 aria-label="开拍 RALLY"><span class="lobby-wordmark">开拍</span><span class="lobby-latin">RALLY</span></h1>
     <p id="menu-intro" class="intro">5 / 11 / 21 分 · 对角发球</p>
     <p class="landscape-hint">请横置手机游玩，或点击右上角「横屏」。</p></div>
-    <div id="entry-heading" class="entry-heading" hidden><button id="entry-back" class="text-btn">← 返回首页</button><h2 id="entry-title"></h2></div><div class="setup" id="mode-setup">
-      <div class="setup-fields preparation-grid" id="ai-setup" hidden>
-        <section class="preparation-player" aria-labelledby="your-style"><h3 id="your-style" class="setup-heading">你的打法</h3>
-          <div class="role-grid" id="roles" role="group" aria-label="角色打法">
-        <button data-role="balanced" class="role-card selected" aria-pressed="true"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3"/></svg></span><strong>均衡型</strong></button>
-        <button data-role="swift" class="role-card" aria-pressed="false"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h12a3 3 0 1 0-3-3M2 12h18m-16 5h10a3 3 0 1 1-3 3"/></svg></span><strong>灵巧型</strong></button>
-        <button data-role="power" class="role-card" aria-pressed="false"><span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 2-10 12h7l-1 8L21 9h-8Z"/></svg></span><strong>力量型</strong></button>
-      </div>
-          <details class="setup-reference"><summary>打法与难度说明</summary><p id="role-note" class="role-note"></p><p id="coach-note" class="rules-note"></p><p id="difficulty-note" class="rules-note"></p></details>
-        </section>
-        <section class="preparation-rules" aria-label="比赛设置"><div class="setup-row"><span class="field-label">对战人数</span><div id="ai-lineup" class="segments" role="group" aria-label="对战人数"><button data-lineup="singles" class="selected" aria-pressed="true">单打 1V1</button><button data-lineup="doubles" aria-pressed="false">双打 2V2</button></div></div>
+    <div id="entry-heading" class="entry-heading" hidden><h2 id="entry-title"></h2></div><div class="setup" id="mode-setup">
+      <div class="setup-fields" id="ai-setup" hidden>
+        <div class="setup-row"><span class="field-label">对战人数</span><div id="ai-lineup" class="segments" role="group" aria-label="对战人数"><button data-lineup="singles" class="selected" aria-pressed="true">单打 1V1</button><button data-lineup="doubles" aria-pressed="false">双打 2V2</button></div></div>
+        <div class="setup-row"><span class="field-label" id="your-style">你的打法</span><div id="roles" class="segments" role="group" aria-labelledby="your-style"><button data-role="balanced" class="selected" aria-pressed="true">均衡</button><button data-role="swift" aria-pressed="false">灵巧</button><button data-role="power" aria-pressed="false">力量</button></div></div>
+        <div class="setup-row"><span class="field-label">人机难度</span><div id="difficulties" class="segments" role="group" aria-label="人机难度"><button data-difficulty="easy" class="selected" aria-pressed="true">入门</button><button data-difficulty="medium" aria-pressed="false">进阶</button><button data-difficulty="hard" aria-pressed="false">高手</button></div></div>
+        <div class="setup-row"><span class="field-label">比赛形式</span><div id="ai-formats" class="segments format-choices" role="group" aria-label="人机比赛形式"><button data-format="quick:5" class="selected" aria-pressed="true">5 分</button><button data-format="quick:11" aria-pressed="false">11 分</button><button data-format="quick:21" aria-pressed="false">21 分</button><button data-format="standard21:21" aria-pressed="false">标准三局</button></div></div>
+        <p id="rules-note" class="rules-note entry-rules" aria-live="polite"></p>
+        <div id="ai-start-controls" class="entry-submit" hidden><button id="start-ai-confirm" class="primary-btn" type="button">开始比赛</button></div>
+        <details class="setup-reference" id="ai-more">
+          <summary>AI 打法与队友设置</summary>
+          <div id="doubles-practice-options" hidden><div class="setup-row"><span class="field-label">队友打法</span><div id="teammate-roles" class="segments" role="group" aria-label="队友打法"><button data-partner-role="balanced" class="selected">均衡</button><button data-partner-role="swift">灵巧</button><button data-partner-role="power">力量</button></div></div><div class="setup-row"><span class="field-label">队友难度</span><div id="teammate-difficulties" class="segments" role="group" aria-label="队友难度"><button data-partner-difficulty="easy">入门</button><button data-partner-difficulty="medium" class="selected">进阶</button><button data-partner-difficulty="hard">高手</button></div></div><p class="rules-note">你与 AI 队友搭档，对抗两名 AI。自由抢球，注意让位。</p></div>
           <div class="setup-row"><span class="field-label">陪练打法</span><div id="coach-roles" class="segments" role="group" aria-label="陪练打法"><button data-coach-role="balanced" class="selected" aria-pressed="true">均衡</button><button data-coach-role="swift" aria-pressed="false">灵巧</button><button data-coach-role="power" aria-pressed="false">力量</button></div></div>
-          <div class="setup-row"><span class="field-label">人机难度</span><div id="difficulties" class="segments" role="group" aria-label="人机难度"><button data-difficulty="easy" class="selected" aria-pressed="true">入门</button><button data-difficulty="medium" aria-pressed="false">进阶</button><button data-difficulty="hard" aria-pressed="false">高手</button></div></div>
-          <div class="setup-row"><span class="field-label">比赛形式</span><div id="ai-formats" class="segments format-choices" role="group" aria-label="人机比赛形式"><button data-format="quick:5" class="selected" aria-pressed="true">5 分</button><button data-format="quick:11" aria-pressed="false">11 分</button><button data-format="quick:21" aria-pressed="false">21 分</button><button data-format="standard21:21" aria-pressed="false">标准三局</button></div></div>
-          <div id="doubles-practice-options" hidden><div class="setup-row"><span class="field-label">队友打法</span><div id="teammate-roles" class="segments" role="group" aria-label="队友打法"><button data-partner-role="balanced" class="selected">均衡</button><button data-partner-role="swift">灵巧</button><button data-partner-role="power">力量</button></div></div><div class="setup-row"><span class="field-label">队友难度</span><div id="teammate-difficulties" class="segments" role="group" aria-label="队友难度"><button data-partner-difficulty="easy">入门</button><button data-partner-difficulty="medium" class="selected">进阶</button><button data-partner-difficulty="hard">高手</button></div></div><p class="rules-note">你与 AI 队友搭档，对抗两名 AI。自由抢球，注意让位。</p></div><p id="rules-note" class="rules-note"></p>
-        </section>
+          <p id="role-note" class="role-note"></p>
+          <p id="coach-note" class="rules-note"></p>
+          <p id="difficulty-note" class="rules-note"></p>
+        </details>
         <div hidden><div id="targets" class="segments" role="group" aria-label="比赛分制"><button data-target="5" class="selected" aria-pressed="true">5 分</button><button data-target="11" aria-pressed="false">11 分</button><button data-target="21" aria-pressed="false">21 分</button></div><div id="rulesets" class="segments" role="group" aria-label="比赛规则"><button data-ruleset="quick" class="selected" aria-pressed="true">单局快赛</button><button data-ruleset="standard21" aria-pressed="false">标准计分</button></div></div>
       </div>
-      <span class="menu-tip-compact">上下滑动查看更多设置</span>
       <div class="launch-actions" id="home-actions">
         <button id="open-solo" class="lobby-action" type="button"><span>单人对战</span><span aria-hidden="true">›</span></button>
         <button id="open-friends" class="lobby-action" type="button" aria-label="好友对战"><span>好友对战</span><span aria-hidden="true">›</span></button>
@@ -114,37 +114,51 @@
       <div class="launch-actions" id="solo-actions" hidden>
         <button id="start-ai" class="lobby-action" type="button" aria-label="人机对战"><span class="entry-copy"><strong>人机对战</strong></span><span aria-hidden="true">›</span></button>
         <button id="start-hell" class="lobby-action" type="button" aria-label="地狱挑战"><span class="entry-copy"><strong>地狱挑战</strong></span><span aria-hidden="true">›</span></button>
-      </div><div class="launch-actions" id="ai-start-controls" hidden><button id="start-ai-confirm" class="primary-btn">开始比赛 ↗</button></div>
+      </div>
     </div>
     <section id="hell-setup" class="entry-content hell-setup" hidden>
       <div class="hell-contract"><span>你的目标<strong>2 <small>分</small></strong></span><b>VS</b><span>对手的目标<strong>5 <small>分</small></strong></span></div>
-      <p class="rules-note">双方从 0 分开始 · 无需净胜 · 对手无限体力 · 你每分回满体力</p>
+      <p class="rules-note entry-rules">双方从 0 分开始，先达到各自目标即胜，无需净胜。你每分回满体力，对手体力无限。</p>
+      <p class="rules-note challenge-skills-note">对手技能 · 幻影球、蓄力重炮、极限救球</p>
       <div class="setup-row"><span class="field-label">你的打法</span><div id="hell-roles" class="segments" role="group" aria-label="挑战打法"><button data-hell-role="balanced" class="selected" aria-pressed="true">均衡</button><button data-hell-role="swift" aria-pressed="false">灵巧</button><button data-hell-role="power" aria-pressed="false">力量</button></div></div>
-      <div class="hell-skills"><article><b>01 / 幻影球</b><p>一真三假。追踪实线尾迹，虚影过网前消散。</p></article><article><b>02 / 蓄力重炮</b><p>提前亮出线路。挡住重杀，趁对手回位慢打空当。</p></article><article><b>03 / 极限救球</b><p>难接低球才鱼跃。侧身落地、撑地起身，两次扑救至少间隔4秒。</p></article></div>
-      <button id="start-hell-confirm" class="primary-btn hell-confirm">挑战地狱人机 <span>↗</span></button>
-    </section>    <section id="friends-dialog" class="entry-content friend-setup" hidden aria-labelledby="entry-title">
-      <div id="friend-tabs" class="segments" role="group" aria-label="好友房间操作"><button data-action="create" class="selected" aria-pressed="true">创建房间</button><button data-action="join" aria-pressed="false">加入房间</button></div>
-      <div class="preparation-grid friend-grid">
-        <section class="preparation-player" aria-label="玩家信息">
-          <label class="input-label" for="player-name">你的昵称</label>
-          <input id="player-name" maxlength="16" placeholder="输入昵称" autocomplete="nickname" aria-describedby="player-profile-note" required>
-          <small id="player-profile-note" class="dialog-foot profile-note" role="status"></small>
+      <div class="entry-submit"><button id="start-hell-confirm" class="primary-btn" type="button">开始挑战</button></div>
+      <details class="setup-reference" id="hell-more">
+        <summary>查看对手技能说明</summary>
+        <div class="hell-skills"><article><b>幻影球</b><p>一真三假。追踪实线尾迹，虚影过网前消散。</p></article><article><b>蓄力重炮</b><p>提前亮出线路。挡住重杀，趁对手回位慢打空当。</p></article><article><b>极限救球</b><p>难接低球才鱼跃。侧身落地、撑地起身，两次扑救至少间隔4秒。</p></article></div>
+      </details>
+    </section>
+    <section id="friends-dialog" class="entry-content friend-setup" hidden aria-labelledby="entry-title">
+      <div id="friend-tabs" class="launch-actions friend-actions" role="group" aria-label="好友房间操作">
+        <button class="lobby-action" type="button" data-action="create"><span>创建房间</span><span aria-hidden="true">›</span></button>
+        <button class="lobby-action" type="button" data-action="join"><span>加入房间</span><span aria-hidden="true">›</span></button>
+      </div>
+      <div id="friend-form" hidden>
+        <div class="setup-row"><span class="field-label">对战人数</span><div id="friend-lineup" class="segments" role="group" aria-label="对战人数"><button data-lineup="singles" class="selected" aria-pressed="true">单打 1V1</button><button data-lineup="doubles" aria-pressed="false">双打 2V2</button></div></div>
+        <label class="input-label" for="player-name">你的昵称</label>
+        <input id="player-name" maxlength="16" placeholder="输入昵称" autocomplete="nickname" aria-describedby="player-profile-note" required>
+        <div id="friend-create-options" hidden>
+          <div class="setup-row"><span class="field-label">比赛形式</span><div id="friend-formats" class="segments format-choices" role="group" aria-label="好友比赛形式"><button data-format="quick:5" class="selected" aria-pressed="true">5 分</button><button data-format="quick:11" aria-pressed="false">11 分</button><button data-format="quick:21" aria-pressed="false">21 分</button><button data-format="standard21:21" aria-pressed="false">标准三局</button></div></div>
+          <p id="friend-rules-note" class="rules-note entry-rules" aria-live="polite"></p>
+          <small id="friend-mode-note">父子局：败者跪拜叫爸爸，约 3 秒不可跳过。</small>
+        </div>
+        <div id="friend-join-options" hidden>
+          <label class="input-label" for="room-code">房间码</label>
+          <input id="room-code" maxlength="5" placeholder="5 位房间码" autocomplete="off" autocapitalize="characters">
+          <p class="rules-note entry-rules">加入后查看房主设置的赛制和对局类型。全员确认并准备后开赛。</p>
+        </div>
+        <div class="entry-submit">
+          <button id="create-room" class="primary-btn" type="button" hidden>创建房间</button>
+          <button id="join-room" class="primary-btn" type="button" hidden>加入房间</button>
+        </div>
+        <small id="player-profile-note" class="dialog-foot profile-note" role="status"></small>
+        <details class="setup-reference" id="friend-more">
+          <summary>更多房间设置</summary>
           <div class="setup-row"><span class="field-label">你的打法</span><div id="friend-roles" class="segments" role="group" aria-label="好友自己的打法"><button data-friend-role="balanced" class="selected" aria-pressed="true">均衡</button><button data-friend-role="swift" aria-pressed="false">灵巧</button><button data-friend-role="power" aria-pressed="false">力量</button></div></div>
-        </section>
-        <section class="preparation-rules" aria-label="房间设置">
-          <div class="setup-row"><span class="field-label">对战人数</span><div id="friend-lineup" class="segments" role="group" aria-label="对战人数"><button data-lineup="singles" class="selected" aria-pressed="true">单打 1V1</button><button data-lineup="doubles" aria-pressed="false">双打 2V2</button></div></div><div id="friend-create-options">
-            <div class="setup-row"><span class="field-label">比赛形式</span><div id="friend-formats" class="segments format-choices" role="group" aria-label="好友比赛形式"><button data-format="quick:5" class="selected" aria-pressed="true">5 分</button><button data-format="quick:11" aria-pressed="false">11 分</button><button data-format="quick:21" aria-pressed="false">21 分</button><button data-format="standard21:21" aria-pressed="false">标准三局</button></div></div>
-            <p id="friend-rules-note" class="rules-note"></p>
-            <div id="friend-mode-picker" class="room-mode-picker"><div class="setup-row"><span class="field-label">对局类型</span><div id="friend-modes" class="segments" role="group" aria-label="建房对局类型" aria-describedby="friend-mode-note"><button type="button" data-finale="none" class="selected" aria-pressed="true">普通对局</button><button type="button" data-finale="father-son" aria-pressed="false">父子局</button></div></div><small id="friend-mode-note">父子局：败者跪拜叫爸爸，约 3 秒不可跳过。</small></div>
-            <button id="create-room" class="primary-btn">创建房间 <span>＋</span></button>
-          </div>
-          <div id="friend-join-options" hidden>
-            <label class="input-label" for="room-code">房间码</label>
-            <div class="join-row"><input id="room-code" maxlength="5" placeholder="5 位房间码" autocomplete="off" autocapitalize="characters" aria-label="房间码"><button id="join-room" class="primary-btn">加入 ↗</button></div>
-            <p class="rules-note">加入后确认人数和规则，全员准备后开赛。</p>
+          <div id="friend-create-details" hidden>
+            <div id="friend-mode-picker" class="room-mode-picker"><div class="setup-row"><span class="field-label">对局类型</span><div id="friend-modes" class="segments" role="group" aria-label="建房对局类型" aria-describedby="friend-mode-note"><button type="button" data-finale="none" class="selected" aria-pressed="true">普通对局</button><button type="button" data-finale="father-son" aria-pressed="false">父子局</button></div></div></div>
           </div>
           <small id="friends-network-note" class="dialog-foot">联网配对 · 同一 Wi-Fi / 热点</small>
-        </section>
+        </details>
       </div>
     </section>
     <div class="menu-foot">
@@ -187,7 +201,21 @@
     </section>
     <section id="lan-dialog" class="dialog" hidden aria-labelledby="lan-title"><button class="close-dialog" data-close aria-label="关闭">×</button><div class="eyebrow">好友对战</div><h2 id="lan-title">局域网联机</h2><p>两台设备连接同一 Wi-Fi，打开主机启动游戏时显示的局域网网址，或对手发来的邀请链接。</p><p>进入后选择「好友对战」：一方创建房间，另一方输入 <strong>5 位房间码</strong>加入。</p><small class="dialog-foot">本网页可直接进行人机对战。房间码仅在局域网游戏内使用，不能用于查找主机；主机需保持运行。</small><button class="primary-btn" data-close>关闭</button></section>
 
-    <section id="waiting-dialog" class="dialog" hidden aria-labelledby="waiting-title"><div class="eyebrow">房间</div><h2 id="waiting-title">房间已创建</h2><p>分享房间码，全员准备后开赛。</p><small id="waiting-mode" class="room-mode-summary"></small><div id="waiting-code" class="room-code">—</div><button id="copy-invite" class="primary-btn">复制邀请链接 <span>↗</span></button><div id="waiting-players" class="lobby-players"></div><div id="doubles-room-options" hidden><label class="input-label" for="room-seat">选择队伍 / 位置</label><select id="room-seat"><option value="0">A 队 · 位置 1</option><option value="2">A 队 · 位置 2</option><option value="1">B 队 · 位置 1</option><option value="3">B 队 · 位置 2</option></select><label class="input-label" for="room-role">你的打法</label><select id="room-role"><option value="balanced">均衡</option><option value="swift">灵巧</option><option value="power">力量</option></select></div><p id="waiting-rules" class="rule-note"></p><p id="waiting-consent" class="rule-note"></p><button id="ready-room" class="primary-btn" disabled>等待对手加入</button><p id="waiting-status" class="waiting-status">● 等待对手加入</p><button id="leave-waiting" class="text-btn">退出房间</button></section>
+    <button id="leave-waiting" class="text-btn entry-navigation" type="button">← 退出房间</button>
+    <section id="waiting-dialog" class="dialog" hidden aria-labelledby="waiting-title">
+      <h2 id="waiting-title">好友房间</h2>
+      <div class="waiting-invite">
+        <div id="waiting-code" class="room-code" aria-label="房间码">—</div>
+        <button id="copy-invite" class="text-btn" type="button">复制邀请链接</button>
+      </div>
+      <p id="waiting-status" class="waiting-status" role="status">等待对手加入</p>
+      <div id="waiting-players" class="lobby-players"></div>
+      <small id="waiting-mode" class="room-mode-summary"></small>
+      <div id="doubles-room-options" hidden><div class="setup-row"><label class="field-label" for="room-seat">队伍位置</label><select id="room-seat"><option value="0">A 队 · 位置 1</option><option value="2">A 队 · 位置 2</option><option value="1">B 队 · 位置 1</option><option value="3">B 队 · 位置 2</option></select></div><div class="setup-row"><label class="field-label" for="room-role">你的打法</label><select id="room-role"><option value="balanced">均衡</option><option value="swift">灵巧</option><option value="power">力量</option></select></div></div>
+      <p id="waiting-rules" class="rule-note"></p>
+      <p id="waiting-consent" class="rule-note"></p>
+      <button id="ready-room" class="primary-btn" type="button" disabled>确认规则并准备</button>
+    </section>
     <section id="pause-dialog" class="dialog compact" hidden aria-labelledby="pause-title"><div class="eyebrow">暂停</div><h2 id="pause-title">比赛暂停</h2><div id="pause-time" class="pause-clock">30</div><p id="pause-description">每人每场可暂停一次，最多 30 秒。</p><p id="pause-rule-note" class="rule-note">超时按当前领先方获胜；平分则结束，不计胜负。</p><button id="resume" class="primary-btn">继续比赛 <span>↗</span></button><button id="leave-game" class="text-btn">结束本局并返回</button></section>
     <section id="result-dialog" class="dialog compact" hidden aria-labelledby="result-title"><div class="eyebrow">比赛结果</div><h2 id="result-title">本局结束</h2><div id="result-score" class="result-score">5 : 3</div><p id="result-reason"></p><small id="result-record" class="dialog-foot result-record" role="status" hidden></small><button id="rematch" class="primary-btn">再来一局 <span>↗</span></button><button id="result-leaderboard" class="secondary-btn" hidden>查看排行榜 <span>↗</span></button><button id="back-menu" class="text-btn">返回首页</button></section>
     <section id="leaderboard-dialog" class="dialog leaderboard-dialog" hidden aria-labelledby="leaderboard-title"><button id="close-leaderboard" class="close-dialog" aria-label="关闭排行榜">×</button><div class="eyebrow">战绩</div><h2 id="leaderboard-title">排行榜</h2><select id="leaderboard-format" aria-label="战绩类型" hidden><option value="singles">单打战绩</option><option value="doubles">双打战绩</option></select><p>胜场优先；同胜场比较胜率，再比较累计得分。</p><p id="leaderboard-status" class="leaderboard-status" role="status" aria-live="polite"></p><div class="leaderboard-table-wrap"><table id="leaderboard-table" class="leaderboard-table" hidden><thead><tr><th scope="col">排名</th><th scope="col">玩家</th><th scope="col">胜场</th><th scope="col">胜率</th><th scope="col">得分</th></tr></thead><tbody id="leaderboard-rows"></tbody></table></div><small id="leaderboard-storage" class="dialog-foot"></small><button id="leaderboard-retry" class="secondary-btn">刷新排行榜 <span>↻</span></button></section>
