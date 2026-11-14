@@ -65,9 +65,6 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     const dialog=element(id);dialog.hidden=true;return dialog;
   });
   const closeButtons = ['close-friends','close-help','close-lan'].map(element);
-  element('camera-panel').hidden = true;
-  element('palette-panel').hidden = true;
-  element('match-settings-panel').hidden = true;
   const settingGroups = new Map();
   for (const [id, attribute, values] of [['hell-roles','hellRole',['balanced','swift','power']], ['roles','role',['balanced','swift','power']], ['coach-roles','coachRole',['balanced','swift','power']], ['friend-roles','friendRole',['balanced','swift','power']], ['ai-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-tabs','action',['create','join']], ['difficulties','difficulty',['easy','medium','hard']], ['targets','target',[5,11,21]], ['rulesets','ruleset',['quick','standard21']]]) {
     const choices=values.map((value,index)=>{const button=element(`choice-${attribute}-${value}`);button.dataset[attribute]=String(value);button.closest=selector=>selector==='button'||selector==='[data-hell-role]'?button:null;button.setAttribute('aria-pressed',String(index===0));return button;});
@@ -93,15 +90,12 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
         if (part === '[data-shot="smash"]') found = element('smash');
         else if (part === 'dialog[open]') found = [...elements.values()].find(node => node.tagName === 'DIALOG' && node.open);
         else if (part === '.dialog:not([hidden])') found = dialogs.find(node => !node.hidden);
-        else if (['camera-panel','palette-panel','match-settings-panel'].some(id=>part === `#${id}:not([hidden])`)) {
-          const id = part.slice(1,part.indexOf(':')); found = element(id).hidden ? null : element(id);
-        }
         if (found) return found;
       }
       return null;
     },
     querySelectorAll: selector => selector === '.dialog' ? dialogs : selector === '.player-dot'
-      ? [element('dot-0'), element('dot-1')] : selector === '[data-shot]' ? shots : selector === '[data-close]' ? closeButtons : [],
+      ? [element('dot-0'), element('dot-1')] : selector === '#game-controls [data-shot]' ? shots : selector === '[data-close]' ? closeButtons : [],
   });
   class Socket extends Target {
     static OPEN = 1;
@@ -224,18 +218,16 @@ test('the production update callback permits only a ready and visible lobby', as
   f.document.hidden = false; assert.equal(safe(), true);
 });
 
-test('the production update callback defers for friend forms, native dialogs, camera, palette, audio settings and text editing', async () => {
+test('the production update callback defers for friend forms, fullscreen settings, the shot editor and text editing', async () => {
   const f = await fixture('serve', { peerMode: true });
   const safe = f.pwaOptions.isSafeToUpdate;
   f.click('open-friends'); assert.deepEqual(f.visibleDialogs(), ['friends-dialog']); assert.equal(safe(), false);
   f.click('entry-back'); assert.equal(safe(), true);
-  const nativeDialog = f.document.createElement('dialog'); nativeDialog.open = true; assert.equal(safe(), false);
-  nativeDialog.open = false; assert.equal(safe(), true);
-  f.element('camera-panel').hidden = false; assert.equal(safe(), false);
-  f.element('camera-panel').hidden = true;
-  for (const id of ['palette-panel','match-settings-panel']) {
-    f.element(id).hidden = false; assert.equal(safe(), false, `${id} must not be interrupted by an update`);
-    f.element(id).hidden = true; assert.equal(safe(), true);
+  for (const id of ['match-settings-panel','shot-layout-editor']) {
+    const dialog = f.element(id);
+    dialog.tagName = 'DIALOG';
+    dialog.open = true; assert.equal(safe(), false, `${id} must not be interrupted by an update`);
+    dialog.open = false; assert.equal(safe(), true);
   }
   for (const tag of ['input', 'textarea', 'select', 'div']) {
     const field = f.document.createElement(tag); if (tag === 'div') field.contentEditable = 'true';

@@ -7,7 +7,7 @@ const fakeStore = (value = null) => {
   if (value !== null) data.set(SHOT_LAYOUT_STORAGE_KEY, typeof value === 'string' ? value : JSON.stringify(value));
   return { getItem: key => data.get(key) ?? null, setItem: (key, next) => data.set(key, next), data };
 };
-const button = key => ({ dataset: { shot: key }, style: { left: 'old', top: 'old', removeProperty(property) { this[property] = ''; } } });
+const button = key => ({ dataset: { shot: key }, style: { left: 'old', top: 'old', setProperty(property, value) { this[property] = value; }, removeProperty(property) { this[property] = ''; } } });
 const fakeDocument = () => {
   const buttons = SHOT_KEYS.map(button);
   return { body: { dataset: {} }, buttons, querySelectorAll: () => buttons, querySelector: () => null, defaultView: { innerWidth: 800, innerHeight: 400 } };
@@ -53,4 +53,19 @@ test('applying a custom layout writes percentage positions and a default layout 
   applyShotLayout({ mode: 'default' }, doc);
   assert.equal(doc.body.dataset.shotLayout, 'default');
   for (const item of doc.buttons) assert.deepEqual({ left: item.style.left, top: item.style.top }, { left: '', top: '' });
+});
+
+test('saved sizes are independent, bounded, and optional for legacy positions', () => {
+  const positions = { clear: { x: 0.5, y: 0.25 }, drop: { x: 0.6, y: 0.5 }, smash: { x: 0.7, y: 0.75 } };
+  const store = fakeStore({ mode: 'custom', positions });
+  assert.deepEqual(readShotLayout(store), { mode: 'custom', positions });
+  const sizes = { clear: 140, drop: 75 };
+  assert.deepEqual(saveShotLayout({ mode: 'custom', positions, sizes: { clear: 170, drop: 50, smash: '85' } }, store), { mode: 'custom', positions, sizes });
+  assert.deepEqual(readShotLayout(store).sizes, sizes);
+  const doc = fakeDocument();
+  applyShotLayout(readShotLayout(store), doc);
+  assert.equal(doc.buttons[0].style['--shot-scale'], '1.4');
+  assert.equal(doc.buttons[1].style['--shot-scale'], '0.75');
+  applyShotLayout({ mode: 'arc' }, doc);
+  assert.equal(doc.buttons[0].style['--shot-scale'], '');
 });

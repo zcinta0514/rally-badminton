@@ -90,17 +90,19 @@ const menuAudio=new MenuAudio({media:$('lobby-music-player'),getContext:()=>aren
     const label=$('arena-music-current');
     if(label){label.textContent=title;label.hidden=false;}
   }});
-const shotLayout=bindShotLayout({showToast,onClose:()=>{shotLayoutHold=false;accumulator=0;lastFrame=performance.now();controls?.reset();}});
-for(const trigger of document.querySelectorAll('[data-open-shot-layout]'))trigger.addEventListener('click',()=>{closeHelpOrSetup();shotLayout?.open();});
-const openShotLayoutInMatch=()=>{
-  if(mode==='online'){showToast('联机对局请回首页调整按键');return;}
-  if(!state||state.phase==='over')return;
-  matchSettings?.close();shotLayoutHold=true;accumulator=0;
-  controls?.reset();pendingShot=null;dragAim=null;gestureOrigin=null;
-  try{if(!shotLayout?.open())shotLayoutHold=false;}
-  catch(error){shotLayoutHold=false;console.error(error);showToast('调整面板打开失败，请回首页重试');}
-};
-$('edit-shot-layout')?.addEventListener('click',openShotLayoutInMatch);
+const shotLayout=bindShotLayout({showToast,onClose:()=>{
+  shotLayoutHold=false;accumulator=0;lastFrame=performance.now();
+  matchSettings?.open();
+  $('edit-shot-layout').focus({preventScroll:true});
+}});
+$('edit-shot-layout').addEventListener('click',()=>{
+  if(mode==='online'&&state) return;
+  shotLayoutHold=mode==='ai';
+  matchSettings?.close();
+  if(shotLayout?.open()) return;
+  shotLayoutHold=false;
+  matchSettings?.open();
+});
 const playback=new NetworkPlayback();
 const performanceMonitor=new PerformanceMonitor({devicePixelRatio:window.devicePixelRatio});
 const pwa=initPWA({fullscreenButton:$('fullscreen'),landscapeButton:$('landscape'),showToast,onUpdateLock:({version}={})=>{
@@ -108,7 +110,7 @@ const pwa=initPWA({fullscreenButton:$('fullscreen'),landscapeButton:$('landscape
   },
   isSafeToUpdate:({allowHidden=false}={})=>entryStage==='home'&&isUpdateSafe({ready:Boolean(controls&&view)&&$('loading').hidden,visible:allowHidden||!document.hidden,mode,state,room,
     connection:socket||peerSession||peerAttempt,connecting,reconnecting,pendingResult:resultPending,finale:finale.blocking,
-    overlay:Boolean(document.querySelector('dialog[open], .dialog:not([hidden]), #camera-panel:not([hidden]), #match-settings-panel:not([hidden]), #palette-panel:not([hidden]), #shot-layout-editor:not([hidden])')),
+    overlay:Boolean(document.querySelector('dialog[open], .dialog:not([hidden])')),
     editing:Boolean(document.activeElement?.matches('input, textarea, select, [contenteditable="true"]'))})});
 const onboarding=initOnboarding({showToast,canOpen:()=>Boolean(controls)&&$('loading').hidden&&mode==='menu'&&!room&&!connecting&&!peerSession&&!peerAttempt,
   onStartPractice:()=>openEntry('ai')});
@@ -308,7 +310,7 @@ syncEntrySettings();
 function selectAim(value){aim=value;lastShotRequest=null;}
 
 function setScreen(screen){
-  if(screen!=='match')matchSettings?.close();
+  matchSettings?.close();
   document.body.dataset.screen=screen;
   menuAudio.setScene(screen==='match'?'match':'lobby');
   if(screen!=='match')document.body.dataset.entering='false';
@@ -573,7 +575,7 @@ document.addEventListener('visibilitychange',()=>{
   arenaAudio.setVisible(!document.hidden);
   menuAudio.setVisible(!document.hidden);
   if(!document.hidden||!state||state.phase==='over')return;
-  if(shotLayoutHold){controls?.reset();pendingShot=null;return;}
+  if(shotLayoutHold||(mode==='ai'&&matchSettings?.isOpen)){controls?.reset();pendingShot=null;return;}
   controls?.reset();pendingShot=null;
   if(mode==='online'){playback.freeze(performance.now());send({type:'suspend'});}
   else if(mode==='ai'&&state.phase!=='paused'){
@@ -676,7 +678,7 @@ function updateUI(info,state){
   $('assist-status').dataset.kind=guidance==='按住击球键，拖动选落点'?'instruction':'live';
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
   $('help').disabled=view?.entranceActive||reconnecting||state.phase==='countdown'||finale.blocking;
-  controls.setEnabled(!view?.entranceActive&&['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting&&!shotLayoutHold);
+  controls.setEnabled(!view?.entranceActive&&['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting&&!shotLayoutHold&&!matchSettings?.isOpen);
   $('pause').disabled=view?.entranceActive||!['serve','rally','point','intermission'].includes(state.phase);
   $('countdown').hidden=!['countdown','intermission'].includes(state.phase)||(state.phase==='intermission'&&view.rallyEnding);
   if(state.phase==='countdown')setText('countdown',Math.max(1,Math.ceil(state.timer)));
@@ -722,7 +724,13 @@ function updateUI(info,state){
 try{
   view=new CourtView($('court'),{courtPalette:arenaPreferences.courtPalette});
   bindCameraSettings(view);
-  matchSettings=bindMatchSettings(arenaAudio,{preferences:arenaPreferences,menuAudio,onChange:value=>{
+  matchSettings=bindMatchSettings(arenaAudio,{preferences:arenaPreferences,menuAudio,onOpen:()=>{
+    const onlineMatch=mode==='online'&&Boolean(state);
+    $('edit-shot-layout').disabled=onlineMatch;
+    $('shot-layout-restriction').hidden=!onlineMatch;
+    $('settings-match-rules').hidden=!state;
+    controls?.setEnabled(false);pendingShot=null;dragAim=null;dragDepth=0;gestureOrigin=null;
+  },onChange:value=>{
     const paletteChanged=value.courtPalette!==arenaPreferences.courtPalette;
     arenaPreferences=value;
     view.setLightingBrightness(value.brightness);
@@ -736,14 +744,14 @@ try{
   window.visualViewport?.addEventListener('resize',resizeCourt);
   new ResizeObserver(resizeCourt).observe($('court'));
   window.addEventListener('orientationchange',()=>{controls?.reset();pendingShot=null;requestAnimationFrame(resizeCourt);setTimeout(resizeCourt,250);});
-  controls=new Controls({joystick:$('joystick'),knob:$('knob'),movementSurface:$('court'),shotButtons:document.querySelectorAll('[data-shot]'),onShot:fireShot,onAim:(value,explicit,depth=0)=>{
+  controls=new Controls({joystick:$('joystick'),knob:$('knob'),movementSurface:$('court'),shotButtons:document.querySelectorAll('#game-controls [data-shot]'),onShot:fireShot,onAim:(value,explicit,depth=0)=>{
     dragAim=explicit?value:null;dragDepth=explicit?depth:0;
     const active=controls?.activeShot;
     if(active?.button)paintShotAim(active.button,value,depth);
-    else clearShotAim(document.querySelectorAll('[data-shot]'));
+    else clearShotAim(document.querySelectorAll('#game-controls [data-shot]'));
     if(active)lastShotRequest=null;
   },onAimSelect:selectAim,onPause:requestPause,onFeedback:(type,detail)=>{if(type==='press')haptics.press(detail.shot);else if(type==='charged')haptics.charged();else if(type==='shoot'){haptics.shoot(detail.shot);flashShotButton(detail.button,detail.shot);}}});
-  document.querySelectorAll('[data-shot]').forEach(button=>button.addEventListener('pointerdown',event=>{
+  document.querySelectorAll('#game-controls [data-shot]').forEach(button=>button.addEventListener('pointerdown',event=>{
     if(controls.activeShot?.pointerId===event.pointerId)gestureOrigin={x:event.clientX,y:event.clientY};
   }));
   window.addEventListener('keydown',()=>{if(controls.activeShot?.key)gestureOrigin=null;});
@@ -760,7 +768,7 @@ try{
       view.advanceEntrance?.(elapsed,{hidden:document.hidden,phase:state.phase,remaining:state.timer});
       document.body.dataset.entering=String(view.entranceActive===true);
       if(mode==='ai'){
-        if(shotLayoutHold||view.entranceActive){accumulator=0;}
+        if(shotLayoutHold||matchSettings?.isOpen||view.entranceActive){accumulator=0;}
         else if(state.phase==='paused'){stepMatch(state,[{},{}],elapsed);accumulator=0;}
         else{
           accumulator+=Math.min(elapsed,.15);

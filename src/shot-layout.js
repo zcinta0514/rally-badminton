@@ -1,6 +1,7 @@
 export const SHOT_LAYOUT_STORAGE_KEY = 'rally.shotLayout.v1';
 export const SHOT_KEYS = Object.freeze(['clear', 'drop', 'smash']);
 export const SHOT_LAYOUT_MODES = Object.freeze(['default', 'arc', 'custom']);
+const SIZE = { min: 75, max: 140, default: 100 };
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const storage = () => { try { return globalThis.localStorage; } catch { return null; } };
@@ -15,7 +16,14 @@ export function normalizeShotLayout(value) {
     if (!Number.isFinite(point?.x) || !Number.isFinite(point?.y)) return { mode: 'default', positions: null };
     positions[key] = { x: clamp(point.x, 0, 1), y: clamp(point.y, 0, 1) };
   }
-  return { mode: 'custom', positions };
+  const sizes = {};
+  for (const key of SHOT_KEYS) {
+    const size = value.sizes?.[key];
+    if (!Number.isFinite(size)) continue;
+    const percent = clamp(Math.round(size), SIZE.min, SIZE.max);
+    if (percent !== SIZE.default) sizes[key] = percent;
+  }
+  return Object.keys(sizes).length ? { mode: 'custom', positions, sizes } : { mode: 'custom', positions };
 }
 
 export function readShotLayout(store = storage()) {
@@ -62,14 +70,16 @@ export function applyShotLayout(layout, doc = globalThis.document) {
   if (doc.body) doc.body.dataset.shotLayout = normalized.mode;
   const buttons = [...(doc.querySelectorAll?.('#game-controls .shot-btn') || [])];
   const view = doc.defaultView || globalThis;
+  const safe = normalized.mode === 'custom' && doc.createElement ? safeInsets(doc) : { top: 0, right: 0, bottom: 0, left: 0 };
   for (const button of buttons) {
+    applySize(button, normalized.sizes?.[button.dataset.shot]);
     if (normalized.mode === 'custom') {
       const point = normalized.positions?.[button.dataset.shot];
       if (point) {
         const halfWidth = (button.offsetWidth || 0) / 2, halfHeight = (button.offsetHeight || 0) / 2;
         const width = view.innerWidth || 0, height = view.innerHeight || 0;
-        const x = width > 0 ? Math.max((halfWidth + 8) / width, Math.min(1 - (halfWidth + 8) / width, point.x)) : point.x;
-        const y = height > 0 ? Math.max((halfHeight + 8) / height, Math.min(1 - (halfHeight + 8) / height, point.y)) : point.y;
+        const x = width > 0 ? clamp(point.x, (halfWidth + 8 + safe.left) / width, 1 - (halfWidth + 8 + safe.right) / width) : point.x;
+        const y = height > 0 ? clamp(point.y, (halfHeight + 8 + safe.top) / height, 1 - (halfHeight + 8 + safe.bottom) / height) : point.y;
         button.style.left = `${x * 100}%`;
         button.style.top = `${y * 100}%`;
         continue;
@@ -84,6 +94,10 @@ export function applyShotLayout(layout, doc = globalThis.document) {
 }
 
 const KEY_LABELS = { clear: '高远', drop: '吊球', smash: '杀球' };
+function applySize(button, size) {
+  if (size && size !== SIZE.default) button.style.setProperty('--shot-scale', String(size / 100));
+  else button.style.removeProperty('--shot-scale');
+}
 
 /** Resolve the notch and home-indicator insets once per clamp. */
 const safeInsets = doc => {
@@ -105,7 +119,9 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
   const controls = doc.querySelector?.('#game-controls');
   if (!controls) return null;
   let saved = applyShotLayout(readShotLayout(store), doc);
-  let editor = null, keys = [], mode = saved.mode, drag = null, previous = saved;
+  const view = doc.defaultView || globalThis;
+  let editor, keys, toolbar, slider, sizeLabel, feedback;
+  let draft, selected, drag, safe;
 
   const measurePreset = preset => {
     const source = controls.querySelector('.shots-wrap');
@@ -114,13 +130,12 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
     const clone = source.cloneNode(true);
     clone.querySelectorAll('[id]').forEach(element => element.removeAttribute('id'));
     clone.querySelectorAll('.shot-btn').forEach(button => {
-      for (const property of ['left', 'top', 'width', 'height']) button.style.removeProperty(property);
+      for (const property of ['left', 'top', '--shot-scale']) button.style.removeProperty(property);
     });
     stage.append(clone);
     doc.body.append(stage);
     const previousMode = doc.body.dataset.shotLayout;
     doc.body.dataset.shotLayout = preset;
-    const view = doc.defaultView || globalThis;
     const positions = {};
     for (const key of SHOT_KEYS) {
       const rect = clone.querySelector(`[data-shot="${key}"]`).getBoundingClientRect();
@@ -136,47 +151,85 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
     return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, width: rect.width, height: rect.height };
   };
 
-  const place = (key, point) => {
-    const view = doc.defaultView || globalThis;
-    const safe = safeInsets(doc);
+  const place = (key, point, checkSpacing = false) => {
     const rect = key.getBoundingClientRect();
     const x = clamp(point.x, rect.width / 2 + 8 + safe.left, view.innerWidth - rect.width / 2 - 8 - safe.right);
-    const y = clamp(point.y, rect.height / 2 + 8 + safe.top, view.innerHeight - rect.height / 2 - 8 - safe.bottom);
+    const top = Math.max(safe.top, toolbar.getBoundingClientRect().bottom);
+    const y = clamp(point.y, rect.height / 2 + 8 + top, view.innerHeight - rect.height / 2 - 8 - safe.bottom);
+    if (checkSpacing && keys.some(other => {
+      if (other === key) return false;
+      const center = keyCenter(other);
+      return Math.hypot(x - center.x, y - center.y) < (rect.width + center.width) / 2 + 6;
+    })) return false;
     key.style.left = `${x}px`;
     key.style.top = `${y}px`;
+    return true;
   };
 
-  const status = () => editor?.querySelector('.shot-layout-status');
-  const setMode = next => {
-    mode = next;
-    if (status()) status().textContent = next === 'custom' ? '自定义' : next === 'arc' ? '弧形预设' : '原位预设';
-    for (const chip of editor?.querySelectorAll('[data-preset]') || []) chip.setAttribute('aria-pressed', String(chip.dataset.preset === next));
+  const syncPresets = () => {
+    for (const chip of toolbar.querySelectorAll('[data-preset]')) chip.setAttribute('aria-pressed', String(chip.dataset.preset === draft.mode));
   };
 
-  const setPreset = preset => {
-    const positions = preset === 'custom'
-      ? saved.positions
-      : measurePreset(preset);
-    if (!positions) return setPreset('default');
+  const select = key => {
+    selected = key;
+    for (const button of keys) button.setAttribute('aria-pressed', String(button === key));
+    sizeLabel.textContent = KEY_LABELS[key.dataset.shot] + '大小';
+    slider.value = draft.sizes[key.dataset.shot] ?? SIZE.default;
+    slider.nextElementSibling.value = slider.value + '%';
+    feedback.textContent = '';
+  };
+
+  const render = () => {
+    const positions = draft.mode === 'custom' ? draft.positions : measurePreset(draft.mode);
     for (const key of keys) {
       const point = positions[key.dataset.shot];
-      if (!point) continue;
-      place(key, { x: point.x * (doc.defaultView || globalThis).innerWidth, y: point.y * (doc.defaultView || globalThis).innerHeight });
+      applySize(key, draft.sizes[key.dataset.shot]);
+      place(key, { x: point.x * view.innerWidth, y: point.y * view.innerHeight });
     }
-    setMode(preset);
+    syncPresets();
+    select(selected);
+  };
+
+  const recordPositions = () => {
+    draft.mode = 'custom';
+    draft.positions = Object.fromEntries(keys.map(key => {
+      const { x, y } = keyCenter(key);
+      return [key.dataset.shot, { x: x / view.innerWidth, y: y / view.innerHeight }];
+    }));
+    syncPresets();
   };
 
   const buildEditor = () => {
     if (editor) return;
-    editor = doc.createElement('section');
+    editor = doc.createElement('dialog');
     editor.id = 'shot-layout-editor';
     editor.className = 'shot-layout-editor';
     editor.hidden = true;
-    editor.setAttribute('role', 'dialog');
-    editor.setAttribute('aria-modal', 'true');
-    editor.setAttribute('aria-label', '调整击球键位置');
-    editor.innerHTML = '<div class="shot-layout-toolbar"><div class="shot-layout-title"><strong>调整击球键位置</strong><small>拖动三个键到顺手的位置</small></div><div class="shot-layout-presets" role="group" aria-label="按键预设"><button type="button" data-preset="default">原位</button><button type="button" data-preset="arc">弧形</button></div><span class="shot-layout-status">原位预设</span><div class="shot-layout-actions"><button type="button" class="text-btn" data-action="cancel">取消</button><button type="button" class="primary-btn" data-action="save">保存</button></div></div><div class="shot-layout-stage"><div class="shot-layout-joystick" aria-hidden="true"><i></i></div><div class="shot-layout-keys"></div></div><p class="shot-layout-note">左摇杆位置不变 · 三个键之间会自动留出间距</p>';
+    editor.setAttribute('aria-label', '击球键布局');
+    editor.innerHTML = `
+      <div class="shot-layout-toolbar">
+        <div class="shot-layout-title"><strong>击球键布局</strong><small>拖动调整位置，点选后调整大小</small></div>
+        <div class="shot-layout-presets" role="group" aria-label="按键预设">
+          <button type="button" data-preset="default">原位</button>
+          <button type="button" data-preset="arc">弧形</button>
+        </div>
+        <div class="shot-layout-actions">
+          <button type="button" class="text-btn" data-action="cancel">取消</button>
+          <button type="button" class="primary-btn" data-action="save">保存</button>
+        </div>
+        <div class="shot-layout-size">
+          <label for="shot-key-size">高远大小</label>
+          <input id="shot-key-size" type="range" min="${SIZE.min}" max="${SIZE.max}" step="1">
+          <output for="shot-key-size">100%</output>
+          <small class="shot-layout-feedback" role="status"></small>
+        </div>
+      </div>
+      <div class="shot-layout-stage"><div class="shot-layout-joystick" aria-hidden="true"><i></i></div><div class="shot-layout-keys"></div></div>`;
     doc.body.append(editor);
+    toolbar = editor.querySelector('.shot-layout-toolbar');
+    slider = editor.querySelector('#shot-key-size');
+    sizeLabel = editor.querySelector('label[for="shot-key-size"]');
+    feedback = editor.querySelector('.shot-layout-feedback');
     const holder = editor.querySelector('.shot-layout-keys');
     const source = [...controls.querySelectorAll('.shot-btn')];
     keys = source.map(button => {
@@ -187,41 +240,30 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
       clone.removeAttribute('disabled');
       clone.removeAttribute('data-aiming');
       for (const property of ['--charge', '--aim-x', '--aim-y', '--aim-angle']) clone.style.removeProperty(property);
-      clone.setAttribute('role', 'button');
-      clone.setAttribute('tabindex', '0');
-      clone.setAttribute('aria-label', `拖动${KEY_LABELS[clone.dataset.shot] || '击球键'}`);
+      clone.setAttribute('aria-label', KEY_LABELS[clone.dataset.shot]);
       holder.append(clone);
       return clone;
     });
     const start = event => {
-      if (event.button !== 0 && event.pointerType === 'mouse') return;
+      if (drag || (event.button !== 0 && event.pointerType === 'mouse')) return;
       event.preventDefault();
       const key = event.currentTarget, center = keyCenter(key);
-      drag = { key, id: event.pointerId, dx: event.clientX - center.x, dy: event.clientY - center.y };
-      try { key.setPointerCapture(event.pointerId); } catch { /* Window listeners still finish the drag. */ }
-      key.classList.add('dragging');
-      setMode('custom');
+      select(key);
+      key.focus({ preventScroll: true });
+      drag = { key, id: event.pointerId, x: event.clientX, y: event.clientY, center };
+      key.setPointerCapture(event.pointerId);
     };
     const move = event => {
-      if (!drag || drag.id !== event.pointerId) return;
-      event.preventDefault();
-      const key = drag.key, center = keyCenter(key);
-      const view = doc.defaultView || globalThis, safe = safeInsets(doc);
-      const x = clamp(event.clientX - drag.dx, center.width / 2 + 8 + safe.left, view.innerWidth - center.width / 2 - 8 - safe.right);
-      const y = clamp(event.clientY - drag.dy, center.height / 2 + 8 + safe.top, view.innerHeight - center.height / 2 - 8 - safe.bottom);
-      for (const other of keys) {
-        if (other === key) continue;
-        const point = keyCenter(other);
-        const minimum = (center.width + point.width) / 2 + 6;
-        if (Math.hypot(x - point.x, y - point.y) < minimum) return;
+      if (drag?.id !== event.pointerId) return;
+      const dx = event.clientX - drag.x, dy = event.clientY - drag.y;
+      if (Math.abs(dx) + Math.abs(dy) < 2 && !drag.moved) return;
+      if (place(drag.key, { x: drag.center.x + dx, y: drag.center.y + dy }, true)) {
+        drag.moved = true;
+        recordPositions();
       }
-      key.style.left = `${x}px`;
-      key.style.top = `${y}px`;
     };
     const end = event => {
-      if (!drag || drag.id !== event.pointerId) return;
-      drag.key.classList.remove('dragging');
-      drag = null;
+      if (drag?.id === event.pointerId) drag = null;
     };
     for (const key of keys) {
       key.addEventListener('pointerdown', start);
@@ -229,75 +271,88 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
       key.addEventListener('pointerup', end);
       key.addEventListener('pointercancel', end);
       key.addEventListener('lostpointercapture', end);
+      key.addEventListener('focus', () => select(key));
+      key.addEventListener('click', () => select(key));
       key.addEventListener('keydown', event => {
         const step = event.shiftKey ? 12 : 4;
         const delta = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[event.key];
         if (!delta) return;
         event.preventDefault();
         const center = keyCenter(key);
-        place(key, { x: center.x + delta[0], y: center.y + delta[1] });
-        setMode('custom');
+        if (place(key, { x: center.x + delta[0], y: center.y + delta[1] }, true)) recordPositions();
       });
     }
-    editor.querySelector('.shot-layout-presets').addEventListener('click', event => {
-      const preset = event.target.closest('[data-preset]')?.dataset.preset;
-      if (preset) setPreset(preset);
+    slider.addEventListener('input', () => {
+      const key = selected.dataset.shot, next = Number(slider.value);
+      const previous = draft.sizes[key] ?? SIZE.default, center = keyCenter(selected);
+      applySize(selected, next);
+      // Always allow shrinking so a layout can be repaired after rotating.
+      if (!place(selected, center, next > previous)) {
+        applySize(selected, previous);
+        slider.value = previous;
+        feedback.textContent = '空间不足，先移开相邻按键';
+        return;
+      }
+      draft.sizes[key] = next;
+      slider.nextElementSibling.value = next + '%';
+      feedback.textContent = '';
+      recordPositions();
     });
-    editor.querySelector('[data-action=cancel]').addEventListener('click', () => close(false));
-    editor.querySelector('[data-action=save]').addEventListener('click', () => {
-      const view = doc.defaultView || globalThis;
-      if (mode === 'custom') {
-        const positions = {};
-        for (const key of keys) {
-          const center = keyCenter(key);
-          const halfWidth = center.width / 2, halfHeight = center.height / 2;
-          positions[key.dataset.shot] = {
-            x: Math.max((halfWidth + 8) / view.innerWidth, Math.min(1 - (halfWidth + 8) / view.innerWidth, center.x / view.innerWidth)),
-            y: Math.max((halfHeight + 8) / view.innerHeight, Math.min(1 - (halfHeight + 8) / view.innerHeight, center.y / view.innerHeight)),
-          };
-        }
-        saved = saveShotLayout({ mode: 'custom', positions }, store);
-      } else saved = saveShotLayout({ mode }, store);
+    toolbar.querySelector('.shot-layout-presets').addEventListener('click', event => {
+      const preset = event.target.closest('[data-preset]')?.dataset.preset;
+      if (!preset) return;
+      draft = { mode: preset, sizes: {} };
+      render();
+    });
+    toolbar.querySelector('[data-action=cancel]').addEventListener('click', close);
+    toolbar.querySelector('[data-action=save]').addEventListener('click', () => {
+      saved = saveShotLayout(draft, store);
       applyShotLayout(saved, doc);
       close();
-      showToast('击球键位置已保存');
+      showToast('击球键布局已保存');
     });
-    doc.addEventListener('keydown', event => { if (event.key === 'Escape' && !editor.hidden) close(false); });
+    editor.addEventListener('cancel', event => {
+      event.preventDefault();
+      close();
+    });
   };
 
   const open = () => {
     buildEditor();
-    previous = saved;
     editor.hidden = false;
+    editor.showModal();
     doc.body.dataset.shotLayoutEditing = 'true';
-    setPreset(saved.mode === 'custom' ? 'custom' : saved.mode);
+    draft = { ...saved, sizes: { ...saved.sizes } };
+    selected = keys[0];
+    safe = safeInsets(doc);
+    render();
+    toolbar.querySelector('[data-action=cancel]').focus();
     return true;
   };
-  const close = (commit = true) => {
+  const close = () => {
     if (!editor || editor.hidden) return;
+    editor.close();
     editor.hidden = true;
     delete doc.body.dataset.shotLayoutEditing;
     drag = null;
-    if (!commit) applyShotLayout(previous, doc);
-    else applyShotLayout(saved, doc);
-    mode = saved.mode;
     onClose();
   };
 
   const resetPosition = () => {
-    if (!editor) return;
-    setPreset('default');
+    if (!editor || editor.hidden) return;
+    draft = { mode: 'default', sizes: {} };
+    render();
   };
 
   const onResize = () => {
-    if (!editor || editor.hidden) return applyShotLayout(saved, doc);
-    for (const key of keys) {
-      const current = keyCenter(key);
-      place(key, { x: current.x, y: current.y });
-    }
+    applyShotLayout(saved, doc);
+    if (!editor || editor.hidden) return;
+    drag = null;
+    safe = safeInsets(doc);
+    render();
   };
   doc.defaultView?.addEventListener('resize', onResize);
   doc.defaultView?.addEventListener('orientationchange', onResize);
 
-  return { open, close: () => close(false), resetPosition, refresh: () => applyShotLayout(saved, doc), get layout() { return { ...saved }; }, get editing() { return Boolean(editor && !editor.hidden); } };
+  return { open, close, resetPosition, refresh: () => applyShotLayout(saved, doc), get layout() { return { ...saved }; }, get editing() { return Boolean(editor && !editor.hidden); } };
 }

@@ -20,17 +20,12 @@ body[data-screen="menu"] .topbar {
 body[data-screen="menu"] .topbar .top-actions { pointer-events:auto; gap:8px; }
 body[data-screen="menu"] .topbar .brand,
 body[data-screen="menu"] .topbar .edition,
-body[data-screen="menu"] #camera-toggle,
-body[data-screen="menu"] #palette-toggle,
 body[data-screen="menu"] #court-caption { display:none; }
 body[data-screen="menu"] .topbar button {
   color:#eeefe5; background:#12201c9c; border:1px solid #c8d3c62b;
   box-shadow:none; border-radius:3px; min-width:44px; height:44px;
 }
 body[data-screen="menu"] #match-settings-toggle { display:inline-flex; align-items:center; justify-content:center; }
-body[data-screen="menu"] #match-settings-panel:not([hidden]) { display:block; top:66px; width:240px; max-height:calc(100dvh - 82px - var(--safe-bottom)); color:var(--ink); background:#16231ff5; border-color:var(--line); z-index:12; }
-body[data-screen="menu"] #match-settings-panel details,
-body[data-screen="menu"] #edit-shot-layout { display:none; }
 body[data-screen="menu"] #menu.menu-panel {
   inset:0 auto 0 0; width:43%; max-width:610px; height:100dvh;
   padding:max(40px,var(--safe-top)) 3vw max(22px,var(--safe-bottom)) max(5vw,var(--safe-left));

@@ -24,8 +24,6 @@ export function saveCameraSettings(settings, storage = localStorageIfAvailable()
 }
 
 export function bindCameraSettings(view, { document = globalThis.document, storage = localStorageIfAvailable() } = {}) {
-  const button = document.querySelector('#camera-toggle');
-  const panel = document.querySelector('#camera-panel');
   const pitch = document.querySelector('#camera-pitch');
   const zoom = document.querySelector('#camera-zoom');
   const pitchValue = document.querySelector('#camera-pitch-value');
@@ -44,11 +42,6 @@ export function bindCameraSettings(view, { document = globalThis.document, stora
     pitchValue.value = `${settings.pitchDegrees}°`;
     zoomValue.value = `${Math.round(settings.zoom * 100)}%`;
   };
-  const close = () => { panel.hidden = true; button.setAttribute('aria-expanded', 'false'); };
-  listen(button, 'click', () => {
-    panel.hidden = !panel.hidden;
-    button.setAttribute('aria-expanded', String(!panel.hidden));
-  });
   const change = (persist) => {
     settings = normalizeCameraSettings({ pitchDegrees: Number(pitch.value), zoom: Number(zoom.value) / 100 });
     apply();
@@ -60,16 +53,6 @@ export function bindCameraSettings(view, { document = globalThis.document, stora
     listen(input, 'change', () => change(true));
   }
   listen(reset, 'click', () => { settings = { ...CAMERA_DEFAULTS }; apply(); saveCameraSettings(settings, storage); });
-  listen(panel, 'keydown', (event) => {
-    if (event.key === 'Escape') { event.stopPropagation(); close(); button.focus(); }
-  });
-  // Dismiss on a fresh court/control press without cancelling either thumb.
-  listen(document, 'pointerdown', (event) => {
-    if (!panel.hidden && !panel.contains(event.target) && !button.contains(event.target)) close();
-  });
-  const Observer = document.defaultView?.MutationObserver;
-  const observer = Observer ? new Observer(() => { if (document.body.dataset.screen !== 'match') close(); }) : null;
-  observer?.observe(document.body, { attributes: true, attributeFilter: ['data-screen'] });
   apply();
-  return { close, dispose() { close(); observer?.disconnect(); cleanups.forEach((remove) => remove()); } };
+  return { dispose() { cleanups.forEach(remove => remove()); } };
 }
