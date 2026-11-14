@@ -130,11 +130,10 @@ button.secondary-btn:active:not(:disabled), .dialog button.secondary-btn:active:
 
 /* Live match: opaque light surfaces keep contrast against every court palette. */
 body[data-screen=match] .topbar { color: var(--ink); }
-body[data-screen=match] .icon-btn, body[data-screen=match] .camera-toggle, body[data-screen=match] .palette-toggle, body[data-screen=match] .match-settings-toggle {
+body[data-screen=match] .icon-btn, body[data-screen=match] .match-settings-toggle {
   background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; box-shadow: inset 0 1px 0 #fff, 0 2px 0 #bdccbb;
 }
-body[data-screen=match] .icon-btn:active, body[data-screen=match] .camera-toggle:active, body[data-screen=match] .palette-toggle:active, body[data-screen=match] .match-settings-toggle:active { background: var(--soft); box-shadow: inset 0 1px 3px #243d3122; }
-.palette-toggle[aria-expanded=true], .camera-toggle[aria-expanded=true], .match-settings-toggle[aria-expanded=true] { border-color: #76947b !important; }
+body[data-screen=match] .icon-btn:active, body[data-screen=match] .match-settings-toggle:active { background: var(--soft); box-shadow: inset 0 1px 3px #243d3122; }
 .scoreboard { background: var(--paper); border-left-color: var(--green); border-radius: 12px; box-shadow: 0 3px 14px #152d2a20; }
 .score-player { font-weight: 550; }
 .score-player b { font-family: inherit; font-weight: 600; }
@@ -143,11 +142,6 @@ body[data-screen=match] .icon-btn:active, body[data-screen=match] .camera-toggle
 /* HUD text drawn straight over the court keeps the shipped light ink. */
 .match-note { color: #e1ede6; }
 .match-note strong { background: var(--surface); color: var(--ink); font-weight: 550; }
-.camera-panel, .palette-panel, .match-settings-panel { border: 1px solid var(--line); border-radius: 13px; background: var(--paper); color: var(--ink); box-shadow: var(--panel-shadow); }
-.camera-panel output, .camera-panel-heading button, .arena-settings-heading button, .palette-heading small, .match-settings-panel small, #performance-details summary { color: var(--muted); }
-.camera-panel input[type=range], .arena-volume input { accent-color: var(--green); }
-.match-settings-panel details, #performance-details { border-color: var(--line); }
-.match-settings-panel select { background: var(--surface); color: var(--ink); border-color: var(--line); border-radius: 7px; }
 .palette-options button { background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 9px; }
 .palette-options button[aria-pressed=true] { background: var(--soft); border-color: #8ca583; box-shadow: inset 0 0 0 1px #8ca58330; }
 .palette-options button i { border: 1px solid #243d3122; box-shadow: none; }

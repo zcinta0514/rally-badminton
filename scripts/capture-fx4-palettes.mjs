@@ -35,7 +35,7 @@ try {
   // launch buttons stay clickable.
   await page.waitForTimeout(500);
   if (await page.locator('#onboarding-dialog[open]').count()) await page.click('#onboarding-skip');
-  await page.waitForSelector('#start-ai', { state: 'visible', timeout: 10000 });
+  await page.click('#open-solo');
   await page.click('#start-ai');
   await page.waitForSelector('#start-ai-confirm', { state: 'visible', timeout: 10000 });
   await page.click('#start-ai-confirm');
@@ -44,12 +44,12 @@ try {
   // Selecting a palette must persist at once and recolour the live venue; a
   // reload then proves the stored choice drives the floor on the next visit.
   for (const name of COURT_PALETTE_NAMES) {
-    await page.click('#palette-toggle');
+    await page.click('#match-settings-toggle');
     await page.click(`#palette-options button[data-palette="${name}"]`);
     const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('rally.arena.v1')).courtPalette);
     assert.equal(stored, name, `selecting ${name} must persist immediately`);
     if (name === 'green') await page.screenshot({ path: resolve(output, 'palette-panel.png') });
-    await page.click('#palette-toggle');
+    await page.click('#settings-back');
     await page.waitForTimeout(900);
     const file = resolve(output, `court-${name}.png`);
     await page.screenshot({ path: file });

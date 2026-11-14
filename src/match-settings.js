@@ -47,10 +47,22 @@ export function describeMatch(state, side = 0, mode = 'ai') {
   ].join(String.fromCharCode(10));
 }
 
-export function bindMatchSettings(audio, { document = globalThis.document, preferences = readArenaPreferences(), menuAudio, onChange = () => {} } = {}) {
+export function bindMatchSettings(audio, { document = globalThis.document, preferences = readArenaPreferences(), menuAudio, onChange = () => {}, onOpen = () => {} } = {}) {
   const button = document.querySelector('#match-settings-toggle'), panel = document.querySelector('#match-settings-panel');
   let settings = normalizeArenaPreferences(preferences);
-  const close = () => { panel.hidden = true; button.setAttribute('aria-expanded', 'false'); };
+  const open = () => {
+    if (panel.open) return;
+    panel.hidden = false;
+    panel.showModal();
+    button.setAttribute('aria-expanded', 'true');
+    onOpen();
+  };
+  const close = () => {
+    if (!panel.open) return;
+    panel.close();
+    panel.hidden = true;
+    button.setAttribute('aria-expanded', 'false');
+  };
   const inputs = [...panel.querySelectorAll('[data-volume]')];
   const brightness = panel.querySelector('#arena-brightness');
   const track = panel.querySelector('#arena-music-track');
@@ -73,7 +85,12 @@ export function bindMatchSettings(audio, { document = globalThis.document, prefe
     for (const input of inputs) { input.value = Math.round(settings[input.dataset.volume] * 100); input.nextElementSibling.value = input.value + '%'; }
     onChange({ ...settings });
   };
-  button.addEventListener('click', () => { panel.hidden = !panel.hidden; button.setAttribute('aria-expanded', String(!panel.hidden)); });
+  button.addEventListener('click', open);
+  panel.querySelector('#settings-back').addEventListener('click', close);
+  panel.addEventListener('cancel', event => {
+    event.preventDefault();
+    close();
+  });
   for (const input of inputs) input.addEventListener('input', () => {
     settings = normalizeArenaPreferences({ ...settings, [input.dataset.volume]: Number(input.value) / 100 }); apply(); saveArenaPreferences(settings);
   });
@@ -92,16 +109,14 @@ export function bindMatchSettings(audio, { document = globalThis.document, prefe
     file.value = '';
   });
   panel.querySelector('#arena-reset').addEventListener('click', () => { settings = normalizeArenaPreferences(null); apply(false); saveArenaPreferences(settings); });
-  panel.addEventListener('keydown', event => { if (event.key === 'Escape') { event.stopPropagation(); close(); button.focus(); } });
-  panel.addEventListener('pointerdown', event => event.stopPropagation());
-  document.addEventListener('pointerdown', event => { if (!panel.hidden && !panel.contains(event.target) && !button.contains(event.target)) close(); });
   apply();
-  return { close, selectPalette(name) {
+  return { open, close, get isOpen() { return panel.open; }, selectPalette(name) {
     settings = normalizeArenaPreferences({ ...settings, courtPalette: name });
     apply(); saveArenaPreferences(settings);
     return settings.courtPalette;
   }, update(state, side, mode) {
-    if (document.body.dataset.screen !== 'match' || state.phase === 'over') close();
+    if (state.phase === 'over') close();
+    if (!panel.open) return;
     const summary = panel.querySelector('#match-settings-summary'), text = describeMatch(state, side, mode);
     if (summary.textContent !== text) summary.textContent = text;
   }, get preferences() { return { ...settings }; } };
