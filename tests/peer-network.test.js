@@ -2,8 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
 import { createMatch, stepMatch, aiInput, RULES_VERSION } from '../shared/game.js';
+import { NetworkPlayback } from '../src/network-playback.js';
 
 import * as api from '../src/peer-network.js';
+const transportClone = globalThis.structuredClone;
 const flush = async () => { for (let i=0;i<16;i++) await Promise.resolve(); };
 const options = { name:'球友', role:'balanced', playerId:'public-player-id' };
 
@@ -13,7 +15,7 @@ function transportBus({ automatic=true, collisions=0, roomBeforeAccept=false }={
   class Connection extends EventEmitter {
     open=false; bufferSize=0; dataChannel={bufferedAmount:0};
     constructor(owner, peer) { super(); this.owner=owner; this.peer=peer; this.closed=false; }
-    send(message) { assert.ok(this.open); sent.push({owner:this.owner.id,message:structuredClone(message)});queueMicrotask(()=>{if(!this.other.closed)this.other.emit('data',structuredClone(message));}); }
+    send(message) { assert.ok(this.open); sent.push({owner:this.owner.id,message:transportClone(message)});queueMicrotask(()=>{if(!this.other.closed)this.other.emit('data',transportClone(message));}); }
     close() { if(this.closed)return;this.closed=true;this.open=false;this.emit('close');if(this.other&&!this.other.closed)this.other.close(); }
   }
   class FakePeer extends EventEmitter {
@@ -67,6 +69,25 @@ async function pair(t, bus=transportBus(), hostOptions={}, guestOptions={}) {
   t.after(()=>guest.close());await flush();
   return {bus,host,guest,hostMessages,guestMessages,hostCloses,guestCloses,statuses};
 }
+
+test('a browser without structuredClone can host a room and play its first snapshot', async t => {
+  globalThis.structuredClone = undefined;
+  t.after(() => { globalThis.structuredClone = transportClone; });
+  const { host, guest, hostMessages, guestMessages } = await pair(t, transportBus(), { readyRequired: true });
+  const { code, target, ruleset } = guestMessages[0];
+  assert.match(code, /^[A-HJ-NP-Z2-9]{5}$/);
+  const ready = { type: 'ready', target, ruleset, finale: 'none' };
+  assert.equal(host.send(ready), true);
+  assert.equal(guest.send(ready), true);
+  await flush();
+  const snapshot = hostMessages.find(m => m.type === 'state');
+  assert.equal(guestMessages.find(m => m.type === 'state').state.phase, 'countdown');
+  const playback = new NetworkPlayback();
+  assert.equal(playback.receive(snapshot.state, 100, snapshot), true);
+  const frame = playback.sample(100);
+  assert.equal(frame.phase, 'countdown');
+  assert.notEqual(frame.players[0], snapshot.state.players[0]);
+});
 
 test('peer room creation propagates its selected finale to both players', async t => {
   for (const finale of ['none', 'father-son']) {

@@ -1,5 +1,6 @@
 import { createMatch, stepMatch, pauseMatch, resumeMatch, finishMatch, ROLES } from '../shared/game.js';
 import { confirmsRoomRules, startRoomCountdown } from '../shared/room-readiness.js';
+import { cloneMatchSnapshot } from './match-snapshot.js';
 
 const STEP_MS = 1000 / 60;
 const MAX_CATCHUP_MS = 500;
@@ -9,7 +10,6 @@ const SHOTS = new Set(['clear', 'drop', 'smash']);
 const MESSAGES = new Set(['lobby', 'ready', 'input', 'ping', 'pause', 'suspend', 'resume', 'rematch', 'leave']);
 const clamp = (value, min, max) => Number.isFinite(value) ? Math.max(min, Math.min(max, value)) : 0;
 const scoreWinner = state => state.score[0] === state.score[1] ? null : state.score[0] > state.score[1] ? 0 : 1;
-const clone = value => structuredClone(value);
 
 function profileOf(profile) {
   const source = profile && typeof profile === 'object' && !Array.isArray(profile) ? profile : {};
@@ -64,7 +64,7 @@ export class PeerMatch {
   }
 
   emit(slot, message) {
-    if (!this.closed && this.players[slot]?.connected) this.send(slot, clone(message));
+    if (!this.closed && this.players[slot]?.connected) this.send(slot, cloneMatchSnapshot(message));
   }
 
   announce() {

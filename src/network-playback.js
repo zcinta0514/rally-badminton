@@ -1,8 +1,8 @@
 import { horizontalLaunch, sampleShuttleFlight } from '../shared/shuttle-flight.js';
+import { cloneMatchSnapshot as copy } from './match-snapshot.js';
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const mix = (a, b, alpha) => a + (b - a) * alpha;
-const copy = value => structuredClone(value);
 const EPSILON = 1e-7;
 const frozenPhase = phase => phase === 'paused' || phase === 'countdown';
 const gravity = 9.81; // Matches the shared ballistic simulation, in metres / second².
