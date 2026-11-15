@@ -94,10 +94,10 @@ test('future interception never advertises immediate smash while ball is unreach
   assert.deepEqual(s, before);
 });
 
-test('shot preview equals actual landing and a zero-charge 2.15m smash descends', () => {
+test('shot preview equals actual landing and a zero-charge overhead smash descends', () => {
   assert.equal(typeof rules.getShotTarget, 'function');
   for (const shot of ['clear', 'drop', 'smash']) for (const aim of [-0.85, 0.85]) {
-    const s = incoming({vy: 0});
+    const s = incoming({y: 3.2, vy: 0});
     const request = {shot, aim, charge: 0};
     const preview = rules.getShotTarget(s, 0, request);
     assert.equal(preview.type, shot);
@@ -242,7 +242,7 @@ test('a fast descending high ball gets anticipation before entering the hit-heig
 });
 
 test('charged smash eligibility and future advice share the actual shot request', () => {
-  const s = incoming(); s.players[0].stamina = 11;
+  const s = incoming({y: 2.8}); s.players[0].stamina = 11;
   assert.equal(rules.getShotAvailability(s, 0, {charge: 0}).canSmash, true);
   assert.equal(rules.getShotTarget(s, 0, {shot: 'smash', charge: 1}).type, 'smash');
   assert.equal(rules.getShotAvailability(s, 0, {charge: 1}).canSmash, false);
@@ -291,10 +291,10 @@ test('dragged two-dimensional previews match the actual contact trajectory and l
     if (shot === 'smash') assert.ok(s.shuttle.vy < 0);
     const landing = rules.predictLanding(s);
     assert.equal(landing.event, 'landing'); assert.equal(landing.out, false);
-    assert.ok(Math.hypot(landing.x - expected.x, landing.z - expected.z) < 1e-8);
+    assert.ok(Math.hypot(landing.x - s.lastShotInfo.x, landing.z - s.lastShotInfo.z) < 1e-8);
     advance(s, landing.time + 0.02);
     assert.equal(s.phase, 'point'); assert.equal(s.score[side], 1);
-    assert.ok(Math.hypot(s.shuttle.x - expected.x, s.shuttle.z - expected.z) < 1e-8);
+    assert.ok(Math.hypot(s.shuttle.x - s.lastShotInfo.x, s.shuttle.z - s.lastShotInfo.z) < 1e-8);
   }
 });
 
@@ -320,8 +320,8 @@ test('vertical service aiming remains monotonic and legal in both diagonal servi
 });
 
 test('smash eligibility warns about a shallow impossible attack and preserves its real net collision', () => {
-  const s = incoming({y: 2.15, vy: 0});
-  assert.equal(rules.getShotAvailability(s, 0, {aimDepth: 1}).canSmash, true);
+  const s = incoming({y: 1.7, vy: 0});
+  assert.equal(rules.getShotAvailability(s, 0, {aimDepth: 1}).canSmash, false);
   const shallow = rules.getShotTarget(s, 0, {shot: 'smash', aimDepth: -1});
   assert.equal(shallow.type, 'smash'); assert.match(shallow.quality.reason, /角度|下网/);
   assert.equal(shallow.quality.reasonCode, 'net-risk');
@@ -455,7 +455,7 @@ test('risk spread encloses actual control drift including the shortened flight f
     const result = rules.getShotTarget(s, side, {shot, aim: end * 0.9, aimDepth: 0.65, charge: 0.85});
     const flightTime = (result.vy + Math.sqrt(result.vy ** 2 + 19.62 * height)) / 9.81;
     const speed = Math.hypot(result.vx, result.vz);
-    const scale = Math.log1p(.2 * speed * flightTime) / (.2 * speed);
+    const scale = Math.log1p(result.drag * speed * flightTime) / (result.drag * speed);
     const actualX = s.shuttle.x + result.vx * scale, actualZ = s.shuttle.z + result.vz * scale;
     assert.ok(Math.hypot(actualX - result.x, actualZ - result.z) < 1e-8);
     assert.ok(Math.hypot(actualX - result.aimX, actualZ - result.aimZ) <= result.quality.spread + 1e-8);

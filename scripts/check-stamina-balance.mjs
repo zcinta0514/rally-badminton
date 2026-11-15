@@ -17,7 +17,7 @@ export function contactSamples(game, role, ratio, shot) {
         Object.assign(state.players[side],{x:0,z:end*z,vx:end*speed,vz:0,stamina:game.ROLES[role].maxStamina*ratio});
         Object.assign(state.shuttle,{x:end*offset,y,z:end*z,vx:0,vy:-3,vz:-end*2,lastHit:1-side,active:true});
         const request={shot,aim:end*aim,aimDepth,charge}, target=game.getShotTarget(state,side,request);
-        Object.assign(state.shuttle,{vx:target.vx,vy:target.vy,vz:target.vz,lastHit:side});
+        Object.assign(state.shuttle,{vx:target.vx,vy:target.vy,vz:target.vz,drag:target.drag,lastHit:side});
         const landing=game.predictLanding(state), error=landing.event==='net'||landing.out||landing.serviceFault;
         rows.push({side,z,y,speed,offset,aim,aimDepth,charge,error:!!error,kind:landing.event==='net'?'net':landing.out?'out':'in'});
       }
