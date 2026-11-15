@@ -11,7 +11,7 @@ test('high service and rally clears retain height and depth with bounded flight 
     assert.ok(apex > (serving ? 3.3 : 3.8));
     assert.ok(Math.abs(target.z) > 5.3);
     assert.ok(target.netHeight > game.COURT.netHeight + .25);
-    Object.assign(state.shuttle, { vx: target.vx, vy: target.vy, vz: target.vz, active: true, lastHit: 0 });
+    Object.assign(state.shuttle, { vx: target.vx, vy: target.vy, vz: target.vz, drag: target.drag, active: true, lastHit: 0 });
     if (state.service) state.service.active = serving;
     const expected = game.predictLanding(state);
     assert.equal(expected.event, 'landing');

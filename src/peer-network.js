@@ -130,7 +130,7 @@ function validState(message, sessionId, format = 'singles') {
         finite(player.shotRecovery.expiresAt) && finite(player.shotRecovery.remaining) && player.shotRecovery.remaining >= 0 &&
         player.shotRecovery.remaining <= STAMINA_TUNING.shotRecovery[player.shotRecovery.type].budget + 1e-6) &&
       (player.action === null || record(player.action) && ['startedAt', 'endsAt'].every(key => finite(player.action[key])))) &&
-    record(state.shuttle) && ['x', 'y', 'z', 'vx', 'vy', 'vz'].every(key => finite(state.shuttle[key])) &&
+    record(state.shuttle) && (state.shuttle.drag === undefined || [0.2, 0.035].includes(state.shuttle.drag)) && ['x', 'y', 'z', 'vx', 'vy', 'vz'].every(key => finite(state.shuttle[key])) &&
     typeof state.shuttle.active === 'boolean' && nullableSlot(state.shuttle.lastHit) &&
     record(state.pause) && nullableSlot(state.pause.by) && finite(state.pause.remaining) && scorePair(state.pause.used);
 }
