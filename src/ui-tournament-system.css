@@ -518,3 +518,19 @@ body #dialog-backdrop #result-dialog .text-btn { color:#afbfaf; font-size:13px; 
 @media (max-width:530px) {
   .settings-grid { grid-template-columns:minmax(0,1fr); }
 }
+
+/* Home version and update action remain visible outside the More disclosure. */
+.lobby-update { display:none; }
+body[data-screen=menu]:has(#menu[data-entry=home]) .lobby-update {
+  position:fixed; right:max(14px,var(--safe-right)); bottom:max(10px,var(--safe-bottom));
+  z-index:4; display:flex; align-items:center; gap:12px; max-width:calc(100vw - 28px);
+  padding:0 10px 0 12px; border:1px solid #40544a; border-radius:3px;
+  background:#101b18e8; color:#b9c8bd;
+}
+.lobby-update .lobby-version { padding:0; font-size:11px; white-space:nowrap; color:inherit; font-variant-numeric:tabular-nums; }
+.lobby-update button { min-height:44px; min-width:72px; padding:0 2px; border:0; background:none; color:#d6efac; font-size:12px; white-space:nowrap; }
+.lobby-update button:hover { color:#f1ffdc; }
+.lobby-update button:disabled { opacity:.6; cursor:wait; }
+@media (orientation:portrait) {
+  body[data-screen=menu] #menu[data-entry=home] { padding-bottom:calc(76px + var(--safe-bottom)); }
+}
