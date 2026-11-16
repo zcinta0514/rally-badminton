@@ -5,7 +5,7 @@ import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 12;
+export const RULES_VERSION = 13;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -43,8 +43,8 @@ const TUNING = {
 const SHOTS = new Set(['clear', 'drop', 'smash']);
 const AI = {
   easy: { reaction: 0.3, error: 1.6, pace: 0.81, serveDelay: 0.72 },
-  medium: { reaction: 0.16, error: 0.5, pace: 0.94, serveDelay: 0.54 },
-  hard: { reaction: 0.07, error: 0.13, pace: 1, serveDelay: 0.42 },
+  medium: { reaction: 0.14, error: 0.5, pace: 0.94, serveDelay: 0.54 },
+  hard: { reaction: 0.045, error: 0.09, pace: 1, serveDelay: 0.42 },
 };
 const PLAYER_ASSIST = {
   none: { reachBonus: 0, lowHeightBonus: 0, highHeightBonus: 0, inputBuffer: 0 },
@@ -892,7 +892,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     if (assignment) return { ...output, ...assignment };
   }
   if (h?.rescue) return output;
-  if (ball.lastHit === playerTeam(state, side)) return { ...output, ...moveToward(player, ball.x * 0.15, direction(side) * 3.55, config.pace * 0.72) };
+  if (ball.lastHit === playerTeam(state, side)) return { ...output, ...moveToward(player, ball.x * 0.15, direction(side) * (level === 'hard' && !h ? 3.25 : 3.55), config.pace * (level === 'hard' && !h ? .9 : .72)) };
   let memory = state._ai[side];
   if (!memory || memory.hitId !== state.hitId) {
     const decision = chooseAIShot(state, side, level);
@@ -906,6 +906,15 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
       shot: decision.shot, aim: decision.aim, aimDepth: decision.aimDepth };
   }
   if (state.time < memory.ready) return output;
+  // A steep incoming attack calls for a defensive lift, not a low counter-smash
+  // or a delicate drop. Decide from the observed flight after the reaction delay.
+  const defendingSmash = !h && level !== 'easy' && state.lastShot === 'smash';
+  if (defendingSmash) {
+    memory.shot = 'clear';
+    memory.aim = clamp(memory.aim, -.55, .55);
+    memory.aimDepth = .15;
+    output.charge = 0;
+  }
   if (h && state.time >= h.recoverUntil) {
     const landing = predictLanding(state);
     const legal = landing && landing.event === 'landing' && !landing.out && !landing.serviceFault && landing.side === side;
@@ -938,7 +947,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     }
   }
   if (h?.warning && h.warning.hitId !== state.hitId) h.warning = null;
-  const contactHeight = memory.shot === 'smash' ? Math.min(3.05, ball.y + Math.max(0, ball.vy) ** 2 / (2 * TUNING.gravity)) : 1.2;
+  const contactHeight = memory.shot === 'smash' ? Math.min(3.05, ball.y + Math.max(0, ball.vy) ** 2 / (2 * TUNING.gravity)) : defendingSmash ? 1.65 : 1.2;
   const discriminant = ball.vy * ball.vy + 2 * TUNING.gravity * (ball.y - contactHeight);
   const contactTime = discriminant > 0 ? Math.max(0, (ball.vy + Math.sqrt(discriminant)) / TUNING.gravity) : 0;
   const contactPoint = liveFlightPoint(ball, contactTime);
@@ -950,6 +959,15 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
   if (ball.z * direction(side) > 0.1 && ball.vy < 1.5 && horizontal < TUNING.reach + role.reachBonus + 0.15
     && ball.y <= (memory.shot === 'smash' ? 4.35 : 1.9)) {
     output.shot = memory.shot; output.aim = memory.aim; output.aimDepth = memory.aimDepth;
+  }
+  if (defendingSmash && level === 'hard' && !output.shot) {
+    // Buffer within the normal player input window. Actual contact still uses
+    // the same reach, height, windup and cooldown checks as human input.
+    const point = liveFlightPoint(ball, .1);
+    if (point.z * direction(side) > .1 && point.y >= TUNING.minHitHeight && point.y <= 2.8
+        && Math.hypot(point.x - player.x, point.z - player.z) < TUNING.reach + role.reachBonus) {
+      output.shot = 'clear'; output.aim = memory.aim; output.aimDepth = memory.aimDepth;
+    }
   }
   if (h?.warning) {
     output.aim = h.warning.aim; output.aimDepth = h.warning.aimDepth; output.prepare = 'smash';
