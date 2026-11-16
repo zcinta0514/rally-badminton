@@ -739,7 +739,17 @@ try{
   }});
   palettePicker=bindPalettePicker({palette:arenaPreferences.courtPalette,onSelect:name=>matchSettings.selectPalette(name)});
   view.setMode('menu');
-  const resizeCourt=()=>view.resize();
+  let portraitViewport=window.innerHeight>window.innerWidth;
+  const resizeCourt=()=>{
+    const portrait=window.innerHeight>window.innerWidth;
+    // A short landscape lobby can scroll. Do not carry that offset into the
+    // portrait home layout; other screens retain their intentional scroll.
+    if(portrait!==portraitViewport){
+      portraitViewport=portrait;
+      if(mode==='menu'&&entryStage==='home')$('menu').scrollTop=0;
+    }
+    view.resize();
+  };
   window.addEventListener('resize',resizeCourt);
   window.visualViewport?.addEventListener('resize',resizeCourt);
   new ResizeObserver(resizeCourt).observe($('court'));
