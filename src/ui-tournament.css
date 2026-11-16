@@ -111,7 +111,7 @@ body[data-screen="menu"] .loading { background:#101b18; color:#e7ecdf; }
   body[data-screen="menu"] #menu h1 { font-size:52px; }
   body[data-screen="menu"] #menu .eyebrow { display:none; }
   body[data-screen="menu"] #menu .lobby-action { min-height:46px; font-size:23px; }
-  body[data-screen="menu"] #menu .menu-foot-actions { gap:0 10px; }
+  body[data-screen="menu"] #menu .menu-foot-actions { gap:0 6px; }
   body[data-screen="menu"] #menu .menu-foot-actions button { font-size:11px; }
 }
 @media (orientation:portrait) {
@@ -126,14 +126,6 @@ body[data-screen="menu"] .loading { background:#101b18; color:#e7ecdf; }
   .lobby-reveal { display:none; animation:none; }
 }
 body[data-screen="menu"] #menu [hidden] { display:none !important; }
-/* Secondary actions stay available in a single, keyboard-operable disclosure. */
 body[data-screen="menu"] #menu .eyebrow { display:none; }
-body[data-screen="menu"] .lobby-more { position:relative; width:100%; border:0; }
-body[data-screen="menu"] .lobby-more summary { cursor:pointer; min-height:44px; display:flex; align-items:center; width:max-content; gap:18px; color:#b0bfb3; font-size:12px; list-style:none; }
-body[data-screen="menu"] .lobby-more summary::-webkit-details-marker { display:none; }
-body[data-screen="menu"] .lobby-more summary::after { content:'＋'; }
-body[data-screen="menu"] .lobby-more[open] summary::after { content:'−'; }
-body[data-screen="menu"] #menu .lobby-more .menu-foot-actions { position:absolute; bottom:48px; left:0; z-index:15; display:flex; flex-direction:column; align-items:stretch; flex-wrap:nowrap; width:230px; max-width:calc(100vw - 64px); max-height:60dvh; overflow:auto; padding:10px 18px; background:#14231ff5; border:1px solid #3a4d3f; box-shadow:0 12px 32px #0005; }
-body[data-screen="menu"] #menu .lobby-more button { text-align:left; flex-shrink:0; }
 .lobby-version { font-size:10px; color:#84958a; padding:8px 0; }
 body #hud .score-player b, body .dialog .result-score { font-family:'Rally Numerals','Rally UI',sans-serif; font-weight:600; font-variant-numeric:tabular-nums; }

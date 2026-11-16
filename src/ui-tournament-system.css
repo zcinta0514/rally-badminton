@@ -20,12 +20,12 @@ body .segments { background:#10201a; border-radius:3px; }
 body .segments button { color:#afbeb1; border-radius:2px; }
 body .segments button.selected { color:#e1f1c5; background:#314837; box-shadow:inset 0 -2px #b8d88e; }
 
-/* Home: the community entrance is always exposed, separate from More. */
-body[data-screen=menu] #menu .menu-foot { position:relative; flex-direction:row; align-items:center; gap:26px; }
-body[data-screen=menu] #menu .community-entry { width:auto; flex:none; min-height:44px; padding:0; border:0; background:none; color:#d5dfcc; white-space:nowrap; font-size:12px; line-height:16px; -webkit-text-size-adjust:none; text-size-adjust:none; }
+/* Home: all secondary entrances share the same exposed row, wrapping on narrow screens. */
+body[data-screen=menu] #menu .menu-foot-actions { margin-inline:0; }
+body[data-screen=menu] #menu .community-entry { width:auto; flex:none; min-height:44px; padding:0; border:0; background:none; color:#d5dfcc; white-space:nowrap; line-height:16px; -webkit-text-size-adjust:none; text-size-adjust:none; }
 body[data-screen=menu] #menu .community-entry:hover { color:#d6efac; }
-body[data-screen=menu] .lobby-more { width:auto; position:static; }
-body[data-screen=menu] #menu .lobby-more .menu-foot-actions { left:0; right:auto; }
+/* Cache details are available inside the install dialog; keep the home links compact. */
+body[data-screen=menu] #menu .pwa-entry small { display:none; }
 
 /* Center each preparation view within the left side of the court. */
 body[data-screen=menu] {
@@ -519,11 +519,11 @@ body #dialog-backdrop #result-dialog .text-btn { color:#afbfaf; font-size:13px; 
   .settings-grid { grid-template-columns:minmax(0,1fr); }
 }
 
-/* Home version and update action remain visible outside the More disclosure. */
+/* Home version and update action remain visible in the bottom-right corner. */
 .lobby-update { display:none; }
 body[data-screen=menu]:has(#menu[data-entry=home]) .lobby-update {
   position:fixed; right:max(14px,var(--safe-right)); bottom:max(10px,var(--safe-bottom));
-  z-index:4; display:flex; align-items:center; gap:12px; max-width:calc(100vw - 28px);
+  z-index:4; display:flex; align-items:center; justify-content:space-between; gap:0; width:174px; max-width:calc(100vw - 28px);
   padding:0 10px 0 12px; border:1px solid transparent; border-radius:0;
   background:none; color:#b9c8bd;
 }
