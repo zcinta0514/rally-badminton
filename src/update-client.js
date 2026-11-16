@@ -23,7 +23,7 @@ function request(worker, message, timeout = 6000) {
 }
 
 // Browser lifecycle and game state are kept separate. A waiting worker owns the
-// transaction; every window must lock before it can replace their controller.
+// transaction; participating windows lock while other pages keep pinned assets.
 export function createUpdateClient({ serviceWorker, document: doc = globalThis.document,
   window: win = globalThis.window, storage, version, isSafe = () => false,
   lock = () => {}, unlock = () => {}, reload = () => globalThis.location.reload(),
@@ -149,7 +149,7 @@ export function createUpdateClient({ serviceWorker, document: doc = globalThis.d
     } catch { status('error', '', 'network'); }
     finally { checking = false; }
   }
-  function setRegistration(value) { registration = value; void bindVersion(); }
+  function setRegistration(value) { registration = value; reconcileOnReturn = true; void bindVersion(); }
   listen(serviceWorker, 'message', onMessage);
   listen(serviceWorker, 'controllerchange', () => {
     if (transaction?.committed) { void verifyAndReload(); return; }
@@ -163,7 +163,9 @@ export function createUpdateClient({ serviceWorker, document: doc = globalThis.d
   listen(doc, 'visibilitychange', () => { if (!doc.hidden) { void bindVersion(); void check(); } });
   listen(win, 'online', () => { void check(); });
   const timer = setInterval(() => {
-    if (registration?.waiting) void tryActivate(); else void check();
+    // A waiting build must not stop discovery of later releases.
+    void check();
+    if (registration?.waiting) void tryActivate();
   }, 4000);
   timer.unref?.();
   function dispose() { disposed = true; clearInterval(timer); release(); for (const remove of listeners) remove(); }

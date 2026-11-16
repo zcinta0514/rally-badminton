@@ -180,3 +180,18 @@ test('a lost version reply after controllerchange is retried after the input loc
   await f.client.check({force:true});await until(()=>f.reloads()===1);
   assert.ok(queries>=2);
 });
+
+test('an already active newer controller is reconciled when registration arrives', async t => {
+  const f=fixture(t);f.sw.controller=f.waiting;
+  f.client.setRegistration(f.registration);
+  await f.client.check({force:true});
+  assert.equal(f.reloads(),1);
+});
+
+test('periodic checks still discover newer deployments while a worker is waiting', async t => {
+  let tick;
+  t.mock.method(globalThis,'setInterval',fn=>{tick=fn;return {unref(){}};});
+  t.mock.method(globalThis,'clearInterval',()=>{});
+  const f=fixture(t);f.registration.waiting=f.waiting;
+  tick();await until(()=>f.checks()===1);
+});
