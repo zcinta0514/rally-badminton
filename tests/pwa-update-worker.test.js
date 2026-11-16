@@ -348,3 +348,27 @@ test('an unpinned index.html game document prevents cache retirement until ident
   await next.message({type: 'CLIENT_VERSION', version: NEXT});
   assert.equal(next.stores.has(prefix + ANCIENT), true);
 });
+
+for (const silent of [false, true]) test(`a pinned ${silent ? 'sleeping' : 'busy'} window does not block an idle window or mix versions`, async () => {
+  const {old, next, windows} = await updateFixture({windows:[client('a'),client('b',{ready:false,silent})]});
+  await old.message({type:'CLIENT_VERSION',version:OLD},windows[1]);
+  assert.equal((await next.message(request))?.status,'activating');
+  assert.equal(windows[1].messages.some(m=>m.type==='COMMIT_UPDATE'),false);
+  const response=await next.event('fetch',{clientId:'b',request:{method:'GET',url:origin+basePath+'src/lazy.js'}});
+  assert.equal(await response.text(),old.assets.get(basePath+'src/lazy.js').toString());
+});
+
+test('a non-participating pinned requester cannot initiate activation', async () => {
+  const {old,next,windows}=await updateFixture({windows:[client('busy',{ready:false}),client('idle')]});
+  await old.message({type:'CLIENT_VERSION',version:OLD},windows[0]);
+  assert.equal((await next.message(request))?.reason,'requester-busy');
+  assert.equal(next.calls().skipCalls,0);
+});
+
+test('a pin without its version cache cannot bypass coordination', async () => {
+  const {old,next,windows}=await updateFixture({windows:[client('idle'),client('busy',{ready:false})]});
+  await old.message({type:'CLIENT_VERSION',version:OLD},windows[1]);
+  next.stores.delete(prefix+OLD);
+  assert.equal((await next.message(request))?.status,'deferred');
+  assert.equal(next.calls().skipCalls,0);
+});

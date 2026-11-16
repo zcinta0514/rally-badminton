@@ -172,31 +172,38 @@ async function requestActivation(event) {
   activationPending = true;
   const transaction = VERSION + '-' + crypto.randomUUID();
   const deadline = Date.now() + 7000;
-  let windows = [], committed = false, preparing = false;
+  let windows = [], participants = [], committed = false, preparing = false;
   try {
     windows = await scopedWindows({coordination: true});
     if (!windows.some(client => client.id === event.source.id)) throw Error('requester-closed');
     // Detect busy/legacy windows without repeatedly locking responsive menus.
     const probes = await Promise.all(windows.map(client => prepareWindow(client, transaction, 'CHECK_UPDATE_SAFETY', 1500)));
-    if (probes.some(version => !version)) throw Error('window-busy-or-unavailable');
+    // Busy or suspended documents can keep their pinned build. Never infer a
+    // version for unknown legacy windows, and never refresh a non-participant.
+    for (let index = 0; index < windows.length; index++) {
+      if (probes[index]) { participants.push(windows[index]); continue; }
+      const version = await readClientVersion(windows[index].id);
+      if (!version || !await knownVersion(version)) throw Error('window-busy-or-unavailable');
+    }
+    if (!participants.some(client => client.id === event.source.id)) throw Error('requester-busy');
     if (!sameWindows(windows, await scopedWindows({coordination: true}))) throw Error('windows-changed');
     if (Date.now() >= deadline) throw Error('coordination-expired');
     preparing = true;
-    const versions = await Promise.all(windows.map(client => prepareWindow(client, transaction)));
+    const versions = await Promise.all(participants.map(client => prepareWindow(client, transaction)));
     if (versions.some(version => !version)) throw Error('window-busy-or-unavailable');
     if (!sameWindows(windows, await scopedWindows({coordination: true}))) throw Error('windows-changed');
-    const pinned = await Promise.all(windows.map((client, index) => pinClient(client.id, versions[index])));
+    const pinned = await Promise.all(participants.map((client, index) => pinClient(client.id, versions[index])));
     if (pinned.some(value => !value)) throw Error('unknown-page-version');
     if (!sameWindows(windows, await scopedWindows({coordination: true}))) throw Error('windows-changed');
     // A slow storage operation must not commit after clients release their lock.
     if (Date.now() >= deadline) throw Error('coordination-expired');
     // A window can still be created after this check. Navigation pins and retained
     // version caches protect that window instead of assuming enumeration is a lock.
-    tellWindows(windows, 'COMMIT_UPDATE', transaction);
+    tellWindows(participants, 'COMMIT_UPDATE', transaction);
     await self.skipWaiting(); committed = true;
     reply('activating');
   } catch (error) {
-    if (preparing) tellWindows(windows, 'CANCEL_UPDATE', transaction);
+    if (preparing) tellWindows(participants, 'CANCEL_UPDATE', transaction);
     reply('deferred', error?.message || 'coordination-failed');
   } finally {
     if (!committed) activationPending = false;
