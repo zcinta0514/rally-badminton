@@ -34,7 +34,7 @@ try {
  assert.equal(await match.evaluate(()=>document.body.dataset.screen),'match');checks.push('1.21.4 lobby upgrades while another 1.21.4 match remains running');
  await match.bringToFront();await match.locator('#pause').evaluate(el=>el.click());await match.locator('#leave-game').evaluate(el=>el.click());
  await match.waitForFunction(v=>globalThis.RALLY_CONFIG?.buildId===v,next.version,{timeout:120000});await loaded(match);checks.push('old match upgrades after returning home');
- assert.match(await lobby.locator('.lobby-version').textContent(),/1.21.5/);
+ assert.match(await lobby.locator('.lobby-version').textContent(),/1.21.6/);
  await context.setOffline(true);await lobby.reload();await loaded(lobby);assert.equal(await lobby.evaluate(()=>RALLY_CONFIG.buildId),next.version);checks.push('homescreen URL reopens latest cache offline');
  await mkdir('artifacts/auto-update',{recursive:true});await lobby.screenshot({path:'artifacts/auto-update/844x390.png'});
  await lobby.setViewportSize({width:667,height:375});await lobby.screenshot({path:'artifacts/auto-update/667x375.png'});

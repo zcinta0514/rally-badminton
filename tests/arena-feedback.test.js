@@ -70,7 +70,7 @@ test('local audio preferences clamp invalid values, persist and ignore retired l
 });
 test('settings show actual authoritative role, rules, AI and assist without changing state', () => {
   const s = createMatch({ roles: ['power', 'swift'], difficulty: 'hard', ruleset: 'standard21' }), before = structuredClone(s);
-  assert.match(describeMatch(s), /力量型.*112/); assert.match(describeMatch(s), /三局两胜.*30分封顶/); assert.match(describeMatch(s), /70ms/);
+  assert.match(describeMatch(s), /力量型.*112/); assert.match(describeMatch(s), /三局两胜.*30分封顶/); assert.match(describeMatch(s), /45ms/);
   assert.match(describeMatch(s, 1, 'online'), /好友对战/); assert.doesNotMatch(describeMatch(s, 1, 'online'), /AI/);
   assert.match(describeRole('swift'), /5.35.*88/); assert.deepEqual(s, before);
 });
