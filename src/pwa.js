@@ -47,6 +47,7 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
   releaseDialog.id = 'release-notice-dialog'; releaseDialog.className = 'release-dialog'; releaseDialog.setAttribute('aria-labelledby', 'release-notice-title');
   releaseDialog.innerHTML = '<button type="button" class="release-close" aria-label="关闭更新公告">×</button><small class="pwa-eyebrow">开拍 / RALLY · 更新公告</small><h2 id="release-notice-title"></h2><p id="release-notice-summary"></p><ul id="release-notice-items"></ul><button type="button" class="release-dismiss">关闭</button>';
   document.body.append(releaseDialog);
+  const cornerCheck = document.getElementById('lobby-check-update');
   const detail = dialog.querySelector('#pwa-cache-detail'), nativeInstall = dialog.querySelector('#pwa-install'), checkButton = dialog.querySelector('#pwa-check');
   const releaseDismiss = releaseDialog.querySelector('.release-dismiss');
   let updateState = '', previousInert = false, updateStorage, releasePending = false, releaseTimer = null, releaseFocus = null;
@@ -125,6 +126,11 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
     nativeInstall.hidden = !installPrompt || isStandalone();
     checkButton.hidden = !supported; checkButton.disabled = checking || matchActive;
     checkButton.textContent = checking ? '检查中…' : failure ? '重试缓存' : '检查更新';
+    if (cornerCheck) {
+      cornerCheck.disabled = checking || matchActive;
+      cornerCheck.textContent = checking ? '检查中…' : '检查更新';
+      cornerCheck.setAttribute('aria-busy', String(checking));
+    }
     if (fullscreenButton) {
       const label = document.fullscreenElement ? '退出全屏' : isStandalone() ? '独立窗口' : '全屏';
       fullscreenButton.textContent = label;
@@ -232,13 +238,21 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
       } catch { /* A success notice is optional. */ }
     } catch { failure = true; updateUI(); }
   }
-  checkButton.addEventListener('click', async () => {
+  async function checkForUpdates() {
     if (checking || matchActive) return;
+    if (!supported) { showToast('当前浏览器或网址不支持自动检查更新，请联网后重新打开正式网址。'); return; }
     checking = true; updateUI();
-    try { if (registration) { await registration.update(); await cacheStatus(failure); } else await register(); }
+    try {
+      if (registration) { await registration.update(); await cacheStatus(failure); } else await register();
+      showToast(registration?.waiting ? '新版已备好，空闲时将自动更新。'
+        : registration?.installing ? '正在下载更新，请保持联网。'
+        : failure ? '检查未完成，请联网后重试。' : '检查完成，未发现可用更新。');
+    }
     catch { failure = !cached; showToast('暂时无法检查更新，请联网后重试'); }
     finally { checking = false; updateUI(); }
-  });
+  }
+  checkButton.addEventListener('click', checkForUpdates);
+  cornerCheck?.addEventListener('click', checkForUpdates);
   window.addEventListener('online', updateUI); window.addEventListener('offline', updateUI);
   updateUI(); if (supported) register();
   document.addEventListener('visibilitychange', () => { if (!document.hidden) scheduleReleaseNotice(); });
