@@ -12,7 +12,7 @@ try{
  await c.addInitScript(()=>{localStorage.setItem('rally.onboarding.seen','1');localStorage.setItem('rally.usage.enabled','off');});
  const p=await c.newPage();p.setDefaultTimeout(60000);p.on('pageerror',e=>report.errors.push(e.message));
  await p.goto(process.env.RALLY_QA_URL||app.url);await p.locator('#loading').waitFor({state:'hidden'});
- await p.waitForFunction(()=>document.querySelector('.lobby-version')?.textContent.includes('1.21.9'));
+ await p.waitForFunction(()=>document.querySelector('.lobby-version')?.textContent.includes('1.21.10'));
  report.build=await p.evaluate(()=>RALLY_CONFIG.buildId);
  for(const [width,height] of [[844,390],[568,320],[390,844],[320,568]]){
   await p.setViewportSize({width,height});
@@ -21,12 +21,15 @@ try{
   assert.equal(await p.locator('.lobby-more .lobby-version').count(),0);
   const button=p.locator('#lobby-check-update');
   assert.equal(await button.evaluate(e=>{const r=e.getBoundingClientRect();return e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}),true);
-  await p.locator('.lobby-more summary').click();
-  assert.ok(await corner.isVisible());await p.locator('.lobby-more summary').click();
+  assert.equal(await p.locator('.lobby-more').count(),0);
+  for(const id of ['#open-beta-group','#onboarding-entry','#install-app']) assert.ok(await p.locator(id).isVisible());
   await p.screenshot({path:out+`/${width}x${height}.png`});
+  await p.locator('#onboarding-entry').click();await p.locator('#onboarding-next').waitFor({state:'visible'});await p.locator('#onboarding-skip').click();
+  await p.locator('#install-app').click();await p.locator('#pwa-dialog').waitFor({state:'visible'});await p.locator('.pwa-close').click();
+  await p.locator('#open-beta-group').click();await p.locator('#copy-beta-wechat').waitFor({state:'visible'});await p.locator('#beta-group [data-close]').click();
   await p.locator('#open-solo').click();await p.locator('#start-ai').click();assert.equal(await corner.isVisible(),false);
   await p.locator('#entry-back').click();await p.locator('#entry-back').click();
-  report.checks.push(`${width}x${height}: right-bottom, reachable, outside More, hidden in preparation`);
+  report.checks.push(`${width}x${height}: right-bottom, reachable, with exposed secondary actions, hidden in preparation`);
  }
  await p.setViewportSize({width:844,height:390});
  await p.evaluate(()=>navigator.serviceWorker.ready);

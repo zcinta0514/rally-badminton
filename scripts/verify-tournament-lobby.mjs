@@ -59,13 +59,11 @@ try {
     checked(name+' home choices fit and have 44px touch targets');
     await fits('#open-beta-group',44);
     assert.equal(await page.locator('#open-beta-group').evaluate(e=>!!e.closest('details')),false);
-    assert.equal(await page.locator('#onboarding-entry').isVisible(),false,'secondary actions start collapsed');
-    await page.locator('.lobby-more summary').click();
+    assert.equal(await page.locator('.lobby-more').count(),0,'secondary actions have no disclosure');
     await fits('#onboarding-entry',44);await fits('#open-beta-group',44);await fits('#install-app',44);
-    await shot(name+'-more');
-    await page.locator('.lobby-more summary').click();
+    await shot(name+'-secondary-actions');
     await page.locator('#open-beta-group').click();await page.locator('#beta-group').waitFor({state:'visible'});await fits('#copy-beta-wechat',44);await page.locator('#beta-group [data-close]').click();
-    checked(name+' community always visible; More keeps guide and install accessible');
+    checked(name+' community, guide and install are directly accessible');
   }
   for(const [flowName,width,height] of [['phone',844,390],['short-phone',667,375]]) {
   await page.setViewportSize({width,height});await page.waitForTimeout(300);
@@ -98,7 +96,7 @@ try {
   await page.locator('#entry-back').click();await page.locator('#friend-tabs [data-action="join"]').click();await page.locator('#room-code').scrollIntoViewIfNeeded();await shot(flowName+'-friends');
   await page.locator('#entry-back').click();await page.locator('#entry-back').click();checked('friend create/join preparation and return');
   await page.locator('#match-settings-toggle').click();await page.locator('#arena-master').waitFor({state:'visible'});
-  await page.locator('#match-settings-toggle').click();checked('lobby audio settings reachable');
+  await page.locator('#settings-back').click();checked('lobby audio settings reachable');
   }
   await page.setViewportSize({width:390,height:844});
   await page.locator('#open-solo').click();await page.locator('#start-ai').click();
