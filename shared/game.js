@@ -5,7 +5,7 @@ import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 13;
+export const RULES_VERSION = 14;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -353,7 +353,11 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
     // Limit depth instead of extending flight into a slow floating arc.
     const net = COURT.netHeight + .12;
     const lineDepth = Math.abs(ball.z) * net / Math.max(.01, ball.y - net);
-    aimZ = -direction(side) * Math.max(Math.abs(aimZ), Math.min(6.2, lineDepth));
+    const safeDepth = Math.max(Math.abs(aimZ), Math.min(6.2, lineDepth));
+    // The last part of a forward drag deliberately spends net clearance.
+    // Preserve this choice: collision, not random chance, determines the miss.
+    const netPressure = clamp((-input.aimDepth - .6) / .4, 0, 1);
+    aimZ = -direction(side) * (safeDepth + (Math.abs(aimZ) - safeDepth) * netPressure);
   }
   if (serving) {
     const sign = direction(side) * (state.score[playerTeam(state, side)] % 2 ? -1 : 1);
@@ -368,7 +372,7 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
   // ballistic, with a deep target and net clearance; no presentation speedup.
   let duration = type === 'clear' ? ((serving ? 1.5 : 1.24) + distance * 0.032) / shotSpeed
     : type === 'drop' ? (0.85 + distance * 0.02) / shotSpeed
-      : (0.24 + distance * 0.01) / role.power / shotSpeed / (1 + input.charge * 0.12);
+      : (0.30 + distance * 0.012) / role.power / shotSpeed / (1 + input.charge * 0.48);
   if (lift > 0) duration += lift * .65;
   if (type === 'smash') {
     const downwardLimit = Math.sqrt(2 * Math.max(0.01, ball.y) / TUNING.gravity) * 0.998;
