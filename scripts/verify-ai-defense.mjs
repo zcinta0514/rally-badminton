@@ -24,7 +24,7 @@ try{
    await route.fulfill({response,body:source});
   });
   await p.goto(app.url);await p.locator('#loading').waitFor({state:'hidden'});
-  assert.match(await p.locator('.lobby-version').textContent(),/1\.21\.5/);
+  assert.match(await p.locator('.lobby-version').textContent(),/1\.21\.6/);
   report.build=await p.evaluate(()=>RALLY_CONFIG.buildId);
   await p.evaluate(async()=>{
    const {CourtView}=await import('/src/view.js');const render=CourtView.prototype.render;
@@ -37,10 +37,10 @@ try{
   await p.locator('[data-shot=clear]').click();await p.waitForFunction(()=>qaState.hitId>=1);
   await p.evaluate(()=>window.qaFeed=true);
   const b=await p.locator('[data-shot=smash]').boundingBox();assert.ok(b.x>=0&&b.x+b.width<=width&&b.y+b.height<=height);
-  await p.mouse.move(b.x+b.width/2,b.y+b.height/2);await p.mouse.down();await p.waitForTimeout(250);
+  await p.mouse.move(b.x+b.width/2,b.y+b.height/2);await p.mouse.down();await p.waitForTimeout(level==='easy'?30:level==='medium'?500:1100);
   await p.evaluate(()=>window.qaFeed=false);await p.mouse.up();
   await p.waitForFunction(()=>window.qaHit?.outgoing.drag===.035);
-  const hit=await p.evaluate(()=>qaHit);assert.ok(hit.outgoing.vy<0);
+  const hit=await p.evaluate(()=>qaHit);assert.ok(hit.outgoing.vy<0);if(level==='easy')assert.ok(hit.charge<.3);if(level==='hard')assert.ok(hit.charge>.95);
   await p.screenshot({path:out+`/${level}-${width}-smash.png`});
   await p.waitForFunction(()=>qaState.phase==='point'||qaState.hitId>qaHit.hitId);
   if(level!=='easy'){assert.ok(await p.evaluate(()=>qaState.hitId>qaHit.hitId),'defender returns centered smash');}

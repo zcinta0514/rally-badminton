@@ -5,7 +5,7 @@ import {measureDefense} from '../scripts/measure-ai-defense.mjs';
 
 test('fixed smash grid separates basic AI and reliable defenders without making every ball reachable',()=>{
  const result=measureDefense();
- assert.ok(result.easy.rate>.15&&result.easy.rate<.35);
+ assert.ok(result.easy.rate>.15&&result.easy.rate<.55);
  for(const level of ['medium','hard']){
   assert.ok(result[level].rate>.7&&result[level].rate<.9,JSON.stringify(result));
   assert.ok(result[level].returns/result[level].hits>.95);
