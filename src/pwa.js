@@ -37,7 +37,7 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
   const status = entry.querySelector('#pwa-status');
   const dialog = document.createElement('dialog');
   dialog.id = 'pwa-dialog'; dialog.className = 'pwa-dialog'; dialog.setAttribute('aria-labelledby', 'pwa-title');
-  dialog.innerHTML = '<button type="button" class="pwa-close" aria-label="关闭主屏幕说明">×</button><small class="pwa-eyebrow">开拍 / RALLY</small><h2 id="pwa-title">添加到主屏幕</h2><p id="pwa-intro"></p><ol id="pwa-steps"></ol><p class="pwa-note">使用时请手动横屏，并关闭系统方向锁定。独立窗口可隐藏地址栏与工具栏；方向锁定、通知与系统手势仍由设备控制。</p><p id="pwa-cache-detail" class="pwa-cache-detail" role="status" aria-live="polite"></p><div class="pwa-actions"><button id="pwa-install" type="button">添加到主屏幕</button><button id="pwa-check" type="button">检查更新</button></div>';
+  dialog.innerHTML = '<button type="button" class="pwa-close" aria-label="关闭主屏幕说明">×</button><small class="pwa-eyebrow">开拍 / RALLY</small><h2 id="pwa-title">添加到主屏幕</h2><p id="pwa-intro"></p><ol id="pwa-steps"></ol><p class="pwa-note">使用时请手动横屏，并关闭系统方向锁定。独立窗口可隐藏地址栏与工具栏；方向锁定、通知与系统手势仍由设备控制。</p><p id="pwa-cache-detail" class="pwa-cache-detail" role="status" aria-live="polite"></p><div class="pwa-actions"><button id="pwa-install" type="button">添加到主屏幕</button></div>';
   document.body.append(dialog);
   const releaseNotice = globalThis.RALLY_CONFIG?.releaseNotice;
   const validReleaseNotice = releaseNotice && typeof releaseNotice.id === 'string' && /^[a-z0-9][a-z0-9._-]{1,64}$/i.test(releaseNotice.id) &&
@@ -48,7 +48,7 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
   releaseDialog.innerHTML = '<button type="button" class="release-close" aria-label="关闭更新公告">×</button><small class="pwa-eyebrow">开拍 / RALLY · 更新公告</small><h2 id="release-notice-title"></h2><p id="release-notice-summary"></p><ul id="release-notice-items"></ul><button type="button" class="release-dismiss">关闭</button>';
   document.body.append(releaseDialog);
   const cornerCheck = document.getElementById('lobby-check-update');
-  const detail = dialog.querySelector('#pwa-cache-detail'), nativeInstall = dialog.querySelector('#pwa-install'), checkButton = dialog.querySelector('#pwa-check');
+  const detail = dialog.querySelector('#pwa-cache-detail'), nativeInstall = dialog.querySelector('#pwa-install');
   const releaseDismiss = releaseDialog.querySelector('.release-dismiss');
   let updateState = '', previousInert = false, updateStorage, releasePending = false, releaseTimer = null, releaseFocus = null;
   try { updateStorage = sessionStorage; } catch { /* Auto reload needs a working loop guard. */ }
@@ -117,15 +117,13 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
       short = navigator.onLine ? '离线模式已就绪' : '当前离线 · 可进行人机对战';
       long = `离线资源已就绪${version ? '（' + version.slice(0,8) + '）' : ''}。断网后仍可从同一网址或主屏幕进入人机对战。${peerMode ? '双设备好友对战无需电脑；创建和加入房间时需要联网，比赛时保持两台设备互通。' : demoMode ? '好友对战请直接打开主机的局域网游戏网址。' : '好友对战需要与运行游戏的电脑保持网络连接。'}浏览器清理存储后需重新联网下载。`;
     } else if (failure) {
-      short = '离线资源未就绪 · 点击重试'; long = '离线资源尚未完整下载，当前可继续在线玩。联网后点击“重试缓存”；若服务器已更新，请关闭全部开拍窗口再重新打开。';
+      short = '离线资源未就绪'; long = '离线资源尚未完整下载，当前可继续在线玩。联网后关闭此说明，点击首页右下角“检查更新”；若服务器已更新，请关闭全部开拍窗口再重新打开。';
     } else {
       short = '正在准备离线资源…'; long = '首次打开需联网下载完整游戏资源；显示「离线模式已就绪」后即可断网。';
     }
     status.textContent = short; detail.textContent = long + (pageVersion ? ` 当前页面版本：${pageVersion.slice(0,8)}。` : '');
-    entry.setAttribute('aria-label', `主屏幕安装与更新：${short}`);
+    entry.setAttribute('aria-label', `主屏幕安装：${short}`);
     nativeInstall.hidden = !installPrompt || isStandalone();
-    checkButton.hidden = !supported; checkButton.disabled = checking || matchActive;
-    checkButton.textContent = checking ? '检查中…' : failure ? '重试缓存' : '检查更新';
     if (cornerCheck) {
       cornerCheck.disabled = checking || matchActive;
       cornerCheck.textContent = checking ? '检查中…' : '检查更新';
@@ -251,7 +249,6 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
     catch { failure = !cached; showToast('暂时无法检查更新，请联网后重试'); }
     finally { checking = false; updateUI(); }
   }
-  checkButton.addEventListener('click', checkForUpdates);
   cornerCheck?.addEventListener('click', checkForUpdates);
   window.addEventListener('online', updateUI); window.addEventListener('offline', updateUI);
   updateUI(); if (supported) register();

@@ -12,7 +12,7 @@ try{
  await c.addInitScript(()=>{localStorage.setItem('rally.onboarding.seen','1');localStorage.setItem('rally.usage.enabled','off');});
  const p=await c.newPage();p.setDefaultTimeout(60000);p.on('pageerror',e=>report.errors.push(e.message));
  await p.goto(process.env.RALLY_QA_URL||app.url);await p.locator('#loading').waitFor({state:'hidden'});
- await p.waitForFunction(()=>document.querySelector('.lobby-version')?.textContent.includes('1.21.8'));
+ await p.waitForFunction(()=>document.querySelector('.lobby-version')?.textContent.includes('1.21.9'));
  report.build=await p.evaluate(()=>RALLY_CONFIG.buildId);
  for(const [width,height] of [[844,390],[568,320],[390,844],[320,568]]){
   await p.setViewportSize({width,height});

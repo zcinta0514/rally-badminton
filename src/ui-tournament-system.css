@@ -524,13 +524,18 @@ body #dialog-backdrop #result-dialog .text-btn { color:#afbfaf; font-size:13px; 
 body[data-screen=menu]:has(#menu[data-entry=home]) .lobby-update {
   position:fixed; right:max(14px,var(--safe-right)); bottom:max(10px,var(--safe-bottom));
   z-index:4; display:flex; align-items:center; gap:12px; max-width:calc(100vw - 28px);
-  padding:0 10px 0 12px; border:1px solid #40544a; border-radius:3px;
-  background:#101b18e8; color:#b9c8bd;
+  padding:0 10px 0 12px; border:1px solid transparent; border-radius:0;
+  background:none; color:#b9c8bd;
 }
 .lobby-update .lobby-version { padding:0; font-size:11px; white-space:nowrap; color:inherit; font-variant-numeric:tabular-nums; }
 .lobby-update button { min-height:44px; min-width:72px; padding:0 2px; border:0; background:none; color:#d6efac; font-size:12px; white-space:nowrap; }
 .lobby-update button:hover { color:#f1ffdc; }
 .lobby-update button:disabled { opacity:.6; cursor:wait; }
 @media (orientation:portrait) {
-  body[data-screen=menu] #menu[data-entry=home] { padding-bottom:calc(76px + var(--safe-bottom)); }
+  /* Bound the scroll area above the fixed footer, including short portrait
+     viewports. Padding alone lets overflowing menu items sit behind it. */
+  body[data-screen=menu] #menu[data-entry=home] {
+    height:calc(100dvh - max(56px,calc(var(--safe-bottom) + 46px)));
+    padding-bottom:20px;
+  }
 }
