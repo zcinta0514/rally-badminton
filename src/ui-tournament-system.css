@@ -21,7 +21,7 @@ body .segments button { color:#afbeb1; border-radius:2px; }
 body .segments button.selected { color:#e1f1c5; background:#314837; box-shadow:inset 0 -2px #b8d88e; }
 
 /* Keep the three home entrances on one line, including short phone landscapes. */
-body[data-screen=menu] #menu .menu-foot-actions { margin-inline:0; flex-wrap:nowrap; gap:0 clamp(6px,1vw,14px); }
+body[data-screen=menu] #menu .menu-foot-actions { margin-inline:0; flex-wrap:nowrap; gap:0 clamp(12px,1.5vw,20px); }
 body[data-screen=menu] #menu .menu-foot-actions > button { flex:none; display:inline-flex; align-items:center; justify-content:center; white-space:nowrap; line-height:16px; padding-block:0; }
 body[data-screen=menu] #menu .community-entry { width:auto; flex:none; min-height:44px; padding:0; border:0; background:none; color:#d5dfcc; white-space:nowrap; line-height:16px; -webkit-text-size-adjust:none; text-size-adjust:none; }
 body[data-screen=menu] #menu .community-entry:hover { color:#d6efac; }
@@ -287,7 +287,7 @@ body .hell-status span { color:#c6cdb9; }
   body #dialog-backdrop:has(#waiting-dialog:not([hidden])) { justify-content:center; padding-inline:var(--entry-gutter); }
 }
 
-@media (max-width:380px) and (orientation:portrait) {
+@media (max-width:520px) {
   body[data-screen=menu]:has(#menu:not([data-entry=home])) .topbar .top-actions { gap:4px; }
   body[data-screen=menu] .entry-navigation { width:44px; padding:0; font-size:0; }
   body[data-screen=menu] .entry-navigation::before { content:"←" / ""; font-size:20px; }
@@ -520,23 +520,68 @@ body #dialog-backdrop #result-dialog .text-btn { color:#afbfaf; font-size:13px; 
   .settings-grid { grid-template-columns:minmax(0,1fr); }
 }
 
-/* Home version and update action remain visible in the bottom-right corner. */
+/* Shared chrome rails: header, navigation and footer use the same safe gutters. */
+body[data-screen=menu] {
+  --chrome-left:max(24px,var(--safe-left));
+  --chrome-right:max(24px,var(--safe-right));
+  --chrome-top:max(12px,var(--safe-top));
+  --chrome-bottom:max(12px,var(--safe-bottom));
+  --entry-nav-top:var(--chrome-top);
+}
+body[data-screen=menu] .topbar {
+  top:var(--chrome-top); right:var(--chrome-right);
+  height:44px; padding:0;
+}
+body[data-screen=menu] .topbar .top-actions { align-items:center; gap:8px; }
+body[data-screen=menu] .topbar button {
+  flex:none; width:44px; min-width:44px; height:44px; min-height:44px;
+  padding:0; line-height:16px; font-size:12px;
+}
+body[data-screen=menu] .entry-navigation {
+  top:var(--chrome-top); left:var(--chrome-left); height:44px;
+}
+body[data-screen=menu] #menu[data-entry=home] {
+  height:calc(100dvh - var(--chrome-bottom) - 64px);
+  padding-left:var(--chrome-left); padding-bottom:0;
+}
+body[data-screen=menu] #menu[data-entry=home] .menu-foot {
+  position:fixed; left:var(--chrome-left); right:calc(var(--chrome-right) + 80px);
+  bottom:var(--chrome-bottom); width:auto; height:44px; padding:0; margin:0;
+  justify-content:center;
+}
+body[data-screen=menu] #menu .menu-foot-actions { height:44px; }
+body[data-screen=menu] #menu .menu-foot-actions > button {
+  height:44px; min-height:44px; margin:0; font-size:12px; line-height:16px;
+}
 .lobby-update { display:none; }
 body[data-screen=menu]:has(#menu[data-entry=home]) .lobby-update {
-  position:fixed; right:max(14px,var(--safe-right)); bottom:max(10px,var(--safe-bottom));
-  z-index:4; display:flex; align-items:center; justify-content:space-between; gap:0; width:174px; max-width:calc(100vw - 28px);
-  padding:0 10px 0 12px; border:1px solid transparent; border-radius:0;
-  background:none; color:#b9c8bd;
+  position:fixed; right:var(--chrome-right); bottom:var(--chrome-bottom);
+  z-index:4; display:flex; align-items:center; justify-content:flex-end;
+  height:44px; width:72px; padding:0; border:0; background:none; color:#b9c8bd;
 }
-.lobby-update .lobby-version { padding:0; font-size:11px; white-space:nowrap; color:inherit; font-variant-numeric:tabular-nums; }
-.lobby-update button { min-height:44px; min-width:72px; padding:0 2px; border:0; background:none; color:#d6efac; font-size:12px; white-space:nowrap; }
+.lobby-update .lobby-version {
+  position:absolute; right:0; bottom:44px; padding:0;
+  font-size:10px; line-height:20px; white-space:nowrap; color:inherit;
+  font-variant-numeric:tabular-nums;
+}
+.lobby-update button {
+  display:inline-flex; align-items:center; justify-content:flex-end;
+  height:44px; min-height:44px; width:72px; padding:0; border:0;
+  background:none; color:#d6efac; font-size:12px; line-height:16px; white-space:nowrap;
+}
 .lobby-update button:hover { color:#f1ffdc; }
 .lobby-update button:disabled { opacity:.6; cursor:wait; }
 @media (orientation:portrait) {
-  /* Bound the scroll area above the fixed footer, including short portrait
-     viewports. Padding alone lets overflowing menu items sit behind it. */
   body[data-screen=menu] #menu[data-entry=home] {
-    height:calc(100dvh - max(56px,calc(var(--safe-bottom) + 46px)));
-    padding-bottom:20px;
+    width:100%; padding-right:var(--chrome-right);
+    padding-top:calc(var(--chrome-top) + 64px);
   }
 }
+@media (max-width:380px) {
+  body[data-screen=menu] { --chrome-left:max(16px,var(--safe-left)); --chrome-right:max(16px,var(--safe-right)); }
+  body[data-screen=menu] .topbar .top-actions { gap:4px; }
+  body[data-screen=menu] #menu .menu-foot-actions > button { font-size:11px; }
+}
+/* Match toolbar keeps existing widths while giving every control one baseline. */
+body[data-screen=match] .topbar .top-actions { align-items:center; }
+body[data-screen=match] .topbar button { height:36px; min-height:36px; line-height:16px; }

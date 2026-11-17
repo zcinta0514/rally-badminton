@@ -10,7 +10,9 @@ function clearMotion() {
 new MutationObserver(() => {
   entryAnimation?.cancel();
   if (reducedMotion.matches || document.hidden || menu.hidden) return;
-  entryAnimation=menu.animate([
+  // A transform on the home panel would re-anchor its fixed footer.
+  const home=menu.dataset.entry==='home';
+  entryAnimation=menu.animate(home ? [{opacity:.5},{opacity:1}] : [
     {opacity:.5,transform:'translateX(-7px)'},
     {opacity:1,transform:'translateX(0)'},
   ],{duration:180,easing:'ease-out'});
