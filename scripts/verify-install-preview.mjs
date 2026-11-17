@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {createServer} from '../server/index.js';
@@ -16,7 +17,7 @@ const setup=async options=>{
 try{
  const {c,p}=await setup({});
  report.build=await p.evaluate(()=>RALLY_CONFIG.buildId);
- assert.match(await p.locator('.lobby-version').textContent(),/1.21.11/);
+ assert.ok((await p.locator('.lobby-version').textContent()).includes(JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8')).version));
  for(const [width,height] of [[844,390],[568,320],[390,844],[320,568]]){
   await p.setViewportSize({width,height});
   const entrances=await p.locator('.menu-foot-actions > button').evaluateAll(buttons=>buttons.filter(button=>button.getBoundingClientRect().width>0).map(button=>{const r=button.getBoundingClientRect();return {id:button.id,x:r.x,y:r.y,width:r.width,height:r.height};}));
