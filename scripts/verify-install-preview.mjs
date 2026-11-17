@@ -19,6 +19,10 @@ try{
  assert.match(await p.locator('.lobby-version').textContent(),/1.21.11/);
  for(const [width,height] of [[844,390],[568,320],[390,844],[320,568]]){
   await p.setViewportSize({width,height});
+  const entrances=await p.locator('.menu-foot-actions > button').evaluateAll(buttons=>buttons.filter(button=>button.getBoundingClientRect().width>0).map(button=>{const r=button.getBoundingClientRect();return {id:button.id,x:r.x,y:r.y,width:r.width,height:r.height};}));
+  assert.equal(entrances.length,3);
+  assert.ok(Math.max(...entrances.map(r=>r.y+r.height/2))-Math.min(...entrances.map(r=>r.y+r.height/2))<=1,`Home entrances must share a row at ${width}x${height}: ${JSON.stringify(entrances)}`);
+  for(const [i,r] of entrances.entries()) {assert.ok(r.x>=0&&r.x+r.width<=width);if(i)assert.ok(r.x>=entrances[i-1].x+entrances[i-1].width+5);}
   await p.locator('#install-app').click();await p.locator('#pwa-dialog').waitFor({state:'visible'});
   const box=await p.locator('#pwa-dialog').boundingBox();assert.ok(box.x>=0&&box.y>=0&&box.x+box.width<=width+1&&box.y+box.height<=height+1);
   assert.equal(await p.locator('#pwa-dialog').evaluate(e=>e.scrollWidth<=e.clientWidth+1),true);
