@@ -23,7 +23,7 @@ try{
    await route.fulfill({response,body:source});
   });
   await p.goto(app.url);await p.locator('#loading').waitFor({state:'hidden'});
-  assert.match(await p.locator('.lobby-version').textContent(),/1\.21\.4/);
+  assert.match(await p.locator('.lobby-version').textContent(),/1\.21\.13/);
   report.build=await p.evaluate(()=>RALLY_CONFIG.buildId);
   await p.evaluate(async()=>{
    const {CourtView}=await import('/src/view.js');const render=CourtView.prototype.render;
