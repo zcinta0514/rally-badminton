@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createMatch, getShotTarget, stepMatch, predictLanding, ROLES} from '../shared/game.js';
-import {sampleShuttleFlight, SHUTTLE_FLIGHT} from '../shared/shuttle-flight.js';
+import {sampleShuttleFlight, SHUTTLE_FLIGHT, timeToShuttleZ} from '../shared/shuttle-flight.js';
 
 test('charge continuously increases smash speed while light smashes remain downward',()=>{
  for(const role of Object.keys(ROLES)) for(const side of [0,1]) {
@@ -13,8 +13,8 @@ test('charge continuously increases smash speed while light smashes remain downw
    assert.ok(shots[i].vy<0&&shots[i].smashViable);
    if(i) assert.ok(shots[i].duration<shots[i-1].duration);
   }
-  assert.ok(shots[4].duration<shots[0].duration*.75);
-  assert.ok(Math.hypot(shots[4].vx,shots[4].vz)>Math.hypot(shots[0].vx,shots[0].vz)*1.4);
+  assert.ok(shots[4].duration<shots[0].duration*.82);
+  assert.ok(Math.hypot(shots[4].vx,shots[4].vz)>Math.hypot(shots[0].vx,shots[0].vz)*1.25);
  }
 });
 
@@ -40,7 +40,7 @@ test('overhead smashes stay fast, downward and close to their straight chord on 
       Object.assign(s.shuttle,{x:0,y:3.2,z:sign*3.8,vy:0,lastHit:1-side%2,active:true});
       const t=getShotTarget(s,side,{shot:'smash',charge});
       const launch={...s.shuttle,...t,y:s.shuttle.y,x:0,z:s.shuttle.z};
-      assert.ok(t.duration<.46); assert.ok(t.vy< -4); assert.ok(t.smashViable);
+      assert.ok(t.duration<.59); assert.ok(t.vy< -2.5); assert.ok(t.smashViable);
       let deviation=0;
       for(let i=0;i<=100;i++) {
         const p=sampleShuttleFlight(launch,t.duration*i/100);
@@ -48,7 +48,7 @@ test('overhead smashes stay fast, downward and close to their straight chord on 
         deviation=Math.max(deviation,Math.abs(p.y-launch.y*(1-fraction)));
         assert.ok(p.vy<0);
       }
-      assert.ok(deviation<.4,`curve ${deviation}`);
+      assert.ok(deviation<.48,`curve ${deviation}`);
       const end=sampleShuttleFlight(launch,t.duration);
       assert.ok(Math.abs(end.z-t.z)<1e-8 && Math.abs(end.y)<1e-8);
       let sliced=launch;
@@ -69,7 +69,7 @@ test('rear contacts retain clearance on moderate aim but can deliberately risk t
   assert.equal(getShotTarget(s,0,{shot:'smash',aimDepth:-1}).aimZ,-1.8);
   s.players[0].z=s.shuttle.z=5;s.shuttle.y=1.7;
   const low=getShotTarget(s,0,{shot:'smash'});
-  assert.ok(!low.smashViable && low.netHeight<1.55 && low.duration<.46);
+  assert.ok(!low.smashViable && low.netHeight<1.55 && low.duration<.59);
 });
 
 test('real smash contact, serialized prediction and a later clear use their own drag',()=>{
@@ -84,4 +84,17 @@ test('real smash contact, serialized prediction and a later clear use their own 
   assert.ok(Math.abs(landed.z-s.lastShotInfo.z)<1e-8);
   const clear=getShotTarget(s,1,{shot:'clear'});
   assert.equal(clear.drag,SHUTTLE_FLIGHT.drag);
+});
+
+
+test('ordinary smashes leave a readable defensive window and heavy smashes retain anticipation pressure',()=>{
+ for(const role of Object.keys(ROLES)) for(const side of [0,1]) {
+  const s=createMatch({roles:[role,role]});s.phase='rally';const sign=side?-1:1;
+  Object.assign(s.players[side],{x:0,z:3.8*sign});
+  Object.assign(s.shuttle,{x:0,y:3.2,z:3.8*sign,vy:0,lastHit:1-side,active:true});
+  const arrival=charge=>{const t=getShotTarget(s,side,{shot:'smash',charge});return timeToShuttleZ({...s.shuttle,vx:t.vx,vz:t.vz,drag:t.drag},-3.55*sign);};
+  const ordinary=arrival(.3),heavy=arrival(1);
+  assert.ok(ordinary>=.30&&ordinary<=.46,`${role}: ordinary ${ordinary}`);
+  assert.ok(heavy>=.23&&heavy<ordinary*.82,`${role}: heavy ${heavy}`);
+ }
 });
