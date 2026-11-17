@@ -27,3 +27,23 @@ test('worker registration resolves from its module location within the project a
   });
   assert.throws(()=>pwa.getWebSocketURL({href:'https://player.example/rally-badminton/'},{demoMode:true}),/人机/);
 });
+
+test('install guide separates platform instructions from browser install capability', async () => {
+  const {getInstallGuide} = await import('../src/pwa.js');
+  const ios = getInstallGuide({isIOS:true,canPrompt:true});
+  assert.equal(ios.canInstall,false);
+  assert.match(ios.steps.join(' '),/Safari.*分享.*添加到主屏幕/);
+  const wechat = getInstallGuide({inWeChat:true,canPrompt:true});
+  assert.equal(wechat.canInstall,false);
+  assert.match(wechat.steps[0],/系统浏览器/);
+  assert.doesNotMatch(wechat.steps.join(' '),/Safari/);
+  const android = getInstallGuide({canPrompt:true});
+  assert.equal(android.canInstall,true);
+  assert.match(android.steps[0],/安装到手机/);
+  const fallback = getInstallGuide({});
+  assert.equal(fallback.canInstall,false);
+  assert.match(fallback.steps.join(' '),/浏览器.*菜单/);
+  const installed = getInstallGuide({standalone:true,canPrompt:true,isIOS:true});
+  assert.equal(installed.canInstall,false);
+  assert.deepEqual(installed.steps,[]);
+});

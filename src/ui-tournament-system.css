@@ -20,8 +20,9 @@ body .segments { background:#10201a; border-radius:3px; }
 body .segments button { color:#afbeb1; border-radius:2px; }
 body .segments button.selected { color:#e1f1c5; background:#314837; box-shadow:inset 0 -2px #b8d88e; }
 
-/* Home: all secondary entrances share the same exposed row, wrapping on narrow screens. */
-body[data-screen=menu] #menu .menu-foot-actions { margin-inline:0; }
+/* Keep the three home entrances on one line, including short phone landscapes. */
+body[data-screen=menu] #menu .menu-foot-actions { margin-inline:0; flex-wrap:nowrap; gap:0 clamp(6px,1vw,14px); }
+body[data-screen=menu] #menu .menu-foot-actions > button { flex:none; display:inline-flex; align-items:center; justify-content:center; white-space:nowrap; line-height:16px; padding-block:0; }
 body[data-screen=menu] #menu .community-entry { width:auto; flex:none; min-height:44px; padding:0; border:0; background:none; color:#d5dfcc; white-space:nowrap; line-height:16px; -webkit-text-size-adjust:none; text-size-adjust:none; }
 body[data-screen=menu] #menu .community-entry:hover { color:#d6efac; }
 /* Cache details are available inside the install dialog; keep the home links compact. */
