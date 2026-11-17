@@ -14,3 +14,27 @@ body .topbar .display-btn {
 .release-dialog{position:fixed;inset:0;margin:auto;width:min(520px,calc(100vw - 32px));max-height:calc(100dvh - max(32px,var(--safe-top)) - var(--safe-bottom));padding:26px;border:1px solid #dbe2dc;border-top:4px solid #008650;border-radius:8px;background:#fff;color:#122b25;box-shadow:0 20px 70px #0004;font-family:inherit;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch}
 .release-dialog::backdrop{background:#13292380}.release-dialog h2{font-size:26px;margin:10px 0 14px}.release-dialog p,.release-dialog li{font-size:13px;line-height:1.7}.release-dialog ul{padding-left:21px;margin:12px 0 22px}.release-dialog li+li{margin-top:8px}.release-dialog .release-dismiss{min-height:44px;padding:10px 16px;border:1px solid #008650;border-radius:4px;background:#008650;color:#fff;font:inherit;font-size:13px;touch-action:manipulation}.release-dialog .release-close{position:absolute;right:10px;top:8px;min-width:44px;min-height:44px;border:0;background:transparent;color:#64746a;font-size:26px;touch-action:manipulation}.release-dialog button:focus-visible{outline:3px solid #0756b0;outline-offset:2px}
 @media(max-height:500px) and (orientation:landscape){.release-dialog{width:min(600px,calc(100vw - 48px));padding:18px 24px}.release-dialog h2{font-size:23px;margin:6px 0}.release-dialog p,.release-dialog li{font-size:12px}.release-dialog ul{margin:9px 0 14px}}
+
+/* Install sheet: installation and resource readiness are separate steps. */
+body[data-screen="menu"] #menu .menu-foot-actions #install-app { color:#176345; font-weight:700; gap:6px; }
+.pwa-dialog .pwa-benefits { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0; }
+.pwa-dialog .pwa-benefits span { padding:5px 9px; border-radius:4px; background:#edf5ef; color:#286046; font-size:11px; }
+.pwa-resource { margin-top:18px; padding:15px; border:1px solid #dbe7dd; border-radius:6px; background:#f3f7f2; }
+.pwa-resource h3 { margin:0 0 7px; color:#637268; font-size:11px; font-weight:500; }
+.pwa-resource strong { display:block; font-size:15px; line-height:1.5; }
+.pwa-resource .pwa-cache-detail { margin:6px 0 10px; padding:0; border:0; background:none; color:#56665c; font-size:12px; }
+.pwa-resource progress { display:block; width:100%; height:5px; margin:10px 0; accent-color:#008650; }
+.pwa-resource button { min-height:44px; padding:7px 12px; border:1px solid #b5cabc; border-radius:4px; background:white; color:#176345; font:inherit; font-size:12px; cursor:pointer; touch-action:manipulation; }
+.pwa-dialog .pwa-update-note { margin:16px 0 8px; font-size:12px; }
+.pwa-dialog .pwa-note { font-size:11px; margin-bottom:0; }
+@media(max-height:500px) and (orientation:landscape) {
+  .pwa-dialog .pwa-benefits { margin:9px 0; }
+  .pwa-resource { margin-top:12px; padding:12px; }
+}
+/* Follow the current dark court palette. */
+body[data-screen="menu"] #menu .menu-foot-actions #install-app { color:#c2dc9b; }
+body .pwa-dialog .pwa-benefits span { background:#25392d; color:#c2dc9b; }
+body .pwa-dialog .pwa-resource { background:#1d3026; border-color:#40544a; }
+body .pwa-resource h3,body .pwa-resource .pwa-cache-detail { color:#afbeb1; }
+body .pwa-resource .pwa-cache-detail { background:none; }
+body .pwa-resource button { background:#25392d; color:#e3eadc; border-color:#4b6451; }
