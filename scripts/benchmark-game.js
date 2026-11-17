@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const STEP = 1 / 60;
-const MAX_STEPS = 60 * 300;
+const MAX_STEPS = 60 * 600;
 const median = values => {
   const sorted = [...values].sort((a, b) => a - b);
   return sorted.length ? sorted[Math.floor(sorted.length / 2)] : null;

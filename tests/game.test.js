@@ -338,7 +338,7 @@ test('all AI difficulties play complete matches through the shared input interfa
   for (const difficulty of ['easy', 'medium', 'hard']) {
     const state = createMatch({ difficulty, seed: 834 });
     let maximumRally = 0;
-    for (let i = 0; i < 60 * 240 && state.phase !== 'over'; i++) {
+    for (let i = 0; i < 60 * 600 && state.phase !== 'over'; i++) {
       const inputs = [aiInput(state, 0, difficulty), aiInput(state, 1, difficulty)];
       for (const input of inputs) assert.ok(Math.hypot(input.x, input.z) <= 1.001);
       stepMatch(state, inputs, frame);

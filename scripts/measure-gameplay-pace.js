@@ -1,3 +1,4 @@
+import {flightApex,timeToHeight} from '../shared/shuttle-flight.js';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import * as currentGame from '../shared/game.js';
@@ -27,7 +28,7 @@ export function receiveFixture(game, { type = 'drop', startZ = 4.8, startX = 0, 
   Object.assign(state.shuttle, { x: 0, y: type === 'smash' ? 3.05 : 2.6, z: -sign * 4.8,
     vx: 0, vy: 0, vz: 0, active: true, lastHit: side });
   const target = game.getShotTarget(state, hitter, { shot: type, charge: .3 });
-  Object.assign(state.shuttle, { vx: target.vx, vy: target.vy, vz: target.vz, drag: target.drag, lastHit: hitter });
+  Object.assign(state.shuttle, { vx: target.vx, vy: target.vy, vz: target.vz, drag: target.drag, verticalDrag: target.verticalDrag, lastHit: hitter });
   return { state, target };
 }
 
@@ -90,15 +91,12 @@ export function measurePace(game = currentGame) {
   const flights = [];
   for (const role of Object.keys(game.ROLES)) for (const [type, serving] of [['clear', true], ['clear', false], ['drop', false], ['smash', false]]) {
     const { state, target } = shotFixture(game, { type, serving, role });
-    Object.assign(state.shuttle, { vx: target.vx, vy: target.vy, vz: target.vz, drag: target.drag, active: true, lastHit: 0 });
+    Object.assign(state.shuttle, { vx: target.vx, vy: target.vy, vz: target.vz, drag: target.drag, verticalDrag: target.verticalDrag, active: true, lastHit: 0 });
     const landing = game.predictLanding(state);
-    const descendingAt = height => {
-      const discriminant = target.vy ** 2 + 19.62 * (state.shuttle.y - height);
-      return discriminant < 0 ? null : round((target.vy + Math.sqrt(discriminant)) / 9.81);
-    };
+    const descendingAt = height => round(timeToHeight(state.shuttle,height));
     flights.push({ role, type, serving, duration: round(target.duration),
       initialVelocity: { vx: round(target.vx), vy: round(target.vy), vz: round(target.vz) },
-      apex: round(state.shuttle.y + Math.max(0, target.vy) ** 2 / (2 * 9.81)),
+      apex: round(flightApex(state.shuttle).y),
       netHeight: round(target.netHeight), x: round(landing.x), z: round(landing.z), event: landing.event,
       descendingContactTimes: { high3_05: descendingAt(3.05), low0_7: descendingAt(.7) } });
   }

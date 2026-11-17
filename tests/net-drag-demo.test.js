@@ -14,7 +14,7 @@ test('forward drop extends smoothly to rear court, clears net and mirrors both e
  for(const side of [0,1]){const sign=side===0?1:-1,s=setup(side);let previous=0;
   for(const d of [0,.001,.25,.5,.75,1]){const r={shot:'drop',aim:.4*sign,aimDepth:d,charge:.2};const t=getShotTarget(s,side,r,{netDrag:true});
    const depth=-t.aimZ*sign;assert.ok(depth>previous);previous=depth;
-   assert.ok(t.netHeight>1.52);const end=predictLanding({...s,shuttle:{...s.shuttle,vx:t.vx,vy:t.vy,vz:t.vz,lastHit:side}});
+   assert.ok(t.netHeight>1.52);const end=predictLanding({...s,shuttle:{...s.shuttle,vx:t.vx,vy:t.vy,vz:t.vz,drag:t.drag,verticalDrag:t.verticalDrag,lastHit:side}});
    assert.equal(end.event,'landing');assert.equal(end.out,false);assert.ok(Math.abs(end.z-t.aimZ)<1e-7);
   }
   assert.equal(previous,6.05);assert.equal(-getShotTarget(s,side,{shot:'drop',aimDepth:1}).aimZ*sign,3);

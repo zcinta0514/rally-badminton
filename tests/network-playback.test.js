@@ -19,6 +19,16 @@ function liveState() {
   return state;
 }
 
+test('network snapshots retain vertical drag through an aerodynamic high clear',()=>{
+  const view=playback(),first=liveState();first.shuttle.verticalDrag=9.81/6.7**2;
+  first.shuttle.y=5;first.shuttle.vy=8;
+  receive(view,first,0,1);
+  const last=copy(first);stepMatch(last,[{},{}],.05);receive(view,last,50,2);
+  const middle=view.sample(185),expected=sampleShuttleFlight(first.shuttle,.025);
+  assert.equal(middle.shuttle.verticalDrag,first.shuttle.verticalDrag);
+  near(middle.shuttle.y,expected.y);near(middle.shuttle.vy,expected.vy);
+});
+
 test('20 Hz snapshots preserve shared decelerating flight without mutating snapshots', () => {
   const player = playback(), first = liveState();
   receive(player, first, 0, 1);

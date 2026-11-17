@@ -2,10 +2,10 @@ import { separateTeammates, contactOrder, doublesAssignment } from './doubles.js
 import { NET_PHYSICS, resolveNetImpact } from './net-physics.js';
 import { HELL, createHellChallenge, resetHellRally } from './hell-mode.js';
 import { contactQuality, contactDrift } from './shot-quality.js';
-import { SHUTTLE_FLIGHT, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
+import { SHUTTLE_FLIGHT, VERTICAL_DRAG, verticalLaunch, timeToHeight, flightApex, verticalFlight, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 15;
+export const RULES_VERSION = 16;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -35,7 +35,7 @@ export const ROLES = Object.freeze({
 
 const TUNING = {
   gravity: 9.81, playerMargin: 0.16, netMargin: 0.54,
-  acceleration: 18, braking: 26,
+  acceleration: 12, braking: 18,
   reach: 1.45, minHitHeight: 0.22, maxHitHeight: 3.25,
   smashHeight: 1.65, shotBuffer: 0.54, swingTime: 0.42,
   pointWait: 1.4, pauseLimit: 30, resumeCountdown: 2,
@@ -244,7 +244,9 @@ function movePlayer(player, input, side, dt, state) {
   const fatigue = staminaEffects(player, role);
   const h = state.challenge?.bossSide === side ? state.challenge : null;
   const moveScale = !h ? 1 : state.time < h.recoverUntil ? (h.rescue?.hit ? 0 : HELL.recoveryMoveScale) : HELL.moveScale;
-  const targetX = input.x * role.speed * fatigue.speedScale * moveScale, targetZ = input.z * role.speed * fatigue.speedScale * moveScale;
+  // Retreating while facing the net is slower than a forward approach.
+  const footwork = 1 - .14 * Math.max(0,input.z * direction(side));
+  const targetX = input.x * role.speed * fatigue.speedScale * moveScale * footwork, targetZ = input.z * role.speed * fatigue.speedScale * moveScale * footwork;
   const dx = targetX - player.vx, dz = targetZ - player.vz, difference = Math.hypot(dx, dz);
   const reversing = player.vx * targetX + player.vz * targetZ < 0;
   // Brake the existing velocity first when changing direction; top speed and
@@ -299,13 +301,13 @@ export function predictLanding(state) {
   if (!ball?.active || ball.lastHit === null) return null;
   let offset = 0;
   const contact = netCrossing(ball);
-  const floorTime = (ball.vy + Math.sqrt(ball.vy ** 2 + 2 * TUNING.gravity * Math.max(0, ball.y))) / TUNING.gravity;
+  const floorTime = timeToHeight(ball);
   if (contact && contact.time <= floorTime) {
     if (!contact.netImpact?.crosses) return { ...contact, y: Math.max(0, contact.y),
       event: 'net', out: false, side: null, winner: 1 - ball.lastHit };
     offset = contact.time; ball = afterNet(contact, ball);
   }
-  const time = Math.max(0, (ball.vy + Math.sqrt(ball.vy ** 2 + 2 * TUNING.gravity * Math.max(0, ball.y))) / TUNING.gravity);
+  const time = Math.max(0,timeToHeight(ball));
   const point = { ...flightPoint(ball, time), time: time + offset, y: 0 };
   const out = Math.abs(point.x) > courtWidth(state) || Math.abs(point.z) > COURT.halfLength;
   const fault = serviceFault(state, point), side = point.z >= 0 ? 0 : 1;
@@ -348,6 +350,7 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
   const liftDepth = shotDepth(type, input.charge, 0, false, role);
   let aimZ = -direction(side) * (lift > 0 ? liftDepth + (6.05 - liftDepth) * lift : normalDepth);
   const drag = type === 'smash' ? SHUTTLE_FLIGHT.smashDrag : SHUTTLE_FLIGHT.drag;
+  const verticalDrag = type === 'smash' ? 0 : VERTICAL_DRAG;
   if (type === 'smash' && ball.z * direction(side) > 0) {
     // Only high/forward contacts can land a straight smash near the net.
     // Limit depth instead of extending flight into a slow floating arc.
@@ -371,8 +374,8 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
   // Separate the low service launch from an overhead clear. Both remain
   // ballistic, with a deep target and net clearance; no presentation speedup.
   // Keep ordinary attacks readable; the final charge segment supplies the heavy-smash burst.
-  let duration = type === 'clear' ? ((serving ? 1.5 : 1.24) + distance * 0.032) / shotSpeed
-    : type === 'drop' ? (0.85 + distance * 0.02) / shotSpeed
+  let duration = type === 'clear' ? ((serving ? 1.65 : 1.62) + distance * 0.058) / shotSpeed
+    : type === 'drop' ? (0.68 + distance * 0.025) / shotSpeed
       : (0.35 + distance * 0.0135) / role.power / shotSpeed / (1 + input.charge ** 1.6 * 0.30);
   if (lift > 0) duration += lift * .65;
   if (type === 'smash') {
@@ -380,14 +383,32 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
     // Never slow a smash to manufacture clearance; low contacts can hit the net.
     duration = Math.min(duration, downwardLimit);
   } else duration = Math.max(duration, minDuration);
-  const { vx, vz } = horizontalLaunch(ball, { x: aimX + drift.x, z: aimZ + drift.z }, duration, drag);
-  const vy = (TUNING.gravity * duration * duration / 2 - ball.y) / duration - drift.verticalLoss;
-  duration = (vy + Math.sqrt(vy * vy + 2 * TUNING.gravity * Math.max(0, ball.y))) / TUNING.gravity;
-  const endpoint = flightPoint({ ...ball, vx, vy, vz, drag }, duration);
+  if (verticalDrag) {
+    // Only raise an arc when the requested flight would hit the net; do not
+    // apply this clearance assistance to the smash.
+    const fraction=horizontalTimeFraction(distance,Math.abs(ball.z)/Math.abs(aimZ-ball.z),drag);
+    const clearance=t=>verticalFlight(ball.y,verticalLaunch(ball.y,0,t,verticalDrag),t*fraction,verticalDrag).y;
+    const margin=type==='drop'?.12:.28;
+    if(fraction>0&&fraction<1&&clearance(duration)<COURT.netHeight+margin) {
+      let lo=duration,hi=Math.max(2.8,duration);
+      for(let i=0;i<20;i++){const mid=(lo+hi)/2;if(clearance(mid)<COURT.netHeight+margin)lo=mid;else hi=mid;}
+      duration=hi;
+    }
+  }
+  let { vx, vz } = horizontalLaunch(ball, { x: aimX + drift.x, z: aimZ + drift.z }, duration, drag);
+  // A late ankle-height lift cannot retain the launch energy of a balanced
+  // overhead clear. This depends on contact state, never a random miss.
+  if(type==='clear'&&!serving) {
+    const energy=1-.60*quality.factors.lowContact*quality.factors.lateContact*(assist.level==='beginner'?.72:1);
+    vx*=energy;vz*=energy;
+  }
+  const vy = verticalLaunch(ball.y,0,duration,verticalDrag) - drift.verticalLoss;
+  duration = timeToHeight({...ball,vy,verticalDrag});
+  const endpoint = flightPoint({ ...ball, vx, vy, vz, drag, verticalDrag }, duration);
   const x = quality.risk === 0 ? aimX : endpoint.x;
   const z = quality.risk === 0 ? aimZ : endpoint.z;
-  const netTime = timeToShuttleZ({ ...ball, vx, vy, vz, drag }, 0);
-  const netHeight = ball.y + vy * netTime - TUNING.gravity * netTime * netTime / 2;
+  const netTime = timeToShuttleZ({ ...ball, vx, vy, vz, drag, verticalDrag }, 0);
+  const netHeight = verticalFlight(ball.y,vy,netTime,verticalDrag).y;
   const smashViable = type === 'smash' && !serving && ball.y >= TUNING.smashHeight
     && player.stamina >= shotStaminaCost(role, type, input.charge) && netHeight > COURT.netHeight + 0.02;
   if (!serving && netHeight <= COURT.netHeight) {
@@ -396,7 +417,7 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
     quality.reason = type === 'smash' ? `下压角度或触点不利，存在下网风险 · ${quality.reason}` : `击球不稳，存在下网风险 · ${quality.reason}`;
   }
   quality.spread = Math.max(quality.spread, Math.hypot(x - aimX, z - aimZ));
-  return { x, y: 0, z, aimX, aimZ, quality, type, requested, fallbackReason, duration, vx, vy, vz, drag,
+  return { x, y: 0, z, aimX, aimZ, quality, type, requested, fallbackReason, duration, vx, vy, vz, drag, verticalDrag,
     netHeight, smashViable, serving, assist: assist.level };
 }
 
@@ -433,7 +454,7 @@ export function getInterceptAdvice(state, side, request = {}) {
   if (!landing || state.phase !== 'rally' || state.shuttle.lastHit === playerTeam(state, side) || !state.players[side]) return { ...base, status: 'inactive' };
   if (landing.event === 'net' || landing.out || landing.serviceFault) return { ...base, status: 'out', reason: landing.event === 'net' ? '来球将触网' : '预计出界，可观察落点' };
   const player = state.players[side], role = ROLES[player.role], assist = assistFor(state, side);
-  const fatigue = staminaEffects(player, role).speedScale;
+  const fatigue = staminaEffects(player, role);
   let nearest = null;
   for (let time = 0.035; time < landing.time; time += 0.035) {
     const point = liveFlightPoint(state.shuttle, time);
@@ -442,7 +463,16 @@ export function getInterceptAdvice(state, side, request = {}) {
     const z = direction(side) * clamp(point.z * direction(side), TUNING.netMargin, COURT.halfLength - TUNING.playerMargin);
     const travel = Math.hypot(x - player.x, z - player.z);
     nearest = point;
-    if (player.cooldown <= time && travel <= TUNING.reach + role.reachBonus + assist.reachBonus + role.speed * fatigue * Math.max(0, time - 0.06)) {
+    const dx=x-player.x,dz=z-player.z,seconds=Math.max(0,time-.06);
+    const speed=role.speed*fatigue.speedScale*(1-.14*Math.max(0,dz*direction(side)/(travel||1)));
+    const initial=Math.max(-speed,Math.min(speed,(player.vx*dx+player.vz*dz)/(travel||1)));
+    const braking=initial<0?Math.min(seconds,-initial/(TUNING.braking*role.braking)):0;
+    const forwardTime=seconds-braking,start=Math.max(0,initial);
+    const acceleration=TUNING.acceleration*role.acceleration*fatigue.accelerationScale;
+    const accelerating=Math.min(forwardTime,(speed-start)/acceleration);
+    const running=initial*braking+.5*TUNING.braking*role.braking*braking**2
+      +start*accelerating+.5*acceleration*accelerating**2+speed*(forwardTime-accelerating);
+    if (player.cooldown <= time && travel <= TUNING.reach + role.reachBonus + assist.reachBonus + running) {
       const players = [...state.players];
       players[side] = { ...player, x, z, cooldown: 0 };
       const futureState = { ...state, players, shuttle: { ...state.shuttle, ...point,
@@ -484,10 +514,10 @@ function playShot(state, side, request, serving = false) {
     const duration = skill === 'rescue' ? Math.max(1.25, target.duration * .85)
       : Math.max(.48, minimumNetDuration(ball, target.aimX, target.aimZ, .14), target.duration * (skill === 'drive' ? .9 : .82));
     const launch = horizontalLaunch(ball, { x: target.aimX, z: target.aimZ }, duration, target.drag);
-    target = { ...target, ...launch, vy: (TUNING.gravity * duration * duration / 2 - ball.y) / duration, duration };
+    target = { ...target, ...launch, vy: verticalLaunch(ball.y,0,duration,target.verticalDrag), duration };
   }
   const contact = { x: ball.x, y: ball.y, z: ball.z };
-  ball.vx = target.vx; ball.vy = target.vy; ball.vz = target.vz; ball.drag = target.drag;
+  ball.vx = target.vx; ball.vy = target.vy; ball.vz = target.vz; ball.drag = target.drag; ball.verticalDrag = target.verticalDrag;
   ball.active = true; ball.lastHit = playerTeam(state, side); ball.lastHitPlayer = side;
   if (state.service) state.service.active = serving;
   const staminaBefore = player.stamina;
@@ -511,7 +541,7 @@ function playShot(state, side, request, serving = false) {
   }
   state.lastShotInfo = {hitId: state.hitId, side: playerTeam(state, side), playerSlot: side, at: state.time, type, requested: target.requested,
     aimX: target.aimX, aimZ: target.aimZ, x: target.x, z: target.z, quality: target.quality,
-    serving, contact, outgoing: { vx: ball.vx, vy: ball.vy, vz: ball.vz, drag: ball.drag }, charge: request.charge, staminaBefore, staminaAfter: player.stamina, ...(skill ? { skill } : {})};
+    serving, contact, outgoing: { vx: ball.vx, vy: ball.vy, vz: ball.vz, drag: ball.drag, verticalDrag: ball.verticalDrag }, charge: request.charge, staminaBefore, staminaAfter: player.stamina, ...(skill ? { skill } : {})};
   state.message = target.fallbackReason || `${shotName(type)} · ${state.rally} 拍${target.quality.risk >= 0.16 ? ` · ${target.quality.reason}` : ''}`;
 }
 
@@ -578,7 +608,7 @@ function attemptShot(state, side) {
   let lead = pending.shot === 'smash' && state.shuttle.y > 2.7 ? 0.14 : 0.055;
   if (state.phase === 'rally') {
     const ball = state.shuttle;
-    const untilLow = (ball.vy + Math.sqrt(Math.max(0, ball.vy * ball.vy + 2 * TUNING.gravity * (ball.y - TUNING.minHitHeight)))) / TUNING.gravity;
+    const untilLow = Math.max(0,timeToHeight(ball,TUNING.minHitHeight));
     lead = Math.min(lead, Math.max(0.006, untilLow * 0.45));
     // Windup may start just before entry into reach/height, but real contact must
     // still pass the live eligibility gate. This allows a jump before a fast ball.
@@ -773,9 +803,8 @@ function moveToward(player, x, z, pace) {
 
 function smashOpportunity(state, side) {
   const ball = state.shuttle;
-  const bestHeight = Math.min(3.05, ball.y + Math.max(0, ball.vy) ** 2 / (2 * TUNING.gravity));
-  const discriminant = ball.vy * ball.vy + 2 * TUNING.gravity * (ball.y - bestHeight);
-  const contactTime = discriminant >= 0 ? (ball.vy + Math.sqrt(discriminant)) / TUNING.gravity : -1;
+  const bestHeight = Math.min(3.05, flightApex(ball).y);
+  const contactTime = timeToHeight(ball,bestHeight);
   const contactDepth = liveFlightPoint(ball, Math.max(0, contactTime)).z * direction(side);
   return { contactTime, highChance: contactTime >= 0 && contactDepth > 0.5 && contactDepth < 6.4 };
 }
@@ -952,9 +981,9 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     }
   }
   if (h?.warning && h.warning.hitId !== state.hitId) h.warning = null;
-  const contactHeight = memory.shot === 'smash' ? Math.min(3.05, ball.y + Math.max(0, ball.vy) ** 2 / (2 * TUNING.gravity)) : defendingSmash ? 1.65 : 1.2;
-  const discriminant = ball.vy * ball.vy + 2 * TUNING.gravity * (ball.y - contactHeight);
-  const contactTime = discriminant > 0 ? Math.max(0, (ball.vy + Math.sqrt(discriminant)) / TUNING.gravity) : 0;
+  const overhead = !h && !defendingSmash && flightApex(ball).y >= 2.8;
+  const contactHeight = memory.shot === 'smash' ? Math.min(3.05, flightApex(ball).y) : defendingSmash ? 1.65 : overhead ? 2.65 : 1.2;
+  const contactTime = Math.max(0,timeToHeight(ball,contactHeight));
   const contactPoint = liveFlightPoint(ball, contactTime);
   const targetX = clamp(contactPoint.x + memory.errorX, -courtWidth(state) + 0.15, courtWidth(state) - 0.15);
   const targetZ = direction(side) * clamp(contactPoint.z * direction(side) + memory.errorZ, 0.7, COURT.halfLength - 0.25);
@@ -962,7 +991,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
   const horizontal = Math.hypot(ball.x - player.x, ball.z - player.z);
   if (memory.shot === 'smash' && contactTime < 0.4) output.prepare = 'smash';
   if (ball.z * direction(side) > 0.1 && ball.vy < 1.5 && horizontal < TUNING.reach + role.reachBonus + 0.15
-    && ball.y <= (memory.shot === 'smash' ? 4.35 : 1.9)) {
+    && ball.y <= (memory.shot === 'smash' ? 4.35 : overhead ? 2.9 : 1.9)) {
     output.shot = memory.shot; output.aim = memory.aim; output.aimDepth = memory.aimDepth;
   }
   if (defendingSmash && level === 'hard' && !output.shot) {
