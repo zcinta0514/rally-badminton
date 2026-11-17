@@ -43,7 +43,7 @@ class Target {
   }
 }
 
-async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none', buildId='1111111111111111', sessionStorage=null} = {}) {
+async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode=false, lobbyOnly=false, search='', pendingPeer=false, slot=0, finaleMode='none', buildId='1111111111111111', sessionStorage=null} = {}) {
   let now = 1000, nextId = 0, frame, controls, view, audio;
   let pwaOptions, onboardingOptions, updateSafeAtInit, onboardingAttempts = 0;
   const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [], usageEvents = [];
@@ -68,6 +68,12 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
   const settingGroups = new Map();
   for (const [id, attribute, values] of [['hell-roles','hellRole',['balanced','swift','power']], ['roles','role',['balanced','swift','power']], ['coach-roles','coachRole',['balanced','swift','power']], ['friend-roles','friendRole',['balanced','swift','power']], ['ai-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-formats','format',['quick:5','quick:11','quick:21','standard21:21']], ['friend-tabs','action',['create','join']], ['difficulties','difficulty',['easy','medium','hard']], ['targets','target',[5,11,21]], ['rulesets','ruleset',['quick','standard21']]]) {
     const choices=values.map((value,index)=>{const button=element(`choice-${attribute}-${value}`);button.dataset[attribute]=String(value);button.closest=selector=>selector==='button'||selector==='[data-hell-role]'?button:null;button.setAttribute('aria-pressed',String(index===0));return button;});
+    settingGroups.set(id,choices);element(id).querySelectorAll=selector=>selector==='button'?choices:[];
+  }
+  for(const id of ['ai-lineup','friend-lineup']){
+    const choices=['singles','doubles'].map(lineup=>{
+      const button=element(`${id}-${lineup}`);button.dataset.lineup=lineup;button.closest=()=>button;return button;
+    });
     settingGroups.set(id,choices);element(id).querySelectorAll=selector=>selector==='button'?choices:[];
   }
   const shots = ['clear', 'drop', 'smash'].map(shot => {
@@ -187,7 +193,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     friendModes,chooseFinale:value=>{const button=friendModes.find(item=>item.dataset.finale===value);if(!button.disabled)element('friend-modes').emit('click',{target:button});},
     get now() { return now; }, get liveState() { return vm.runInContext('state', context); },
     visibleDialogs: () => dialogs.filter(dialog => !dialog.hidden).map(dialog => dialog.id) };
-  if(demoMode||peerMode)return Object.assign(common,{sockets,peerCalls,invites,resolvePeer:()=>resolvePeer?.()});
+  if(demoMode||peerMode||lobbyOnly)return Object.assign(common,{sockets,peerCalls,invites,resolvePeer:()=>resolvePeer?.()});
   element('player-name').value = '球友A';
   const creating = click('create-room'); sockets.at(-1).open(); await creating;
   const room = { type: 'room', code: 'ABCDE', slot, token: 'original-token', sessionId: 'test-session',
@@ -206,6 +212,29 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
   }
   return Object.assign(common, { retry, snapshot, room, state, socket: () => sockets.at(-1) });
 }
+
+test('server lobby offers singles and explains shared internet entry while peer doubles remain available',async()=>{
+  const server=await fixture('serve',{lobbyOnly:true});
+  assert.equal(server.choice('friend-lineup','doubles').hidden,true);
+  assert.equal(server.choice('ai-lineup','doubles').hidden,false);
+  assert.match(server.element('friends-network-note').textContent,/服务器联机/);
+  assert.doesNotMatch(server.element('friends-network-note').textContent,/局域网|Wi-Fi/);
+  server.settings.friendFormat='doubles';server.click('open-friends');assert.equal(server.settings.friendFormat,'singles');
+  const peer=await fixture('serve',{peerMode:true});
+  assert.equal(peer.choice('friend-lineup','doubles').hidden,false);
+  peer.chooseSetting('friend-lineup','doubles');assert.equal(peer.settings.friendFormat,'doubles');
+});
+
+test('server doubles invites are explicitly refused before prefilling a singles join',async()=>{
+  const server=await fixture('serve',{lobbyOnly:true,search:'?room=ABCDE&format=doubles'});
+  assert.match(server.element('toast').textContent,/双打邀请.*仅支持单打/);
+  assert.equal(server.element('room-code').value,'');assert.equal(server.sockets.length,0);
+  assert.equal(server.element('friend-form').hidden,true);
+  const singles=await fixture('serve',{lobbyOnly:true,search:'?room=ABCDE'});
+  assert.equal(singles.element('room-code').value,'ABCDE');assert.equal(singles.element('join-room').hidden,false);
+  const peer=await fixture('serve',{peerMode:true,search:'?room=ABCDE&format=doubles'});
+  assert.equal(peer.settings.friendFormat,'doubles');assert.equal(peer.element('room-code').value,'ABCDE');
+});
 
 test('the production update callback permits only a ready and visible lobby', async () => {
   const f = await fixture('serve', { peerMode: true });

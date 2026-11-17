@@ -132,7 +132,7 @@ if(practiceOnly){
 if(peerMode){
   setText('menu-intro','人机对战 · 好友对战 · 5 / 11 / 21 分');
   setText('leaderboard-title','本机好友榜');
-}else setText('friends-network-note','同一局域网网址 · 主机电脑需保持运行');
+}else if(!practiceOnly)setText('friends-network-note','服务器联机 · 双方打开同一游戏网址 · 主机需保持运行');
 if(netDragPlaytest){
   document.title='开拍 RALLY · 网前试打';
   setText('menu-intro','网前试打 · 吊球轻点打短，向上拖可挑后场');
@@ -245,6 +245,8 @@ for(const [id,key,attr] of [['roles','role','role'],['friend-roles','friendRole'
   });
 }
 function syncEntrySettings(){
+  if(!peerMode)settings.friendFormat='singles';
+  for(const button of $('friend-lineup').querySelectorAll('button'))button.hidden=!peerMode&&button.dataset.lineup==='doubles';
   groupChoice('teammate-roles','partnerRole',settings.teammateRole);groupChoice('teammate-difficulties','partnerDifficulty',settings.teammateDifficulty);
   groupChoice('ai-lineup','lineup',settings.format);groupChoice('friend-lineup','lineup',settings.friendFormat);
   $('doubles-practice-options').hidden=settings.format!=='doubles';
@@ -832,7 +834,14 @@ try{
   }
   requestAnimationFrame(frame);
   const invited=new URLSearchParams(location.search).get('room');
-  if(invited&&!practiceOnly){settings.friendFormat=new URLSearchParams(location.search).get('format')==='doubles'?'doubles':'singles';syncEntrySettings();$('room-code').value=invited.toUpperCase().slice(0,5);setFriendAction('join');dialog('friends-dialog');}
+  if(invited&&!practiceOnly){
+    const invitedFormat=new URLSearchParams(location.search).get('format')==='doubles'?'doubles':'singles';
+    if(!peerMode&&invitedFormat==='doubles'){
+      setFriendAction('choose');dialog('friends-dialog');showToast('这是双打邀请，当前服务器仅支持单打；请使用原手机直连网址');
+    }else{
+      settings.friendFormat=invitedFormat;syncEntrySettings();$('room-code').value=invited.toUpperCase().slice(0,5);setFriendAction('join');dialog('friends-dialog');
+    }
+  }
   onboarding.maybeShow();
 }catch(error){
   console.error(error);$('loading').textContent='球场加载失败：'+error.message+'。请使用支持 WebGL 2 的浏览器后刷新。';

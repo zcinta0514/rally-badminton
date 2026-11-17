@@ -17,11 +17,18 @@ export class Rooms {
   clients=new Map();
   tokens=new Map();
   tickCount=0;
-  constructor({now=()=>performance.now(),leaderboard=null}={}){
+  constructor({now=()=>performance.now(),leaderboard=null,maxClients=Infinity,maxRooms=200}={}){
+    if(!(maxClients===Infinity||Number.isSafeInteger(maxClients)&&maxClients>0)||!Number.isSafeInteger(maxRooms)||maxRooms<1)throw new RangeError('Room capacity limits must be positive integers');
+    this.maxClients=maxClients;this.maxRooms=maxRooms;
     this.now=now;this.lastTick=now();this.accumulator=0;this.leaderboard=leaderboard;
     this.timer=setInterval(()=>this.tick(),STEP_MS);this.timer.unref();
   }
   attach(socket){
+    if(this.clients.size>=this.maxClients){
+      socket.on('error',()=>{});
+      send(socket,{type:'error',message:'服务器连接暂满，请稍后重试'});
+      socket.close(1013,'Server capacity reached');return;
+    }
     const ctx={socket,room:null,slot:null,window:this.now(),count:0,lastPing:this.now(),pingSentAt:null};
     this.clients.set(socket,ctx);
     socket.on('message',raw=>{
@@ -91,9 +98,10 @@ export class Rooms {
     if(m.type==='ping'){send(ctx.socket,{type:'pong',at:m.at});return;}
     if(['create','join','resumeSession'].includes(m.type)&&m.rulesVersion!==RULES_VERSION)return this.error(ctx,'比赛规则已更新，请双方联网刷新后重新建房');
     if(['create','join'].includes(m.type)&&m.playerKey!==undefined&&!validPlayerKey(m.playerKey))return this.error(ctx,'玩家凭据无效，请刷新后重新进入');
+    if(['create','join'].includes(m.type)&&m.format==='doubles')return this.error(ctx,'当前服务器仅支持单打；四人双打请使用手机直连入口');
     if(m.type==='create'){
       if(ctx.room)return this.error(ctx,'请先退出当前房间');
-      if(this.rooms.size>=200)return this.error(ctx,'房间暂满，请稍后再试');
+      if(this.rooms.size>=this.maxRooms)return this.error(ctx,'房间暂满，请稍后再试');
       const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let code;
       do{code=Array.from({length:5},()=>alphabet[randomInt(alphabet.length)]).join('');}while(this.rooms.has(code));
       const ruleset=rulesetOf(m.ruleset);
