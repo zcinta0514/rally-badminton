@@ -55,6 +55,27 @@ test('applying a custom layout writes percentage positions and a default layout 
   for (const item of doc.buttons) assert.deepEqual({ left: item.style.left, top: item.style.top }, { left: '', top: '' });
 });
 
+test('custom keys stay separated on a short landscape viewport and return to their saved positions', () => {
+  const doc = fakeDocument();
+  const layout = { mode: 'custom', positions: { clear: { x: .8, y: .52 }, drop: { x: .8, y: .70 }, smash: { x: .8, y: .88 } } };
+  for (const key of doc.buttons) key.offsetWidth = key.offsetHeight = 80;
+  const positions = (width, height) => {
+    Object.assign(doc.defaultView, { innerWidth: width, innerHeight: height });
+    applyShotLayout(layout, doc);
+    return doc.buttons.map(key => ({ x: parseFloat(key.style.left) * width / 100, y: parseFloat(key.style.top) * height / 100 }));
+  };
+  const portrait = positions(320, 568);
+  const landscape = positions(568, 260);
+  for (const [index, key] of landscape.entries()) {
+    assert.ok(key.x >= 48 && key.x <= 520 && key.y >= 48 && key.y <= 212);
+    for (const other of landscape.slice(index + 1)) {
+      assert.ok(Math.abs(other.x - key.x) >= 80 || Math.abs(other.y - key.y) >= 80, 'two shot hit areas overlap');
+    }
+  }
+  assert.deepEqual(positions(320, 568), portrait);
+  assert.deepEqual(portrait.map(key => Math.round(key.y)), [.52, .70, .88].map(y => Math.round(y * 568)));
+});
+
 test('saved sizes are independent, bounded, and optional for legacy positions', () => {
   const positions = { clear: { x: 0.5, y: 0.25 }, drop: { x: 0.6, y: 0.5 }, smash: { x: 0.7, y: 0.75 } };
   const store = fakeStore({ mode: 'custom', positions });
