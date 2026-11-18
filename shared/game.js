@@ -945,7 +945,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     return output;
   }
   if (state.format === 'doubles') {
-    const assignment = doublesAssignment(state, side, config, inputs, getInterceptAdvice);
+    const assignment = doublesAssignment(state, side, config, inputs, getInterceptAdvice, level);
     if (assignment) return { ...output, ...assignment };
   }
   if (h?.rescue) return output;
@@ -958,7 +958,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     if (h && !smashOpportunity(state, side).highChance) decision.shot = 'drop';
     // Reaction delay and spatial prediction error remain difficulty-dependent.
     // Every reachable return is attempted; the common contact model causes errors.
-    memory = state._ai[side] = { hitId: state.hitId, ready: state.format === 'doubles' ? state._doublesAI[playerTeam(state, side)].ready : state.time + config.reaction,
+    memory = state._ai[side] = { hitId: state.hitId, ready: state.format === 'doubles' ? state.time : state.time + config.reaction,
       errorX: (random(state) - 0.5) * config.error * 2, errorZ: (random(state) - 0.5) * config.error * 2,
       shot: decision.shot, aim: decision.aim, aimDepth: decision.aimDepth, charge: decision.charge ?? .3 };
   }

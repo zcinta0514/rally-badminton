@@ -70,11 +70,12 @@ test('all four slots use stamina, actions and own court movement',()=>{
  game.stepMatch(s,Array.from({length:4},()=>({x:1,prepare:'smash'})),.2);
  for(let i=0;i<4;i++) {assert.ok(s.players[i].stamina<stamina[i]);assert.equal(s.players[i].action.stage,'prepare');assert.ok(s.players[i].z*(i%2===0?1:-1)>0);}
 });
-test('AI coordinated matches finish for every teammate difficulty',()=>{
+test('AI doubles matches finish at every difficulty, including long defensive rallies',()=>{
  for(const difficulty of ['easy','medium','hard']) {
   const s=game.createMatch({format:'doubles',target:5});
-  for(let i=0;i<36000&&s.phase!=='over';i++) game.stepMatch(s,s.players.map((_,slot)=>game.aiInput(s,slot,difficulty)),1/60);
-  assert.equal(s.phase,'over');assert.ok(s.players.every(p=>Number.isFinite(p.stamina)));
+  for(let i=0;i<43200&&s.phase!=='over';i++) game.stepMatch(s,s.players.map((_,slot)=>game.aiInput(s,slot,difficulty)),1/60);
+  assert.equal(s.phase,'over',`${difficulty}: score ${s.score.join('-')}, ${s.hitId} hits`);
+  assert.ok(s.players.every(p=>Number.isFinite(p.stamina)));
  }
 });
 test('AI preserves a committed windup when human changes intention',()=>{
@@ -124,6 +125,59 @@ test('each difficulty pays one reaction delay and a reassignment pays only one',
 test('reachable human actual approach still claims reception without held controls',()=>{
  const s=incoming();s.players[0].x=-1;s.players[0].vx=2;s.players[2].x=.65;
  game.aiInput(s,2,'hard',[{}]);assert.equal(s._doublesAI[0].primary,0);
+});
+
+test('recovery after serving covers the open half on either side', () => {
+ for (const sign of [-1, 1]) {
+  const s = create();
+  s.phase = 'rally';
+  Object.assign(s.shuttle, { active: true, lastHit: 0, lastHitPlayer: 0 });
+  Object.assign(s.players[0], { x: sign*.85, z: 3.8 });
+  Object.assign(s.players[2], { x: -sign*.85, z: 3.8 });
+  const cover = game.aiInput(s, 2, 'hard', [{}]);
+  assert.ok(cover.x * -sign > 0, 'teammate should widen the open half from its service position');
+ }
+});
+
+test('cover leaves the incoming path when the player calls a cross-court ball', () => {
+ for (const sign of [-1, 1]) {
+  const s = incoming();
+  Object.assign(s.shuttle, { x: sign*1.1, y: 2, z: 3 });
+  Object.assign(s.players[0], { x: -sign*.1, z: 3 });
+  Object.assign(s.players[2], { x: sign*.8, z: 3 });
+  const cover = game.aiInput(s, 2, 'hard', [{ prepare: 'clear', x: sign }]);
+  assert.equal(s._doublesAI[0].primary, 0);
+  assert.ok(Math.abs(cover.z) > .2, 'cover should sidestep an occupied cross-court route');
+  assert.equal(cover.shot, null);
+ }
+});
+
+test('a moving player who never swings gives a reachable late ball back to AI', () => {
+ const s = incoming();
+ Object.assign(s.shuttle, { y: 1.3, vy: -1.4 });
+ game.aiInput(s, 2, 'hard', [{ x: 1 }]);
+ assert.equal(s._doublesAI[0].primary, 0);
+ s.time += .25;
+ s.shuttle.y = .7;
+ const input = game.aiInput(s, 2, 'hard', [{ x: 1 }]);
+ assert.equal(s._doublesAI[0].primary, 2);
+ assert.ok(input.shot, 'the rescue should use the remaining contact window');
+});
+
+test('ambiguous center balls occasionally cause a late yield, less often at higher difficulties', () => {
+ const hesitation = difficulty => Array.from({ length: 240 }, (_, seed) => {
+  const s = incoming();
+  s._rng = seed + 1;
+  s.shuttle.y = 3;
+  game.aiInput(s, 2, difficulty, [{ x: 1 }]);
+  const contested = s._doublesAI[0].primary === 2;
+  s.time = .24;
+  game.aiInput(s, 2, difficulty, [{ x: 1 }]);
+  assert.equal(s._doublesAI[0].primary, 0, 'a contested claim should yield within one step');
+  return contested;
+ }).filter(Boolean).length;
+ const [easy, medium, hard] = ['easy', 'medium', 'hard'].map(hesitation);
+ assert.ok(easy > medium && medium > hard && easy < 48, `late yields for easy/medium/hard: ${easy}/${medium}/${hard}`);
 });
 test('partner pause consumes the team quota and preserves team attribution',()=>{
  for(const slot of [2,3]) {

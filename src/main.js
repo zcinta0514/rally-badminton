@@ -673,7 +673,11 @@ function updateUI(info,state){
   else if(info.prepare==='smash'&&info.availability.canHit&&!info.availability.canSmash)guidance=info.target.fallbackReason||qualityReason||info.availability.reason;
   const lastShot=state.lastShotInfo;
   if(!info.prepare&&(lastShot?.playerSlot??lastShot?.side)===side&&state.time-lastShot.at<1.2&&lastShot.quality.risk>.25)guidance='刚才一拍 · '+lastShot.quality.reason.split(' · ')[0];
-  if(doubles&&state.phase==='rally'&&!info.prepare&&!info.availability.canHit&&state._doublesAI?.[team])guidance=state._doublesAI[team].primary===side?'你来接 · 队友补位':'队友接球 · 留意空当';
+  const assignment = state._doublesAI?.[team];
+  if (doubles && state.phase === 'rally' && state.shuttle.lastHit === 1 - team &&
+      !info.prepare && !info.availability.canHit && assignment?.hitId === state.hitId && assignment.primary != null) {
+    guidance = assignment.primary === side ? '你来接 · 队友补位' : '队友接球 · 留意空当';
+  }
   setText('assist-status',guidance);
   $('assist-status').dataset.kind=guidance==='按住击球键，拖动选落点'?'instruction':'live';
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}

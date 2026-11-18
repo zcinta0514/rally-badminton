@@ -324,9 +324,17 @@ export function makeAthlete(scene,index) {
   const ground=new THREE.Group();scene.add(ground);
   function ring(radius,width,color,opacity){const r=mesh(ground,new THREE.RingGeometry(radius-width,radius,40),new THREE.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false,side:THREE.DoubleSide}));r.rotation.x=-Math.PI/2;r.position.y=.034;return r;}
   const halo=ring(.38,.026,index===0?0xfb785a:0x9cddcc,.55),selected=ring(.46,.035,0xffdf8c,.85);
+  const doublesMarker = new THREE.Group();
+  const markerOutline = ring(.62,.16,0x211b13,1);
+  const markerBright = ring(.59,.095,0xffdf75,1);
+  markerBright.position.y = .035;
+  markerOutline.material.toneMapped = markerBright.material.toneMapped = false;
+  doublesMarker.add(markerOutline, markerBright);
+  doublesMarker.visible = false;
+  ground.add(doublesMarker);
   const shadow=makeContactShadow(ground,{opacity:.22,name:'athlete-body-contact'});
   const footShadows=['left','right'].map(name=>makeContactShadow(ground,{texture:shadow.material.map,opacity:.4,name:name+'-foot-contact'}));
-  return {root,bones,skeleton,...model,ground,halo,selected,shadow,footShadows,moveCycle:0,previousSpeed:0,stop:0,index,motion:null};
+  return {root,bones,skeleton,...model,ground,halo,selected,doublesMarker,shadow,footShadows,moveCycle:0,previousSpeed:0,stop:0,index,motion:null};
 }
 
 function motionFor(visual,player,side,time,freeze,reset) {
