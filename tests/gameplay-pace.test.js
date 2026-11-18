@@ -1,3 +1,4 @@
+import {flightApex} from '../shared/shuttle-flight.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as game from '../shared/game.js';
@@ -6,12 +7,12 @@ import { shotFixture, runReceive, measureMovement } from '../scripts/measure-gam
 test('high service and rally clears retain height and depth with bounded flight time', () => {
   for (const role of Object.keys(game.ROLES)) for (const serving of [true, false]) {
     const { state, target } = shotFixture(game, { serving, role });
-    assert.ok(target.duration >= (serving ? 1.7 : 1.4) && target.duration <= (serving ? 1.9 : 1.7), JSON.stringify({ role, serving, duration: target.duration }));
-    const apex = state.shuttle.y + Math.max(0, target.vy) ** 2 / (2 * 9.81);
-    assert.ok(apex > (serving ? 3.3 : 3.8));
+    assert.ok(target.duration >= (serving ? 2 : 1.8) && target.duration <= (serving ? 2.5 : 2.05), JSON.stringify({ role, serving, duration: target.duration }));
+    const apex = flightApex({...state.shuttle,vy:target.vy,verticalDrag:target.verticalDrag}).y;
+    assert.ok(apex > 5 && apex < 8);
     assert.ok(Math.abs(target.z) > 5.3);
     assert.ok(target.netHeight > game.COURT.netHeight + .25);
-    Object.assign(state.shuttle, { vx: target.vx, vy: target.vy, vz: target.vz, drag: target.drag, active: true, lastHit: 0 });
+    Object.assign(state.shuttle, { vx: target.vx, vy: target.vy, vz: target.vz, drag: target.drag, verticalDrag: target.verticalDrag, active: true, lastHit: 0 });
     if (state.service) state.service.active = serving;
     const expected = game.predictLanding(state);
     assert.equal(expected.event, 'landing');
@@ -24,21 +25,21 @@ test('high service and rally clears retain height and depth with bounded flight 
   }
 });
 
-test('video-calibrated acceleration preserves role top speeds and bounded braking', () => {
+test('court-scale acceleration preserves role top speeds and bounded braking', () => {
   for (const role of Object.keys(game.ROLES)) {
     const m = measureMovement(game, role);
-    assert.ok(m.fullSpeed > .24 && m.fullSpeed < .28);
-    assert.ok(m.reverseZero > .16 && m.reverseZero < .2);
-    assert.ok(m.reverseFull > .4 && m.reverseFull < .47);
-    assert.ok(m.stopDistance < .47);
+    assert.ok(m.fullSpeed > .37 && m.fullSpeed < .41);
+    assert.ok(m.reverseZero > .25 && m.reverseZero < .28);
+    assert.ok(m.reverseFull > .63 && m.reverseFull < .67);
+    assert.ok(m.stopDistance > .5 && m.stopDistance < .7);
   }
   assert.deepEqual(Object.values(game.ROLES).map(role => role.speed), [4.6, 5.35, 4.05]);
-  assert.ok(Math.abs(measureMovement(game).distanceAtPoint4 - 1.27) < .3, 'video ground-displacement estimate with declared uncertainty');
+  assert.ok(measureMovement(game).distanceAtPoint4 > .9 && measureMovement(game).distanceAtPoint4 < 1.1, 'startup must consume time before top speed');
 });
 
 test('a single early release survives the approach to a drop; a late start still loses', () => {
   for (const frame of [1 / 30, 1 / 60, 1 / 120]) for (const side of [0, 1]) {
-    const timely = runReceive(game, { frame, side });
+    const timely = runReceive(game, { startZ:3.8, frame, side });
     assert.equal(timely.received, true, JSON.stringify(timely));
     assert.ok(timely.quality.risk > .15, 'running and stretching retain control loss');
     const late = runReceive(game, { reaction: .66, pressAt: .9, frame, side });
@@ -63,8 +64,8 @@ test('a positioned defender can buffer one return against an unchanged fast smas
 });
 
 test('a last-moment low contact retains control loss and cannot create a strong attack', () => {
-  const timely = runReceive(game);
-  const scramble = runReceive(game, { reaction: .35, pressAt: .72 });
+  const timely = runReceive(game,{startZ:3.8});
+  const scramble = runReceive(game, { startZ:3.8,reaction: .45, pressAt: .72 });
   assert.equal(scramble.received, true);
   assert.ok(scramble.contactHeight < .35);
   assert.ok(scramble.quality.risk > .65);

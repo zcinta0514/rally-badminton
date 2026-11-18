@@ -1,3 +1,4 @@
+import {timeToHeight} from '../shared/shuttle-flight.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as rules from '../shared/game.js';
@@ -453,7 +454,7 @@ test('risk spread encloses actual control drift including the shortened flight f
     const s = incoming({x: end * 1.3, y: height, z: end * 3.8, vx: end, vy: -5, vz: 0, lastHit: 1 - side});
     Object.assign(s.players[side], {x: 0, z: end * 3.8, vx: end * 3, vz: -end * 2, stamina: 12});
     const result = rules.getShotTarget(s, side, {shot, aim: end * 0.9, aimDepth: 0.65, charge: 0.85});
-    const flightTime = (result.vy + Math.sqrt(result.vy ** 2 + 19.62 * height)) / 9.81;
+    const flightTime = timeToHeight({y:height,vy:result.vy,verticalDrag:result.verticalDrag});
     const speed = Math.hypot(result.vx, result.vz);
     const scale = Math.log1p(result.drag * speed * flightTime) / (result.drag * speed);
     const actualX = s.shuttle.x + result.vx * scale, actualZ = s.shuttle.z + result.vz * scale;

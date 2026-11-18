@@ -1,11 +1,10 @@
-import { horizontalLaunch, sampleShuttleFlight } from '../shared/shuttle-flight.js';
+import { horizontalLaunch, verticalLaunch, sampleShuttleFlight } from '../shared/shuttle-flight.js';
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const mix = (a, b, alpha) => a + (b - a) * alpha;
 const copy = value => structuredClone(value);
 const EPSILON = 1e-7;
 const frozenPhase = phase => phase === 'paused' || phase === 'countdown';
-const gravity = 9.81; // Matches the shared ballistic simulation, in metres / second².
 
 // Exact shared flight plus endpoint corrections for slice/packet rounding.
 // Consistent snapshots need zero correction; contact anchors keep both ends.
@@ -26,8 +25,8 @@ function contactBall(contact, end, duration) {
   // Derive launch velocity from exact authoritative contact and endpoint. This
   // also absorbs the physics slice in which a hit precedes shuttle integration.
   return { ...end, ...contact,
-    ...(duration > EPSILON ? horizontalLaunch(contact, end, duration) : { vx: end.vx, vz: end.vz }),
-    vy: duration > EPSILON ? (end.y - contact.y) / duration + gravity * duration / 2 : end.vy,
+    ...(duration > EPSILON ? horizontalLaunch(contact, end, duration,end.drag) : { vx: end.vx, vz: end.vz }),
+    vy: duration > EPSILON ? verticalLaunch(contact.y,end.y,duration,end.verticalDrag) : end.vy,
   };
 }
 

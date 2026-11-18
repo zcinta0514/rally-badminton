@@ -20,7 +20,7 @@ test('hard defensive preparation respects reaction delay and cannot hit a distan
  assert.equal(aiInput(s,1,'hard').shot,null);
  s.time+=.002;
  assert.equal(aiInput(s,1,'hard').shot,null);
- assert.equal(s._ai[1].shot,'clear');
+ assert.ok(['clear','drop'].includes(s._ai[1].shot));
  stepMatch(s,[{},aiInput(s,1,'hard')],1/120);
  assert.equal(s.hitId,1);
 });

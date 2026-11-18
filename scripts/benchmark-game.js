@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const STEP = 1 / 60;
-const MAX_STEPS = 60 * 300;
+const MAX_STEPS = 60 * 600;
 const median = values => {
   const sorted = [...values].sort((a, b) => a - b);
   return sorted.length ? sorted[Math.floor(sorted.length / 2)] : null;
@@ -17,14 +17,17 @@ export function simulateMatch({ difficulty = 'easy', roles = ['balanced', 'balan
   const planBuckets = new Set();
   while (state.phase !== 'over' && steps < MAX_STEPS) {
     const inputs = [aiInput(state, 0, difficulty), aiInput(state, 1, difficulty)];
-    inputs.forEach((input, side) => { if (input.shot) {
-      shotCounts[input.shot]++;
-      const plan = `${input.shot}:${Math.sign(input.aim)}:${Math.round((input.aimDepth || 0) * 4)}`;
+    const previousHit=state.hitId;
+    stepMatch(state, inputs, STEP);
+    const hit=state.lastShotInfo;
+    if(hit && hit.hitId>previousHit) {
+      const side=hit.playerSlot;
+      shotCounts[hit.type]++;
+      const plan = `${hit.type}:${Math.sign(hit.aimX)}:${Math.round(Math.abs(hit.aimZ))}`;
       planBuckets.add(plan);
       if (plan === previousPlans[side]) repeatedPlans++;
       previousPlans[side] = plan;
-    }});
-    stepMatch(state, inputs, STEP);
+    }
     steps++;
     maxRally = Math.max(maxRally, state.rally);
     shots = Math.max(shots, state.hitId);

@@ -73,7 +73,7 @@ test('all four slots use stamina, actions and own court movement',()=>{
 test('AI coordinated matches finish for every teammate difficulty',()=>{
  for(const difficulty of ['easy','medium','hard']) {
   const s=game.createMatch({format:'doubles',target:5});
-  for(let i=0;i<18000&&s.phase!=='over';i++) game.stepMatch(s,s.players.map((_,slot)=>game.aiInput(s,slot,difficulty)),1/60);
+  for(let i=0;i<36000&&s.phase!=='over';i++) game.stepMatch(s,s.players.map((_,slot)=>game.aiInput(s,slot,difficulty)),1/60);
   assert.equal(s.phase,'over');assert.ok(s.players.every(p=>Number.isFinite(p.stamina)));
  }
 });

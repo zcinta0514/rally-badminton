@@ -72,8 +72,8 @@ test('nearby low returns keep ordinary footwork instead of triggering a dive',()
 });
 
 test('distant balls with running time use footwork and a recent dive cannot repeat',()=>{
-  const runnable=incoming();runnable.shuttle.y=2.5;
-  for(let i=0;i<120;i++)stepMatch(runnable,[{},aiInput(runnable,1,'hard')],dt);
+  const runnable=incoming();runnable.shuttle.y=3;
+  for(let i=0;i<240&&runnable.phase==='rally';i++)stepMatch(runnable,[{},aiInput(runnable,1,'hard')],dt);
   assert.equal(runnable.challenge.rescueUses,0,'distance alone must not trigger a dive');
   assert.ok(runnable.hitId>0,'ordinary footwork still returns the ball');
   const recent=incoming();recent.challenge.nextDiveAt=HELL.diveInterval;
