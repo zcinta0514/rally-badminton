@@ -1,12 +1,14 @@
 /* Shared match dialogs: solid surfaces, readable copy, and scrollable on phones. */
 #dialog-backdrop {
+  --dialog-top: max(16px, var(--safe-top));
+  --dialog-bottom: max(16px, var(--safe-bottom));
   position: fixed;
   inset: 0;
   z-index: 30;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: max(16px, var(--safe-top)) max(16px, var(--safe-right)) max(16px, var(--safe-bottom)) max(16px, var(--safe-left));
+  padding: var(--dialog-top) max(16px, var(--safe-right)) var(--dialog-bottom) max(16px, var(--safe-left));
   overflow: auto;
   background: rgb(10 25 20 / 58%);
   overscroll-behavior: contain;
@@ -19,7 +21,7 @@
   width: 440px;
   min-width: 0;
   max-width: 100%;
-  max-height: calc(100dvh - max(16px, var(--safe-top)) - max(16px, var(--safe-bottom)));
+  max-height: calc(100dvh - var(--dialog-top) - var(--dialog-bottom));
   padding: 32px;
   overflow: auto;
   border: 1px solid var(--line, #dbe2dc);
@@ -477,9 +479,8 @@
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
-  #dialog-backdrop { padding-top: 12px; padding-bottom: 12px; }
+  #dialog-backdrop { --dialog-top: max(12px, var(--safe-top)); --dialog-bottom: max(12px, var(--safe-bottom)); }
   #dialog-backdrop .dialog {
-    max-height: calc(100dvh - 24px);
     padding: 20px 24px;
   }
   .dialog h2 { margin: 8px 0; font-size: 26px; }
@@ -517,6 +518,22 @@
   #friends-dialog .room-mode-row .segments button { min-height:34px; padding:5px 10px; }
   #friends-dialog .divider { margin:5px 0; }
   #friends-dialog #friends-network-note { display:none; }
+}
+
+@media (max-height: 380px) and (orientation: landscape) {
+  #dialog-backdrop #pause-dialog:not([hidden]) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px 12px;
+    padding: 12px 20px;
+  }
+  #pause-dialog h2, #pause-dialog .pause-clock,
+  #pause-dialog > p, #pause-dialog #resume, #pause-dialog #leave-game { margin: 0; }
+  #pause-dialog .pause-clock { font-size: 36px; }
+  #pause-dialog > p { grid-column: 1 / -1; }
+  #pause-dialog .rule-note { padding-block: 4px; }
+  #pause-dialog #leave-game { min-height: 44px; }
 }
 
 @media (max-width: 380px) {

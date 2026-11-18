@@ -21,7 +21,10 @@ for(const engine of (process.env.RALLY_QA_ENGINE?[process.env.RALLY_QA_ENGINE]:[
   async function reachable(selector){
    const element=page.locator(selector).first();await element.scrollIntoViewIfNeeded();
    const issue=await element.evaluate(e=>{const r=e.getBoundingClientRect();if(r.left< -1||r.right>innerWidth+1||r.top< -1||r.bottom>innerHeight+1)return 'viewport '+JSON.stringify(r.toJSON());
-    for(let p=e.parentElement;p;p=p.parentElement){const s=getComputedStyle(p),b=p.getBoundingClientRect();if(/hidden|auto|scroll|clip/.test(s.overflowX)&&(r.left<b.left-1||r.right>b.right+1))return 'horizontal clip '+p.className;if(/hidden|auto|scroll|clip/.test(s.overflowY)&&(r.top<b.top-1||r.bottom>b.bottom+1))return 'vertical clip '+p.className;}
+    for(let p=e.parentElement;p;p=p.parentElement){const s=getComputedStyle(p),b=p.getBoundingClientRect();if(/hidden|auto|scroll|clip/.test(s.overflowX)&&(r.left<b.left-1||r.right>b.right+1))return 'horizontal clip '+p.className;if(/hidden|auto|scroll|clip/.test(s.overflowY)&&(r.top<b.top-1||r.bottom>b.bottom+1))return 'vertical clip '+p.className;
+     // The home footer is fixed to the viewport, outside the lobby's scrolling content.
+     if(p.matches('.menu-foot')&&s.position==='fixed')break;
+    }
     const hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return e.contains(hit)||hit===e?null:'covered by '+hit?.outerHTML.slice(0,150);
    });assert.equal(issue,null,selector+' reachable');
   }

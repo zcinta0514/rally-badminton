@@ -2,6 +2,8 @@ export const SHOT_LAYOUT_STORAGE_KEY = 'rally.shotLayout.v1';
 export const SHOT_KEYS = Object.freeze(['clear', 'drop', 'smash']);
 export const SHOT_LAYOUT_MODES = Object.freeze(['default', 'arc', 'custom']);
 const SIZE = { min: 75, max: 140, default: 100 };
+const EDGE_GAP = 8;
+const KEY_GAP = 6;
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const storage = () => { try { return globalThis.localStorage; } catch { return null; } };
@@ -64,27 +66,96 @@ export function positionShotHints(doc = globalThis.document) {
   instruction.style.top = bottom + 44 <= view.innerHeight ? `${bottom + 8}px` : `${Math.max(8, top - 66)}px`;
 }
 
+function buttonSize(button) {
+  const rect = button.getBoundingClientRect?.();
+  return { width: rect?.width ?? button.offsetWidth ?? 0, height: rect?.height ?? button.offsetHeight ?? 0 };
+}
+
+function overlaps(a, b) {
+  return Math.abs(a.x - b.x) < (a.width + b.width) / 2 + KEY_GAP - .01 &&
+    Math.abs(a.y - b.y) < (a.height + b.height) / 2 + KEY_GAP - .01;
+}
+
+function fitButtons(buttons, positions, width, height, safe) {
+  const fitted = [];
+  for (const button of buttons) {
+    const size = buttonSize(button);
+    const point = positions[button.dataset.shot];
+    const minX = safe.left + EDGE_GAP + size.width / 2;
+    const maxX = width - safe.right - EDGE_GAP - size.width / 2;
+    const minY = safe.top + EDGE_GAP + size.height / 2;
+    const maxY = height - safe.bottom - EDGE_GAP - size.height / 2;
+    const x = clamp(point.x * width, minX, maxX);
+    const y = clamp(point.y * height, minY, maxY);
+    const preferred = { ...size, x, y };
+    if (!fitted.some(other => overlaps(preferred, other))) {
+      fitted.push(preferred);
+      continue;
+    }
+
+    // The closest free position lies on an edge of an occupied rectangle,
+    // or at an intersection of two such edges.
+    const xs = [x], ys = [y];
+    for (const other of fitted) {
+      const dx = (size.width + other.width) / 2 + KEY_GAP;
+      const dy = (size.height + other.height) / 2 + KEY_GAP;
+      xs.push(other.x - dx, other.x + dx);
+      ys.push(other.y - dy, other.y + dy);
+    }
+    let nearest = null, distance = Infinity;
+    for (const cx of xs) {
+      if (cx < minX || cx > maxX) continue;
+      for (const cy of ys) {
+        if (cy < minY || cy > maxY) continue;
+        const candidate = { ...size, x: cx, y: cy };
+        const delta = Math.hypot(cx - x, cy - y);
+        if (delta >= distance || fitted.some(other => overlaps(candidate, other))) continue;
+        nearest = candidate;
+        distance = delta;
+      }
+    }
+    if (nearest) {
+      fitted.push(nearest);
+      continue;
+    }
+
+    // An early key may divide the available space. In that case pack all
+    // three in a row or column without changing the saved coordinates.
+    const sizes = buttons.map(buttonSize);
+    const rowWidth = sizes.reduce((total, item) => total + item.width, KEY_GAP * (sizes.length - 1));
+    const availableWidth = width - safe.left - safe.right - 2 * EDGE_GAP;
+    const horizontal = rowWidth <= availableWidth;
+    let edge = (horizontal ? width - safe.right - rowWidth : safe.top) + (horizontal ? -EDGE_GAP : EDGE_GAP);
+    return sizes.map(item => {
+      const center = horizontal
+        ? { x: edge + item.width / 2, y: height - safe.bottom - EDGE_GAP - item.height / 2 }
+        : { x: width - safe.right - EDGE_GAP - item.width / 2, y: edge + item.height / 2 };
+      edge += (horizontal ? item.width : item.height) + KEY_GAP;
+      return center;
+    });
+  }
+  return fitted;
+}
+
 /** Apply one layout to the live controls. Positions are viewport percentages. */
 export function applyShotLayout(layout, doc = globalThis.document) {
   const normalized = normalizeShotLayout(layout);
   if (doc.body) doc.body.dataset.shotLayout = normalized.mode;
   const buttons = [...(doc.querySelectorAll?.('#game-controls .shot-btn') || [])];
   const view = doc.defaultView || globalThis;
-  const safe = normalized.mode === 'custom' && doc.createElement ? safeInsets(doc) : { top: 0, right: 0, bottom: 0, left: 0 };
-  for (const button of buttons) {
-    applySize(button, normalized.sizes?.[button.dataset.shot]);
-    if (normalized.mode === 'custom') {
-      const point = normalized.positions?.[button.dataset.shot];
-      if (point) {
-        const halfWidth = (button.offsetWidth || 0) / 2, halfHeight = (button.offsetHeight || 0) / 2;
-        const width = view.innerWidth || 0, height = view.innerHeight || 0;
-        const x = width > 0 ? clamp(point.x, (halfWidth + 8 + safe.left) / width, 1 - (halfWidth + 8 + safe.right) / width) : point.x;
-        const y = height > 0 ? clamp(point.y, (halfHeight + 8 + safe.top) / height, 1 - (halfHeight + 8 + safe.bottom) / height) : point.y;
-        button.style.left = `${x * 100}%`;
-        button.style.top = `${y * 100}%`;
-        continue;
-      }
+  for (const button of buttons) applySize(button, normalized.sizes?.[button.dataset.shot]);
+  if (normalized.mode === 'custom') {
+    const area = doc.querySelector('#game-controls .shot-buttons')?.getBoundingClientRect();
+    const width = area?.width || view.innerWidth, height = area?.height || view.innerHeight;
+    const safe = safeInsets(doc);
+    const toolbar = doc.querySelector('body[data-screen=match] .topbar');
+    safe.top = Math.max(safe.top, toolbar?.getBoundingClientRect().bottom || 0);
+    const fitted = fitButtons(buttons, normalized.positions, width, height, safe);
+    for (const [index, button] of buttons.entries()) {
+      button.style.left = `${fitted[index].x / width * 100}%`;
+      button.style.top = `${fitted[index].y / height * 100}%`;
     }
+  } else for (const button of buttons) {
     button.style.removeProperty('left');
     button.style.removeProperty('top');
   }
@@ -101,8 +172,9 @@ function applySize(button, size) {
 
 /** Resolve the notch and home-indicator insets once per clamp. */
 const safeInsets = doc => {
+  if (!doc.createElement) return { top: 0, right: 0, bottom: 0, left: 0 };
   const probe = doc.createElement('div');
-  probe.style.cssText = 'position:fixed;inset:0;pointer-events:none;visibility:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';
+  probe.style.cssText = 'position:fixed;inset:0;pointer-events:none;visibility:hidden;padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left)';
   doc.body.append(probe);
   const style = (doc.defaultView || globalThis).getComputedStyle(probe);
   const read = value => Number.parseFloat(value) || 0;
@@ -120,8 +192,8 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
   if (!controls) return null;
   let saved = applyShotLayout(readShotLayout(store), doc);
   const view = doc.defaultView || globalThis;
-  let editor, keys, toolbar, slider, sizeLabel, feedback;
-  let draft, selected, drag, safe;
+  let editor, keys, holder, toolbar, slider, sizeLabel, feedback;
+  let draft, selected, drag, safe, width, height;
 
   const measurePreset = preset => {
     const source = controls.querySelector('.shots-wrap');
@@ -137,9 +209,10 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
     const previousMode = doc.body.dataset.shotLayout;
     doc.body.dataset.shotLayout = preset;
     const positions = {};
+    const { width, height } = stage.getBoundingClientRect();
     for (const key of SHOT_KEYS) {
       const rect = clone.querySelector(`[data-shot="${key}"]`).getBoundingClientRect();
-      positions[key] = { x: (rect.left + rect.width / 2) / view.innerWidth, y: (rect.top + rect.height / 2) / view.innerHeight };
+      positions[key] = { x: (rect.left + rect.width / 2) / width, y: (rect.top + rect.height / 2) / height };
     }
     stage.remove();
     doc.body.dataset.shotLayout = previousMode;
@@ -152,15 +225,10 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
   };
 
   const place = (key, point, checkSpacing = false) => {
-    const rect = key.getBoundingClientRect();
-    const x = clamp(point.x, rect.width / 2 + 8 + safe.left, view.innerWidth - rect.width / 2 - 8 - safe.right);
-    const top = Math.max(safe.top, toolbar.getBoundingClientRect().bottom);
-    const y = clamp(point.y, rect.height / 2 + 8 + top, view.innerHeight - rect.height / 2 - 8 - safe.bottom);
-    if (checkSpacing && keys.some(other => {
-      if (other === key) return false;
-      const center = keyCenter(other);
-      return Math.hypot(x - center.x, y - center.y) < (rect.width + center.width) / 2 + 6;
-    })) return false;
+    const size = buttonSize(key);
+    const x = clamp(point.x, size.width / 2 + EDGE_GAP + safe.left, width - size.width / 2 - EDGE_GAP - safe.right);
+    const y = clamp(point.y, size.height / 2 + EDGE_GAP + safe.top, height - size.height / 2 - EDGE_GAP - safe.bottom);
+    if (checkSpacing && keys.some(other => other !== key && overlaps({ ...size, x, y }, keyCenter(other)))) return false;
     key.style.left = `${x}px`;
     key.style.top = `${y}px`;
     return true;
@@ -180,22 +248,28 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
   };
 
   const render = () => {
+    ({ width, height } = holder.getBoundingClientRect());
+    safe = safeInsets(doc);
+    safe.top = Math.max(safe.top, toolbar.getBoundingClientRect().bottom);
     const positions = draft.mode === 'custom' ? draft.positions : measurePreset(draft.mode);
-    for (const key of keys) {
-      const point = positions[key.dataset.shot];
-      applySize(key, draft.sizes[key.dataset.shot]);
-      place(key, { x: point.x * view.innerWidth, y: point.y * view.innerHeight });
+    for (const key of keys) applySize(key, draft.sizes[key.dataset.shot]);
+    const fitted = fitButtons(keys, positions, width, height, safe);
+    for (const [index, key] of keys.entries()) {
+      key.style.left = `${fitted[index].x}px`;
+      key.style.top = `${fitted[index].y}px`;
     }
     syncPresets();
     select(selected);
   };
 
-  const recordPositions = () => {
+  const recordPositions = changed => {
+    const movedKeys = draft.mode === 'custom' ? [changed] : keys;
     draft.mode = 'custom';
-    draft.positions = Object.fromEntries(keys.map(key => {
+    draft.positions = { ...draft.positions };
+    for (const key of movedKeys) {
       const { x, y } = keyCenter(key);
-      return [key.dataset.shot, { x: x / view.innerWidth, y: y / view.innerHeight }];
-    }));
+      draft.positions[key.dataset.shot] = { x: x / width, y: y / height };
+    }
     syncPresets();
   };
 
@@ -227,10 +301,11 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
       <div class="shot-layout-stage"><div class="shot-layout-joystick" aria-hidden="true"><i></i></div><div class="shot-layout-keys"></div></div>`;
     doc.body.append(editor);
     toolbar = editor.querySelector('.shot-layout-toolbar');
+    observer?.observe(editor);
     slider = editor.querySelector('#shot-key-size');
     sizeLabel = editor.querySelector('label[for="shot-key-size"]');
     feedback = editor.querySelector('.shot-layout-feedback');
-    const holder = editor.querySelector('.shot-layout-keys');
+    holder = editor.querySelector('.shot-layout-keys');
     const source = [...controls.querySelectorAll('.shot-btn')];
     keys = source.map(button => {
       const clone = button.cloneNode(true);
@@ -259,11 +334,14 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
       if (Math.abs(dx) + Math.abs(dy) < 2 && !drag.moved) return;
       if (place(drag.key, { x: drag.center.x + dx, y: drag.center.y + dy }, true)) {
         drag.moved = true;
-        recordPositions();
+        recordPositions(drag.key);
       }
     };
     const end = event => {
-      if (drag?.id === event.pointerId) drag = null;
+      if (drag?.id !== event.pointerId) return;
+      const moved = drag.moved;
+      drag = null;
+      if (moved) render();
     };
     for (const key of keys) {
       key.addEventListener('pointerdown', start);
@@ -279,7 +357,10 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
         if (!delta) return;
         event.preventDefault();
         const center = keyCenter(key);
-        if (place(key, { x: center.x + delta[0], y: center.y + delta[1] }, true)) recordPositions();
+        if (place(key, { x: center.x + delta[0], y: center.y + delta[1] }, true)) {
+          recordPositions(key);
+          render();
+        }
       });
     }
     slider.addEventListener('input', () => {
@@ -294,9 +375,8 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
         return;
       }
       draft.sizes[key] = next;
-      slider.nextElementSibling.value = next + '%';
-      feedback.textContent = '';
-      recordPositions();
+      recordPositions(selected);
+      render();
     });
     toolbar.querySelector('.shot-layout-presets').addEventListener('click', event => {
       const preset = event.target.closest('[data-preset]')?.dataset.preset;
@@ -324,9 +404,8 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
     doc.body.dataset.shotLayoutEditing = 'true';
     draft = { ...saved, sizes: { ...saved.sizes } };
     selected = keys[0];
-    safe = safeInsets(doc);
     render();
-    toolbar.querySelector('[data-action=cancel]').focus();
+    toolbar.querySelector('[data-action=cancel]').focus({ preventScroll: true });
     return true;
   };
   const close = () => {
@@ -348,11 +427,11 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
     applyShotLayout(saved, doc);
     if (!editor || editor.hidden) return;
     drag = null;
-    safe = safeInsets(doc);
     render();
   };
-  doc.defaultView?.addEventListener('resize', onResize);
-  doc.defaultView?.addEventListener('orientationchange', onResize);
+  const observer = view.ResizeObserver ? new view.ResizeObserver(onResize) : null;
+  observer?.observe(controls);
+  view.addEventListener?.('resize', onResize);
 
   return { open, close, resetPosition, refresh: () => applyShotLayout(saved, doc), get layout() { return { ...saved }; }, get editing() { return Boolean(editor && !editor.hidden); } };
 }
