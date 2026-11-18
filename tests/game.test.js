@@ -105,7 +105,7 @@ test('easy AI favours clear shots and centre lines while medium varies its shots
   const clears = responses => responses.filter(item => item.shot === 'clear').length / responses.length;
   const averageWidth = responses => responses.reduce((sum, item) => sum + Math.abs(item.aim), 0) / responses.length;
   assert.ok(easy.length > 50 && medium.length > 50);
-  assert.ok(clears(easy) > 0.65, `easy clear share ${clears(easy)}`);
+  assert.ok(clears(easy) > 0.6 && clears(easy) < 0.8, `easy clear share ${clears(easy)}`);
   assert.ok(clears(easy) > clears(medium) + 0.2);
   assert.ok(averageWidth(medium) > averageWidth(easy) + 0.15);
   assert.deepEqual([...new Set(medium.map(item => item.shot))].sort(), ['clear', 'drop', 'smash']);
@@ -125,7 +125,8 @@ test('hard AI attacks the space opposite its opponent and changes depth with opp
   const share = (responses, predicate) => responses.filter(predicate).length / responses.length;
   assert.ok(share(farOpponent, response => response.shot === 'drop') > 0.7);
   assert.ok(share(nearOpponent, response => response.shot === 'clear') > 0.7);
-  assert.ok(share(highChances, response => response.shot === 'smash') > 0.55);
+  const attackShare=share(highChances, response => response.shot === 'smash');
+  assert.ok(attackShare > .4 && attackShare < .75,'an open high contact favors attacks while retaining clear/drop changes');
   assert.ok(share(highChances, response => response.aim < -0.6) > 0.8);
   assert.equal(highChances.length, 80, 'reachable returns are attempted; physical quality determines mistakes');
   assert.ok(highChances.every(response => response.inputShot === response.shot), 'shots are performed through the common input contract');

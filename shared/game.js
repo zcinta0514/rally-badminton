@@ -5,7 +5,7 @@ import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, VERTICAL_DRAG, verticalLaunch, timeToHeight, flightApex, verticalFlight, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 16;
+export const RULES_VERSION = 17;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -371,10 +371,12 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
   const distance = Math.hypot(aimX - ball.x, aimZ - ball.z);
   const minDuration = minimumNetDuration(ball, aimX, aimZ, type === 'smash' ? 0.12 : type === 'drop' ? 0.18 : 0.28);
   const shotSpeed = role.shotSpeed?.[type] || 1;
-  // Separate the low service launch from an overhead clear. Both remain
-  // ballistic, with a deep target and net clearance; no presentation speedup.
+  // Overhead clears pressure the rear court; extra charge flattens the arc.
+  // Low defensive lifts and high serves retain recovery time and net clearance.
   // Keep ordinary attacks readable; the final charge segment supplies the heavy-smash burst.
-  let duration = type === 'clear' ? ((serving ? 1.65 : 1.62) + distance * 0.058) / shotSpeed
+  const clearTime = serving ? 1.65 + distance * .058
+    : 1.55 + distance * .043 - input.charge * .28 + .24 * clamp((2.1 - ball.y) / 1.7, 0, 1);
+  let duration = type === 'clear' ? clearTime / shotSpeed
     : type === 'drop' ? (0.68 + distance * 0.025) / shotSpeed
       : (0.35 + distance * 0.0135) / role.power / shotSpeed / (1 + input.charge ** 1.6 * 0.30);
   if (lift > 0) duration += lift * .65;
@@ -399,7 +401,7 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
   // A late ankle-height lift cannot retain the launch energy of a balanced
   // overhead clear. This depends on contact state, never a random miss.
   if(type==='clear'&&!serving) {
-    const energy=1-.60*quality.factors.lowContact*quality.factors.lateContact*(assist.level==='beginner'?.72:1);
+    const energy=1-.62*quality.factors.lowContact*quality.factors.lateContact*(assist.level==='beginner'?.72:1);
     vx*=energy;vz*=energy;
   }
   const vy = verticalLaunch(ball.y,0,duration,verticalDrag) - drift.verticalLoss;
@@ -847,29 +849,44 @@ function chooseCandidate(state, side, level, candidates) {
   }
   history.push({ shot: selected.shot, aim: selected.aim, aimDepth: selected.aimDepth });
   if (history.length > 6) history.shift();
-  return { shot: selected.shot, aim: selected.aim, aimDepth: selected.aimDepth };
+  return { shot: selected.shot, aim: selected.aim, aimDepth: selected.aimDepth, charge: selected.charge ?? .3 };
 }
 
 function chooseAIShot(state, side, level) {
   const roll = random(state), lineRoll = random(state) * 2 - 1;
+  const opponent = state.players[1 - playerTeam(state, side)];
+  const opponentDepth = Math.abs(opponent.z);
+  const { highChance } = smashOpportunity(state, side);
+  const lowReturn = state.lastShot === 'smash' || state.lastShot === 'drop' || !highChance;
   if (level === 'easy') {
-    const shot = roll < 0.75 ? 'clear' : roll < 0.94 ? 'drop' : 'smash';
+    const shot = roll < 0.68 ? 'clear' : roll < 0.93 || lowReturn ? 'drop' : 'smash';
     const selected = { shot, aim: lineRoll * 0.28, aimDepth: (random(state) - 0.5) * 0.25 };
     const history = aiHistoryFor(state, side); history.push(selected); if (history.length > 6) history.shift();
     return selected;
   }
+  if (lowReturn) {
+    // A block and a lift are both legal low-contact returns. Favor the space
+    // left by the attacker; never turn a low defensive contact into a smash.
+    const open = Math.abs(opponent.x) > .25 ? -Math.sign(opponent.x) : Math.sign(lineRoll) || 1;
+    const width = level === 'hard' ? .72 : .48;
+    const read = level === 'hard' ? 1 : .45;
+    const frontSpace = clamp((opponentDepth - 3.2) / 1.5, -1, 1) * read;
+    return chooseCandidate(state, side, level, [
+      {shot:'drop',aim:open*width,aimDepth:-.15,charge:.05,score:2.3+frontSpace},
+      {shot:'drop',aim:-open*width*.65,aimDepth:.1,charge:.12,score:1.6+frontSpace*.6},
+      {shot:'clear',aim:open*width,aimDepth:.45,charge:.25,score:2.3-frontSpace},
+      {shot:'clear',aim:-open*width*.8,aimDepth:.65,charge:.35,score:1.7-frontSpace*.6},
+    ]);
+  }
   if (level === 'medium') {
     return chooseCandidate(state, side, level, [
-      { shot: 'clear', aim: lineRoll * 0.72, aimDepth: (random(state) - 0.5) * 0.45, score: 2.1 },
+      { shot: 'clear', aim: lineRoll * 0.72, aimDepth: .3 + (random(state) - 0.5) * 0.3, charge:.45, score: 2.1 },
       { shot: 'drop', aim: lineRoll * 0.82, aimDepth: -0.25 + (random(state) - 0.5) * 0.25, score: 1.9 },
       { shot: 'smash', aim: lineRoll * 0.9, aimDepth: 0.2 + (random(state) - 0.5) * 0.3, score: 1.7 },
     ]);
   }
-  const opponent = state.players[1 - playerTeam(state, side)];
   const openSide = Math.abs(opponent.x) > 0.25 ? -Math.sign(opponent.x) : Math.sign(lineRoll) || 1;
   const alternateSide = -openSide;
-  const opponentDepth = Math.abs(opponent.z);
-  const { highChance } = smashOpportunity(state, side);
   const pressure = openSide * (0.72 + Math.abs(lineRoll) * 0.2);
   const alternate = alternateSide * (0.42 + Math.abs(lineRoll) * 0.36);
   const smashScore = highChance ? opponentDepth > 4.25 ? 2.3 : opponentDepth < 2.7 ? 2.2 : 3.35 : -10;
@@ -877,9 +894,9 @@ function chooseAIShot(state, side, level) {
   const clearScore = opponentDepth < 2.7 ? 3.9 : opponentDepth > 4.25 ? 1.65 : 2.45;
   const candidates = [
     { shot: 'drop', aim: pressure, aimDepth: -0.32 + (random(state) - 0.5) * 0.18, score: dropScore },
-    { shot: 'clear', aim: pressure, aimDepth: 0.28 + (random(state) - 0.5) * 0.2, score: clearScore },
-    { shot: 'smash', aim: pressure, aimDepth: 0.05 + random(state) * 0.68, score: smashScore },
-    { shot: 'clear', aim: alternate, aimDepth: 0.05 + (random(state) - 0.5) * 0.35, score: 1.6 },
+    { shot: 'clear', aim: pressure, aimDepth: 0.55 + (random(state) - 0.5) * 0.2, charge:.7, score: clearScore },
+    { shot: 'smash', aim: pressure, aimDepth: 0.05 + random(state) * 0.68, charge:.25+random(state)*.5, score: smashScore },
+    { shot: 'clear', aim: alternate, aimDepth: 0.35 + (random(state) - 0.5) * 0.25, charge:.15, score: 1.6 },
     { shot: 'drop', aim: alternate, aimDepth: -0.08 + (random(state) - 0.5) * 0.35, score: 1.55 },
   ];
   if(state.format==='doubles')candidates.push(
@@ -916,8 +933,14 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
   const output = { x: 0, z: 0, shot: null, aim: 0, aimDepth: 0, charge: 0.3 };
   if (state.phase === 'serve') {
     if (serverSlot(state) === side && state._serveAge > config.serveDelay + config.reaction) {
-      output.shot = 'clear'; output.aim = (random(state) - 0.5) * (level === 'easy' ? 0.6 : 1.5);
-      output.aimDepth = level === 'hard' ? (random(state) - 0.5) * 0.4 : 0;
+      let serve = state._ai[side];
+      if (serve?.servePointId !== state.pointId) {
+        const short = !h && random(state) < (level === 'hard' ? .72 : level === 'medium' ? .48 : .22);
+        serve = state._ai[side] = {servePointId:state.pointId,shot:short?'drop':'clear',
+          aim:(random(state)-.5)*(level==='easy'?.5:1.4),
+          aimDepth:short?-.65: .2+random(state)*.35,charge:short?.05:.35};
+      }
+      output.shot=serve.shot;output.aim=serve.aim;output.aimDepth=serve.aimDepth;output.charge=serve.charge;
     }
     return output;
   }
@@ -937,18 +960,12 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     // Every reachable return is attempted; the common contact model causes errors.
     memory = state._ai[side] = { hitId: state.hitId, ready: state.format === 'doubles' ? state._doublesAI[playerTeam(state, side)].ready : state.time + config.reaction,
       errorX: (random(state) - 0.5) * config.error * 2, errorZ: (random(state) - 0.5) * config.error * 2,
-      shot: decision.shot, aim: decision.aim, aimDepth: decision.aimDepth };
+      shot: decision.shot, aim: decision.aim, aimDepth: decision.aimDepth, charge: decision.charge ?? .3 };
   }
   if (state.time < memory.ready) return output;
-  // A steep incoming attack calls for a defensive lift, not a low counter-smash
-  // or a delicate drop. Decide from the observed flight after the reaction delay.
+  // Defend attacks at a low contact, preserving the chosen block/lift and line.
   const defendingSmash = !h && level !== 'easy' && state.lastShot === 'smash';
-  if (defendingSmash) {
-    memory.shot = 'clear';
-    memory.aim = clamp(memory.aim, -.55, .55);
-    memory.aimDepth = .15;
-    output.charge = 0;
-  }
+  output.charge = memory.charge;
   if (h && state.time >= h.recoverUntil) {
     const landing = predictLanding(state);
     const legal = landing && landing.event === 'landing' && !landing.out && !landing.serviceFault && landing.side === side;
@@ -994,13 +1011,25 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     && ball.y <= (memory.shot === 'smash' ? 4.35 : overhead ? 2.9 : 1.9)) {
     output.shot = memory.shot; output.aim = memory.aim; output.aimDepth = memory.aimDepth;
   }
-  if (defendingSmash && level === 'hard' && !output.shot) {
+  if (defendingSmash && level === 'hard' && memory.shot === 'clear' && !output.shot) {
     // Buffer within the normal player input window. Actual contact still uses
     // the same reach, height, windup and cooldown checks as human input.
     const point = liveFlightPoint(ball, .1);
     if (point.z * direction(side) > .1 && point.y >= TUNING.minHitHeight && point.y <= 2.8
         && Math.hypot(point.x - player.x, point.z - player.z) < TUNING.reach + role.reachBonus) {
-      output.shot = 'clear'; output.aim = memory.aim; output.aimDepth = memory.aimDepth;
+      output.shot = memory.shot; output.aim = memory.aim; output.aimDepth = memory.aimDepth;
+    }
+  }
+  if (!h && level !== 'easy' && output.shot === 'drop' && state.lastShot === 'smash') {
+    // A stretched block can lose its small tape margin during the windup.
+    // Use the visible flight and normal contact model to choose a safer lift.
+    const contact = liveFlightPoint(ball, .07);
+    const forecast = {...state, shuttle:contact, players:state.players.map((p,slot)=>slot===side
+      ? {...p,x:p.x+p.vx*.07,z:p.z+p.vz*.07} : p)};
+    const block = getShotTarget(forecast,side,output);
+    if (contact.y < .65 || block.netHeight < COURT.netHeight + .04 || block.quality.risk > .4) {
+      memory.shot=output.shot='clear';memory.aim=output.aim=clamp(memory.aim,-.55,.55);
+      memory.aimDepth=output.aimDepth=.35;memory.charge=output.charge=.15;
     }
   }
   if (h?.warning) {
