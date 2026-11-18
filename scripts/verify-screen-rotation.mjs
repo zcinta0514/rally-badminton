@@ -40,9 +40,11 @@ try {
       const checkTargets = selector => page.locator(selector).evaluateAll(elements => elements.map(element => {
         const { left, right, top, bottom, width, height } = element.getBoundingClientRect();
         const hit = document.elementFromPoint(left + width / 2, top + height / 2);
+        const pausePanel = element.closest('#pause-dialog')?.getBoundingClientRect();
         return { target: element.id || element.dataset.shot || element.textContent.trim(),
           left, right, top, bottom, hit: width > 0 && height > 0 && element.contains(hit),
-          inside: left >= -1 && top >= -1 && right <= innerWidth + 1 && bottom <= innerHeight + 1 };
+          inside: left >= -1 && top >= (pausePanel?.top ?? 0) - 1 &&
+            right <= innerWidth + 1 && bottom <= (pausePanel?.bottom ?? innerHeight) + 1 };
       }));
       const check = (condition, label, detail) => {
         if (!condition) {
@@ -51,21 +53,22 @@ try {
           if (process.env.RALLY_QA_VERBOSE) console.log(issue);
         }
       };
-      const rotate = async (stage, targets, { shots, scroll, cycles = 2 } = {}) => {
+      const rotate = async (stage, targets, { shots, scroll, cycles = 2, viewports = sizes } = {}) => {
         const reference = new Map();
         for (let cycle = 0; cycle < cycles; cycle++) {
-          for (const [width, height] of sizes) {
+          for (const [width, height] of viewports) {
             if (scroll) await page.locator(scroll).evaluate(element => { element.scrollTop = element.scrollHeight; });
             await page.setViewportSize({ width, height });
             await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
             rotations++;
-            const label = `${stage} ${width}×${height} #${cycle + 1}`;
+            const viewport = `${width}×${height}`;
+            const label = `${stage} ${viewport} #${cycle + 1}`;
             const boxes = await checkTargets(targets);
             for (const box of boxes) check(box.hit && box.inside, label, box);
             const offsets = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
             check(!offsets.x && !offsets.y, `${label} root scroll`, offsets);
-            if (reference.has(width)) check(JSON.stringify(boxes) === reference.get(width), `${label} position drift`, boxes);
-            else reference.set(width, JSON.stringify(boxes));
+            if (reference.has(viewport)) check(JSON.stringify(boxes) === reference.get(viewport), `${label} position drift`, boxes);
+            else reference.set(viewport, JSON.stringify(boxes));
             if (!shots) continue;
             const keys = boxes.filter(box => ['clear', 'drop', 'smash'].includes(box.target));
             check(keys.length === 3, `${label} shot count`, keys);
@@ -117,6 +120,29 @@ try {
       await click('#start-ai-confirm');
       await page.waitForFunction(() => !document.querySelector('#game-controls [data-shot=clear]').disabled);
       await rotate('custom match', '#game-controls .shot-btn, #match-settings-toggle, #pause, #fullscreen', { shots: true });
+      await page.setViewportSize({ width: 568, height: 260 });
+      await click('#match-settings-toggle');
+      await click('#edit-shot-layout');
+      const editorKey = await page.locator('.shot-layout-key[data-shot=clear]').boundingBox();
+      const editorX = editorKey.x + editorKey.width / 2, editorY = editorKey.y + editorKey.height / 2;
+      await page.mouse.move(editorX, editorY);
+      await page.mouse.down();
+      await page.mouse.move(editorX - 310, editorY);
+      await page.mouse.up();
+      const edited = await checkTargets('.shot-layout-key');
+      check(edited[0].left < editorKey.x - 250, 'dragged key moved', edited);
+      await click('#shot-layout-editor [data-action=save]');
+      const updatedLayout = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), storageKey);
+      assert.deepEqual(updatedLayout.positions.drop, savedLayout.positions.drop);
+      assert.deepEqual(updatedLayout.positions.smash, savedLayout.positions.smash);
+      await click('#edit-shot-layout');
+      const reopened = await checkTargets('.shot-layout-key');
+      for (const [index, box] of edited.entries()) {
+        check(Math.abs(box.left - reopened[index].left) <= 1 && Math.abs(box.top - reopened[index].top) <= 1,
+          'saved editor matches preview', [box, reopened[index]]);
+      }
+      await click('#shot-layout-editor [data-action=cancel]');
+      await click('#settings-back');
       for (const preset of ['arc', 'default']) {
         await click('#match-settings-toggle');
         await click('#edit-shot-layout');
@@ -128,15 +154,23 @@ try {
       }
       const key = page.locator('#game-controls [data-shot=clear]');
       const rect = await key.boundingBox();
-      await page.mouse.move(rect.x + rect.width / 2, rect.y + rect.height / 2);
-      await page.mouse.down();
+      const x = rect.x + rect.width / 2, y = rect.y + rect.height / 2;
+      const touch = engine === 'Chromium' ? await page.context().newCDPSession(page) : null;
+      if (touch) await touch.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+      else {
+        await page.mouse.move(x, y);
+        await page.mouse.down();
+      }
       await page.locator('#game-controls [data-shot=clear].charging').waitFor();
       await page.setViewportSize({ width: 320, height: 568 });
       await page.locator('#game-controls [data-shot=clear].charging').waitFor({ state: 'hidden' });
-      await page.mouse.up();
+      if (touch) await touch.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      else await page.mouse.up();
       await click('#pause');
       await page.addStyleTag({ content: '@media (orientation: landscape) { :root { --safe-top: 20px; --safe-bottom: 21px; --safe-left: 44px; --safe-right: 44px; } }' });
-      await rotate('pause with safe insets', '#pause-dialog #resume, #pause-dialog #leave-game');
+      await rotate('pause with safe insets', '#pause-dialog #resume, #pause-dialog #leave-game', {
+        viewports: [[320, 568], [568, 260], [390, 844], [568, 330], [320, 568], [568, 350], [390, 844], [667, 375], [390, 844], [844, 390]]
+      });
       await click('#resume');
       await page.waitForFunction(() => rallyDiagnostics.statePhase === 'serve');
       await page.evaluate(() => qaFinish());

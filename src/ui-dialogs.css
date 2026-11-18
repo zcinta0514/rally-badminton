@@ -520,7 +520,7 @@
   #friends-dialog #friends-network-note { display:none; }
 }
 
-@media (max-height: 300px) and (orientation: landscape) {
+@media (max-height: 380px) and (orientation: landscape) {
   #dialog-backdrop #pause-dialog:not([hidden]) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;

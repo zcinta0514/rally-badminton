@@ -338,7 +338,10 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
       }
     };
     const end = event => {
-      if (drag?.id === event.pointerId) drag = null;
+      if (drag?.id !== event.pointerId) return;
+      const moved = drag.moved;
+      drag = null;
+      if (moved) render();
     };
     for (const key of keys) {
       key.addEventListener('pointerdown', start);
@@ -354,7 +357,10 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
         if (!delta) return;
         event.preventDefault();
         const center = keyCenter(key);
-        if (place(key, { x: center.x + delta[0], y: center.y + delta[1] }, true)) recordPositions(key);
+        if (place(key, { x: center.x + delta[0], y: center.y + delta[1] }, true)) {
+          recordPositions(key);
+          render();
+        }
       });
     }
     slider.addEventListener('input', () => {
@@ -369,9 +375,8 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
         return;
       }
       draft.sizes[key] = next;
-      slider.nextElementSibling.value = next + '%';
-      feedback.textContent = '';
       recordPositions(selected);
+      render();
     });
     toolbar.querySelector('.shot-layout-presets').addEventListener('click', event => {
       const preset = event.target.closest('[data-preset]')?.dataset.preset;
