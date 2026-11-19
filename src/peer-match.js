@@ -93,7 +93,7 @@ export class PeerMatch {
   startMatch() {
     this.abandoned = false;
     this.matchEndedAt = null;
-    this.state = createMatch({ format:this.format, target: this.target, ruleset: this.ruleset,
+    this.state = createMatch({ humanSlots:this.players.map((_, seat) => seat), format:this.format, target: this.target, ruleset: this.ruleset,
       roles: this.players.map(player => player.role), seed: this.seed() });
     this.inputs = Array.from({length:this.count}, () => ({}));
     this.lastInput = Array(this.count).fill(-Infinity);
