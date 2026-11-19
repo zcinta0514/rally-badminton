@@ -120,6 +120,22 @@ export function createUpdateClient({ serviceWorker, document: doc = globalThis.d
       }
     } finally { requesting = false; }
   }
+  let lastDiscovery = -Infinity, discovery = null, startupPending = true;
+  async function discover(force = false) {
+    if (discovery) return discovery;
+    if (!force && now() - lastDiscovery < 60000) return;
+    lastDiscovery = now();
+    discovery = registration.update();
+    try { await discovery; } finally { discovery = null; }
+  }
+  async function checkOnOpen() {
+    if (!startupPending || !registration || !online() || disposed || suspended) return;
+    startupPending = false;
+    try {
+      await discover();
+      await tryActivate();
+    } catch { status('error', '', 'network'); }
+  }
   async function check({force = false} = {}) {
     if (!registration || checking || !online() || !safe() || transaction || reloading) return;
     if (!force && now() - lastCheck < 60000) return;
@@ -144,7 +160,7 @@ export function createUpdateClient({ serviceWorker, document: doc = globalThis.d
           reconcileOnReturn=false;
         }
       }
-      await registration.update();
+      await discover(force);
       if (registration.waiting) await tryActivate({force});
     } catch { status('error', '', 'network'); }
     finally { checking = false; }
@@ -161,7 +177,7 @@ export function createUpdateClient({ serviceWorker, document: doc = globalThis.d
   listen(doc, 'keydown', () => { lastInteraction = now(); });
   listen(doc, 'input', () => { lastInteraction = now(); });
   listen(doc, 'visibilitychange', () => { if (!doc.hidden) { void bindVersion(); void check(); } });
-  listen(win, 'online', () => { void check(); });
+  listen(win, 'online', () => { void checkOnOpen(); void check(); });
   const timer = setInterval(() => {
     // A waiting build must not stop discovery of later releases.
     void check();
@@ -178,5 +194,5 @@ export function createUpdateClient({ serviceWorker, document: doc = globalThis.d
     suspended=false;reconcileOnReturn=true;lastCheck=-Infinity;lastAttempt=-Infinity;
     void bindVersion();void check();
   });
-  return {setRegistration,check,tryActivate,dispose,get locked(){return Boolean(transaction);}};
+  return {setRegistration,checkOnOpen,check,tryActivate,dispose,get locked(){return Boolean(transaction);}};
 }
