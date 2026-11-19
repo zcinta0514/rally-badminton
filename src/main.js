@@ -387,7 +387,7 @@ function exitToMenu({entry='home'}={}){
 function startAI(){
   if(peerAttempt||peerSession)exitToMenu();
   playback.reset();lastRtt=null;
-  mode='ai';side=0;state=createMatch({target:settings.target,ruleset:settings.ruleset,format:settings.format,roles:settings.format==='doubles'?[settings.role,settings.coachRole,settings.teammateRole,settings.coachRole]:[settings.role,settings.coachRole],teammateDifficulty:settings.teammateDifficulty,difficulty:settings.difficulty,
+  mode='ai';side=0;state=createMatch({humanSlots:[0],target:settings.target,ruleset:settings.ruleset,format:settings.format,roles:settings.format==='doubles'?[settings.role,settings.coachRole,settings.teammateRole,settings.coachRole]:[settings.role,settings.coachRole],teammateDifficulty:settings.teammateDifficulty,difficulty:settings.difficulty,
     playerAssist:settings.difficulty==='easy'?'beginner':'none',assistSide:0,netDragSide:netDragPlaytest?0:null,seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
   if(netDragPlaytest)showToast('网前试打：吊球轻点打短，向上拖可挑后场');
@@ -395,7 +395,7 @@ function startAI(){
 function startHell(){
   if(peerAttempt||peerSession)exitToMenu();
   playback.reset();lastRtt=null;
-  mode='ai';side=0;state=createMatch({challenge:'hell',roles:[hellRole,'balanced'],difficulty:'hard',
+  mode='ai';side=0;state=createMatch({humanSlots:[0],challenge:'hell',roles:[hellRole,'balanced'],difficulty:'hard',
     seed:Math.floor(Math.random()*0x7fffffff)});
   enterMatch();
 }

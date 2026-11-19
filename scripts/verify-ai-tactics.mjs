@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {RULES_VERSION} from '../shared/game.js';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {createServer} from '../server/index.js';
@@ -41,7 +42,7 @@ try{
     await p.waitForFunction(()=>qaHits.filter(h=>h.playerSlot===1).length>=6||qaState.phase==='over',null,{timeout:60000});
     const result=await p.evaluate(()=>({version:document.querySelector('.lobby-version').textContent,rules:qaState.rulesVersion,difficulty:qaState.difficulty,
       hits:qaHits.filter(h=>h.playerSlot===1).map(h=>({type:h.type,serving:h.serving,x:h.aimX,z:h.aimZ})),score:qaState.score,phase:qaState.phase}));
-    assert.equal(result.rules,17);assert.equal(result.difficulty,level);assert.ok(result.hits.length>=3);
+    assert.equal(result.rules,RULES_VERSION);assert.equal(result.difficulty,level);assert.ok(result.hits.length>=3);
     await p.screenshot({path:`${out}/${level}-${width}.png`});report.checks.push({width,height,...result});
     console.log(`PASS ${level} ${width}x${height}: short-serve button, reachable controls, ${result.hits.length} real AI contacts`);
     await c.close();

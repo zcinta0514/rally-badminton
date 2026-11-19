@@ -365,3 +365,22 @@ test('AI decisions do not randomly abandon an otherwise reachable return', () =>
     assert.ok(aiInput(s, 0, difficulty).shot, `${difficulty}/${seed} attempts the return`);
   }
 });
+
+test('low smash blocks get a small lift only for human defenders', () => {
+  const block = (humanSlots, lastShot, changes = {}) => {
+    const state = createMatch({ humanSlots });
+    incoming(state, { y: .35, z: 1, vy: -6, ...changes });
+    state.lastShot = lastShot;
+    Object.assign(state.players[0], { x: 0, z: 1, vx: 2 });
+    return getShotTarget(state, 0, { shot: 'drop' });
+  };
+  const normal = block([], 'smash');
+  const defended = block([0], 'smash');
+  assert.ok(normal.netHeight < COURT.netHeight);
+  assert.ok(defended.netHeight > COURT.netHeight && defended.netHeight < COURT.netHeight + .05);
+  assert.equal(defended.vx, normal.vx);
+  assert.equal(defended.vz, normal.vz);
+  assert.deepEqual(block([1], 'smash'), normal);
+  assert.deepEqual(block([0], 'clear'), normal);
+  assert.deepEqual(block([0], 'smash', { y: 1.6 }), block([], 'smash', { y: 1.6 }));
+});

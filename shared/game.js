@@ -5,7 +5,7 @@ import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, VERTICAL_DRAG, verticalLaunch, timeToHeight, flightApex, verticalFlight, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 17;
+export const RULES_VERSION = 18;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -92,7 +92,7 @@ export function getScoringRules({ ruleset = 'quick', target = 5 } = {}) {
 }
 
 export function createMatch({ target = 5, roles = ['balanced', 'balanced'], difficulty = 'easy', seed = 1, ruleset = 'quick',
-  playerAssist = 'none', assistSide = 0, netDragSide = null, challenge = null, format = 'singles', teammateDifficulty = 'medium' } = {}) {
+  humanSlots = [], playerAssist = 'none', assistSide = 0, netDragSide = null, challenge = null, format = 'singles', teammateDifficulty = 'medium' } = {}) {
   ruleset = challenge === 'hell' ? 'quick' : ruleset === 'standard21' ? 'standard21' : 'quick';
   playerAssist = assistLevelOf(playerAssist);
   assistSide = assistSide === 0 || assistSide === 1 ? assistSide : 0;
@@ -108,7 +108,7 @@ export function createMatch({ target = 5, roles = ['balanced', 'balanced'], diff
     rally: 0, hitId: 0, pointId: 0, rallyEnd: null, netContactId: 0, netContacts: [], lastShot: 'clear', lastShotInfo: null, difficulty: difficultyOf(difficulty),
     players: (format === 'doubles' ? [0, 1, 2, 3] : [0, 1]).map(side => {
       const role = roleOf(roles?.[side]);
-      return { x: 0, z: direction(side) * 3.8, vx: 0, vz: 0, role,
+      return { humanControlled: humanSlots.includes(side), x: 0, z: direction(side) * 3.8, vx: 0, vz: 0, role,
         stamina: ROLES[role].maxStamina, staminaRate: 0, recoveryWait: 0, staminaStatus: 'idle',
         swing: 0, lastShot: 'clear', cooldown: 0, pendingShot: null, action: null, actionId: 0, shotRecovery: null };
     }),
@@ -404,7 +404,11 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
     const energy=1-.62*quality.factors.lowContact*quality.factors.lateContact*(assist.level==='beginner'?.72:1);
     vx*=energy;vz*=energy;
   }
-  const vy = verticalLaunch(ball.y,0,duration,verticalDrag) - drift.verticalLoss;
+  // Give low, late player blocks a little more lift without correcting their aim.
+  const blockingSmash = player.humanControlled && type === 'drop' && state.phase === 'rally'
+    && state.lastShot === 'smash' && ball.lastHit === 1 - playerTeam(state, side);
+  const blockLift = blockingSmash ? 0.22 * quality.factors.lateContact : 0;
+  const vy = verticalLaunch(ball.y,0,duration,verticalDrag) - Math.max(0, drift.verticalLoss - blockLift);
   duration = timeToHeight({...ball,vy,verticalDrag});
   const endpoint = flightPoint({ ...ball, vx, vy, vz, drag, verticalDrag }, duration);
   const x = quality.risk === 0 ? aimX : endpoint.x;
