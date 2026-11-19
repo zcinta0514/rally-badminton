@@ -805,12 +805,17 @@ try{
   controls.setEnabled(false);
   $('loading').hidden=true;
   let pingTime=0,previousMotion=null;
+  const previewMatch = createMatch({seed:1});
   function frame(now){
     const elapsed=Math.max(0,(now-lastFrame)/1000);lastFrame=now;
     let renderMs=0,guidanceMs=0,uiMs=0;
+    const previewCanvas = document.body.dataset.shotLayoutEditing ? $('layout-court') : matchSettings?.isOpen ? $('settings-court') : null;
     if(mode==='menu'||mode==='waiting'){
       const renderStart=performance.now();
-      view.renderLobby(Math.min(elapsed,.1));renderMs=performance.now()-renderStart;
+      view.setMode(previewCanvas ? 'match' : 'menu');
+      if(previewCanvas) view.render(previewMatch,0,0);
+      else view.renderLobby(Math.min(elapsed,.1));
+      renderMs=performance.now()-renderStart;
     }else if(state){
       view.advanceEntrance?.(elapsed,{hidden:document.hidden,phase:state.phase,remaining:state.timer});
       document.body.dataset.entering=String(view.entranceActive===true);
@@ -841,6 +846,16 @@ try{
       showFinale(finaleFrame);
       // Input eligibility follows authority as well as the delayed presentation.
       if(reconnecting||!['serve','rally'].includes(state.phase))controls.setEnabled(false);
+    }
+    if(previewCanvas){
+      const court = view.canvas;
+      const width = Math.min(court.width,Math.max(1,Math.round(previewCanvas.clientWidth * devicePixelRatio)));
+      const height = Math.max(1,Math.round(width * court.height / Math.max(1,court.width)));
+      if(previewCanvas.width !== width || previewCanvas.height !== height){
+        previewCanvas.width = width;
+        previewCanvas.height = height;
+      }
+      previewCanvas.getContext('2d').drawImage(court,0,0,width,height);
     }
     performanceMonitor.record({frameMs:elapsed*1000,renderMs,guidanceMs,uiMs,visible:!document.hidden});
     if(now-lastDiagnostics>500){

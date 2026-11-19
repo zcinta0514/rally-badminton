@@ -281,6 +281,7 @@ export function bindShotLayout({ document: doc = globalThis.document, store = st
     editor.hidden = true;
     editor.setAttribute('aria-label', '击球键布局');
     editor.innerHTML = `
+      <canvas id="layout-court" aria-label="比赛球场"></canvas>
       <div class="shot-layout-toolbar">
         <div class="shot-layout-title"><strong>击球键布局</strong><small>拖动调整位置，点选后调整大小</small></div>
         <div class="shot-layout-presets" role="group" aria-label="按键预设">

@@ -64,6 +64,30 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
   let updateState = '', previousInert = false, updateStorage, releasePending = false, releaseTimer = null, releaseFocus = null;
   try { updateStorage = sessionStorage; } catch { /* Auto reload needs a working loop guard. */ }
   const pageVersion = globalThis.RALLY_CONFIG?.buildId || '';
+  const history = globalThis.RALLY_CONFIG?.releaseHistory || [];
+  releaseDialog.querySelector('#release-notice-title').textContent = '近期更新';
+  releaseDialog.querySelector('#release-notice-summary').hidden = true;
+  const sections = document.createElement('div');
+  releaseDialog.querySelector('#release-notice-items').replaceWith(sections);
+  history.forEach((entry,index) => {
+    const section = document.createElement('details');
+    const heading = document.createElement('summary');
+    heading.textContent = [entry.version,entry.detail].filter(Boolean).join(' · ');
+    const list = document.createElement('ul');
+    for(const item of entry.items){
+      const li = document.createElement('li');
+      li.textContent = item;
+      list.append(li);
+    }
+    section.append(heading,list);
+    section.open = index < 3;
+    sections.append(section);
+  });
+  document.getElementById('lobby-history')?.addEventListener('click',()=>{
+    releaseFocus = document.activeElement;
+    releasePending = true;
+    scheduleReleaseNotice();
+  });
   function closeReleaseNotice() {
     if (!releaseDialog.open) return;
     releaseDialog.close(); releaseFocus?.focus?.({preventScroll:true}); releaseFocus = null;
@@ -79,11 +103,6 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
       if (!releasePending) return;
       if (!releaseNoticeCanOpen()) { releaseTimer = setTimeout(attempt, 500); return; }
       releasePending = false;
-      const title = releaseDialog.querySelector('#release-notice-title');
-      const summary = releaseDialog.querySelector('#release-notice-summary');
-      const items = releaseDialog.querySelector('#release-notice-items');
-      title.textContent = releaseNotice.title; summary.textContent = releaseNotice.summary;
-      items.replaceChildren(...releaseNotice.items.slice(0, 5).map(item => { const li = document.createElement('li'); li.textContent = item; return li; }));
       releaseFocus = document.activeElement;
       try { releaseDialog.showModal(); releaseDismiss.focus({preventScroll:true}); try { localStorage.setItem('rally.release.notice.' + releaseNotice.id, '1'); } catch {} }
       catch { releaseFocus = null; showToast('已更新到新版：' + releaseNotice.summary); }
