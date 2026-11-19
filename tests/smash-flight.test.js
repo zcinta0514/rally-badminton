@@ -62,7 +62,7 @@ test('rear smashes give a positioned defender more reading time while a front ki
     const state = createMatch();
     const sign = side === 0 ? 1 : -1;
     state.phase = 'rally';
-    for (const [depth, earliest, latest] of [[1.5, .33, .337], [4.8, .39, .40], [5.2, .39, .40]]) {
+    for (const [depth, earliest, latest] of [[1.5, .33, .337], [4.8, .389, .394], [5.2, .386, .391]]) {
       Object.assign(state.players[side], { x: 0, z: sign * depth });
       Object.assign(state.shuttle, { x: 0, y: 3.2, z: sign * depth, vy: 0, lastHit: 1 - side, active: true });
       const shot = getShotTarget(state, side, { shot: 'smash', charge: .3 });
@@ -73,7 +73,7 @@ test('rear smashes give a positioned defender more reading time while a front ki
       if (depth === 5.2) {
         const after8m = sampleShuttleFlight(launch, timeToShuttleZ(launch, (depth - 8) * sign));
         const retained = after8m.vz / launch.vz;
-        assert.ok(retained > .66 && retained < .68);
+        assert.ok(retained > .68 && retained < .69);
       }
     }
   }
