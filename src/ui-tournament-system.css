@@ -545,7 +545,7 @@ body[data-screen=menu] #menu[data-entry=home] {
   padding-left:var(--chrome-left); padding-bottom:0;
 }
 body[data-screen=menu] #menu[data-entry=home] .menu-foot {
-  position:fixed; left:var(--chrome-left); right:calc(var(--chrome-right) + 80px);
+  position:fixed; left:var(--chrome-left); right:calc(var(--chrome-right) + 116px);
   bottom:var(--chrome-bottom); width:auto; height:44px; padding:0; margin:0;
   justify-content:center;
 }
@@ -557,7 +557,7 @@ body[data-screen=menu] #menu .menu-foot-actions > button {
 body[data-screen=menu]:has(#menu[data-entry=home]) .lobby-update {
   position:fixed; right:var(--chrome-right); bottom:var(--chrome-bottom);
   z-index:4; display:flex; align-items:center; justify-content:flex-end;
-  height:44px; width:72px; padding:0; border:0; background:none; color:#b9c8bd;
+  height:44px; width:max-content; gap:12px; padding:0; border:0; background:none; color:#b9c8bd;
 }
 .lobby-update .lobby-version {
   position:absolute; right:0; bottom:44px; padding:0;
@@ -566,7 +566,7 @@ body[data-screen=menu]:has(#menu[data-entry=home]) .lobby-update {
 }
 .lobby-update button {
   display:inline-flex; align-items:center; justify-content:flex-end;
-  height:44px; min-height:44px; width:72px; padding:0; border:0;
+  height:44px; min-height:44px; width:auto; padding:0; border:0;
   background:none; color:#d6efac; font-size:12px; line-height:16px; white-space:nowrap;
 }
 .lobby-update button:hover { color:#f1ffdc; }
