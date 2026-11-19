@@ -892,7 +892,7 @@ function chooseCandidate(state, side, level, candidates) {
   // On an overhead, pressure the space beyond the receiver's current motion.
   // Faster attacking shots leave less time to recover than a high clear.
   const pressure = candidate => {
-    if (state.challenge || state.format === 'doubles' || state.lastShot !== 'clear') return 0;
+    if (state.challenge || state.format === 'doubles' || state.lastShot !== 'clear' || state.shuttle.vy <= 0) return 0;
     const opponent = state.players[1 - side];
     const targetX = candidate.aim * (courtWidth(state) - .3);
     const depth = shotDepth(candidate.shot, candidate.charge ?? .3, candidate.aimDepth, false, ROLES[player.role]);
@@ -967,7 +967,7 @@ function chooseAIShot(state, side, level) {
   const smashScore = highChance ? opponentDepth > 4.25 ? 2.3 : opponentDepth < 2.7 ? 2.2 : 3.35 : -10;
   const dropScore = opponentDepth > 4.25 ? 3.5 : opponentDepth < 2.7 ? 1.65 : 2.35;
   const clearScore = opponentDepth < 2.7 ? 3.9 : opponentDepth > 4.25 ? 1.65 : 2.45;
-  const canPress = !state.challenge && state.format !== 'doubles' && highChance;
+  const canPress = !state.challenge && state.format !== 'doubles' && highChance && contactTime > .4;
   const attacker = state.players[side];
   // A moving defender has to brake before covering the other lane.
   const commitment = Math.hypot(opponent.vx, opponent.vz) / ROLES[opponent.role].speed;
@@ -975,11 +975,10 @@ function chooseAIShot(state, side, level) {
   const attackBonus = canPress ? 2.2 * clamp(reserve + commitment, 0, 1) : 0;
   const shortLift = !state.challenge && state.lastShotInfo?.type === 'clear' && !state.lastShotInfo.serving
     && Math.abs(state.lastShotInfo.z) < 5.2;
-  const firmAttack = canPress && (shortLift || contactTime > .4);
   const candidates = [
     { shot: 'drop', aim: pressure, aimDepth: -0.32 + (random(state) - 0.5) * 0.18, score: dropScore },
     { shot: 'clear', aim: pressure, aimDepth: 0.55 + (random(state) - 0.5) * 0.2, charge:.7, score: clearScore },
-    { shot: 'smash', aim: pressure, aimDepth: 0.05 + random(state) * 0.68, charge:firmAttack ? .65+random(state)*.1 : .25+random(state)*.5, score: smashScore + attackBonus + (shortLift ? 1.6 : 0) },
+    { shot: 'smash', aim: pressure, aimDepth: 0.05 + random(state) * 0.68, charge:canPress ? .65+random(state)*.1 : .25+random(state)*.5, score: smashScore + attackBonus + (shortLift ? 1.6 : 0) },
     { shot: 'clear', aim: alternate, aimDepth: 0.35 + (random(state) - 0.5) * 0.25, charge:.15, score: 1.6 },
     { shot: 'drop', aim: alternate, aimDepth: -0.08 + (random(state) - 0.5) * 0.35, score: 1.55 },
   ];
