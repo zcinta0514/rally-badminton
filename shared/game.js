@@ -862,7 +862,7 @@ function setupValue(state, side, candidate) {
 
 function recoveryPosition(state, side, level) {
   let x = state.shuttle.x * .15;
-  let depth = level === 'hard' && !state.challenge ? 3.25 : 3.55;
+  let depth = level === 'hard' && !state.challenge ? 2.95 : 3.55;
   const book = level === 'hard' && !state.challenge && state._scouting?.[side];
   const replies = book?.setup && book.lanes[book.setup.key];
   if (replies?.length) {
@@ -870,7 +870,7 @@ function recoveryPosition(state, side, level) {
     const weight = 1 / (3 + replies.length);
     const baseX = x, baseDepth = depth;
     for (const reply of replies) {
-      x += weight * (clamp(reply.x, -2.3, 2.3) - baseX);
+      x += .85 * weight * (clamp(reply.x, -2.3, 2.3) - baseX);
       depth += weight * (clamp(reply.depth, 1.4, 5.5) - baseDepth);
     }
   }
@@ -889,7 +889,19 @@ function chooseCandidate(state, side, level, candidates) {
     // Reward space according to the nearer defender, never just one opponent.
     return 2.5*Math.min(...opponents.map(p=>Math.hypot(target.aimX-p.x,target.aimZ-p.z)/(ROLES[p.role].speed*staminaEffects(p,ROLES[p.role]).speedScale)));
   };
-  const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score + coverage(candidate)
+  // On an overhead, pressure the space beyond the receiver's current motion.
+  // Faster attacking shots leave less time to recover than a high clear.
+  const pressure = candidate => {
+    if (state.challenge || state.format === 'doubles' || state.lastShot !== 'clear') return 0;
+    const opponent = state.players[1 - side];
+    const targetX = candidate.aim * (courtWidth(state) - .3);
+    const depth = shotDepth(candidate.shot, candidate.charge ?? .3, candidate.aimDepth, false, ROLES[player.role]);
+    const distance = Math.hypot(targetX - opponent.x - opponent.vx * .18,
+      -direction(side) * depth - opponent.z - opponent.vz * .18);
+    const urgency = candidate.shot === 'smash' ? 1.8 : candidate.shot === 'drop' ? 1.15 : .8;
+    return (level === 'hard' ? 1.7 : 1) * distance / ROLES[opponent.role].speed * urgency;
+  };
+  const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score + coverage(candidate) + (1 - reservePressure) * pressure(candidate)
     + (level === 'hard' && !state.challenge ? setupValue(state, side, candidate) : 0) - repeatPenalty(history, candidate)
     - reservePressure * (candidate.shot === 'smash' ? 1.2 : candidate.shot === 'clear' ? .3 : 0) }));
   const best = Math.max(...scored.map(candidate => candidate.score));
@@ -911,7 +923,7 @@ function chooseAIShot(state, side, level) {
   const roll = random(state), lineRoll = random(state) * 2 - 1;
   const opponent = state.players[1 - playerTeam(state, side)];
   const opponentDepth = Math.abs(opponent.z);
-  const { highChance } = smashOpportunity(state, side);
+  const { highChance, contactTime } = smashOpportunity(state, side);
   const lowReturn = state.lastShot === 'smash' || state.lastShot === 'drop' || !highChance;
   if (level === 'easy') {
     const shot = roll < 0.74 ? 'clear' : roll < 0.96 || lowReturn ? 'drop' : 'smash';
@@ -955,12 +967,19 @@ function chooseAIShot(state, side, level) {
   const smashScore = highChance ? opponentDepth > 4.25 ? 2.3 : opponentDepth < 2.7 ? 2.2 : 3.35 : -10;
   const dropScore = opponentDepth > 4.25 ? 3.5 : opponentDepth < 2.7 ? 1.65 : 2.35;
   const clearScore = opponentDepth < 2.7 ? 3.9 : opponentDepth > 4.25 ? 1.65 : 2.45;
+  const canPress = !state.challenge && state.format !== 'doubles' && highChance;
+  const attacker = state.players[side];
+  // A moving defender has to brake before covering the other lane.
+  const commitment = Math.hypot(opponent.vx, opponent.vz) / ROLES[opponent.role].speed;
+  const reserve = attacker.stamina / (2 * shotStaminaCost(ROLES[attacker.role], 'smash'));
+  const attackBonus = canPress ? 2.2 * clamp(reserve + commitment, 0, 1) : 0;
   const shortLift = !state.challenge && state.lastShotInfo?.type === 'clear' && !state.lastShotInfo.serving
     && Math.abs(state.lastShotInfo.z) < 5.2;
+  const firmAttack = canPress && (shortLift || contactTime > .4);
   const candidates = [
     { shot: 'drop', aim: pressure, aimDepth: -0.32 + (random(state) - 0.5) * 0.18, score: dropScore },
     { shot: 'clear', aim: pressure, aimDepth: 0.55 + (random(state) - 0.5) * 0.2, charge:.7, score: clearScore },
-    { shot: 'smash', aim: pressure, aimDepth: 0.05 + random(state) * 0.68, charge:.25+random(state)*.5, score: smashScore + (shortLift ? 1.6 : 0) },
+    { shot: 'smash', aim: pressure, aimDepth: 0.05 + random(state) * 0.68, charge:firmAttack ? .65+random(state)*.1 : .25+random(state)*.5, score: smashScore + attackBonus + (shortLift ? 1.6 : 0) },
     { shot: 'clear', aim: alternate, aimDepth: 0.35 + (random(state) - 0.5) * 0.25, charge:.15, score: 1.6 },
     { shot: 'drop', aim: alternate, aimDepth: -0.08 + (random(state) - 0.5) * 0.35, score: 1.55 },
   ];
