@@ -28,7 +28,7 @@ export function modelGlb(name = 'fixture') {
 export async function modelBuildRoot(t) {
   const root = await mkdtemp(path.join(tmpdir(),'rally-model-build-'));
   t.after(() => rm(root,{recursive:true,force:true}));
-  const files = ['index.html','manifest.webmanifest','src','shared','icons','scripts/service-worker.js',
+  const files = ['CHANGELOG.md','index.html','manifest.webmanifest','src','shared','icons','scripts/service-worker.js',
     'node_modules/three/build','node_modules/three/LICENSE',
     ...['loaders/GLTFLoader.js','utils/BufferGeometryUtils.js','utils/SkeletonUtils.js'].map(file=>'node_modules/three/examples/jsm/'+file),
     'node_modules/peerjs/dist/peerjs.min.js','node_modules/peerjs/LICENSE',

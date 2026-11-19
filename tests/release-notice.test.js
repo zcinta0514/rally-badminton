@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { createPwaBuild } from '../scripts/build-pwa.js';
-import { RELEASE_NOTICE } from '../src/release-notes.js';
+import pkg from '../package.json' with {type:'json'};
 
 function config(build) {
   const context = {};
@@ -13,8 +13,9 @@ function config(build) {
 test('player-facing release notice is embedded in root and Pages builds', async () => {
   const root = await createPwaBuild({basePath: '/'});
   const pages = await createPwaBuild({basePath: '/rally-badminton/'});
-  assert.equal(JSON.stringify(config(root).releaseNotice), JSON.stringify(RELEASE_NOTICE));
-  assert.equal(JSON.stringify(config(pages).releaseNotice), JSON.stringify(RELEASE_NOTICE));
-  assert.equal(config(root).releaseNotice.id, '2026-11-13-doubles');
+  assert.equal(JSON.stringify(config(root).releaseHistory),JSON.stringify(config(pages).releaseHistory));
+  assert.equal(config(root).releaseNotice.id,pkg.version);
+  assert.equal(config(root).releaseHistory[0].version,pkg.version);
+  assert.ok(config(root).releaseHistory.length >= 3);
   assert.ok(config(root).releaseNotice.items.length >= 2);
 });

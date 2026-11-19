@@ -664,3 +664,12 @@ body[data-screen=menu] #menu #open-playtest-notice:is(:hover,:focus-visible) { b
     font-size:40px;
   }
 }
+
+#settings-court { width:100%; height:28dvh; flex:none; object-fit:contain; background:#09120f; }
+#layout-court { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+@media (orientation:landscape) {
+  #match-settings-panel[open] { display:grid; grid-template: auto minmax(0,1fr) / minmax(0,1fr) minmax(280px,44%); }
+  #match-settings-panel .settings-header { grid-column:1/-1; }
+  #settings-court { height:100%; }
+  #match-settings-panel .settings-grid { grid-template-columns:minmax(0,1fr); }
+}
