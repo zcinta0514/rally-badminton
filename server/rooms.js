@@ -113,7 +113,7 @@ export class Rooms {
       if(m.readyRequired===true&&!room.readyRequired)return this.error(ctx,'房间缺少双方规则确认，请房主重新建房');
       if(room.rules.finale==='father-son'&&m.finaleCapability!=='father-son')return this.error(ctx,'父子局需要双方更新游戏，请联网刷新后重试；普通对局可继续使用');
       this.connect(ctx,room,1,m.name,m.role,m.playerKey);
-      if(!room.readyRequired)room.state=createMatch({ruleset:room.ruleset,target:room.target,roles:room.players.map(p=>p.role),seed:randomInt(1,1000000)});
+      if(!room.readyRequired)room.state=createMatch({humanSlots:[0,1],ruleset:room.ruleset,target:room.target,roles:room.players.map(p=>p.role),seed:randomInt(1,1000000)});
       room.advancedMs=this.accumulator;
       this.roomInfo(room);this.broadcast(room);return;
     }
@@ -136,7 +136,7 @@ export class Rooms {
       if(!confirmsRoomRules(m,room))return this.error(ctx,'请确认本房间的比分和对局类型');
       room.startReady.add(slot);this.roomInfo(room);
       if(room.startReady.size===2){
-        room.state=createMatch({ruleset:room.ruleset,target:room.target,roles:room.players.map(p=>p.role),seed:randomInt(1,1000000)});
+        room.state=createMatch({humanSlots:[0,1],ruleset:room.ruleset,target:room.target,roles:room.players.map(p=>p.role),seed:randomInt(1,1000000)});
         startRoomCountdown(room.state);room.advancedMs=this.accumulator;this.broadcast(room);
       }
       return;
@@ -174,7 +174,7 @@ export class Rooms {
         room.matchId++;
         room.matchEndedAt=null;
         room.leaderboardResult=null;room.abandoned=false;
-        room.state=createMatch({ruleset:room.ruleset,target:room.target,roles:room.players.map(p=>p.role),seed:randomInt(1,1000000)});
+        room.state=createMatch({humanSlots:[0,1],ruleset:room.ruleset,target:room.target,roles:room.players.map(p=>p.role),seed:randomInt(1,1000000)});
         if(room.readyRequired)startRoomCountdown(room.state);
         room.advancedMs=this.accumulator;
         room.inputs=[{},{}];room.lastInput=[0,0];room.lastShot=[-Infinity,-Infinity];
