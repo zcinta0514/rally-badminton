@@ -5,7 +5,7 @@ import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, VERTICAL_DRAG, verticalLaunch, timeToHeight, flightApex, verticalFlight, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 18;
+export const RULES_VERSION = 19;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -383,7 +383,8 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
   if (type === 'smash') {
     const downwardLimit = Math.sqrt(2 * Math.max(0.01, ball.y) / TUNING.gravity) * 0.998;
     // Never slow a smash to manufacture clearance; low contacts can hit the net.
-    duration = Math.min(duration, downwardLimit);
+    const rearDepth = clamp((Math.abs(ball.z) - 3.8) / 1.4, 0, 1);
+    duration = Math.min(duration + .024 * rearDepth, downwardLimit);
   } else duration = Math.max(duration, minDuration);
   if (verticalDrag) {
     // Only raise an arc when the requested flight would hit the net; do not

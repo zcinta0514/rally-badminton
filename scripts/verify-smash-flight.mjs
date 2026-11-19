@@ -23,7 +23,7 @@ try{
    await route.fulfill({response,body:source});
   });
   await p.goto(app.url);await p.locator('#loading').waitFor({state:'hidden'});
-  assert.match(await p.locator('.lobby-version').textContent(),/1\.21\.13/);
+  assert.match(await p.locator('.lobby-version').textContent(),/1\.23\.1/);
   report.build=await p.evaluate(()=>RALLY_CONFIG.buildId);
   await p.evaluate(async()=>{
    const {CourtView}=await import('/src/view.js');const render=CourtView.prototype.render;
@@ -31,6 +31,7 @@ try{
     if(s.lastShotInfo?.type==='smash'&&!window.qaHit) window.qaHit=structuredClone(s.lastShotInfo);
     return render.call(this,s,...rest);};
   });
+  await p.locator('#close-playtest-notice').click();
   await p.locator('#open-solo').click();await p.locator('#start-ai').click();await p.locator('#start-ai-confirm').click();
   await p.waitForFunction(()=>window.rallyDiagnostics?.statePhase==='serve'&&!rallyDiagnostics.entrance.active);
   await p.locator('[data-shot=clear]').click();await p.waitForFunction(()=>qaState.hitId>=1);
@@ -38,7 +39,7 @@ try{
   const b=await p.locator('[data-shot=smash]').boundingBox();assert.ok(b.x>=0&&b.x+b.width<=width&&b.y+b.height<=height);
   await p.mouse.move(b.x+b.width/2,b.y+b.height/2);await p.mouse.down();await p.waitForTimeout(250);
   await p.evaluate(()=>window.qaFeed=false);await p.mouse.up();
-  await p.waitForFunction(()=>window.qaHit?.outgoing.drag===.035);
+  await p.waitForFunction(()=>window.qaHit?.outgoing.drag===.047);
   const hit=await p.evaluate(()=>qaHit);assert.ok(hit.outgoing.vy<0);
   await p.screenshot({path:out+`/${width}-smash.png`});
   await p.waitForFunction(()=>qaState.phase==='point'||qaState.hitId>qaHit.hitId);
