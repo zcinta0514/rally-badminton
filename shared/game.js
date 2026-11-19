@@ -823,6 +823,56 @@ function repeatPenalty(history, candidate) {
   return penalty;
 }
 
+// Learn only from consecutive contacts in this point. Keep six recent replies
+// per shot family and lane so an opponent can establish or abandon a pattern.
+function shotLane(type, x) {
+  return type + (x < -.65 ? 'Left' : x > .65 ? 'Right' : 'Middle');
+}
+
+function observeReplies(state, side) {
+  const hit = state.lastShotInfo;
+  if (!hit || hit.hitId !== state.hitId) return;
+  state._scouting ??= {};
+  const book = state._scouting[side] ??= { lanes: {}, lastHit: -1 };
+  if (book.lastHit === hit.hitId) return;
+  book.lastHit = hit.hitId;
+  const setup = book.setup;
+  book.setup = null;
+  if (hit.serving) return;
+  if (hit.playerSlot === side) {
+    book.setup = { key: shotLane(hit.type, hit.x), hitId: hit.hitId, point: state.pointId };
+  } else if (hit.side !== playerTeam(state, side) && setup?.hitId === hit.hitId - 1 && setup.point === state.pointId) {
+    const replies = book.lanes[setup.key] ??= [];
+    replies.push({ x: hit.x, depth: Math.abs(hit.z), attack: hit.type === 'smash',
+      shortLift: hit.type === 'clear' && Math.abs(hit.z) < 5.2 });
+    if (replies.length > 6) replies.shift();
+  }
+}
+
+function setupValue(state, side, candidate) {
+  const key = shotLane(candidate.shot, candidate.aim * (courtWidth(state) - .3));
+  const replies = state._scouting?.[side]?.lanes[key] || [];
+  const value = replies.reduce((sum, r) => sum + (r.shortLift ? 1.8 : r.attack ? -2.8 : 0), 0);
+  return value / (2 + replies.length);
+}
+
+function recoveryPosition(state, side, level) {
+  let x = state.shuttle.x * .15;
+  let depth = level === 'hard' && !state.challenge ? 3.25 : 3.55;
+  const book = level === 'hard' && !state.challenge && state._scouting?.[side];
+  const replies = book?.setup && book.lanes[book.setup.key];
+  if (replies?.length) {
+    // Opposite replies cancel out. A single observation barely moves the base.
+    const weight = 1 / (3 + replies.length);
+    const baseX = x, baseDepth = depth;
+    for (const reply of replies) {
+      x += weight * (clamp(reply.x, -2.3, 2.3) - baseX);
+      depth += weight * (clamp(reply.depth, 1.4, 5.5) - baseDepth);
+    }
+  }
+  return { x, z: direction(side) * depth };
+}
+
 function chooseCandidate(state, side, level, candidates) {
   const history = aiHistoryFor(state, side);
   const temperature = level === 'hard' ? 0.72 : 0.9;
@@ -835,7 +885,8 @@ function chooseCandidate(state, side, level, candidates) {
     // Reward space according to the nearer defender, never just one opponent.
     return 2.5*Math.min(...opponents.map(p=>Math.hypot(target.aimX-p.x,target.aimZ-p.z)/(ROLES[p.role].speed*staminaEffects(p,ROLES[p.role]).speedScale)));
   };
-  const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score + coverage(candidate) - repeatPenalty(history, candidate)
+  const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score + coverage(candidate)
+    + (level === 'hard' && !state.challenge ? setupValue(state, side, candidate) : 0) - repeatPenalty(history, candidate)
     - reservePressure * (candidate.shot === 'smash' ? 1.2 : candidate.shot === 'clear' ? .3 : 0) }));
   const best = Math.max(...scored.map(candidate => candidate.score));
   const viable = scored.filter(candidate => candidate.score > -5);
@@ -859,8 +910,11 @@ function chooseAIShot(state, side, level) {
   const { highChance } = smashOpportunity(state, side);
   const lowReturn = state.lastShot === 'smash' || state.lastShot === 'drop' || !highChance;
   if (level === 'easy') {
-    const shot = roll < 0.68 ? 'clear' : roll < 0.93 || lowReturn ? 'drop' : 'smash';
-    const selected = { shot, aim: lineRoll * 0.28, aimDepth: (random(state) - 0.5) * 0.25 };
+    const shot = roll < 0.74 ? 'clear' : roll < 0.96 || lowReturn ? 'drop' : 'smash';
+    // A loose midcourt lift stays playable and gives the receiver an attack.
+    const feed = shot === 'clear' && roll < .34;
+    const selected = { shot, aim: lineRoll * (feed ? .14 : .28),
+      aimDepth: (random(state) - .5) * .25 - (feed ? .73 : 0) };
     const history = aiHistoryFor(state, side); history.push(selected); if (history.length > 6) history.shift();
     return selected;
   }
@@ -879,10 +933,15 @@ function chooseAIShot(state, side, level) {
     ]);
   }
   if (level === 'medium') {
+    // Doubles already scores space against both defenders in chooseCandidate.
+    const singles = state.format !== 'doubles';
+    const depthRead = singles ? clamp((opponentDepth - 3.3) / 1.6, -1, 1) : 0;
+    const line = singles && Math.abs(opponent.x) > .85 && roll < .7
+      ? -Math.sign(opponent.x) * (.5 + .45 * Math.abs(lineRoll)) : lineRoll;
     return chooseCandidate(state, side, level, [
-      { shot: 'clear', aim: lineRoll * 0.72, aimDepth: .3 + (random(state) - 0.5) * 0.3, charge:.45, score: 2.1 },
-      { shot: 'drop', aim: lineRoll * 0.82, aimDepth: -0.25 + (random(state) - 0.5) * 0.25, score: 1.9 },
-      { shot: 'smash', aim: lineRoll * 0.9, aimDepth: 0.2 + (random(state) - 0.5) * 0.3, score: 1.7 },
+      { shot: 'clear', aim: line * 0.72, aimDepth: .3 + (random(state) - 0.5) * 0.3, charge:.45, score: 2.1 - .95 * depthRead },
+      { shot: 'drop', aim: line * 0.82, aimDepth: -0.25 + (random(state) - 0.5) * 0.25, score: 1.9 + .95 * depthRead },
+      { shot: 'smash', aim: line * 0.9, aimDepth: 0.2 + (random(state) - 0.5) * 0.3, score: 1.7 },
     ]);
   }
   const openSide = Math.abs(opponent.x) > 0.25 ? -Math.sign(opponent.x) : Math.sign(lineRoll) || 1;
@@ -892,10 +951,12 @@ function chooseAIShot(state, side, level) {
   const smashScore = highChance ? opponentDepth > 4.25 ? 2.3 : opponentDepth < 2.7 ? 2.2 : 3.35 : -10;
   const dropScore = opponentDepth > 4.25 ? 3.5 : opponentDepth < 2.7 ? 1.65 : 2.35;
   const clearScore = opponentDepth < 2.7 ? 3.9 : opponentDepth > 4.25 ? 1.65 : 2.45;
+  const shortLift = !state.challenge && state.lastShotInfo?.type === 'clear' && !state.lastShotInfo.serving
+    && Math.abs(state.lastShotInfo.z) < 5.2;
   const candidates = [
     { shot: 'drop', aim: pressure, aimDepth: -0.32 + (random(state) - 0.5) * 0.18, score: dropScore },
     { shot: 'clear', aim: pressure, aimDepth: 0.55 + (random(state) - 0.5) * 0.2, charge:.7, score: clearScore },
-    { shot: 'smash', aim: pressure, aimDepth: 0.05 + random(state) * 0.68, charge:.25+random(state)*.5, score: smashScore },
+    { shot: 'smash', aim: pressure, aimDepth: 0.05 + random(state) * 0.68, charge:.25+random(state)*.5, score: smashScore + (shortLift ? 1.6 : 0) },
     { shot: 'clear', aim: alternate, aimDepth: 0.35 + (random(state) - 0.5) * 0.25, charge:.15, score: 1.6 },
     { shot: 'drop', aim: alternate, aimDepth: -0.08 + (random(state) - 0.5) * 0.35, score: 1.55 },
   ];
@@ -944,12 +1005,16 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     }
     return output;
   }
+  if (level === 'hard' && !state.challenge) observeReplies(state, side);
   if (state.format === 'doubles') {
     const assignment = doublesAssignment(state, side, config, inputs, getInterceptAdvice, level);
     if (assignment) return { ...output, ...assignment };
   }
   if (h?.rescue) return output;
-  if (ball.lastHit === playerTeam(state, side)) return { ...output, ...moveToward(player, ball.x * 0.15, direction(side) * (level === 'hard' && !h ? 3.25 : 3.55), config.pace * (level === 'hard' && !h ? .9 : .72)) };
+  if (ball.lastHit === playerTeam(state, side)) {
+    const base = recoveryPosition(state, side, level);
+    return { ...output, ...moveToward(player, base.x, base.z, config.pace * (level === 'hard' && !h ? .9 : .72)) };
+  }
   let memory = state._ai[side];
   if (!memory || memory.hitId !== state.hitId) {
     const decision = chooseAIShot(state, side, level);

@@ -76,3 +76,54 @@ test('a deep attacking clear punishes a late retreat from the net while a center
     assert.ok(chase(3.3,.8,side,dt),'better initial positioning retains a return');
   }
 });
+
+test('expert learns from replies across points, commits before the opponent hits, and can be wrong-footed', () => {
+  const {state} = receiveFixture(game, {type:'clear', startZ:3.25});
+  const contact = (side, type, x, z) => {
+    state.hitId++;
+    state.lastShot = type;
+    state.shuttle.lastHit = side;
+    state.lastShotInfo = {hitId:state.hitId, playerSlot:side, side, type, x, z, serving:false};
+    return game.aiInput(state, 0, 'hard');
+  };
+  const setup = () => contact(0, 'drop', 1.8, -1);
+  assert.equal(setup().x, 0);
+  for (let point = 0; point < 6; point++) {
+    contact(1, 'clear', 2, 4.5);
+    for (let frame=0; frame<10; frame++) game.aiInput(state, 0, 'hard');
+    assert.equal(state._scouting[0].lanes.dropRight.length, point + 1);
+    state.pointId++;
+    assert.ok(setup().x > 0);
+  }
+  // Follow the learned recovery step before the opponent switches lines.
+  const before = state.players[0].x;
+  game.stepMatch(state, [game.aiInput(state, 0, 'hard'), {}], .04);
+  assert.ok(state.players[0].x > before);
+  assert.ok(Math.abs(-2 - state.players[0].x) > Math.abs(-2 - before));
+  for (let i=0; i<6; i++) {
+    contact(1, 'clear', -2, 4.5);
+    setup();
+  }
+  assert.ok(game.aiInput(state, 0, 'hard').x < 0);
+  assert.equal(game.createMatch()._scouting, undefined);
+});
+
+test('beginner offers midcourt lifts and intermediate reads both the rear and front court', () => {
+  let feeds=0, deepDrops=0, frontDrops=0;
+  for (let seed=1; seed<=96; seed++) {
+    for (const [level, depth] of [['easy',3], ['medium',5], ['medium',1.6]]) {
+      const {state}=receiveFixture(game,{type:'clear'});
+      state.players[1].z=-depth;
+      state._rng=Math.imul(seed,2654435761)>>>0;
+      game.aiInput(state,0,level);
+      const plan=state._ai[0];
+      if (level==='easy' && plan.shot==='clear' && plan.aimDepth<-.55 && Math.abs(plan.aim)<.15) feeds++;
+      if (level==='medium' && plan.shot==='drop') {
+        if (depth===5) deepDrops++;
+        else frontDrops++;
+      }
+    }
+  }
+  assert.ok(feeds>=24 && feeds<=42, String(feeds));
+  assert.ok(deepDrops>frontDrops+28, JSON.stringify({deepDrops,frontDrops}));
+});
