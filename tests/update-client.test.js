@@ -54,6 +54,18 @@ test('checks are throttled, and do not begin a download during a match', async t
   f.setSafe(true); await f.client.check(); assert.equal(f.checks(),2);
 });
 
+test('online startup checks once while busy and activates only when idle', async t => {
+  const f = fixture(t, {safe:false});
+  f.registration.waiting = f.waiting;
+  await Promise.all([f.client.checkOnOpen(), f.client.checkOnOpen()]);
+  assert.equal(f.checks(), 1);
+  assert.equal(f.messages.some(m => m.type === 'REQUEST_ACTIVATION'), false);
+  f.setSafe(true);
+  await f.client.check();
+  assert.equal(f.checks(), 1);
+  assert.ok(f.messages.some(m => m.type === 'REQUEST_ACTIVATION'));
+});
+
 test('a busy window refuses the worker without locking input', async t => {
   const f=fixture(t,{safe:false});
   assert.equal((await f.prepare()).ready,false); assert.equal(f.locked(),false);

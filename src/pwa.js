@@ -258,6 +258,7 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
     if (!worker) return;
     worker.addEventListener('statechange', () => {
       if (worker.state === 'redundant') failure = !cached;
+      if (worker.state === 'installed') void updater?.tryActivate();
       if (worker.state === 'activated') cacheStatus();
       updateUI();
     });
@@ -267,6 +268,7 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
       const {scriptURL, scope} = getPwaRegistrationURLs();
       registration = await navigator.serviceWorker.register(scriptURL, {scope, updateViaCache:'none'});
       updater?.setRegistration(registration);
+      void updater?.checkOnOpen();
       failure = false; watchWorker(registration.installing);
       registration.addEventListener('updatefound', () => { watchWorker(registration.installing); updateUI(); });
       await cacheStatus(); updateUI();
@@ -293,7 +295,7 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
   }
   cornerCheck?.addEventListener('click', checkForUpdates);
   retryButton.addEventListener('click', checkForUpdates);
-  window.addEventListener('online', updateUI); window.addEventListener('offline', updateUI);
+  window.addEventListener('online', () => { updateUI(); if (supported && !registration) void register(); }); window.addEventListener('offline', updateUI);
   updateUI(); if (supported) register();
   document.addEventListener('visibilitychange', () => { if (!document.hidden) scheduleReleaseNotice(); });
   return {setMatchActive(value) { matchActive = Boolean(value); if(matchActive && dialog.open)dialog.close(); updateUI(); if(!matchActive)scheduleReleaseNotice(); }, openInstall};
