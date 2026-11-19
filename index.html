@@ -102,7 +102,10 @@
     <div class="menu-heading" id="entry-home-heading"><div class="eyebrow">BADMINTON CLUB</div>
     <h1 aria-label="开拍 RALLY"><span class="lobby-wordmark">开拍</span><span class="lobby-latin">RALLY</span></h1>
     <p id="menu-intro" class="intro">5 / 11 / 21 分 · 对角发球</p>
-    <p class="landscape-hint">请横置手机游玩，或点击右上角「横屏」。</p></div>
+    <p class="landscape-hint">请横置手机游玩，或点击右上角「横屏」。</p>
+    <button id="open-playtest-notice" type="button" aria-haspopup="dialog" aria-controls="playtest-notice">
+      <span>公告</span><strong>试玩预告</strong><span aria-hidden="true">›</span>
+    </button></div>
     <div id="entry-heading" class="entry-heading" hidden><h2 id="entry-title"></h2></div><div class="setup" id="mode-setup">
       <div class="setup-fields" id="ai-setup" hidden>
         <div class="setup-row"><span class="field-label">对战人数</span><div id="ai-lineup" class="segments" role="group" aria-label="对战人数"><button data-lineup="singles" class="selected" aria-pressed="true">单打 1V1</button><button data-lineup="doubles" aria-pressed="false">双打 2V2</button></div></div>
@@ -184,7 +187,7 @@
     </div>
   </main>
   <footer class="lobby-update" aria-label="游戏版本与更新">
-    <span class="lobby-version">正式版 1.22.3</span>
+    <span class="lobby-version">正式版 1.22.4</span>
     <button id="lobby-check-update" type="button">检查更新</button>
   </footer>
   <aside id="court-caption" class="court-caption"><div class="live-tag"><i></i> 球场预览</div><div class="court-strip"><b>01</b><span>比赛场地</span><span>RALLY COURT</span></div></aside>
@@ -205,6 +208,21 @@
     <div class="shots-wrap"><div class="aim-heading"><b id="aim-value">按住击球键拖动</b></div><div class="shot-buttons"><button data-shot="clear" class="shot-btn"><span class="key-face"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 18C4 2 20 2 21 18m-5-3 5 3 1-6"/></svg></span><strong>高远</strong><small>J</small><i class="key-charge" aria-hidden="true"></i><i class="key-direction" aria-hidden="true"></i><i class="key-nub" aria-hidden="true"></i></span></button><button data-shot="drop" class="shot-btn"><span class="key-face"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10c7-10 12-2 12 10m-4-4 4 4 4-4"/></svg></span><strong>吊球</strong><small>K</small><i class="key-charge" aria-hidden="true"></i><i class="key-direction" aria-hidden="true"></i><i class="key-nub" aria-hidden="true"></i></span></button><button data-shot="smash" class="shot-btn smash"><span class="key-face"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 2-10 12h7l-1 8L21 9h-8Z"/></svg></span><strong>杀球</strong><small>L</small><i class="key-charge" aria-hidden="true"></i><i class="key-direction" aria-hidden="true"></i><i class="key-nub" aria-hidden="true"></i></span></button></div><small class="shot-instruction"><span>↑ 更深 · ↓ 靠网</span><span id="shot-risk" data-risk="idle">左右选线 · 松手击球</span></small></div>
     <div id="gesture-pad" class="gesture-pad" hidden aria-hidden="true"><span class="gesture-up">深</span><span class="gesture-down">短</span><i id="gesture-dot"></i></div>
   </section>
+  <dialog id="playtest-notice" class="release-dialog" aria-labelledby="playtest-notice-title">
+    <header>
+      <h2 id="playtest-notice-title">《开拍 RALLY》试玩预告</h2>
+      <button id="close-playtest-notice" class="release-close" type="button" aria-label="关闭试玩公告" autofocus>×</button>
+    </header>
+    <div class="playtest-notice-body">
+      <p>感谢大家关注和支持《开拍 RALLY》！游戏目前还在测试中。我们正在准备 TapTap 试玩版本，也计划在微信小游戏及其他小游戏平台陆续开放试玩。开放时间确认后会另行公布，欢迎到时候来打一局！</p>
+      <p>好友房间正在测试，开放后可以建房邀请好友对战。在线匹配也在计划中，开放安排会单独公布。</p>
+      <p id="playtest-beta-note" hidden>想提前参与内测，欢迎添加开发者微信，备注「开拍内测」。试玩入口、测试安排和版本更新会在群里同步。</p>
+    </div>
+    <div class="playtest-notice-actions">
+      <button id="playtest-beta-group" class="release-dismiss" type="button" hidden>加入内测群</button>
+      <button id="dismiss-playtest-notice" type="button">知道了</button>
+    </div>
+  </dialog>
   <div id="dialog-backdrop" class="dialog-backdrop" hidden>
     <section id="beta-group" class="dialog feedback-dialog" role="dialog" hidden aria-labelledby="beta-group-title">
       <button class="close-dialog" type="button" data-close aria-label="关闭">×</button>

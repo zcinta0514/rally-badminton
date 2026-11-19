@@ -114,6 +114,39 @@ const pwa=initPWA({fullscreenButton:$('fullscreen'),landscapeButton:$('landscape
     editing:Boolean(document.activeElement?.matches('input, textarea, select, [contenteditable="true"]'))})});
 const onboarding=initOnboarding({showToast,canOpen:()=>Boolean(controls)&&$('loading').hidden&&mode==='menu'&&!room&&!connecting&&!peerSession&&!peerAttempt,
   onStartPractice:()=>openEntry('ai')});
+const playtestNotice = $('playtest-notice');
+const playtestNoticeKey = 'rally.playtest.notice.1';
+const betaGroupEntry = $('open-beta-group');
+let offeredPlaytestNoticeOnStartup = false;
+
+function openPlaytestNotice({ automatic = false } = {}) {
+  if (automatic) {
+    try { if (localStorage.getItem(playtestNoticeKey) === '1') return false; } catch {}
+  }
+  if (document.querySelector('dialog[open], .dialog:not([hidden])')) return false;
+  playtestNotice.showModal();
+  offeredPlaytestNoticeOnStartup = automatic;
+  try { localStorage.setItem(playtestNoticeKey, '1'); } catch {}
+  return true;
+}
+
+$('open-playtest-notice').addEventListener('click', () => openPlaytestNotice());
+for (const id of ['close-playtest-notice', 'dismiss-playtest-notice']) {
+  $(id).addEventListener('click', () => playtestNotice.close());
+}
+if (betaGroupEntry) {
+  $('playtest-beta-note').hidden = false;
+  $('playtest-beta-group').hidden = false;
+  $('playtest-beta-group').addEventListener('click', () => {
+    playtestNotice.close();
+    betaGroupEntry.click();
+  });
+}
+playtestNotice.addEventListener('close', () => {
+  if (playtestNotice.open || !offeredPlaytestNoticeOnStartup) return;
+  offeredPlaytestNoticeOnStartup = false;
+  onboarding.maybeShow();
+});
 let lastRtt=null,lastDiagnostics=0,appliedQuality='',peerStats=null,lastPeerStats=0,peerStatsPending=false;
 const setText=(id,text)=>{if($(id).textContent!==String(text))$(id).textContent=text;};
 const peerRecords=peerMode?createPeerRecords():null;
@@ -837,7 +870,7 @@ try{
   requestAnimationFrame(frame);
   const invited=new URLSearchParams(location.search).get('room');
   if(invited&&!practiceOnly){settings.friendFormat=new URLSearchParams(location.search).get('format')==='doubles'?'doubles':'singles';syncEntrySettings();$('room-code').value=invited.toUpperCase().slice(0,5);setFriendAction('join');dialog('friends-dialog');}
-  onboarding.maybeShow();
+  if (invited || !openPlaytestNotice({ automatic: true })) onboarding.maybeShow();
 }catch(error){
   console.error(error);$('loading').textContent='球场加载失败：'+error.message+'。请使用支持 WebGL 2 的浏览器后刷新。';
 }

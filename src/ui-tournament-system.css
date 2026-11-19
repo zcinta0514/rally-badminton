@@ -585,3 +585,54 @@ body[data-screen=menu]:has(#menu[data-entry=home]) .lobby-update {
 /* Match toolbar keeps existing widths while giving every control one baseline. */
 body[data-screen=match] .topbar .top-actions { align-items:center; }
 body[data-screen=match] .topbar button { height:36px; min-height:36px; line-height:16px; }
+body[data-screen=menu] #menu #open-playtest-notice {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:44px;
+  margin-top:6px;
+  padding:6px 12px;
+  border:1px solid #759858;
+  border-radius:4px;
+  background:#22362b;
+  color:#e2f0ca;
+  font:inherit;
+  font-size:12px;
+  white-space:nowrap;
+}
+#open-playtest-notice span:first-child { color:#c2dc9b; }
+body[data-screen=menu] #menu #open-playtest-notice:is(:hover,:focus-visible) { background:#354e38; }
+
+#playtest-notice[open] {
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:10px;
+  padding:16px 20px;
+  overflow:hidden;
+}
+#playtest-notice h2 {
+  margin:0;
+  padding-right:40px;
+  font-size:clamp(18px,4vw,24px);
+}
+#playtest-notice .playtest-notice-body {
+  overflow:auto;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+}
+#playtest-notice p { margin:0 0 8px; }
+#playtest-notice p:last-child { margin-bottom:0; }
+#playtest-notice .playtest-notice-actions { display:flex; flex-wrap:wrap; gap:8px; }
+#dismiss-playtest-notice {
+  min-height:44px;
+  padding:8px 14px;
+  border:1px solid #b8c8bc;
+  border-radius:4px;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  font-size:13px;
+}
+@media (max-height:360px) and (orientation:landscape) {
+  body[data-screen=menu] #menu[data-entry=home] #mode-setup { padding-block:6px; }
+}
