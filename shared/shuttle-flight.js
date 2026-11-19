@@ -1,7 +1,7 @@
 // Horizontal quadratic drag, dv/dt = -k |v| v, solved analytically. Vertical
 // motion optionally includes its own quadratic drag. This separable model is
 // a rhythm approximation, not full coupled aerodynamics. Metres and seconds.
-export const SHUTTLE_FLIGHT = Object.freeze({ drag: .2, smashDrag: .035, gravity: 9.81 });
+export const SHUTTLE_FLIGHT = Object.freeze({ drag: .2, smashDrag: .05, gravity: 9.81 });
 
 // Separable quadratic vertical drag: calibrated to a feather shuttle's ~6.7m/s
 // terminal fall. This is not a coupled 3D aerodynamic model. Legacy/test balls

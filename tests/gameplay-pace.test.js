@@ -49,10 +49,10 @@ test('a single early release survives the approach to a drop; a late start still
   }
 });
 
-test('a positioned defender can buffer one return against an unchanged fast smash', () => {
+test('a positioned defender can react to a smash from the rear court', () => {
   for (const frame of [1 / 30, 1 / 60, 1 / 120]) for (const side of [0, 1]) {
     for (const startZ of [3.6, 4.8]) {
-      const response = runReceive(game, { type: 'smash', startZ, moving: false, pressAt: 0, frame, side });
+      const response = runReceive(game, { type: 'smash', startZ, moving: false, pressAt: .24, frame, side });
       assert.equal(response.received, true, JSON.stringify(response));
       assert.equal(response.player.z, startZ * (side === 0 ? 1 : -1), 'input buffering must not move the defender');
       assert.ok(response.incomingFlight < .62);

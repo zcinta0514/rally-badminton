@@ -48,13 +48,35 @@ test('overhead smashes stay fast, downward and close to their straight chord on 
         deviation=Math.max(deviation,Math.abs(p.y-launch.y*(1-fraction)));
         assert.ok(p.vy<0);
       }
-      assert.ok(deviation<.48,`curve ${deviation}`);
+      assert.ok(deviation<.52,`curve ${deviation}`);
       const end=sampleShuttleFlight(launch,t.duration);
       assert.ok(Math.abs(end.z-t.z)<1e-8 && Math.abs(end.y)<1e-8);
       let sliced=launch;
       for(let i=0;i<100;i++) sliced=sampleShuttleFlight(sliced,t.duration/100);
       assert.ok(Math.abs(sliced.z-end.z)<1e-8);
     }
+});
+
+test('rear smashes give a positioned defender more reading time while a front kill stays quick', () => {
+  for (const side of [0, 1]) {
+    const state = createMatch();
+    const sign = side === 0 ? 1 : -1;
+    state.phase = 'rally';
+    for (const [depth, earliest, latest] of [[1.5, .33, .337], [4.8, .39, .40], [5.2, .39, .40]]) {
+      Object.assign(state.players[side], { x: 0, z: sign * depth });
+      Object.assign(state.shuttle, { x: 0, y: 3.2, z: sign * depth, vy: 0, lastHit: 1 - side, active: true });
+      const shot = getShotTarget(state, side, { shot: 'smash', charge: .3 });
+      assert.ok(shot.smashViable);
+      const launch = { ...state.shuttle, vx: shot.vx, vz: shot.vz, vy: shot.vy, drag: shot.drag };
+      const arrival = timeToShuttleZ(launch, -3.55 * sign);
+      assert.ok(arrival > earliest && arrival < latest, `depth ${depth}, arrival ${arrival}`);
+      if (depth === 5.2) {
+        const after8m = sampleShuttleFlight(launch, timeToShuttleZ(launch, (depth - 8) * sign));
+        const retained = after8m.vz / launch.vz;
+        assert.ok(retained > .66 && retained < .68);
+      }
+    }
+  }
 });
 
 test('rear contacts retain clearance on moderate aim but can deliberately risk the net',()=>{
