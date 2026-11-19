@@ -29,6 +29,27 @@ try {
       for (const [width, height] of [[844, 390], [568, 320], [568, 260], [390, 844]]) {
         await page.setViewportSize({ width, height });
         await page.evaluate(() => document.fonts.ready);
+        if (width > height) {
+          const layout = await page.evaluate(() => {
+            const menu = document.querySelector('#menu');
+            const bounds = selector => document.querySelector(selector).getBoundingClientRect();
+            const notice = bounds('#open-playtest-notice');
+            const friends = bounds('#open-friends');
+            const solo = bounds('#open-solo');
+            const logoTop = bounds('.lobby-wordmark').top;
+            const firstScreen = ['#open-solo', '#open-friends', '#open-playtest-notice'].every(selector => {
+              const box = bounds(selector);
+              const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+              return hit?.closest('button') === document.querySelector(selector);
+            });
+            menu.scrollTop = menu.scrollHeight;
+            return { firstScreen, scroll: menu.scrollTop, logoShift: bounds('.lobby-wordmark').top - logoTop,
+              centered: Math.abs(notice.x + notice.width / 2 - innerWidth / 2) < 1,
+              clear: notice.left >= solo.right || notice.bottom <= solo.top,
+              aboveCenter: notice.bottom < innerHeight / 2 };
+          });
+          assert.deepEqual(layout, { firstScreen:true, scroll:0, logoShift:0, centered:true, clear:true, aboveCenter:true }, engine + ' ' + width + '×' + height + ' ' + JSON.stringify(layout));
+        }
         for (const selector of ['#open-playtest-notice', '#open-solo', '#open-friends']) {
           const box = await page.locator(selector).boundingBox();
           assert.ok(box && box.x >= 0 && box.y >= 0 && box.x + box.width <= width + 1 && box.y + box.height <= height + 1, engine + ' ' + width + '×' + height + ' ' + selector + ' ' + JSON.stringify(box));
@@ -42,7 +63,7 @@ try {
         await close.click();
       }
       await page.reload();
-      await page.locator('#loading').waitFor({ state: 'hidden' });
+      await page.locator('#loading').waitFor({ state: 'hidden', timeout: 30000 });
       assert.equal(await notice.isVisible(), false);
       await entry.click();
       await page.locator('#playtest-beta-group').click();
