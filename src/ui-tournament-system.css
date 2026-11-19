@@ -637,8 +637,11 @@ body[data-screen=menu] #menu #open-playtest-notice:is(:hover,:focus-visible) { b
   body[data-screen=menu] #menu #open-playtest-notice {
     position:fixed;
     left:50%;
-    top:max(calc(var(--chrome-top) + 52px), 21dvh);
-    transform:translateX(-50%);
+    top:max(calc(var(--chrome-top) + 48px), 18dvh);
+    translate:-50% 0;
+    font-size:14px;
+    min-height:48px;
+    padding-inline:14px;
     margin:0;
   }
 }
@@ -646,6 +649,10 @@ body[data-screen=menu] #menu #open-playtest-notice:is(:hover,:focus-visible) { b
   body[data-screen=menu] #menu[data-entry=home] #mode-setup { padding-block:6px; }
 }
 @media (max-height:300px) and (orientation:landscape) {
+  body[data-screen=menu] #menu #open-playtest-notice {
+    gap:4px;
+    padding-inline:8px;
+  }
   body[data-screen=menu] #menu[data-entry=home] {
     padding-top:max(10px,var(--safe-top));
     height:calc(100dvh - var(--chrome-bottom) - 48px);
