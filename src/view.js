@@ -96,6 +96,8 @@ export class CourtView {
     this.scene.fog = new THREE.Fog(COLORS.background, 32, 65);
     this.camera = new THREE.PerspectiveCamera(45,1,0.1,100);
     this.fatigueEdge = canvas.id === 'court' ? document.querySelector('#fatigue-edge') : null;
+    // Remove near-side scenery along a diagonal above the court, keeping the far stands.
+    this.followVenuePlanes = [new THREE.Plane(new THREE.Vector3(0,-1,-1).normalize(), 8.5/Math.SQRT2)];
     this.cameraSide = null;
     this.entrance = new MatchEntrance();this.entranceFrom = null;this.entranceTo = this.camera.clone();
     this.cameraSettings = normalizeCameraSettings();
@@ -121,6 +123,7 @@ export class CourtView {
       top.target.position.set(0, 0, end * 3.2); this.scene.add(top, top.target);this.courtLights.push(top);
     }
     this.makeCourt();
+    this.prepareFollowScenery(this.fallbackCourt);
     this.players = [makeAthlete(this.scene, 0), makeAthlete(this.scene, 1)];
     for (const player of this.players) void upgradeAthlete(player);
     this.mode = 'menu';
@@ -203,6 +206,15 @@ export class CourtView {
     this.courtMaterials = { court: courtMat, apron: apronMat, edge: edgeMat, dark: darkMat };
     this.arena = makeArena(scene);
     this.hallShell = makeHallShell(scene);
+
+  }
+
+  prepareFollowScenery(group) {
+    group.traverse(object => {
+      if (!object.material) return;
+      const materials = Array.isArray(object.material) ? object.material : [object.material];
+      for (const material of materials) material.clippingPlanes = this.followVenuePlanes;
+    });
   }
 
   makeShuttle() {
@@ -372,6 +384,7 @@ export class CourtView {
     const hall = this.preparedTournament;
     if (!hall || this.mode === 'training') return;
     hall.palette(this.courtPalette);
+    this.prepareFollowScenery(hall.scene);
     this.venue.add(hall.scene);
     this.fallbackCourt.removeFromParent();
     disposeSceneResources(this.fallbackCourt);
@@ -391,6 +404,7 @@ export class CourtView {
     if (training) {
       if (!this.trainingHall) {
         this.trainingHall = makeTrainingHall();
+        this.prepareFollowScenery(this.trainingHall.group);
         this.scene.add(this.trainingHall.group);
       }
       this.trainingHall.group.add(this.netVisual.group);
@@ -514,7 +528,8 @@ export class CourtView {
       camera.position.z += origin.z;
     }
     camera.lookAt(origin?.x ?? 0,origin?.y ?? 0,origin?.z ?? 0);
-    camera.updateProjectionMatrix();camera.updateMatrixWorld();
+    // setViewOffset already refreshed the projection.
+    camera.updateMatrixWorld();
   }
 
   updateHints(state, info, freeze, reset, side = 0) {
@@ -688,7 +703,7 @@ export class CourtView {
       updateAthlete(athlete,player,localTeam(state,index),shuttle,athleteTime,dt,!doubles&&index===side,athleteFreeze,athleteReset,
         state.challenge?.bossSide===index?state.challenge.rescue:null);
     });
-    const ballReset=reset||this.shuttlePosition.distanceToSquared(new THREE.Vector3(shuttle.x,shuttle.y,shuttle.z))>100;
+    const ballReset=reset||this.shuttlePosition.distanceToSquared(shuttle)>100;
     const position=tail?.position||shuttle;
     this.shuttlePosition.set(position.x,position.y,position.z);
     this.shuttle.position.copy(this.shuttlePosition);
@@ -789,7 +804,10 @@ export class CourtView {
       for(const hint of [this.landingHint,this.interceptHint,this.targetHint,this.readyHint])hint.group.visible=false;
       for(const player of this.players){player.halo.visible=false;player.selected.visible=false;}
     }else for(const player of this.players)player.halo.visible=true;
+    if (follow) this.followVenuePlanes[0].normal.z = (team === 1 ? 1 : -1) / Math.SQRT2;
+    this.renderer.localClippingEnabled = follow;
     this.renderer.render(this.scene,this.camera);
+    this.renderer.localClippingEnabled = false;
   }
   dispose() {
     this.disposed = true;
