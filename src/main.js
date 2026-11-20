@@ -1,4 +1,6 @@
 import { captureMotion, presentLocal } from './local-presentation.js';
+import { createTraining, setTrainingOptions, stepTraining } from '../shared/training.js';
+import { bindTrainingUI } from './training-ui.js';
 import { practiceInputs, localTeam, lineupNames } from './match-lineup.js';
 import { hellStatus } from '../shared/hell-mode.js';
 import { CourtView } from './view.js';
@@ -346,8 +348,42 @@ function setScreen(screen){
   $('menu').hidden=screen!=='menu';$('court-caption').hidden=screen!=='menu';
   $('hud').hidden=screen!=='match';$('game-controls').hidden=screen!=='match';$('pause').hidden=screen!=='match';
   if(screen==='match')shotLayout?.refresh();
-  view?.setMode(screen);
+  view?.setMode(mode==='training' ? 'training' : screen);
 }
+let trainingPlaying=false;
+function resetTraining(options){
+  controls.reset();
+  controls.setEnabled(false);
+  pendingShot=null;
+  selectAim(0);
+  dragAim=null;
+  dragDepth=0;
+  gestureOrigin=null;
+  trainingPlaying=false;
+  accumulator=0;
+  lastFrame=performance.now();
+  state=state?.training ? setTrainingOptions(state,options) : createTraining(options);
+  arenaAudio.reset();
+}
+const trainingUI=bindTrainingUI({
+  onEnter(options){
+    if(mode!=='menu'||!controls||state||room||peerAttempt||connecting)return false;
+    mode='training';
+    side=0;
+    resetTraining(options);
+    setScreen('match');
+    dialog(null);
+    return true;
+  },
+  onConfigure:resetTraining,
+  onStart(options){
+    resetTraining(options);
+    trainingPlaying=true;
+    controls.setEnabled(true);
+    unlockAudio();
+  },
+  onExit:()=>exitToMenu(),
+});
 function enterMatch(){
   usage.startMatch(mode);
   clearFinale();
@@ -361,6 +397,10 @@ function enterMatch(){
   document.body.dataset.entering=String(view?.entranceActive===true);
 }
 function exitToMenu({entry='home'}={}){
+  if(mode==='training'){
+    trainingPlaying=false;
+    trainingUI.close();
+  }
   usage.endMatch('quit');
   clearFinale();finale.reset();
   resultPending=false;
@@ -398,6 +438,7 @@ $('hell-roles').addEventListener('click',event=>{
 const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},localTeam(state,side),dragAim??aim);
 function send(message){if(peerMode)peerSession?.send(message);else if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(['create','join','resumeSession'].includes(message.type)?{...message,rulesVersion:RULES_VERSION}:message));}
 function fireShot(request){
+  if(mode==='training'&&!trainingPlaying)return;
   if(view?.entranceActive||!state||!['serve','rally'].includes(state.phase))return;
   const selectedAim=resolveShotAim(request,aim);
   const input=worldInput({...controls.sample(),...request,aim:selectedAim});dragAim=null;dragDepth=0;
@@ -405,6 +446,7 @@ function fireShot(request){
   if(mode==='online')send({type:'input',...input});else pendingShot=input;
 }
 function requestPause(){
+  if(mode==='training'){trainingUI.configure();return;}
   if(view?.entranceActive)return;
   if(reconnecting){showConnectionRecovery();return;}
   if(!state||!['serve','rally','point','intermission'].includes(state.phase))return;
@@ -599,6 +641,13 @@ document.addEventListener('visibilitychange',()=>{
   if(finale.blocking)lastFrame=performance.now();
   arenaAudio.setVisible(!document.hidden);
   menuAudio.setVisible(!document.hidden);
+  if(mode==='training'){
+    controls.reset();
+    pendingShot=null;
+    accumulator=0;
+    lastFrame=performance.now();
+    return;
+  }
   if(!document.hidden||!state||state.phase==='over')return;
   if(shotLayoutHold||(mode==='ai'&&matchSettings?.isOpen)){controls?.reset();pendingShot=null;return;}
   controls?.reset();pendingShot=null;
@@ -622,6 +671,20 @@ function shotGuidance(state){
     availability:getShotAvailability(state,side,request),
     target:getShotTarget(state,side,request),
     shot,prepare:input.prepare,charge:input.charge,aim:localRequest.aim,aimDepth:localRequest.aimDepth};
+}
+function paintShotControls(input,canSmash,phase){
+  const smashButton=document.querySelector('[data-shot="smash"]');
+  smashButton.classList.toggle('unavailable',!canSmash);
+  smashButton.classList.toggle('ready',canSmash);
+  if(canSmash&&!smashReady&&phase==='rally')haptics.ready();
+  smashReady=canSmash;
+  const gesture=$('gesture-pad');
+  gesture.hidden=!input?.prepare||!gestureOrigin;
+  if(!gesture.hidden){
+    gesture.style.left=`${Math.max(62,Math.min(innerWidth-62,gestureOrigin.x))}px`;
+    gesture.style.top=`${Math.max(70,Math.min(innerHeight-70,gestureOrigin.y))}px`;
+    $('gesture-dot').style.transform=`translate(calc(-50% + ${input.aim*42}px),calc(-50% - ${input.aimDepth*42}px))`;
+  }
 }
 function updateUI(info,state){
   if(!state)return;
@@ -663,12 +726,7 @@ function updateUI(info,state){
   setText('match-message',state.phase==='serve'?(state.server===team?`${doubles&&state.serverPlayer!==side?'队友':'你'}发球 · ${state.service?.court==='left'?'左':'右'}发球区`:'对手发球'):relativeMessage(state.message));
   setText('rally',state.phase==='rally'?`${state.rally} 拍回合`:`第 ${state.pointId+1} 分`);
   if(mode==='ai')setText('connection',state.challenge?'2 / 5 非对称挑战':'本地练习');
-  const smashButton=document.querySelector('[data-shot="smash"]');
-  const canSmash=Boolean(info.availability.canSmash);
-  smashButton.classList.toggle('unavailable',!canSmash);
-  smashButton.classList.toggle('ready',canSmash);
-  if(canSmash&&!smashReady&&state.phase==='rally')haptics.ready();
-  smashReady=canSmash;
+  paintShotControls(info,info.availability.canSmash,state.phase);
   const lane=info.aim,depth=info.aimDepth;
   const quality=info.target?.quality;
   const risk=quality?.risk||0;
@@ -677,13 +735,6 @@ function updateUI(info,state){
   setText('shot-risk',riskText);
   $('shot-risk').dataset.risk=info.prepare?(risk>.55?'high':risk>.25?'medium':'low'):'idle';
   setText('aim-value',info.prepare?`${lane<-.15?'左':lane>.15?'右':'中路'}${depth>.15?' · 偏深':depth<-.15?' · 偏短':''} · ${Math.round(info.charge*100)}%`:'按住击球键拖动');
-  const gesture=$('gesture-pad');
-  gesture.hidden=!info.prepare||!gestureOrigin;
-  if(!gesture.hidden){
-    gesture.style.left=`${Math.max(62,Math.min(innerWidth-62,gestureOrigin.x))}px`;
-    gesture.style.top=`${Math.max(70,Math.min(innerHeight-70,gestureOrigin.y))}px`;
-    $('gesture-dot').style.transform=`translate(calc(-50% + ${lane*42}px),calc(-50% - ${depth*42}px))`;
-  }
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
   $('help').disabled=view?.entranceActive||reconnecting||state.phase==='countdown'||finale.blocking;
   controls.setEnabled(!view?.entranceActive&&['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting&&!shotLayoutHold&&!matchSettings?.isOpen);
@@ -790,6 +841,31 @@ try{
       if(previewCanvas) view.render(previewMatch,0,0);
       else view.renderLobby(Math.min(elapsed,.1));
       renderMs=performance.now()-renderStart;
+    }else if(mode==='training'){
+      if(trainingPlaying&&!document.hidden){
+        accumulator+=Math.min(elapsed,.15);
+        while(accumulator>=1/60){
+          const input=worldInput(controls.sample());
+          if(pendingShot){Object.assign(input,pendingShot);pendingShot=null;}
+          stepTraining(state,input,1/60);
+          accumulator-=1/60;
+        }
+        arenaAudio.setListener(view.camera.position);
+        arenaAudio.update(state,true);
+      }
+      const renderStart=performance.now();
+      const held=trainingPlaying && controls.activeShot ? worldInput(controls.sample()) : null;
+      const aiming=held && (state.training.stage==='feed' || (state.phase==='serve' && state.training.stage==='ready'));
+      view.render(state,0,Math.min(elapsed,.1),{
+        prepare:aiming ? held.prepare : null,
+        target:aiming ? getShotTarget(state,0,held) : null,
+        trainingTarget:state.training.target,
+        trainingTargets:state.training.targets,
+        trainingActiveTarget:state.training.returnShot?.technique,
+      });
+      renderMs=performance.now()-renderStart;
+      paintShotControls(held,trainingPlaying && Boolean(state.training.canSmash),state.phase);
+      trainingUI.update(state.training,held);
     }else if(state){
       view.advanceEntrance?.(elapsed,{hidden:document.hidden,phase:state.phase,remaining:state.timer});
       document.body.dataset.entering=String(view.entranceActive===true);
@@ -847,7 +923,23 @@ try{
       if($('performance-readout'))setText('performance-readout',formatPerformance(stats,network,lastRtt,renderer,peerStats));
       // Read-only diagnostics for reproducible browser QA and user bug reports.
       window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats,
-        stateTime:state?.time??null,statePhase:state?.phase??null,
+        stateTime:state?.time??null,statePhase:state?.phase??null,venue:view.mode,
+        get matchStroke(){return mode==='ai' ? structuredClone(state?.lastShotInfo??null) : null;},
+        get training(){
+          if(mode!=='training')return null;
+          const pose=view.players[0].root.userData.pose;
+          const project=(x,y,z)=>{
+            const p=view.shuttle.position.clone().set(x,y,z).project(view.camera);
+            return {x:(p.x+1)*view.width/2,y:(1-p.y)*view.height/2};
+          };
+          const target=state.training.target;
+          return structuredClone({...state.training,time:state.time,shuttle:state.shuttle,
+            player:{x:state.players[0].x,z:state.players[0].z},stroke:state.lastShotInfo,
+            pose:pose&&{racketHead:pose.racketHead,racketRoll:pose.racketRoll,chestYaw:pose.chestYaw},
+            screen:{ball:project(state.shuttle.x,state.shuttle.y,state.shuttle.z),
+              target:target&&[-1,1].flatMap(dx=>[-1,1].map(dz=>
+                project(target.x+dx*target.width/2,.03,target.z+dz*target.depth/2)))}});
+        },
         format:state?.format,playerSlot:side,team:state?localTeam(state,side):null,score:state?[...state.score]:null,hitId:state?.hitId,playerCount:state?.players.length,serverPlayer:state?.serverPlayer,receiverPlayer:state?.receiverPlayer,
         entrance:{active:view.entranceActive,progress:view.entrance?.progress??1,camera:view.camera?.position?.toArray()},
         challenge:state?.challenge?{...state.challenge,score:[...state.score],hitId:state.hitId,lastShot:state.lastShotInfo}:null,

@@ -1,0 +1,104 @@
+/* Keep the shot keys and floating stick on the same hit surfaces as a match. */
+body[data-training] :is(#hud, #countdown, .player-stamina-layer, .assist-panel) { display:none !important; }
+/* The layout editor measures the toolbar and both instruction rows to fit
+   custom keys. Keep their geometry available while in the training venue. */
+body[data-training] .topbar, body[data-training] .shot-instruction,
+body[data-training=preview] #game-controls { visibility:hidden; }
+body[data-training=playing] #game-controls .aim-heading { visibility:visible; }
+
+#training-ui {
+  --rail-left:max(16px,var(--safe-left));
+  --rail-right:max(16px,var(--safe-right));
+  position:fixed; inset:0; z-index:7; pointer-events:none;
+  color:#edf2e6; font-family:inherit;
+}
+.training-bar {
+  position:absolute; inset:0 0 auto; display:flex; justify-content:space-between; align-items:flex-start;
+  gap:8px; padding:max(12px,var(--safe-top)) var(--rail-right) 20px var(--rail-left);
+  background:linear-gradient(#0d1916e8,#0d1916ae 56%,transparent);
+}
+.training-heading, .training-bar nav { display:flex; align-items:center; gap:12px; }
+.training-heading { flex-wrap:wrap; gap:4px 12px; min-height:44px; }
+.training-heading strong { font-size:clamp(17px,2.3vw,24px); font-weight:600; }
+#training-session { padding-left:12px; border-left:1px solid #aec7b16e; font-size:14px; }
+#training-count { color:#ceeaa9; font-size:12px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+#training-ui button { min-height:44px; font:inherit; font-size:13px; padding:4px 6px; pointer-events:auto; }
+#training-setup select:focus-visible,
+#training-ui button:focus-visible { outline:2px solid #d6efac !important; outline-offset:2px; }
+#training-coaching {
+  position:absolute; top:calc(max(12px,var(--safe-top)) + 47px); left:var(--rail-left);
+  max-width:min(260px,31vw); padding:7px 11px; font-size:13px; line-height:1.5;
+  background:#14241fea; border-left:2px solid #c5dc98;
+}
+#training-feedback { color:#eef5df; font-weight:600; }
+#training-cue { margin:3px 0 0; color:#c9d6c9; font-size:12px; }
+body[data-training-contact=ready] #training-coaching { border-color:#e6f5a9; }
+body[data-training-contact=ready] #training-feedback {
+  color:#e1f5a2;
+}
+body[data-training=playing] #game-controls [data-training-recommended] .key-face {
+  border-color:#c4dca0; box-shadow:inset 0 0 0 1px #c4dca066;
+}
+body[data-training-contact=ready] #game-controls [data-training-recommended] .key-face {
+  border-color:#f2ffc2; color:#ffffff; --key-accent:#f2ffc2;
+  background:#385f42; box-shadow:inset 0 0 0 2px #c8e99880;
+}
+#training-setup {
+  position:absolute; right:var(--rail-right); bottom:max(12px,var(--safe-bottom)); left:var(--rail-left);
+  max-width:850px; max-height:52dvh; margin-inline:auto; padding:12px 18px 6px;
+  background:#11211ef2; border-top:2px solid #a8c986; box-shadow:0 4px 18px #04130e55;
+  overflow-y:auto; overscroll-behavior:contain; pointer-events:auto; touch-action:pan-y;
+}
+.training-fields { display:flex; align-items:flex-end; gap:14px; }
+.training-fields label { flex:1; min-width:0; font-size:11px; line-height:1.3; color:#bdccb9; }
+.training-fields label:first-child { flex:1.55; }
+.training-fields select {
+  display:block; width:100%; min-height:38px; margin:3px 0 0; padding:4px;
+  font:inherit; font-size:14px; color:#f0f3e8; background:#20352d; border:1px solid #536957;
+  border-radius:3px; color-scheme:dark; touch-action:manipulation;
+}
+.training-fields select:disabled { background:transparent; color:#c5d4bf; opacity:1; }
+.training-launch { display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:3px; }
+.training-instructions { min-width:0; padding-block:4px; }
+#training-hint, #training-gestures { margin:0; font-size:12px; line-height:1.4; }
+#training-hint { color:#ecf4df; }
+#training-gestures { margin-top:2px; color:#bdccb9; font-size:11px; }
+#training-ui #training-start { flex:none; color:#d8efb6; font-size:15px; font-weight:600; }
+#training-start span { margin-left:5px; }
+
+@media (orientation:landscape) and (max-height:500px) {
+  #training-ui { --rail-left:max(10px,var(--safe-left)); --rail-right:max(10px,var(--safe-right)); }
+  .training-bar { padding-top:max(2px,var(--safe-top)); padding-bottom:9px; }
+  #training-coaching { top:calc(max(2px,var(--safe-top)) + 43px); padding:4px 8px; font-size:11px; }
+  #training-cue { font-size:11px; line-height:1.4; }
+  #training-setup { bottom:max(4px,var(--safe-bottom)); padding:6px 10px 0; }
+  .training-fields { gap:7px; }
+  .training-fields select { min-height:34px; margin-top:2px; font-size:13px; }
+  .training-launch { padding-top:0; }
+  #training-hint { font-size:11px; }
+}
+@media (orientation:landscape) and (max-height:360px) {
+  body[data-screen=menu] #menu[data-entry=home] { --notice-half-width:70px; }
+  body[data-screen=menu] #menu #open-playtest-notice { width:calc(2 * var(--notice-half-width)); }
+  body[data-screen=menu] #menu[data-entry=home] h1 { display:flex; align-items:baseline; gap:6px; font-size:38px; }
+  body[data-screen=menu] #menu[data-entry=home] #home-actions {
+    gap:0;
+    max-width:calc(50vw - var(--chrome-left) - var(--notice-half-width) - 6px);
+  }
+  body[data-screen=menu] #menu[data-entry=home] .lobby-action { min-height:44px; padding-block:5px; font-size:20px; }
+  body[data-screen=menu] #menu[data-entry=home] #mode-setup { padding-block:2px; }
+}
+@media (orientation:landscape) and (max-height:300px) {
+  body[data-screen=menu] #menu[data-entry=home] { --notice-half-width:60px; }
+}
+@media (orientation:portrait) {
+  #training-ui { --rail-left:max(10px,var(--safe-left)); --rail-right:max(10px,var(--safe-right)); }
+  .training-bar { gap:5px; }
+  .training-bar nav { gap:3px; flex:none; }
+  .training-heading { gap:2px 6px; }
+  #training-session { padding-left:6px; font-size:12px; }
+  #training-coaching { top:calc(max(12px,var(--safe-top)) + 55px); max-width:65vw; }
+  .training-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px 10px; }
+  .training-fields label:first-child { grid-column:1 / -1; }
+  #training-setup { padding:10px 12px 4px; }
+}

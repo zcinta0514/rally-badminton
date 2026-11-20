@@ -60,6 +60,12 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
     racketRoll=elapsed<=0?-.8*Math.sin(pre*Math.PI)+.18*pre:(.18+1.15*post)*active;
     localContact=v((action.contact.x-player.x)*sign,action.contact.y,(action.contact.z-player.z)*sign);
     const low=localContact.y<1.25;
+    // A brush across the cork and an underhand lift share a contact but have
+    // different face angles, incoming racket paths and follow-throughs.
+    const technique=action.technique;
+    const underhand=technique==='lift'||technique==='serve'||(technique==='feed'&&!smash);
+    const brush=technique==='cross', block=technique==='defense';
+    const across=action.across||-1;
     // Anticipate wide contacts instead of dragging a folded arm across the
     // torso during the rules' shortest release window.
     // While the button is held the predicted shuttle can be across the court.
@@ -71,10 +77,28 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
       const ready=smooth((time-action.startedAt)/.14);
       active=.55*ready;crouch=.13*ready;lunge*=ready;
       stroke=-.3*ready;racketRoll=-.45*ready;
-      racketHead=mix(racketHead,smash?smashWindup:turn(type==='smash'?v(.38,1.92,.22):v(.53,1.2,-.15),heading),ready);
+      const setPosition=underhand?v(.46,.75,-.18):block?v(.32,1.15,-.56):brush?v(.56,1.1,-.55):
+        type==='smash'?v(.38,1.92,.22):v(.53,1.2,-.15);
+      racketHead=mix(racketHead,smash?smashWindup:turn(setPosition,heading),ready);
     } else {
-      const windup=smash?smashWindup:turn(type==='smash'?v(.35,1.99,.42):type==='clear'?v(.62,1.62,.26):v(.55,.93,-.18),heading);
-      const follow=turn(smash?v(-.20,.92,-1.0):type==='smash'?v(-.6,.85,-.6):type==='clear'?v(-.22,1.74,-.78):v(.53,1.05,-.86),heading);
+      let windup=smash?smashWindup:turn(type==='smash'?v(.35,1.99,.42):type==='clear'?v(.62,1.62,.26):v(.55,.93,-.18),heading);
+      let follow=turn(smash?v(-.20,.92,-1.0):type==='smash'?v(-.6,.85,-.6):type==='clear'?v(-.22,1.74,-.78):v(.53,1.05,-.86),heading);
+      if(underhand){
+        windup=add(localContact,v(.08,-.38,.37));
+        follow=add(localContact,v(-.10,.65,-.29));
+      }else if(brush){
+        windup=add(localContact,v(-across*.22,.04,.15));
+        follow=add(localContact,v(across*.46,.10,-.14));
+      }else if(block){
+        windup=add(localContact,v(.08,.02,.19));
+        follow=add(localContact,v(-.06,.08,-.16));
+      }
+      if(brush||underhand||block){
+        const swing=elapsed<=0?pre:active;
+        racketRoll=(brush?across*(.83+.39*post):underhand?-across*(.63-.24*post):.32)*swing;
+        stroke=(brush?across*.26:underhand?-.16:.08)*swing;
+        lunge=(brush?.97:underhand?.72:.54)*swing;
+      }
       const ready=turn(v(.47,1.52,-.54),heading),duration=Math.max(.001,action.contactAt-action.startedAt);
       // Share tangents across impact and follow-through: the racket passes the
       // authoritative contact instead of easing to a stop on either side of it.
@@ -96,7 +120,10 @@ export function sampleAthletePose(player,side,shuttle,time,options={}) {
         const height=jumpHeight;
         jump=elapsed<0?height*smooth((pre-.12)/.88):height*(1-smooth(elapsed/.28));
         crouch=elapsed<0?.17*(1-pre):.17*Math.sin(Math.PI*clamp((elapsed-.22)/.2,0,1));
-      } else crouch=(low?.27:.045)*active;
+      } else {
+        const kneeBend=brush?.13:underhand?.24:block?.27:low?.27:.045;
+        crouch=kneeBend*active;
+      }
     }
   }
   const contactForAim=turn(localContact||v(),-heading);

@@ -169,6 +169,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     // These independently tested UI modules do not replace any match decisions.
     initOnboarding: options => { onboardingOptions = options; return { maybeShow() { onboardingAttempts++; } }; },
     initFeedback: () => null,
+    bindTrainingUI: () => ({ close() {}, configure() {}, update() {} }),
     getWebSocketURL: () => 'ws://localhost/ws', queueMicrotask,
     bindMatchSettings:()=>({close(){},update(){},selectPalette(){}}), bindPalettePicker:()=>null, bindCameraSettings() {}, bindShotLayout:()=>({open(){},close(){},refresh(){},resetPosition(){},layout:{mode:'default',positions:null},editing:false}), ResizeObserver: class { observe() {} },
     requestAnimationFrame(callback) { frame = callback; },
