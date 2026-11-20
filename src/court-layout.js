@@ -46,7 +46,9 @@ export function fitCourtViewport(width, height, side = 0, options = {}) {
 }
 
 export function projectCourtPoint(point, fit) {
-  const p = plane(point, fit.yaw, fit.pitch, fit.distance);
+  const origin = fit.origin;
+  const relative = origin ? { x: point.x-origin.x, y: (point.y || 0)-origin.y, z: point.z-origin.z } : point;
+  const p = plane(relative, fit.yaw, fit.pitch, fit.distance);
   return {x:fit.screenCenterX+(p.x-fit.centerX)*fit.scale,
     y:fit.screenCenterY-(p.y-fit.centerY)*fit.scale};
 }
