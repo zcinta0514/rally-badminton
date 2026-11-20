@@ -1,29 +1,35 @@
-const lessons = {
-  cross: {
-    hint: '迎到网前，球到拍前时松开勾对角键，贴网回到斜对面。',
-    buttons: { drop: '勾对角', clear: '挑后场' },
-  },
-  lift: {
-    hint: '接同一组网前球，在球下方起拍，把球挑到后场目标区。',
-    buttons: { drop: '勾对角', clear: '挑后场' },
-  },
-  netFree: {
-    hint: '每球自选动作。勾对角打斜对面的网前区，挑后场打同侧的后场区。',
-    buttons: { drop: '勾对角', clear: '挑后场' },
-  },
-  defense: {
-    hint: '迎住向下的杀球，在身前松开接杀键，把球挡回目标区。',
-    buttons: { drop: '接杀' },
-  },
-  smash: {
-    hint: '提前移动到高球下方，在高点松开杀球键，向下打进目标区。',
-    buttons: { smash: '杀球' },
-  },
-  serve: {
-    hint: '按住发球键蓄力，拖动选线，松手把球发进对角目标区。',
-    buttons: { clear: '发球' },
-  },
+const recommendedKeys = {
+  cross: ['drop'], lift: ['clear'], netFree: ['drop', 'clear'],
+  defense: ['drop'], smash: ['smash'], serve: ['clear'],
 };
+
+function strokeCue(training) {
+  const { drill, lane, target } = training;
+  if (!target) return '';
+  const incoming = lane < 0 ? '左' : '右';
+  const side = target.x < 0 ? '左' : '右';
+  switch (drill) {
+    case 'cross': return incoming + '路网前球。吊球键向' + side + '横拖并稍向下，勾对角。';
+    case 'lift': return incoming + '路网前球。高远键向' + side + '横拖并稍向上，挑后场。';
+    case 'netFree': {
+      const crossSide = lane < 0 ? '右' : '左';
+      return incoming + '路网前球。吊球键向' + crossSide + '下勾对角，高远键向' + incoming + '上挑后场。';
+    }
+    case 'defense': return incoming + '路杀球。先按住吊球键，向' + side + '拖瞄准目标，球到身前时松手。';
+    case 'smash': return incoming + '路高球。提前到位，杀球键向' + side + '拖，高点松手下压。';
+    case 'serve': return '比赛沿对角发球，吊球发短，高远发长。本球用高远键向' + side + '拖，蓄力发到对角后场。';
+    default: return '';
+  }
+}
+
+const keyLabels = {clear:'高远', drop:'吊球', smash:'杀球'};
+function aimLabel(heldShot) {
+  if (!heldShot?.prepare) return '按住蓄力 · 松手击球';
+  const { prepare, aim, aimDepth, charge } = heldShot;
+  const lane = aim < -.125 ? '左路' : aim > .125 ? '右路' : '中路';
+  const depth = aimDepth > .125 ? '偏深' : aimDepth < -.125 ? '偏短' : '原深度';
+  return keyLabels[prepare] + ' · ' + lane + ' ' + depth + ' · ' + Math.round(charge * 100) + '%';
+}
 
 export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
   const byId = id => document.getElementById(id);
@@ -36,11 +42,14 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
     line: byId('training-line'), targetSide: byId('training-target'),
   };
   const feedback = byId('training-feedback');
+  const coaching = byId('training-coaching');
+  const cue = byId('training-cue');
+  const setupCue = byId('training-hint');
   const counter = byId('training-count');
   const aimValue = byId('aim-value');
+  const buttons = document.querySelectorAll('#game-controls [data-shot]');
   const saved = new Map();
   let options = { drill: 'cross', power: 1, interval: 1.5, line: 'right', targetSide: 'auto' };
-  let originalButtons;
 
   function showSetup(visible) {
     setup.hidden = !visible;
@@ -55,14 +64,13 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
     for (const field of setup.querySelectorAll('[data-feed-field]')) field.hidden = drill === 'serve';
     fields.targetSide.disabled = ['cross','netFree'].includes(drill);
     fields.targetSide.options[0].textContent = ({cross:'随线对角', netFree:'前后双区'})[drill] || '随专项';
-    byId('training-hint').textContent = lessons[drill].hint;
   }
 
   function preview() {
     document.body.dataset.training = 'preview';
     delete document.body.dataset.trainingContact;
     panel.hidden = false;
-    feedback.hidden = counter.hidden = true;
+    coaching.hidden = counter.hidden = true;
     byId('training-session').textContent = '场馆预览';
     syncOptions();
     showSetup(true);
@@ -101,15 +109,8 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
     onConfigure({ ...options });
   });
   byId('training-start').addEventListener('click', () => {
-    const buttons = lessons[options.drill].buttons;
-    originalButtons ??= [...document.querySelectorAll('#game-controls [data-shot]')].map(button => {
-      const label = button.querySelector('.key-face strong');
-      return { button, label, text: label.textContent };
-    });
-    for (const { button, label } of originalButtons) {
-      const name = buttons[button.dataset.shot];
-      button.hidden = !name;
-      if (name) label.textContent = name;
+    for (const button of buttons) {
+      button.toggleAttribute('data-training-recommended', recommendedKeys[options.drill].includes(button.dataset.shot));
     }
     document.body.dataset.training = 'playing';
     byId('training-session').textContent = drillSelect.selectedOptions[0].textContent;
@@ -118,8 +119,9 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
     setup.hidden = true;
     counter.hidden = false;
     counter.textContent = '命中 0 / 0';
-    feedback.hidden = false;
-    feedback.textContent = lessons[options.drill].hint;
+    coaching.hidden = false;
+    cue.textContent = setupCue.textContent;
+    feedback.textContent = '';
     onStart({ ...options });
   });
 
@@ -129,14 +131,15 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
       delete document.body.dataset.training;
       delete document.body.dataset.trainingContact;
       panel.hidden = true;
-      for (const { button, label, text } of originalButtons || []) {
-        button.hidden = false;
-        label.textContent = text;
-      }
-      originalButtons = null;
+      for (const button of buttons) button.removeAttribute('data-training-recommended');
     },
     update(training, heldShot) {
-      if (!training || document.body.dataset.training !== 'playing') return;
+      if (!training || !document.body.dataset.training) return;
+      const playing = document.body.dataset.training === 'playing';
+      const hint = playing ? cue : setupCue;
+      const instruction = strokeCue(training);
+      if (hint.textContent !== instruction) hint.textContent = instruction;
+      if (!playing) return;
       const count = '命中 ' + training.hits + ' / ' + training.attempts;
       if (counter.textContent !== count) counter.textContent = count;
       const ready = training.stage === 'feed' && training.canHit;
@@ -146,11 +149,8 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
       }
       const prompt = ready ? '可以击球 · 松开击球键' : training.feedback;
       if (prompt && feedback.textContent !== prompt) feedback.textContent = prompt;
-      const serving = options.drill === 'serve';
-      const aimLabel = heldShot?.prepare
-        ? '蓄力 ' + Math.round(heldShot.charge * 100) + '%'
-        : serving ? '按住发球键蓄力' : '松开击球键出手';
-      if (aimValue.textContent !== aimLabel) aimValue.textContent = aimLabel;
+      const aim = aimLabel(heldShot);
+      if (aimValue.textContent !== aim) aimValue.textContent = aim;
     },
   };
 }

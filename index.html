@@ -191,7 +191,7 @@
     </div>
   </main>
   <footer class="lobby-update" aria-label="游戏版本与更新">
-    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.26.0</a>
+    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.26.1</a>
     <button id="lobby-history" type="button">近期更新</button>
     <button id="lobby-check-update" type="button">检查更新</button>
   </footer>
@@ -204,7 +204,10 @@
         <button id="training-exit" type="button">返回大厅</button>
       </nav>
     </header>
-    <div id="training-feedback" role="status" hidden></div>
+    <div id="training-coaching" hidden>
+      <div id="training-feedback" role="status"></div>
+      <p id="training-cue"></p>
+    </div>
     <div id="training-setup">
       <div class="training-fields">
         <label>训练专项
@@ -227,7 +230,11 @@
         </label>
       </div>
       <div class="training-launch">
-        <p id="training-hint"></p><button id="training-start" type="button">开始连练 <span aria-hidden="true">↗</span></button>
+        <div class="training-instructions">
+          <p id="training-hint"></p>
+          <p id="training-gestures">回合中轻点沿当前选线，初始为中路。横拖选左右，上拖更深，下拖更短。按住蓄力，松手击球。</p>
+        </div>
+        <button id="training-start" type="button">开始连练 <span aria-hidden="true">↗</span></button>
       </div>
     </div>
   </section>

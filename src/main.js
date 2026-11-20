@@ -446,10 +446,7 @@ $('hell-roles').addEventListener('click',event=>{
 const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},localTeam(state,side),dragAim??aim);
 function send(message){if(peerMode)peerSession?.send(message);else if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(['create','join','resumeSession'].includes(message.type)?{...message,rulesVersion:RULES_VERSION}:message));}
 function fireShot(request){
-  if(mode==='training'){
-    if(trainingPlaying)pendingShot=worldInput({...request,aim:resolveShotAim(request,aim)});
-    return;
-  }
+  if(mode==='training'&&!trainingPlaying)return;
   if(view?.entranceActive||!state||!['serve','rally'].includes(state.phase))return;
   const selectedAim=resolveShotAim(request,aim);
   const input=worldInput({...controls.sample(),...request,aim:selectedAim});dragAim=null;dragDepth=0;
@@ -683,6 +680,20 @@ function shotGuidance(state){
     target:getShotTarget(state,side,request),
     shot,prepare:input.prepare,charge:input.charge,aim:localRequest.aim,aimDepth:localRequest.aimDepth};
 }
+function paintShotControls(input,canSmash,phase){
+  const smashButton=document.querySelector('[data-shot="smash"]');
+  smashButton.classList.toggle('unavailable',!canSmash);
+  smashButton.classList.toggle('ready',canSmash);
+  if(canSmash&&!smashReady&&phase==='rally')haptics.ready();
+  smashReady=canSmash;
+  const gesture=$('gesture-pad');
+  gesture.hidden=!input?.prepare||!gestureOrigin;
+  if(!gesture.hidden){
+    gesture.style.left=`${Math.max(62,Math.min(innerWidth-62,gestureOrigin.x))}px`;
+    gesture.style.top=`${Math.max(70,Math.min(innerHeight-70,gestureOrigin.y))}px`;
+    $('gesture-dot').style.transform=`translate(calc(-50% + ${input.aim*42}px),calc(-50% - ${input.aimDepth*42}px))`;
+  }
+}
 function updateUI(info,state){
   if(!state)return;
   const team=localTeam(state,side),doubles=state.format==='doubles';
@@ -716,12 +727,7 @@ function updateUI(info,state){
   setText('rally',state.phase==='rally'?`${state.rally} 拍回合`:`第 ${state.pointId+1} 分`);
   if(mode==='ai')setText('connection',state.challenge?'2 / 5 非对称挑战':'本地练习');
   const roleHint=roleGuidance[self.role]||roleGuidance.balanced;
-  const smashButton=document.querySelector('[data-shot="smash"]');
-  const canSmash=Boolean(info.availability.canSmash);
-  smashButton.classList.toggle('unavailable',!canSmash);
-  smashButton.classList.toggle('ready',canSmash);
-  if(canSmash&&!smashReady&&state.phase==='rally')haptics.ready();
-  smashReady=canSmash;
+  paintShotControls(info,info.availability.canSmash,state.phase);
   const lane=info.aim,depth=info.aimDepth;
   const quality=info.target?.quality;
   const risk=quality?.risk||0;
@@ -730,13 +736,6 @@ function updateUI(info,state){
   setText('shot-risk',riskText);
   $('shot-risk').dataset.risk=info.prepare?(risk>.55?'high':risk>.25?'medium':'low'):'idle';
   setText('aim-value',info.prepare?`${lane<-.15?'左':lane>.15?'右':'中路'}${depth>.15?' · 偏深':depth<-.15?' · 偏短':''} · ${Math.round(info.charge*100)}%`:'按住击球键拖动');
-  const gesture=$('gesture-pad');
-  gesture.hidden=!info.prepare||!gestureOrigin;
-  if(!gesture.hidden){
-    gesture.style.left=`${Math.max(62,Math.min(innerWidth-62,gestureOrigin.x))}px`;
-    gesture.style.top=`${Math.max(70,Math.min(innerHeight-70,gestureOrigin.y))}px`;
-    $('gesture-dot').style.transform=`translate(calc(-50% + ${lane*42}px),calc(-50% - ${depth*42}px))`;
-  }
   let guidance='按住击球键，拖动选落点';
   if(state.phase==='serve')guidance=state.serverPlayer===side?'发球落点限在对角区 · 按住再松开':doubles?(state.receiverPlayer===side?'你接发球 · 留意对角来球':'队友准备中 · 发球后自由跑位'):'准备接发 · 留意来球落点';
   else if(info.availability.canSmash)guidance=self.role==='power'&&state.shuttle.y<2.4
@@ -884,13 +883,18 @@ try{
         arenaAudio.update(state,true);
       }
       const renderStart=performance.now();
+      const held=trainingPlaying && controls.activeShot ? worldInput(controls.sample()) : null;
+      const aiming=held && (state.training.stage==='feed' || (state.phase==='serve' && state.training.stage==='ready'));
       view.render(state,0,Math.min(elapsed,.1),{
+        prepare:aiming ? held.prepare : null,
+        target:aiming ? getShotTarget(state,0,held) : null,
         trainingTarget:state.training.target,
         trainingTargets:state.training.targets,
         trainingActiveTarget:state.training.returnShot?.technique,
       });
       renderMs=performance.now()-renderStart;
-      trainingUI.update(state.training,controls.activeShot ? controls.sample() : null);
+      paintShotControls(held,trainingPlaying && Boolean(state.training.canSmash),state.phase);
+      trainingUI.update(state.training,held);
     }else if(state){
       view.advanceEntrance?.(elapsed,{hidden:document.hidden,phase:state.phase,remaining:state.timer});
       document.body.dataset.entering=String(view.entranceActive===true);
@@ -949,6 +953,7 @@ try{
       // Read-only diagnostics for reproducible browser QA and user bug reports.
       window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats,
         stateTime:state?.time??null,statePhase:state?.phase??null,venue:view.mode,
+        get matchStroke(){return mode==='ai' ? structuredClone(state?.lastShotInfo??null) : null;},
         get training(){
           if(mode!=='training')return null;
           const pose=view.players[0].root.userData.pose;
