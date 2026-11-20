@@ -776,6 +776,9 @@ try{
   }});
   palettePicker=bindPalettePicker({palette:arenaPreferences.courtPalette,onSelect:name=>matchSettings.selectPalette(name)});
   view.setMode('menu');
+  // Prefer the authored venue on the first entrance without holding up input
+  // or the network countdown while the model downloads.
+  void view.prepareTournament();
   let portraitViewport=window.innerHeight>window.innerWidth;
   const resizeCourt=()=>{
     const portrait=window.innerHeight>window.innerWidth;

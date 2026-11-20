@@ -9,6 +9,7 @@ import { upgradeAthlete } from './athlete-import.js';
 import { sampleFinalePose } from './finale-pose.js';
 import { makeArena, makeHallShell, makeCourtMaterial, resetArenaCrowd, updateArenaCrowd } from './arena.js';
 import { makeNetVisual, updateNetVisual } from './net-visual.js';
+import { loadTournamentArena } from './tournament-arena.js';
 import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
 import { COURT } from '../shared/game.js';
 import { StaminaHUD } from './stamina-hud.js';
@@ -55,6 +56,27 @@ function ring(parent, radius, thickness, color, opacity = 1) {
   return mesh;
 }
 
+function disposeSceneResources(scene) {
+  const geometries = new Set();
+  const materials = new Set();
+  const textures = new Set();
+  const skeletons = new Set();
+  scene.traverse((object) => {
+    object.shadow?.dispose();
+    if (object.isInstancedMesh) object.dispose();
+    if (object.isSkinnedMesh && object.skeleton) skeletons.add(object.skeleton);
+    if (object.geometry) geometries.add(object.geometry);
+    if (object.material) for (const mat of Array.isArray(object.material) ? object.material : [object.material]) materials.add(mat);
+  });
+  for (const mat of materials) {
+    for (const value of Object.values(mat)) if (value?.isTexture) textures.add(value);
+    mat.dispose();
+  }
+  for (const geometry of geometries) geometry.dispose();
+  for (const texture of textures) texture.dispose();
+  for (const skeleton of skeletons) skeleton.dispose();
+}
+
 export class CourtView {
   constructor(canvas, { courtPalette } = {}) {
     this.canvas = canvas;
@@ -91,8 +113,8 @@ export class CourtView {
     // is steady; only the lobby has an entrance ramp. No extra shadow passes.
     this.courtLights = [];
     for (const end of [-1, 1]) {
-      const top = new THREE.SpotLight(0xf1f3ed, 185, 24, 1.04, 1, 2);
-      top.name = 'match-court-soft-top'; top.position.set(end * 1.8, 8, end * 4.5);
+      const top = new THREE.SpotLight(end < 0 ? 0xffebcf : 0xd6e8ff, 400, 30, 1.04, 1, 2);
+      top.name = 'match-court-side-wash'; top.position.set(end * 6.05, 12.36, end * 4.5);
       top.target.position.set(0, 0, end * 3.2); this.scene.add(top, top.target);this.courtLights.push(top);
     }
     this.makeCourt();
@@ -127,7 +149,9 @@ export class CourtView {
   }
 
   makeCourt() {
-    const scene = this.scene;
+    const scene = new THREE.Group();
+    this.fallbackCourt = scene;
+    this.scene.add(scene);
     const palette = resolveCourtPalette(this.courtPalette);
     const floorMat = material(COLORS.floor);
     const apronMat = material(palette.apron);
@@ -162,7 +186,7 @@ export class CourtView {
       box(scene, 0.066, 1.6, 0.066, postMat, x, 0.8, 0, true);
       box(scene, 0.09, 0.052, 0.09, material(COLORS.coral), x, 1.61, 0);
     }
-    this.netVisual = makeNetVisual(scene);
+    this.netVisual = makeNetVisual(this.scene);
     this.netGeometry = this.netVisual.wires.geometry;
     this.netAtRest = true;
 
@@ -288,11 +312,16 @@ export class CourtView {
 
   resetCrowd() {
     resetArenaCrowd(this.arena);
+    this.tournament?.reset();
   }
 
   get entranceActive(){return this.entrance?.active===true;}
 
   beginMatchEntrance(options={}) {
+    // A rematch can begin without visiting the menu. It is also a safe
+    // boundary for a venue that arrived after the previous opening.
+    this.installPreparedTournament();
+    this.prepareTournament();
     this.entrance.begin({...options,reducedMotion:this.reducedMotion?.matches===true});
     this.updateCamera(options.side??0);
     this.entranceFrom=this.lobby.camera.clone();
@@ -313,14 +342,44 @@ export class CourtView {
     this.courtLights.forEach((light,index)=>{
       const end=index===0?-1:1;
       light.target.position.set(end*5.8*(1-t),0,end*(6-2.8*t));
-      light.intensity=110+75*t;light.angle=1.2-.16*t;
+      light.intensity=180+220*t;light.angle=1.2-.16*t;
       light.target.updateMatrixWorld(true);
     });
+  }
+
+  prepareTournament() {
+    if (!this.tournamentLoad) {
+      this.tournamentLoad = loadTournamentArena().then(hall => {
+        if (this.disposed) { disposeSceneResources(hall.scene); return; }
+        this.preparedTournament = hall;
+        if (this.mode === 'menu') this.installPreparedTournament();
+      }).catch(error => {
+        console.warn('Tournament hall could not be loaded', error);
+        this.tournamentLoad = null;
+      });
+    }
+    return this.tournamentLoad;
+  }
+
+  installPreparedTournament() {
+    const hall = this.preparedTournament;
+    if (!hall) return;
+    hall.palette(this.courtPalette);
+    this.scene.add(hall.scene);
+    this.fallbackCourt.removeFromParent();
+    disposeSceneResources(this.fallbackCourt);
+    this.fallbackCourt = this.courtMaterials = this.arena = this.hallShell = null;
+    this.netVisual.group.scale.x = 3.05 / 3.17;
+    this.tournament = hall;
+    this.preparedTournament = null;
+    this.canvas.dataset.venue = 'tournament';
   }
 
   setMode(mode) {
     if(this.mode===mode)return;
     this.mode=mode;
+    this.installPreparedTournament();
+    if(mode==='match'||mode==='menu')this.prepareTournament();
     if(mode!=="match"){this.entrance?.cancel();this.entranceFrom=null;}
     this.resetCrowd();
     if (mode !== 'match') this.staminaHUD?.hide();
@@ -347,6 +406,7 @@ export class CourtView {
 
   setCourtPalette(name) {
     this.courtPalette = normalizeCourtPalette(name);
+    this.tournament?.palette(this.courtPalette);
     this.lobby?.setCourtPalette(this.courtPalette);
     const palette = resolveCourtPalette(this.courtPalette);
     if (this.courtMaterials) {
@@ -550,7 +610,8 @@ export class CourtView {
 
   render(state, side=0, dt=1/60, info={}) {
     if(!state?.players||!state.shuttle)return;
-    updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
+    if (this.tournament) this.tournament.update(state, dt);
+    else updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
     if(info.finale){this.staminaHUD?.hide();this.renderFinale(state,info.finale,side);return;}
     this.clearFinale();
     dt=clamp(Number.isFinite(dt)?dt:1/60,0,.06);
@@ -667,27 +728,13 @@ export class CourtView {
     this.renderer.render(this.scene,this.camera);
   }
   dispose() {
+    this.disposed = true;
+    if (this.preparedTournament) disposeSceneResources(this.preparedTournament.scene);
     this.lobby?.dispose();
     for (const player of this.players || []) player.disposed = true;
     if (this.onVisibilityChange) globalThis.document?.removeEventListener('visibilitychange', this.onVisibilityChange);
     this.edgeIndicator.remove();
-    const geometries = new Set();
-    const materials = new Set();
-    const textures = new Set();
-    const skeletons = new Set();
-    this.scene.traverse((object) => {
-      object.shadow?.dispose();
-      if (object.isSkinnedMesh && object.skeleton) skeletons.add(object.skeleton);
-      if (object.geometry) geometries.add(object.geometry);
-      if (object.material) for (const mat of Array.isArray(object.material) ? object.material : [object.material]) materials.add(mat);
-    });
-    for (const mat of materials) {
-      for (const value of Object.values(mat)) if (value?.isTexture) textures.add(value);
-      mat.dispose();
-    }
-    for (const geometry of geometries) geometry.dispose();
-    for (const texture of textures) texture.dispose();
-    for (const skeleton of skeletons) skeleton.dispose();
+    disposeSceneResources(this.scene);
     this.renderer.dispose();
   }
 }

@@ -110,6 +110,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
       view = this; this.rallyEnding = false; this.crowdResets = 0; this.finaleClears = 0;
       this.finaleAnchors = [{ x: 170, y: 210 }, { x: 830, y: 260 }];
     }
+    prepareTournament() {}
     setMode(mode) { this.mode = mode;if(mode!=='match')this.entrance?.cancel(); }
     get entranceActive(){return this.entrance?.active===true;}
     beginMatchEntrance(options){if(entrance){this.entrance=new MatchEntrance();this.entrance.begin(options);}}
