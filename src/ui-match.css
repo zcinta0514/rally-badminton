@@ -52,12 +52,12 @@ body[data-finale=true] .match-settings-toggle { display:none; }
 .game-controls { position:fixed; inset:0 0 auto; height:100vh; height:100dvh; pointer-events:none; z-index:5; color:#eff8ee; }
 
 .energy-panel { display:none; }
-.player-stamina-layer { position:fixed; inset:0; z-index:4; pointer-events:none; }
-.player-stamina { position:absolute; top:0; left:0; width:60px; color:#dce9dd; text-align:center; filter:drop-shadow(0 1px 2px #001c1c); }
+.player-stamina-layer { position:fixed; top:0; right:0; bottom:0; left:0; z-index:4; pointer-events:none; }
+.player-stamina { position:absolute; top:0; left:0; width:60px; margin-left:-30px; color:#dce9dd; text-align:center; text-shadow:0 1px 2px #001c1c; }
 .player-stamina-track { height:4px; border:1px solid #ddf5e578; border-radius:4px; background:#072623e8; overflow:hidden; }
 .player-stamina-track i { display:block; height:100%; background:#a6d9c0; }
 .player-stamina span { display:block; min-height:12px; margin-top:3px; font:600 9px/1.2 Arial,sans-serif; white-space:nowrap; }
-.player-stamina[data-own=true] { width:76px; color:#fffde4; }
+.player-stamina[data-own=true] { width:76px; margin-left:-38px; color:#fffde4; }
 .player-stamina[data-own=true] .player-stamina-track { height:6px; border-color:#f4ffe9bd; }
 .player-stamina[data-own=true] i { background:#dbed91; }
 .player-stamina[data-low=true] i { background:#ff9c79; }
