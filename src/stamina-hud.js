@@ -50,7 +50,7 @@ export class StaminaHUD {
   }
   hide() { this.root.hidden = true; }
   refreshObstacles() {
-    this.obstacles = [...this.document.querySelectorAll('.shot-buttons,.shot-instruction,.movement-panel,.hud')]
+    this.obstacles = [...this.document.querySelectorAll('.shot-buttons,.shot-instruction,.hud')]
       .map(e => e.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0);
   }
   update(state, side, project, bounds, enabled = true, names = null) {

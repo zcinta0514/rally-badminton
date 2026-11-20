@@ -137,18 +137,13 @@ body[data-screen=match] .icon-btn:active, body[data-screen=match] .match-setting
 .scoreboard { background: var(--paper); border-left-color: var(--green); border-radius: 12px; box-shadow: 0 3px 14px #152d2a20; }
 .score-player { font-weight: 550; }
 .score-player b { font-family: inherit; font-weight: 600; }
-.player-dot { background: #6b8f63; border-radius: 3px; }
-.opponent .player-dot { background: #b58568; }
 /* HUD text drawn straight over the court keeps the shipped light ink. */
 .match-note { color: #e1ede6; }
 .match-note strong { background: var(--surface); color: var(--ink); font-weight: 550; }
 .palette-options button { background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 9px; }
 .palette-options button[aria-pressed=true] { background: var(--soft); border-color: #8ca583; box-shadow: inset 0 0 0 1px #8ca58330; }
 .palette-options button i { border: 1px solid #243d3122; box-shadow: none; }
-.assist-panel>strong { background: var(--paper); color: var(--ink); border-color: #87a385; border-radius: 12px; box-shadow: 0 3px 12px #152d2a1a; }
-.assist-panel>strong[data-kind=instruction] { color: var(--muted); }
-.joystick-wrap>small { color: #e0eee6; }
-.joystick-wrap>small span { color: #9bb8ac; }
+
 .joystick { background: #f7f8f3dd; border-color: #d2ddca; box-shadow: inset 0 0 0 10px #c7d4c31c, 0 3px 12px #153c2c22; }
 .joystick::after { border-color: #93a58b66; }
 .stick-cross::before, .stick-cross::after { background: #8ca58366; }
