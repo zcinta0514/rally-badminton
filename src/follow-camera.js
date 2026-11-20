@@ -3,16 +3,18 @@ export function followCourtViewport(base, previous, player, shuttle, settings, d
   const { width, height, pitch } = base;
   const sign = base.side === 1 ? -1 : 1;
   const sin = Math.sin(pitch), cos = Math.cos(pitch);
-  const ease = 1 - Math.exp(-5 * dt);
-  function track(last, target) {
-    if (last === undefined) return target;
-    const delta = target - last;
-    return last + Math.sign(delta) * Math.max(0, Math.abs(delta) - .14) * ease;
+  // Two cascaded filters accelerate into a new target and brake into a stop.
+  // Keeping both stages across points also smooths the teleport to a service box.
+  const ease = -Math.expm1(-15 * dt);
+  function approach(last, target) {
+    return last === undefined ? target : last + (target - last) * ease;
   }
+  const trackingX = approach(previous?.trackingX, player.x * .9);
+  const trackingZ = approach(previous?.trackingZ, player.z * .92 - sign * 2.2);
   const origin = {
-    x: track(previous?.origin.x, player.x * .76),
+    x: approach(previous?.origin.x, trackingX),
     y: 1.15,
-    z: track(previous?.origin.z, player.z * .84 - sign * 2.2),
+    z: approach(previous?.origin.z, trackingZ),
   };
   const focal = height * 1.32;
   const cy = height * .56;
@@ -43,9 +45,13 @@ export function followCourtViewport(base, previous, player, shuttle, settings, d
   const predicted = shuttle?.active ? requiredDistance(shuttle.x+(shuttle.vx||0)*lead,
     Math.max(0,shuttle.y+(shuttle.vy||0)*lead),shuttle.z+(shuttle.vz||0)*lead) : required;
   const target = Math.max(required, predicted);
-  const last = previous?.distance ?? target;
-  const rate = target > last ? 12 : 1.4;
-  const distance = Math.max(required, last + (target-last)*(1-Math.exp(-rate*dt)));
-  return { ...base, origin, distance, scale: focal/distance, centerX: 0, centerY: 0,
+  // Carry the zoom request through contact and landing. When prediction ends,
+  // the lens eases back while the current shuttle still sets a hard safety bound.
+  const lastRequest = previous?.zoomRequest ?? target;
+  const zoomRequest = lastRequest + (target-lastRequest) * -Math.expm1(-10*dt);
+  const last = previous?.distance ?? zoomRequest;
+  const rate = zoomRequest > last ? 12 : 1.4;
+  const distance = Math.max(required, last + (zoomRequest-last)*-Math.expm1(-rate*dt));
+  return { ...base, origin, trackingX, trackingZ, zoomRequest, distance, scale: focal/distance, centerX: 0, centerY: 0,
     screenCenterX: width/2, screenCenterY: cy, top };
 }

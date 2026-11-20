@@ -1,4 +1,4 @@
-export const CAMERA_DEFAULTS = Object.freeze({ pitchDegrees: 24, zoom: 1, mode: 'fixed', distance: 12, fatigue: true });
+export const CAMERA_DEFAULTS = Object.freeze({ pitchDegrees: 24, zoom: 1, mode: 'fixed', distance: 11, fatigue: true });
 export const CAMERA_LIMITS = Object.freeze({ pitchMin: 18, pitchMax: 40, zoomMin: .85, zoomMax: 1.12 });
 const STORAGE_KEY = 'rally.camera.v1';
 const clamp = (value, fallback, min, max) => Number.isFinite(value) ? Math.max(min, Math.min(max, value)) : fallback;

@@ -670,7 +670,7 @@ export class CourtView {
     const follow = this.mode === 'match' && this.cameraSettings?.mode === 'follow' && !this.entranceActive;
     if (follow) {
       if (!freeze || !this.followLayout || finalTail) {
-        this.followLayout = followCourtViewport(this.baseLayout, reset ? null : this.followLayout,
+        this.followLayout = followCourtViewport(this.baseLayout, this.followLayout,
           state.players[side], position, this.cameraSettings, dt, this.hudBounds);
       }
       this.applyCourtLayout(this.followLayout);

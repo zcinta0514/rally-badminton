@@ -118,3 +118,26 @@ test('nearest follow distance keeps the player and a fast high return clear on e
     }
   }
 });
+
+test('follow camera settles after a sprint and tracks the new service box without a cut', () => {
+  const base = fitCourtViewport(844,390);
+  for (const fps of [30,60,120]) {
+    const player = {x:0,z:4}, shuttle = {x:0,y:2,z:1};
+    let view;
+    const frame = () => view = followCourtViewport(base,view,player,shuttle,CAMERA_DEFAULTS,1/fps);
+    for (let i=0;i<fps;i++) { player.x += 2.5/fps; frame(); }
+    const target = player.x*.9;
+    assert.ok(target-view.origin.x < .32, 'camera stays close during the sprint');
+    for (let i=0;i<fps;i++) {
+      const before = view.origin.x;
+      frame();
+      assert.ok(view.origin.x >= before && view.origin.x <= target, 'no recoil at a stop');
+    }
+    const before = view.origin.x;
+    player.x = -2.5;
+    frame();
+    assert.ok(Math.abs(view.origin.x-before) < .75, 'pan accelerates into the new position');
+    for (let i=0;i<fps;i++) frame();
+    assert.ok(Math.abs(view.origin.x-player.x*.9)<.001);
+  }
+});
