@@ -12,7 +12,7 @@ const app = process.env.RALLY_QA_URL ? null : createServer({port:0, host:'127.0.
 await app?.listen();
 const browser = await chromium.launch({channel:'chrome', args:['--enable-unsafe-swiftshader']});
 const page = await browser.newPage({viewport:{width:844,height:390}, isMobile:true, hasTouch:true, reducedMotion:'reduce', serviceWorkers:'block'});
-const report = {environment:'Windows Chrome, CDP touchscreen input, WebGL', errors:[], rounds:{}, layouts:[], keys:{}, matchServes:{}};
+const report = {environment:'Windows Chrome, CDP touchscreen input, WebGL', errors:[], rounds:{}, layouts:[], keys:{}, matchServes:{},receiveHints:{}};
 page.on('pageerror', e=>report.errors.push(e.message));
 await page.addInitScript(()=>{
   localStorage.setItem('rally.playtest.notice.1','1');
@@ -22,7 +22,66 @@ await page.addInitScript(()=>{
 const cdp = await page.context().newCDPSession(page);
 const sample = ()=>page.evaluate(()=>window.rallyDiagnostics?.training);
 const shotButton = key=>'#game-controls [data-shot="'+key+'"]';
-const screenshot = file=>page.screenshot({path:path.join(out,file+'.png')});
+const screenshot = file=>page.screenshot({path:path.join(out,file+'.png'),scale:'css'});
+async function observeReceiveHints() {
+  await page.evaluate(async()=>{
+    // Observe the meshes after the production render. This hook lives only
+    // inside the QA browser and never changes a shot, material or transform.
+    const {CourtView}=await import('./src/view.js');
+    const render=CourtView.prototype.render;
+    CourtView.prototype.render=function(...args){
+      const result=render.apply(this,args);
+      window.qaRenderedCourt=this;
+      return result;
+    };
+  });
+}
+async function receiveHints() {
+  return page.evaluate(()=>{
+    const view=window.qaRenderedCourt;
+    function read(marker) {
+      const object=marker.group, position=object.position.clone().project(view.camera);
+      return {visible:object.visible, x:object.position.x, z:object.position.z,
+        screen:{x:(1+position.x)*view.width/2,y:(1-position.y)*view.height/2},
+        color:marker.circle.material.color.getHexString()};
+    }
+    return {landing:read(view.landingHint),intercept:read(view.interceptHint),
+      arc:view.landingHint.countdown.geometry.drawRange.count};
+  });
+}
+async function noReceiveHints(label) {
+  const {landing,intercept}=await receiveHints();
+  assert.equal(landing.visible,false,label+' clears the landing ring');
+  assert.equal(intercept.visible,false,label+' clears the intercept arcs');
+}
+async function captureReceiveHints(file) {
+  const markers=await receiveHints(), png=await screenshot(file);
+  const pixels=await page.evaluate(async({base64,markers})=>{
+    const img=new Image();img.src='data:image/png;base64,'+base64;await img.decode();
+    const canvas=document.createElement('canvas');canvas.width=img.width;canvas.height=img.height;
+    const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0);
+    const {data}=ctx.getImageData(0,0,img.width,img.height);
+    function colorCount(marker) {
+      const rgb=marker.color.match(/../g).map(channel=>parseInt(channel,16));
+      let count=0;
+      for(let y=Math.max(0,Math.round(marker.screen.y)-20);y<Math.min(img.height,marker.screen.y+20);y++)
+        for(let x=Math.max(0,Math.round(marker.screen.x)-32);x<Math.min(img.width,marker.screen.x+32);x++) {
+          const i=4*(y*img.width+x);
+          if(rgb.every((c,j)=>Math.abs(c-data[i+j])<=24)) count++;
+        }
+      return count;
+    }
+    return {landing:colorCount(markers.landing),intercept:colorCount(markers.intercept)};
+  },{base64:png.toString('base64'),markers});
+  report.receiveHints[file]={...markers,pixels,viewport:page.viewportSize()};
+  for (const key of ['landing','intercept']) {
+    assert.ok(markers[key].visible && markers[key].z>0,file+' shows '+key+' on the receiving half');
+    assert.ok(pixels[key]>=3,file+' '+key+' needs visible ring pixels: '+JSON.stringify({pixels,markers}));
+  }
+  assert.equal(markers.landing.color,'00d5e8');
+  assert.ok(['ffd580','ffe1a1'].includes(markers.intercept.color));
+  return markers;
+}
 async function center(selector) {
   return page.locator(selector).evaluate(el=>{
     const r=el.getBoundingClientRect(), x=r.x+r.width/2, y=r.y+r.height/2;
@@ -67,6 +126,36 @@ async function until(predicate, limit=5000, stride=32) {
   }
   throw Error('Timed out in drill: '+JSON.stringify(s));
 }
+async function checkMovingReceiver() {
+  // Miss one alternating delivery deliberately. The receiver can move while
+  // reading the floor, and the next valid feed must acquire a new landing.
+  await page.locator('#training-line').selectOption('alternate');
+  await tap('#training-start');
+  const before=await until(s=>s.stage==='feed');
+  const first=await receiveHints();
+  assert.ok(first.landing.visible && first.intercept.visible);
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:70,y:216}]});
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:104,y:216}]});
+  await page.clock.runFor(192);
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  const moving=await sample(), next=await captureReceiveHints('moving-receiver');
+  assert.ok(moving.player.x>before.player.x+.12,'real stick moved the receiver during the feed');
+  assert.ok(next.arc<first.arc,'landing countdown advances during the same flight');
+  assert.ok(Math.abs(first.landing.x-next.landing.x)<.08 && Math.abs(first.landing.z-next.landing.z)<.08);
+  await until(s=>s.stage==='rest');
+  await noReceiveHints('missed feed');
+  await until(s=>s.stage==='feed' && s.lane===-before.lane);
+  const mirrored=await captureReceiveHints('opposite-lane-receive');
+  assert.ok(mirrored.landing.visible && mirrored.landing.x*first.landing.x<0,'new feed shows the opposite landing');
+  report.receiveHints.alternating={first,afterMovement:next,mirrored,player:[before.player,moving.player]};
+  await tap('#training-exit');
+  await page.clock.runFor(64);
+  assert.equal(await page.locator('#court').getAttribute('data-venue'),'tournament');
+  await tap('#open-training');
+  await page.clock.runFor(64);
+  await noReceiveHints('re-entering the preview after a live feed');
+  await page.locator('#training-line').selectOption('right');
+}
 async function round(drill,shot,hold=65,file=drill,{continuing=false,dx=0,dy=0,expected='hit'}={}){
   if(!continuing){
     await page.locator('#training-drill').selectOption(drill);
@@ -82,7 +171,13 @@ async function round(drill,shot,hold=65,file=drill,{continuing=false,dx=0,dy=0,e
     await page.clock.runFor(1300);
     const s=await sample();
     assert.equal(s.shuttle.active,false,'serve waits for player release');
-  }else feed=await until(s=>s.stage==='feed');
+    await noReceiveHints(file+' waiting to serve');
+  }else{
+    feed=await until(s=>s.stage==='feed');
+    const {landing,intercept}=await receiveHints();
+    assert.ok(landing.visible && intercept.visible,file+' draws both receiving guides on this reachable feed');
+  }
+  if(file==='cross'||file==='free-cross')await captureReceiveHints(file+'-receive');
   if(drill==='defense' || drill==='smash'){
     const windup=drill==='defense'?.275:1.28;
     await until(s=>s.time-s.feedAt>=windup,2200,16);
@@ -90,6 +185,7 @@ async function round(drill,shot,hold=65,file=drill,{continuing=false,dx=0,dy=0,e
   const gesture=await stroke(shot,hold,dx,dy,file==='cross'||file==='lift'?file+'-aim':null);
   assert.ok(gesture.padVisible,file+' shows the original gesture pad while pressed');
   const impact=await until(s=>s.stage==='return',1200,16);
+  await noReceiveHints(file+' outgoing shuttle');
   await page.clock.runFor(64);
   const follow=await sample();
   await screenshot(file+'-stroke');
@@ -103,6 +199,7 @@ async function round(drill,shot,hold=65,file=drill,{continuing=false,dx=0,dy=0,e
     if(file==='cross' && flight.length===4)await screenshot('cross-flight');
   }
   assert.ok(s.lastResult,file+' produced a landing');
+  await noReceiveHints(file+' resting after landing');
   report.rounds[file]={gesture,feed:feed?.stroke?.outgoing,impact:{time:impact.time,pose:impact.pose,contact:impact.stroke?.contact,feedAt:impact.feedAt,stroke:impact.stroke},follow:follow.pose,target:s.target,result:s.lastResult,feedback:s.feedback,flight};
   console.log(file,JSON.stringify(s.lastResult));
   assert.equal(s.lastResult.outcome,expected,file+': '+JSON.stringify(s.lastResult));
@@ -112,7 +209,17 @@ async function round(drill,shot,hold=65,file=drill,{continuing=false,dx=0,dy=0,e
 async function matchServe(width,height,shot,hold,dx,dy) {
   await page.setViewportSize({width,height});
   await page.clock.runFor(80);
-  for(const id of ['open-solo','start-ai','start-ai-confirm'])await tap('#'+id);
+  for(const id of ['open-solo','start-ai'])await tap('#'+id);
+  // A normal AI can miss the serve. Pin only match creation to a known
+  // returnable rally so this comparison still exercises the ordinary AI.
+  const random=await page.evaluateHandle(()=>Math.random);
+  try {
+    await page.evaluate(()=>{Math.random=()=>2.5/0x7fffffff;});
+    await tap('#start-ai-confirm');
+  } finally {
+    await page.evaluate(original=>{Math.random=original;},random);
+    await random.dispose();
+  }
   await page.clock.runFor(850);
   assert.equal(await page.locator('#court').getAttribute('data-venue'),'tournament');
   assert.equal(await page.evaluate(()=>rallyDiagnostics.statePhase),'serve');
@@ -132,6 +239,17 @@ async function matchServe(width,height,shot,hold,dx,dy) {
   assert.ok(actual?.serving && actual.side===0 && actual.type===shot,'player served using '+shot);
   report.matchServes[shot]={width,height,buttons:matchKeys,gesture,stroke:actual};
   await screenshot('match-'+shot+'-serve');
+  if(shot==='clear'){
+    await noReceiveHints('ordinary match outgoing serve');
+    let reached=false;
+    for(let t=0;t<4800;t+=48){
+      await page.clock.runFor(48);
+      const {landing,intercept}=await receiveHints();
+      if(landing.visible && intercept.visible){reached=true;break;}
+    }
+    assert.ok(reached,'ordinary AI returned a reachable serve');
+    await captureReceiveHints('ordinary-match-receive');
+  }
   await tap('#pause');
   await page.clock.runFor(80);
   await tap('#leave-game');
@@ -141,6 +259,7 @@ try{
   await page.goto(process.env.RALLY_QA_URL||app.url);
   await page.locator('#loading').waitFor({state:'hidden'});
   await page.waitForFunction(()=>document.querySelector('#court').dataset.venue==='tournament' && window.rallyDiagnostics);
+  await observeReceiveHints();
   await page.evaluate(()=>document.fonts.ready);
   report.build=await page.evaluate(()=>({id:RALLY_CONFIG.buildId,version:RALLY_CONFIG.releaseNotice.id,url:location.href}));
   for(const [width,height] of [[667,320],[390,844],[844,390]]){
@@ -150,6 +269,7 @@ try{
     await center('#training-start');
     await center('#training-exit');
     await page.waitForTimeout(130);
+    await noReceiveHints('stationary preview '+width);
     await screenshot('setup-'+width);
     await tap('#training-adjust');
     await screenshot('hall-'+width);
@@ -162,6 +282,7 @@ try{
   await screenshot('lobby');
   await tap('#open-training');
   await page.clock.pauseAt(new Date(await page.evaluate(()=>Date.now()+150)));
+  await checkMovingReceiver();
   // The game keeps its production fixed-step simulation. The controlled browser
   // clock lets us capture each stroke at the same offset from physical contact.
   for(const [drill,shot,dx,dy] of [

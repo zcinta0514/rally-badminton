@@ -61,7 +61,7 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
     const { drill } = options;
     drillSelect.value = drill;
     for (const [key, field] of Object.entries(fields)) field.value = String(options[key]);
-    for (const field of setup.querySelectorAll('[data-feed-field]')) field.hidden = drill === 'serve';
+    for (const element of setup.querySelectorAll('[data-feed-only]')) element.hidden = drill === 'serve';
     fields.targetSide.disabled = ['cross','netFree'].includes(drill);
     fields.targetSide.options[0].textContent = ({cross:'随线对角', netFree:'前后双区'})[drill] || '随专项';
   }
