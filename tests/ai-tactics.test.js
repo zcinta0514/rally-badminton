@@ -127,3 +127,54 @@ test('beginner offers midcourt lifts and intermediate reads both the rear and fr
   assert.ok(feeds>=24 && feeds<=42, String(feeds));
   assert.ok(deepDrops>frontDrops+28, JSON.stringify({deepDrops,frontDrops}));
 });
+
+test('late reads of the receiver punish repeated net camping on lifts in hard and hell singles', () => {
+  for (const hell of [false, true]) {
+    const sample = (habit, rush) => {
+      let deep = 0;
+      for (let seed = 1; seed <= 64; seed++) {
+        const {state} = receiveFixture(game, {type:'clear', side:1, startZ:4.8});
+        if (hell) state.challenge = game.createMatch({challenge:'hell'}).challenge;
+        state._rng = Math.imul(seed, 2654435761) >>> 0;
+        state._netRush = [0, habit];
+        game.aiInput(state, 1, 'hard');
+        state.players[0].z = rush ? 1.15 : 4.5;
+        for (let frame=0; frame<240 && state.phase==='rally' && !state.lastShotInfo; frame++) {
+          const input = game.aiInput(state,1,'hard');
+          game.stepMatch(state,[{},input],1/120);
+        }
+        assert.equal(state._netRush[1],Math.min(3,Math.max(0,habit+(rush?1:-1))));
+        if (state._ai[1]?.playDeep) {
+          const hit = state.lastShotInfo;
+          assert.equal(hit?.type,'clear');
+          assert.ok(Math.abs(hit.z)>5.5);
+          deep++;
+        }
+      }
+      return deep;
+    };
+    assert.ok(sample(3,true) > sample(0,true)+10);
+    assert.equal(sample(3,false),0);
+  }
+});
+
+test('only easy and medium AI telegraph their planned ordinary smashes before contact', () => {
+  for (const level of ['easy','medium','hard']) {
+    let smashes = 0;
+    for (let seed=1; seed<=160 && smashes<3; seed++) {
+      const {state}=receiveFixture(game,{type:'clear',side:1,startZ:4.8});
+      state._rng=Math.imul(seed,2654435761)>>>0;
+      let warned=false;
+      for(let frame=0;frame<240 && state.phase==='rally' && !state.lastShotInfo;frame++) {
+        const input=game.aiInput(state,1,level);
+        warned ||= state.smashWarning?.hitId===state.hitId;
+        game.stepMatch(state,[{},input],1/120);
+      }
+      if(state.lastShotInfo?.type==='smash'){
+        smashes++;
+        assert.equal(warned,level!=='hard');
+      }
+    }
+    assert.ok(smashes>0,level);
+  }
+});

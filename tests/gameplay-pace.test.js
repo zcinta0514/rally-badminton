@@ -7,9 +7,9 @@ import { shotFixture, runReceive, measureMovement } from '../scripts/measure-gam
 test('high service and rally clears retain height and depth with bounded flight time', () => {
   for (const role of Object.keys(game.ROLES)) for (const serving of [true, false]) {
     const { state, target } = shotFixture(game, { serving, role });
-    assert.ok(target.duration >= (serving ? 2 : 1.8) && target.duration <= (serving ? 2.5 : 2.05), JSON.stringify({ role, serving, duration: target.duration }));
+    assert.ok(target.duration >= (serving ? 2 : 1.72) && target.duration <= (serving ? 2.5 : 1.85), JSON.stringify({ role, serving, duration: target.duration }));
     const apex = flightApex({...state.shuttle,vy:target.vy,verticalDrag:target.verticalDrag}).y;
-    assert.ok(apex > 5 && apex < 8);
+    assert.ok(apex > (serving ? 5 : 4.6) && apex < (serving ? 8 : 5.1));
     assert.ok(Math.abs(target.z) > 5.3);
     assert.ok(target.netHeight > game.COURT.netHeight + .25);
     Object.assign(state.shuttle, { vx: target.vx, vy: target.vy, vz: target.vz, drag: target.drag, verticalDrag: target.verticalDrag, active: true, lastHit: 0 });

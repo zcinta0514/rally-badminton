@@ -268,7 +268,7 @@ test('vertical shot direction moves each shot landing monotonically for either p
     });
     for (let i = 1; i < depths.length; i++) assert.ok(depths[i] > depths[i - 1], `${shot}: ${depths}`);
     assert.ok(depths.at(-1) - depths[0] >= 2, 'drag must make a visible depth difference');
-    assert.equal(depths[2], shot === 'clear' ? 5.45 + 0.4 * 0.55 : shot === 'drop' ? 1.35 + 0.4 * 0.25 : 4.45 + 0.4 * 0.5);
+    assert.equal(depths[2], shot === 'clear' ? 5.45 + 0.4 * 0.55 + .22 : shot === 'drop' ? 1.35 + 0.4 * 0.25 : 4.45 + 0.4 * 0.5);
     const omitted = rules.getShotTarget(s, side, {shot, aim: 0.65, charge: 0.4});
     assert.equal(Math.abs(omitted.z), depths[2], 'existing AI defaults remain unchanged');
   }
@@ -282,7 +282,7 @@ test('dragged two-dimensional previews match the actual contact trajectory and l
     const request = {shot, aim: aimDepth > 0 ? -0.7 : 0.7, aimDepth, charge: 0.25};
     const expected = rules.getShotTarget(s, side, request);
     if (aimDepth !== 0) {
-      const limits = {clear: [3.5, 6.25], drop: [0.7, 3], smash: [1.8, 6.2]}[shot];
+      const limits = {clear: [3.5, 6.25 + .22], drop: [0.7, 3], smash: [1.8, 6.2]}[shot];
       assert.equal(Math.abs(expected.z), limits[aimDepth < 0 ? 0 : 1]);
     }
     const inputs = [{}, {}]; inputs[side] = request;
