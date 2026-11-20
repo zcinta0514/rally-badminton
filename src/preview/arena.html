@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101d20">
+  <title>中央球场 · 开拍 RALLY</title>
+  <link rel="stylesheet" href="./arena.css">
+  <script type="importmap">{"imports":{"three":"../../vendor/three.module.js","three/addons/":"../../vendor/three-addons/"}}</script>
+</head>
+<body>
+  <header>
+    <div class="brand"><i aria-hidden="true"></i><b>RALLY</b><span>场馆预览</span></div>
+    <a class="back" href="../../">进入对局 <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <section class="stage" aria-label="三维比赛场馆">
+      <canvas aria-label="当前机位的三维场馆"></canvas>
+      <div class="title"><p>COURT 01</p><h1 id="shot">中央球场</h1></div>
+      <div class="score" aria-label="当前比分">
+        <div><span>近场</span><strong id="near">00</strong></div>
+        <div><span>远场</span><strong id="far">00</strong></div>
+      </div>
+      <p id="load" role="status">正在载入场馆…</p>
+      <div class="call" role="status"><i></i><span id="verdict">等待判罚演示</span></div>
+    </section>
+    <section class="desk" aria-label="审片控制">
+      <div class="group">
+        <h2>观察机位</h2>
+        <div class="buttons" id="cameras">
+          <button data-camera="wide" aria-pressed="true">全景</button>
+          <button data-camera="chief" aria-pressed="false">主裁席</button>
+          <button data-camera="line" aria-pressed="false">底线司线员</button>
+          <button data-camera="gear" aria-pressed="false">器材区</button>
+          <button data-camera="lights" aria-pressed="false">灯架</button>
+        </div>
+      </div>
+      <div class="group">
+        <h2>判罚演示</h2>
+        <div class="buttons" id="events">
+          <button data-event="in" disabled>界内</button>
+          <button data-event="out" disabled>界外</button>
+          <button data-event="net" disabled>下网</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="./arena.js"></script>
+</body>
+</html>

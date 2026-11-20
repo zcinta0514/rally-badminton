@@ -123,7 +123,8 @@ test('an edge indicator beside the scoreboard clears its full label width',()=>{
 
 test('painted singles boundary outer edges coincide with rule boundaries',()=>{
   const view={scene:new THREE.Scene()};CourtView.prototype.makeCourt.call(view);
-  const boxes=view.scene.children.filter(m=>m.geometry?.type==='BoxGeometry');
+  const boxes=[];
+  view.scene.traverse(m=>{ if(m.geometry?.type==='BoxGeometry') boxes.push(m); });
   const sideLines=boxes.filter(m=>Math.abs(Math.abs(m.position.x)-COURT.halfWidth)<.04&&m.geometry.parameters.depth>13);
   const baseLines=boxes.filter(m=>Math.abs(Math.abs(m.position.z)-COURT.halfLength)<.04&&m.geometry.parameters.width>5);
   assert.equal(sideLines.length,2);assert.equal(baseLines.length,2);
