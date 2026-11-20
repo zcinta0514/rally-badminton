@@ -8,6 +8,7 @@ import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 import { webcrypto } from 'node:crypto';
 import * as game from '../shared/game.js';
+import { createTraining, setTrainingOptions, stepTraining } from '../shared/training.js';
 import {MenuAudio,interfaceSound} from '../src/menu-audio.js';
 import {readArenaPreferences} from '../src/arena-preferences.js';
 import {describeRole} from '../src/match-settings.js';
@@ -44,7 +45,7 @@ class Target {
 }
 
 async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none', buildId='1111111111111111', sessionStorage=null} = {}) {
-  let now = 1000, nextId = 0, frame, controls, view, audio;
+  let now = 1000, nextId = 0, frame, controls, view, audio, trainingActions;
   let pwaOptions, onboardingOptions, updateSafeAtInit, onboardingAttempts = 0;
   const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [], usageEvents = [];
   let resolvePeer;
@@ -121,20 +122,21 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     getRendererMetrics() { return { pixelRatio: 1, shadows: true, calls: 1 }; }
     renderLobby(dt) { this.dt=dt; }
     render(state, side, dt, info) {
-      this.drawn = structuredClone(state); this.side = side; this.dt = dt; this.lastPhase = state.phase;
+      this.drawn = structuredClone(state); this.info = info; this.side = side; this.dt = dt; this.lastPhase = state.phase;
       this.finale = info?.finale ? structuredClone(info.finale) : null;
     }
   }
   class Input {
-    constructor() { controls = this; this.enabled = true; }
+    constructor({onShot}) { controls = this; this.enabled = true; this.onShot = onShot; }
     reset() {}
     setEnabled(value) { this.enabled = Boolean(value); }
     sample() { return { x: 0, z: 0, prepare: null, charge: 0 }; }
   }
   const context = vm.createContext({
-    ...game, practiceInputs,localTeam,lineupNames, MenuAudio, interfaceSound, captureMotion, presentLocal, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
+    ...game, createTraining, setTrainingOptions, stepTraining, practiceInputs,localTeam,lineupNames, MenuAudio, interfaceSound, captureMotion, presentLocal, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
     getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
+    localStorage:{getItem:key=>key==='rally.playtest.notice.1'?'1':null}, // Returning player at the lobby.
     createUsageAnalytics:()=>({configured:true,enabled:true,
       pageView:()=>usageEvents.push(['view']),
       startMatch:mode=>usageEvents.push(['start',mode]),
@@ -169,7 +171,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     // These independently tested UI modules do not replace any match decisions.
     initOnboarding: options => { onboardingOptions = options; return { maybeShow() { onboardingAttempts++; } }; },
     initFeedback: () => null,
-    bindTrainingUI: () => ({ close() {}, configure() {}, update() {} }),
+    bindTrainingUI: actions => { trainingActions = actions; return { close() {}, configure() {}, update() {} }; },
     getWebSocketURL: () => 'ws://localhost/ws', queueMicrotask,
     bindMatchSettings:()=>({close(){},update(){},selectPalette(){}}), bindPalettePicker:()=>null, bindCameraSettings() {}, bindShotLayout:()=>({open(){},close(){},refresh(){},resetPosition(){},layout:{mode:'default',positions:null},editing:false}), ResizeObserver: class { observe() {} },
     requestAnimationFrame(callback) { frame = callback; },
@@ -181,7 +183,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
   const common = { element, click, startAI(){click('entry-back');click('start-ai');click('start-ai-confirm');}, startHell(){click('entry-back');click('start-hell');click('start-hell-confirm');}, draw, controls, view, audio, document, usageEvents,
-    pwaOptions, onboardingOptions, updateSafeAtInit, get onboardingAttempts() { return onboardingAttempts; },
+    trainingActions, pwaOptions, onboardingOptions, updateSafeAtInit, get onboardingAttempts() { return onboardingAttempts; },
     choice:(id,value)=>settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value))),
     chooseSetting:(id,value)=>{const button=settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value)));if(!button.disabled)element(id).emit('click',{target:button});},
     get settings() { return vm.runInContext('settings', context); }, get sound() { return vm.runInContext('sound', context); },
@@ -207,6 +209,37 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
   }
   return Object.assign(common, { retry, snapshot, room, state, socket: () => sockets.at(-1) });
 }
+
+test('the training frame passes real incoming landing and intercept guidance to the court until the player returns the feed', async () => {
+  const f = await fixture('serve', {demoMode:true});
+  f.view.camera = { position:null }; // Audio listener boundary.
+  const options = { drill:'cross', line:'right' };
+  assert.equal(f.trainingActions.onEnter(options),true);
+  f.draw();
+  assert.equal(f.view.info.landing,undefined);
+  f.trainingActions.onStart(options);
+
+  const advanceUntil = predicate => {
+    for (let i=0;i<150 && !predicate();i++) f.draw();
+    assert.ok(predicate(),'expected the real training loop to advance to the next stage');
+  };
+  advanceUntil(()=>f.view.drawn.training.stage==='feed');
+  const expected = game.getInterceptAdvice(f.view.drawn,0,{shot:'clear'});
+  assert.equal(expected.status,'approach');
+  assert.equal(expected.landing.side,0);
+  assert.deepEqual(f.view.info.landing,expected.landing,'court must receive the coach feed landing');
+  assert.deepEqual(f.view.info.intercept,expected,'court must receive the playable interception point');
+
+  advanceUntil(()=>f.view.drawn.training.canHit);
+  assert.equal(f.view.info.availability.canHit,true);
+  f.controls.onShot({shot:'drop',aimExplicit:true,aim:-.85,aimDepth:-.35,charge:.30});
+  advanceUntil(()=>f.view.drawn.training.stage==='return');
+  assert.equal(f.view.drawn.lastShotInfo.side,0);
+  assert.equal(f.view.drawn.lastShotInfo.type,'drop');
+  assert.equal(f.view.info.landing,undefined);
+  assert.equal(f.view.info.intercept,undefined);
+  assert.ok(f.view.info.trainingTarget,'the landing-zone exercise remains visible');
+});
 
 test('the production update callback permits only a ready and visible lobby', async () => {
   const f = await fixture('serve', { peerMode: true });
