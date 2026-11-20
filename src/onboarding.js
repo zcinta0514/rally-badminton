@@ -42,7 +42,7 @@ export function initOnboarding({
   const replay = button('查看新手入门', 'onboarding-replay');
   const label = create('label', 'onboarding-hints-label');
   const hints = create('input', '', '', 'operation-hints'); hints.type = 'checkbox';
-  const hintDescription = create('p', 'onboarding-hints-note', '收起操作说明、键位与图例。体力、击球状态和实时风险会保留。', 'operation-hints-description');
+  const hintDescription = create('p', 'onboarding-hints-note', '关闭后隐藏键位和图例，仍显示体力与击球风险。', 'operation-hints-description');
   hints.setAttribute('aria-describedby', hintDescription.id);
   label.append(hints, create('span', '', '显示操作文字提示'));
   settings.append(replay, label, hintDescription);
@@ -66,38 +66,38 @@ export function initOnboarding({
   const practice = button('开始人机对战', 'onboarding-practice', 'secondary-btn');
   const next = button('下一步 ↗', 'onboarding-next', 'primary-btn');
   actions.append(back, practice, next);
-  const note = create('p', 'onboarding-return-note', '内容可上下滑动；也可从首页「更多」里的「新手指南」重新查看。');
+  const note = create('p', 'onboarding-return-note', '回到首页，点「新手指南」可再看。');
   modal.append(header, content, actions, note);
   document.body.append(modal);
 
   const pages = [
     {
       title: '选择比赛模式',
-      intro: '首次游玩建议：均衡型 · 入门难度 · 5 分制。',
-      visual: ['人机对战', '好友对战'],
+      intro: '第一次打，选「单人对战」里的「人机对战」，从入门单打开始。',
+      visual: ['单打', '双打', '专项训练'],
       lines: [
-        ['人机对战', '选择「单人对战」→「人机对战」，设置打法、难度与赛制后开始比赛。'],
-        ['好友对战', '一方创建房间，另一方输入 5 位房间码加入；双方确认规则后开始。'],
+        ['专项训练', '想单练接杀或发球，回首页选「专项训练」。'],
+        ['好友对战', '建房后把房间码发给好友，或直接分享邀请链接。'],
       ],
-      keyboard: '手机横屏，双手操控。规则与技巧可在「操作说明」查看。',
+      keyboard: '想练配合，在人机对战中选「双打」，与 AI 队友搭档。',
     },
     {
       title: '移动与跑位',
-      intro: '左半屏空白处按下并拖动，松手就停。右手可以同时击球。',
+      intro: '左手按住左半屏空白处，向想去的方向拖，松手即停。',
       visual: ['↕ ↔', '移动 → 到位'],
       lines: [
-        ['看地面', '青圈是来球预计落点，黄色圈是建议接球位置。'],
-        ['提前跑位', '球落地前到位；出现「进入击球范围」或「现在可杀球」时准备出手。'],
+        ['看地面', '青圈标出球会落在哪，琥珀色提示标出你该站在哪。'],
+        ['提前跑位', '先跑向建议位置，脚下提示亮起就能回球。'],
       ],
       keyboard: '电脑：W A S D 或方向键移动。',
     },
     {
       title: '击球与选线',
-      intro: '按住高远、吊球或杀球按钮，拖动瞄准，再松开出手。',
+      intro: '轻点沿当前方向击球。想找空当，按住球键拖动，松手出球。',
       visual: ['按住', '拖动', '松开'],
       lines: [
-        ['选落点', '左拖打左、右拖打右；上拖更深、下拖更靠网。粉圈显示瞄准目标。'],
-        ['选时机', '按住越久蓄力越多。先用高远球稳定回球，等「现在可杀球」再尝试杀球。'],
+        ['选落点', '横拖选左右，上拖打后场，下拖打网前。'],
+        ['选时机', '被逼到后场，用高远球争取回位时间。杀球键亮起时，可抓高点下压。'],
       ],
       keyboard: '电脑：J 高远 / K 吊球 / L 杀球；Z / X / C 选择左 / 中 / 右。',
     },

@@ -702,3 +702,6 @@ body[data-screen=menu] #menu #open-playtest-notice:is(:hover,:focus-visible) { b
   -webkit-backdrop-filter:grayscale(.75) blur(1.4px); backdrop-filter:grayscale(.75) blur(1.4px);
   mask-image:radial-gradient(ellipse 73% 72% at 50% 53%, transparent 76%, black 100%);
   transition:opacity .25s ease; }
+body[data-screen=menu] #menu[data-entry=home] #open-beta-group { font-size:15px; font-weight:600; }
+body[data-screen=menu] #menu[data-entry=home] #onboarding-entry { margin-inline-start:8px; color:#d6efac; font-size:13px; }
+#help-dialog .help-item p { grid-column:1 / -1; }
