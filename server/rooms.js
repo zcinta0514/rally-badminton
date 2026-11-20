@@ -99,7 +99,7 @@ export class Rooms {
       const ruleset=rulesetOf(m.ruleset);
       const room={code,ruleset,rules:Object.freeze({finale:m.finale==='father-son'?'father-son':'none'}),
         readyRequired:m.readyRequired===true,startReady:new Set(),
-        target:ruleset==='standard21'?21:[5,11,21].includes(m.target)?m.target:5,players:[null,null],state:null,snapshotSeq:0,matchId:1,
+        target:ruleset==='standard21'?21:[5,10,11,21].includes(m.target)?m.target:5,players:[null,null],state:null,snapshotSeq:0,matchId:1,
         sessionId:randomBytes(16).toString('hex'),matchEndedAt:null,abandoned:false,
         inputs:[{},{}],lastInput:[0,0],lastShot:[-Infinity,-Infinity],rematch:new Set(),resumeReady:new Set(),advancedMs:this.accumulator,touched:this.now()};
       this.rooms.set(code,room);this.connect(ctx,room,0,m.name,m.role,m.playerKey);this.roomInfo(room);return;

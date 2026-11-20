@@ -5,7 +5,7 @@ import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, VERTICAL_DRAG, verticalLaunch, timeToHeight, flightApex, verticalFlight, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 21;
+export const RULES_VERSION = 24;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -15,22 +15,22 @@ export const COURT = Object.freeze({ halfWidth: 2.59, halfLength: 6.7, netHeight
 export const ROLES = Object.freeze({
   balanced: Object.freeze({ label: '均衡', speed: 4.6, acceleration: 1, braking: 1, power: 1,
     maxStamina: 100, recovery: 5.8, reachBonus: 0, runCost: 1, swingTime: 0.42, dropControl: 1,
-    fatigue: Object.freeze({ onset: .55, speedFloor: .65, accelerationFloor: .8, controlWeight: .3 }),
+    fatigue: Object.freeze({ onset: .55, speedFloor: .88, accelerationFloor: .8, controlWeight: .3 }),
     shotSpeed: Object.freeze({ clear: 1, drop: 1, smash: 1 }),
     shotDepth: Object.freeze({ clear: 1, drop: 1, smash: 1 }),
     shotCost: Object.freeze({ serve: 1, clear: 1, drop: 1, smash: 1 }) }),
   swift: Object.freeze({ label: '灵巧', speed: 5.35, acceleration: 1.15, braking: 1.15, power: 0.9,
-    maxStamina: 88, recovery: 5.8, reachBonus: 0.1, runCost: .84, swingTime: 0.378, dropControl: 0.8,
-    fatigue: Object.freeze({ onset: .45, speedFloor: .72, accelerationFloor: .85, controlWeight: .26 }),
+    maxStamina: 112, recovery: 6.6, reachBonus: 0.1, runCost: .84, swingTime: 0.378, dropControl: 0.8,
+    fatigue: Object.freeze({ onset: .45, speedFloor: .90, accelerationFloor: .85, controlWeight: .26 }),
     shotSpeed: Object.freeze({ clear: 1, drop: 1.08, smash: 0.97 }),
     shotDepth: Object.freeze({ clear: 0.97, drop: 0.94, smash: 0.97 }),
-    shotCost: Object.freeze({ serve: .9, clear: .95, drop: .8, smash: 1.2 }) }),
+    shotCost: Object.freeze({ serve: .9, clear: .95, drop: .8, smash: .95 }) }),
   power: Object.freeze({ label: '力量', speed: 4.05, acceleration: 0.85, braking: 0.85, power: 1.12,
-    maxStamina: 112, recovery: 6.2, reachBonus: 0, runCost: 1.05, swingTime: 0.47, dropControl: 1,
-    fatigue: Object.freeze({ onset: .6, speedFloor: .6, accelerationFloor: .75, controlWeight: .36 }),
+    maxStamina: 92, recovery: 5.2, reachBonus: 0, runCost: 1.05, swingTime: 0.47, dropControl: 1,
+    fatigue: Object.freeze({ onset: .6, speedFloor: .85, accelerationFloor: .75, controlWeight: .36 }),
     shotSpeed: Object.freeze({ clear: 1.04, drop: 0.95, smash: 1.08 }),
     shotDepth: Object.freeze({ clear: 1.07, drop: 0.96, smash: 1.06 }),
-    shotCost: Object.freeze({ serve: 1, clear: .95, drop: .9, smash: .85 }) }),
+    shotCost: Object.freeze({ serve: 1, clear: .95, drop: .9, smash: 1.2 }) }),
 });
 
 const TUNING = {
@@ -82,13 +82,14 @@ function inputOf(input) {
 
 const SCORING_RULES = Object.freeze({
   5: Object.freeze({ target: 5, winBy: 2, cap: 10 }),
+  10: Object.freeze({ target: 10, winBy: 2, cap: 15 }),
   11: Object.freeze({ target: 11, winBy: 2, cap: 20 }),
   21: Object.freeze({ target: 21, winBy: 2, cap: 30 }),
 });
 
 /** Shared by scoring and rule hints; target stays fixed throughout deuce. */
 export function getScoringRules({ ruleset = 'quick', target = 5 } = {}) {
-  return SCORING_RULES[ruleset === 'standard21' ? 21 : [5, 11, 21].includes(target) ? target : 5];
+  return SCORING_RULES[ruleset === 'standard21' ? 21 : [5, 10, 11, 21].includes(target) ? target : 5];
 }
 
 export function createMatch({ target = 5, roles = ['balanced', 'balanced'], difficulty = 'easy', seed = 1, ruleset = 'quick',
@@ -349,6 +350,10 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
   const normalDepth = Math.min(serving && state.format === 'doubles' ? 5.7 : Infinity, shotDepth(type, input.charge, input.aimDepth, serving, role));
   const liftDepth = shotDepth(type, input.charge, 0, false, role);
   let aimZ = -direction(side) * (lift > 0 ? liftDepth + (6.05 - liftDepth) * lift : normalDepth);
+  // In the last fifth of the reserve a high overhead loses its downward angle.
+  // Low contacts still carry the usual risk of driving the shuttle into the net.
+  const weakSmash = type === 'smash' ? clamp(1 - player.stamina / (.2 * role.maxStamina), 0, 1)
+    * clamp((ball.y - 1.4) / .7, 0, 1) : 0;
   const drag = type === 'smash' ? SHUTTLE_FLIGHT.smashDrag : SHUTTLE_FLIGHT.drag;
   const verticalDrag = type === 'smash' ? 0 : VERTICAL_DRAG;
   if (type === 'smash' && ball.z * direction(side) > 0) {
@@ -360,7 +365,8 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
     // The last part of a forward drag deliberately spends net clearance.
     // Preserve this choice: collision, not random chance, determines the miss.
     const netPressure = clamp((-input.aimDepth - .6) / .4, 0, 1);
-    aimZ = -direction(side) * (safeDepth + (Math.abs(aimZ) - safeDepth) * netPressure);
+    const depth = safeDepth + (Math.abs(aimZ) - safeDepth) * netPressure;
+    aimZ = -direction(side) * (depth + (Math.max(depth, 5.7) - depth) * weakSmash);
   }
   if (serving) {
     const sign = direction(side) * (state.score[playerTeam(state, side)] % 2 ? -1 : 1);
@@ -392,6 +398,7 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
     // Never slow a smash to manufacture clearance; low contacts can hit the net.
     const rearDepth = clamp((Math.abs(ball.z) - 3.8) / 1.4, 0, 1);
     duration = Math.min(duration + .024 * rearDepth, downwardLimit);
+    duration += (downwardLimit + .25 - duration) * weakSmash;
   } else duration = Math.max(duration, minDuration);
   if (verticalDrag) {
     // Only raise an arc when the requested flight would hit the net; do not
@@ -1043,7 +1050,8 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
   if (h?.rescue) return output;
   if (ball.lastHit === playerTeam(state, side)) {
     const base = recoveryPosition(state, side, level);
-    return { ...output, ...moveToward(player, base.x, base.z, config.pace * (level === 'hard' && !h ? .9 : .72)) };
+    const regroupPace = !h && player.stamina < role.maxStamina * .45 ? .20 : config.pace * (level === 'hard' && !h ? .9 : .72);
+    return { ...output, ...moveToward(player, base.x, base.z, regroupPace) };
   }
   let memory = state._ai[side];
   if (!memory || memory.hitId !== state.hitId) {

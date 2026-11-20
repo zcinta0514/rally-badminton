@@ -5,7 +5,7 @@ import { STAMINA_TUNING } from '../shared/stamina.js';
 
 export function describeRole(role) {
   const r = ROLES[role] || ROLES.balanced;
-  const style = { balanced: '控球耗费均衡，疲劳反应适中', swift: '跑动省力、体力回满快，连续杀球更费体力', power: '杀球省力、体力池大，跑动较费力、回满较慢' }[role] || '控球耗费均衡，疲劳反应适中';
+  const style = { balanced: '控球耗费均衡，疲劳反应适中', swift: '速度最快，耐力最好，击球力量偏低', power: '击球力量最强，连续杀球和跑动耗体力快' }[role] || '控球耗费均衡，疲劳反应适中';
   return style + ' · 速度 ' + r.speed + 'm/s（耗尽 ' + (r.speed * r.fatigue.speedFloor).toFixed(2) + 'm/s） · 力量 ' + Math.round(r.power * 100) + '% · 体力 ' + r.maxStamina +
     ' · 慢移恢复最高 ' + r.recovery + '/s · 全速耗费 ' + movementStaminaRate(r, r.speed).toFixed(1) + '/s' +
     ' · 高远/吊球/杀球耗费 ' + ['clear','drop','smash'].map(shot => shotStaminaCost(r,shot).toFixed(1)).join('/') + ' · 满力耗费增加35%';
@@ -19,6 +19,7 @@ export function describeMatch(state, side = 0, mode = 'ai') {
     '鱼跃救球：远处低球触发；落地、撑地起身共约0.7秒，两次至少间隔3秒，次数不限。',
     '每次回球尽可能使用技能，高球可连续重炮，扑救不叠加主动技能。移动与击球按键沿用你的布局。',
   ].join('\n');
+  const staminaRule = '各局制每次跑动和击球的耗费相同。回合越多，累计耗费越高。力竭时跑速略降，高点杀球下压不足，更容易失误。';
   if(state.format==='doubles'){
     const team=side%2,own=ROLES[state.players[side].role],partner=ROLES[state.players[side^2].role],rule=getScoringRules(state);
     const levels={easy:'入门',medium:'进阶',hard:'高手'};
@@ -27,6 +28,7 @@ export function describeMatch(state, side = 0, mode = 'ai') {
       '对手：'+[1-team,3-team].map(i=>ROLES[state.players[i].role].label+'型').join(' / '),
       mode==='ai'?'队友难度：'+levels[state.teammateDifficulty]+'；对手难度：'+levels[state.difficulty]:'四人好友双打 · 全员确认后开赛',
       (state.ruleset==='standard21'?'三局两胜 · 每局21分':rule.target+'分单局')+' · 净胜2分 · '+rule.cap+'分封顶',
+      staminaRule,
       '自由跑位、抢球和补位；同队轻度身体阻挡，不能连续两次击球。',
       '发球与接发顺序自动引导；只有指定球员能接发球，回球后自由接球。',
       '你固定控制本人；体力与移动、击球规则沿用单打。',
@@ -38,6 +40,7 @@ export function describeMatch(state, side = 0, mode = 'ai') {
   return [
     '我方：' + self.label + '型 · 体力上限 ' + self.maxStamina + '；对手：' + other.label + '型 · ' + other.maxStamina,
     (state.ruleset === 'standard21' ? '三局两胜 · 每局21分' : '单局快赛 · ' + rule.target + '分') + ' · 净胜' + rule.winBy + '分 · ' + rule.cap + '分封顶',
+    staminaRule,
     mode === 'online' ? '好友对战 · ' + assistance : 'AI 反应 ' + Math.round(ai.reaction * 1000) + 'ms · 节奏 ' + Math.round(ai.pace * 100) + '% · ' + assistance,
     '你的当前最高移动速度 ' + (self.speed * staminaEffects(state.players[side], self).speedScale).toFixed(2) + 'm/s；疲劳时跑动、强攻与压线更容易失误。',
     '成功回球后慢移或站稳调整：高远球恢复加快' + Math.round(STAMINA_TUNING.shotRecovery.clear.boost * 100) + '%（额外最多' + STAMINA_TUNING.shotRecovery.clear.budget + '点），吊球加快' + Math.round(STAMINA_TUNING.shotRecovery.drop.boost * 100) + '%（额外最多' + STAMINA_TUNING.shotRecovery.drop.budget + '点）；杀球和发球无加成，跑动／准备击球时不恢复。',

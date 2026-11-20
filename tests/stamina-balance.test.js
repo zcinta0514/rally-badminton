@@ -26,9 +26,9 @@ test('the three styles trade movement economy, recovery, control and attack econ
   const shot = (r,type) => game.shotStaminaCost(r,type) / r.maxStamina;
   assert.ok(run(s) < run(b) && run(b) < run(p));
   assert.ok(s.recovery/s.maxStamina > b.recovery/b.maxStamina && b.recovery/b.maxStamina > p.recovery/p.maxStamina);
-  assert.ok(shot(p,'smash') < shot(b,'smash') && shot(b,'smash') < shot(s,'smash'));
+  assert.ok(shot(s,'smash') < shot(b,'smash') && shot(b,'smash') < shot(p,'smash'));
   assert.ok(shot(s,'drop') < shot(b,'drop'));
-  assert.ok(shot(b,'clear') < shot(s,'clear'));
+  assert.ok(shot(s,'clear') < shot(b,'clear'));
   // Power can conserve energy with control shots, but retains the slowest
   // movement and strongest fatigue/control penalties; it cannot dominate agility.
   assert.ok(p.speed < b.speed && b.speed < s.speed);
@@ -53,7 +53,7 @@ test('exhaustion changes actual movement for both ends and all roles while prese
     const states=[1,0].map(ratio=>{const s=game.createMatch({roles:[role,role]});s.phase='rally';s.shuttle.active=false;s.players[side].stamina=game.ROLES[role].maxStamina*ratio;s.players[side].x=-1;return s;});
     for(const s of states)for(let i=0;i<36;i++)game.stepMatch(s,side===0?[{x:1},{}]:[{}, {x:1}],1/120);
     assert.ok(states[1].players[side].vx > 2);
-    assert.ok(states[1].players[side].vx < states[0].players[side].vx*.85);
+    assert.ok(states[1].players[side].vx < states[0].players[side].vx*.95);
     assert.ok(states[1].players[side].x < states[0].players[side].x);
   }
 });
@@ -87,4 +87,20 @@ test('fatigue is explained in the player meter without hiding recovery, waiting 
   assert.ok(staminaDisplay(p,'rally',true).speed < game.ROLES.balanced.speed);
   p.staminaStatus='recovering';assert.match(staminaDisplay(p,'rally',true).label,/恢复中/);
   assert.equal(staminaDisplay(p,'paused',true).status,'paused');
+});
+
+test('exhausted overhead smashes flatten into slower rising shots for every role', () => {
+  for (const role of Object.keys(game.ROLES)) {
+    const state = game.createMatch({ roles: [role, role] });
+    state.phase = 'rally';
+    Object.assign(state.shuttle, { x: 0, y: 2.5, z: 3, vy: 0, active: true, lastHit: 1 });
+    Object.assign(state.players[0], { x: 0, z: 3 });
+    const shot = { shot: 'smash', charge: 1 };
+    const fresh = game.getShotTarget(state, 0, shot);
+    state.players[0].stamina = 0;
+    const tired = game.getShotTarget(state, 0, shot);
+    assert.ok(fresh.vy < 0 && tired.vy > 0);
+    assert.ok(Math.hypot(tired.vx, tired.vz) < Math.hypot(fresh.vx, fresh.vz));
+    assert.ok(tired.quality.risk > fresh.quality.risk);
+  }
 });
