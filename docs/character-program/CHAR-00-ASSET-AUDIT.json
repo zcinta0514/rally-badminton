@@ -1,0 +1,45 @@
+{
+  "asset": "src\\models\\athlete.glb",
+  "bytes": 297572,
+  "sha256": "2bd358cca2e5a963c4de5da6d80e576920d15d33b19143b94e509608dc8b242f",
+  "meshes": 1,
+  "primitives": 5,
+  "triangles": 8931,
+  "uniquePositionVertices": 5350,
+  "materials": [
+    "rally-skin",
+    "rally-hair",
+    "rally-dark",
+    "rally-shirt",
+    "rally-accent"
+  ],
+  "textures": 0,
+  "images": 0,
+  "animations": [],
+  "skins": [
+    {
+      "jointCount": 18,
+      "joints": [
+        "chest",
+        "head",
+        "leftAnkle",
+        "leftElbow",
+        "leftHip",
+        "leftKnee",
+        "leftShoulder",
+        "leftWrist",
+        "neck",
+        "pelvis",
+        "rightAnkle",
+        "rightElbow",
+        "rightHip",
+        "rightKnee",
+        "rightShoulder",
+        "rightWrist",
+        "spine",
+        "spineLow"
+      ]
+    }
+  ],
+  "limitations": "Static asset inventory only; not full-scene draw calls, visual quality or phone performance."
+}

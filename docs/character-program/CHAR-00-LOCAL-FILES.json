@@ -1,0 +1,164 @@
+[
+  {
+    "path": "C:\\Users\\Administrator\\Documents\\ChatGPT\\开拍\\character-program\\local\\downloads\\blender-4.5.9-windows-x64.zip",
+    "bytes": 399051129,
+    "sha256": "41da973b9bf95bb312cbeff4d1982feb13259b43c821686b9bafea4dfe5477cf",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\Documents\\ChatGPT\\开拍\\character-program\\local\\downloads\\blender-4.5.9.sha256",
+    "bytes": 871,
+    "sha256": "fadc7ef868751ab836a3792f68f95eb954042626b206cca8d9b20723eb88756b",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\Documents\\ChatGPT\\开拍\\character-program\\local\\models\\pose_landmarker_full.task",
+    "bytes": 9398198,
+    "sha256": "5134a3aad27a58b93da0088d431f366da362b44e3ccfbe3462b3827a839011b1",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\Documents\\ChatGPT\\开拍\\character-program\\local\\samples\\pose.jpg",
+    "bytes": 44100,
+    "sha256": "c8a830ed683c0276d713dd5aeda28f415f10cd6291972084a40d0d8b934ed62b",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\athlete-inspection.blend",
+    "bytes": 1410867,
+    "sha256": "c2416d385a8306282fd88ec2aaef265792bc756ba398276880ab10e4ac1c87a4",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\athlete-inspection.json",
+    "bytes": 746,
+    "sha256": "6683b84155ca02a5a279fab5060da12c9ef9163450a562a7beb8984c652aa480",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\baseline-tests.log",
+    "bytes": 84016,
+    "sha256": "2838f83e22f3fd02ee1545454196e36171f89fce8a27ff6e619fd264e2f9bdc4",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\character-tests.log",
+    "bytes": 6118,
+    "sha256": "be76c556749b45391abb68347886f7d1e4a7dd54c4ed7700c62f37cc1f346265",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\baseline-build.log",
+    "bytes": 129,
+    "sha256": "4ea8275d92032b0509d61dadfee5546b072c40d8da7e443377605f8e91524959",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\handoff-longpath-tests.log",
+    "bytes": 5024,
+    "sha256": "2d2c897614c6bdb0e51983e5208cb1b50e47ede2bc13bda6babca97caa2a9252",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\Documents\\ChatGPT\\开拍\\character-program\\local\\downloads\\mpfb-2.0.18.zip",
+    "bytes": 45956992,
+    "sha256": "c075b3e9b94b8e5556a5f03f4653602d02ea306de08126e8f55ed6dee28a2dad",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\Documents\\ChatGPT\\开拍\\character-program\\local\\downloads\\universal-base-standard.zip",
+    "bytes": 128968391,
+    "sha256": "fdbf1804c90dfc1ea03e992bff7da2dfd1a79318e13270a660180f9308455f40",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\Documents\\ChatGPT\\开拍\\character-program\\local\\blender-user\\extensions\\rally_local\\mpfb\\blender_manifest.toml",
+    "bytes": 434,
+    "sha256": "09723beadd1cb5f29f0327a6792fd92365b46fd8bfb8141d9df21c6421a6a201",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\Documents\\ChatGPT\\开拍\\character-program\\local\\pose-env\\Lib\\site-packages\\imageio_ffmpeg\\binaries\\ffmpeg-win-x86_64-v9.0.2.exe",
+    "bytes": 105423872,
+    "sha256": "3256173f3f8bffd7df12227c68adf68025edb1832273a9530688a7bb1ed8edec",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\mpfb-base-check.blend",
+    "bytes": 5897922,
+    "sha256": "8a469b010eb6e5c840d4e0692fcf03ac51a607a80cca9a9c778241684b0fef68",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\mpfb-base-check.json",
+    "bytes": 470,
+    "sha256": "ca26ad26123b4b8687cc44ff7d9f1d8490d24fe1c469a12faf1898224108a656",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\mpfb-check.log",
+    "bytes": 1079,
+    "sha256": "89afe808e9c864932fa437daa37b1b449635ecbc078451bab699046e9f090598",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\mpfb-reopen-check.log",
+    "bytes": 672,
+    "sha256": "55574f5de9933e837ae573ae3fae8aa986b1541a73ec362b0c21d23caab734fd",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\quaternius-base-inspection.blend",
+    "bytes": 13647448,
+    "sha256": "577f6e6f86a0f0fd276fd8b2074d582afca847e04f7ddc09fb76af1b473598be",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\quaternius-base-inspection.json",
+    "bytes": 1062,
+    "sha256": "2bdf43e51bf0db3b9b1219fddda508a49e34ebb628b4c9185a29b5ce882af012",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\source-import-check.log",
+    "bytes": 2379,
+    "sha256": "4ab08c9599e7c5974bc46b77a66702c12eba034ef044e4270b134fbb8ed44318",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\toolchain-build.log",
+    "bytes": 129,
+    "sha256": "60ed03b66ce4c1c367fb40b626c83ec5c0b33bc85df43615e82bbb934e9c66ce",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\toolchain-character-tests.log",
+    "bytes": 6117,
+    "sha256": "0d82eb7ff01b05a643aa0ac5f80e6620721c0f46040972393647f0a6458c9357",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\toolchain-full-tests.log",
+    "bytes": 83517,
+    "sha256": "0b6ae0ba01ad16a1d11a371740a266ffa3b6b7339b7cd15770e69a604b7d81f5",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\toolchain-handoff-longpath-tests.log",
+    "bytes": 5006,
+    "sha256": "f2f8d06a15214b44abfd1bce43bc86764bc3c4d11ee8f8d8c816fac530a482cc",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\video-pipeline\\review-vfr-pose.json",
+    "bytes": 42017,
+    "sha256": "cb58f218d687e0bf6e0be18aafc01a9dd6d7f40a68f1cc5e16b12616dfc0ac50",
+    "backup": "local-only"
+  },
+  {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\rally-char-00\\rally-dev\\artifacts\\character\\CHAR-00\\video-pipeline\\review-tests.log",
+    "bytes": 882,
+    "sha256": "fe28354398ed7ddd49808b1703b0bf4a7629f5f579d7a109266ed220a5e028a7",
+    "backup": "local-only"
+  }
+]
