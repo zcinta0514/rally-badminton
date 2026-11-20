@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createMatch, stepMatch, aiInput, ROLES, pauseMatch, resumeMatch, predictLanding } from '../shared/game.js';
+import { createMatch, stepMatch, movePlayer, getShotTarget, aiInput, ROLES, pauseMatch, resumeMatch, predictLanding } from '../shared/game.js';
 import { HELL, phantomPositions, hellStatus } from '../shared/hell-mode.js';
 import { matchPressure } from '../src/arena-feedback.js';
 import { describeMatch } from '../src/match-settings.js';
@@ -204,5 +204,43 @@ test('situational variations retain legal flights and readable visual fakes', ()
     const landing=predictLanding(s);
     assert.equal(landing.event,'landing');assert.equal(landing.out,false);
     assert.equal(phantomPositions(s).length,3);
+  }
+});
+
+
+test('hell boss matches swift running and power striking', () => {
+  const hell = createMatch({ challenge: 'hell' });
+  const swift = createMatch({ roles: ['balanced', 'swift'] });
+  for (let frame = 0; frame < 60; frame++) {
+    const input = { x: frame < 50 ? 1 : -1, z: 0 };
+    for (const state of [hell, swift]) movePlayer(state.players[1], input, 1, dt, state);
+    assert.equal(hell.players[1].vx, swift.players[1].vx);
+    if (frame === 49) assert.equal(hell.players[1].vx, ROLES.swift.speed);
+  }
+  const power = createMatch({ roles: ['balanced', 'power'] });
+  for (const state of [power, hell]) {
+    state.phase = 'rally';
+    Object.assign(state.players[1], { x: 0, vx: 0 });
+    Object.assign(state.shuttle, { x: 0, z: -3.8, y: 2.5, active: true, lastHit: 0 });
+  }
+  for (const shot of ['clear','drop','smash']) {
+    const request = { shot, charge: .7 };
+    assert.equal(getShotTarget(hell,1,request).duration,getShotTarget(power,1,request).duration);
+  }
+});
+
+test('paper throws use live play and respect the match budget', () => {
+  for (const seed of [4,5]) {
+    const state = createMatch({ challenge: 'hell', seed });
+    const paper = state.challenge.paper;
+    tick(state,[{},{}],.5);
+    assert.equal(paper.count,0);
+    for (let pointId = 0; pointId < 4; pointId++) {
+      state.pointId = pointId;
+      state.phase = 'rally';
+      Object.assign(state.shuttle,{ active:true, x:0, z:-3, y:4, vx:0, vy:0, vz:0 });
+      tick(state,[{},{}],.45);
+      assert.equal(paper.count,Math.min(pointId+1,paper.limit));
+    }
   }
 });

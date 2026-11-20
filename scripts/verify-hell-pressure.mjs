@@ -12,6 +12,7 @@ try {for(const [width,height] of [[844,390],[667,375]]) {
  await context.addInitScript(()=>{localStorage.setItem('rally.onboarding.seen','1');localStorage.setItem('rally.usage.enabled','off');});
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
  await page.goto(app.url);await page.locator('#loading').waitFor({state:'hidden'});
+ await page.locator('#dismiss-playtest-notice').click();
  await page.locator('#open-solo').click();await page.locator('#start-hell').click();
  assert.equal(await page.locator('#hell-more').evaluate(e=>e.open),false);
  await page.locator('#hell-more summary').click();assert.match(await page.locator('#hell-more').innerText(),/3秒/);

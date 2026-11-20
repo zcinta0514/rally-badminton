@@ -100,7 +100,7 @@ export function createMatch({ target = 5, roles = ['balanced', 'balanced'], diff
   const state = {
     rulesVersion: RULES_VERSION, format: format === 'doubles' ? 'doubles' : 'singles', teammateDifficulty: difficultyOf(teammateDifficulty),
     serverPlayer: 0, receiverPlayer: 1, servicePositions: [0, 0, 1, 1], _contactTie: 0,
-    ...(challenge === 'hell' ? { challenge: createHellChallenge() } : {}),
+    ...(challenge === 'hell' ? { challenge: createHellChallenge(seed) } : {}),
     ...((netDragSide === 0 || netDragSide === 1) ? { netDragSide } : {}),
     phase: 'serve', time: 0, timer: 0, target: getScoringRules({ ruleset, target }).target,
     ruleset, games: [0, 0], gameNumber: 1, gameScores: [],
@@ -240,11 +240,11 @@ export function resumeMatch(state) {
 }
 
 export function movePlayer(player, input, side, dt, state) {
-  const role = ROLES[player.role];
+  const role = state.challenge?.bossSide === side ? ROLES.swift : ROLES[player.role];
   const effort = Math.hypot(input.x, input.z);
   const fatigue = staminaEffects(player, role);
   const h = state.challenge?.bossSide === side ? state.challenge : null;
-  const moveScale = !h ? 1 : state.time < h.recoverUntil ? (h.rescue?.hit ? 0 : HELL.recoveryMoveScale) : HELL.moveScale;
+  const moveScale = !h ? 1 : state.time < h.recoverUntil ? (h.rescue?.hit ? 0 : HELL.recoveryMoveScale) : 1;
   // Retreating while facing the net is slower than a forward approach.
   const footwork = 1 - .14 * Math.max(0,input.z * direction(side));
   const targetX = input.x * role.speed * fatigue.speedScale * moveScale * footwork, targetZ = input.z * role.speed * fatigue.speedScale * moveScale * footwork;
@@ -336,7 +336,7 @@ function shotDepth(type, charge, aimDepth, serving, role) {
 /** Preview uses exactly the same target and launch solution as actual contact. */
 export function getShotTarget(state, side, request = {}, { netDrag = state?.netDragSide === side } = {}) {
   if (playerTeam(state, side) === null) return null;
-  const input = inputOf(request), ball = state.shuttle, player = state.players[side], role = ROLES[player.role], assist = assistFor(state, side);
+  const input = inputOf(request), ball = state.shuttle, player = state.players[side], role = state.challenge?.bossSide === side ? ROLES.power : ROLES[player.role], assist = assistFor(state, side);
   const serving = state.phase === 'serve' && serverSlot(state) === side;
   const requested = input.shot || input.prepare || 'clear';
   const type = requested === 'smash' && serving ? 'clear' : requested;
@@ -486,7 +486,7 @@ export function getInterceptAdvice(state, side, request = {}) {
   if (available.reasonCode === 'receiver') return { ...base, status: 'inactive' };
   if (!landing || state.phase !== 'rally' || state.shuttle.lastHit === playerTeam(state, side) || !state.players[side]) return { ...base, status: 'inactive' };
   if (landing.event === 'net' || landing.out || landing.serviceFault) return { ...base, status: 'out', reason: landing.event === 'net' ? '来球将触网' : '预计出界，可观察落点' };
-  const player = state.players[side], role = ROLES[player.role], assist = assistFor(state, side);
+  const player = state.players[side], role = state.challenge?.bossSide === side ? ROLES.swift : ROLES[player.role], assist = assistFor(state, side);
   const fatigue = staminaEffects(player, role);
   let nearest = null;
   for (let time = 0.035; time < landing.time; time += 0.035) {
@@ -665,6 +665,16 @@ function stepLive(state, inputs, dt, firstSlice) {
   const speeds = state.players.map(() => 0);
   try {
   state.time += dt;
+  const paper = state.challenge?.paper;
+  if (paper && phase === 'rally' && state.shuttle.active && paper.count < paper.limit && pointId >= paper.nextPoint) {
+    paper.liveTime += dt;
+    if (paper.liveTime >= paper.delay) {
+      paper.count++;
+      paper.at = state.time;
+      paper.side *= -1;
+      paper.nextPoint = pointId + 1;
+    }
+  }
   if (state.challenge?.rescue && state.time >= state.challenge.rescue.endsAt) state.challenge.rescue = null;
   for (let side = 0; side < state.players.length; side++) {
     const player = state.players[side];
@@ -1020,7 +1030,7 @@ function chooseAIShot(state, side, level) {
 // contact margin. Save the dive when ordinary footwork has a viable contact.
 // Existing speed avoids needless dives while already approaching the ball.
 function canRunToIncoming(player, ball, landingTime) {
-  const role = ROLES[player.role], speed = role.speed * HELL.moveScale;
+  const role = ROLES.swift, speed = role.speed;
   const acceleration = TUNING.acceleration * role.acceleration;
   const initial = Math.min(speed, Math.hypot(player.vx, player.vz));
   const toTop = (speed - initial) / acceleration;
@@ -1030,7 +1040,7 @@ function canRunToIncoming(player, ball, landingTime) {
     const runTime = Math.max(0, t - .09);
     const accelerating = Math.min(runTime, toTop);
     const travel = initial * accelerating + .5 * acceleration * accelerating ** 2 + speed * Math.max(0, runTime - toTop);
-    if (Math.hypot(point.x-player.x, point.z-player.z) <= TUNING.reach + role.reachBonus + travel - .3) return true;
+    if (Math.hypot(point.x-player.x, point.z-player.z) <= TUNING.reach + role.reachBonus + travel - .5) return true;
   }
   return false;
 }

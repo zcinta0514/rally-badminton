@@ -234,6 +234,10 @@ export class CourtView {
     this.scene.add(this.groundMarker);
     this.groundDot = makeContactShadow(this.groundMarker,{name:"shuttle-soft-shadow"});
     this.groundDot.position.y = .030;
+    this.paperBall = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 0),
+      new THREE.MeshStandardMaterial({ color: 0xe7decc, roughness: 1, flatShading: true }));
+    this.paperBall.visible = false;
+    this.scene.add(this.paperBall);
     const trailGeo = new THREE.BufferGeometry();
     this.trailPositions = new Float32Array(18 * 3);
     trailGeo.setAttribute('position', new THREE.BufferAttribute(this.trailPositions, 3));
@@ -653,13 +657,14 @@ export class CourtView {
       const anchor=new THREE.Vector3(x,2.03,3.4).project(camera);
       this.finaleAnchors[index]={x:(anchor.x+1)*this.width/2,y:(1-anchor.y)*this.height/2};
     }
-    for(const object of [this.shuttle,this.groundMarker,this.impactMarker,this.trail,
+    for(const object of [this.paperBall,this.shuttle,this.groundMarker,this.impactMarker,this.trail,
       this.landingHint,this.interceptHint,this.targetHint,this.readyHint])if(object)object.visible=false;
     this.edgeIndicator.hidden=true;
     this.renderer.render(this.scene,camera);
   }
 
   renderLobby(dt=1/60) {
+    this.paperBall.visible=false;
     this.staminaHUD?.hide();
     this.edgeIndicator.hidden=true;
     this.lobby.render(this.renderer,globalThis.document?.hidden?0:dt,this.width,this.height,
@@ -780,6 +785,18 @@ export class CourtView {
       return { x: (point.x + 1) * this.width / 2, y: (1 - point.y) * this.height / 2, depth: point.z };
     }, { left: 0, right: this.width, top: 0, bottom: this.height }, this.mode === 'match', info.playerNames);
     const ghosts = phantomPositions(state), h = state.challenge, boss = state.players[1];
+    const paper = h?.paper;
+    const age = paper?.at == null ? -1 : state.time - paper.at;
+    this.paperBall.visible = this.mode === 'match' && state.phase === 'rally' && age >= 0 && age < .58;
+    if (this.paperBall.visible) {
+      const t = age / .58, depth = 3 * (1 - t) + .22;
+      const halfHeight = depth * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
+      this.paperBall.position.set(paper.side * (1.1 - 1.45*t) * halfHeight * this.camera.aspect,
+        (.4 - .48*t + .22*Math.sin(Math.PI*t)) * halfHeight, -depth);
+      this.camera.localToWorld(this.paperBall.position);
+      this.paperBall.rotation.set(t*7,t*9,t*4);
+      this.paperBall.scale.set(.025,.021,.023);
+    }
     this.phantoms.forEach((ghost,index) => {
       const point = ghosts[index];ghost.visible = this.mode === 'match' && !!point;
       if (!point) return;
@@ -798,7 +815,9 @@ export class CourtView {
       points.setXYZ(0,boss.x,.055,boss.z);points.setXYZ(1,warning.aim*(COURT.halfWidth-.3),.055,4.8);
       points.needsUpdate=true;this.cannonLine.computeLineDistances();
     }
-    this.trail.material.opacity=['phantom','netDrop','drive'].includes(h?.active?.kind)&&h.active.hitId===state.hitId? .95 : .35;
+    const cannon = h?.active?.kind === 'cannon' && h.active.hitId === state.hitId;
+    this.trail.material.color.setHex(cannon ? 0xff9752 : 0xfff8de);
+    this.trail.material.opacity=['cannon','phantom','netDrop','drive'].includes(h?.active?.kind)&&h.active.hitId===state.hitId? .95 : .35;
     if(this.entranceActive){
       this.staminaHUD?.hide();this.edgeIndicator.hidden=true;
       for(const hint of [this.landingHint,this.interceptHint,this.targetHint,this.readyHint])hint.group.visible=false;
