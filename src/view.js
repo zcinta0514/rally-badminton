@@ -11,7 +11,8 @@ import { makeArena, makeHallShell, makeCourtMaterial, resetArenaCrowd, updateAre
 import { makeNetVisual, updateNetVisual } from './net-visual.js';
 import { loadTournamentArena } from './tournament-arena.js';
 import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
-import { COURT } from '../shared/game.js';
+import { followCourtViewport } from './follow-camera.js';
+import { COURT, ROLES, staminaEffects } from '../shared/game.js';
 import { StaminaHUD } from './stamina-hud.js';
 import { phantomPositions } from '../shared/hell-mode.js';
 import { TournamentLobby } from './tournament-lobby.js';
@@ -93,6 +94,7 @@ export class CourtView {
     this.scene.background = new THREE.Color(COLORS.background);
     this.scene.fog = new THREE.Fog(COLORS.background, 32, 65);
     this.camera = new THREE.PerspectiveCamera(45,1,0.1,100);
+    this.fatigueEdge = canvas.id === 'court' ? document.querySelector('#fatigue-edge') : null;
     this.cameraSide = null;
     this.entrance = new MatchEntrance();this.entranceFrom = null;this.entranceTo = this.camera.clone();
     this.cameraSettings = normalizeCameraSettings();
@@ -390,6 +392,7 @@ export class CourtView {
     this.resetCrowd();
     if (mode !== 'match') this.staminaHUD?.hide();
     if(mode!=='match')this.edgeIndicator.hidden=true;
+    if(this.fatigueEdge)this.fatigueEdge.hidden=true;
     this.resize();
   }
 
@@ -462,6 +465,14 @@ export class CourtView {
   updateCamera(side) {
     const lobby=this.mode==='menu';
     const fit=fitCourtViewport(this.width,this.height,side,lobby?{top:38,bottom:60,sideMargin:18}:{camera:this.cameraSettings});
+    this.baseLayout=fit;
+    this.followLayout=null;
+    this.applyCourtLayout(fit);
+    this.cameraSide=side;
+    this.entranceTo?.copy(this.camera);
+  }
+
+  applyCourtLayout(fit) {
     this.layout=fit;
     const camera=this.camera;
     // Face the net from the baseline. A symmetric perspective keeps both
@@ -474,9 +485,14 @@ export class CourtView {
       fit.height/2-fit.screenCenterY-fit.centerY*fit.scale,fit.width,fit.height);
     camera.position.set(Math.sin(fit.yaw)*Math.cos(fit.pitch)*distance,Math.sin(fit.pitch)*distance,Math.cos(fit.yaw)*Math.cos(fit.pitch)*distance);
     camera.up.set(0,1,0);
-    camera.lookAt(0,0,0);camera.updateProjectionMatrix();camera.updateMatrixWorld();
-    this.cameraSide=side;
-    this.entranceTo?.copy(camera);
+    const origin = fit.origin;
+    if (origin) {
+      camera.position.x += origin.x;
+      camera.position.y += origin.y;
+      camera.position.z += origin.z;
+    }
+    camera.lookAt(origin?.x ?? 0,origin?.y ?? 0,origin?.z ?? 0);
+    camera.updateProjectionMatrix();camera.updateMatrixWorld();
   }
 
   updateHints(state, info, freeze, reset, side = 0) {
@@ -617,7 +633,7 @@ export class CourtView {
     if(!state?.players||!state.shuttle)return;
     if (this.tournament) this.tournament.update(state, dt);
     else updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
-    if(info.finale){this.staminaHUD?.hide();this.renderFinale(state,info.finale,side);return;}
+    if(info.finale){if(this.fatigueEdge)this.fatigueEdge.hidden=true;this.staminaHUD?.hide();this.renderFinale(state,info.finale,side);return;}
     this.clearFinale();
     dt=clamp(Number.isFinite(dt)?dt:1/60,0,.06);
     const team=localTeam(state,side);
@@ -651,6 +667,24 @@ export class CourtView {
     const position=tail?.position||shuttle;
     this.shuttlePosition.set(position.x,position.y,position.z);
     this.shuttle.position.copy(this.shuttlePosition);
+    const follow = this.mode === 'match' && this.cameraSettings?.mode === 'follow' && !this.entranceActive;
+    if (follow) {
+      if (!freeze || !this.followLayout || finalTail) {
+        this.followLayout = followCourtViewport(this.baseLayout, reset ? null : this.followLayout,
+          state.players[side], position, this.cameraSettings, dt, this.hudBounds);
+      }
+      this.applyCourtLayout(this.followLayout);
+    }
+    if (this.fatigueEdge) {
+      const p = state.players[side];
+      const amount = follow && this.cameraSettings.fatigue && p.staminaStatus !== 'infinite'
+        ? staminaEffects(p, ROLES[p.role]).severity : 0;
+      this.fatigueEdge.hidden = !(amount > .02);
+      if (!this.fatigueEdge.hidden) {
+        this.fatigueEdge.style.opacity = amount.toFixed(2);
+        this.fatigueEdge.style.setProperty('--exhaustion', Math.max(0,(amount-.76)/.24).toFixed(2));
+      }
+    }
     const axis=tail?.axis;
     this.direction.set(axis?.x??shuttle.vx??0,axis?.y??shuttle.vy??0,axis?.z??shuttle.vz??0);
     if(this.direction.lengthSq()>.01)this.shuttle.quaternion.setFromUnitVectors(UP,this.direction.normalize());

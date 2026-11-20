@@ -65,7 +65,7 @@ test('screen directions project correctly for both court sides without axis stre
 
 test('actual CourtView camera projection matches the fitted layout for every boundary',()=>{
   for(const [width,height]of [[667,320],[844,390],[1280,720]])for(const side of [0,1]){
-    const view={width,height,camera:new THREE.PerspectiveCamera(45,1,.1,100)};
+    const view=Object.assign(Object.create(CourtView.prototype),{width,height,camera:new THREE.PerspectiveCamera(45,1,.1,100)});
     CourtView.prototype.updateCamera.call(view,side);
     for(const x of [-3.05,3.05])for(const z of [-6.7,6.7]){
       const actual=new THREE.Vector3(x,0,z).project(view.camera),expected=projectCourtPoint({x,y:0,z},view.layout);
