@@ -28,7 +28,7 @@ import { createLeaderboard, getLeaderboardURL, resultRecordText } from './leader
 import { openPeerRoom } from './peer-network.js';
 import { createPeerRecords } from './peer-records.js';
 import { resolveShotAim, toWorldInput } from './play-input.js';
-import { createMatch, getScoringRules, getDifficultyProfile, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, RULES_VERSION, ROLES, staminaEffects, predictLanding, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
+import { createMatch, getScoringRules, getDifficultyProfile, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, RULES_VERSION, ROLES, predictLanding, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
 
 const $=id=>document.getElementById(id);
 const demoMode=globalThis.RALLY_CONFIG?.demoMode===true;
@@ -46,11 +46,6 @@ const netDragPlaytest=new URLSearchParams(location.search).get('netDrag')==='1';
 const names={easy:'入门',medium:'进阶',hard:'高手'};
 const difficultyNotes=Object.fromEntries(['easy','medium','hard'].map(key=>{const p=getDifficultyProfile(key);return [key, 'AI 反应 '+Math.round(p.reaction*1000)+'ms · 回球节奏 '+Math.round(p.pace*100)+'%'+(key==='easy'?' · 入门接球辅助开启':' · 接球辅助关闭')];}));
 const roleNotes=Object.fromEntries(Object.keys(ROLES).map(key=>[key,describeRole(key)]));
-const roleGuidance={
-  balanced:{energy:'回位调整，保持攻守平衡',ready:'站稳击球 · 保持攻守平衡',smash:'现在可杀球 · 均衡出手'},
-  swift:{energy:'抢点接球，减少无谓跑动',ready:'已进入抢点范围 · 松开击球',smash:'现在可杀球 · 灵巧型适合抢节奏'},
-  power:{energy:'重击要选高点，出手后及时回位',ready:'进入击球范围 · 为重击找高点',smash:'高点击球 · 现在适合重击'},
-};
 const updatePreferencesStorage=getUpdatePreferencesStorage(window);
 const restoredUpdatePreferences=restoreUpdatePreferences(globalThis.RALLY_CONFIG?.buildId,updatePreferencesStorage);
 let arenaPreferences=restoredUpdatePreferences?.arena??readArenaPreferences(),matchSettings;
@@ -400,9 +395,6 @@ function enterMatch(){
   controls.reset();controls.setEnabled(false);setScreen('match');dialog(null);unlockAudio();
   view?.beginMatchEntrance?.({side:localTeam(state,side),online:mode==='online',phase:state?.phase,remaining:state?.timer,fromLobby});
   document.body.dataset.entering=String(view?.entranceActive===true);
-  const dots=document.querySelectorAll('.player-dot');
-  dots[0].style.background=localTeam(state,side)===0?'#fb7959':'#b5ebc7';
-  dots[1].style.background=localTeam(state,side)===1?'#fb7959':'#b5ebc7';
 }
 function exitToMenu({entry='home'}={}){
   if(mode==='training'){
@@ -711,6 +703,14 @@ function updateUI(info,state){
   const namesPair=lineupNames(state,side,mode==='online'?room?.players:null);
   const nameSelf=doubles?namesPair.self:mode==='online'?room?.players[side]?.name||'你':'你';
   const nameOther=doubles?namesPair.other:mode==='online'?room?.players[1-team]?.name||'球友':state.challenge?'地狱球王':`${names[settings.difficulty]}陪练`;
+  const showServer = ['serve','rally'].includes(state.phase);
+  $('serve-self').hidden = !showServer || state.server !== team;
+  $('serve-other').hidden = !showServer || state.server !== 1-team;
+  // The last entry already includes the current game during an interval.
+  const previousGames = state.ruleset === 'standard21'
+    ? state.gameScores.slice(0,state.gameNumber-1) : [];
+  setText('games-self',previousGames.map(score=>String(score[team]).padStart(2)).join(' '));
+  setText('games-other',previousGames.map(score=>String(score[1-team]).padStart(2)).join(' '));
   setText('name-self',nameSelf);setText('name-other',nameOther);
   setText('role-self',ROLES[self.role].label+'型');setText('role-other',state.challenge?'体力 ∞':ROLES[opponent.role].label+'型');
   setText('score-self',state.challenge?state.score[team]+'/2':state.score[team]);setText('score-other',state.challenge?state.score[1-team]+'/5':state.score[1-team]);
@@ -723,10 +723,9 @@ function updateUI(info,state){
   const pressureHint=[team,1-team].filter(player=>pressure[player]).map(player=>(player===team?'你':'对手')+'的'+(pressure[player]==='match'?'赛点':'局点')).join(' · ');
   const scoringHint=[pressureHint,extraPoints?(state.score.every(score=>score===scoring.cap-1)?'下一分获胜':'加球中'):''].filter(Boolean).join(' · ');
   setText('match-label',matchLabel+(scoringHint?` · ${scoringHint}`:''));
-  setText('match-message',state.phase==='serve'?(state.server===team?`${doubles&&state.serverPlayer!==side?'队友':'你'}发球 · ${state.service?.court==='left'?'左':'右'}发球区 → 对角`:'等待对手对角发球'):relativeMessage(state.message));
+  setText('match-message',state.phase==='serve'?(state.server===team?`${doubles&&state.serverPlayer!==side?'队友':'你'}发球 · ${state.service?.court==='left'?'左':'右'}发球区`:'对手发球'):relativeMessage(state.message));
   setText('rally',state.phase==='rally'?`${state.rally} 拍回合`:`第 ${state.pointId+1} 分`);
   if(mode==='ai')setText('connection',state.challenge?'2 / 5 非对称挑战':'本地练习');
-  const roleHint=roleGuidance[self.role]||roleGuidance.balanced;
   paintShotControls(info,info.availability.canSmash,state.phase);
   const lane=info.aim,depth=info.aimDepth;
   const quality=info.target?.quality;
@@ -736,34 +735,6 @@ function updateUI(info,state){
   setText('shot-risk',riskText);
   $('shot-risk').dataset.risk=info.prepare?(risk>.55?'high':risk>.25?'medium':'low'):'idle';
   setText('aim-value',info.prepare?`${lane<-.15?'左':lane>.15?'右':'中路'}${depth>.15?' · 偏深':depth<-.15?' · 偏短':''} · ${Math.round(info.charge*100)}%`:'按住击球键拖动');
-  let guidance='按住击球键，拖动选落点';
-  if(state.phase==='serve')guidance=state.serverPlayer===side?'发球落点限在对角区 · 按住再松开':doubles?(state.receiverPlayer===side?'你接发球 · 留意对角来球':'队友准备中 · 发球后自由跑位'):'准备接发 · 留意来球落点';
-  else if(info.availability.canSmash)guidance=self.role==='power'&&state.shuttle.y<2.4
-    ?'现在可杀球 · 高点威力更大':roleHint.smash;
-  else if(info.availability.canHit)guidance=info.availability.assist==='beginner'?'已进入辅助接球范围 · 松开击球':roleHint.ready;
-  else if(info.intercept.status==='approach')guidance=info.intercept.futureCanSmash
-    ? (info.availability.assist==='beginner'?'向黄色圈移动 · 辅助范围会提前提示':'向黄色圈移动 · 准备高点击杀')
-    : (info.availability.assist==='beginner'?'向黄色圈移动 · 提前准备挥拍':'向黄色圈移动 · 提前准备挥拍');
-  else if(info.intercept.status==='out')guidance=info.intercept.reason;
-  else if(info.intercept.status==='unreachable')guidance='来球较远 · 尽快移动接球';
-  if(state.phase==='rally'&&state.shuttle.lastHit===1-team&&state.lastShot==='smash'&&
-    ['approach','ready'].includes(info.intercept.status))guidance='来球快 · 提前松开高远／吊球键接回';
-  if(state.phase==='rally'&&state.shuttle.lastHit===1-team&&self.pendingShot)guidance='击球已准备 · 继续跑位，进入范围后出手';
-  if(state.phase==='rally'&&!info.prepare&&info.availability.canHit&&staminaEffects(self,ROLES[self.role]).severity>.5)guidance='体力偏低 · 先减速，收力打场内';
-  if(state.netDragSide===team&&state.phase==='rally'&&info.prepare==='drop'&&
-    state.shuttle.z*(team===0?1:-1)>0&&Math.abs(state.shuttle.z)<=2.2&&state.shuttle.y<=1.9)
-    guidance=`网前试打 · ${Math.abs(info.target.aimZ)>3?'挑后场':'轻放 / 打短'} · 目标距网 ${Math.abs(info.target.aimZ).toFixed(1)} 米`;
-  if(info.prepare&&info.availability.canHit&&risk>.25)guidance=qualityReason;
-  else if(info.prepare==='smash'&&info.availability.canHit&&!info.availability.canSmash)guidance=info.target.fallbackReason||qualityReason||info.availability.reason;
-  const lastShot=state.lastShotInfo;
-  if(!info.prepare&&(lastShot?.playerSlot??lastShot?.side)===side&&state.time-lastShot.at<1.2&&lastShot.quality.risk>.25)guidance='刚才一拍 · '+lastShot.quality.reason.split(' · ')[0];
-  const assignment = state._doublesAI?.[team];
-  if (doubles && state.phase === 'rally' && state.shuttle.lastHit === 1 - team &&
-      !info.prepare && !info.availability.canHit && assignment?.hitId === state.hitId && assignment.primary != null) {
-    guidance = assignment.primary === side ? '你来接 · 队友补位' : '队友接球 · 留意空当';
-  }
-  setText('assist-status',guidance);
-  $('assist-status').dataset.kind=guidance==='按住击球键，拖动选落点'?'instruction':'live';
   if(state.phase==='countdown'&&helpOpen){helpOpen=false;dialog(null);}
   $('help').disabled=view?.entranceActive||reconnecting||state.phase==='countdown'||finale.blocking;
   controls.setEnabled(!view?.entranceActive&&['serve','rally'].includes(state.phase)&&!helpOpen&&!reconnecting&&!shotLayoutHold&&!matchSettings?.isOpen);

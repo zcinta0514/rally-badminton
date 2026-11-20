@@ -27,10 +27,8 @@ body[data-screen=match] .icon-btn:hover { background:#145340; }
 .scoreboard { display:grid; gap:3px; padding:6px 9px; color:var(--ink); background:#fffffff0; border-left:2px solid var(--green); border-radius:3px; box-shadow:0 3px 12px #001b2030; }
 .match-label { min-width:0; color:var(--muted); font-size:9px; line-height:1.4; white-space:normal; }
 .score-player { min-width:0; display:grid; grid-template-columns:4px minmax(0,1fr) auto; align-items:center; gap:7px; font-size:11px; font-weight:700; line-height:1.4; }
-.score-player>span:not(.player-dot) { min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.score-player>span { min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .score-player small { display:none; }
-.player-dot { width:4px; height:13px; background:#fb7959; border-radius:1px; }
-.opponent .player-dot { background:#b5ebc7; }
 .score-player b { font-family:"Arial Narrow",Arial,sans-serif; font-size:24px; line-height:1; font-weight:800; font-variant-numeric:tabular-nums; }
 .match-note { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:3px 6px; margin-top:4px; color:#e1ede6; font-size:9px; line-height:1.4; }
 .match-note>span { white-space:nowrap; }
@@ -52,10 +50,7 @@ body[data-finale=true] .match-settings-toggle { display:none; }
 #performance-details summary { cursor:pointer; color:#b8cec5; min-height:18px; }
 #performance-readout { display:block; white-space:pre-line; font-size:11px; line-height:1.6; margin-top:5px; overflow-wrap:anywhere; }
 .game-controls { position:fixed; inset:0 0 auto; height:100vh; height:100dvh; pointer-events:none; z-index:5; color:#eff8ee; }
-.movement-panel { position:absolute; left:max(20px,var(--safe-left)); bottom:max(20px,var(--safe-bottom)); display:flex; flex-direction:column; align-items:flex-start; gap:14px; width:144px; }
-.assist-panel { order:1; width:100%; }
-.assist-panel>strong { display:block; font-size:12px; line-height:1.6; font-weight:600; padding:9px 10px; border-left:3px solid #9dd6c1; background:#082c2de8; border-radius:0 3px 3px 0; overflow-wrap:anywhere; }
-.assist-panel>small { display:none; }
+
 .energy-panel { display:none; }
 .player-stamina-layer { position:fixed; inset:0; z-index:4; pointer-events:none; }
 .player-stamina { position:absolute; top:0; left:0; width:60px; color:#dce9dd; text-align:center; filter:drop-shadow(0 1px 2px #001c1c); }
@@ -75,15 +70,14 @@ body:not([data-screen=match]) .player-stamina-layer,body[data-finale=true] .play
 .energy-track { height:5px; background:#ffffff24; border:1px solid #ffffff24; border-radius:1px; overflow:hidden; }
 .energy-track i { display:block; width:100%; height:100%; background:#cde96c; transition:width .1s linear; }
 .energy-panel>small { display:block; margin-top:6px; font-size:10px; line-height:1.5; color:#b8cdc2; }
-.joystick-wrap { order:3; pointer-events:none; }
+
 .joystick { width:112px; height:112px; border-radius:50%; position:fixed; z-index:6; transform:translate(-50%,-50%); visibility:hidden; pointer-events:none; touch-action:none; border:1px solid #c0e5d578; background:#092b31b8; box-shadow:inset 0 0 0 11px #a9d7c708; }
 .joystick[data-active=true] { visibility:visible; }
 .joystick::after { content:''; position:absolute; inset:15px; border:1px dashed #bedace30; border-radius:50%; pointer-events:none; }
 .stick-cross::before,.stick-cross::after { content:''; position:absolute; background:#bedace26; left:50%; top:50%; transform:translate(-50%,-50%); }
 .stick-cross::before { width:72%; height:1px; }.stick-cross::after { height:72%; width:1px; }
 #knob { position:absolute; left:50%; top:50%; width:42px; height:42px; transform:translate(-50%,-50%); border-radius:50%; background:#eaf7ed; border:4px solid #a9cfbb; box-shadow:0 2px 12px #002d3440; pointer-events:none; }
-.joystick-wrap>small { display:block; color:#e0eee6; font-size:11px; }
-.joystick-wrap>small span { display:block; margin-top:4px; color:#9bb8ac; font-size:9px; letter-spacing:2px; }
+
 .shots-wrap { position:absolute; width:150px; right:max(22px,var(--safe-right)); bottom:max(20px,var(--safe-bottom)); }
 .aim-heading { min-height:18px; margin-bottom:10px; text-align:center; line-height:1.45; }
 .aim-heading b { color:#f5d1df; font-size:11px; font-weight:650; white-space:nowrap; }
@@ -129,18 +123,18 @@ body:not([data-screen=match]) .player-stamina-layer,body[data-finale=true] .play
   .hud { top:max(48px,calc(var(--safe-top) + 40px)); width:138px; }
   .scoreboard { gap:2px; padding:5px 8px; }.score-player { gap:5px; }
   .score-player b { font-size:22px; }
-  .movement-panel { left:max(16px,var(--safe-left)); bottom:max(12px,var(--safe-bottom)); width:142px; gap:11px; }
-  .assist-panel>strong { font-size:11px; padding:7px 8px; }.energy-panel { width:108px; }
+
+  .energy-panel { width:108px; }
   .energy-panel>small { font-size:10px; }.joystick { width:96px; height:96px; }
-  #knob { width:38px; height:38px; }.joystick-wrap>small { font-size:10px; }
+  #knob { width:38px; height:38px; }
   .shots-wrap { right:max(20px,var(--safe-right)); bottom:max(16px,var(--safe-bottom)); }
   .shot-buttons { grid-template-columns:64px 76px; gap:7px 6px; }.shot-btn { --shot-base-size:64px; }.shot-btn.smash { --shot-base-size:76px; }
   .shot-instruction { margin-top:8px; }.aim-heading { margin-bottom:8px; }
 }
 @media (max-height:360px) and (orientation:landscape) {
   .score-player b { font-size:21px; }
-  .movement-panel { gap:8px; }.assist-panel>strong { font-size:10px; padding:6px 7px; }
-  .energy-panel>small { font-size:9px; }.joystick-wrap>small span { display:none; }
+
+  .energy-panel>small { font-size:9px; }
   .aim-heading b { font-size:10px; }.shot-instruction { font-size:9px; margin-top:6px; }
 }
 @media (orientation:portrait) {
@@ -153,8 +147,8 @@ body:not([data-screen=match]) .player-stamina-layer,body[data-finale=true] .play
   body[data-screen=match] .icon-btn { width:32px; height:32px; }
   body[data-screen=match] .top-actions { gap:4px; }
   .hud { top:calc(var(--safe-top) + 60px); left:max(12px,var(--safe-left)); width:136px; }
-  .movement-panel { left:12px; bottom:max(93px,var(--safe-bottom)); width:110px; gap:9px; }
-  .assist-panel>strong { font-size:10px; padding:6px; }.energy-panel { width:100px; }
+
+  .energy-panel { width:100px; }
   .joystick { width:90px; height:90px; }.shots-wrap { right:12px; bottom:max(93px,var(--safe-bottom)); width:188px; }
   .shot-buttons { grid-template-columns:56px 56px 64px; gap:6px; }.shot-btn { --shot-base-size:56px; }.shot-btn.smash { --shot-base-size:64px; }
   [data-shot=clear] { grid-column:1; grid-row:1; }[data-shot=drop] { grid-column:2; grid-row:1; }[data-shot=smash] { grid-column:3; grid-row:1; }

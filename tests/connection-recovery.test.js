@@ -94,8 +94,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
       }
       return null;
     },
-    querySelectorAll: selector => selector === '.dialog' ? dialogs : selector === '.player-dot'
-      ? [element('dot-0'), element('dot-1')] : selector === '#game-controls [data-shot]' ? shots : selector === '[data-close]' ? closeButtons : [],
+    querySelectorAll: selector => selector === '.dialog' ? dialogs : selector === '#game-controls [data-shot]' ? shots : selector === '[data-close]' ? closeButtons : [],
   });
   class Socket extends Target {
     static OPEN = 1;
@@ -411,7 +410,9 @@ for (const [target, cap] of [[5, 10], [11, 20], [21, 30]]) {
     assert.equal(f.element('match-label').textContent, `${target} 分制 · 人机对战`);
     state.score = [target - 1, target - 1]; f.draw(0);
     assert.match(f.element('match-label').textContent, /人机对战 · 加球中$/);
-    assert.match(f.element('match-message').textContent, /你发球.*发球区 → 对角/);
+    assert.match(f.element('match-message').textContent, /你发球.*发球区/);
+    assert.equal(f.element('serve-self').hidden,false);
+    assert.equal(f.element('serve-other').hidden,true);
     landScoringShuttle(state, 0); f.draw(0);
     assert.deepEqual([...state.score], [target, target - 1]);
     assert.equal(state.phase, 'point');
@@ -472,7 +473,9 @@ test('standard HUD retains game counts and hides deuce hints during a completed 
   const f = await fixture('serve', { demoMode: true });
   f.chooseSetting('rulesets', 'standard21'); f.startAI();
   const state = f.liveState;
-  state.score = [20, 20]; state.games = [1, 0]; state.gameNumber = 2; f.draw(0);
+  state.score = [20, 20]; state.games = [1, 0]; state.gameNumber = 2; state.gameScores = [[21,17]]; f.draw(0);
+  assert.equal(f.element('games-self').textContent,'21');
+  assert.equal(f.element('games-other').textContent,'17');
   assert.equal(f.element('match-label').textContent, '第2局 · 1:0 · 人机对战 · 加球中');
   state.score = [29, 29]; f.draw(0);
   assert.match(f.element('match-label').textContent, /下一分获胜$/);
