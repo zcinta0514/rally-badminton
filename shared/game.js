@@ -422,7 +422,10 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
   // Give low, late player blocks a little more lift without correcting their aim.
   const blockingSmash = player.humanControlled && type === 'drop' && state.phase === 'rally'
     && state.lastShot === 'smash' && ball.lastHit === 1 - playerTeam(state, side);
-  const blockLift = blockingSmash ? 0.22 * quality.factors.lateContact : 0;
+  const expertBlock = blockingSmash && state.format === 'singles' && state.difficulty === 'hard'
+    && !state.challenge && !state.training && !state.players[1 - side].humanControlled;
+  const closeLift = expertBlock ? .30 * (1 - quality.factors.stretch) * quality.factors.lowContact : 0;
+  const blockLift = blockingSmash ? (.22 + closeLift) * quality.factors.lateContact : 0;
   const vy = verticalLaunch(ball.y,0,duration,verticalDrag) - Math.max(0, drift.verticalLoss - blockLift);
   duration = timeToHeight({...ball,vy,verticalDrag});
   const endpoint = flightPoint({ ...ball, vx, vy, vz, drag, verticalDrag }, duration);
