@@ -141,3 +141,17 @@ test('follow camera settles after a sprint and tracks the new service box withou
     assert.ok(Math.abs(view.origin.x-player.x*.9)<.001);
   }
 });
+
+test('service-box teleport after landing does not snap the lens to the next framing distance', () => {
+  const base = fitCourtViewport(844,390);
+  const settings = {...CAMERA_DEFAULTS,distance:9};
+  const player = {x:2.5,z:5}, shuttle = {x:1,y:.2,z:3,active:true};
+  const before = followCourtViewport(base,null,player,shuttle,settings,1/60);
+  shuttle.active = false;
+  const landing = followCourtViewport(base,before,player,shuttle,settings,1/60);
+  Object.assign(player,{x:-2.5,z:3});
+  Object.assign(shuttle,{x:-2.5,y:1,z:3});
+  const serve = followCourtViewport(base,landing,player,shuttle,settings,1/60);
+  assert.ok(Math.abs(landing.distance-before.distance)<.03);
+  assert.ok(Math.abs(serve.distance-landing.distance)<.25);
+});

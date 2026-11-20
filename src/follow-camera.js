@@ -51,7 +51,10 @@ export function followCourtViewport(base, previous, player, shuttle, settings, d
   const zoomRequest = lastRequest + (target-lastRequest) * -Math.expm1(-10*dt);
   const last = previous?.distance ?? zoomRequest;
   const rate = zoomRequest > last ? 12 : 1.4;
-  const distance = Math.max(required, last + (zoomRequest-last)*-Math.expm1(-rate*dt));
+  const easedDistance = last + (zoomRequest-last)*-Math.expm1(-rate*dt);
+  // A live flight must stay visible. Between points, players and the shuttle
+  // respawn together; fitting that new service box instantly would cut the shot.
+  const distance = shuttle?.active ? Math.max(required,easedDistance) : easedDistance;
   return { ...base, origin, trackingX, trackingZ, zoomRequest, distance, scale: focal/distance, centerX: 0, centerY: 0,
     screenCenterX: width/2, screenCenterY: cy, top };
 }
