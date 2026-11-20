@@ -5,7 +5,7 @@ import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, VERTICAL_DRAG, verticalLaunch, timeToHeight, flightApex, verticalFlight, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 20;
+export const RULES_VERSION = 21;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -516,7 +516,7 @@ function playShot(state, side, request, serving = false) {
     } else if (!(state._ai[side]?.playDeep && state._ai[side].hitId === state.hitId && target.type === 'clear')) {
       const opponent = state.players[1 - side];
       // Situational variations retain readable phantom trails and real contact.
-      skill = opponent.z > 4.2 ? 'netDrop'
+      skill = state._ai[side]?.wideDrop || opponent.z > 4.2 ? 'netDrop'
         : Math.abs(opponent.vx) > 1.8 && ball.y > 1.2 ? 'drive' : 'phantom';
       h.warning = null;
       target = getShotTarget(state, side, { ...request, shot: 'drop',
@@ -1064,21 +1064,33 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
   // Read the receiver once near overhead preparation, after they have had
   // time to move following the lift. Store the habit across points in this match.
   const readLift = level === 'hard' && state.format === 'singles' && state.lastShot === 'clear'
-    && !state.lastShotInfo?.serving && !h?.warning && !memory.readReceiver;
+    && !h?.warning && !memory.readReceiver;
   const chance = readLift || h ? smashOpportunity(state, side) : null;
   if (readLift && chance.highChance && chance.contactTime <= .55) {
     memory.readReceiver = true;
     const habits = state._netRush ??= [0, 0];
     const receiver = state.players[1 - side];
-    const forward = Math.abs(receiver.z) < 2.4;
-    if (forward && random(state) < .48 + .12 * habits[side]) {
+    const depth = Math.abs(receiver.z);
+    const projectedDepth = depth + Math.sign(receiver.z) * receiver.vz * .18;
+    const forward = depth < 2.5 || (depth < 3.2 && projectedDepth < 2.5);
+    const openLane = Math.abs(receiver.x) > .4 ? -Math.sign(receiver.x) : Math.sign(memory.aim) || 1;
+    const deepChance = habits[side] ? (Math.abs(receiver.x) > .65 ? .84 : .94) : .70;
+    if (forward && random(state) < deepChance) {
       memory.playDeep = true;
       memory.shot = 'clear';
-      memory.aim = (Math.abs(receiver.x) > .4 ? -Math.sign(receiver.x) : random(state) < .5 ? -1 : 1) * .8;
-      memory.aimDepth = .8;
-      memory.charge = random(state) < .65 ? .85 : .35;
-      output.charge = memory.charge;
+      memory.aim = openLane * (.6 + random(state) * .28);
+      memory.aimDepth = .62 + random(state) * .3;
+      memory.charge = random(state) < .55 ? .84 : .16;
+    } else if ((forward && Math.abs(receiver.x) > .65 || !forward && depth > 4.2 && habits[side] > 0)
+        && random(state) < .7) {
+      // Use the opposite forecourt when the receiver guards a sideline or retreats.
+      memory.wideDrop = true;
+      memory.shot = 'drop';
+      memory.aim = openLane * .94;
+      memory.aimDepth = -.65;
+      memory.charge = .12;
     }
+    output.charge = memory.charge;
     habits[side] = clamp(habits[side] + (forward ? 1 : -1), 0, 3);
   }
   if (h && state.time >= h.recoverUntil) {
@@ -1104,7 +1116,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
       h.recoverUntil = dive.endsAt;
       return output;
     }
-    if (!h.warning && !memory.playDeep && !(readLift && chance.contactTime > .55)) {
+    if (!h.warning && !memory.playDeep && !memory.wideDrop && !(readLift && chance.contactTime > .55)) {
       if (chance.highChance && chance.contactTime >= HELL.chargeTime && chance.contactTime < 1.4) {
         h.warning = { at: state.time, hitId: state.hitId, aim: memory.aim, aimDepth: .35 };
         memory.shot = 'smash'; memory.aimDepth = .35;
@@ -1112,7 +1124,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     }
   }
   if (h?.warning && h.warning.hitId !== state.hitId) h.warning = null;
-  const overhead = (!h || memory.playDeep) && !defendingSmash && flightApex(ball).y >= 2.8;
+  const overhead = (!h || memory.playDeep || memory.wideDrop) && !defendingSmash && flightApex(ball).y >= 2.8;
   const contactHeight = memory.shot === 'smash' ? Math.min(3.05, flightApex(ball).y) : defendingSmash ? 1.65 : overhead ? 2.65 : 1.2;
   const contactTime = Math.max(0,timeToHeight(ball,contactHeight));
   const contactPoint = liveFlightPoint(ball, contactTime);
