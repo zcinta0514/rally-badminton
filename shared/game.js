@@ -3,9 +3,9 @@ import { NET_PHYSICS, resolveNetImpact } from './net-physics.js';
 import { HELL, createHellChallenge, resetHellRally } from './hell-mode.js';
 import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, VERTICAL_DRAG, verticalLaunch, timeToHeight, flightApex, verticalFlight, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
-import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
+import { staminaEffects, movementStaminaRate, shotStaminaCost, staminaCostScale, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 20;
+export const RULES_VERSION = 21;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -82,13 +82,14 @@ function inputOf(input) {
 
 const SCORING_RULES = Object.freeze({
   5: Object.freeze({ target: 5, winBy: 2, cap: 10 }),
+  10: Object.freeze({ target: 10, winBy: 2, cap: 15 }),
   11: Object.freeze({ target: 11, winBy: 2, cap: 20 }),
   21: Object.freeze({ target: 21, winBy: 2, cap: 30 }),
 });
 
 /** Shared by scoring and rule hints; target stays fixed throughout deuce. */
 export function getScoringRules({ ruleset = 'quick', target = 5 } = {}) {
-  return SCORING_RULES[ruleset === 'standard21' ? 21 : [5, 11, 21].includes(target) ? target : 5];
+  return SCORING_RULES[ruleset === 'standard21' ? 21 : [5, 10, 11, 21].includes(target) ? target : 5];
 }
 
 export function createMatch({ target = 5, roles = ['balanced', 'balanced'], difficulty = 'easy', seed = 1, ruleset = 'quick',
@@ -424,7 +425,7 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
   const netTime = timeToShuttleZ({ ...ball, vx, vy, vz, drag, verticalDrag }, 0);
   const netHeight = verticalFlight(ball.y,vy,netTime,verticalDrag).y;
   const smashViable = type === 'smash' && !serving && ball.y >= TUNING.smashHeight
-    && player.stamina >= shotStaminaCost(role, type, input.charge) && netHeight > COURT.netHeight + 0.02;
+    && player.stamina >= shotStaminaCost(role, type, input.charge) * staminaCostScale(state) && netHeight > COURT.netHeight + 0.02;
   if (!serving && netHeight <= COURT.netHeight) {
     quality.risk = Math.max(quality.risk, 0.8); quality.score = 1 - quality.risk;
     quality.reasonCode = 'net-risk';
@@ -535,7 +536,7 @@ function playShot(state, side, request, serving = false) {
   ball.active = true; ball.lastHit = playerTeam(state, side); ball.lastHitPlayer = side;
   if (state.service) state.service.active = serving;
   const staminaBefore = player.stamina;
-  player.stamina = Math.max(0, player.stamina - shotStaminaCost(role, type, request.charge, serving));
+  player.stamina = Math.max(0, player.stamina - shotStaminaCost(role, type, request.charge, serving) * staminaCostScale(state));
   player.swing = role.swingTime; player.cooldown = role.swingTime;
   player.pendingShot = null; player.lastShot = type;
   if (skill === 'rescue') player.cooldown = Math.max(0, h.recoverUntil - state.time);
@@ -754,7 +755,7 @@ function stepLive(state, inputs, dt, firstSlice) {
         }
       }
       if (player.shotRecovery && (player.shotRecovery.expiresAt <= start + liveDt || state.shuttle.lastHit !== playerTeam(state, side) || phase !== 'rally')) player.shotRecovery = null;
-      const drain = ['serve', 'rally'].includes(phase) ? movementStaminaRate(role, speeds[side]) * liveDt : 0;
+      const drain = ['serve', 'rally'].includes(phase) ? movementStaminaRate(role, speeds[side]) * staminaCostScale(state) * liveDt : 0;
       const before = player.stamina;
       player.stamina = clamp(before + recovery - drain, 0, role.maxStamina);
       player.staminaRate = liveDt > 0 ? (player.stamina - before) / liveDt : 0;
@@ -889,7 +890,7 @@ function chooseCandidate(state, side, level, candidates) {
   const history = aiHistoryFor(state, side);
   const temperature = level === 'hard' ? 0.72 : 0.9;
   const player = state.players[side];
-  const reservePressure = clamp(1 - player.stamina / (2 * shotStaminaCost(ROLES[player.role], 'smash')), 0, 1);
+  const reservePressure = clamp(1 - player.stamina / (2 * shotStaminaCost(ROLES[player.role], 'smash') * staminaCostScale(state)), 0, 1);
   // Fatigue shifts preference toward economical returns without banning attacks.
   const coverage = candidate => {
     if(state.format!=='doubles')return 0;
@@ -979,7 +980,7 @@ function chooseAIShot(state, side, level) {
   const attacker = state.players[side];
   // A moving defender has to brake before covering the other lane.
   const commitment = Math.hypot(opponent.vx, opponent.vz) / ROLES[opponent.role].speed;
-  const reserve = attacker.stamina / (2 * shotStaminaCost(ROLES[attacker.role], 'smash'));
+  const reserve = attacker.stamina / (2 * shotStaminaCost(ROLES[attacker.role], 'smash') * staminaCostScale(state));
   const attackBonus = canPress ? 2.2 * clamp(reserve + commitment, 0, 1) : 0;
   const shortLift = !state.challenge && state.lastShotInfo?.type === 'clear' && !state.lastShotInfo.serving
     && Math.abs(state.lastShotInfo.z) < 5.2;

@@ -70,7 +70,7 @@ function withinLimit(value, maximum) {
 function commandOf(message) {
   if (!withinLimit(message, MAX_INPUT) || typeof message.type !== 'string') return null;
   if(message.type === 'lobby') return (message.seat === undefined || playerSlot(message.seat)) && (message.role === undefined || typeof message.role === 'string' && Object.hasOwn(ROLES,message.role)) && (message.seat !== undefined || message.role !== undefined) ? {type:'lobby',...(message.seat !== undefined ? {seat:message.seat}:{}),...(message.role !== undefined ? {role:message.role}:{})} : null;
-  if (message.type === 'ready') return [5,11,21].includes(message.target) && ['quick','standard21'].includes(message.ruleset) &&
+  if (message.type === 'ready') return [5,10,11,21].includes(message.target) && ['quick','standard21'].includes(message.ruleset) &&
     ['none','father-son'].includes(message.finale) ? {type:'ready',target:message.target,ruleset:message.ruleset,finale:message.finale,...(message.format === 'doubles' ? {format:'doubles'} : {})} : null;
   if (COMMANDS.has(message.type)) return { type: message.type };
   if (message.type === 'ping') return finite(message.at) ? { type: 'ping', at: message.at } : null;
@@ -94,7 +94,7 @@ function validRoom(message, code) {
   if(doubles && (!validReconnect(message.reconnect) || message.rules?.finale!=='none' || !Array.isArray(message.ready) || new Set(message.ready).size!==message.ready.length))return false;
   return message.type === 'room' && message.code === code && (doubles ? validSeat(message.slot) && credential(message.token) : message.slot === 1) &&
     typeof message.sessionId === 'string' && message.sessionId.length > 0 && message.sessionId.length <= 128 &&
-    ['quick', 'standard21'].includes(message.ruleset) && [5, 11, 21].includes(message.target) &&
+    ['quick', 'standard21'].includes(message.ruleset) && [5, 10, 11, 21].includes(message.target) &&
     (message.rules === undefined || record(message.rules) && ['none', 'father-son'].includes(message.rules.finale)) &&
     (message.readyRequired === undefined || message.readyRequired === true && Array.isArray(message.ready) && message.ready.length <= count && message.ready.every(validSeat)) &&
     Array.isArray(message.players) && message.players.length === count && message.players.every(player => player === null ||
@@ -109,7 +109,7 @@ function validState(message, sessionId, format = 'singles') {
   return message.sessionId === sessionId && Number.isSafeInteger(message.seq) && message.seq > 0 &&
     Number.isSafeInteger(message.matchId) && message.matchId > 0 && finite(message.serverTime) && record(state) &&
     state.rulesVersion === RULES_VERSION && PHASES.has(state.phase) && finite(state.time) && finite(state.timer) &&
-    ['quick', 'standard21'].includes(state.ruleset) && [5, 11, 21].includes(state.target) &&
+    ['quick', 'standard21'].includes(state.ruleset) && [5, 10, 11, 21].includes(state.target) &&
     scorePair(state.score) && scorePair(state.games) && Array.isArray(state.gameScores) && state.gameScores.every(scorePair) &&
     Number.isInteger(state.gameNumber) && state.gameNumber >= 1 && slot(state.server) && nullableSlot(state.winner) &&
     typeof state.message === 'string' && ['rally', 'hitId', 'pointId'].every(key => finite(state[key])) &&

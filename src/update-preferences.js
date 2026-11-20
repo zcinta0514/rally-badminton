@@ -11,10 +11,10 @@ function allowedPreferences(settings, sound, arena) {
       !['balanced', 'swift', 'power'].includes(settings.role) ||
       (settings.coachRole !== undefined && !['balanced', 'swift', 'power'].includes(settings.coachRole)) ||
       (settings.friendRole !== undefined && !['balanced', 'swift', 'power'].includes(settings.friendRole)) ||
-      (settings.friendTarget !== undefined && ![5,11,21].includes(settings.friendTarget)) ||
+      (settings.friendTarget !== undefined && ![5,10,11,21].includes(settings.friendTarget)) ||
       (settings.friendRuleset !== undefined && !['quick','standard21'].includes(settings.friendRuleset)) ||
       !['easy', 'medium', 'hard'].includes(settings.difficulty) ||
-      ![5, 11, 21].includes(settings.target) ||
+      ![5, 10, 11, 21].includes(settings.target) ||
       !['quick', 'standard21'].includes(settings.ruleset)) return null;
   const extra={};
   for(const [key,values] of Object.entries({format:['singles','doubles'],friendFormat:['singles','doubles'],teammateRole:['balanced','swift','power'],teammateDifficulty:['easy','medium','hard']}))if(values.includes(settings[key]))extra[key]=settings[key];

@@ -1,6 +1,12 @@
 const clamp = (value, low = 0, high = 1) => Math.max(low, Math.min(high, value));
 const smooth = value => value * value * (3 - 2 * value);
 
+const FORMAT_COST = Object.freeze({ 5: 1, 10: .92, 11: .90, 21: .80 });
+
+export function staminaCostScale(state) {
+  return state.challenge ? 1 : FORMAT_COST[state.target] ?? 1;
+}
+
 export const STAMINA_TUNING = Object.freeze({
   runCost: 4.2, chargeCost: .35,
   pointRecoverySeconds: 2,

@@ -36,7 +36,7 @@ export class PeerMatch {
     this.sessionId = typeof sessionId === 'string' && sessionId.length > 0 && sessionId.length <= 128 ? sessionId : newSessionId();
     this.ruleset = ruleset === 'standard21' ? 'standard21' : 'quick';
     this.rules = Object.freeze({ finale: format !== 'doubles' && finale === 'father-son' ? 'father-son' : 'none' });
-    this.target = this.ruleset === 'standard21' ? 21 : [5, 11, 21].includes(target) ? target : 5;
+    this.target = this.ruleset === 'standard21' ? 21 : [5, 10, 11, 21].includes(target) ? target : 5;
     this.format = format === 'doubles' ? 'doubles' : 'singles';
     this.count = this.format === 'doubles' ? 4 : 2;
     this.hostSlot = 0; this.tokens = Array.from({length:this.count}, () => newSessionId());
