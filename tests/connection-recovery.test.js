@@ -261,7 +261,7 @@ test('automatic update transfers selected controls and mute once without preserv
   assert.deepEqual({...restored.settings},{format:'singles',friendFormat:'singles',teammateRole:'balanced',teammateDifficulty:'medium',role:'power',coachRole:'swift',friendRole:'balanced',friendTarget:5,friendRuleset:'quick',difficulty:'hard',target:11,ruleset:'standard21',finale:'none'});
   for(const [group,value] of [['roles','power'],['coach-roles','swift'],['difficulties','hard'],['targets',21],['rulesets','standard21']])assert.equal(restored.choice(group,value).attributes['aria-pressed'],'true');
   assert.equal(restored.element('targets').attributes['aria-disabled'],'true');assert.equal(restored.choice('targets',11).disabled,true);
-  assert.match(restored.element('role-note').textContent,/速度 4.05.*体力 112/);assert.match(restored.element('rules-note').textContent,/三局两胜/);
+  assert.match(restored.element('role-note').textContent,/速度 4.05.*体力 92/);assert.match(restored.element('rules-note').textContent,/三局两胜/);
   assert.equal(restored.sound,false);assert.equal(restored.audio.enabled,false);assert.equal(restored.element('sound').dataset.muted,'true');assert.equal(restored.element('sound').attributes['aria-label'],'开启声音');
   assert.equal(restored.document.body.dataset.screen,'menu');assert.equal(restored.liveState,null);assert.equal(restored.audio.unlocks,0);
   restored.chooseSetting('rulesets','quick');assert.equal(restored.choice('targets',11).disabled,false);assert.equal(restored.choice('targets',11).attributes['aria-pressed'],'true');

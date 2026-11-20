@@ -5,7 +5,7 @@ import { staminaCostScale, STAMINA_TUNING } from '../shared/stamina.js';
 
 export function describeRole(role) {
   const r = ROLES[role] || ROLES.balanced;
-  const style = { balanced: '控球耗费均衡，疲劳反应适中', swift: '跑动省力、体力回满快，连续杀球更费体力', power: '杀球省力、体力池大，跑动较费力、回满较慢' }[role] || '控球耗费均衡，疲劳反应适中';
+  const style = { balanced: '控球耗费均衡，疲劳反应适中', swift: '速度最快，耐力最好，击球力量偏低', power: '击球力量最强，连续杀球和跑动耗体力快' }[role] || '控球耗费均衡，疲劳反应适中';
   return style + ' · 速度 ' + r.speed + 'm/s（耗尽 ' + (r.speed * r.fatigue.speedFloor).toFixed(2) + 'm/s） · 力量 ' + Math.round(r.power * 100) + '% · 体力 ' + r.maxStamina +
     ' · 慢移恢复最高 ' + r.recovery + '/s · 全速耗费 ' + movementStaminaRate(r, r.speed).toFixed(1) + '/s' +
     ' · 高远/吊球/杀球耗费 ' + ['clear','drop','smash'].map(shot => shotStaminaCost(r,shot).toFixed(1)).join('/') + ' · 满力耗费增加35%';

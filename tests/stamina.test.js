@@ -74,9 +74,9 @@ test('network stamina stays before cost until contact, including contact plus po
   assert.equal(p.sample(1060).phase, 'rally'); assert.equal(p.sample(1080).phase, 'point');
 });
 test('HUD normalizes each role and has shape, percent, waiting and net recovery cues', () => {
-  const s = rally('power'), p = s.players[0]; p.stamina = 28; p.staminaStatus = 'waiting';
+  const s = rally('power'), p = s.players[0]; p.stamina = ROLES.power.maxStamina / 4; p.staminaStatus = 'waiting';
   assert.equal(staminaDisplay(p, 'rally', true).percent, 25);
-  p.stamina = 27; assert.match(staminaDisplay(p, 'rally', true).label, /△.*调整/);
+  p.stamina -= 1; assert.match(staminaDisplay(p, 'rally', true).label, /△.*调整/);
   p.staminaStatus = 'recovering'; assert.match(staminaDisplay(p, 'rally', true).label, /恢复中/);
   assert.equal(staminaDisplay(p, 'paused', true).status, 'paused');
 });

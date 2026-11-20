@@ -37,7 +37,7 @@ test('roles have distinct movement windows and tactical shot profiles', () => {
   assert.ok(ROLES.swift.acceleration > ROLES.balanced.acceleration);
   assert.ok(ROLES.swift.reachBonus > ROLES.balanced.reachBonus);
   assert.ok(ROLES.power.speed < ROLES.balanced.speed);
-  assert.ok(ROLES.power.maxStamina > ROLES.balanced.maxStamina);
+  assert.ok(ROLES.swift.maxStamina > ROLES.balanced.maxStamina && ROLES.balanced.maxStamina > ROLES.power.maxStamina);
   assert.ok(ROLES.power.shotDepth.clear > ROLES.balanced.shotDepth.clear);
   assert.ok(ROLES.power.shotSpeed.smash > ROLES.balanced.shotSpeed.smash);
   assert.ok(ROLES.swift.shotSpeed.drop > ROLES.balanced.shotSpeed.drop);

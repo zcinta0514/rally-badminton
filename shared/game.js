@@ -5,7 +5,7 @@ import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, VERTICAL_DRAG, verticalLaunch, timeToHeight, flightApex, verticalFlight, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, staminaCostScale, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 21;
+export const RULES_VERSION = 22;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -20,17 +20,17 @@ export const ROLES = Object.freeze({
     shotDepth: Object.freeze({ clear: 1, drop: 1, smash: 1 }),
     shotCost: Object.freeze({ serve: 1, clear: 1, drop: 1, smash: 1 }) }),
   swift: Object.freeze({ label: '灵巧', speed: 5.35, acceleration: 1.15, braking: 1.15, power: 0.9,
-    maxStamina: 88, recovery: 5.8, reachBonus: 0.1, runCost: .84, swingTime: 0.378, dropControl: 0.8,
+    maxStamina: 112, recovery: 6.6, reachBonus: 0.1, runCost: .84, swingTime: 0.378, dropControl: 0.8,
     fatigue: Object.freeze({ onset: .45, speedFloor: .72, accelerationFloor: .85, controlWeight: .26 }),
     shotSpeed: Object.freeze({ clear: 1, drop: 1.08, smash: 0.97 }),
     shotDepth: Object.freeze({ clear: 0.97, drop: 0.94, smash: 0.97 }),
-    shotCost: Object.freeze({ serve: .9, clear: .95, drop: .8, smash: 1.2 }) }),
+    shotCost: Object.freeze({ serve: .9, clear: .95, drop: .8, smash: .95 }) }),
   power: Object.freeze({ label: '力量', speed: 4.05, acceleration: 0.85, braking: 0.85, power: 1.12,
-    maxStamina: 112, recovery: 6.2, reachBonus: 0, runCost: 1.05, swingTime: 0.47, dropControl: 1,
+    maxStamina: 92, recovery: 5.2, reachBonus: 0, runCost: 1.05, swingTime: 0.47, dropControl: 1,
     fatigue: Object.freeze({ onset: .6, speedFloor: .6, accelerationFloor: .75, controlWeight: .36 }),
     shotSpeed: Object.freeze({ clear: 1.04, drop: 0.95, smash: 1.08 }),
     shotDepth: Object.freeze({ clear: 1.07, drop: 0.96, smash: 1.06 }),
-    shotCost: Object.freeze({ serve: 1, clear: .95, drop: .9, smash: .85 }) }),
+    shotCost: Object.freeze({ serve: 1, clear: .95, drop: .9, smash: 1.2 }) }),
 });
 
 const TUNING = {

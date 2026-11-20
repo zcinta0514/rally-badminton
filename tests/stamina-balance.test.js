@@ -26,9 +26,9 @@ test('the three styles trade movement economy, recovery, control and attack econ
   const shot = (r,type) => game.shotStaminaCost(r,type) / r.maxStamina;
   assert.ok(run(s) < run(b) && run(b) < run(p));
   assert.ok(s.recovery/s.maxStamina > b.recovery/b.maxStamina && b.recovery/b.maxStamina > p.recovery/p.maxStamina);
-  assert.ok(shot(p,'smash') < shot(b,'smash') && shot(b,'smash') < shot(s,'smash'));
+  assert.ok(shot(s,'smash') < shot(b,'smash') && shot(b,'smash') < shot(p,'smash'));
   assert.ok(shot(s,'drop') < shot(b,'drop'));
-  assert.ok(shot(b,'clear') < shot(s,'clear'));
+  assert.ok(shot(s,'clear') < shot(b,'clear'));
   // Power can conserve energy with control shots, but retains the slowest
   // movement and strongest fatigue/control penalties; it cannot dominate agility.
   assert.ok(p.speed < b.speed && b.speed < s.speed);
