@@ -1,4 +1,6 @@
 import { captureMotion, presentLocal } from './local-presentation.js';
+import { createTraining, setTrainingOptions, stepTraining } from '../shared/training.js';
+import { bindTrainingUI } from './training-ui.js';
 import { practiceInputs, localTeam, lineupNames } from './match-lineup.js';
 import { hellStatus } from '../shared/hell-mode.js';
 import { CourtView } from './view.js';
@@ -351,8 +353,42 @@ function setScreen(screen){
   $('menu').hidden=screen!=='menu';$('court-caption').hidden=screen!=='menu';
   $('hud').hidden=screen!=='match';$('game-controls').hidden=screen!=='match';$('pause').hidden=screen!=='match';
   if(screen==='match')shotLayout?.refresh();
-  view?.setMode(screen);
+  view?.setMode(mode==='training' ? 'training' : screen);
 }
+let trainingPlaying=false;
+function resetTraining(options){
+  controls.reset();
+  controls.setEnabled(false);
+  pendingShot=null;
+  selectAim(0);
+  dragAim=null;
+  dragDepth=0;
+  gestureOrigin=null;
+  trainingPlaying=false;
+  accumulator=0;
+  lastFrame=performance.now();
+  state=state?.training ? setTrainingOptions(state,options) : createTraining(options);
+  arenaAudio.reset();
+}
+const trainingUI=bindTrainingUI({
+  onEnter(options){
+    if(mode!=='menu'||!controls||state||room||peerAttempt||connecting)return false;
+    mode='training';
+    side=0;
+    resetTraining(options);
+    setScreen('match');
+    dialog(null);
+    return true;
+  },
+  onConfigure:resetTraining,
+  onStart(options){
+    resetTraining(options);
+    trainingPlaying=true;
+    controls.setEnabled(true);
+    unlockAudio();
+  },
+  onExit:()=>exitToMenu(),
+});
 function enterMatch(){
   usage.startMatch(mode);
   clearFinale();
@@ -369,6 +405,10 @@ function enterMatch(){
   dots[1].style.background=localTeam(state,side)===1?'#fb7959':'#b5ebc7';
 }
 function exitToMenu({entry='home'}={}){
+  if(mode==='training'){
+    trainingPlaying=false;
+    trainingUI.close();
+  }
   usage.endMatch('quit');
   clearFinale();finale.reset();
   resultPending=false;
@@ -406,6 +446,10 @@ $('hell-roles').addEventListener('click',event=>{
 const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},localTeam(state,side),dragAim??aim);
 function send(message){if(peerMode)peerSession?.send(message);else if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(['create','join','resumeSession'].includes(message.type)?{...message,rulesVersion:RULES_VERSION}:message));}
 function fireShot(request){
+  if(mode==='training'){
+    if(trainingPlaying)pendingShot=worldInput({...request,aim:resolveShotAim(request,aim)});
+    return;
+  }
   if(view?.entranceActive||!state||!['serve','rally'].includes(state.phase))return;
   const selectedAim=resolveShotAim(request,aim);
   const input=worldInput({...controls.sample(),...request,aim:selectedAim});dragAim=null;dragDepth=0;
@@ -413,6 +457,7 @@ function fireShot(request){
   if(mode==='online')send({type:'input',...input});else pendingShot=input;
 }
 function requestPause(){
+  if(mode==='training'){trainingUI.configure();return;}
   if(view?.entranceActive)return;
   if(reconnecting){showConnectionRecovery();return;}
   if(!state||!['serve','rally','point','intermission'].includes(state.phase))return;
@@ -607,6 +652,13 @@ document.addEventListener('visibilitychange',()=>{
   if(finale.blocking)lastFrame=performance.now();
   arenaAudio.setVisible(!document.hidden);
   menuAudio.setVisible(!document.hidden);
+  if(mode==='training'){
+    controls.reset();
+    pendingShot=null;
+    accumulator=0;
+    lastFrame=performance.now();
+    return;
+  }
   if(!document.hidden||!state||state.phase==='over')return;
   if(shotLayoutHold||(mode==='ai'&&matchSettings?.isOpen)){controls?.reset();pendingShot=null;return;}
   controls?.reset();pendingShot=null;
@@ -819,6 +871,26 @@ try{
       if(previewCanvas) view.render(previewMatch,0,0);
       else view.renderLobby(Math.min(elapsed,.1));
       renderMs=performance.now()-renderStart;
+    }else if(mode==='training'){
+      if(trainingPlaying&&!document.hidden){
+        accumulator+=Math.min(elapsed,.15);
+        while(accumulator>=1/60){
+          const input=worldInput(controls.sample());
+          if(pendingShot){Object.assign(input,pendingShot);pendingShot=null;}
+          stepTraining(state,input,1/60);
+          accumulator-=1/60;
+        }
+        arenaAudio.setListener(view.camera.position);
+        arenaAudio.update(state,true);
+      }
+      const renderStart=performance.now();
+      view.render(state,0,Math.min(elapsed,.1),{
+        trainingTarget:state.training.target,
+        trainingTargets:state.training.targets,
+        trainingActiveTarget:state.training.returnShot?.technique,
+      });
+      renderMs=performance.now()-renderStart;
+      trainingUI.update(state.training,controls.activeShot ? controls.sample() : null);
     }else if(state){
       view.advanceEntrance?.(elapsed,{hidden:document.hidden,phase:state.phase,remaining:state.timer});
       document.body.dataset.entering=String(view.entranceActive===true);
@@ -876,7 +948,22 @@ try{
       if($('performance-readout'))setText('performance-readout',formatPerformance(stats,network,lastRtt,renderer,peerStats));
       // Read-only diagnostics for reproducible browser QA and user bug reports.
       window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats,
-        stateTime:state?.time??null,statePhase:state?.phase??null,
+        stateTime:state?.time??null,statePhase:state?.phase??null,venue:view.mode,
+        get training(){
+          if(mode!=='training')return null;
+          const pose=view.players[0].root.userData.pose;
+          const project=(x,y,z)=>{
+            const p=view.shuttle.position.clone().set(x,y,z).project(view.camera);
+            return {x:(p.x+1)*view.width/2,y:(1-p.y)*view.height/2};
+          };
+          const target=state.training.target;
+          return structuredClone({...state.training,time:state.time,shuttle:state.shuttle,
+            player:{x:state.players[0].x,z:state.players[0].z},stroke:state.lastShotInfo,
+            pose:pose&&{racketHead:pose.racketHead,racketRoll:pose.racketRoll,chestYaw:pose.chestYaw},
+            screen:{ball:project(state.shuttle.x,state.shuttle.y,state.shuttle.z),
+              target:target&&[-1,1].flatMap(dx=>[-1,1].map(dz=>
+                project(target.x+dx*target.width/2,.03,target.z+dz*target.depth/2)))}});
+        },
         format:state?.format,playerSlot:side,team:state?localTeam(state,side):null,score:state?[...state.score]:null,hitId:state?.hitId,playerCount:state?.players.length,serverPlayer:state?.serverPlayer,receiverPlayer:state?.receiverPlayer,
         entrance:{active:view.entranceActive,progress:view.entrance?.progress??1,camera:view.camera?.position?.toArray()},
         challenge:state?.challenge?{...state.challenge,score:[...state.score],hitId:state.hitId,lastShot:state.lastShotInfo}:null,

@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="./src/shot-buttons.css">
   <link rel="stylesheet" href="./src/ui-tournament.css">
   <link rel="stylesheet" href="./src/ui-tournament-system.css">
+  <link rel="stylesheet" href="./src/training-ui.css">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/three-addons/"}}</script>
 </head>
 <body data-screen="menu" data-shot-skin="glass">
@@ -129,6 +130,7 @@
       <div class="launch-actions" id="home-actions">
         <button id="open-solo" class="lobby-action" type="button"><span>单人对战</span><span aria-hidden="true">›</span></button>
         <button id="open-friends" class="lobby-action" type="button" aria-label="好友对战"><span>好友对战</span><span aria-hidden="true">›</span></button>
+        <button id="open-training" class="lobby-action" type="button"><span>专项训练</span><span aria-hidden="true">›</span></button>
       </div>
       <div class="launch-actions" id="solo-actions" hidden>
         <button id="start-ai" class="lobby-action" type="button" aria-label="人机对战"><span class="entry-copy"><strong>人机对战</strong></span><span aria-hidden="true">›</span></button>
@@ -189,11 +191,46 @@
     </div>
   </main>
   <footer class="lobby-update" aria-label="游戏版本与更新">
-    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.25.3</a>
+    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.26.0</a>
     <button id="lobby-history" type="button">近期更新</button>
     <button id="lobby-check-update" type="button">检查更新</button>
   </footer>
   <aside id="court-caption" class="court-caption"><div class="live-tag"><i></i> 球场预览</div><div class="court-strip"><b>01</b><span>比赛场地</span><span>RALLY COURT</span></div></aside>
+  <section id="training-ui" aria-label="专项训练馆" hidden>
+    <header class="training-bar">
+      <div class="training-heading"><strong>训练馆</strong><span id="training-session">场馆预览</span><span id="training-count" hidden></span></div>
+      <nav aria-label="训练操作">
+        <button id="training-adjust" type="button" aria-controls="training-setup">收起设置</button>
+        <button id="training-exit" type="button">返回大厅</button>
+      </nav>
+    </header>
+    <div id="training-feedback" role="status" hidden></div>
+    <div id="training-setup">
+      <div class="training-fields">
+        <label>训练专项
+          <select id="training-drill">
+            <option value="cross">网前勾对角</option><option value="lift">起球（挑后场）</option><option value="netFree">网前自由连练</option>
+            <option value="defense">接杀</option><option value="smash">定点击杀</option><option value="serve">定点发球</option>
+          </select>
+        </label>
+        <label data-feed-field>来球力度
+          <select id="training-power"><option value="0.8">轻</option><option value="1" selected>中</option><option value="1.2">重</option></select>
+        </label>
+        <label data-feed-field>喂球间隔
+          <select id="training-interval"><option value="0.6">0.6 秒</option><option value="1.5" selected>1.5 秒</option><option value="3">3.0 秒</option></select>
+        </label>
+        <label data-feed-field>喂球线路
+          <select id="training-line"><option value="right">右路</option><option value="left">左路</option><option value="alternate">左右交替</option></select>
+        </label>
+        <label>落点目标
+          <select id="training-target"><option value="auto">随专项</option><option value="left">左区</option><option value="right">右区</option></select>
+        </label>
+      </div>
+      <div class="training-launch">
+        <p id="training-hint"></p><button id="training-start" type="button">开始连练 <span aria-hidden="true">↗</span></button>
+      </div>
+    </div>
+  </section>
   <section id="hud" class="hud" hidden aria-label="比赛信息">
     <div class="scoreboard">
       <small id="match-label" class="match-label">5 分制 · 人机</small>

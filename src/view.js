@@ -10,6 +10,7 @@ import { sampleFinalePose } from './finale-pose.js';
 import { makeArena, makeHallShell, makeCourtMaterial, resetArenaCrowd, updateArenaCrowd } from './arena.js';
 import { makeNetVisual, updateNetVisual } from './net-visual.js';
 import { loadTournamentArena } from './tournament-arena.js';
+import { makeTrainingHall } from './training-hall.js';
 import { makeShuttleModel, RallyEndPresentation } from './shuttle-visual.js';
 import { COURT } from '../shared/game.js';
 import { StaminaHUD } from './stamina-hud.js';
@@ -367,7 +368,7 @@ export class CourtView {
 
   installPreparedTournament() {
     const hall = this.preparedTournament;
-    if (!hall) return;
+    if (!hall || this.mode === 'training') return;
     hall.palette(this.courtPalette);
     this.venue.add(hall.scene);
     this.fallbackCourt.removeFromParent();
@@ -381,8 +382,29 @@ export class CourtView {
 
   setMode(mode) {
     if(this.mode===mode)return;
+    const leavingTraining = this.mode === 'training';
     this.mode=mode;
-    (mode === 'menu' ? this.lobby.scene : this.scene).add(this.venue);
+    const training = mode === 'training';
+    (mode === 'menu' || training ? this.lobby.scene : this.scene).add(this.venue);
+    if (training) {
+      if (!this.trainingHall) {
+        this.trainingHall = makeTrainingHall();
+        this.scene.add(this.trainingHall.group);
+      }
+      this.trainingHall.group.add(this.netVisual.group);
+      this.netVisual.group.scale.x = 3.05 / 3.17;
+      this.canvas.dataset.venue = 'training';
+    } else if (leavingTraining) {
+      this.venue.add(this.netVisual.group);
+      this.netVisual.group.scale.x = this.tournament ? 3.05 / 3.17 : 1;
+      this.canvas.dataset.venue = this.tournament ? 'tournament' : 'fallback';
+    }
+    if (this.trainingHall) this.trainingHall.group.visible = training;
+    if (training || leavingTraining) {
+      this.initialized = false;
+      this.trailPoints.length = 0;
+      updateNetVisual(this.netVisual, [], 0);
+    }
     if (mode === 'menu') updateNetVisual(this.netVisual, [], 0);
     this.installPreparedTournament();
     if(mode==='match'||mode==='menu')this.prepareTournament();
@@ -615,7 +637,10 @@ export class CourtView {
 
   render(state, side=0, dt=1/60, info={}) {
     if(!state?.players||!state.shuttle)return;
-    if (this.tournament) this.tournament.update(state, dt);
+    if (this.mode === 'training') {
+      this.trainingHall.setTarget(info.trainingTarget, info.trainingTargets, info.trainingActiveTarget);
+    }
+    else if (this.tournament) this.tournament.update(state, dt);
     else updateArenaCrowd(this.arena,state,dt,{enabled:this.mode==='match',hidden:globalThis.document?.hidden===true});
     if(info.finale){this.staminaHUD?.hide();this.renderFinale(state,info.finale,side);return;}
     this.clearFinale();
@@ -675,7 +700,7 @@ export class CourtView {
       this.netAtRest=this.netVisual.atRest;
     }
     this.updateHints(state,info,freeze,reset,side);
-    const showEdge=this.mode==='match'&&shuttle.active&&['rally','paused','countdown'].includes(state.phase);
+    const showEdge=(this.mode==='match'||this.mode==='training')&&shuttle.active&&['rally','paused','countdown'].includes(state.phase);
     const edge=showEdge?getShuttleEdgeHint(shuttle,this.layout,{hud:this.hudBounds}):null;
     this.edgeIndicator.hidden=!edge;
     if(edge){

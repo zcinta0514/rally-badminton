@@ -127,10 +127,42 @@ test('home and gameplay share one court, net, and palette before and after insta
   view.setCourtPalette('blue');
   assert.equal(view.courtMaterials.court.color.getHex(), resolveCourtPalette('blue').court);
 
+  view.trailPoints = [];
+  view.setMode('training');
+  const trainingVenue = view.trainingHall.group;
+  assert.equal(view.canvas.dataset.venue, 'training');
+  assert.equal(trainingVenue.getObjectById(view.netVisual.group.id), view.netVisual.group);
+  assert.equal(view.scene.getObjectById(view.venue.id), undefined);
+  assert.equal(trainingVenue.getObjectsByProperty('name', 'adjacent-court').length, 2);
+  for (const name of ['coach-shuttle-cart', 'main-training-court', 'divider-diamond-mesh']) {
+    assert.ok(trainingVenue.getObjectByName(name), name);
+  }
+  const target = trainingVenue.getObjectByName('training-target');
+  for (const [x, z] of [[-1.91,-1.02], [1.53,-5.91]]) {
+    view.trainingHall.setTarget({ x, z, width: 1.48, depth: 1.38 });
+    assert.deepEqual(target.position.toArray(), [x,0,z]);
+    assert.deepEqual(target.scale.toArray(), [1.48,1,1.38]);
+    assert.equal(target.visible, true);
+  }
+  view.trainingHall.setTarget(null);
+  assert.equal(target.visible, false);
+  const pair = [{ x: -1.91, z: -1.02, width: 1.15, depth: 1.05, technique: 'cross' },
+    { x: 1.53, z: -5.91, width: 1.48, depth: 1.38, technique: 'lift' }];
+  const deep = trainingVenue.getObjectByName('training-deep-target');
+  for (const technique of [undefined,'cross','lift']) {
+    view.trainingHall.setTarget(null,pair,technique);
+    assert.equal(target.visible, technique !== 'lift');
+    assert.equal(deep.visible, technique !== 'cross');
+  }
   const bytes = await readFile(new URL('../src/models/tournament-hall.glb', import.meta.url));
   const model = await new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), '');
   view.preparedTournament = installTournamentArena(model);
   view.installPreparedTournament();
+  assert.equal(view.canvas.dataset.venue, 'training');
+  assert.ok(view.preparedTournament);
+  view.setMode('menu');
+  assert.equal(view.canvas.dataset.venue, 'tournament');
+  assert.equal(trainingVenue.visible, false);
   const court = model.scene.getObjectByName('Court_|_sprung_competition_mat');
   assert.equal(view.fallbackCourt, null);
   assert.equal(court.material.color.getHex(), resolveCourtPalette('blue').court);

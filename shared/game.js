@@ -239,7 +239,7 @@ export function resumeMatch(state) {
   return true;
 }
 
-function movePlayer(player, input, side, dt, state) {
+export function movePlayer(player, input, side, dt, state) {
   const role = ROLES[player.role];
   const effort = Math.hypot(input.x, input.z);
   const fatigue = staminaEffects(player, role);
@@ -566,7 +566,7 @@ function playShot(state, side, request, serving = false) {
   state.message = target.fallbackReason || `${shotName(type)} · ${state.rally} 拍${target.quality.risk >= 0.16 ? ` · ${target.quality.reason}` : ''}`;
 }
 
-function integrateShuttle(state, dt) {
+export function integrateShuttle(state, dt, onImpact = awardPoint) {
   const ball = state.shuttle;
   const contact = netCrossing(ball);
   const ending = predictLanding(state);
@@ -577,7 +577,7 @@ function integrateShuttle(state, dt) {
     if (contact.netImpact.crosses) {
       Object.assign(ball, afterNet(contact, ball));
       // Consume the remainder of this same slice, including a very close floor.
-      integrateShuttle(state, Math.max(0, dt - contact.time));
+      integrateShuttle(state, Math.max(0, dt - contact.time), onImpact);
       return;
     }
   }
@@ -588,7 +588,7 @@ function integrateShuttle(state, dt) {
       hitSide: ball.lastHit, hitId: state.hitId,
       ...(ending.event === 'net' ? { netImpact: contact?.netImpact || null } : {}) };
     Object.assign(ball, sampleShuttleFlight(ball, ending.time), { x: ending.x, y: ending.y, z: ending.z });
-    awardPoint(state, ending.winner, ending.event === 'net' ? '未过网' : ending.serviceFault ? '发球未落入对角发球区' : ending.out ? '出界' : '落地', impact);
+    onImpact(state, ending.winner, ending.event === 'net' ? '未过网' : ending.serviceFault ? '发球未落入对角发球区' : ending.out ? '出界' : '落地', impact);
     return;
   }
   Object.assign(ball, sampleShuttleFlight(ball, dt));
