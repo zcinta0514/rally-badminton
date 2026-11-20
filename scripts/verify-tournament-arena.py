@@ -72,10 +72,14 @@ def verify(browser, url, case, lineup, offline):
         if offline:
             page.wait_for_function("""async () => {
                 const reg = await navigator.serviceWorker.getRegistration();
-                if (!reg?.active) return false;
+                if (reg?.active?.state !== 'activated') return false;
                 const modelURL = new URL('src/models/tournament-hall.glb', reg.scope);
                 return Boolean(await caches.match(modelURL));
             }""", timeout=120_000)
+            # The app lets the first, uncontrolled tab finish using its original
+            # bytes. A normal navigation lets the installed worker take control.
+            page.reload(wait_until="domcontentloaded",timeout=90_000)
+            page.wait_for_function("Boolean(navigator.serviceWorker.controller)",timeout=30_000)
             context.set_offline(True)
             page.reload(wait_until="domcontentloaded",timeout=90_000)
             page.locator("#loading").wait_for(state="hidden",timeout=90_000)
