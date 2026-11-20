@@ -103,6 +103,7 @@ export function installTournamentArena({ scene, animations }) {
   }
   function reset() {
     active = null; previousId = -1; clock = -1; pose();
+    scoreboard.update(0, 0);
   }
   function update(state, dt) {
     if (state.time < clock || state.pointId < previousId) reset();
