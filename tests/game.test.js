@@ -384,3 +384,21 @@ test('low smash blocks get a small lift only for human defenders', () => {
   assert.deepEqual(block([0], 'clear'), normal);
   assert.deepEqual(block([0], 'smash', { y: 1.6 }), block([], 'smash', { y: 1.6 }));
 });
+
+test('heavy smashes carry off-balance expert blocks deeper and higher', () => {
+  function block(speed, vx, offset, difficulty = 'hard') {
+    const state = createMatch({humanSlots: [0], difficulty});
+    incoming(state, {y: .85, z: 2, vz: speed, vy: -4});
+    state.lastShot = 'smash';
+    Object.assign(state.players[0], {x: offset, z: 2, vx});
+    return getShotTarget(state, 0, {shot: 'drop', aimDepth: -1});
+  }
+  assert.deepEqual(block(19, 0, 0), block(6, 0, 0));
+  for (const [vx, offset] of [[4, 0], [0, 1.25]]) {
+    const soft = block(6, vx, offset);
+    const heavy = block(19, vx, offset);
+    assert.deepEqual(block(19, vx, offset, 'medium'), block(6, vx, offset, 'medium'));
+    assert.ok(Math.abs(heavy.z) > Math.abs(soft.z) + .35);
+    assert.ok(heavy.netHeight > soft.netHeight + .08);
+  }
+});

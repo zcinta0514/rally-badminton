@@ -373,6 +373,18 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
     aimX = -sign * 0.85 + input.aim * 0.55;
   }
   const quality = contactQuality({player, ball, role, ...input, shot: type, serving, assist: assist.level});
+  const blockingSmash = player.humanControlled && type === 'drop' && state.phase === 'rally'
+    && state.lastShot === 'smash' && ball.lastHit === 1 - playerTeam(state, side);
+  const expertBlock = blockingSmash && state.format === 'singles' && state.difficulty === 'hard'
+    && !state.challenge && !state.training && !state.players[1 - side].humanControlled;
+  // Off-balance contact cannot absorb all the pace of a heavy smash.
+  let looseBlock = 0;
+  if (expertBlock && lift === 0) {
+    const incomingSpeed = Math.hypot(ball.vx, ball.vy, ball.vz);
+    const pace = clamp((incomingSpeed - 9) / 11, 0, 1);
+    looseBlock = pace * Math.max(quality.factors.movement, quality.factors.stretch);
+    aimZ -= direction(side) * .95 * looseBlock;
+  }
   const overheadClear = type === 'clear' && !serving
     ? clamp((ball.y - 1.5) / .9, 0, 1) * clamp(1 - quality.risk * 3, 0, 1) * (1 + Math.min(0, input.aimDepth))
     : 0;
@@ -412,6 +424,7 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
       duration=hi;
     }
   }
+  duration += .10 * looseBlock;
   let { vx, vz } = horizontalLaunch(ball, { x: aimX + drift.x, z: aimZ + drift.z }, duration, drag);
   // A late ankle-height lift cannot retain the launch energy of a balanced
   // overhead clear. This depends on contact state, never a random miss.
@@ -420,10 +433,6 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
     vx*=energy;vz*=energy;
   }
   // Give low, late player blocks a little more lift without correcting their aim.
-  const blockingSmash = player.humanControlled && type === 'drop' && state.phase === 'rally'
-    && state.lastShot === 'smash' && ball.lastHit === 1 - playerTeam(state, side);
-  const expertBlock = blockingSmash && state.format === 'singles' && state.difficulty === 'hard'
-    && !state.challenge && !state.training && !state.players[1 - side].humanControlled;
   const closeLift = expertBlock ? .30 * (1 - quality.factors.stretch) * quality.factors.lowContact : 0;
   const blockLift = blockingSmash ? (.22 + closeLift) * quality.factors.lateContact : 0;
   const vy = verticalLaunch(ball.y,0,duration,verticalDrag) - Math.max(0, drift.verticalLoss - blockLift);
