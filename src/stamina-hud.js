@@ -65,7 +65,8 @@ export class StaminaHUD {
       if (!own && Math.abs(p.x - positions[side].x) < 80 && Math.abs(p.y - positions[side].y) < 32) y += 32;
       const placed = placeStaminaMeter({ x: p.x, y }, bounds, own, this.obstacles);
       const x = placed.x; y = placed.y;
-      bar.element.style.transform = 'translate(' + x + 'px,' + y + 'px) translateX(-50%)';
+      bar.element.style.left = Math.round(x) + 'px';
+      bar.element.style.top = Math.round(y) + 'px';
       bar.element.dataset.own = String(own); bar.element.dataset.low = String(display.low); bar.element.dataset.status = display.status;
       bar.element.dataset.fatigued = String(display.fatigued);
       bar.element.title = '当前最高移动速度 ' + display.speed.toFixed(2) + 'm/s' + (display.fatigued ? ' · 疲劳增加强攻与压线失误风险' : ' · 控球稳定');
