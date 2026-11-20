@@ -5,7 +5,7 @@ import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, VERTICAL_DRAG, verticalLaunch, timeToHeight, flightApex, verticalFlight, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
 export { staminaEffects, movementStaminaRate, shotStaminaCost } from './stamina.js';
-export const RULES_VERSION = 19;
+export const RULES_VERSION = 20;
 export const playerTeam = (state, slot) => Number.isInteger(slot) && slot >= 0 && slot < state.players.length ? slot % 2 : null;
 const courtWidth = state => state.format === 'doubles' ? 3.05 : 2.59;
 const serverSlot = state => state.format === 'doubles' ? state.serverPlayer : state.server;
@@ -367,6 +367,13 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
     aimX = -sign * 0.85 + input.aim * 0.55;
   }
   const quality = contactQuality({player, ball, role, ...input, shot: type, serving, assist: assist.level});
+  const overheadClear = type === 'clear' && !serving
+    ? clamp((ball.y - 1.5) / .9, 0, 1) * clamp(1 - quality.risk * 3, 0, 1) * (1 + Math.min(0, input.aimDepth))
+    : 0;
+  if (overheadClear > 0) {
+    const room = Math.max(0, COURT.halfLength - .18 - Math.abs(aimZ));
+    aimZ -= direction(side) * Math.min(.22, room) * overheadClear;
+  }
   const drift = contactDrift({quality, player, ball, role, aimX, aimDepth: input.aimDepth, side: playerTeam(state, side), shot: type, charge: input.charge});
   const distance = Math.hypot(aimX - ball.x, aimZ - ball.z);
   const minDuration = minimumNetDuration(ball, aimX, aimZ, type === 'smash' ? 0.12 : type === 'drop' ? 0.18 : 0.28);
@@ -375,7 +382,7 @@ export function getShotTarget(state, side, request = {}, { netDrag = state?.netD
   // Low defensive lifts and high serves retain recovery time and net clearance.
   // Keep ordinary attacks readable; the final charge segment supplies the heavy-smash burst.
   const clearTime = serving ? 1.65 + distance * .058
-    : 1.55 + distance * .043 - input.charge * .28 + .24 * clamp((2.1 - ball.y) / 1.7, 0, 1);
+    : 1.55 + distance * .043 - .14 * overheadClear - input.charge * .28 + .24 * clamp((2.1 - ball.y) / 1.7, 0, 1);
   let duration = type === 'clear' ? clearTime / shotSpeed
     : type === 'drop' ? (0.68 + distance * 0.025) / shotSpeed
       : (0.35 + distance * 0.0135) / role.power / shotSpeed / (1 + input.charge ** 1.6 * 0.30);
@@ -506,7 +513,7 @@ function playShot(state, side, request, serving = false) {
     } else if (h.warning && state.time - h.warning.at >= HELL.chargeTime && target.type === 'smash' && target.smashViable) {
       skill = 'cannon'; h.warning = null;
       h.recoverUntil = state.time + HELL.recovery;
-    } else {
+    } else if (!(state._ai[side]?.playDeep && state._ai[side].hitId === state.hitId && target.type === 'clear')) {
       const opponent = state.players[1 - side];
       // Situational variations retain readable phantom trails and real contact.
       skill = opponent.z > 4.2 ? 'netDrop'
@@ -1054,6 +1061,26 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
   // Defend attacks at a low contact, preserving the chosen block/lift and line.
   const defendingSmash = !h && level !== 'easy' && state.lastShot === 'smash';
   output.charge = memory.charge;
+  // Read the receiver once near overhead preparation, after they have had
+  // time to move following the lift. Store the habit across points in this match.
+  const readLift = level === 'hard' && state.format === 'singles' && state.lastShot === 'clear'
+    && !state.lastShotInfo?.serving && !h?.warning && !memory.readReceiver;
+  const chance = readLift || h ? smashOpportunity(state, side) : null;
+  if (readLift && chance.highChance && chance.contactTime <= .55) {
+    memory.readReceiver = true;
+    const habits = state._netRush ??= [0, 0];
+    const receiver = state.players[1 - side];
+    const forward = Math.abs(receiver.z) < 2.4;
+    if (forward && random(state) < .48 + .12 * habits[side]) {
+      memory.playDeep = true;
+      memory.shot = 'clear';
+      memory.aim = (Math.abs(receiver.x) > .4 ? -Math.sign(receiver.x) : random(state) < .5 ? -1 : 1) * .8;
+      memory.aimDepth = .8;
+      memory.charge = random(state) < .65 ? .85 : .35;
+      output.charge = memory.charge;
+    }
+    habits[side] = clamp(habits[side] + (forward ? 1 : -1), 0, 3);
+  }
   if (h && state.time >= h.recoverUntil) {
     const landing = predictLanding(state);
     const legal = landing && landing.event === 'landing' && !landing.out && !landing.serviceFault && landing.side === side;
@@ -1077,8 +1104,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
       h.recoverUntil = dive.endsAt;
       return output;
     }
-    if (!h.warning) {
-      const chance = smashOpportunity(state, side);
+    if (!h.warning && !memory.playDeep && !(readLift && chance.contactTime > .55)) {
       if (chance.highChance && chance.contactTime >= HELL.chargeTime && chance.contactTime < 1.4) {
         h.warning = { at: state.time, hitId: state.hitId, aim: memory.aim, aimDepth: .35 };
         memory.shot = 'smash'; memory.aimDepth = .35;
@@ -1086,7 +1112,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     }
   }
   if (h?.warning && h.warning.hitId !== state.hitId) h.warning = null;
-  const overhead = !h && !defendingSmash && flightApex(ball).y >= 2.8;
+  const overhead = (!h || memory.playDeep) && !defendingSmash && flightApex(ball).y >= 2.8;
   const contactHeight = memory.shot === 'smash' ? Math.min(3.05, flightApex(ball).y) : defendingSmash ? 1.65 : overhead ? 2.65 : 1.2;
   const contactTime = Math.max(0,timeToHeight(ball,contactHeight));
   const contactPoint = liveFlightPoint(ball, contactTime);
@@ -1095,6 +1121,10 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
   Object.assign(output, moveToward(player, targetX, targetZ, config.pace));
   const horizontal = Math.hypot(ball.x - player.x, ball.z - player.z);
   if (memory.shot === 'smash' && contactTime < 0.4) output.prepare = 'smash';
+  if (!state.challenge && state.format === 'singles' && side === 1 && level !== 'hard'
+      && memory.shot === 'smash' && contactTime < .4) {
+    state.smashWarning = { hitId: state.hitId, aim: memory.aim };
+  }
   if (ball.z * direction(side) > 0.1 && ball.vy < 1.5 && horizontal < TUNING.reach + role.reachBonus + 0.15
     && ball.y <= (memory.shot === 'smash' ? 4.35 : overhead ? 2.9 : 1.9)) {
     output.shot = memory.shot; output.aim = memory.aim; output.aimDepth = memory.aimDepth;

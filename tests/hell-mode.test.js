@@ -104,7 +104,7 @@ test('rescue cannot catch an out ball or reach an arbitrarily distant ball', () 
 });
 
 test('real complete rallies exercise all three skills, telegraph cannon and allow consecutive active attacks', () => {
-  const counts={phantom:0,cannon:0,rescue:0,netDrop:0,drive:0};let consecutive=0,bossReturns=0;
+  const counts={phantom:0,cannon:0,rescue:0,netDrop:0,drive:0};let consecutive=0,bossReturns=0,deepClears=0;
   for(let seed=1;seed<=200;seed++){
     const s=createMatch({challenge:'hell',seed});let previous=0,warning=null,lastAttackPoint=-1,lastAttackHit=-99;
     for(let frame=0;frame<60*150&&s.phase!=='over';frame++){
@@ -113,7 +113,10 @@ test('real complete rallies exercise all three skills, telegraph cannon and allo
       stepMatch(s,inputs,1/60);
       if(s.hitId!==previous){
         previous=s.hitId;const shot=s.lastShotInfo;
-        if(shot.side===1&&!shot.serving)bossReturns++;
+        if(shot.side===1&&!shot.serving){
+          bossReturns++;
+          if(!shot.skill){ assert.equal(shot.type,'clear'); deepClears++; }
+        }
         assert.ok(Number.isInteger(s.challenge.rescueUses));
         if(shot.skill){
           counts[shot.skill]++;
@@ -133,7 +136,7 @@ test('real complete rallies exercise all three skills, telegraph cannon and allo
   }
   for(const skill in counts)assert.ok(counts[skill]>0,`${skill} must occur in ordinary complete matches`);
   assert.ok(consecutive>0,'active skills can happen on adjacent boss returns');
-  assert.ok(Object.values(counts).reduce((a,b)=>a+b,0)/bossReturns===1,'every non-serve boss return uses a skill');
+  assert.equal(Object.values(counts).reduce((a,b)=>a+b,0)+deepClears,bossReturns);
 });
 
 test('spent rescue state clears after recovery and cannot immobilize the next cannon', () => {
