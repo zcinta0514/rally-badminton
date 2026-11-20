@@ -240,6 +240,17 @@ test('a tied pause timeout ends normally instead of being marked abandoned', () 
   assert.equal(f.last('state').abandoned, false);
 });
 
+test('a short host stall discards stale input and preserves the player pause allowance', () => {
+  const f = fixture(); f.join();
+  f.match.receive(0, {type:'input', shot:'clear', x:1});
+  f.advance(750);
+  assert.equal(f.match.state.phase, 'serve');
+  assert.deepEqual(f.match.state.pause.used, [0, 0]);
+  f.advance(50);
+  assert.equal(f.match.state.hitId, 0);
+  assert.ok(Math.abs(f.match.state.time - .05) < 1e-6);
+});
+
 test('long host suspension discards elapsed backlog and freezes without moving or scoring', () => {
   const f = fixture(); f.join();
   f.match.receive(0, { type: 'input', shot: 'clear' }); f.advance(100);

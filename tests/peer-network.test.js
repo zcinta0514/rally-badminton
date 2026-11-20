@@ -224,6 +224,9 @@ test('snapshot backpressure drops stale snapshots and hard congestion ends the c
   const {bus,guest,guestCloses}=await pair(t);
   const outbound=bus.peers[1].connections[0];outbound.dataChannel.bufferedAmount=70000;
   assert.equal(guest.send({type:'input',x:1}),false);
+  assert.equal(guest.send({type:'input',shot:'smash',charge:1}),true);
+  await flush();
+  assert.equal(bus.sent.filter(p=>p.message.shot==='smash').length,1);
   outbound.dataChannel.bufferedAmount=2*1024*1024;
   assert.equal(guest.send({type:'ping',at:12}),false);assert.equal(guestCloses.length,1);
 });
@@ -252,6 +255,33 @@ test('standard match intermission is a valid authoritative game phase', async t 
   message.state.ruleset='standard21';message.state.target=21;message.state.phase='intermission';message.state.games=[1,0];message.state.gameNumber=2;
   bus.peers[0].connections[0].send(message);await flush();
   assert.equal(guestCloses.length,0);assert.equal(guestMessages.at(-1).state.phase,'intermission');
+});
+
+test('a simulated smash reaches the guest, scores one point and allows the next serve', async t => {
+  const {bus, guestMessages, guestCloses} = await pair(t);
+  const packet = structuredClone(guestMessages.find(m => m.type === 'state'));
+  const state = packet.state;
+  state.phase = 'rally';
+  Object.assign(state.players[0], {x:0, z:3.8});
+  Object.assign(state.shuttle, {x:0, y:2.8, z:3.8, vx:0, vy:-.2, vz:0, active:true, lastHit:1});
+  let sawSmash = false;
+  for (let frame = 0; frame < 360; frame++) {
+    stepMatch(state, [frame === 0 ? {shot:'smash', charge:1} : {}, {}], 1/60);
+    if (frame % 3 !== 0) continue;
+    packet.seq++;
+    packet.serverTime += 50;
+    bus.peers[0].connections[0].send(JSON.parse(JSON.stringify(packet)));
+    await flush();
+    assert.equal(guestCloses.length, 0, guestCloses[0]?.message);
+    const received = guestMessages.at(-1).state;
+    if (received.phase === 'rally' && received.lastShot === 'smash') sawSmash = true;
+    if (received.phase === 'serve') {
+      assert.ok(sawSmash);
+      assert.equal(received.score[0] + received.score[1], 1);
+      return;
+    }
+  }
+  assert.fail('guest never reached the next serve');
 });
 
 test('incomplete state cannot reach the renderer after handshake', async t => {

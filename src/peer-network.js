@@ -1,6 +1,7 @@
 import { validNetImpact, resolveNetImpact } from '../shared/net-physics.js';
 import { PeerMatch } from './peer-match.js';
 import { ROLES, RULES_VERSION } from '../shared/game.js';
+import { SHUTTLE_FLIGHT, VERTICAL_DRAG } from '../shared/shuttle-flight.js';
 import { STAMINA_TUNING } from '../shared/stamina.js';
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -130,7 +131,7 @@ function validState(message, sessionId, format = 'singles') {
         finite(player.shotRecovery.expiresAt) && finite(player.shotRecovery.remaining) && player.shotRecovery.remaining >= 0 &&
         player.shotRecovery.remaining <= STAMINA_TUNING.shotRecovery[player.shotRecovery.type].budget + 1e-6) &&
       (player.action === null || record(player.action) && ['startedAt', 'endsAt'].every(key => finite(player.action[key])))) &&
-    record(state.shuttle) && (state.shuttle.verticalDrag === undefined || [0, 9.81 / 6.7 ** 2].includes(state.shuttle.verticalDrag)) && (state.shuttle.drag === undefined || [0.2, 0.035].includes(state.shuttle.drag)) && ['x', 'y', 'z', 'vx', 'vy', 'vz'].every(key => finite(state.shuttle[key])) &&
+    record(state.shuttle) && (state.shuttle.verticalDrag === undefined || [0, VERTICAL_DRAG].includes(state.shuttle.verticalDrag)) && (state.shuttle.drag === undefined || [SHUTTLE_FLIGHT.drag, SHUTTLE_FLIGHT.smashDrag].includes(state.shuttle.drag)) && ['x', 'y', 'z', 'vx', 'vy', 'vz'].every(key => finite(state.shuttle[key])) &&
     typeof state.shuttle.active === 'boolean' && nullableSlot(state.shuttle.lastHit) &&
     record(state.pause) && nullableSlot(state.pause.by) && finite(state.pause.remaining) && scorePair(state.pause.used);
 }
@@ -228,7 +229,8 @@ export async function openPeerRoom({ type, code, name, role, playerId, target = 
       if (ended || !current?.open) return false;
       const bytes = current.dataChannel?.bufferedAmount || 0, queued = current.bufferSize || 0;
       if (bytes > HARD_BUFFER || queued > 64) { if(roomFormat==='doubles' && settled){current.close();return false;} fail(new Error('直连数据积压，连接已结束，请检查 Wi-Fi 后重新约战')); return false; }
-      if ((message.type === 'state' || message.type === 'input') && (bytes > SOFT_BUFFER || queued > 0)) { stats.dropped++; return false; }
+      const replaceable = message.type === 'state' || (message.type === 'input' && !message.shot);
+      if (replaceable && (bytes > SOFT_BUFFER || queued > 0)) { stats.dropped++; return false; }
       try { current.send(message); stats.sent++; return true; }
       catch { if(roomFormat==='doubles' && settled)current.close();else fail(new Error('手机直连已断开，请重新约战')); return false; }
     };
