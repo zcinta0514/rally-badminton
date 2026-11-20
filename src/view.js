@@ -122,7 +122,7 @@ export class CourtView {
     for (const player of this.players) void upgradeAthlete(player);
     this.mode = 'menu';
     this.lobby = new TournamentLobby();
-    this.lobby.setCourtPalette(this.courtPalette);
+    this.lobby.scene.add(this.venue);
     this.reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');
     this.staminaHUD = new StaminaHUD();
     this.staminaProjection = new THREE.Vector3();
@@ -150,8 +150,12 @@ export class CourtView {
 
   makeCourt() {
     const scene = new THREE.Group();
+    // The lobby and match take turns owning the same hall and cloth net.
+    this.venue = new THREE.Group();
+    this.venue.name = 'playing-venue';
+    this.scene.add(this.venue);
+    this.venue.add(scene);
     this.fallbackCourt = scene;
-    this.scene.add(scene);
     const palette = resolveCourtPalette(this.courtPalette);
     const floorMat = material(COLORS.floor);
     const apronMat = material(palette.apron);
@@ -186,7 +190,7 @@ export class CourtView {
       box(scene, 0.066, 1.6, 0.066, postMat, x, 0.8, 0, true);
       box(scene, 0.09, 0.052, 0.09, material(COLORS.coral), x, 1.61, 0);
     }
-    this.netVisual = makeNetVisual(this.scene);
+    this.netVisual = makeNetVisual(this.venue);
     this.netGeometry = this.netVisual.wires.geometry;
     this.netAtRest = true;
 
@@ -365,7 +369,7 @@ export class CourtView {
     const hall = this.preparedTournament;
     if (!hall) return;
     hall.palette(this.courtPalette);
-    this.scene.add(hall.scene);
+    this.venue.add(hall.scene);
     this.fallbackCourt.removeFromParent();
     disposeSceneResources(this.fallbackCourt);
     this.fallbackCourt = this.courtMaterials = this.arena = this.hallShell = null;
@@ -378,6 +382,8 @@ export class CourtView {
   setMode(mode) {
     if(this.mode===mode)return;
     this.mode=mode;
+    (mode === 'menu' ? this.lobby.scene : this.scene).add(this.venue);
+    if (mode === 'menu') updateNetVisual(this.netVisual, [], 0);
     this.installPreparedTournament();
     if(mode==='match'||mode==='menu')this.prepareTournament();
     if(mode!=="match"){this.entrance?.cancel();this.entranceFrom=null;}
@@ -407,7 +413,6 @@ export class CourtView {
   setCourtPalette(name) {
     this.courtPalette = normalizeCourtPalette(name);
     this.tournament?.palette(this.courtPalette);
-    this.lobby?.setCourtPalette(this.courtPalette);
     const palette = resolveCourtPalette(this.courtPalette);
     if (this.courtMaterials) {
       this.courtMaterials.court.color.setHex(palette.court);
@@ -730,6 +735,7 @@ export class CourtView {
   dispose() {
     this.disposed = true;
     if (this.preparedTournament) disposeSceneResources(this.preparedTournament.scene);
+    this.scene.add(this.venue);
     this.lobby?.dispose();
     for (const player of this.players || []) player.disposed = true;
     if (this.onVisibilityChange) globalThis.document?.removeEventListener('visibilitychange', this.onVisibilityChange);

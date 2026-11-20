@@ -64,4 +64,6 @@ test('real exported clips signal a point once, independently of the umpire and o
   assert.ok(rest[1].angleTo(joints[1].quaternion)<.001);
   assert.ok(rest[2].angleTo(joints[2].quaternion)>.005);
   assert.deepEqual(text.slice(-2),['01','01']);
+  hall.reset();
+  assert.deepEqual(text.slice(-2),['00','00']);
 });

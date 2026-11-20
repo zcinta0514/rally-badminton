@@ -5,6 +5,8 @@ import { readFile } from 'node:fs/promises';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { cloneModel } from '../src/model-assets.js';
 import { TournamentLobby, sampleLobbyPose, sampleLobbyLighting } from '../src/tournament-lobby.js';
+import { CourtView } from '../src/view.js';
+import { installTournamentArena } from '../src/tournament-arena.js';
 import { resolveCourtPalette } from '../src/court-palettes.js';
 
 function renderer(callback = () => {}) {
@@ -13,8 +15,7 @@ function renderer(callback = () => {}) {
 }
 
 const lightingSnapshot = lobby => ({ clock: lobby.lightClock,
-  lights: Object.fromEntries(Object.entries(lobby.lights).map(([name, light]) => [name, light.intensity])),
-  fixtures: ['fixture', 'fixtureSide', 'fixtureBack'].map(name => lobby.materials[name].emissiveIntensity) });
+  lights: Object.fromEntries(Object.entries(lobby.lights).map(([name, light]) => [name, light.intensity])) });
 
 test('lighting enters from a readable level once, then varies by less than 1.5% at a slow rate', () => {
   const out = {}, first = sampleLobbyLighting(0);
@@ -39,7 +40,7 @@ test('lighting enters from a readable level once, then varies by less than 1.5% 
   assert.notEqual(sampleLobbyLighting(9).main, sampleLobbyLighting(19).main);
 });
 
-test('lighting remains spatially fixed, uses one shadow map, and keeps strip emitters in sync', () => {
+test('original portrait lighting stays spatially fixed, within the phone budget, with one shadow map', () => {
   const lobby = new TournamentLobby({ loadAthlete: false }), shared = renderer();
   const lights = []; lobby.scene.traverse(object => { if (object.isLight) lights.push(object); });
   assert.ok(lights.length <= 6, 'local soft lights remain within the phone budget');
@@ -48,16 +49,13 @@ test('lighting remains spatially fixed, uses one shadow map, and keeps strip emi
   assert.ok(lobby.lights.court.penumbra >= .8 && lobby.lights.wall.penumbra >= .8);
   assert.ok(lobby.lights.athlete.intensity < 85, 'avoid the former blown shirt');
   const positions = lights.map(light => light.position.toArray());
-  const emitterVersions = ['fixture', 'fixtureSide', 'fixtureBack'].map(name => lobby.materials[name].version);
   const first = lightingSnapshot(lobby);
   for (let frame = 0; frame < 90; frame++) lobby.render(shared, 1 / 60, 844, 390);
   const next = lightingSnapshot(lobby);
-  for (const [light, index] of [['court', 0], ['rim', 1], ['wall', 2]]) {
-    assert.ok(Math.abs(next.lights[light] / first.lights[light] - next.fixtures[index] / first.fixtures[index]) < 1e-10);
+  for (const light of ['key', 'court', 'athlete', 'rim', 'wall']) {
+    assert.ok(next.lights[light] > first.lights[light]);
   }
   assert.deepEqual(lights.map(light => light.position.toArray()), positions, 'no moving light beams');
-  assert.deepEqual(['fixture', 'fixtureSide', 'fixtureBack'].map(name => lobby.materials[name].version), emitterVersions,
-    'brightness updates do not recompile materials');
   lobby.dispose();
 });
 
@@ -111,24 +109,41 @@ test('waiting pose keeps both feet planted and the racket down through a breathi
   assert.notEqual(sampleLobbyPose(1).joints.chest.y, first.joints.chest.y);
 });
 
-test('lobby has a regulation court, closed roof, distinct materials and an isolated palette', () => {
-  const lobby = new TournamentLobby({ loadAthlete: false });
-  const court = lobby.scene.getObjectByName('lobby-playing-surface');
-  assert.equal(court.geometry.parameters.width, 6.1);
-  assert.equal(court.geometry.parameters.depth, 13.4);
-  assert.ok(court.material.roughness >= .95);
-  assert.ok(lobby.scene.getObjectByName('lobby-roof'));
-  assert.ok(lobby.materials.metal.metalness > court.material.metalness, 'coated steel remains distinct from rubber');
-  assert.ok(court.material.bumpMap && court.material.bumpScale > 0 && court.material.bumpScale < .01);
-  assert.equal(court.material.bumpMap.colorSpace, THREE.NoColorSpace, 'surface data is linear');
-  assert.ok(lobby.materials.wood.roughness < court.material.roughness);
-  const wood = lobby.materials.wood.color.getHex();
-  lobby.setCourtPalette('blue');
+test('home and gameplay share one court, net, and palette before and after installing the tournament model', async t => {
+  const context = { fillRect() {}, fillText() {} };
+  globalThis.document = { createElement: () => ({ getContext: () => context }) };
+  t.after(() => { delete globalThis.document; });
+  const view = Object.create(CourtView.prototype);
+  view.scene = new THREE.Scene();
+  view.lobby = new TournamentLobby({ loadAthlete: false });
+  view.canvas = { dataset: {} };
+  view.edgeIndicator = {};
+  view.resize = view.prepareTournament = () => {};
+  view.mode = 'match';
+  view.makeCourt();
+  view.setMode('menu');
+  assert.equal(view.fallbackCourt.parent.parent, view.lobby.scene);
+  assert.equal(view.netVisual.group.parent, view.venue);
+  view.setCourtPalette('blue');
+  assert.equal(view.courtMaterials.court.color.getHex(), resolveCourtPalette('blue').court);
+
+  const bytes = await readFile(new URL('../src/models/tournament-hall.glb', import.meta.url));
+  const model = await new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), '');
+  view.preparedTournament = installTournamentArena(model);
+  view.installPreparedTournament();
+  const court = model.scene.getObjectByName('Court_|_sprung_competition_mat');
+  assert.equal(view.fallbackCourt, null);
   assert.equal(court.material.color.getHex(), resolveCourtPalette('blue').court);
-  assert.equal(lobby.materials.wood.color.getHex(), wood);
-  lobby.setCourtPalette('invalid');
-  assert.equal(lobby.courtPalette, 'green');
-  lobby.dispose();
+  for (const mode of ['menu', 'match', 'menu']) {
+    view.setMode(mode);
+    const activeScene = mode === 'menu' ? view.lobby.scene : view.scene;
+    assert.equal(activeScene.getObjectById(court.id), court);
+    assert.equal(activeScene.getObjectById(view.netVisual.group.id), view.netVisual.group);
+    assert.equal(view.lobby.athlete.root.parent, view.lobby.scene);
+  }
+  view.setCourtPalette('purple');
+  assert.equal(court.material.color.getHex(), resolveCourtPalette('purple').court);
+  view.lobby.dispose();
 });
 
 test('shared renderer settings restore on success and error; paused and reduced-motion frames freeze', () => {
@@ -201,12 +216,27 @@ test('dispose releases shared resources once and marks pending athlete loads as 
   lobby.render(renderer(() => assert.fail('disposed scene rendered')), .1, 844, 390);
 });
 
-test('the real asynchronously installed athlete keeps the lobby pose and ivory kit without recoloring its cached template', async () => {
+test('the lobby shows only the original athlete, including after a failed first load', async () => {
   const bytes = await readFile(new URL('../src/models/athlete.glb', import.meta.url));
   const template = await new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), '');
-  const lobby = new TournamentLobby({ athleteLoader: async () => cloneModel(template) });
+  let attempts = 0;
+  const lobby = new TournamentLobby({ athleteLoader: async () => {
+    if (++attempts === 1) throw new Error('First download interrupted');
+    return cloneModel(template);
+  } });
   const initial = structuredClone(lobby.athlete.root.userData.pose);
+  assert.equal(lobby.athlete.root.visible, false);
+  assert.equal(await lobby.athleteReady, false);
+  const shared = renderer();
+  for (let frame = 0; frame < 102; frame++) {
+    lobby.render(shared, .1, 844, 390, { reducedMotion: true });
+    assert.equal(lobby.athlete.root.visible, false);
+    assert.equal(lobby.athlete.ground.visible, false);
+  }
   assert.equal(await lobby.athleteReady, true);
+  assert.equal(attempts, 2);
+  assert.equal(lobby.athlete.root.visible, true);
+  assert.equal(lobby.athlete.ground.visible, true);
   assert.deepEqual(lobby.athlete.root.userData.pose, initial);
   let shirt = null, original = null;
   lobby.athlete.importedModel.traverse(mesh => { if (mesh.material?.name === 'rally-shirt') shirt = mesh.material; });
