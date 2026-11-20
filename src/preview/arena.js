@@ -51,7 +51,7 @@ async function openGallery() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.45));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.18;
 
@@ -64,9 +64,11 @@ async function openGallery() {
   function setShot(name) {
     selected = name;
     const shot = shots[name];
-    camera.position.fromArray(shot.eye);
-    camera.lookAt(...shot.target);
     const aspect = (stage.clientWidth || 1) / (stage.clientHeight || 1);
+    // The end-on portrait view keeps both baselines and the floor mark in frame.
+    const portraitOverview = name === 'wide' && aspect < .85;
+    camera.position.fromArray(portraitOverview ? [-2.5, 5.8, 12.8] : shot.eye);
+    camera.lookAt(...(portraitOverview ? [0, 1.4, -.3] : shot.target));
     // Preserve the horizontal composition on a narrower screen.
     const vertical = Math.tan(THREE.MathUtils.degToRad(shot.fov / 2));
     camera.aspect = aspect;

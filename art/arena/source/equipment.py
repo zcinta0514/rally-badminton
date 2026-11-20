@@ -3,6 +3,7 @@
 import math
 
 import bpy
+from signage import BRAND, apply_brand_font
 from mathutils import Vector
 
 
@@ -91,6 +92,7 @@ def _text(name, content, pos, size, rotation, material, collection, anchor="CENT
     curve.align_x = anchor
     curve.align_y = "CENTER"
     curve.space_character = 1.1
+    apply_brand_font(curve)
     curve.resolution_u = 4
     obj = bpy.data.objects.new(name,curve)
     collection.objects.link(obj)
@@ -125,7 +127,7 @@ def _court(col,m):
             ink.box((x,(a+b)/2,.0006),(.04,b-a,.0012),m["ink"])
     ink.mesh("Court | 40 mm line paint",col)
     for end, turn in [(-1,0),(1,math.pi)]:
-        _text("Court | event stencil", "RALLY   OPEN", (0,end*8.05,.0018),.47,(0,0,turn),m["ink"],col)
+        _text("Court | event stencil", BRAND, (0,end*8.05,.0018),.65,(0,0,turn),m["ink"],col)
 
 
 def _net(col,m):
@@ -334,13 +336,16 @@ def _board(col,m,x,y,turn,width,word,number):
     for dx in [-width*.40,width*.40]:
         p.box(world(dx,.05,.031),(.13,.35,.052),m["rubber"],turn)
         p.rod(world(dx,.19,.039),world(dx,.062,.39),.012,m["steel"],8)
-    # Three slanted feather vanes form the event mark.
-    for j in range(3):
-        a=-width*.43+j*.085
-        z=.21+j*.024
-        p.shell([world(a,-.05,z),world(a+.055,-.05,z),world(a+.19,-.05,z+.226),world(a+.108,-.05,z+.226)],[(0,1,2,3)],color)
+    # Official 40-unit brand-mark SVG used in index.html, in the board's local plane.
+    def logo_point(u,v):
+        return world(-width*.44 + .011*u,-.051,.55-.011*v)
+    for path in [((8,29),(23,7),(29,7),(14,29)), ((19,29),(31,11),(36,11),(24,29))]:
+        p.shell([logo_point(*point) for point in path],[(3,2,1,0)],color)
+    circle=[logo_point(10+4*math.cos(i*math.tau/16),32+4*math.sin(i*math.tau/16)) for i in range(16)]
+    p.shell(circle,[tuple(reversed(range(16)))],color)
     p.mesh("Perimeter board | "+str(number).zfill(2),col,.004)
-    _text("Fascia | "+word,word,world(.23,-.053,.33),min(.30,width*.091),(math.pi/2,0,turn),color,col)
+    size=.425 if word==BRAND else min(.30,width*.091)
+    _text("Fascia | "+word,word,world(.23,-.053,.33),size,(math.pi/2,0,turn),color,col)
 
 
 def build_equipment():
@@ -367,7 +372,7 @@ def build_equipment():
     _stations(collection,m)
     _service_station(collection,m)
     _score_station(collection,m)
-    words=["RALLY OPEN","COURT 01","RALLY"]
+    words=[BRAND,"COURT 01",BRAND]
     index=0
     for y,turn in [(10.40,0),(-10.40,math.pi)]:
         for x in [-5.10,-1.70,1.70,5.10]:

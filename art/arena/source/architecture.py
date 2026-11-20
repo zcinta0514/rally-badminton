@@ -8,10 +8,11 @@ import random
 
 import bpy
 from mathutils import Vector
+from signage import BRAND, apply_brand_font
 
 
 def build_architecture():
-    root = bpy.data.collections.new("Architecture | RALLY OPEN")
+    root = bpy.data.collections.new("Architecture | " + BRAND)
     bpy.context.scene.collection.children.link(root)
     sections = {}
     for key in ("Bowl", "Seats", "Audience", "Roof", "Lighting", "Wayfinding"):
@@ -102,6 +103,7 @@ def build_architecture():
         curve.align_y = 'CENTER'
         curve.size = size
         curve.space_character = 1.14
+        apply_brand_font(curve)
         ob = bpy.data.objects.new("AR / " + name, curve)
         ob.location = center
         ob.rotation_euler = (math.pi / 2, 0, rot_z)
@@ -128,7 +130,7 @@ def build_architecture():
                 box("Bowl","End wall vertical fins",facade,(x+(dx-3.5)*.32,sign*22.95,9.45),(.15,.19,3.55))
         box("Wayfinding","End-wall identity",facade,(0,sign*22.90,9.36),(13.5,.21,3.68))
         box("Wayfinding","End-wall identity",teal,(0,sign*22.77,7.96),(3.7,.026,.037))
-        label("Arena logotype %d" % sign,"RALLY   /   OPEN",(0,sign*22.77,9.73),1.27,0 if sign==1 else math.pi,ivory)
+        label("Arena logotype %d" % sign,BRAND,(0,sign*22.77,9.81),1.92,0 if sign==1 else math.pi,ivory)
         label("Hall designation %d" % sign,"C E N T R E   C O U R T",(0,sign*22.77,8.62),.31,0 if sign==1 else math.pi,teal)
 
     rng = random.Random(20314)
@@ -200,7 +202,10 @@ def build_architecture():
                     occupancy += .12
                 if rng.random()>occupancy:
                     continue
-                block = title + (" / audience left" if idx<0 else " / audience right")
+                if row < 2:
+                    block = title + " / audience front"
+                else:
+                    block = title + (" / audience left" if idx<0 else " / audience right")
                 height=rng.uniform(.91,1.12)
                 lean=rng.uniform(-.115,.018)
                 turn=rng.uniform(-.15,.15)

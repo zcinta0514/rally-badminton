@@ -37,6 +37,9 @@ def prepare_export():
         ratio = 1.0
         if "formed seat shells" in name:
             ratio = .15
+        elif " / audience front" in name:
+            # Knees, cuffs and shoes frame the near officials in courtside shots.
+            ratio = .62
         elif " / audience " in name:
             ratio = .19
         elif name.startswith(("LJ_", "Umpire_Main", "Service_Judge")):

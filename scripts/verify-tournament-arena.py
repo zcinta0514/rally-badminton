@@ -1,4 +1,4 @@
-"""Drive two landscape singles matches through the ordinary game UI."""
+"""Play a point in the selected match format, online or from the installed PWA."""
 
 import argparse
 import json
@@ -29,8 +29,9 @@ SNAPSHOT = """() => {
 }"""
 
 
-def verify(browser, url, case):
+def verify(browser, url, case, lineup, offline):
     width, height = CASES[case]
+    run_name = f"{case}-{lineup}" + ("-offline" if offline else "")
     context = browser.new_context(viewport={"width": width,"height": height},
                                   is_mobile=True, has_touch=True, device_scale_factor=1)
     page = context.new_page()
@@ -46,7 +47,7 @@ def verify(browser, url, case):
       };
     })();""")
     page.set_default_timeout(45_000)
-    report = {"case": case, "url": url, "modelResponses": [], "console": [],
+    report = {"case": case, "lineup": lineup, "offline": offline, "url": url, "modelResponses": [], "console": [],
               "errors": [], "requestsFailed": []}
     def on_response(r):
         path = urlparse(r.url).path.lower()
@@ -68,18 +69,32 @@ def verify(browser, url, case):
         print(case, "opening local build", flush=True)
         page.goto(url,wait_until="domcontentloaded",timeout=90_000)
         page.locator("#loading").wait_for(state="hidden",timeout=90_000)
+        if offline:
+            page.wait_for_function("""async () => {
+                const reg = await navigator.serviceWorker.getRegistration();
+                if (!reg?.active) return false;
+                const modelURL = new URL('src/models/tournament-hall.glb', reg.scope);
+                return Boolean(await caches.match(modelURL));
+            }""", timeout=120_000)
+            context.set_offline(True)
+            page.reload(wait_until="domcontentloaded",timeout=90_000)
+            page.locator("#loading").wait_for(state="hidden",timeout=90_000)
+            assert page.evaluate("Boolean(navigator.serviceWorker.controller) && !navigator.onLine")
         for button in ["#dismiss-playtest-notice","#onboarding-skip"]:
             if page.locator(button).is_visible():
                 page.locator(button).tap()
-        for selector in ["#open-solo","#start-ai","#start-ai-confirm"]:
-            page.locator(selector).tap()
+        page.locator("#open-solo").tap()
+        page.locator("#start-ai").tap()
+        page.locator(f'#ai-lineup [data-lineup="{lineup}"]').tap()
+        page.locator("#start-ai-confirm").tap()
         print(case, "entered AI match", flush=True)
         page.wait_for_function("document.querySelector('#court').dataset.venue === 'tournament'",timeout=120_000)
         page.wait_for_function("window.rallyDiagnostics?.statePhase === 'serve' && !window.rallyDiagnostics.entrance.active",timeout=90_000)
         before = report["before"] = page.evaluate(SNAPSHOT)
-        assert before["diagnostics"]["format"] == "singles"
+        assert before["diagnostics"]["format"] == lineup
+        assert before["diagnostics"]["playerCount"] == (4 if lineup == "doubles" else 2)
         assert before["diagnostics"]["score"] == [0, 0]
-        page.screenshot(path=str(OUT/f"{case}-serve.png"),timeout=45_000)
+        page.screenshot(path=str(OUT/f"{run_name}-serve.png"),timeout=45_000)
         # Use the mobile shot control for the initial serve, then let the
         # normal simulation and opponent AI complete the point.
         btn = page.locator('button[data-shot="clear"]')
@@ -95,7 +110,7 @@ def verify(browser, url, case):
         assert after["diagnostics"]["renderer"]["triangles"] > 0
         assert any("tournament-hall.glb" in path and 200<=status<400 for path,status in report["modelResponses"])
         assert not [item for item in report["requestsFailed"] if ".glb" in item[0]]
-        page.screenshot(path=str(OUT/f"{case}-point.png"),timeout=45_000)
+        page.screenshot(path=str(OUT/f"{run_name}-point.png"),timeout=45_000)
         assert not report["errors"], report["errors"]
         print(case, "passed", after["hud"], after["diagnostics"]["renderer"],flush=True)
         report["passed"] = True
@@ -103,12 +118,12 @@ def verify(browser, url, case):
         report.update(passed=False,failure=str(exc))
         try:
             report["failureSnapshot"]=page.evaluate(SNAPSHOT)
-            page.screenshot(path=str(OUT/f"{case}-failure.png"),timeout=15_000)
+            page.screenshot(path=str(OUT/f"{run_name}-failure.png"),timeout=15_000)
         except Exception as nested:
             report["snapshotFailure"]=str(nested)
         print(case,"failed",str(exc),flush=True)
     finally:
-        (OUT/f"{case}-report.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
+        (OUT/f"{run_name}-report.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
         context.close()
     return report["passed"]
 
@@ -117,13 +132,15 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url",default="http://127.0.0.1:4731/")
     parser.add_argument("--case",choices=list(CASES))
+    parser.add_argument("--lineup", choices=["singles","doubles"], default="singles")
+    parser.add_argument("--offline", action="store_true")
     args=parser.parse_args()
     OUT.mkdir(parents=True,exist_ok=True)
     exe=Path(os.environ["ProgramFiles"])/"Google/Chrome/Application/chrome.exe"
     with sync_playwright() as pw:
         browser=pw.chromium.launch(executable_path=str(exe),headless=True,args=["--enable-unsafe-swiftshader","--no-first-run"])
         try:
-            results=[verify(browser,args.url,k) for k in ([args.case] if args.case else CASES)]
+            results=[verify(browser,args.url,k,args.lineup,args.offline) for k in ([args.case] if args.case else CASES)]
         finally:
             browser.close()
     return 0 if all(results) else 1

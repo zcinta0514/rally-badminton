@@ -318,6 +318,10 @@ export class CourtView {
   get entranceActive(){return this.entrance?.active===true;}
 
   beginMatchEntrance(options={}) {
+    // A rematch can begin without visiting the menu. It is also a safe
+    // boundary for a venue that arrived after the previous opening.
+    this.installPreparedTournament();
+    this.prepareTournament();
     this.entrance.begin({...options,reducedMotion:this.reducedMotion?.matches===true});
     this.updateCamera(options.side??0);
     this.entranceFrom=this.lobby.camera.clone();
@@ -343,25 +347,39 @@ export class CourtView {
     });
   }
 
-  setMode(mode) {
-    if(this.mode===mode)return;
-    this.mode=mode;
-    if (mode === 'match' && !this.tournamentLoad) {
+  prepareTournament() {
+    if (!this.tournamentLoad) {
       this.tournamentLoad = loadTournamentArena().then(hall => {
         if (this.disposed) { disposeSceneResources(hall.scene); return; }
-        hall.palette(this.courtPalette);
-        this.scene.add(hall.scene);
-        this.fallbackCourt.removeFromParent();
-        disposeSceneResources(this.fallbackCourt);
-        this.fallbackCourt = this.courtMaterials = this.arena = this.hallShell = null;
-        this.netVisual.group.scale.x = 3.05 / 3.17;
-        this.tournament = hall;
-        this.canvas.dataset.venue = 'tournament';
+        this.preparedTournament = hall;
+        if (this.mode === 'menu') this.installPreparedTournament();
       }).catch(error => {
-        console.error('Tournament hall could not be loaded', error);
+        console.warn('Tournament hall could not be loaded', error);
         this.tournamentLoad = null;
       });
     }
+    return this.tournamentLoad;
+  }
+
+  installPreparedTournament() {
+    const hall = this.preparedTournament;
+    if (!hall) return;
+    hall.palette(this.courtPalette);
+    this.scene.add(hall.scene);
+    this.fallbackCourt.removeFromParent();
+    disposeSceneResources(this.fallbackCourt);
+    this.fallbackCourt = this.courtMaterials = this.arena = this.hallShell = null;
+    this.netVisual.group.scale.x = 3.05 / 3.17;
+    this.tournament = hall;
+    this.preparedTournament = null;
+    this.canvas.dataset.venue = 'tournament';
+  }
+
+  setMode(mode) {
+    if(this.mode===mode)return;
+    this.mode=mode;
+    this.installPreparedTournament();
+    if(mode==='match'||mode==='menu')this.prepareTournament();
     if(mode!=="match"){this.entrance?.cancel();this.entranceFrom=null;}
     this.resetCrowd();
     if (mode !== 'match') this.staminaHUD?.hide();
@@ -711,6 +729,7 @@ export class CourtView {
   }
   dispose() {
     this.disposed = true;
+    if (this.preparedTournament) disposeSceneResources(this.preparedTournament.scene);
     this.lobby?.dispose();
     for (const player of this.players || []) player.disposed = true;
     if (this.onVisibilityChange) globalThis.document?.removeEventListener('visibilitychange', this.onVisibilityChange);

@@ -34,7 +34,7 @@ function scoreScreen() {
     last = near + '/' + far;
     ctx.fillStyle = '#071c22'; ctx.fillRect(0, 0, 768, 300);
     ctx.fillStyle = '#94f0c8'; ctx.fillRect(24, 24, 8, 30);
-    ctx.font = 'bold 28px Arial'; ctx.fillText('RALLY   /   COURT 01', 49, 49);
+    ctx.font = '650 30px "Rally Display", Arial, sans-serif'; ctx.fillText('开拍 RALLY   /   COURT 01', 49, 49);
     ctx.fillStyle = '#284146'; ctx.fillRect(384, 85, 2, 172);
     ctx.font = 'bold 36px Arial'; ctx.fillStyle = '#96b3b6';
     ctx.fillText('NEAR', 35, 114); ctx.fillText('FAR', 418, 114);
@@ -48,7 +48,11 @@ function scoreScreen() {
 }
 
 export async function loadTournamentArena() {
-  return installTournamentArena(await new GLTFLoader().loadAsync(assetURL.href));
+  const [model] = await Promise.all([
+    new GLTFLoader().loadAsync(assetURL.href),
+    document.fonts?.load('650 30px "Rally Display"', '开拍').catch(() => {}),
+  ]);
+  return installTournamentArena(model);
 }
 
 export function installTournamentArena({ scene, animations }) {
@@ -65,6 +69,9 @@ export function installTournamentArena({ scene, animations }) {
     actions.set(role, action);
   }
   const floorMaterials = new Set(), crowd = [];
+  const surround = scene.getObjectByName('AR__Competition_surround');
+  // Keep the apron tint local to this surface even if a future export shares its material.
+  if (surround?.isMesh) surround.material = surround.material.clone();
   scene.traverse(node => {
     if (node.name.startsWith('CompetitionNet_')) node.visible = false;
     if (node.userData.role === 'spectator_block') crowd.push(node);
@@ -120,9 +127,11 @@ export function installTournamentArena({ scene, animations }) {
     }
   }
   function palette(name) {
-    const color = resolveCourtPalette(name).court;
-    for (const mat of floorMaterials) mat.color.setHex(color);
+    const { court, apron } = resolveCourtPalette(name);
+    for (const mat of floorMaterials) mat.color.setHex(court);
+    if (surround?.isMesh) surround.material.color.setHex(apron);
   }
+  palette();
   pose();
   return { scene, update, reset, palette };
 }

@@ -10,6 +10,7 @@ sys.path.insert(0, str(folder))
 from architecture import build_architecture
 from equipment import build_equipment
 from officials import build_officials
+from signage import BRAND, apply_brand_font
 
 args = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 output = Path(args[0]).resolve() if args else next(p for p in folder.parents if (p/'src'/'view.js').exists())
@@ -93,6 +94,7 @@ b.inputs['Emission Strength'].default_value = .7
 def caption(name, body, x,z, size):
     data = bpy.data.curves.new(name,'FONT')
     data.body = body
+    apply_brand_font(data)
     data.size = size
     data.materials.append(fontmat)
     obj = bpy.data.objects.new(name,data)
@@ -100,7 +102,7 @@ def caption(name, body, x,z, size):
     obj.location = (x,9.428,z)
     obj.rotation_euler.x = 1.5707963268
     return obj
-caption('Panel header','RALLY  /  CENTRE COURT',-5.32,1.58,.16)
+caption('Panel header',BRAND,-5.32,1.58,.25)
 for label,x in [('NEAR',-5.32),('FAR',-4.12)]:
     caption('Team '+label,label,x,1.35,.14)
 for x,values,change in [(-5.32,('00','01'),25),(-4.12,('00','01'),85)]:
@@ -129,7 +131,7 @@ for area in bpy.context.screen.areas:
         area.spaces.active.overlay.show_overlays=False
         area.spaces.active.shading.color_type='MATERIAL'
 bpy.context.preferences.filepaths.save_version = 0
-bpy.ops.wm.save_as_mainfile(filepath=str(art/'Rally Open.blend'), compress=True)
+bpy.ops.wm.save_as_mainfile(filepath=str(art/(BRAND + '.blend')), compress=True)
 for obj, action, slot in muted:
     obj.animation_data.action = action
     obj.animation_data.action_slot = slot

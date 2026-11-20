@@ -30,9 +30,13 @@ export function applyEntranceCamera(camera,from,to,progress){
   if(t>=1){camera.copy(to);camera.updateMatrixWorld(true);return;}
   if(t<=0){camera.copy(from);camera.updateMatrixWorld(true);return;}
   const startYaw=Math.atan2(from.position.x,from.position.z),endYaw=Math.atan2(to.position.x,to.position.z);
-  const yaw=startYaw+Math.atan2(Math.sin(endYaw-startYaw),Math.cos(endYaw-startYaw))*t;
+  const sweep=Math.atan2(Math.sin(endYaw-startYaw),Math.cos(endYaw-startYaw));
+  const yaw=startYaw+sweep*t;
   const radius=THREE.MathUtils.lerp(Math.hypot(from.position.x,from.position.z),Math.hypot(to.position.x,to.position.z),t);
-  camera.position.set(Math.sin(yaw)*radius,THREE.MathUtils.lerp(from.position.y,to.position.y,t)+Math.sin(Math.PI*t)*1.2,Math.cos(yaw)*radius);
+  // The reverse-end entrance travels over the side stands. Its longer arc
+  // needs more clearance above the upper seats, especially at 18° pitch.
+  const lift=1.2+2.8*Math.sin(sweep/2)**2;
+  camera.position.set(Math.sin(yaw)*radius,THREE.MathUtils.lerp(from.position.y,to.position.y,t)+Math.sin(Math.PI*t)*lift,Math.cos(yaw)*radius);
   const target=new THREE.Vector3(0,0,-1).applyQuaternion(from.quaternion);
   const distance=Math.abs(target.y)>.01?(from.position.y-.35)/-target.y:10;
   target.multiplyScalar(distance).add(from.position).multiplyScalar(1-t);
