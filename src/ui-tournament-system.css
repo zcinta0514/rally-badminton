@@ -236,17 +236,36 @@ body .shot-layout-settings { background:#25392d; color:#e3eadc; border-color:#40
 body .shot-layout-settings:hover { background:#314837; }
 body .shot-layout-editor { background:linear-gradient(180deg,#14221e,#101b18); }
 
-body .scoreboard { background:#14221ee8; border:1px solid #61745b66; border-radius:3px; box-shadow:none; color:#f0f0e6; }
-body .scoreboard :is(.match-label,.score-player small) { color:#b3c2af; }
-body .scoreboard .score-player { color:#f0f0e6; border-color:#40544a; }
-body .scoreboard .score-player b { color:#deebba; }
+/* Two aligned competitors, completed games in muted type and the live score
+   in its own column. The service marker stays within the name gutter. */
+body .scoreboard {
+  display:grid; gap:0; padding:0; overflow:hidden; border:0; border-radius:2px;
+  background:#102621f5; color:#fff; box-shadow:0 2px 6px #08130e40;
+}
+.scoreboard .match-label {
+  padding:3px 7px; background:#075e40; color:#fff; font:650 10px/1.35 'Rally UI',sans-serif;
+}
+body .scoreboard .score-player {
+  min-height:23px; padding:0 0 0 6px; gap:4px; grid-template-columns:6px minmax(0,1fr) auto 32px;
+  color:#f6f9f7; font-size:12px; line-height:1.15;
+}
+body .scoreboard .opponent { border-top:1px solid #ffffff26; }
+.scoreboard .serve-mark {
+  grid-column:1; width:0; height:0; border-block:3px solid transparent; border-left:5px solid #88edac;
+}
+.scoreboard [id^=name-] { grid-column:2; }
+.scoreboard .previous-games { grid-column:3; color:#b9cac5; font:600 10px/1.2 monospace; white-space:pre; }
+body .scoreboard .score-player b {
+  grid-column:4; align-self:stretch; display:grid; place-items:center;
+  background:#e8f4e9; color:#10392a; font:750 18px/1 Arial,sans-serif; font-variant-numeric:tabular-nums;
+}
 body .hud .match-note { color:#bccbb7; text-shadow:0 1px 4px #07120b; }
 body .hud .match-note strong { color:#edf2df; }
-body .assist-panel>strong { background:#14221ee8; color:#dae6ce; border-left:2px solid #b8d88e; border-radius:0; box-shadow:none; }
+
 body .joystick { border:1px solid #b3c6a766; background:#14221e99; box-shadow:inset 0 0 0 5px #c2dc9b08; }
 body #knob { background:#b8c9ab66; border:1px solid #d5e5c4aa; box-shadow:none; }
 body .stick-cross::before,body .stick-cross::after { background:#b3c6a744; }
-body .joystick-wrap>small { color:#bacbb2; text-shadow:0 1px 4px #07120b; }
+
 body .aim-heading { background:transparent; border:0; box-shadow:none; }
 body .aim-heading b { color:#dce8ce; text-shadow:0 1px 4px #07120b; }
 body[data-shot-skin=glass] .shot-btn { --key-accent:#c6d9b2; }
@@ -295,7 +314,8 @@ body .hell-status span { color:#c6cdb9; }
 /* Keep all match actions on screen even on a 320px portrait viewport. */
 @media (max-width:360px) {
   body[data-screen=match] .topbar { gap:3px; left:max(4px,var(--safe-left)); right:max(4px,var(--safe-right)); }
-  body[data-screen=match] .topbar .brand { display:none; }
+  body[data-screen=match] .topbar .brand { display:inline-flex; }
+  body[data-screen=match] .topbar .brand-mark { width:23px; height:23px; }
   body[data-screen=match] .topbar .top-actions { gap:3px; }
   body[data-screen=match] .topbar .icon-btn:not(.display-btn) { width:26px; }
   body[data-screen=match] .topbar .display-btn { padding-inline:3px; }
@@ -313,9 +333,10 @@ body .hell-status span { color:#c6cdb9; }
 }
 body .shuttle-edge-indicator { color:#ead29f !important; border-color:#a48f65 !important; }
 
-body[data-screen=match] .brand { color:#e6ecdc; }
-body[data-screen=match] .brand small { color:#c0d2b5; }
-body[data-screen=match] .brand-mark { background:#45634c; border-bottom-color:#a3bd83; }
+body[data-screen=match] .brand { color:white; text-decoration:none; border:0; }
+body[data-screen=match] .brand small { color:white; }
+body[data-screen=match] .brand-mark { background:transparent url('../icons/rally.svg') center / contain no-repeat; border:0; }
+body[data-screen=match] .brand-mark svg { display:none; }
 
 /* Native dialogs are outside the shared backdrop but use the same palette. */
 body :is(.onboarding-dialog,.pwa-dialog,.release-dialog) { color:#f2f2e9; background:#14221e; border:1px solid #40544a; border-top:2px solid #b8d88e; border-radius:4px; }

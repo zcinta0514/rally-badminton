@@ -31,13 +31,10 @@
 .onboarding-dialog button:focus-visible,.onboarding-link:focus-visible,.onboarding-hints-label input:focus-visible { outline:3px solid #0756b0; outline-offset:2px; }
 /* Static instructions are optional. Live aim, charge, risk, stamina, contact
    eligibility and all court markers retain their existing behaviour. */
-body[data-operation-hints=off] .joystick-wrap>small,
-body[data-operation-hints=off] .assist-panel>small,
 body[data-operation-hints=off] .shot-btn>small,
 body[data-operation-hints=off] .shot-instruction>span:first-child { display:none; }
 body[data-operation-hints=off] #shot-risk[data-risk=idle],
-body[data-operation-hints=off] .shots-wrap:has(#shot-risk[data-risk=idle]) .aim-heading,
-body[data-operation-hints=off] #assist-status[data-kind=instruction] { visibility:hidden; }
+body[data-operation-hints=off] .shots-wrap:has(#shot-risk[data-risk=idle]) .aim-heading { visibility:hidden; }
 @media(max-height:500px) and (orientation:landscape) {
   .onboarding-dialog { width:min(700px,calc(100vw - 40px)); max-height:calc(100dvh - 20px - var(--safe-top) - var(--safe-bottom)); padding:10px 22px; }
   .onboarding-dialog[open] { gap:7px; }

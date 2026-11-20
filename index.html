@@ -196,25 +196,22 @@
     </div>
   </main>
   <footer class="lobby-update" aria-label="游戏版本与更新">
-    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.26.0</a>
+    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.26.1</a>
     <button id="lobby-history" type="button">近期更新</button>
     <button id="lobby-check-update" type="button">检查更新</button>
   </footer>
   <aside id="court-caption" class="court-caption"><div class="live-tag"><i></i> 球场预览</div><div class="court-strip"><b>01</b><span>比赛场地</span><span>RALLY COURT</span></div></aside>
   <section id="hud" class="hud" hidden aria-label="比赛信息">
-    <div class="scoreboard">
+    <div id="scoreboard" class="scoreboard">
       <small id="match-label" class="match-label">5 分制 · 人机</small>
-      <div class="score-player"><span class="player-dot"></span><span id="name-self">你</span><small id="role-self">均衡型</small><b id="score-self">0</b></div>
-      <div class="score-player opponent"><span class="player-dot"></span><span id="name-other">入门陪练</span><small id="role-other">均衡型</small><b id="score-other">0</b></div>
+      <div class="score-player"><i class="serve-mark" id="serve-self" aria-label="发球方" title="发球方"></i><span id="name-self">你</span><small id="role-self">均衡型</small><span class="previous-games" id="games-self"></span><b id="score-self">0</b></div>
+      <div class="score-player opponent"><i class="serve-mark" id="serve-other" aria-label="发球方" title="发球方"></i><span id="name-other">入门陪练</span><small id="role-other">均衡型</small><span class="previous-games" id="games-other"></span><b id="score-other">0</b></div>
     </div>
     <div id="hell-status" class="hell-status" hidden><b id="hell-skill-title"></b><span id="hell-skill-hint"></span></div>
     <div class="match-note"><span id="rally">第 1 分</span><strong id="match-message">按击球键发球</strong><span id="connection">本地练习</span></div>
   </section>
   <section id="game-controls" class="game-controls" hidden aria-label="比赛操作">
-    <div class="movement-panel">
-    <div class="joystick-wrap"><div id="joystick" class="joystick" aria-hidden="true"><span class="stick-cross"></span><span id="knob"></span></div><small>左侧任意处拖动<span>W A S D</span></small></div>
-    <div class="assist-panel"><strong id="assist-status">按住击球键，拖动选落点</strong><small><i class="legend-dot landing"></i>预计落点 <i class="legend-dot intercept"></i>接球位置 <i class="legend-dot target"></i>你的目标</small></div>
-    </div>
+    <div id="joystick" class="joystick" aria-hidden="true"><span class="stick-cross"></span><span id="knob"></span></div>
     <div class="shots-wrap"><div class="aim-heading"><b id="aim-value">按住击球键拖动</b></div><div class="shot-buttons"><button data-shot="clear" class="shot-btn"><span class="key-face"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 18C4 2 20 2 21 18m-5-3 5 3 1-6"/></svg></span><strong>高远</strong><small>J</small><i class="key-charge" aria-hidden="true"></i><i class="key-direction" aria-hidden="true"></i><i class="key-nub" aria-hidden="true"></i></span></button><button data-shot="drop" class="shot-btn"><span class="key-face"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10c7-10 12-2 12 10m-4-4 4 4 4-4"/></svg></span><strong>吊球</strong><small>K</small><i class="key-charge" aria-hidden="true"></i><i class="key-direction" aria-hidden="true"></i><i class="key-nub" aria-hidden="true"></i></span></button><button data-shot="smash" class="shot-btn smash"><span class="key-face"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 2-10 12h7l-1 8L21 9h-8Z"/></svg></span><strong>杀球</strong><small>L</small><i class="key-charge" aria-hidden="true"></i><i class="key-direction" aria-hidden="true"></i><i class="key-nub" aria-hidden="true"></i></span></button></div><small class="shot-instruction"><span>↑ 更深 · ↓ 靠网</span><span id="shot-risk" data-risk="idle">左右选线 · 松手击球</span></small></div>
     <div id="gesture-pad" class="gesture-pad" hidden aria-hidden="true"><span class="gesture-up">深</span><span class="gesture-down">短</span><i id="gesture-dot"></i></div>
   </section>
