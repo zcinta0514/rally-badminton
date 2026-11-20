@@ -1,16 +1,18 @@
 import { sampleShuttleFlight } from './shuttle-flight.js';
 
 export const HELL = Object.freeze({ targets: Object.freeze([2, 5]), chargeTime: .22, recovery: .18,
-  divePrepare: .08, diveTime: .22, diveDuration: .7, diveSpeed: 18, diveInterval: 3, moveScale: 1.57, recoveryMoveScale: .85,
+  divePrepare: .08, diveTime: .22, diveDuration: .7, diveSpeed: 18, diveInterval: 3, recoveryMoveScale: .85,
   reaction: .016, error: .02 });
 
-export function createHellChallenge() {
-  return { kind: 'hell', bossSide: 1, warning: null,
+export function createHellChallenge(seed = 1) {
+  return { kind: 'hell', bossSide: 1, paper: { limit: 1 + (seed & 1), count: 0, nextPoint: (seed >>> 1) % 2,
+      delay: .16 + ((seed >>> 2) % 25) / 100, liveTime: 0, at: null, side: (seed & 128) ? 1 : -1 }, warning: null,
     active: null, rescue: null, rescueUses: 0, recoverUntil: 0, nextDiveAt: 0,
     counts: { phantom: 0, cannon: 0, rescue: 0, netDrop: 0, drive: 0 } };
 }
 
 export function resetHellRally(challenge) {
+  challenge.paper.at = null; challenge.paper.liveTime = 0;
   challenge.warning = null; challenge.active = null; challenge.rescue = null;
   challenge.rescueUses = 0; challenge.recoverUntil = 0; challenge.nextDiveAt = 0;
 }
@@ -41,6 +43,6 @@ export function phantomPositions(state) {
   const point = sampleShuttleFlight(fx.launch, age);
   const spread = Math.sin(Math.min(1, age / fx.fadeAt) * Math.PI / 2);
   const opacity = .60 * Math.min(1, (fx.fadeAt - age) / .16);
-  return [-1, 1, 2].map((lane, index) => ({ x: point.x + lane * .62 * spread,
+  return [-1, 1, 2].map((lane, index) => ({ x: point.x + lane * .86 * spread,
     y: Math.max(.12, point.y + (index - 1) * .22 * spread), z: point.z + (index - 1) * .38 * spread, opacity }));
 }

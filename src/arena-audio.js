@@ -300,7 +300,11 @@ export class ArenaAudio {
     if (state?.phase === 'serve' || state?.phase === 'rally') this.stopVoices('reaction');
     if (!visible || !this.enabled || !this.active || suppress) return;
     for (const event of events) {
-      if (event.type === 'hit') this.hit(event.shot, event);
+      if (event.type === 'hit') {
+        const skill = state.lastShotInfo?.skill;
+        this.hit(event.shot, skill === 'cannon' ? { ...event, rate: .76 } : event);
+        if (skill === 'rescue') this.sample('cheer', { bus: 'crowd', group: 'anticipation', priority: 1, duration: .85, volume: .32 });
+      }
       if (event.type === 'foot') this.sample('foot', { ...event, bus: 'movement', priority: 2, duration: .16, volume: .16 });
       if (event.type === 'net') {
         this.duckCrowd(); this.sample('net', { ...event, bus: 'hits', priority: 5,
