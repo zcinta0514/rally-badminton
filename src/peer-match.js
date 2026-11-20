@@ -3,6 +3,7 @@ import { confirmsRoomRules, startRoomCountdown } from '../shared/room-readiness.
 
 const STEP_MS = 1000 / 60;
 const MAX_CATCHUP_MS = 500;
+const HOST_SUSPENSION_MS = 2000;
 const INPUT_TIMEOUT_MS = 250;
 const SHOT_INTERVAL_MS = 100;
 const SHOTS = new Set(['clear', 'drop', 'smash']);
@@ -278,7 +279,11 @@ export class PeerMatch {
       if (elapsed > MAX_CATCHUP_MS) {
         // A background phone must not replay minutes of unobserved gameplay on wake.
         this.accumulator = 0;
-        if (this.state && this.state.phase !== 'over') { this.freeze(0); this.broadcast(); }
+        this.inputs = Array.from({length:this.count}, () => ({}));
+        if (this.state && this.state.phase !== 'over') {
+          if (elapsed >= HOST_SUSPENSION_MS) this.freeze(this.hostSlot);
+          this.broadcast();
+        }
         return;
       }
       this.accumulator += elapsed;
@@ -290,7 +295,9 @@ export class PeerMatch {
         this.accumulator = Math.max(0, this.accumulator - STEP_MS);
         this.tickCount++;
         if (this.state) {
+          const previousHit = this.state.hitId;
           stepMatch(this.state, this.inputs, STEP_MS / 1000);
+          if (this.state.hitId !== previousHit) snapshotDue = true;
           for (const input of this.inputs) input.shot = null;
         }
         if (this.tickCount % 3 === 0) snapshotDue = true;
