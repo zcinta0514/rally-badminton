@@ -54,25 +54,30 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
     Array.isArray(releaseNotice.items) && releaseNotice.items.length > 0 && releaseNotice.items.every(item => typeof item === 'string');
   const releaseDialog = document.createElement('dialog');
   releaseDialog.id = 'release-notice-dialog'; releaseDialog.className = 'release-dialog'; releaseDialog.setAttribute('aria-labelledby', 'release-notice-title');
-  releaseDialog.innerHTML = '<button type="button" class="release-close" aria-label="关闭更新公告">×</button><small class="pwa-eyebrow">开拍 / RALLY · 更新公告</small><h2 id="release-notice-title"></h2><p id="release-notice-summary"></p><ul id="release-notice-items"></ul><button type="button" class="release-dismiss">关闭</button>';
+  releaseDialog.innerHTML = `<header class="release-header">
+    <h2 id="release-notice-title">近期更新</h2>
+    <button type="button" class="release-close" aria-label="关闭近期更新">×</button>
+  </header>
+  <div class="release-history" tabindex="0" role="region" aria-label="版本记录"></div>`;
   document.body.append(releaseDialog);
   const cornerCheck = document.getElementById('lobby-check-update');
   const detail = dialog.querySelector('#pwa-cache-detail'), nativeInstall = dialog.querySelector('#pwa-install');
   const retryButton = dialog.querySelector('#pwa-retry'), download = dialog.querySelector('#pwa-download');
   let installAccepted = false, installCompleted = false;
-  const releaseDismiss = releaseDialog.querySelector('.release-dismiss');
+  const releaseClose = releaseDialog.querySelector('.release-close');
   let updateState = '', previousInert = false, updateStorage, releasePending = false, releaseTimer = null, releaseFocus = null;
   try { updateStorage = sessionStorage; } catch { /* Auto reload needs a working loop guard. */ }
   const pageVersion = globalThis.RALLY_CONFIG?.buildId || '';
   const history = globalThis.RALLY_CONFIG?.releaseHistory || [];
-  releaseDialog.querySelector('#release-notice-title').textContent = '近期更新';
-  releaseDialog.querySelector('#release-notice-summary').hidden = true;
-  const sections = document.createElement('div');
-  releaseDialog.querySelector('#release-notice-items').replaceWith(sections);
+  const sections = releaseDialog.querySelector('.release-history');
   history.forEach((entry,index) => {
     const section = document.createElement('details');
     const heading = document.createElement('summary');
-    heading.textContent = [entry.version,entry.detail].filter(Boolean).join(' · ');
+    const versionLabel = document.createElement('strong');
+    versionLabel.textContent = entry.version;
+    const detailLabel = document.createElement('span');
+    detailLabel.textContent = entry.detail;
+    heading.append(versionLabel, detailLabel);
     const list = document.createElement('ul');
     for(const item of entry.items){
       const li = document.createElement('li');
@@ -104,7 +109,7 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
       if (!releaseNoticeCanOpen()) { releaseTimer = setTimeout(attempt, 500); return; }
       releasePending = false;
       releaseFocus = document.activeElement;
-      try { releaseDialog.showModal(); releaseDismiss.focus({preventScroll:true}); try { localStorage.setItem('rally.release.notice.' + releaseNotice.id, '1'); } catch {} }
+      try { releaseDialog.showModal(); sections.scrollTop = 0; releaseClose.focus({preventScroll:true}); try { localStorage.setItem('rally.release.notice.' + releaseNotice.id, '1'); } catch {} }
       catch { releaseFocus = null; showToast('已更新到新版：' + releaseNotice.summary); }
     };
     attempt();
@@ -117,8 +122,7 @@ export function initPWA({ fullscreenButton, landscapeButton, showToast = () => {
     } catch { /* The automatic-reload marker still limits this to the current update. */ }
     releasePending = true; scheduleReleaseNotice();
   }
-  releaseDialog.querySelector('.release-close').addEventListener('click', closeReleaseNotice);
-  releaseDismiss.addEventListener('click', closeReleaseNotice);
+  releaseClose.addEventListener('click', closeReleaseNotice);
   releaseDialog.addEventListener('cancel', event => { event.preventDefault(); closeReleaseNotice(); });
   const updater = supported ? createUpdateClient({serviceWorker:navigator.serviceWorker,storage:updateStorage,version:pageVersion,
     isSafe:context => !matchActive && isSafeToUpdate(context),
