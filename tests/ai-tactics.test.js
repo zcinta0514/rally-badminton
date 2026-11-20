@@ -178,3 +178,31 @@ test('only easy and medium AI telegraph their planned ordinary smashes before co
     assert.ok(smashes>0,level);
   }
 });
+
+function rushAfterHighServe(hell, habit){
+ const counts={high:0,flat:0,drop:0,smash:0,miss:0};
+ for(let i=1;i<=96;i++){
+  const s=game.createMatch({challenge:hell?'hell':null,seed:Math.imul(i,2654435761)>>>0});
+  s._netRush=[0,habit];
+  for(let f=0;f<500 && s.hitId<2 && !['point','over'].includes(s.phase);f++){
+   const human=s.phase==='serve'?{shot:'clear',charge:.55}: {z:-1,shot:'drop'};
+   game.stepMatch(s,[human,game.aiInput(s,1,'hard')],1/120);
+  }
+  const h=s.lastShotInfo;
+  counts[h?.playerSlot!==1?'miss':h.type==='clear'?(h.charge>.5?'flat':'high'):h.type]++;
+ }
+ return counts;
+}
+
+test('both expert opponents vary the first high serve return and learn after one rush', () => {
+  for (const hell of [false, true]) {
+    const first = rushAfterHighServe(hell, 0);
+    const learned = rushAfterHighServe(hell, 1);
+    for (const returns of [first, learned]) {
+      assert.equal(returns.miss, 0);
+      assert.ok(returns.high > 15 && returns.flat > 15 && returns.drop > 0);
+    }
+    assert.ok(first.smash < 20 && learned.smash < first.smash);
+    assert.ok(learned.high + learned.flat > first.high + first.flat);
+  }
+});
