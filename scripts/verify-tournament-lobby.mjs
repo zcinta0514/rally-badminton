@@ -26,17 +26,20 @@ async function fits(selector,minHeight=0){
   const size=page.viewportSize();
   assert.ok(bounds.x>=-1&&bounds.y>=-1&&bounds.x+bounds.width<=size.width+1&&bounds.y+bounds.height<=size.height+1,selector+' fits viewport '+JSON.stringify(bounds));
   assert.ok(bounds.height>=minHeight,selector+' touch height');
-  const clipped=await page.locator(selector).evaluate(e=>{
-    const r=e.getBoundingClientRect();const issues=[];
-    for(let p=e.parentElement;p;p=p.parentElement){const s=getComputedStyle(p),b=p.getBoundingClientRect();
-      if(/hidden|auto|scroll|clip/.test(s.overflowX)&&(r.left<b.left-1||r.right>b.right+1))issues.push(p.id+' clips horizontally');
-      if(/hidden|auto|scroll|clip/.test(s.overflowY)&&(r.top<b.top-1||r.bottom>b.bottom+1))issues.push(p.id+' clips vertically');
-    }return issues;
-  });assert.deepEqual(clipped,[],selector+' is not clipped by an ancestor');
+  const blocked=await page.locator(selector).evaluate(element=>{
+    const box=element.getBoundingClientRect();
+    const probes=[[.5,.5],[.1,.5],[.9,.5],[.5,.1],[.5,.9]];
+    return probes.flatMap(([x,y])=>{
+      const hit=document.elementFromPoint(box.left+box.width*x,box.top+box.height*y);
+      return element.contains(hit)?[]:[{x,y,hit:hit?.id||hit?.tagName||null}];
+    });
+  });assert.deepEqual(blocked,[],selector+' receives pointer input across its visible bounds');
 }
 try {
   await page.goto(process.env.RALLY_QA_URL || app.url,{waitUntil:'networkidle',timeout:60000});
   await page.locator('#loading').waitFor({state:'hidden',timeout:60000});
+  const dismissNotice = page.locator('#dismiss-playtest-notice');
+  if (await dismissNotice.isVisible()) await dismissNotice.click();
   report.fonts=await page.evaluate(async()=>{
     await document.fonts.ready;
     return {faces:[...document.fonts].map(face=>({family:face.family,status:face.status})),
