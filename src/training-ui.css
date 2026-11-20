@@ -78,10 +78,18 @@ body[data-training-contact=ready] #game-controls [data-training-recommended] .ke
   #training-hint { font-size:11px; }
 }
 @media (orientation:landscape) and (max-height:360px) {
+  body[data-screen=menu] #menu[data-entry=home] { --notice-half-width:70px; }
+  body[data-screen=menu] #menu #open-playtest-notice { width:calc(2 * var(--notice-half-width)); }
   body[data-screen=menu] #menu[data-entry=home] h1 { display:flex; align-items:baseline; gap:6px; font-size:38px; }
-  body[data-screen=menu] #menu[data-entry=home] #home-actions { gap:0; }
+  body[data-screen=menu] #menu[data-entry=home] #home-actions {
+    gap:0;
+    max-width:calc(50vw - var(--chrome-left) - var(--notice-half-width) - 6px);
+  }
   body[data-screen=menu] #menu[data-entry=home] .lobby-action { min-height:44px; padding-block:5px; font-size:20px; }
   body[data-screen=menu] #menu[data-entry=home] #mode-setup { padding-block:2px; }
+}
+@media (orientation:landscape) and (max-height:300px) {
+  body[data-screen=menu] #menu[data-entry=home] { --notice-half-width:60px; }
 }
 @media (orientation:portrait) {
   #training-ui { --rail-left:max(10px,var(--safe-left)); --rail-right:max(10px,var(--safe-right)); }
