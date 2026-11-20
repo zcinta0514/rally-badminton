@@ -28,7 +28,7 @@ import { createLeaderboard, getLeaderboardURL, resultRecordText } from './leader
 import { openPeerRoom } from './peer-network.js';
 import { createPeerRecords } from './peer-records.js';
 import { resolveShotAim, toWorldInput } from './play-input.js';
-import { createMatch, getScoringRules, getDifficultyProfile, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, RULES_VERSION, ROLES, predictLanding, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
+import { createMatch, getScoringRules, getDifficultyProfile, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, RULES_VERSION, ROLES, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
 
 const $=id=>document.getElementById(id);
 const demoMode=globalThis.RALLY_CONFIG?.demoMode===true;
@@ -662,12 +662,13 @@ function relativeMessage(text){
   const team=localTeam(state,side), own=state?.format==='doubles'?'我方':'你';
   return String(text||'').replace(/近场/g,team===0?own:'对方').replace(/远场/g,team===1?own:'对方');
 }
-function shotGuidance(state){
-  const input=controls.sample(),shot=input.prepare||selectedShot;
+function shotGuidance(state,input=controls.sample()){
+  const shot=input.prepare||selectedShot;
   const localRequest=input.prepare?{shot,aim:dragAim??aim,aimDepth:dragDepth,charge:input.charge}:
     lastShotRequest||{shot,aim,aimDepth:0,charge:0};
   const request={...localRequest,aim:localRequest.aim*(localTeam(state,side)===0?1:-1)};
-  return {landing:predictLanding(state),intercept:getInterceptAdvice(state,side,request),
+  const intercept=getInterceptAdvice(state,side,request);
+  return {landing:intercept.landing,intercept,
     availability:getShotAvailability(state,side,request),
     target:getShotTarget(state,side,request),
     shot,prepare:input.prepare,charge:input.charge,aim:localRequest.aim,aimDepth:localRequest.aimDepth};
@@ -853,12 +854,16 @@ try{
         arenaAudio.setListener(view.camera.position);
         arenaAudio.update(state,true);
       }
+      const input=controls.sample();
+      const held=input.prepare ? worldInput(input) : null;
+      const liveStroke=trainingPlaying && (state.training.stage==='feed' ||
+        (state.training.stage==='ready' && state.phase==='serve'));
+      const guidanceStart=performance.now();
+      const info=liveStroke ? shotGuidance(state,input) : {};
+      guidanceMs=performance.now()-guidanceStart;
       const renderStart=performance.now();
-      const held=trainingPlaying && controls.activeShot ? worldInput(controls.sample()) : null;
-      const aiming=held && (state.training.stage==='feed' || (state.phase==='serve' && state.training.stage==='ready'));
       view.render(state,0,Math.min(elapsed,.1),{
-        prepare:aiming ? held.prepare : null,
-        target:aiming ? getShotTarget(state,0,held) : null,
+        ...info,
         trainingTarget:state.training.target,
         trainingTargets:state.training.targets,
         trainingActiveTarget:state.training.returnShot?.technique,

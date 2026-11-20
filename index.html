@@ -198,7 +198,7 @@
     </div>
   </main>
   <footer class="lobby-update" aria-label="游戏版本与更新">
-    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.27.0</a>
+    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.27.1</a>
     <button id="lobby-history" type="button">近期更新</button>
     <button id="lobby-check-update" type="button">检查更新</button>
   </footer>
@@ -223,13 +223,13 @@
             <option value="defense">接杀</option><option value="smash">定点击杀</option><option value="serve">定点发球</option>
           </select>
         </label>
-        <label data-feed-field>来球力度
+        <label data-feed-only>来球力度
           <select id="training-power"><option value="0.8">轻</option><option value="1" selected>中</option><option value="1.2">重</option></select>
         </label>
-        <label data-feed-field>喂球间隔
+        <label data-feed-only>喂球间隔
           <select id="training-interval"><option value="0.6">0.6 秒</option><option value="1.5" selected>1.5 秒</option><option value="3">3.0 秒</option></select>
         </label>
-        <label data-feed-field>喂球线路
+        <label data-feed-only>喂球线路
           <select id="training-line"><option value="right">右路</option><option value="left">左路</option><option value="alternate">左右交替</option></select>
         </label>
         <label>落点目标
@@ -239,7 +239,7 @@
       <div class="training-launch">
         <div class="training-instructions">
           <p id="training-hint"></p>
-          <p id="training-gestures">回合中轻点沿当前选线，初始为中路。横拖选左右，上拖更深，下拖更短。按住蓄力，松手击球。</p>
+          <p id="training-gestures"><span data-feed-only>青圈看预计落点，琥珀弧看接球位置。</span>回合中轻点沿当前选线，初始为中路。横拖选左右，上拖更深，下拖更短。按住蓄力，松手击球。</p>
         </div>
         <button id="training-start" type="button">开始连练 <span aria-hidden="true">↗</span></button>
       </div>
