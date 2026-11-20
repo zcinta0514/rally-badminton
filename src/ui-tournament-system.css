@@ -673,3 +673,11 @@ body[data-screen=menu] #menu #open-playtest-notice:is(:hover,:focus-visible) { b
   #settings-court { height:100%; }
   #match-settings-panel .settings-grid { grid-template-columns:minmax(0,1fr); }
 }
+
+#camera-mode { width:auto; margin:0; }
+.settings-card label[for=follow-distance] { display:flex; justify-content:space-between; }
+#fatigue-edge { position:fixed; inset:0; pointer-events:none;
+  background:linear-gradient(rgb(130 35 24 / calc(.23 * var(--exhaustion, 0))),rgb(130 35 24 / calc(.23 * var(--exhaustion, 0)))),rgb(65 65 62 / .38);
+  -webkit-backdrop-filter:grayscale(.75) blur(1.4px); backdrop-filter:grayscale(.75) blur(1.4px);
+  mask-image:radial-gradient(ellipse 73% 72% at 50% 53%, transparent 76%, black 100%);
+  transition:opacity .25s ease; }

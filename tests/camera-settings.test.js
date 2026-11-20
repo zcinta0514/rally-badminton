@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { CAMERA_DEFAULTS, normalizeCameraSettings, readCameraSettings, saveCameraSettings } from '../src/camera-settings.js';
 import { fitCourtViewport, projectCourtPoint } from '../src/court-layout.js';
+import { followCourtViewport } from '../src/follow-camera.js';
 import * as THREE from 'three';
 import { CourtView } from '../src/view.js';
 
 test('camera settings reject invalid storage and clamp the usable ranges', () => {
-  assert.deepEqual(normalizeCameraSettings({ pitchDegrees: -5, zoom: 8, yaw: 30 }), { pitchDegrees: 18, zoom: 1.12 });
+  assert.deepEqual(normalizeCameraSettings({ pitchDegrees: -5, zoom: 8, yaw: 30 }), { ...CAMERA_DEFAULTS, pitchDegrees: 18, zoom: 1.12 });
   for (const value of [null, [], 'wrong', { pitchDegrees: NaN, zoom: Infinity }]) {
     assert.deepEqual(normalizeCameraSettings(value), CAMERA_DEFAULTS);
   }
@@ -15,7 +16,7 @@ test('camera settings reject invalid storage and clamp the usable ranges', () =>
 });
 
 test('the actual view updates its level projection immediately when a saved pitch or zoom changes', () => {
-  const view = { width: 844, height: 390, mode: 'match', camera: new THREE.PerspectiveCamera(45, 1, .1, 100), updateCamera: CourtView.prototype.updateCamera };
+  const view = { width: 844, height: 390, mode: 'match', camera: new THREE.PerspectiveCamera(45, 1, .1, 100), applyCourtLayout: CourtView.prototype.applyCourtLayout, updateCamera: CourtView.prototype.updateCamera };
   for (const side of [0, 1]) {
     view.cameraSide = side;
     CourtView.prototype.setCameraSettings.call(view, { pitchDegrees: 38, zoom: 1.08 });
@@ -48,7 +49,7 @@ test('local camera preferences survive a reload and storage denial stays usable'
   const values = new Map();
   const storage = { setItem: (key, value) => values.set(key, value), getItem: (key) => values.get(key) };
   saveCameraSettings({ pitchDegrees: 36, zoom: .91 }, storage);
-  assert.deepEqual(readCameraSettings(storage), { pitchDegrees: 36, zoom: .91 });
+  assert.deepEqual(readCameraSettings(storage), { ...CAMERA_DEFAULTS, pitchDegrees: 36, zoom: .91 });
   assert.doesNotThrow(() => saveCameraSettings(CAMERA_DEFAULTS, { setItem() { throw new Error('private'); } }));
 });
 
@@ -89,4 +90,68 @@ test('pitch and zoom change the projection while both sides remain level and the
     const close = fitCourtViewport(width, height, 0, { camera: { pitchDegrees: 24, zoom: 1.12 } });
     assert.ok(close.scale > wide.scale * 1.1, 'distance control visibly changes the scene scale');
   }
+});
+
+test('nearest follow distance keeps the player and a fast high return clear on either baseline', () => {
+  for (const [width, height] of [[568,320],[844,390],[390,844]]) for (const side of [0,1]) {
+    const sign = side === 0 ? 1 : -1;
+    const base = fitCourtViewport(width,height,side);
+    const hud = { left: width*.4, right: width*.6, bottom: height*.17 };
+    const settings = { ...CAMERA_DEFAULTS, mode: 'follow', distance: 9 };
+    let layout;
+    for (let frame=0;frame<100;frame++) {
+      const t = frame/99;
+      const player = { x: 2.7-5.4*t, y: 0, z: sign*(.8+5.5*t) };
+      const shuttle = { x: -2.7+5*t, y: 1.3+7*Math.sin(Math.PI*t), z: sign*(-5+11*t),
+        active: true, vx: 3, vy: 13*Math.cos(Math.PI*t), vz: sign*6.6 };
+      layout = followCourtViewport(base,layout,player,shuttle,settings,1/60,hud);
+      const view = {camera:new THREE.PerspectiveCamera(45,1,.1,100)};
+      CourtView.prototype.applyCourtLayout.call(view,layout);
+      for (const p of [player,shuttle]) {
+        const screen = projectCourtPoint(p,layout);
+        const actual = new THREE.Vector3(p.x,p.y,p.z).project(view.camera);
+        assert.ok(Math.abs(screen.x-(1+actual.x)*width/2)<1e-7);
+        assert.ok(Math.abs(screen.y-(1-actual.y)*height/2)<1e-7);
+        assert.ok(screen.x > width*.1 && screen.x < width*.9);
+        assert.ok(screen.y > hud.bottom && screen.y < height*.91);
+      }
+    }
+  }
+});
+
+test('follow camera settles after a sprint and tracks the new service box without a cut', () => {
+  const base = fitCourtViewport(844,390);
+  for (const fps of [30,60,120]) {
+    const player = {x:0,z:4}, shuttle = {x:0,y:2,z:1};
+    let view;
+    const frame = () => view = followCourtViewport(base,view,player,shuttle,CAMERA_DEFAULTS,1/fps);
+    for (let i=0;i<fps;i++) { player.x += 2.5/fps; frame(); }
+    const target = player.x*.9;
+    assert.ok(target-view.origin.x < .32, 'camera stays close during the sprint');
+    for (let i=0;i<fps;i++) {
+      const before = view.origin.x;
+      frame();
+      assert.ok(view.origin.x >= before && view.origin.x <= target, 'no recoil at a stop');
+    }
+    const before = view.origin.x;
+    player.x = -2.5;
+    frame();
+    assert.ok(Math.abs(view.origin.x-before) < .75, 'pan accelerates into the new position');
+    for (let i=0;i<fps;i++) frame();
+    assert.ok(Math.abs(view.origin.x-player.x*.9)<.001);
+  }
+});
+
+test('service-box teleport after landing does not snap the lens to the next framing distance', () => {
+  const base = fitCourtViewport(844,390);
+  const settings = {...CAMERA_DEFAULTS,distance:9};
+  const player = {x:2.5,z:5}, shuttle = {x:1,y:.2,z:3,active:true};
+  const before = followCourtViewport(base,null,player,shuttle,settings,1/60);
+  shuttle.active = false;
+  const landing = followCourtViewport(base,before,player,shuttle,settings,1/60);
+  Object.assign(player,{x:-2.5,z:3});
+  Object.assign(shuttle,{x:-2.5,y:1,z:3});
+  const serve = followCourtViewport(base,landing,player,shuttle,settings,1/60);
+  assert.ok(Math.abs(landing.distance-before.distance)<.03);
+  assert.ok(Math.abs(serve.distance-landing.distance)<.25);
 });
