@@ -92,10 +92,10 @@ test('portrait rear-corner stamina stays below the foot anchor and clears fixed 
   assert.ok(placed.x - 38 >= bounds.left);
 });
 
-test('match length scales actual running and serving costs for every role', () => {
+test('match lengths preserve the same running and serving costs for every role', () => {
   for (const role of Object.keys(ROLES)) {
     let baseRun, baseServe;
-    for (const [target, scale] of [[5, 1], [10, .92], [11, .90], [21, .80]]) {
+    for (const target of [5, 10, 11, 21]) {
       const state = createMatch({ target, roles: [role, role] });
       run(state, .2, [{ x: 1 }, {}]);
       const running = ROLES[role].maxStamina - state.players[0].stamina;
@@ -105,8 +105,8 @@ test('match length scales actual running and serving costs for every role', () =
       const serving = service.lastShotInfo.staminaBefore - service.lastShotInfo.staminaAfter;
       if (target === 5) { baseRun = running; baseServe = serving; }
       assert.ok(running > 0 && serving > 0);
-      near(running, baseRun * scale);
-      near(serving, baseServe * scale);
+      near(running, baseRun);
+      near(serving, baseServe);
     }
   }
 });

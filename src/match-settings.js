@@ -1,7 +1,7 @@
 import { ROLES, getScoringRules, getDifficultyProfile, staminaEffects, movementStaminaRate, shotStaminaCost } from '../shared/game.js';
 import { normalizeArenaPreferences, saveArenaPreferences, readArenaPreferences } from './arena-preferences.js';
 import { LOBBY_TRACKS } from './lobby-tracks.js';
-import { staminaCostScale, STAMINA_TUNING } from '../shared/stamina.js';
+import { STAMINA_TUNING } from '../shared/stamina.js';
 
 export function describeRole(role) {
   const r = ROLES[role] || ROLES.balanced;
@@ -19,7 +19,7 @@ export function describeMatch(state, side = 0, mode = 'ai') {
     '鱼跃救球：远处低球触发；落地、撑地起身共约0.7秒，两次至少间隔3秒，次数不限。',
     '每次回球尽可能使用技能，高球可连续重炮，扑救不叠加主动技能。移动与击球按键沿用你的布局。',
   ].join('\n');
-  const staminaRule = '本局跑动与击球耗费为 5 分局的 ' + Math.round(staminaCostScale(state) * 100) + '%';
+  const staminaRule = '各局制每次跑动和击球的耗费相同。回合越多，累计耗费越高。力竭时跑速略降，高点杀球下压不足，更容易失误。';
   if(state.format==='doubles'){
     const team=side%2,own=ROLES[state.players[side].role],partner=ROLES[state.players[side^2].role],rule=getScoringRules(state);
     const levels={easy:'入门',medium:'进阶',hard:'高手'};

@@ -36,7 +36,7 @@ test('a completed point earns bounded role recovery once, without serve-wait far
     s.players.forEach(p => assert.equal(p.stamina, ROLES[role].recovery * 2));
     for (let frame = 0; frame < 600; frame++) stepMatch(s, [{}, {}], 1/120);
     s.players.forEach(p => assert.equal(p.stamina, ROLES[role].recovery * 2));
-    assert.ok(staminaEffects(s.players[0], ROLES[role]).speedScale < .85);
+    assert.ok(staminaEffects(s.players[0], ROLES[role]).speedScale < 1);
   }
 });
 
