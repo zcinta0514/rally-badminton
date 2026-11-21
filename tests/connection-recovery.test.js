@@ -403,15 +403,15 @@ test('usage hooks count actual AI starts and restarts while menu autoplay remain
   assert.ok(f.usageEvents.some(event=>event[0]==='leave'));
 });
 
-test('hell challenge starts locally, exposes asymmetric targets and retries in the same mode', async () => {
+test('hell challenge starts locally, shows five-point targets and retries in the same mode', async () => {
   const f = await fixture();
   f.chooseSetting('hell-roles','swift');
   f.startHell(); f.draw();
   assert.equal(f.liveState.players[0].role,'swift');
   assert.equal(f.document.body.dataset.screen, 'match');
   assert.equal(f.liveState.ruleset, 'quick');
-  assert.match(f.element('match-label').textContent, /你 2 分 \/ 对手 5 分/);
-  assert.equal(f.element('score-self').textContent,'0/2');
+  assert.match(f.element('match-label').textContent, /先得 5 分即胜/);
+  assert.equal(f.element('score-self').textContent,'0/5');
   assert.equal(f.element('score-other').textContent,'0/5');
   assert.equal(f.element('hell-status').hidden,false);
   game.finishMatch(f.liveState,0,'通关','scored');f.draw();

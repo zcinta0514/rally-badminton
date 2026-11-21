@@ -1,6 +1,6 @@
 import { sampleShuttleFlight } from './shuttle-flight.js';
 
-export const HELL = Object.freeze({ targets: Object.freeze([2, 5]), chargeTime: .22, recovery: .18,
+export const HELL = Object.freeze({ scoring: Object.freeze({ target: 5, winBy: 1, cap: 5 }), chargeTime: .22, recovery: .18,
   divePrepare: .08, diveTime: .22, diveDuration: .7, diveSpeed: 18, diveInterval: 3, recoveryMoveScale: .85,
   reaction: .016, error: .02 });
 
@@ -27,7 +27,7 @@ export function crowdRequest(state) {
 export function hellStatus(state) {
   const h = state?.challenge;
   if (!h || h.kind !== 'hell') return null;
-  if (!['serve', 'rally', 'paused', 'countdown'].includes(state.phase)) return { key: 'idle', title: '地狱挑战', hint: '你得 2 分获胜 · 对手得 5 分获胜' };
+  if (!['serve', 'rally', 'paused', 'countdown'].includes(state.phase)) return { key: 'idle', title: '地狱挑战', hint: '双方先得 5 分即胜' };
   if (h.rescue && !h.rescue.hit) return { key: 'rescue', title: '鱼跃救球', hint: '难接低球才扑救 · 抓住起身空当' };
   if (h.warning) return { key: 'charge', title: '重炮蓄力', hint: '线路已锁定 · 提前站位，挡回后反攻' };
   if (h.active?.hitId === state.hitId && state.shuttle.lastHit === h.bossSide) {
@@ -41,7 +41,7 @@ export function hellStatus(state) {
   if (state.time < h.recoverUntil) return { key: 'recovery', title: '破绽出现', hint: '对手恢复中 · 趁机打空当' };
   if (h.spotlight) return { key: 'recovery', title: '看台助威', hint: '下一记幻影球将显出真身' };
   if (!h.crowdEarned) return { key: 'idle', title: '看台点招 · ' + crowdNames[crowdRequest(state)], hint: '用指定球路回击，破解下一记幻影' };
-  return { key: 'idle', title: '地狱人机 · 无限体力', hint: '拉开落点 · 识破技能 · 抓住两次机会' };
+  return { key: 'idle', title: '地狱人机 · 无限体力', hint: '拉开落点 · 识破技能 · 抓住回位空当' };
 }
 
 // Presentation only: fake flight points never enter collision, prediction or AI.

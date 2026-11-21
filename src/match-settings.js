@@ -12,7 +12,7 @@ export function describeRole(role) {
 }
 export function describeMatch(state, side = 0, mode = 'ai') {
   if (state.challenge?.kind === 'hell') return [
-    '地狱挑战 · 双方从0分开始；你先得2分获胜，对手先得5分获胜，无需净胜。',
+    '地狱挑战 · 双方先得5分即胜，4:4 时一球定胜负。',
     '你：' + ROLES[state.players[side].role].label + '型，每分回满体力；对手无限体力、高手决策、移动加快。',
     '幻影球：一真三假，真球有实线尾迹，虚影过网前消散，包含短吊与平抽变化。',
     '重炮：提前蓄力并锁定线路；挡回后，利用对手回位减速反攻。',

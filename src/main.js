@@ -845,9 +845,9 @@ function updateUI(info,state){
   setText('games-other',previousGames.map(score=>String(score[1-team]).padStart(2)).join(' '));
   setText('name-self',nameSelf);setText('name-other',nameOther);
   setText('role-self',ROLES[self.role].label+'型');setText('role-other',state.challenge?'体力 ∞':ROLES[opponent.role].label+'型');
-  setText('score-self',state.challenge?state.score[team]+'/2':state.score[team]);setText('score-other',state.challenge?state.score[1-team]+'/5':state.score[1-team]);
+  setText('score-self',state.challenge?state.score[team]+'/'+state.target:state.score[team]);setText('score-other',state.challenge?state.score[1-team]+'/'+state.target:state.score[1-team]);
   const matchType=cupMatch?cupMatch.label:doubles?(mode==='ai'?'人机双打':'好友双打'):mode==='ai'?(state.netDragSide===side?'人机 · 网前试打':'人机对战'):room?.rules?.finale==='father-son'?'父子局':'普通对局';
-  const matchLabel=state.challenge?'地狱挑战 · 你 2 分 / 对手 5 分':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[team]}:${state.games[1-team]} · ${matchType}`:`${state.target} 分制 · ${matchType}`;
+  const matchLabel=state.challenge?'地狱挑战 · 先得 5 分即胜':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[team]}:${state.games[1-team]} · ${matchType}`:`${state.target} 分制 · ${matchType}`;
   const scoring=getScoringRules(state);
   const scoringPhase=['paused','countdown'].includes(state.phase)?state.pause.previousPhase:state.phase;
   const extraPoints=!state.challenge&&['serve','rally','point'].includes(scoringPhase)&&Math.min(...state.score)>=scoring.target-1;
@@ -857,7 +857,7 @@ function updateUI(info,state){
   setText('match-label',matchLabel+(scoringHint?` · ${scoringHint}`:''));
   setText('match-message',state.phase==='serve'?(state.server===team?`${doubles&&state.serverPlayer!==side?'队友':'你'}发球 · ${state.service?.court==='left'?'左':'右'}发球区`:'对手发球'):relativeMessage(state.message));
   setText('rally',state.phase==='rally'?`${state.rally} 拍回合`:`第 ${state.pointId+1} 分`);
-  if(mode==='ai')setText('connection',cupMatch?'杯赛单打':state.challenge?'2 / 5 非对称挑战':'本地练习');
+  if(mode==='ai')setText('connection',cupMatch?'杯赛单打':state.challenge?'地狱五分挑战':'本地练习');
   paintShotControls(info,info.availability.canSmash,state.phase);
   const lane=info.aim,depth=info.aimDepth;
   const quality=info.target?.quality;

@@ -14,11 +14,13 @@ try {for(const [width,height] of [[844,390],[667,375]]) {
  await page.goto(app.url);await page.locator('#loading').waitFor({state:'hidden'});
  await page.locator('#dismiss-playtest-notice').click();
  await page.locator('#open-solo').click();await page.locator('#start-hell').click();
+ assert.deepEqual(await page.locator('.hell-contract strong').allTextContents(),['5 分','5 分']);
  assert.equal(await page.locator('#hell-more').evaluate(e=>e.open),false);
  await page.locator('#hell-more summary').click();assert.match(await page.locator('#hell-more').innerText(),/3秒/);
  await page.screenshot({path:`artifacts/hell-pressure/details-${width}.png`});
  await page.locator('#start-hell-confirm').click();
  await page.waitForFunction(()=>rallyDiagnostics.challenge?.kind==='hell'&&!rallyDiagnostics.entrance.active);
+ for(const id of ['score-self','score-other']) assert.equal(await page.locator('#'+id).innerText(),'0/5');
  await page.locator('[data-shot="clear"]').click();await page.waitForTimeout(3500);
  assert.ok(await page.evaluate(()=>rallyDiagnostics.challenge));
  await page.screenshot({path:`artifacts/hell-pressure/match-${width}.png`});
