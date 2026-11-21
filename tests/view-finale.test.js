@@ -12,6 +12,8 @@ test('court finale uses actual winner identity, projects both labels, and restor
   view.edgeIndicator={hidden:false};view.renderer={render(){}};
   view.updateCamera=side=>{view.cameraSide=side;};
   const s=createMatch(),before=structuredClone(s),cameraSettings={pitch:28,zoom:1};view.cameraSettings=cameraSettings;
+  // A left-handed competitor enters with its match rig still mirrored.
+  view.players[0].root.scale.x=-1;
   for(const winner of [0,1]){
     view.renderFinale(s,{winner,loser:1-winner,age:1.4},1);
     const leftLine=new THREE.Vector3(-3.05,.03,4).project(view.camera);
@@ -21,6 +23,11 @@ test('court finale uses actual winner identity, projects both labels, and restor
     assert.ok(loser.root.userData.pose.joints.head.y<.3);
     assert.ok(victor.root.userData.pose.joints.head.y>1.6);
     assert.ok(loser.root.position.x<victor.root.position.x);
+    for(const [player,opponent] of [[loser,victor],[victor,loser]]){
+      player.root.updateMatrixWorld(true);
+      const forward=new THREE.Vector3(0,0,-1).transformDirection(player.root.matrixWorld);
+      assert.ok(forward.x*(opponent.root.position.x-player.root.position.x)>0,'face the opponent for either racket hand');
+    }
     for(const p of view.finaleAnchors)assert.ok(p.x>0&&p.x<844&&p.y>0&&p.y<390);
     assert.equal(view.shuttle.visible,false);assert.equal(loser.racket.visible,false);
     view.clearFinale();assert.ok(view.players.every(p=>p.racket.visible&&p.ground.visible));

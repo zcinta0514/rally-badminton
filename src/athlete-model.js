@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { makeAthleteSkin } from './athlete-skin.js';
+import { makeAthleteShorts } from './athlete-shorts.js';
 import { makeRacket } from './racket-visual.js';
 
 // Original vertex-coloured clothing and accessories. The jersey and limbs use
@@ -72,13 +73,11 @@ export function makeAthleteModel(root,bones,index) {
   const jerseyColor=(x,y,z)=>{
     if(y>.325)return colors.dark;
     if(y<-.232)return colors.accent;
-    if(Math.abs(x)>.16&&y<.23)return colors.dark;
-    if(z<-.06&&x>.06&&y<.24&&y>-.20)return colors.accent;
     return colors.shirt;
   };
   const jersey=loft([
     [-.265,.165,.114],[-.23,.169,.115],[-.15,.173,.108],[-.03,.184,.111],
-    [.08,.206,.12],[.20,.234,.126],[.28,.247,.125],[.315,.197,.105],
+    [.08,.206,.12],[.20,.234,.126],[.285,.249,.125],[.324,.202,.105],
     [.335,.092,.065],[.35,.065,.057],[.36,.061,.054]
   ],jerseyColor,24);
   const torsoGeometry=join([jersey,
@@ -88,7 +87,10 @@ export function makeAthleteModel(root,bones,index) {
     box([.024,.12,.003],[.03,.105,.125],colors.white)
   ]);
   const skin=makeAthleteSkin(root,material,torsoGeometry,colors);
-  const neck=mesh(bones.neck,loft([[-.072,.056,.049],[.02,.048,.044],[.097,.05,.044]],colors.skin,16),'neck');
+  const neck=mesh(bones.neck,loft([
+    [-.072,.080,.060,0,.006],[-.025,.064,.052,0,.004],[.015,.053,.045],
+    [.060,.047,.041,0,-.004],[.096,.047,.042,0,-.010],[.119,.042,.038,0,-.014]
+  ],colors.skin,20),'neck');
   const headParts=[loft([
     [-.108,.038,.039,0,-.018],[-.092,.055,.05,0,-.013],[-.065,.067,.063,0,-.01],
     [-.026,.078,.076,0,-.004],[.013,.083,.086],[.055,.08,.083],
@@ -113,14 +115,11 @@ export function makeAthleteModel(root,bones,index) {
   }
   hair.computeVertexNormals();headParts.push(hair);
   const head=mesh(bones.head,join(headParts),'head');
-  const shorts=mesh(bones.pelvis,loft([[-.14,.20,.125],[-.085,.223,.133],[-.005,.202,.123],[.035,.17,.11]],
-    (x,y)=>y>.003?colors.dark:0x203f4a,20),'shorts-waist');
-  const hems=[],hands={},feet={};
+  const shorts=makeAthleteShorts(material,colors);
+  shorts.userData.bindToBody(skin.skeleton,['skin-pelvis','skin-left-leg-upper','skin-right-leg-upper']);
+  root.add(shorts);
+  const hands={},feet={};
   for(const name of ['left','right']){
-    const hem=mesh(bones[`${name}Hip`],loft([[-.20,.106,.115],[-.135,.12,.117],
-      [.065,.103,.099],[.115,.103,.094],[.135,.105,.096]],
-      (x,y)=>y>.11?colors.accent:Math.abs(x)>.08?colors.dark:0x203f4a,20),`${name}-shorts-leg`);
-    hems.push({name,mesh:hem,offset:.13});
     const shoeParts=[
       // The sole and upper have a long toe box and a close-fitting raised heel.
       loft([[-.076,.06,.145,0,-.071],[-.062,.074,.156,0,-.074],[-.045,.073,.155,0,-.074]],colors.accent,20),
@@ -158,5 +157,5 @@ export function makeAthleteModel(root,bones,index) {
     hands[name]=mesh(bones[`${name}Wrist`],join(handParts),`${name}-hand`);
   }
   const racket=makeRacket(colors);root.add(racket);
-  return {skin,shorts,hems,hands,feet,head,neck,racket};
+  return {skin,shorts,hands,feet,head,neck,racket};
 }
