@@ -5,16 +5,23 @@ export const HELL = Object.freeze({ targets: Object.freeze([2, 5]), chargeTime: 
   reaction: .016, error: .02 });
 
 export function createHellChallenge(seed = 1) {
-  return { kind: 'hell', bossSide: 1, paper: { limit: 1 + (seed & 1), count: 0, nextPoint: (seed >>> 1) % 2,
+  return { kind: 'hell', bossSide: 1, crowdOffset: (seed >>> 7) % 3, crowdEarned: false, spotlight: false, paper: { limit: 1 + (seed & 1), count: 0, nextPoint: (seed >>> 1) % 2,
       delay: .16 + ((seed >>> 2) % 25) / 100, liveTime: 0, at: null, side: (seed & 128) ? 1 : -1 }, warning: null,
     active: null, rescue: null, rescueUses: 0, recoverUntil: 0, nextDiveAt: 0,
     counts: { phantom: 0, cannon: 0, rescue: 0, netDrop: 0, drive: 0 } };
 }
 
 export function resetHellRally(challenge) {
+  challenge.crowdEarned = false; challenge.spotlight = false;
   challenge.paper.at = null; challenge.paper.liveTime = 0;
   challenge.warning = null; challenge.active = null; challenge.rescue = null;
   challenge.rescueUses = 0; challenge.recoverUntil = 0; challenge.nextDiveAt = 0;
+}
+
+const crowdShots = ['clear', 'drop', 'smash'];
+const crowdNames = { clear: '高远球', drop: '吊球', smash: '杀球' };
+export function crowdRequest(state) {
+  return crowdShots[((state.challenge.crowdOffset ?? 0) + state.pointId) % crowdShots.length];
 }
 
 export function hellStatus(state) {
@@ -24,6 +31,7 @@ export function hellStatus(state) {
   if (h.rescue && !h.rescue.hit) return { key: 'rescue', title: '鱼跃救球', hint: '难接低球才扑救 · 抓住起身空当' };
   if (h.warning) return { key: 'charge', title: '重炮蓄力', hint: '线路已锁定 · 提前站位，挡回后反攻' };
   if (h.active?.hitId === state.hitId && state.shuttle.lastHit === h.bossSide) {
+    if (h.active.revealed) return { key: 'recovery', title: '看台破影', hint: '这拍只剩真球，跟住落点' };
     return ['phantom', 'netDrop', 'drive'].includes(h.active.kind)
       ? { key: 'phantom', title: '四重幻影', hint: '追踪实线真球 · 虚影过网前消散' }
       : h.active.kind === 'cannon'
@@ -31,13 +39,15 @@ export function hellStatus(state) {
         : { key: 'recovery', title: '扑救回球', hint: '对手短暂恢复 · 尽快组织进攻' };
   }
   if (state.time < h.recoverUntil) return { key: 'recovery', title: '破绽出现', hint: '对手恢复中 · 趁机打空当' };
+  if (h.spotlight) return { key: 'recovery', title: '看台助威', hint: '下一记幻影球将显出真身' };
+  if (!h.crowdEarned) return { key: 'idle', title: '看台点招 · ' + crowdNames[crowdRequest(state)], hint: '用指定球路回击，破解下一记幻影' };
   return { key: 'idle', title: '地狱人机 · 无限体力', hint: '拉开落点 · 识破技能 · 抓住两次机会' };
 }
 
 // Presentation only: fake flight points never enter collision, prediction or AI.
 export function phantomPositions(state) {
   const h = state?.challenge, fx = h?.active;
-  if (!['phantom', 'netDrop', 'drive'].includes(fx?.kind) || fx.hitId !== state.hitId || state.phase !== 'rally' || !state.shuttle.active) return [];
+  if (fx?.revealed || !['phantom', 'netDrop', 'drive'].includes(fx?.kind) || fx.hitId !== state.hitId || state.phase !== 'rally' || !state.shuttle.active) return [];
   const age = state.time - fx.at;
   if (age < 0 || age >= fx.fadeAt) return [];
   const point = sampleShuttleFlight(fx.launch, age);
