@@ -112,11 +112,19 @@ const SCORING_RULES = Object.freeze({
   5: Object.freeze({ target: 5, winBy: 2, cap: 10 }),
   10: Object.freeze({ target: 10, winBy: 2, cap: 15 }),
   11: Object.freeze({ target: 11, winBy: 2, cap: 20 }),
+  15: Object.freeze({ target: 15, winBy: 2, cap: 21 }),
   21: Object.freeze({ target: 21, winBy: 2, cap: 30 }),
 });
 
+export const CUP_TARGETS = Object.freeze([5, 15, 21]);
+
+export function getCupScoringRules(target) {
+  return SCORING_RULES[CUP_TARGETS.includes(target) ? target : 5];
+}
+
 /** Shared by scoring and rule hints; target stays fixed throughout deuce. */
-export function getScoringRules({ ruleset = 'quick', target = 5 } = {}) {
+export function getScoringRules({ ruleset = 'quick', target = 5, players } = {}) {
+  if (players?.[1]?.cup) return getCupScoringRules(target);
   return SCORING_RULES[ruleset === 'standard21' ? 21 : [5, 10, 11, 21].includes(target) ? target : 5];
 }
 
@@ -131,7 +139,7 @@ export function createMatch({ target = 5, roles = ['balanced', 'balanced'], diff
     serverPlayer: 0, receiverPlayer: 1, servicePositions: [0, 0, 1, 1], _contactTie: 0,
     ...(challenge === 'hell' ? { challenge: createHellChallenge(seed) } : {}),
     ...((netDragSide === 0 || netDragSide === 1) ? { netDragSide } : {}),
-    phase: 'serve', time: 0, timer: 0, target: getScoringRules({ ruleset, target }).target,
+    phase: 'serve', time: 0, timer: 0, target,
     ruleset, games: [0, 0], gameNumber: 1, gameScores: [],
     sideChange: { id: 0, at: 0, reason: null, ends: [1, -1] }, _deciderChanged: false,
     score: [0, 0], server: 0, winner: null, endReason: null, message: '你来发球 · 点击任意击球键',
@@ -150,6 +158,8 @@ export function createMatch({ target = 5, roles = ['balanced', 'balanced'], diff
     assist: { level: playerAssist, side: playerAssist === 'none' ? null : assistSide },
     _ai: [null, null], _aiHistory: [[], []], service: null,
   };
+  if (state.players[1].cup) state.ruleset = 'quick';
+  state.target = getScoringRules(state).target;
   startServe(state);
   return state;
 }

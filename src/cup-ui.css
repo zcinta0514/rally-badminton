@@ -73,23 +73,30 @@
 .cup-pairs span:last-child { text-align:right; }
 .cup-pairs small { color:#6b7d75; }
 .cup-mine { background:#daebdd; }
-#cup-dialog.cup-awarding { background:linear-gradient(105deg,#0b2728ef,#12302fbb); color:white; border-color:#d7ba71; }
-#cup-dialog.cup-awarding::backdrop { background:#061d2252; }
-.cup-award { position:relative; display:flex; flex-direction:column; align-items:center; padding:12px; overflow:hidden; }
-#cup-dialog .cup-award .cup-note { color:#fff2ca; font-weight:700; }
-.cup-trophy { width:58px; height:38px; position:relative; margin:12px 0 27px; border-radius:3px 3px 24px 24px; background:linear-gradient(100deg,#a76a26,#ffe89e 43%,#e9b756 77%,#a96d27); animation:cup-lift .8s ease-out both; }
-.cup-trophy::before,.cup-trophy::after { content:""; position:absolute; height:22px; width:15px; top:3px; border:4px solid #eed08a; }
-.cup-trophy::before { left:-12px; border-radius:4px 0 0 12px; }
-.cup-trophy::after { right:-12px; border-radius:0 4px 12px 0; }
-.cup-trophy i { position:absolute; top:100%; left:25px; height:12px; width:8px; background:#f5cd71; }
-.cup-trophy i::after { content:""; position:absolute; bottom:-5px; left:-11px; width:30px; height:6px; background:#eaba61; }
-.cup-ribbons { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
-.cup-ribbons i { position:absolute; left:var(--x); width:5px; height:10px; background:#e7c46b; opacity:0; animation:cup-ribbon 2.8s var(--delay) ease-out forwards; }
-.cup-ribbons i:nth-child(3n) { background:#a3dac7; }
-@keyframes cup-lift { from { opacity:0; transform:translateY(18px); } }
-@keyframes cup-ribbon { 5% { opacity:1; } 100% { opacity:0; transform:translate(14px,220px) rotate(var(--turn)); } }
+body[data-cup-award="true"] > :not(#court, #skip-cup-award) { display:none !important; }
+#skip-cup-award {
+  position:fixed; z-index:80; right:max(16px,env(safe-area-inset-right)); bottom:max(16px,env(safe-area-inset-bottom));
+  min-height:44px; padding:8px 20px; border:1px solid #d6cba4; border-radius:6px;
+  color:#fff8df; background:#12312eeb; font:600 14px/1.2 system-ui; cursor:pointer; touch-action:manipulation;
+}
+#skip-cup-award[hidden] { display:none; }
+.cup-fields { display:grid; grid-template-columns:minmax(110px,1fr) minmax(190px,1fr); gap:16px; }
+.cup-athlete-id,.cup-fields legend { font-size:13px; font-weight:700; }
+.cup-athlete-id input { display:block; width:100%; height:40px; border:1px solid #9fb5a9; border-radius:5px; padding:0 10px; margin-top:5px; color:var(--cup-ink); background:#fff; font:inherit; font-size:16px; }
+.cup-fields fieldset { min-width:0; margin:0; padding:0; border:0; }
+.cup-fields legend { padding:0; margin-bottom:5px; }
+.cup-score-options { display:flex; }
+.cup-score-options label { position:relative; flex:1; }
+.cup-score-options input { position:absolute; opacity:0; }
+.cup-score-options span { display:grid; place-items:center; min-height:40px; border:1px solid #9fb5a9; color:var(--cup-ink); font-size:14px; cursor:pointer; }
+.cup-score-options label + label span { border-left:0; }
+.cup-score-options label:first-child span { border-radius:5px 0 0 5px; }
+.cup-score-options label:last-child span { border-radius:0 5px 5px 0; }
+.cup-score-options input:checked + span { color:white; background:var(--cup-accent); }
+.cup-score-options input:focus-visible + span { outline:3px solid #db851e; outline-offset:-3px; }
+#cup-registration .cup-rules { margin:8px 0; padding:5px 0; }
 @media (max-width:530px) {
-  .cup-cards,.cup-pairs,.cup-duel { grid-template-columns:1fr; }
+  .cup-cards,.cup-pairs,.cup-duel,.cup-fields { grid-template-columns:1fr; }
   #cup-dialog .cup-card { min-height:110px; }
   .cup-card-copy { gap:4px; padding:14px; }
 }
@@ -100,11 +107,15 @@
   .cup-card-copy { padding:12px; gap:4px; }
   .cup-duel,.cup-rules { padding:8px 0; }
 }
-@media (prefers-reduced-motion:reduce) {
-  .cup-trophy,.cup-ribbons i { animation:none; }
-}
 .cup-arrival { margin:8px 0; padding:7px 10px; border-left:3px solid var(--cup-accent); color:var(--cup-accent); background:#e4eddf; font-size:13px; animation:cup-arrive .36s ease-out; }
 @keyframes cup-arrive { from { opacity:0; transform:translateX(-12px); } }
 @media (prefers-reduced-motion:reduce) { .cup-arrival { animation:none; } }
 .cup-next { font-size:13px; line-height:1.55; color:#43605c; margin:12px 0 0; }
 .cup-next strong { color:var(--cup-ink); margin-right:5px; }
+@media (max-height:350px) and (orientation:landscape) {
+  #cup-body:has(#cup-registration) { padding-block:7px; }
+  #cup-dialog:has(#cup-registration) .cup-note { margin:3px 0 6px; font-size:12px; }
+  #cup-registration .cup-rules { margin:5px 0; padding:2px 0; }
+  #cup-registration .cup-rules p { margin:2px 0; font-size:12px; line-height:1.4; }
+  #cup-registration .cup-actions { margin-top:5px; }
+}

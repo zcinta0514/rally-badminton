@@ -389,6 +389,11 @@ const trainingUI=bindTrainingUI({
 });
 let cupSave=null, cupMatch=null, cupCheckpointAt=0;
 let cupStorage;
+const CUP_NAME_KEY='rally.cup.lastName';
+function defaultCupName(){
+  try {return normalizePlayerName(cupStorage?.getItem(CUP_NAME_KEY))||playerProfile?.name||'';}
+  catch {return playerProfile?.name||'';}
+}
 try { cupStorage=window.localStorage; } catch {}
 function readCup() {
   cupSave=readCupSave(cupStorage);
@@ -415,9 +420,33 @@ function checkpointCup() {
   cupCheckpointAt=performance.now();
   return saved;
 }
+function beginCupAward(){
+  view.beginCupAward({name:cupMatch.selfName,eventId:cupSave.draw.eventId});
+  cupMatch.awardTime=0;
+  document.body.dataset.cupAward='true';
+  controls.reset();controls.setEnabled(false);
+  matchSettings?.close();
+  dialog(null);
+  $('skip-cup-award').hidden=false;
+  $('skip-cup-award').focus({preventScroll:true});
+}
+function endCupAward(){
+  if(cupMatch?.awardTime==null)return false;
+  delete cupMatch.awardTime;
+  delete document.body.dataset.cupAward;
+  view.endCupAward();
+  arenaAudio.stopVoices('cup-award');
+  $('skip-cup-award').hidden=true;
+  return true;
+}
+function showChampionRoad(){
+  if(endCupAward())cupUI.open();
+}
+$('skip-cup-award').addEventListener('click',showChampionRoad);
 function leaveCupCourt() {
   if(!cupMatch)return true;
   if(!checkpointCup())return false;
+  endCupAward();
   cupMatch=null;
   view.setCupVenue(null);
   exitToMenu({entry:'solo'});
@@ -426,9 +455,14 @@ function leaveCupCourt() {
 const cupUI=bindCupUI({
   getRun:readCup,
   getScore:()=>cupSave?.match?.score,
-  onCreate(eventId){
+  getDefaultName:defaultCupName,
+  onCreate(eventId,name,target=5){
     readCup();
-    if(!cupSave)saveCup(createCup(eventId,playerProfile?.name||'你'));
+    if(cupSave)return;
+    const displayName=normalizePlayerName(name)||defaultCupName()||'你';
+    if(saveCup(createCup(eventId,displayName,undefined,target))){
+      try {cupStorage.setItem(CUP_NAME_KEY,displayName);} catch {}
+    }
   },
   onWithdraw(){saveCup(null);},
   onFinish(){saveCup(null);},
@@ -443,11 +477,11 @@ const cupUI=bindCupUI({
     const restored=saved?.rulesVersion===RULES_VERSION && saved.format==='singles' &&
       saved.players?.length===2 && saved.shuttle && saved.pause && Array.isArray(saved.score);
     state=restored?saved:createMatch({humanSlots:[0],roles:[settings.role,opponent.role],cupOpponent:opponent,
-      difficulty:opponent.difficulty,target:5,ruleset:'quick',seed:draw.seed+draw.roundIndex});
+      difficulty:opponent.difficulty,target:draw.target??5,ruleset:'quick',seed:draw.seed+draw.roundIndex});
     if(!saveCup(draw,state)){state=null;cupUI.open();return;}
     cupMatch={opponent,label:event.name+' · '+roundLabel(remaining),selfName:draw.players[0].name,settled:false};
     mode='ai';side=0;playback.reset();lastRtt=null;
-    view.setCupVenue({eventId:event.id,centerCourt:remaining<=4,opponent});
+    view.setCupVenue({eventId:event.id,centerCourt:remaining<=4,opponent,selfName:cupMatch.selfName});
     enterMatch();
   }
 });
@@ -853,12 +887,14 @@ function updateUI(info,state){
       setText('result-score-label',state.ruleset==='standard21'?'最终局数':state.endReason==='scored'?'最终比分':'结束时比分');
       $('result-score').setAttribute('aria-label',`${nameSelf} ${resultScores[team]} 比 ${resultScores[1-team]} ${nameOther}${state.ruleset==='standard21'?'，局数':''}`);
       const resultReason=relativeMessage(state.message).replace(/\s*·\s*(?:局数\s*)?\d+\s*:\s*\d+$/,'');
-      setText('result-reason',resultReason+(state.ruleset==='standard21'?` · 最后一局 ${state.score[team]}:${state.score[1-team]}`:''));setText('rematch',cupMatch?(cupSave?.draw.status==='champion'?'登上领奖台 ↗':'查看签表 ↗'):state.challenge?'再次挑战 ↗':'再来一局 ↗');
+      setText('result-reason',resultReason+(state.ruleset==='standard21'?` · 最后一局 ${state.score[team]}:${state.score[1-team]}`:''));setText('rematch',cupMatch?'查看签表 ↗':state.challenge?'再次挑战 ↗':'再来一局 ↗');
       rematchRequested=false;helpOpen=false;resultPending=true;dialog(null);
     }else if(!helpOpen)dialog(null);
   }
   if(state.phase==='over'&&resultPending&&!view.rallyEnding&&!finale.blocking){
-    resultPending=false;dialog('result-dialog');
+    resultPending=false;
+    if(cupMatch?.settled&&cupSave?.draw.status==='champion')beginCupAward();
+    else dialog('result-dialog');
   }
   if(state.phase==='over'&&!resultPending&&!finale.blocking&&!arenaAudio.voices?.size)menuAudio.setScene('result');
   if(state.phase==='paused'){
@@ -930,6 +966,13 @@ try{
       if(previewCanvas) view.render(previewMatch,0,0);
       else view.renderLobby(Math.min(elapsed,.1));
       renderMs=performance.now()-renderStart;
+    }else if(cupMatch?.awardTime!=null){
+      const dt=document.hidden?0:elapsed;
+      const previous=cupMatch.awardTime;
+      cupMatch.awardTime+=dt;
+      view.renderCupAward(dt);
+      if(previous<3.5&&cupMatch.awardTime>=3.5)arenaAudio.playCupApplause();
+      if(cupMatch.awardTime>=6)showChampionRoad();
     }else if(mode==='training'){
       if(trainingPlaying&&!document.hidden){
         accumulator+=Math.min(elapsed,.15);

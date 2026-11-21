@@ -285,6 +285,11 @@ export class ArenaAudio {
     });
   }
 
+  playCupApplause() {
+    this.setActive(this.visible);
+    this.sample('applause',{group:'cup-award',bus:'crowd',priority:2,duration:2.5,volume:.5});
+  }
+
   playFinale(key) {
     if(!key||this.finaleKey===key)return;
     this.finaleKey=key;

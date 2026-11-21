@@ -2,7 +2,33 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createCup, getCupOpponent, advanceCup} from '../src/cup-draw.js';
 import {createMatch, stepMatch} from '../shared/game.js';
-import {readCupSave, writeCupSave} from '../src/cup-save.js';
+import {readCupSave, writeCupSave, CUP_STORAGE_KEY} from '../src/cup-save.js';
+
+test('cup format survives reload and advancement; old draws use five points', () => {
+  const data = new Map();
+  const storage = {getItem: key => data.get(key), setItem: (key, value) => data.set(key, value)};
+  for (const target of [5, 15, 21]) {
+    data.clear();
+    const draw = createCup('bay', '你', 31, target);
+    const opponent = getCupOpponent(draw);
+    const match = createMatch({cupOpponent: opponent, target});
+    assert.equal(match.target, target);
+    assert.equal(match.ruleset, 'quick');
+    writeCupSave(storage, null, draw, match);
+    const restored = readCupSave(storage);
+    assert.equal(restored.match.target, target);
+    assert.equal(advanceCup(restored.draw, true).target, target);
+  }
+  const legacy = createCup('bay', '你', 42);
+  delete legacy.target;
+  data.set(CUP_STORAGE_KEY, JSON.stringify({revision: 'old', draw: legacy, match: null}));
+  assert.deepEqual(readCupSave(storage).draw, {...legacy, target: 5});
+  for (const target of [10, 11, 22, null, '15']) {
+    assert.throws(() => createCup('bay', '你', 42, target), RangeError);
+    data.set(CUP_STORAGE_KEY, JSON.stringify({draw: {...legacy, target}}));
+    assert.equal(readCupSave(storage), null);
+  }
+});
 
 test('cup checkpoints restore a playable match and a stale window cannot undo advancement or withdrawal', () => {
   const data=new Map();

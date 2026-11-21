@@ -28,24 +28,27 @@ function scoreScreen() {
   const screen = new THREE.Mesh(new THREE.PlaneGeometry(2.36, .91),
     new THREE.MeshBasicMaterial({map: texture, toneMapped: false}));
   screen.position.set(-4.25, 1.36, -9.43);
-  let last;
-  let cupName = '';
-  const update = (near, far) => {
-    if (last === near + '/' + far) return;
-    last = near + '/' + far;
+  let lastNear, lastFar, nearName = 'NEAR', farName = 'FAR';
+  const update = (near, far, force = false) => {
+    if (!force && lastNear === near && lastFar === far) return;
+    lastNear = near; lastFar = far;
     ctx.fillStyle = '#071c22'; ctx.fillRect(0, 0, 768, 300);
     ctx.fillStyle = '#94f0c8'; ctx.fillRect(24, 24, 8, 30);
     ctx.font = '650 30px "Rally Display", Arial, sans-serif'; ctx.fillText('开拍 RALLY   /   COURT 01', 49, 49);
     ctx.fillStyle = '#284146'; ctx.fillRect(384, 85, 2, 172);
     ctx.font = 'bold 36px Arial'; ctx.fillStyle = '#96b3b6';
-    ctx.fillText(cupName ? '你' : 'NEAR', 35, 114); ctx.fillText(cupName || 'FAR', 418, 114, 322);
+    ctx.fillText(nearName, 35, 114, 322); ctx.fillText(farName, 418, 114, 322);
     ctx.font = 'bold 142px Arial'; ctx.fillStyle = '#eff8ef';
     ctx.fillText(String(near).padStart(2, '0'), 29, 258);
     ctx.fillText(String(far).padStart(2, '0'), 413, 258);
     texture.needsUpdate = true;
   };
   update(0,0);
-  return { screen, update, opponent(name) { cupName = name || ''; last = null; } };
+  return { screen, update, names(near, far) {
+    if (near === nearName && far === farName) return;
+    nearName = near; farName = far;
+    update(lastNear, lastFar, true);
+  } };
 }
 
 export async function loadTournamentArena() {
@@ -132,9 +135,9 @@ export function installTournamentArena({ scene, animations }) {
       pose();
     }
   }
-  function palette(name, cupTheme, opponent) {
+  function palette(name, cupTheme, opponent, selfName) {
     const { court, apron } = cupTheme ?? resolveCourtPalette(name);
-    scoreboard.opponent(opponent);
+    scoreboard.names(cupTheme ? selfName || '你' : 'NEAR', cupTheme ? opponent || '对手' : 'FAR');
     for (const seat of seats) {
       if (cupTheme) seat.material.color.setHex(cupTheme.seat);
       else seat.material.color.copy(seat.base);

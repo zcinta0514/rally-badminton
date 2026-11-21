@@ -28,17 +28,18 @@ function nextServe(state) {
 }
 
 test('scoring configuration normalizes targets exactly as match creation does', () => {
-  for (const target of [undefined, null, '11', 6, NaN, Infinity]) {
+  for (const target of [undefined, null, '11', 6, 15, NaN, Infinity]) {
     assert.deepEqual(getScoringRules({ target }), { target: 5, winBy: 2, cap: 10 });
     assert.equal(createMatch({ target }).target, 5);
   }
   assert.deepEqual(getScoringRules({ ruleset: 'standard21', target: 5 }), { target: 21, winBy: 2, cap: 30 });
 });
 
-for (const [target, cap] of [[5, 10], [10, 15], [11, 20], [21, 30]]) for (const winner of [0, 1]) {
+for (const [target, cap] of [[5, 10], [10, 15], [11, 20], [15, 21], [21, 30]]) for (const winner of [0, 1]) {
   const other = 1 - winner;
+  const options = target === 15 ? { target, cupOpponent: { role: 'power', style: '后场重杀' } } : { target };
   test(`${target}-point quick game: side ${winner} must reach the target and lead by two`, () => {
-    const state = createMatch({ target });
+    const state = createMatch(options);
     landPoint(state, winner);
     nextServe(state);
     landPoint(state, other);
@@ -55,7 +56,7 @@ for (const [target, cap] of [[5, 10], [10, 15], [11, 20], [21, 30]]) for (const 
   });
 
   test(`${target}-point quick game: side ${winner} wins only after extending a deuce lead`, () => {
-    const state = createMatch({ target });
+    const state = createMatch(options);
     state.score = [target - 1, target - 1];
     landPoint(state, winner);
     nextServe(state);
@@ -76,7 +77,7 @@ for (const [target, cap] of [[5, 10], [10, 15], [11, 20], [21, 30]]) for (const 
   });
 
   test(`${target}-point quick game: repeated ties reach cap ${cap} for side ${winner}`, () => {
-    const state = createMatch({ target });
+    const state = createMatch(options);
     state.score = [target - 1, target - 1];
     for (let tied = target - 1; tied < cap - 1; tied++) {
       landPoint(state, winner); nextServe(state);
