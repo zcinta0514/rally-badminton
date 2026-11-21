@@ -15,16 +15,16 @@ function tick(s, input = [{}, {}], seconds = .2) {
   for (let t=0;t<seconds-1e-8;t+=dt) stepMatch(s,input,dt);
 }
 
-test('hell starts at zero and wins at 2:4 with no deuce; opponent needs 5', () => {
+test('either side wins hell on the next point at 4:4', () => {
   const human=createMatch({challenge:'hell',ruleset:'standard21'});
   assert.equal(human.ruleset,'quick');assert.deepEqual(human.score,[0,0]);
-  human.score=[1,4];point(human,0);
+  human.score=[4,4];point(human,0);
   assert.equal(human.phase,'over');assert.equal(human.winner,0);assert.equal(human.endReason,'scored');
-  assert.deepEqual(human.score,[2,4]);assert.equal(human.rallyEnd.grade,'match');
-  const boss=createMatch({challenge:'hell'});boss.score=[1,4];point(boss,1);
-  assert.equal(boss.phase,'over');assert.equal(boss.winner,1);assert.deepEqual(boss.score,[1,5]);
-  const early=createMatch({challenge:'hell'});early.score=[0,1];point(early,1);
-  assert.equal(early.phase,'point');assert.equal(early.winner,null);assert.equal(early.server,1);
+  assert.deepEqual(human.score,[5,4]);assert.equal(human.rallyEnd.grade,'match');
+  const boss=createMatch({challenge:'hell'});boss.score=[4,4];point(boss,1);
+  assert.equal(boss.phase,'over');assert.equal(boss.winner,1);assert.deepEqual(boss.score,[4,5]);
+  const early=createMatch({challenge:'hell'});early.score=[1,0];point(early,0);
+  assert.equal(early.phase,'point');assert.equal(early.winner,null);assert.equal(early.server,0);
 });
 
 test('normal scoring, court rules and player lineup stay isolated', () => {
@@ -33,8 +33,9 @@ test('normal scoring, court rules and player lineup stay isolated', () => {
   assert.equal(phantomPositions(normal).length,0);assert.equal(hellStatus(normal),null);
   assert.deepEqual(matchPressure(normal),[null,'match']);
   const hell=createMatch({challenge:'hell',roles:['swift','balanced']});
-  hell.score=[1,4];assert.deepEqual(matchPressure(hell),['match','match']);
-  assert.match(describeMatch(hell),/先得2分/);assert.equal(hell.players[0].role,'swift');
+  hell.score=[1,4];assert.deepEqual(matchPressure(hell),[null,'match']);
+  hell.score=[4,4];assert.deepEqual(matchPressure(hell),['match','match']);
+  assert.match(describeMatch(hell),/先得5分/);assert.equal(hell.players[0].role,'swift');
 });
 
 test('boss stays at full stamina, player consumes stamina and refills once at next serve', () => {

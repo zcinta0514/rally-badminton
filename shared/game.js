@@ -123,7 +123,8 @@ export function getCupScoringRules(target) {
 }
 
 /** Shared by scoring and rule hints; target stays fixed throughout deuce. */
-export function getScoringRules({ ruleset = 'quick', target = 5, players } = {}) {
+export function getScoringRules({ ruleset = 'quick', target = 5, players, challenge } = {}) {
+  if (challenge?.kind === 'hell') return HELL.scoring;
   if (players?.[1]?.cup) return getCupScoringRules(target);
   return SCORING_RULES[ruleset === 'standard21' ? 21 : [5, 10, 11, 21].includes(target) ? target : 5];
 }
@@ -232,8 +233,7 @@ function awardPoint(state, winner, reason, impact) {
   // Quick games also require two clear points, with a cap for each target.
   // Court coordinates stay player-relative; standard breaks are shortened for play.
   const scoring = getScoringRules(state);
-  const wonGame = state.challenge ? state.score[winner] >= HELL.targets[winner]
-    : state.trainingServer == null && state.score[winner] >= scoring.target
+  const wonGame = state.trainingServer == null && state.score[winner] >= scoring.target
       && (state.score[winner] - state.score[1 - winner] >= scoring.winBy || state.score[winner] >= scoring.cap);
   if (state.challenge) { state.challenge.active = null; state.challenge.warning = null; state.challenge.rescue = null; }
   state.rallyEnd.grade = wonGame ? state.ruleset === 'standard21' && state.games[winner] < 1 ? 'game' : 'match'
