@@ -1234,7 +1234,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
       const contact = liveFlightPoint(ball, .06);
       const balanced = contact.y >= 1.2
         && Math.hypot(contact.x - player.x, contact.z - player.z) <= TUNING.reach;
-      if ((balanced || contact.y >= .55 && horizontal < TUNING.reach) && (depth < 2.5 || advancing) && random(state) < .90) {
+      if ((balanced || contact.y >= .95 && horizontal < TUNING.reach) && (depth < 2.5 || advancing) && random(state) < .90) {
         const openLane = Math.abs(receiver.x) > .4 ? -Math.sign(receiver.x) : Math.sign(memory.aim) || 1;
         memory.aim = openLane * .82;
         memory.wideDrop = balanced && Math.abs(receiver.x) > 1 && random(state) < .25;
