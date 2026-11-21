@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="./src/ui-tournament-system.css">
   <link rel="stylesheet" href="./src/training-ui.css">
   <link rel="stylesheet" href="./src/cup-ui.css">
+  <link rel="stylesheet" href="./src/cup-bracket.css">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/three-addons/"}}</script>
 </head>
 <body data-screen="menu" data-shot-skin="glass">
@@ -202,13 +203,13 @@
     </div>
   </main>
   <footer class="lobby-update" aria-label="游戏版本与更新">
-    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.32.0</a>
+    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.33.0</a>
     <button id="lobby-history" type="button">近期更新</button>
     <button id="lobby-check-update" type="button">检查更新</button>
   </footer>
   <aside id="court-caption" class="court-caption"><div class="live-tag"><i></i> 球场预览</div><div class="court-strip"><b>01</b><span>比赛场地</span><span>RALLY COURT</span></div></aside>
   <button id="skip-cup-award" type="button" hidden>跳过颁奖</button>
-  <dialog id="cup-dialog" aria-labelledby="cup-title"><header class="cup-bar"><span>开拍 <b>RALLY</b></span><button type="button" data-cup="close">返回大厅</button></header><div id="cup-body" tabindex="-1"></div></dialog>
+  <dialog id="cup-dialog" aria-labelledby="cup-title"><button type="button" class="cup-back" data-action="cancel" data-cup="close">← 返回大厅</button><div id="cup-body" tabindex="-1"></div></dialog>
   <section id="training-ui" aria-label="训练模式" hidden>
     <header class="training-bar">
       <div class="training-heading"><strong>训练馆</strong><span id="training-session">场馆预览</span><span id="training-count" hidden></span></div>
