@@ -1,3 +1,4 @@
+import { bracketMarkup, mountBracket } from './cup-bracket.js';
 import { getCupScoringRules } from '../shared/game.js';
 import { normalizePlayerName } from './player-profile.js';
 import { CUP_EVENTS, CUP_TARGETS, getCupOpponent, roundLabel } from './cup-draw.js';
@@ -15,10 +16,9 @@ function heading(title, note = '') {
 }
 
 function eventCard(event) {
-  return `<button type="button" class="cup-card" data-event="${event.id}" data-cup="preview-${event.id}">
-    <span class="cup-illustration" aria-hidden="true"><i></i></span>
-    <span class="cup-card-copy"><small>${event.size} 强单打 · ${Math.log2(event.size)} 轮</small>
-    <strong>${escapeText(event.name)}</strong><span>${escapeText(event.venue)}　↗</span></span></button>`;
+  return `<button type="button" class="cup-event" data-cup="preview-${event.id}">
+    <span><strong>${escapeText(event.name)}</strong><small>${escapeText(event.venue)} · ${event.size} 强 · ${Math.log2(event.size)} 轮</small></span>
+    <span aria-hidden="true">›</span></button>`;
 }
 
 function road(cup, expanded = false) {
@@ -31,17 +31,6 @@ function road(cup, expanded = false) {
   return matches.length ? `<details class="cup-road"${expanded ? ' open' : ''}><summary>我的晋级记录 · ${matches.length} 场</summary><ul>${matches.join('')}</ul></details>` : '';
 }
 
-function drawSheet(cup, index) {
-  const round = cup.rounds[index];
-  const tabs = cup.rounds.map((r, i) => button('round-' + i, roundLabel(r.length * 2), index === i ? 'cup-selected' : '')).join('');
-  const pair = (id, winner) => {
-    const player = cup.players[id];
-    return `<span class="${winner === id && id != null ? 'cup-winner' : ''}">${id != null && player ? escapeText(player.name) : '待定'}${id === 0 ? '（你）' : ''}</span>`;
-  };
-  const rows = round.map(m => `<li class="${m.a === 0 || m.b === 0 ? 'cup-mine' : ''}">${pair(m.a, m.winner)}<small>对</small>${pair(m.b, m.winner)}</li>`).join('');
-  return heading('赛事签表') + `<div class="cup-actions cup-rounds">${tabs}</div><ul class="cup-pairs">${rows}</ul>` + button('hub', '← 返回赛事');
-}
-
 function duel(cup, event, score) {
   const rival = getCupOpponent(cup);
   const remaining = cup.rounds[cup.roundIndex].length * 2;
@@ -50,40 +39,42 @@ function duel(cup, event, score) {
   const round = cup.rounds[cup.roundIndex];
   const myPair = round.findIndex(m => m.a === 0 || m.b === 0);
   const adjacent = round[myPair ^ 1];
-  const nextPair = adjacent ? `<p class="cup-next"><strong>同区对阵</strong> ${escapeText(cup.players[adjacent.a].name)} 对 ${escapeText(cup.players[adjacent.b].name)}，若你晋级，下轮将迎战其中的胜者。</p>` : '';
+  const nextPair = adjacent ? `<p class="cup-next"><strong>下轮对手</strong> ${escapeText(cup.players[adjacent.a].name)} / ${escapeText(cup.players[adjacent.b].name)} 中的胜者</p>` : '';
   const previous = cup.rounds[cup.roundIndex - 1]?.find(m => m.winner === 0);
   const arrival = previous ? `<p class="cup-arrival"><strong>${escapeText(cup.players[0].name)}</strong> 战胜 ${escapeText(cup.players[previous.a || previous.b].name)}，晋级${roundLabel(remaining)}。</p>` : '';
   return heading(event.name, `${venue} · ${roundLabel(remaining)} · ${cup.target ?? 5} 分单局`) +
-    `${arrival}<div class="cup-duel"><section><small>本轮对手 · ${escapeText(rival.country)}</small><h3>${escapeText(rival.name)}</h3>
+    `${arrival}<div class="cup-duel"><section><small>本轮对手　${escapeText(rival.country)}</small><h3>${escapeText(rival.name)}</h3>
     <p>${escapeText(rival.style)}　·　${escapeText(rival.height)} cm</p></section>
     <dl>${stat('实力', rival.rating)}${stat('力量', rival.power)}${stat('速度', rival.speed)}${stat('控球', rival.control)}</dl></div>
-    <div class="cup-actions">${button('play', score ? '继续比赛 · ' + score.map(escapeText).join(' : ') + ' ↗' : '进入球场 ↗', 'cup-primary')}${button('draw', '查看签表')}${button('withdraw', '主动退赛', 'cup-quiet')}</div>${nextPair}${road(cup)}`;
+    <div class="cup-actions">${button('play', score ? '继续比赛 · ' + score.map(escapeText).join(' : ') + ' ↗' : '进入球场 ↗', 'cup-primary')}${button('draw', '查看签表')}</div>${nextPair}${road(cup)}${button('withdraw', '退赛', 'cup-quiet')}`;
 }
 
 function scoreHint(target) {
   const {cap, winBy} = getCupScoringRules(target);
-  return `每轮一局，先到 ${target} 分且领先 ${winBy} 分取胜，先到 ${cap} 分直接胜出。`;
+  return `单局 ${target} 分，净胜 ${winBy} 分。先到 ${cap} 分直接胜出。`;
 }
 
 function registration(event, name) {
   const choices = CUP_TARGETS.map(target =>
     `<label><input type="radio" name="target" value="${target}"${target === 5 ? ' checked' : ''}><span>${target} 分</span></label>`).join('');
-  return heading(event.name, `${event.venue} · ${event.size} 强单打 · 共 ${Math.log2(event.size)} 轮`) +
+  return heading(event.name, `${event.venue} · ${event.size} 强单打`) +
     `<form id="cup-registration">
       <div class="cup-fields"><label class="cup-athlete-id">参赛 ID<input name="athlete" maxlength="16" autocomplete="nickname" value="${escapeText(name)}" placeholder="输入参赛名"></label>
         <fieldset><legend>本届分制</legend><div class="cup-score-options">${choices}</div></fieldset></div>
       <div class="cup-rules"><p id="cup-score-rule" aria-live="polite">${scoreHint(5)}</p>
-      <p>连赢 ${Math.log2(event.size)} 场夺冠，输一场淘汰。半决赛起移师${escapeText(event.centerVenue)}。</p>
-      <p>报名后分制固定。关闭游戏可在本机续赛，主动退赛将结束本届赛事。</p></div>
-      <div class="cup-actions"><button type="submit" class="cup-primary" data-cup="create">确认参赛 ↗</button>${button('hub', '重新选赛')}</div>
+      <p>连赢 ${Math.log2(event.size)} 场夺冠，单败淘汰。</p>
+      <p>本届分制固定。退出游戏可续赛，退赛后须重新报名。</p></div>
+      <div class="cup-actions"><button type="submit" class="cup-primary" data-cup="create" data-action="save">确认参赛 ↗</button></div>
     </form>`;
 }
 
 export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, onWithdraw, onFinish, onClose }) {
   const dialog = document.getElementById('cup-dialog');
   const body = document.getElementById('cup-body');
+  const toast = document.getElementById('toast');
+  const toastParent = toast.parentNode;
   let preview;
-  let roundIndex = 0;
+  const back = dialog.querySelector('.cup-back');
   let renderedRun;
 
   function render(page = 'hub') {
@@ -94,9 +85,9 @@ export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, 
     if (!cup && page === 'preview' && event) {
       content = registration(event, normalizePlayerName(getDefaultName?.()) || '你');
     } else if (!cup) {
-      content = heading('杯赛挑战', '选择本届赛事') + `<div class="cup-cards">${CUP_EVENTS.map(eventCard).join('')}</div>`;
+      content = heading('杯赛挑战') + `<div class="cup-events">${CUP_EVENTS.map(eventCard).join('')}</div>`;
     } else if (page === 'draw') {
-      content = drawSheet(cup, roundIndex);
+      content = heading(event.name + ' · 签表') + bracketMarkup(cup);
     } else if (page === 'withdraw') {
       const stage = roundLabel(cup.rounds[cup.roundIndex].length * 2);
       content = heading('确认退赛？', `你已打到${stage}。退赛后，本届签表和进度将结束。`) +
@@ -107,28 +98,34 @@ export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, 
       content = heading(cup.status === 'champion' ? '夺冠之路' : '止步' + roundLabel(cup.rounds[cup.roundIndex].length * 2), event.name) +
         road(cup, true) + `<div class="cup-actions">${button('draw', '查看签表')}${button('finish', '选择下一届赛事 ↗', 'cup-primary')}</div>`;
     }
+    const backToHub = ['preview', 'withdraw', 'draw'].includes(page);
+    back.dataset.cup = backToHub ? 'hub' : 'close';
+    back.textContent = page === 'preview' ? '← 返回选赛' : backToHub ? '← 返回赛事' : '← 返回单人对战';
+    dialog.dataset.page = page;
     dialog.dataset.event = event?.id || '';
     body.innerHTML = content;
     body.scrollTop = 0;
     if (dialog.open) body.focus({preventScroll:true});
+    if (page === 'draw' && cup) mountBracket(body);
   }
 
   function close() {
     if (dialog.open) dialog.close();
+    if (toast.parentNode === dialog) toastParent.append(toast);
   }
 
   function open() {
     preview = null;
     render();
     if (!dialog.open) dialog.showModal();
+    if (toast.parentNode !== dialog) dialog.append(toast);
     body.focus({preventScroll:true});
   }
 
   document.getElementById('open-cup').addEventListener('click', open);
   dialog.addEventListener('cancel', event => {
     event.preventDefault();
-    close();
-    onClose?.();
+    back.click();
   });
   dialog.addEventListener('change', event => {
     if (event.target.name === 'target') {
@@ -142,6 +139,7 @@ export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, 
       const fields = new FormData(event.target);
       const name = normalizePlayerName(fields.get('athlete')) || normalizePlayerName(getDefaultName?.()) || '你';
       onCreate(preview, name, Number(fields.get('target')));
+      if (!getRun()) return;
     }
     render();
   });
@@ -157,13 +155,10 @@ export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, 
     if (action.startsWith('preview-')) {
       preview = action.slice(8);
       render('preview');
-    } else if (action.startsWith('round-')) {
-      roundIndex = Number(action.slice(6));
-      render('draw');
     } else {
       switch (action) {
         case 'play': close(); onPlay(); break;
-        case 'draw': roundIndex = getRun()?.roundIndex || 0; render('draw'); break;
+        case 'draw': render('draw'); break;
         case 'withdraw': render('withdraw'); break;
         case 'confirm-withdraw': onWithdraw(); preview = null; render(); break;
         case 'finish': onFinish(); preview = null; render(); break;
