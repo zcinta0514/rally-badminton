@@ -4,14 +4,16 @@
 @import url('./typography.css');
 
 :root {
+  --page-height:100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
-  color: #243d31; background: #f7f8f3; font-synthesis: none; color-scheme: light;
+  color: #243d31; background: #14221e; font-synthesis: none; color-scheme: light;
   --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px); --safe-right: env(safe-area-inset-right, 0px);
   --ink: #243d31; --green: #37694c; --blue: #3e6454;
   --paper: #f7f8f3; --line: #d9dfd4; --muted: #647268; --lime: #dce7cd;
   --header-height: 72px; --menu-width: 40%;
 }
+@supports (height:100dvh) { :root { --page-height:100dvh; } }
 * { box-sizing: border-box; }
 /* Home-screen landscape puts the island on one side only; older iOS builds also
    report the island side as 0. Mirror the larger inset so left and right
@@ -24,7 +26,7 @@
 }
 /* Keep the responsive type scale stable when iOS rotates the viewport. */
 html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
-html,body { margin:0; width:100%; height:100vh; height:100dvh; overflow:hidden; overscroll-behavior:none; }
+html,body { margin:0; width:100%; height:100vh; height:var(--page-height); overflow:hidden; overscroll-behavior:none; }
 body { background: var(--paper); touch-action:manipulation; -webkit-user-select:none; user-select:none; }
 body[data-screen=match],body[data-screen=match] * { -webkit-touch-callout:none; }
 button,input { font:inherit; }
@@ -37,7 +39,7 @@ a { color:inherit; text-decoration:none; }
 input,textarea,[contenteditable=true] { -webkit-user-select:text; user-select:text; touch-action:manipulation; -webkit-touch-callout:default!important; }
 input[type=range] { -webkit-user-select:none; user-select:none; touch-action:none; -webkit-touch-callout:none!important; }
 button,a { transition:background-color .16s,color .16s,border-color .16s,box-shadow .16s; }
-#court { position:fixed; inset:0; display:block; width:100vw; height:100dvh; touch-action:none; }
+#court { position:fixed; inset:0; display:block; width:100vw; height:var(--page-height); touch-action:none; }
 .screen-vignette { position:fixed; inset:0; pointer-events:none; background:linear-gradient(#061c2426,transparent 24%,transparent 82%,#061c2426); }
 .topbar { position:fixed; inset:0 0 auto; z-index:6; height:var(--header-height); padding:0 max(32px,var(--safe-right)) 0 max(32px,var(--safe-left)); display:flex; align-items:center; gap:26px; background:white; border-bottom:1px solid var(--line); }
 .brand { display:inline-flex; align-items:center; gap:10px; font-size:24px; line-height:1; font-weight:850; letter-spacing:1px; flex:0 0 auto; }
@@ -65,7 +67,7 @@ button:where(.secondary-btn) { background:white; color:var(--blue); border:1px s
 :where(.text-btn) { display:block; background:transparent; color:var(--muted); padding:12px; margin:6px auto 0; font-size:13px; text-decoration:underline; text-underline-offset:4px; }
 
 /* Separate the lobby setup from the live court. Match canvas stays full-screen. */
-body[data-screen=menu] #court { left:var(--menu-width); top:var(--header-height); width:calc(100vw - var(--menu-width)); height:calc(100dvh - var(--header-height)); }
+body[data-screen=menu] #court { left:var(--menu-width); top:var(--header-height); width:calc(100vw - var(--menu-width)); height:calc(var(--page-height) - var(--header-height)); }
 body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--header-height); background:linear-gradient(180deg,#071b3060,transparent 28%,transparent 55%,#05251bb3); }
 .menu-panel { position:fixed; z-index:3; inset:var(--header-height) auto 0 0; width:var(--menu-width); padding:clamp(24px,3.2vw,48px) clamp(24px,3.6vw,56px) 20px; background:var(--paper); display:flex; flex-direction:column; min-height:0; }
 .menu-heading { flex:0 0 auto; }
@@ -202,7 +204,7 @@ body[data-screen=menu] .screen-vignette { left:var(--menu-width); top:var(--head
   .topbar { padding:0 max(16px,var(--safe-right)) 0 max(16px,var(--safe-left)); gap:12px; }
   .edition { display:none; }.top-actions { gap:5px; }.brand { font-size:22px; }
   .brand-mark { width:36px; height:36px; }.icon-btn { width:32px; height:32px; }
-  body[data-screen=menu] #court { left:0; top:0; width:100vw; height:100dvh; }
+  body[data-screen=menu] #court { left:0; top:0; width:100vw; height:var(--page-height); }
   body[data-screen=menu] .court-caption { display:none; }
   /* The portrait lobby is an opaque sheet; hiding the 3D canvas removes any dark edge behind it. */
   body[data-screen=menu] #court { display:none; }

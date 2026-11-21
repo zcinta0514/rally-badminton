@@ -24,6 +24,7 @@ try {
       page.setDefaultTimeout(12000);
       page.on('pageerror', error => issues.push(`${engine}: ${error.message}`));
       await page.addInitScript(({ storageKey, savedLayout }) => {
+        localStorage.setItem('rally.playtest.notice.1', '1');
         localStorage.setItem('rally.onboarding.seen', '1');
         localStorage.setItem('rally.usage.enabled', 'off');
         localStorage.setItem(storageKey, JSON.stringify(savedLayout));
@@ -63,6 +64,8 @@ try {
             rotations++;
             const viewport = `${width}×${height}`;
             const label = `${stage} ${viewport} #${cycle + 1}`;
+            const edges = await page.locator('#court').boundingBox();
+            check(edges && edges.x === 0 && edges.y === 0 && edges.width === width && edges.height === height, label + ' court edges', edges);
             const boxes = await checkTargets(targets);
             for (const box of boxes) check(box.hit && box.inside, label, box);
             const offsets = await page.evaluate(() => ({ x: scrollX, y: scrollY }));

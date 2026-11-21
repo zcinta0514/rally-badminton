@@ -198,7 +198,7 @@ function showConnectionRecovery(){
   dialog('pause-dialog');
 }
 function unlockAudio(){
-  if(sound&&(!arenaAudio.context||arenaAudio.context.state!=='running'))void arenaAudio.unlock();
+  if(sound && (arenaAudio.context?.state !== 'running' || Date.now() >= arenaAudio.retryAfter)) void arenaAudio.unlock();
 }
 function clearFinale(){
   finale.cancel(state?.phase==='over'||finale.blocking);view?.clearFinale();arenaAudio.stopVoices('finale');
@@ -926,8 +926,10 @@ try{
   // Prefer the authored venue on the first entrance without holding up input
   // or the network countdown while the model downloads.
   void view.prepareTournament();
+  const legacyViewport = !window.CSS?.supports('height', '100dvh');
   let portraitViewport=window.innerHeight>window.innerWidth;
   const resizeCourt=()=>{
+    if (legacyViewport && window.innerHeight > 0) document.documentElement.style.setProperty('--page-height', window.innerHeight + 'px');
     const portrait=window.innerHeight>window.innerWidth;
     // A short landscape lobby can scroll. Do not carry that offset into the
     // portrait home layout; other screens retain their intentional scroll.
@@ -937,6 +939,7 @@ try{
     }
     view.resize();
   };
+  resizeCourt();
   window.addEventListener('resize',resizeCourt);
   window.visualViewport?.addEventListener('resize',resizeCourt);
   new ResizeObserver(resizeCourt).observe($('court'));

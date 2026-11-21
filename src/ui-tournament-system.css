@@ -206,7 +206,7 @@ body #dialog-backdrop:has(#waiting-dialog:not([hidden])) {
 body #dialog-backdrop #waiting-dialog {
   flex:0 1 390px;
   max-width:var(--entry-width);
-  max-height:calc(100dvh - var(--entry-content-top) - max(16px,var(--safe-bottom)));
+  max-height:calc(var(--page-height) - var(--entry-content-top) - max(16px,var(--safe-bottom)));
   padding:4px 8px 4px 0;
   border:0;
   background:none;
@@ -562,7 +562,7 @@ body[data-screen=menu] .entry-navigation {
   top:var(--chrome-top); left:var(--chrome-left); height:44px;
 }
 body[data-screen=menu] #menu[data-entry=home] {
-  height:calc(100dvh - var(--chrome-bottom) - 64px);
+  height:calc(var(--page-height) - var(--chrome-bottom) - 64px);
   padding-left:var(--chrome-left); padding-bottom:0;
 }
 body[data-screen=menu] #menu[data-entry=home] .menu-foot {
@@ -676,7 +676,7 @@ body[data-screen=menu] #menu #open-playtest-notice:is(:hover,:focus-visible) { b
   }
   body[data-screen=menu] #menu[data-entry=home] {
     padding-top:max(10px,var(--safe-top));
-    height:calc(100dvh - var(--chrome-bottom) - 48px);
+    height:calc(var(--page-height) - var(--chrome-bottom) - 48px);
   }
   body[data-screen=menu] #menu[data-entry=home] h1 {
     display:flex;

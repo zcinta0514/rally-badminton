@@ -24,6 +24,7 @@ try {
     page.setDefaultTimeout(25000);
     page.on('pageerror', error => report.errors.push(error.message));
     await page.addInitScript(() => {
+      localStorage.setItem('rally.playtest.notice.1', '1');
       localStorage.setItem('rally.onboarding.seen', '1');
       localStorage.setItem('rally.usage.enabled', 'off');
       window.interfaceOscillators = 0;
