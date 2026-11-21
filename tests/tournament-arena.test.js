@@ -67,3 +67,24 @@ test('real exported clips signal a point once, independently of the umpire and o
   hall.reset();
   assert.deepEqual(text.slice(-2),['00','00']);
 });
+test('cup signage, stands and court return to the chosen ordinary-match palette', async t => {
+  const { hall, text } = await loadHall(t);
+  const { cupVenueTheme } = await import('../src/cup-venue.js');
+  const seats = hall.scene.getObjectByName('AR__East__formed_seat_shells').material.color;
+  const mat = hall.scene.getObjectByName('Court_|_sprung_competition_mat').material.color;
+  const originalSeats = seats.getHex();
+  const state = {time:0, pointId:0, phase:'serve', score:[0,0], format:'singles'};
+  for (const id of ['bay','crown']) {
+    const theme = cupVenueTheme(id);
+    hall.palette('green', theme, '许嘉音');
+    hall.update(state,0);
+    assert.equal(mat.getHex(), theme.court);
+    assert.equal(seats.getHex(), theme.seat);
+    assert.ok(text.slice(-5).includes('许嘉音'));
+  }
+  hall.palette('pink');
+  hall.update(state,0);
+  assert.equal(mat.getHex(), COURT_PALETTES.pink.court);
+  assert.equal(seats.getHex(), originalSeats);
+  assert.ok(text.slice(-5).includes('FAR'));
+});
