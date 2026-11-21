@@ -251,3 +251,23 @@ test('long-rally tension triggers once at 8 and 12 confirmed strokes, with disti
   s.time+=.1;s.pointId=1;s.phase='over';s.rallyEnd={id:1,at:s.time,kind:'in',winner:0,hitSide:0,grade:'match'};
   assert.equal(collectArenaSounds(s,m).find(e=>e.type==='score').grade,'match');
 });
+
+test('a transient failure retries only the missing recording and accepts callback decoding', async () => {
+  const { audio } = audioFixture();
+  const fetch = audio.fetch;
+  const attempts = [];
+  audio.fetch = url => {
+    if (url.pathname.endsWith('/hit-1.wav')) {
+      attempts.push(url);
+      if (attempts.length === 1) throw new Error('offline');
+    }
+    return fetch(url);
+  };
+  audio.AudioContext.prototype.decodeAudioData = (_, success) => { success({ duration: 1 }); };
+  await audio.unlock();
+  assert.equal(audio.samples.get('hit').length, 3);
+  audio.retryAfter = 0;
+  await audio.unlock();
+  assert.equal(attempts.length, 2);
+  assert.equal(audio.samples.get('hit').length, 4);
+});

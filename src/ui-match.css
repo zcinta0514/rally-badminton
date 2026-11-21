@@ -49,7 +49,7 @@ body[data-finale=true] .match-settings-toggle { display:none; }
 #performance-details { font-size:10px; border-top:1px solid #ffffff20; padding-top:6px; margin-top:1px; }
 #performance-details summary { cursor:pointer; color:#b8cec5; min-height:18px; }
 #performance-readout { display:block; white-space:pre-line; font-size:11px; line-height:1.6; margin-top:5px; overflow-wrap:anywhere; }
-.game-controls { position:fixed; inset:0 0 auto; height:100vh; height:100dvh; pointer-events:none; z-index:5; color:#eff8ee; }
+.game-controls { position:fixed; inset:0 0 auto; height:100vh; height:var(--page-height); pointer-events:none; z-index:5; color:#eff8ee; }
 
 .energy-panel { display:none; }
 .player-stamina-layer { position:fixed; top:0; right:0; bottom:0; left:0; z-index:4; pointer-events:none; }

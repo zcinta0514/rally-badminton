@@ -6,7 +6,7 @@ body[data-screen="menu"] {
   color:var(--ink); background:#101b18; color-scheme:dark;
 }
 body[data-screen="menu"] #court {
-  display:block; inset:0; width:100vw; height:100dvh; border:0; border-radius:0;
+  display:block; inset:0; width:100vw; height:var(--page-height); border:0; border-radius:0;
 }
 body[data-screen="menu"] .screen-vignette {
   display:block; inset:0; pointer-events:none; z-index:1;
@@ -27,7 +27,7 @@ body[data-screen="menu"] .topbar button {
 }
 body[data-screen="menu"] #match-settings-toggle { display:inline-flex; align-items:center; justify-content:center; }
 body[data-screen="menu"] #menu.menu-panel {
-  inset:0 auto 0 0; width:43%; max-width:610px; height:100dvh;
+  inset:0 auto 0 0; width:43%; max-width:610px; height:var(--page-height);
   padding:max(40px,var(--safe-top)) 3vw max(22px,var(--safe-bottom)) max(5vw,var(--safe-left));
   display:flex; flex-direction:column; gap:0; overflow-y:auto; overflow-x:hidden;
   border:0; background:none; z-index:3; scrollbar-width:thin;

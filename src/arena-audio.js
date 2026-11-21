@@ -98,6 +98,7 @@ export class ArenaAudio {
   constructor(options = {}) {
     this.enabled = true; this.visible = true; this.active = false;
     this.memory = {}; this.context = null; this.master = null; this.voices = new Set();
+    this.requests = new Map(); this.retryAfter = Infinity;
     this.samples = new Map(); this.loading = null; this.loaded = false; this.suppressNext = false;
     this.AudioContext = options.AudioContext === undefined ? globalThis.AudioContext || globalThis.webkitAudioContext : options.AudioContext;
     this.fetch = options.fetch === undefined ? globalThis.fetch?.bind(globalThis) : options.fetch;
@@ -108,7 +109,7 @@ export class ArenaAudio {
 
   unlock() {
     if (!this.enabled || !this.AudioContext) return Promise.resolve();
-    if (this.context?.state === 'running' && this.loaded) return this.loading;
+    if (this.context?.state === 'running' && this.loaded && Date.now() < this.retryAfter) return this.loading;
     try {
       if (!this.context) {
         const ctx = new this.AudioContext();
@@ -121,26 +122,38 @@ export class ArenaAudio {
       // Resume synchronously inside the phone gesture; fetching must not delay it.
       const shouldResume = this.context.state === 'suspended' || this.context.state === 'interrupted';
       const resumed = shouldResume ? Promise.resolve(this.context.resume()).catch(() => {}) : Promise.resolve();
-      if (!this.loading) this.loading = this.preload();
+      if (!this.loading || Date.now() >= this.retryAfter) {
+        this.retryAfter = Infinity;
+        this.loading = this.preload();
+      }
       return Promise.allSettled([resumed, this.loading]).then(() => {});
     } catch { return Promise.resolve(); } // Sound failures never stop a match.
   }
 
   async preload() {
     const ctx = this.context;
-    const requests = new Map();
+    const requests = this.requests;
+    const failed = new Set();
     await Promise.allSettled(Object.entries(ARENA_AUDIO_SAMPLES).map(async ([kind, urls]) => {
       const decoded = await Promise.allSettled(urls.map(async url => {
         if (!requests.has(url.href)) requests.set(url.href, (async () => {
           if (!this.fetch) throw new Error('Audio fetch unavailable');
           const response = await this.fetch(url); if (!response.ok) throw new Error('Audio sample unavailable');
-          return ctx.decodeAudioData(await response.arrayBuffer());
+          const bytes = await response.arrayBuffer();
+          return new Promise((resolve, reject) => {
+            ctx.decodeAudioData(bytes, resolve, reject)?.then(resolve, reject);
+          });
         })());
         return requests.get(url.href);
       }));
+      decoded.forEach((result, index) => {
+        if (result.status === 'rejected') failed.add(urls[index].href);
+      });
       this.samples.set(kind, kind === 'net' ? decoded.map(result => result.status === 'fulfilled' ? result.value : null)
         : decoded.filter(result => result.status === 'fulfilled').map(result => result.value));
     }));
+    for (const url of failed) requests.delete(url);
+    if (failed.size) this.retryAfter = Date.now() + 5000;
     this.loaded = true;
   }
 

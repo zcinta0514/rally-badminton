@@ -21,7 +21,7 @@
   width: 440px;
   min-width: 0;
   max-width: 100%;
-  max-height: calc(100dvh - var(--dialog-top) - var(--dialog-bottom));
+  max-height: calc(var(--page-height) - var(--dialog-top) - var(--dialog-bottom));
   padding: 32px;
   overflow: auto;
   border: 1px solid var(--line, #dbe2dc);
@@ -560,5 +560,5 @@
 #doubles-room-options select {min-height:44px;min-width:0;width:100%;border:0;border-bottom:1px solid #829586;border-radius:0;background:#101d19;color:var(--ink);padding:5px 8px;font:inherit;font-size:12px;}
 #doubles-room-options label {margin:0;font-size:12px;}
 #waiting-players {white-space:pre-line;line-height:1.7;font-size:12px;}
-#waiting-dialog {max-height:calc(100dvh - 24px);overflow-y:auto;}
+#waiting-dialog {max-height:calc(var(--page-height) - 24px);overflow-y:auto;}
 #ai-lineup button,#friend-lineup button {white-space:nowrap;}

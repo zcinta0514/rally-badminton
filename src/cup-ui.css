@@ -1,7 +1,7 @@
 #cup-dialog {
   --cup-ink:#102d32; --cup-accent:#006b64; --cup-paper:#f6f5ea;
   position:fixed; inset:0; box-sizing:border-box; width:min(840px,94vw);
-  max-width:calc(100vw - 16px); max-height:calc(100dvh - 16px);
+  max-width:calc(100vw - 16px); max-height:calc(var(--page-height) - 16px);
   padding:0; margin:auto; border:1px solid #acc1b6; border-radius:12px;
   background:var(--cup-paper); color:var(--cup-ink); font-family:inherit;
   box-shadow:0 22px 80px #01181866; text-align:left;

@@ -141,7 +141,7 @@ export class MenuAudio {
 
   playClick(kind = 'tap') {
     const context = this.getContext();
-    if (!this.enabled || !this.visible || !this.activated || !context ||
+    if (!this.enabled || !this.visible || !this.activated || context?.state !== 'running' ||
         !this.preferences.master || !this.preferences.ui || performance.now() - this.lastClick < 35) return;
     try {
       if (!this.clickGain) {
@@ -149,7 +149,6 @@ export class MenuAudio {
         this.clickGain.connect(context.destination);
         this.syncClickGain();
       }
-      this.clickVoice?.stop();
       this.lastClick = performance.now();
       const [start, end, length] = clicks[kind] ?? clicks.tap;
       const at = context.currentTime;
@@ -163,11 +162,9 @@ export class MenuAudio {
       envelope.gain.exponentialRampToValueAtTime(.0001, at + length);
       oscillator.connect(envelope);
       envelope.connect(this.clickGain);
-      this.clickVoice = oscillator;
       oscillator.onended = () => {
         oscillator.disconnect();
         envelope.disconnect();
-        if (this.clickVoice === oscillator) this.clickVoice = null;
       };
       oscillator.start(at);
       oscillator.stop(at + length);
