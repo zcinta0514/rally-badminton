@@ -1,3 +1,4 @@
+import { applyHandPreference } from '../shared/handedness.js';
 import * as drawModel from '../src/cup-draw.js';
 import * as cupPersistence from '../src/cup-save.js';
 import {practiceInputs,localTeam,lineupNames} from '../src/match-lineup.js';
@@ -139,6 +140,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     sample() { return { x: 0, z: 0, prepare: null, charge: 0 }; }
   }
   const context = vm.createContext({
+    applyHandPreference,
     ...drawModel, ...cupPersistence, ...game, createTraining, setTrainingOptions, stepTraining, practiceInputs,localTeam,lineupNames, MenuAudio, interfaceSound, captureMotion, presentLocal, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
     getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences,
     normalizePlayerName, getLeaderboardURL, resultRecordText,

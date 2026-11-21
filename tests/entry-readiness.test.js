@@ -31,7 +31,11 @@ for(const transport of ['peer','websocket'])test(`${transport}: rules are acknow
   for(let i=0;i<29;i++){clock+=100;advance();}
   assert.equal(state().phase,'countdown');assert.equal(state().hitId,0);
   clock+=150;advance();assert.equal(state().phase,'serve');assert.equal(state().hitId,0);
+  send(0,{type:'input',hand:'left'});send(1,{type:'input',hand:'right'});
+  clock+=100;advance();
+  assert.deepEqual(state().players.map(p=>p.hand),['left','right']);
   const frames=messages.map(list=>list.filter(m=>m.type==='state'));
+  assert.deepEqual(frames[1].at(-1).state.players.map(p=>p.hand),['left','right']);
   assert.deepEqual(frames[0].at(-1).state,frames[1].at(-1).state);
 });
 
