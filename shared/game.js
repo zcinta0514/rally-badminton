@@ -93,12 +93,13 @@ export function getScoringRules({ ruleset = 'quick', target = 5 } = {}) {
 }
 
 export function createMatch({ target = 5, roles = ['balanced', 'balanced'], difficulty = 'easy', seed = 1, ruleset = 'quick',
-  humanSlots = [], playerAssist = 'none', assistSide = 0, netDragSide = null, challenge = null, format = 'singles', teammateDifficulty = 'medium' } = {}) {
+  humanSlots = [], playerAssist = 'none', assistSide = 0, netDragSide = null, trainingServer = null, challenge = null, format = 'singles', teammateDifficulty = 'medium' } = {}) {
   ruleset = challenge === 'hell' ? 'quick' : ruleset === 'standard21' ? 'standard21' : 'quick';
   playerAssist = assistLevelOf(playerAssist);
   assistSide = assistSide === 0 || assistSide === 1 ? assistSide : 0;
   const state = {
     rulesVersion: RULES_VERSION, format: format === 'doubles' ? 'doubles' : 'singles', teammateDifficulty: difficultyOf(teammateDifficulty),
+    ...([0, 1].includes(trainingServer) ? { trainingServer } : {}),
     serverPlayer: 0, receiverPlayer: 1, servicePositions: [0, 0, 1, 1], _contactTie: 0,
     ...(challenge === 'hell' ? { challenge: createHellChallenge(seed) } : {}),
     ...((netDragSide === 0 || netDragSide === 1) ? { netDragSide } : {}),
@@ -130,8 +131,9 @@ function attachServe(state) {
     active: false, lastHit: null, lastHitPlayer: null });
 }
 function startServe(state) {
-  if (state.challenge) {
-    resetHellRally(state.challenge);
+  if (state.challenge) resetHellRally(state.challenge);
+  if (state.trainingServer != null) state.server = state.trainingServer;
+  if (state.challenge || state.trainingServer != null) {
     for (const p of state.players) p.stamina = ROLES[p.role].maxStamina;
   }
   // Earned once after an actual scored rally, never by waiting to serve.
@@ -178,7 +180,7 @@ function awardPoint(state, winner, reason, impact) {
   if (state.format === 'doubles' && state.server === winner) {
     for (let slot = winner; slot < 4; slot += 2) state.servicePositions[slot] = 1 - state.servicePositions[slot];
   }
-  state.score[winner]++; state.pointId++; state.server = winner;
+  state.score[winner]++; state.pointId++; state.server = state.trainingServer ?? winner;
   state.rallyEnd = { id: state.pointId, ...impact, winner, duration: TUNING.pointWait };
   state.shuttle.active = false; state.timer = TUNING.pointWait;
   state.message = `${reason} · ${winner === 0 ? '近场' : '远场'}得分`;
@@ -191,7 +193,7 @@ function awardPoint(state, winner, reason, impact) {
   // Court coordinates stay player-relative; standard breaks are shortened for play.
   const scoring = getScoringRules(state);
   const wonGame = state.challenge ? state.score[winner] >= HELL.targets[winner]
-    : state.score[winner] >= scoring.target
+    : state.trainingServer == null && state.score[winner] >= scoring.target
       && (state.score[winner] - state.score[1 - winner] >= scoring.winBy || state.score[winner] >= scoring.cap);
   if (state.challenge) { state.challenge.active = null; state.challenge.warning = null; state.challenge.rescue = null; }
   state.rallyEnd.grade = wonGame ? state.ruleset === 'standard21' && state.games[winner] < 1 ? 'game' : 'match'

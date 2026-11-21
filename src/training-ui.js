@@ -37,6 +37,7 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
   const setup = byId('training-setup');
   const adjust = byId('training-adjust');
   const drillSelect = byId('training-drill');
+  const kind = byId('training-kind');
   const fields = {
     power: byId('training-power'), interval: byId('training-interval'),
     line: byId('training-line'), targetSide: byId('training-target'),
@@ -52,18 +53,29 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
   let options = { drill: 'cross', power: 1, interval: 1.5, line: 'right', targetSide: 'auto' };
 
   function showSetup(visible) {
+    adjust.hidden = false;
     setup.hidden = !visible;
     adjust.setAttribute('aria-expanded', String(visible));
-    adjust.textContent = visible ? '收起设置' : '专项设置';
+    adjust.textContent = visible ? '收起设置' : '训练设置';
   }
 
   function syncOptions() {
     const { drill } = options;
+    const free = kind.value === 'free';
+    for (const el of setup.querySelectorAll('[data-free-only]')) el.hidden = !free;
+    for (const el of setup.querySelectorAll('[data-drill-only]')) el.hidden = free;
+    byId('training-gestures').hidden = free;
+    byId('training-start').textContent = free ? '开始对练 ↗' : '开始连练 ↗';
+    if (free) setupCue.textContent = '每球恢复双方体力，持续计分，退出结束训练。';
     drillSelect.value = drill;
     for (const [key, field] of Object.entries(fields)) field.value = String(options[key]);
-    for (const element of setup.querySelectorAll('[data-feed-only]')) element.hidden = drill === 'serve';
+    for (const element of setup.querySelectorAll('[data-feed-only]')) element.hidden = free || drill === 'serve';
     fields.targetSide.disabled = ['cross','netFree'].includes(drill);
     fields.targetSide.options[0].textContent = ({cross:'随线对角', netFree:'前后双区'})[drill] || '随专项';
+  }
+
+  function configuration() {
+    return { ...options, free: kind.value === 'free', roles: [byId('free-role').value, byId('free-opponent').value], server: Number(byId('free-server').value) };
   }
 
   function preview() {
@@ -77,16 +89,16 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
   }
 
   function configure() {
-    if (document.body.dataset.training !== 'playing') return;
+    if (document.body.dataset.training !== 'playing' || kind.value === 'free') return;
     preview();
-    onConfigure({ ...options });
-    drillSelect.focus({ preventScroll: true });
+    onConfigure(configuration());
+    kind.focus({ preventScroll: true });
   }
 
   byId('open-training').addEventListener('click', () => {
-    if (onEnter({ ...options }) === false) return;
+    if (onEnter(configuration()) === false) return;
     preview();
-    drillSelect.focus({ preventScroll: true });
+    kind.focus({ preventScroll: true });
   });
   adjust.addEventListener('click', () => {
     if (document.body.dataset.training === 'playing') configure();
@@ -106,27 +118,34 @@ export function bindTrainingUI({ onEnter, onStart, onConfigure, onExit }) {
       };
     }
     syncOptions();
-    onConfigure({ ...options });
+    onConfigure(configuration());
   });
   byId('training-start').addEventListener('click', () => {
     for (const button of buttons) {
-      button.toggleAttribute('data-training-recommended', recommendedKeys[options.drill].includes(button.dataset.shot));
+      button.toggleAttribute('data-training-recommended', kind.value !== 'free' && recommendedKeys[options.drill].includes(button.dataset.shot));
     }
     document.body.dataset.training = 'playing';
-    byId('training-session').textContent = drillSelect.selectedOptions[0].textContent;
-    adjust.textContent = '调整专项';
+    byId('training-session').textContent = kind.value === 'free' ? '自由训练' : drillSelect.selectedOptions[0].textContent;
+    adjust.hidden = kind.value === 'free';
+    adjust.textContent = '训练设置';
     adjust.setAttribute('aria-expanded', 'false');
     setup.hidden = true;
     counter.hidden = false;
-    counter.textContent = '命中 0 / 0';
-    coaching.hidden = false;
+    counter.textContent = kind.value === 'free' ? '你 0 ∶ 0 对方' : '命中 0 / 0';
+    coaching.hidden = kind.value === 'free';
     cue.textContent = setupCue.textContent;
     feedback.textContent = '';
-    onStart({ ...options });
+    onStart(configuration());
   });
 
   return {
     configure,
+    updateFree(state, held) {
+      const aim = aimLabel(held);
+      if (aimValue.textContent !== aim) aimValue.textContent = aim;
+      const score = '你 ' + state.score[0] + ' ∶ ' + state.score[1] + ' 对方';
+      if (counter.textContent !== score) counter.textContent = score;
+    },
     close() {
       delete document.body.dataset.training;
       delete document.body.dataset.trainingContact;
