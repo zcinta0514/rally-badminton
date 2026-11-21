@@ -1171,6 +1171,25 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
   }
   if (ball.z * direction(side) > 0.1 && ball.vy < 1.5 && horizontal < TUNING.reach + role.reachBonus + 0.15
     && ball.y <= (memory.shot === 'smash' ? 4.35 : overhead ? 2.9 : 1.9)) {
+    // Commit at swing preparation, once the receiver has had time to move.
+    if (h && !memory.readReceiver && !h.warning && memory.shot !== 'smash') {
+      memory.readReceiver = true;
+      const receiver = state.players[1 - side];
+      const depth = Math.abs(receiver.z);
+      const advancing = depth < 3.2 && depth + Math.sign(receiver.z) * receiver.vz * .18 < 2.5;
+      const contact = liveFlightPoint(ball, .06);
+      const balanced = contact.y >= 1.2
+        && Math.hypot(contact.x - player.x, contact.z - player.z) <= TUNING.reach;
+      if (balanced && (depth < 2.5 || advancing) && random(state) < .82) {
+        const openLane = Math.abs(receiver.x) > .4 ? -Math.sign(receiver.x) : Math.sign(memory.aim) || 1;
+        memory.aim = openLane * .82;
+        memory.wideDrop = Math.abs(receiver.x) > 1 && random(state) < .35;
+        memory.playDeep = !memory.wideDrop;
+        memory.shot = memory.playDeep ? 'clear' : 'drop';
+        memory.aimDepth = memory.playDeep ? .72 : -.65;
+        memory.charge = output.charge = .2;
+      }
+    }
     output.shot = memory.shot; output.aim = memory.aim; output.aimDepth = memory.aimDepth;
   }
   if (defendingSmash && level === 'hard' && memory.shot === 'clear' && !output.shot) {
