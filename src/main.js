@@ -1,3 +1,4 @@
+import { applyHandPreference } from '../shared/handedness.js';
 import { captureMotion, presentLocal } from './local-presentation.js';
 import { createTraining, setTrainingOptions, stepTraining } from '../shared/training.js';
 import { CUP_EVENTS, createCup, getCupOpponent, advanceCup, roundLabel } from './cup-draw.js';
@@ -545,7 +546,17 @@ $('hell-roles').addEventListener('click',event=>{
   const button=event.target.closest('[data-hell-role]');if(!button)return;
   hellRole=button.dataset.hellRole;groupChoice('hell-roles','hellRole',hellRole);
 });
-const worldInput=input=>toWorldInput({...input,aimDepth:input.aimDepth??dragDepth},localTeam(state,side),dragAim??aim);
+let racketHand = 'right';
+try { if (localStorage.getItem('rally.racketHand') === 'left') racketHand = 'left'; } catch {}
+groupChoice('racket-hand', 'hand', racketHand);
+$('racket-hand').addEventListener('click', event => {
+  const button = event.target.closest('button[data-hand]');
+  if (!button) return;
+  racketHand = button.dataset.hand;
+  groupChoice('racket-hand', 'hand', racketHand);
+  try { localStorage.setItem('rally.racketHand', racketHand); } catch {}
+});
+const worldInput=input=>toWorldInput({...input,hand:racketHand,aimDepth:input.aimDepth??dragDepth},localTeam(state,side),dragAim??aim);
 function send(message){if(peerMode)peerSession?.send(message);else if(socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify(['create','join','resumeSession'].includes(message.type)?{...message,rulesVersion:RULES_VERSION}:message));}
 function fireShot(request){
   if(mode==='training'&&!trainingPlaying)return;
@@ -960,13 +971,18 @@ try{
   let pingTime=0,previousMotion=null;
   const previewMatch = createMatch({seed:1});
   function frame(now){
+    if (state && mode !== 'online') applyHandPreference(state, side, racketHand);
+    $('hand-pending').hidden = !state || (state.players[side]?.hand ?? 'right') === racketHand;
     const elapsed=Math.max(0,(now-lastFrame)/1000);lastFrame=now;
     let renderMs=0,guidanceMs=0,uiMs=0;
     const previewCanvas = document.body.dataset.shotLayoutEditing ? $('layout-court') : matchSettings?.isOpen ? $('settings-court') : null;
     if(mode==='menu'||mode==='waiting'){
       const renderStart=performance.now();
       view.setMode(previewCanvas ? 'match' : 'menu');
-      if(previewCanvas) view.render(previewMatch,0,0);
+      if(previewCanvas) {
+        applyHandPreference(previewMatch, 0, racketHand);
+        view.render(previewMatch,0,0);
+      }
       else view.renderLobby(Math.min(elapsed,.1));
       renderMs=performance.now()-renderStart;
     }else if(cupMatch?.awardTime!=null){
@@ -1024,7 +1040,7 @@ try{
         if(cupMatch&&!cupMatch.settled&&((state.phase==='over'&&lastPhase!=='over')||now-cupCheckpointAt>=3000))checkpointCup();
         usage.observeResult(state);
       }else if(mode==='online'){
-        if(now-lastSend>1000/30){lastSend=now;if(['serve','rally'].includes(state.phase)&&!reconnecting)send({type:'input',...worldInput(controls.sample())});}
+        if(now-lastSend>1000/30){lastSend=now;if(!reconnecting && (['serve','rally'].includes(state.phase) || (state.players[side]?.hand ?? 'right') !== racketHand))send({type:'input',...worldInput(controls.sample())});}
         if(now-pingTime>2000){pingTime=now;send({type:'ping',at:Date.now()});}
       }
       const displayed=mode==='online'?(playback.sample(now)||state):presentLocal(state,previousMotion,accumulator*60);

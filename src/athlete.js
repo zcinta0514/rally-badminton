@@ -428,6 +428,20 @@ function motionFor(visual,player,side,time,freeze,reset) {
 
 const UP=new THREE.Vector3(0,1,0), temp=new THREE.Vector3(), yawRotation=new THREE.Quaternion();
 export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze=false,reset=false,rescue=null) {
+  // Solve in the authored right-handed coordinate system; reflect back at the root.
+  const handedSign = player.hand === 'left' ? -1 : 1;
+  reset ||= visual.root.scale.x !== handedSign;
+  visual.root.scale.x = handedSign;
+  if (handedSign < 0) {
+    const reflect = point => point && ({ ...point, x: -point.x });
+    const action = player.action;
+    player = { ...reflect(player), vx: -(player.vx || 0), action: action && {
+      ...action, contact: reflect(action.contact), across: -(action.across || 0)
+    }};
+    shuttle = reflect(shuttle);
+    if (rescue) rescue = { ...rescue, from: reflect(rescue.from), to: reflect(rescue.to),
+      slideTo: reflect(rescue.slideTo), point: reflect(rescue.point), contact: reflect(rescue.contact) };
+  }
   const discard=reset||!visual.motion||side!==visual.motion.side||time<visual.motion.time||
     Math.hypot(player.x-visual.motion.position.x,player.z-visual.motion.position.z)>.9;
   if(freeze&&!discard&&visual.root.userData.pose){
@@ -470,14 +484,14 @@ export function updateAthlete(visual,player,side,shuttle,time,dt,selected,freeze
     pose.feet[name]={planted:!pose.actionType&&pose.jump<.005&&foot.planted,id:foot.id};
   }
   if(pose.jump>.005||(transition?.from.jump>.005&&blend<1))motion.inAction=true;
-  return applyAthletePose(visual,pose,{x:player.x,z:player.z,side,selected,
+  return applyAthletePose(visual,pose,{x:player.x*handedSign,z:player.z,side,selected,
     ankleYaws:Object.fromEntries(['left','right'].map(name=>[name,pose.actionType?pose.heading:motion.feet[name].yaw]))});
 }
 
 /** Apply a sampled pose without changing the match or its locomotion clock. */
 export function applyAthletePose(visual,pose,{x,z,side=0,selected=false,ankleYaws={}}={}) {
   visual.root.position.set(x,0,z);visual.ground.position.set(x,0,z);
-  visual.root.rotation.y=(side===0?0:Math.PI)+pose.heading;
+  visual.root.rotation.y=(side===0?0:Math.PI)+visual.root.scale.x*pose.heading;
   const joints={};for(const [name,p]of Object.entries(pose.joints))joints[name]=turn(p,-pose.heading);
   for(const [name,parent]of Object.entries(JOINT_PARENTS)){const p=joints[name],q=parent?joints[parent]:v();visual.bones[name].position.set(p.x-q.x,p.y-q.y,p.z-q.z);}
   if(pose.headUp)visual.bones.head.quaternion.setFromUnitVectors(UP,temp.set(pose.headUp.x,pose.headUp.y,pose.headUp.z));
@@ -499,7 +513,7 @@ export function applyAthletePose(visual,pose,{x,z,side=0,selected=false,ankleYaw
   visual.footShadows.forEach((shadow,index)=>{
     const ankle=pose.joints[index===0?'leftAnkle':'rightAnkle'];
     const lift=Math.max(0,ankle.y-.085);
-    shadow.position.set(ankle.x*sign,.029,ankle.z*sign);
+    shadow.position.set(ankle.x*sign*visual.root.scale.x,.029,ankle.z*sign);
     shadow.scale.set(.24+lift*.2,.42+lift*.25,1);
     shadow.material.opacity=.46*Math.exp(-lift*8);
   });

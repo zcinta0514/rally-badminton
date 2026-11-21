@@ -62,6 +62,8 @@
         <div class="settings-column">
           <section class="settings-card" aria-labelledby="settings-controls-title">
             <h3 id="settings-controls-title">操作</h3>
+            <div class="setup-row"><span id="hand-label">持拍手</span><div class="segments" id="racket-hand" role="group" aria-labelledby="hand-label"><button type="button" data-hand="left">左手</button><button type="button" data-hand="right">右手</button></div></div>
+            <small id="hand-pending" role="status" hidden>下一分生效</small>
             <button id="edit-shot-layout" class="shot-layout-settings" type="button"><span>击球键布局</span><span aria-hidden="true">›</span></button>
             <small id="shot-layout-restriction" hidden>请在开局前或回到大厅后调整击球键。</small>
             <label class="arena-haptics" for="haptics-enabled"><input id="haptics-enabled" type="checkbox" checked><span>触感反馈</span></label><small id="haptics-note" class="arena-haptics-note">击球与杀球时轻振；可在本机关闭。</small>
@@ -200,7 +202,7 @@
     </div>
   </main>
   <footer class="lobby-update" aria-label="游戏版本与更新">
-    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.31.1</a>
+    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.32.0</a>
     <button id="lobby-history" type="button">近期更新</button>
     <button id="lobby-check-update" type="button">检查更新</button>
   </footer>
