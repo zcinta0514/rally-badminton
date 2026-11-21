@@ -1,7 +1,7 @@
 import { bracketMarkup, mountBracket } from './cup-bracket.js';
 import { getCupScoringRules } from '../shared/game.js';
 import { normalizePlayerName } from './player-profile.js';
-import { CUP_EVENTS, CUP_TARGETS, getCupOpponent, roundLabel } from './cup-draw.js';
+import { CUP_EVENTS, CUP_TARGETS, cupVenueForDraw, getCupOpponent, roundLabel } from './cup-draw.js';
 
 const escapeText = value => String(value ?? '').replace(/[&<>"']/g, c => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
@@ -68,7 +68,7 @@ function registration(event, name) {
     </form>`;
 }
 
-export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, onWithdraw, onFinish, onClose }) {
+export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, onWithdraw, onFinish, onClose, onPreview }) {
   const dialog = document.getElementById('cup-dialog');
   const body = document.getElementById('cup-body');
   const toast = document.getElementById('toast');
@@ -81,9 +81,14 @@ export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, 
     const cup = getRun();
     const event = CUP_EVENTS.find(e => e.id === (cup?.eventId || preview));
     renderedRun = cup;
+    const entryName = normalizePlayerName(getDefaultName?.()) || '你';
+    const venue = cup ? cupVenueForDraw(cup) : page === 'preview' && event
+      ? {eventId:event.id, centerCourt:false, selfName:entryName, opponent:null}
+      : null;
+    onPreview(venue);
     let content;
     if (!cup && page === 'preview' && event) {
-      content = registration(event, normalizePlayerName(getDefaultName?.()) || '你');
+      content = registration(event, entryName);
     } else if (!cup) {
       content = heading('杯赛挑战') + `<div class="cup-events">${CUP_EVENTS.map(eventCard).join('')}</div>`;
     } else if (page === 'draw') {
@@ -109,7 +114,8 @@ export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, 
     if (page === 'draw' && cup) mountBracket(body);
   }
 
-  function close() {
+  function close({enteringMatch=false} = {}) {
+    if (!enteringMatch) onPreview(null);
     if (dialog.open) dialog.close();
     if (toast.parentNode === dialog) toastParent.append(toast);
   }
@@ -157,7 +163,7 @@ export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, 
       render('preview');
     } else {
       switch (action) {
-        case 'play': close(); onPlay(); break;
+        case 'play': if (onPlay()) close({enteringMatch:true}); break;
         case 'draw': render('draw'); break;
         case 'withdraw': render('withdraw'); break;
         case 'confirm-withdraw': onWithdraw(); preview = null; render(); break;

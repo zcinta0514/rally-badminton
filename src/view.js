@@ -1,5 +1,6 @@
 import { makeCupAward, frameCupAwardCamera, STAGE_HEIGHT } from './cup-award.js';
 import { applyCupKit, cupVenueTheme, makeCupBoards } from './cup-venue.js';
+import { makeCupHall } from './cup-hall.js';
 import { localTeam } from './match-lineup.js';
 import { normalizeBrightness } from './arena-preferences.js';
 import * as THREE from 'three';
@@ -394,6 +395,7 @@ export class CourtView {
     const hall = this.preparedTournament;
     if (!hall || this.mode === 'training') return;
     hall.palette(this.courtPalette, this.cupTheme, this.cupVenue?.opponent?.name, this.cupVenue?.selfName);
+    hall.setCupArchitectureVisible(!this.cupVenue);
     this.prepareFollowScenery(hall.scene);
     this.venue.add(hall.scene);
     this.fallbackCourt.removeFromParent();
@@ -402,13 +404,14 @@ export class CourtView {
     this.netVisual.group.scale.x = 3.05 / 3.17;
     this.tournament = hall;
     this.preparedTournament = null;
-    this.canvas.dataset.venue = 'tournament';
+    this.canvas.dataset.venue = this.cupVenue ? 'cup-' + this.cupVenue.eventId : 'tournament';
   }
 
   setMode(mode) {
     if(this.mode===mode)return;
     if (mode !== 'match' && this.cupAward) this.endCupAward();
-    if (mode !== 'match' && this.cupVenue) this.setCupVenue(null);
+    if (mode !== 'menu' && this.cupPreview) this.setCupPreview(null);
+    if (mode !== 'match' && !this.cupPreview && this.cupVenue) this.setCupVenue(null);
     const leavingTraining = this.mode === 'training';
     this.mode=mode;
     const training = mode === 'training';
@@ -516,20 +519,51 @@ export class CourtView {
     this.updateCamera(award.previousSide);
   }
 
+  setCupPreview(preview) {
+    const old = this.cupPreview;
+    if (!preview && !old) return;
+    if (preview && old && old.eventId === preview.eventId && old.centerCourt === preview.centerCourt &&
+        old.selfName === preview.selfName && old.hand === preview.hand &&
+        old.opponent?.name === preview.opponent?.name && old.opponent?.height === preview.opponent?.height &&
+        old.opponent?.id === preview.opponent?.id) return;
+    this.cupPreview = preview;
+    this.updateCupVenue(preview);
+    const athlete = preview ? this.players[preview.opponent ? 1 : 0] : null;
+    this.lobby.setCupAthlete(athlete, preview?.opponent ? 'right' : preview?.hand, this.cupTheme);
+    if (this.mode === 'menu') this.renderLobby(0);
+  }
+
   setCupVenue(venue) {
-    if (!venue && !this.cupVenue) return;
-    if (this.cupBoards) {
-      this.cupBoards.removeFromParent();
-      disposeSceneResources(this.cupBoards);
-      this.cupBoards = null;
+    if (this.cupPreview) {
+      this.lobby.setCupAthlete(null);
+      this.cupPreview = null;
+    }
+    this.updateCupVenue(venue);
+  }
+
+  updateCupVenue(venue) {
+    const old = this.cupVenue;
+    if (!old && !venue) return;
+    const rebuild = old?.eventId !== venue?.eventId || old?.centerCourt !== venue?.centerCourt;
+    if (rebuild && this.cupHall) {
+      this.cupHall.group.removeFromParent();
+      disposeSceneResources(this.cupHall.group);
+      this.cupBoards = this.cupHall = null;
     }
     this.cupVenue = venue;
     this.cupTheme = venue && cupVenueTheme(venue.eventId);
-    if (this.cupTheme) {
+    if (this.cupTheme && rebuild) {
+      this.cupHall = makeCupHall(venue.eventId, Boolean(venue.centerCourt));
       this.cupBoards = makeCupBoards(venue.eventId, venue.centerCourt);
-      this.prepareFollowScenery(this.cupBoards);
-      this.venue.add(this.cupBoards);
+      this.cupHall.group.add(this.cupBoards);
+      this.prepareFollowScenery(this.cupHall.group);
+      this.venue.add(this.cupHall.group);
     }
+    this.cupHall?.update([0,0], venue?.selfName, venue?.opponent?.name);
+    this.tournament?.setCupArchitectureVisible(!venue);
+    if (this.arena) this.arena.visible = !venue;
+    if (this.hallShell) this.hallShell.visible = !venue;
+    if (this.mode !== 'training') this.canvas.dataset.venue = venue ? 'cup-' + venue.eventId : this.tournament ? 'tournament' : 'fallback';
     this.players.slice(0, 2).forEach(player => this.applyCupUniform(player));
     this.scene.background.setHex(this.cupTheme?.sky ?? COLORS.background);
     this.scene.fog.color.copy(this.scene.background);
@@ -758,6 +792,7 @@ export class CourtView {
   render(state, side=0, dt=1/60, info={}) {
     if(this.cupAward){this.renderCupAward(dt);return;}
     if(!state?.players||!state.shuttle)return;
+    this.cupHall?.update(state.score, this.cupVenue.selfName, this.cupVenue.opponent?.name);
     if (this.mode === 'training') {
       this.trainingHall.setTarget(info.trainingTarget, info.trainingTargets, info.trainingActiveTarget);
     }

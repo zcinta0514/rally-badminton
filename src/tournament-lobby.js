@@ -4,6 +4,8 @@ import { makeAthlete, applyAthletePose, bend } from './athlete.js';
 import { upgradeAthlete } from './athlete-import.js';
 
 const ATHLETE = Object.freeze({ x: 4.25, z: 5.1 });
+// Keep the near baseline official (x=5.65,z=6.7) outside the close-up frustum.
+const CUP_ATHLETE = Object.freeze({ x: 2.85, z: 5.1 });
 const HEADING = -2.55;
 const JOINTS = ['pelvis', 'spine', 'chest', 'neck', 'head',
   ...['left', 'right'].flatMap(side => ['Hip', 'Knee', 'Ankle', 'Shoulder', 'Elbow', 'Wrist'].map(name => side + name))];
@@ -114,6 +116,7 @@ export class TournamentLobby {
     this.athleteLoader = athleteLoader;
     this.retryAthleteIn = Infinity;
     this.athlete.root.visible = this.athlete.ground.visible = !loadAthlete;
+    this.showLobbyAthlete = !loadAthlete;
     this.athleteReady = loadAthlete ? this.showOriginalAthlete() : Promise.resolve(false);
     this.layoutCamera(844, 390, false);
   }
@@ -125,7 +128,8 @@ export class TournamentLobby {
     if (ready) {
       recolorAthlete(this.athlete);
       this.applyPose();
-      this.athlete.root.visible = this.athlete.ground.visible = true;
+      this.showLobbyAthlete = true;
+      this.athlete.root.visible = this.athlete.ground.visible = !this.cupAthlete;
     } else {
       this.retryAthleteIn = 10;
     }
@@ -187,10 +191,50 @@ export class TournamentLobby {
     sampleLobbyLighting(this.lightClock, this.lightLevels); this.applyLighting();
   }
 
-  applyPose() { applyAthletePose(this.athlete, this.pose, { x: ATHLETE.x, z: ATHLETE.z }); }
+  setCupAthlete(athlete, hand = 'right', theme = null) {
+    if (this.cupAthlete) {
+      const old = this.cupAthlete, saved = this.borrowedAthlete;
+      saved.parent.add(old.root, old.ground);
+      old.root.visible = saved.visible;
+      old.ground.visible = saved.groundVisible;
+      old.root.scale.x = saved.hand;
+      old.halo.visible = saved.halo;
+      old.doublesMarker.visible = saved.marker;
+      old.motion = null;
+    }
+    this.cupAthlete = athlete;
+    this.borrowedAthlete = null;
+    this.athlete.root.visible = this.athlete.ground.visible = !athlete && this.showLobbyAthlete;
+    this.scene.background.setHex(theme?.sky ?? 0x131c1b);
+    this.scene.fog.color.setHex(theme?.sky ?? 0x172220);
+    this.lights.key.color.setHex(theme?.light ?? 0xf6f2e9);
+    if (athlete) {
+      this.borrowedAthlete = {parent:athlete.root.parent,visible:athlete.root.visible,
+        groundVisible:athlete.ground.visible,hand:athlete.root.scale.x,
+        halo:athlete.halo.visible,marker:athlete.doublesMarker.visible};
+      this.scene.add(athlete.root, athlete.ground);
+      athlete.root.visible = athlete.ground.visible = true;
+      athlete.halo.visible = athlete.doublesMarker.visible = false;
+      athlete.root.scale.x = hand === 'left' ? -1 : 1;
+    }
+    this.applyPose();
+    this.shadowElapsed = Infinity;
+  }
+
+  applyPose() { applyAthletePose(this.cupAthlete || this.athlete, this.pose, this.cupAthlete ? CUP_ATHLETE : ATHLETE); }
 
   layoutCamera(width, height, reducedMotion) {
     const aspect = Math.max(1, width) / Math.max(1, height);
+    if (this.cupAthlete) {
+      const camera = this.camera;
+      camera.aspect = aspect; camera.fov = 38;
+      camera.position.set(CUP_ATHLETE.x + 1.55, 1.42, CUP_ATHLETE.z + 3.45);
+      camera.lookAt(CUP_ATHLETE.x, .99, CUP_ATHLETE.z);
+      camera.setViewOffset(width, height, -width * (aspect < 1 ? .16 : .27), 0, width, height);
+      camera.updateMatrixWorld(true);
+      return;
+    }
+    if (this.camera.view?.enabled) this.camera.clearViewOffset();
     const wide = THREE.MathUtils.clamp((844 / 390 - aspect) / (844 / 390 - 1.6), 0, 1);
     const u = THREE.MathUtils.clamp((1.6 - aspect) / (1.6 - 390 / 844), 0, 1);
     const blend = u * u * (3 - 2 * u), mix = THREE.MathUtils.lerp;
@@ -225,6 +269,7 @@ export class TournamentLobby {
 
   dispose() {
     if (this.disposed) return;
+    if (this.cupAthlete) this.setCupAthlete(null);
     this.disposed = true; this.athlete.disposed = true;
     const geometry = new Set(), materials = new Set(), textures = new Set(), skeletons = new Set();
     this.scene.traverse(object => {

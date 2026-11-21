@@ -92,6 +92,15 @@ export function getCupOpponent(cup) {
   return cup.players[match.a === 0 ? match.b : match.a];
 }
 
+export function cupVenueForDraw(cup) {
+  return {
+    eventId: cup.eventId,
+    centerCourt: cup.rounds[cup.roundIndex].length <= 2,
+    opponent: getCupOpponent(cup),
+    selfName: cup.players[0].name,
+  };
+}
+
 export function advanceCup(cup, won) {
   if (cup.status !== 'active') return cup;
   if (typeof won !== 'boolean') throw new TypeError('需要玩家比赛结果');

@@ -145,7 +145,15 @@ export function installTournamentArena({ scene, animations }) {
     for (const mat of floorMaterials) mat.color.setHex(court);
     if (surround?.isMesh) surround.material.color.setHex(apron);
   }
+  // Exported architecture lives in the AR namespace. Retain the apron, floor,
+  // lines, net posts, judges and scoreboard while an event owns the building.
+  const building = scene.children.filter(node =>
+    (node.name.startsWith('AR__') && node !== surround) ||
+    /^(Perimeter_board|Fascia_|Court_.*event_stencil)/.test(node.name));
+  function setCupArchitectureVisible(visible) {
+    for (const object of building) object.visible = visible;
+  }
   palette();
   pose();
-  return { scene, update, reset, palette };
+  return { scene, update, reset, palette, setCupArchitectureVisible };
 }
