@@ -1,3 +1,5 @@
+import * as drawModel from '../src/cup-draw.js';
+import * as cupPersistence from '../src/cup-save.js';
 import {practiceInputs,localTeam,lineupNames} from '../src/match-lineup.js';
 import {captureMotion,presentLocal} from '../src/local-presentation.js';
 import { MatchEntrance } from '../src/match-entrance.js';
@@ -45,7 +47,7 @@ class Target {
 }
 
 async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode=false, search='', pendingPeer=false, slot=0, finaleMode='none', buildId='1111111111111111', sessionStorage=null} = {}) {
-  let now = 1000, nextId = 0, frame, controls, view, audio, trainingActions;
+  let now = 1000, nextId = 0, frame, controls, view, audio, trainingActions, cupActions;
   let pwaOptions, onboardingOptions, updateSafeAtInit, onboardingAttempts = 0;
   const timers = new Map(), sockets = [], elements = new Map(), peerCalls = [], invites = [], usageEvents = [];
   let resolvePeer;
@@ -110,6 +112,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
       view = this; this.rallyEnding = false; this.crowdResets = 0; this.finaleClears = 0;
       this.finaleAnchors = [{ x: 170, y: 210 }, { x: 830, y: 260 }];
     }
+    setCupVenue(venue) { this.cupVenue=venue; }
     prepareTournament() {}
     setMode(mode) { this.mode = mode;if(mode!=='match')this.entrance?.cancel(); }
     get entranceActive(){return this.entrance?.active===true;}
@@ -133,7 +136,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     sample() { return { x: 0, z: 0, prepare: null, charge: 0 }; }
   }
   const context = vm.createContext({
-    ...game, createTraining, setTrainingOptions, stepTraining, practiceInputs,localTeam,lineupNames, MenuAudio, interfaceSound, captureMotion, presentLocal, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
+    ...drawModel, ...cupPersistence, ...game, createTraining, setTrainingOptions, stepTraining, practiceInputs,localTeam,lineupNames, MenuAudio, interfaceSound, captureMotion, presentLocal, hellStatus, readArenaPreferences, describeRole, matchPressure, MatchFinale, NetworkPlayback, PerformanceMonitor, formatPerformance, resolveShotAim, toWorldInput, isUpdateSafe,
     getUpdatePreferencesStorage, saveUpdatePreferences, restoreUpdatePreferences,
     normalizePlayerName, getLeaderboardURL, resultRecordText,
     localStorage:{getItem:key=>key==='rally.playtest.notice.1'?'1':null}, // Returning player at the lobby.
@@ -171,6 +174,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     // These independently tested UI modules do not replace any match decisions.
     initOnboarding: options => { onboardingOptions = options; return { maybeShow() { onboardingAttempts++; } }; },
     initFeedback: () => null,
+    bindCupUI: actions => { cupActions=actions; return {open(){},close(){}}; },
     bindTrainingUI: actions => { trainingActions = actions; return { close() {}, configure() {}, update() {} }; },
     getWebSocketURL: () => 'ws://localhost/ws', queueMicrotask,
     bindMatchSettings:()=>({close(){},update(){},selectPalette(){}}), bindPalettePicker:()=>null, bindCameraSettings() {}, bindShotLayout:()=>({open(){},close(){},refresh(){},resetPosition(){},layout:{mode:'default',positions:null},editing:false}), ResizeObserver: class { observe() {} },
@@ -178,12 +182,14 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     setTimeout(callback, delay) { timers.set(++nextId, { callback, delay, at: now + delay }); return nextId; },
     clearTimeout(id) { timers.delete(id); },
   });
+  const savedCups=new Map();
+  context.window.localStorage={getItem:key=>savedCups.get(key),setItem:(key,value)=>savedCups.set(key,value),removeItem:key=>savedCups.delete(key)};
   vm.runInContext(source, context, { filename: 'src/main.js' });
   assert.equal(typeof frame, 'function', 'the real application must initialize its render loop');
   const click = id => { const target = element(id); if (!target.disabled) return target.emit('click', { target }); };
   const draw = (elapsed = 20) => { now += elapsed; frame(now); };
   const common = { element, click, startAI(){click('entry-back');click('start-ai');click('start-ai-confirm');}, startHell(){click('entry-back');click('start-hell');click('start-hell-confirm');}, draw, controls, view, audio, document, usageEvents,
-    trainingActions, pwaOptions, onboardingOptions, updateSafeAtInit, get onboardingAttempts() { return onboardingAttempts; },
+    cupActions, trainingActions, pwaOptions, onboardingOptions, updateSafeAtInit, get onboardingAttempts() { return onboardingAttempts; },
     choice:(id,value)=>settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value))),
     chooseSetting:(id,value)=>{const button=settingGroups.get(id).find(button=>Object.values(button.dataset).includes(String(value)));if(!button.disabled)element(id).emit('click',{target:button});},
     get settings() { return vm.runInContext('settings', context); }, get sound() { return vm.runInContext('sound', context); },
@@ -960,3 +966,26 @@ test('local entrance freezes authoritative time and input, then releases both wi
   assert.equal(f.view.entranceActive,false);assert.equal(f.controls.enabled,true);
   assert.ok(f.liveState.time-start<.4,'hidden and entrance time never catch up into simulation');
 });
+
+
+for(const {id,size} of drawModel.CUP_EVENTS){
+  test(id+' advances once per scored win through the production match loop',async()=>{
+    const app=await fixture('serve',{demoMode:true});
+    const cup=app.cupActions;
+    cup.onCreate(id);
+    for(let remaining=size;remaining>=2;remaining/=2){
+      cup.onPlay();
+      app.draw();
+      assert.equal(app.view.cupVenue.centerCourt,remaining<=4);
+      assert.equal(app.element('name-other').textContent,drawModel.getCupOpponent(cup.getRun()).name);
+      app.liveState.score=[5,2];
+      game.finishMatch(app.liveState,0,'获胜','scored');
+      app.draw();app.draw();
+      assert.equal(cup.getRun().status,remaining===2?'champion':'active');
+      if(remaining>2)assert.equal(cup.getRun().rounds.at(-1).length,remaining/4);
+    }
+    cup.onClose();
+    assert.equal(app.view.cupVenue,null);
+    assert.equal(app.liveState,null);
+  });
+}

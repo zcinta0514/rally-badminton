@@ -1,5 +1,5 @@
 import { HELL } from '../shared/hell-mode.js';
-import { ROLES, staminaEffects } from '../shared/game.js';
+import { getPlayerRole, staminaEffects } from '../shared/game.js';
 
 // Keep the default foot anchor; move only when a fixed control would cover it.
 export function placeStaminaMeter(anchor, bounds, own, obstacles = []) {
@@ -25,13 +25,13 @@ export function placeStaminaMeter(anchor, bounds, own, obstacles = []) {
 
 export function staminaDisplay(player, phase, own) {
   if (player.staminaStatus === 'infinite') return { fraction: 1, percent: 100, low: false,
-    status: 'infinite', fatigued: false, speed: ROLES[player.role].speed * HELL.moveScale, label: '∞ 无限体力' };
-  const fraction = Math.max(0, Math.min(1, player.stamina / ROLES[player.role].maxStamina));
+    status: 'infinite', fatigued: false, speed: getPlayerRole(player).speed * HELL.moveScale, label: '∞ 无限体力' };
+  const fraction = Math.max(0, Math.min(1, player.stamina / getPlayerRole(player).maxStamina));
   const status = ['paused', 'countdown'].includes(phase) ? 'paused' : player.staminaStatus || 'idle';
-  const fatigue = staminaEffects(player, ROLES[player.role]), fatigued = fatigue.severity > .25;
+  const fatigue = staminaEffects(player, getPlayerRole(player)), fatigued = fatigue.severity > .25;
   const text = { recovering: '↑ 恢复中', draining: own && fatigued ? '↓ 疲劳' : '↓ 消耗', waiting: '· 调整中', paused: '暂停', idle: own && fatigued ? '疲劳' : '' }[status];
   return { fraction, percent: Math.round(fraction * 100), low: fraction < .25, status, fatigued,
-    speed: ROLES[player.role].speed * fatigue.speedScale,
+    speed: getPlayerRole(player).speed * fatigue.speedScale,
     label: (fraction < .25 ? '△ ' : '') + (own ? Math.round(fraction * 100) + '% ' : '') + text };
 }
 

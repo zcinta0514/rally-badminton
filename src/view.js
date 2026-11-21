@@ -1,3 +1,4 @@
+import { applyCupKit, cupVenueTheme, makeCupBoards } from './cup-venue.js';
 import { localTeam } from './match-lineup.js';
 import { normalizeBrightness } from './arena-preferences.js';
 import * as THREE from 'three';
@@ -125,7 +126,11 @@ export class CourtView {
     this.makeCourt();
     this.prepareFollowScenery(this.fallbackCourt);
     this.players = [makeAthlete(this.scene, 0), makeAthlete(this.scene, 1)];
-    for (const player of this.players) void upgradeAthlete(player);
+    for (const player of this.players) {
+      void upgradeAthlete(player).then(() => {
+        if (this.cupVenue && !this.disposed) this.applyCupUniform(player);
+      });
+    }
     this.mode = 'menu';
     this.lobby = new TournamentLobby();
     this.lobby.scene.add(this.venue);
@@ -387,7 +392,7 @@ export class CourtView {
   installPreparedTournament() {
     const hall = this.preparedTournament;
     if (!hall || this.mode === 'training') return;
-    hall.palette(this.courtPalette);
+    hall.palette(this.courtPalette, this.cupTheme, this.cupVenue?.opponent?.name);
     this.prepareFollowScenery(hall.scene);
     this.venue.add(hall.scene);
     this.fallbackCourt.removeFromParent();
@@ -401,6 +406,7 @@ export class CourtView {
 
   setMode(mode) {
     if(this.mode===mode)return;
+    if (mode !== 'match' && this.cupVenue) this.setCupVenue(null);
     const leavingTraining = this.mode === 'training';
     this.mode=mode;
     const training = mode === 'training';
@@ -453,10 +459,35 @@ export class CourtView {
     return { ...this.cameraSettings };
   }
 
+  applyCupUniform(player) {
+    applyCupKit(player, this.cupTheme, player.index === 1 && this.cupVenue?.opponent?.height);
+  }
+
+  setCupVenue(venue) {
+    if (!venue && !this.cupVenue) return;
+    if (this.cupBoards) {
+      this.cupBoards.removeFromParent();
+      disposeSceneResources(this.cupBoards);
+      this.cupBoards = null;
+    }
+    this.cupVenue = venue;
+    this.cupTheme = venue && cupVenueTheme(venue.eventId);
+    if (this.cupTheme) {
+      this.cupBoards = makeCupBoards(venue.eventId, venue.centerCourt);
+      this.prepareFollowScenery(this.cupBoards);
+      this.venue.add(this.cupBoards);
+    }
+    this.players.slice(0, 2).forEach(player => this.applyCupUniform(player));
+    this.scene.background.setHex(this.cupTheme?.sky ?? COLORS.background);
+    this.scene.fog.color.copy(this.scene.background);
+    this.matchKey.color.setHex(this.cupTheme?.light ?? 0xf6f2e9);
+    this.setCourtPalette(this.courtPalette);
+  }
+
   setCourtPalette(name) {
     this.courtPalette = normalizeCourtPalette(name);
-    this.tournament?.palette(this.courtPalette);
-    const palette = resolveCourtPalette(this.courtPalette);
+    this.tournament?.palette(this.courtPalette, this.cupTheme, this.cupVenue?.opponent?.name);
+    const palette = this.cupTheme ?? resolveCourtPalette(this.courtPalette);
     if (this.courtMaterials) {
       this.courtMaterials.court.color.setHex(palette.court);
       this.courtMaterials.apron.color.setHex(palette.apron);

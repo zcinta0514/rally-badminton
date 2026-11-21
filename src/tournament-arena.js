@@ -29,6 +29,7 @@ function scoreScreen() {
     new THREE.MeshBasicMaterial({map: texture, toneMapped: false}));
   screen.position.set(-4.25, 1.36, -9.43);
   let last;
+  let cupName = '';
   const update = (near, far) => {
     if (last === near + '/' + far) return;
     last = near + '/' + far;
@@ -37,14 +38,14 @@ function scoreScreen() {
     ctx.font = '650 30px "Rally Display", Arial, sans-serif'; ctx.fillText('开拍 RALLY   /   COURT 01', 49, 49);
     ctx.fillStyle = '#284146'; ctx.fillRect(384, 85, 2, 172);
     ctx.font = 'bold 36px Arial'; ctx.fillStyle = '#96b3b6';
-    ctx.fillText('NEAR', 35, 114); ctx.fillText('FAR', 418, 114);
+    ctx.fillText(cupName ? '你' : 'NEAR', 35, 114); ctx.fillText(cupName || 'FAR', 418, 114, 322);
     ctx.font = 'bold 142px Arial'; ctx.fillStyle = '#eff8ef';
     ctx.fillText(String(near).padStart(2, '0'), 29, 258);
     ctx.fillText(String(far).padStart(2, '0'), 413, 258);
     texture.needsUpdate = true;
   };
   update(0,0);
-  return { screen, update };
+  return { screen, update, opponent(name) { cupName = name || ''; last = null; } };
 }
 
 export async function loadTournamentArena() {
@@ -68,7 +69,7 @@ export function installTournamentArena({ scene, animations }) {
     action.play(); action.paused = true;
     actions.set(role, action);
   }
-  const floorMaterials = new Set(), crowd = [];
+  const floorMaterials = new Set(), crowd = [], seats = [];
   const surround = scene.getObjectByName('AR__Competition_surround');
   // Keep the apron tint local to this surface even if a future export shares its material.
   if (surround?.isMesh) surround.material = surround.material.clone();
@@ -76,6 +77,10 @@ export function installTournamentArena({ scene, animations }) {
     if (node.name.startsWith('CompetitionNet_')) node.visible = false;
     if (node.userData.role === 'spectator_block') crowd.push(node);
     if (!node.isMesh) return;
+    if (/formed.seat.shells/i.test(node.name) && node.material.color) {
+      node.material = node.material.clone();
+      seats.push({ material: node.material, base: node.material.color.clone() });
+    }
     node.receiveShadow = true;
     node.castShadow = /^LJ_|^Umpire_Main|^Service_Judge|^Players|^Umpire|^Net_post|^Scoreboard/.test(node.name);
     if (node.material.name === 'Court_Mat_Green') {
@@ -127,8 +132,13 @@ export function installTournamentArena({ scene, animations }) {
       pose();
     }
   }
-  function palette(name) {
-    const { court, apron } = resolveCourtPalette(name);
+  function palette(name, cupTheme, opponent) {
+    const { court, apron } = cupTheme ?? resolveCourtPalette(name);
+    scoreboard.opponent(opponent);
+    for (const seat of seats) {
+      if (cupTheme) seat.material.color.setHex(cupTheme.seat);
+      else seat.material.color.copy(seat.base);
+    }
     for (const mat of floorMaterials) mat.color.setHex(court);
     if (surround?.isMesh) surround.material.color.setHex(apron);
   }

@@ -1,5 +1,8 @@
 import { captureMotion, presentLocal } from './local-presentation.js';
 import { createTraining, setTrainingOptions, stepTraining } from '../shared/training.js';
+import { CUP_EVENTS, createCup, getCupOpponent, advanceCup, roundLabel } from './cup-draw.js';
+import { readCupSave, writeCupSave, CUP_STORAGE_KEY } from './cup-save.js';
+import { bindCupUI } from './cup-ui.js';
 import { bindTrainingUI } from './training-ui.js';
 import { practiceInputs, localTeam, lineupNames } from './match-lineup.js';
 import { hellStatus } from '../shared/hell-mode.js';
@@ -384,6 +387,79 @@ const trainingUI=bindTrainingUI({
   },
   onExit:()=>exitToMenu(),
 });
+let cupSave=null, cupMatch=null, cupCheckpointAt=0;
+let cupStorage;
+try { cupStorage=window.localStorage; } catch {}
+function readCup() {
+  cupSave=readCupSave(cupStorage);
+  return cupSave?.draw;
+}
+function saveCup(draw, match=null) {
+  try {
+    cupSave=writeCupSave(cupStorage,cupSave,draw,match);
+    return true;
+  } catch (error) {
+    showToast(error.message.includes('另一窗口')?error.message:'本机未能保存赛事进度，请检查浏览器存储空间。');
+    return false;
+  }
+}
+function checkpointCup() {
+  if(!cupMatch||cupMatch.settled||!state)return true;
+  let saved;
+  if(state.phase==='over'){
+    const next=advanceCup(cupSave.draw,state.winner===0);
+    saved=cupMatch.settled=saveCup(next);
+  }else{
+    saved=saveCup(cupSave.draw,state);
+  }
+  cupCheckpointAt=performance.now();
+  return saved;
+}
+function leaveCupCourt() {
+  if(!cupMatch)return true;
+  if(!checkpointCup())return false;
+  cupMatch=null;
+  view.setCupVenue(null);
+  exitToMenu({entry:'solo'});
+  return true;
+}
+const cupUI=bindCupUI({
+  getRun:readCup,
+  getScore:()=>cupSave?.match?.score,
+  onCreate(eventId){
+    readCup();
+    if(!cupSave)saveCup(createCup(eventId,playerProfile?.name||'你'));
+  },
+  onWithdraw(){saveCup(null);},
+  onFinish(){saveCup(null);},
+  onClose:leaveCupCourt,
+  onPlay(){
+    if(cupMatch&&!leaveCupCourt())return;
+    const draw=readCup();
+    if(mode!=='menu'||!controls||!draw||draw.status!=='active')return;
+    const opponent=getCupOpponent(draw), event=CUP_EVENTS.find(item=>item.id===draw.eventId);
+    const remaining=event.size/2**draw.roundIndex;
+    const saved=cupSave.match;
+    const restored=saved?.rulesVersion===RULES_VERSION && saved.format==='singles' &&
+      saved.players?.length===2 && saved.shuttle && saved.pause && Array.isArray(saved.score);
+    state=restored?saved:createMatch({humanSlots:[0],roles:[settings.role,opponent.role],cupOpponent:opponent,
+      difficulty:opponent.difficulty,target:5,ruleset:'quick',seed:draw.seed+draw.roundIndex});
+    if(!saveCup(draw,state)){state=null;cupUI.open();return;}
+    cupMatch={opponent,label:event.name+' · '+roundLabel(remaining),selfName:draw.players[0].name,settled:false};
+    mode='ai';side=0;playback.reset();lastRtt=null;
+    view.setCupVenue({eventId:event.id,centerCourt:remaining<=4,opponent});
+    enterMatch();
+  }
+});
+window.addEventListener('storage',event=>{
+  if(event.key!==CUP_STORAGE_KEY||!cupMatch)return;
+  if(readCupSave(cupStorage)?.revision===cupSave?.revision)return;
+  cupMatch.settled=true;
+  cupUI.close();
+  leaveCupCourt();
+  showToast('另一窗口已更新杯赛进度。');
+});
+window.addEventListener('pagehide',checkpointCup);
 function enterMatch(){
   usage.startMatch(mode);
   clearFinale();
@@ -451,6 +527,7 @@ function requestPause(){
   if(reconnecting){showConnectionRecovery();return;}
   if(!state||!['serve','rally','point','intermission'].includes(state.phase))return;
   pendingShot=null;controls.reset();
+  if(cupMatch)state.pause.used[0]=0;
   if(mode==='online')send({type:'pause'});
   else if(!pauseMatch(state,0)){helpOpen=false;showToast('暂停已用过，每人每场可暂停一次。');}
 }
@@ -597,12 +674,16 @@ $('join-room').addEventListener('click',()=>roomAction('join'));
 $('room-code').addEventListener('keydown',event=>{if(event.key==='Enter')roomAction('join');});
 $('pause').addEventListener('click',requestPause);
 $('resume').addEventListener('click',()=>{if(mode==='online')send({type:'resume'});else if(state)resumeMatch(state);});
-for(const id of ['leave-game','back-menu'])$(id).addEventListener('click',exitToMenu);
+for(const id of ['leave-game','back-menu'])$(id).addEventListener('click',()=>{
+  if(cupMatch){if(leaveCupCourt()&&id==='leave-game')cupUI.open();}
+  else exitToMenu();
+});
 $('leave-waiting').addEventListener('click',()=>exitToMenu({entry:'friends'}));
 $('rematch').addEventListener('click',()=>{
   if(finale.blocking)return;
   if(peerMode&&peerDisconnected){exitToMenu();dialog('friends-dialog');return;}
   if(mode==='online'){send({type:'rematch'});rematchRequested=true;setText('rematch','等待球友同意…');}
+  else if(cupMatch){if(checkpointCup()){dialog(null);cupUI.open();}}
   else if(state?.challenge)startHell();
   else startAI();
 });
@@ -646,6 +727,11 @@ document.addEventListener('visibilitychange',()=>{
     pendingShot=null;
     accumulator=0;
     lastFrame=performance.now();
+    return;
+  }
+  if(cupMatch){
+    controls?.reset();pendingShot=null;accumulator=0;lastFrame=performance.now();
+    if(document.hidden)checkpointCup();
     return;
   }
   if(!document.hidden||!state||state.phase==='over')return;
@@ -702,8 +788,8 @@ function updateUI(info,state){
   if(mode==='online'&&state.phase==='over')setText('result-record',resultRecordText(leaderboardRecord));
   const self=state.players[side],opponent=state.players[1-team];
   const namesPair=lineupNames(state,side,mode==='online'?room?.players:null);
-  const nameSelf=doubles?namesPair.self:mode==='online'?room?.players[side]?.name||'你':'你';
-  const nameOther=doubles?namesPair.other:mode==='online'?room?.players[1-team]?.name||'球友':state.challenge?'地狱球王':`${names[settings.difficulty]}陪练`;
+  const nameSelf=cupMatch?cupMatch.selfName:doubles?namesPair.self:mode==='online'?room?.players[side]?.name||'你':'你';
+  const nameOther=cupMatch?cupMatch.opponent.name:doubles?namesPair.other:mode==='online'?room?.players[1-team]?.name||'球友':state.challenge?'地狱球王':`${names[settings.difficulty]}陪练`;
   const showServer = ['serve','rally'].includes(state.phase);
   $('serve-self').hidden = !showServer || state.server !== team;
   $('serve-other').hidden = !showServer || state.server !== 1-team;
@@ -715,7 +801,7 @@ function updateUI(info,state){
   setText('name-self',nameSelf);setText('name-other',nameOther);
   setText('role-self',ROLES[self.role].label+'型');setText('role-other',state.challenge?'体力 ∞':ROLES[opponent.role].label+'型');
   setText('score-self',state.challenge?state.score[team]+'/2':state.score[team]);setText('score-other',state.challenge?state.score[1-team]+'/5':state.score[1-team]);
-  const matchType=doubles?(mode==='ai'?'人机双打':'好友双打'):mode==='ai'?(state.netDragSide===side?'人机 · 网前试打':'人机对战'):room?.rules?.finale==='father-son'?'父子局':'普通对局';
+  const matchType=cupMatch?cupMatch.label:doubles?(mode==='ai'?'人机双打':'好友双打'):mode==='ai'?(state.netDragSide===side?'人机 · 网前试打':'人机对战'):room?.rules?.finale==='father-son'?'父子局':'普通对局';
   const matchLabel=state.challenge?'地狱挑战 · 你 2 分 / 对手 5 分':state.ruleset==='standard21'?`第${state.gameNumber}局 · ${state.games[team]}:${state.games[1-team]} · ${matchType}`:`${state.target} 分制 · ${matchType}`;
   const scoring=getScoringRules(state);
   const scoringPhase=['paused','countdown'].includes(state.phase)?state.pause.previousPhase:state.phase;
@@ -726,7 +812,7 @@ function updateUI(info,state){
   setText('match-label',matchLabel+(scoringHint?` · ${scoringHint}`:''));
   setText('match-message',state.phase==='serve'?(state.server===team?`${doubles&&state.serverPlayer!==side?'队友':'你'}发球 · ${state.service?.court==='left'?'左':'右'}发球区`:'对手发球'):relativeMessage(state.message));
   setText('rally',state.phase==='rally'?`${state.rally} 拍回合`:`第 ${state.pointId+1} 分`);
-  if(mode==='ai')setText('connection',state.challenge?'2 / 5 非对称挑战':'本地练习');
+  if(mode==='ai')setText('connection',cupMatch?'杯赛单打':state.challenge?'2 / 5 非对称挑战':'本地练习');
   paintShotControls(info,info.availability.canSmash,state.phase);
   const lane=info.aim,depth=info.aimDepth;
   const quality=info.target?.quality;
@@ -749,12 +835,14 @@ function updateUI(info,state){
   if(state.phase!==lastPhase){
     lastPhase=state.phase;
     if(state.phase==='paused'){
-      $('pause-rule-note').hidden=Boolean(state.reconnect);
+      $('pause-rule-note').hidden=Boolean(state.reconnect)||Boolean(cupMatch);
+      setText('leave-game',cupMatch?'保存并返回签表':'结束本局并返回');
       setText('pause-title','比赛暂停');
       setText('resume','继续比赛 ↗');
-      setText('pause-description',state.reconnect?'连接中断，等待球友恢复。超时则中断，不计胜负。':doubles&&mode==='online'?'全员连接后，四人确认继续比赛。':mode==='ai'?'每人每场可暂停一次，最多 30 秒。':peerMode?'每人每场一次，最多 30 秒；双方准备后继续，请保持游戏在前台。':'每人每场一次；双方准备后继续，断线对手可在倒计时内重连。');
+      setText('pause-description',cupMatch?'可随时继续比赛，或保存比分并返回签表。':state.reconnect?'连接中断，等待球友恢复。超时则中断，不计胜负。':doubles&&mode==='online'?'全员连接后，四人确认继续比赛。':mode==='ai'?'每人每场可暂停一次，最多 30 秒。':peerMode?'每人每场一次，最多 30 秒；双方准备后继续，请保持游戏在前台。':'每人每场一次；双方准备后继续，断线对手可在倒计时内重连。');
       dialog(helpOpen?'help-dialog':'pause-dialog');
     }else if(state.phase==='over'){
+      setText('back-menu',cupMatch?'返回单人对战':'返回首页');
       const resultScope=state.ruleset==='standard21'?'本场':'本局';
       setText('result-title',state.challenge&&state.endReason==='scored'?(state.winner===team?'地狱挑战通关':'挑战失败'):state.winner===null?`${resultScope}结束`:state.winner===team?`${resultScope}获胜`:`${resultScope}失利`);
       const resultScores=state.ruleset==='standard21'?state.games:state.score;
@@ -765,7 +853,7 @@ function updateUI(info,state){
       setText('result-score-label',state.ruleset==='standard21'?'最终局数':state.endReason==='scored'?'最终比分':'结束时比分');
       $('result-score').setAttribute('aria-label',`${nameSelf} ${resultScores[team]} 比 ${resultScores[1-team]} ${nameOther}${state.ruleset==='standard21'?'，局数':''}`);
       const resultReason=relativeMessage(state.message).replace(/\s*·\s*(?:局数\s*)?\d+\s*:\s*\d+$/,'');
-      setText('result-reason',resultReason+(state.ruleset==='standard21'?` · 最后一局 ${state.score[team]}:${state.score[1-team]}`:''));setText('rematch',state.challenge?'再次挑战 ↗':'再来一局 ↗');
+      setText('result-reason',resultReason+(state.ruleset==='standard21'?` · 最后一局 ${state.score[team]}:${state.score[1-team]}`:''));setText('rematch',cupMatch?(cupSave?.draw.status==='champion'?'登上领奖台 ↗':'查看签表 ↗'):state.challenge?'再次挑战 ↗':'再来一局 ↗');
       rematchRequested=false;helpOpen=false;resultPending=true;dialog(null);
     }else if(!helpOpen)dialog(null);
   }
@@ -774,7 +862,7 @@ function updateUI(info,state){
   }
   if(state.phase==='over'&&!resultPending&&!finale.blocking&&!arenaAudio.voices?.size)menuAudio.setScene('result');
   if(state.phase==='paused'){
-    setText('pause-time',Math.ceil(state.reconnect?state.reconnect.remainingMs/1000:state.pause.remaining));
+    setText('pause-time',cupMatch?'Ⅱ':Math.ceil(state.reconnect?state.reconnect.remainingMs/1000:state.pause.remaining));
     $('resume').disabled=mode==='online'&&(reconnecting||room?.players.some(p=>!p?.connected));
   }
   if(peerMode&&peerDisconnected&&state.phase==='over')setText('rematch','重新建房 ↗');
@@ -877,16 +965,17 @@ try{
       view.advanceEntrance?.(elapsed,{hidden:document.hidden,phase:state.phase,remaining:state.timer});
       document.body.dataset.entering=String(view.entranceActive===true);
       if(mode==='ai'){
-        if(shotLayoutHold||matchSettings?.isOpen||view.entranceActive){accumulator=0;}
+        if(shotLayoutHold||matchSettings?.isOpen||view.entranceActive||(cupMatch&&(document.hidden||state.phase==='paused'))){accumulator=0;}
         else if(state.phase==='paused'){stepMatch(state,[{},{}],elapsed);accumulator=0;}
         else{
           accumulator+=Math.min(elapsed,.15);
           while(accumulator>=1/60){
             const input=worldInput(controls.sample());if(pendingShot){Object.assign(input,pendingShot);pendingShot=null;}
             previousMotion=captureMotion(state);
-            stepMatch(state,practiceInputs(state,input,settings),1/60);accumulator-=1/60;
+            stepMatch(state,practiceInputs(state,input,cupMatch?state:settings),1/60);accumulator-=1/60;
           }
         }
+        if(cupMatch&&!cupMatch.settled&&((state.phase==='over'&&lastPhase!=='over')||now-cupCheckpointAt>=3000))checkpointCup();
         usage.observeResult(state);
       }else if(mode==='online'){
         if(now-lastSend>1000/30){lastSend=now;if(['serve','rally'].includes(state.phase)&&!reconnecting)send({type:'input',...worldInput(controls.sample())});}
@@ -897,7 +986,7 @@ try{
       const finaleFrame=mode==='online'?finale.update({dt:elapsed,serverNow:now-(playback.clockOffset??0)-playback.bufferMs,
         phase:displayed.phase,rallyEnding:view.rallyEnding,visible:!document.hidden}):null;
       if(finaleFrame)info.finale=finaleFrame;
-      info.playerNames=mode==='online'?room?.players.map(p=>p?.name||'球友'):null;
+      info.playerNames=cupMatch?[cupMatch.selfName,cupMatch.opponent.name]:mode==='online'?room?.players.map(p=>p?.name||'球友'):null;
       const renderStart=performance.now();view.render(displayed,side,reconnecting?0:Math.min(elapsed,.1),info);renderMs=performance.now()-renderStart;
       const uiStart=performance.now();updateUI(info,displayed);uiMs=performance.now()-uiStart;
       showFinale(finaleFrame);
