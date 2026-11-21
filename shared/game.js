@@ -919,6 +919,12 @@ function observeReplies(state, side) {
   const book = state._scouting[side] ??= { lanes: {}, lastHit: -1 };
   if (book.lastHit === hit.hitId) return;
   book.lastHit = hit.hitId;
+  if (state.challenge?.bossSide === side && hit.side !== playerTeam(state, side)) {
+    const deepCorner = !hit.serving && Math.abs(hit.x) > 1.25 && Math.abs(hit.z) > 4.5;
+    const lane = deepCorner ? Math.sign(hit.x) : 0;
+    book.switches = lane && book.lastCorner === -lane ? Math.min(3, (book.switches || 0) + 1) : 0;
+    book.lastCorner = lane;
+  }
   const setup = book.setup;
   book.setup = null;
   if (hit.serving) return;
@@ -942,7 +948,7 @@ function setupValue(state, side, candidate) {
 function recoveryPosition(state, side, level) {
   let x = state.shuttle.x * .15;
   let depth = level === 'hard' && !state.challenge ? 2.95 : 3.55;
-  const book = level === 'hard' && !state.challenge && state._scouting?.[side];
+  const book = level === 'hard' && state._scouting?.[side];
   const replies = book?.setup && book.lanes[book.setup.key];
   if (replies?.length) {
     // Opposite replies cancel out. A single observation barely moves the base.
@@ -952,6 +958,11 @@ function recoveryPosition(state, side, level) {
       x += .85 * weight * (clamp(reply.x, -2.3, 2.3) - baseX);
       depth += weight * (clamp(reply.depth, 1.4, 5.5) - baseDepth);
     }
+  }
+  if (book?.switches && state.challenge?.bossSide === side) {
+    // Shade the opposite rear corner. A change of length immediately clears this read.
+    x = x * .45 - book.lastCorner * Math.min(.9, book.switches * .35);
+    depth = Math.max(depth, 3.95 + .16 * book.switches);
   }
   depth += state.players[side].cup?.tactics?.depth ?? 0;
   return { x, z: direction(side) * depth };
@@ -982,7 +993,7 @@ function chooseCandidate(state, side, level, candidates) {
     return (level === 'hard' ? 1.7 : 1) * distance / getPlayerRole(opponent).speed * urgency;
   };
   const scored = candidates.map(candidate => ({ ...candidate, score: candidate.score + (player.cup?.tactics?.[candidate.shot] ?? 0) + coverage(candidate) + (1 - reservePressure) * pressure(candidate)
-    + (level === 'hard' && !state.challenge ? setupValue(state, side, candidate) : 0) - repeatPenalty(history, candidate)
+    + (level === 'hard' ? setupValue(state, side, candidate) : 0) - repeatPenalty(history, candidate)
     - reservePressure * (candidate.shot === 'smash' ? 1.2 : candidate.shot === 'clear' ? .3 : 0) }));
   const best = Math.max(...scored.map(candidate => candidate.score));
   const viable = scored.filter(candidate => candidate.score > -5);
@@ -1100,7 +1111,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     if (serverSlot(state) === side && state._serveAge > config.serveDelay + config.reaction) {
       let serve = state._ai[side];
       if (serve?.servePointId !== state.pointId) {
-        const short = !h && random(state) < (level === 'hard' ? .72 : level === 'medium' ? .48 : .22);
+        const short = random(state) < (h ? .40 : level === 'hard' ? .72 : level === 'medium' ? .48 : .22);
         serve = state._ai[side] = {servePointId:state.pointId,shot:short?'drop':'clear',
           aim:(random(state)-.5)*(level==='easy'?.5:1.4),
           aimDepth:short?-.65: .2+random(state)*.35,charge:short?.05:.35};
@@ -1109,7 +1120,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
     }
     return output;
   }
-  if (level === 'hard' && !state.challenge) observeReplies(state, side);
+  if (level === 'hard') observeReplies(state, side);
   if (state.format === 'doubles') {
     const assignment = doublesAssignment(state, side, config, inputs, getInterceptAdvice, level);
     if (assignment) return { ...output, ...assignment };
@@ -1117,7 +1128,7 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
   if (h?.rescue) return output;
   if (ball.lastHit === playerTeam(state, side)) {
     const base = recoveryPosition(state, side, level);
-    const regroupPace = !h && player.stamina < role.maxStamina * .45 ? .20 : config.pace * (level === 'hard' && !h ? .9 : .72);
+    const regroupPace = !h && player.stamina < role.maxStamina * .45 ? .20 : config.pace * (level === 'hard' ? .9 : .72);
     return { ...output, ...moveToward(player, base.x, base.z, regroupPace) };
   }
   let memory = state._ai[side];
@@ -1223,10 +1234,10 @@ export function aiInput(state, side, difficulty = 'easy', inputs = null) {
       const contact = liveFlightPoint(ball, .06);
       const balanced = contact.y >= 1.2
         && Math.hypot(contact.x - player.x, contact.z - player.z) <= TUNING.reach;
-      if (balanced && (depth < 2.5 || advancing) && random(state) < .82) {
+      if ((balanced || contact.y >= .55 && horizontal < TUNING.reach) && (depth < 2.5 || advancing) && random(state) < .90) {
         const openLane = Math.abs(receiver.x) > .4 ? -Math.sign(receiver.x) : Math.sign(memory.aim) || 1;
         memory.aim = openLane * .82;
-        memory.wideDrop = Math.abs(receiver.x) > 1 && random(state) < .35;
+        memory.wideDrop = balanced && Math.abs(receiver.x) > 1 && random(state) < .25;
         memory.playDeep = !memory.wideDrop;
         memory.shot = memory.playDeep ? 'clear' : 'drop';
         memory.aimDepth = memory.playDeep ? .72 : -.65;

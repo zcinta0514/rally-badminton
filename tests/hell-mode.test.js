@@ -278,3 +278,24 @@ test('a low forced contact still gives the rushing server a short reply', () => 
   assert.equal(s.lastShotInfo?.playerSlot, 1);
   assert.equal(s.lastShotInfo.type, 'drop');
 });
+
+test('hell learns alternating deep corners once per shot and releases its read on a short ball', () => {
+  const s = createMatch({challenge:'hell'});
+  s.phase = 'rally';
+  function observe(x,z) {
+    s.hitId++;
+    s.lastShotInfo = {hitId:s.hitId, playerSlot:0, side:0, type:'smash', x,z};
+    s.shuttle.lastHit = 0;
+    aiInput(s,1);
+    aiInput(s,1);
+    return s._scouting[1].switches;
+  }
+  assert.equal(observe(-2,-5.4),0);
+  assert.equal(observe(2,-5.4),1);
+  assert.equal(observe(-2,-5.4),2);
+  s.shuttle.lastHit = 1;
+  Object.assign(s.players[1],{x:0,z:-3.55});
+  const cover = aiInput(s,1);
+  assert.ok(cover.x > 0 && cover.z < 0);
+  assert.equal(observe(1,-1.2),0);
+});
