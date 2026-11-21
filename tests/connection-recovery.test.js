@@ -117,6 +117,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
     endCupAward() {this.award=null;}
     renderCupAward() {}
     setCupVenue(venue) { this.cupVenue=venue; }
+    setCupPreview(venue) { this.cupPreview=venue; }
     prepareTournament() {}
     setMode(mode) { this.mode = mode;if(mode!=='match')this.entrance?.cancel(); }
     get entranceActive(){return this.entrance?.active===true;}
@@ -1026,4 +1027,25 @@ test('losing a cup final keeps the result screen and never starts the podium',as
   assert.equal(cup.getRun().status,'eliminated');
   assert.equal(app.view.award,undefined);
   assert.equal(app.element('result-dialog').hidden,false);
+});
+
+
+test('returning to the draw after a win leaves the prior court before previewing the next opponent',async()=>{
+  const app=await fixture('serve',{demoMode:true});
+  const cup=app.cupActions;
+  cup.onCreate('bay','海湾选手',15);
+  const first=drawModel.cupVenueForDraw(cup.getRun());
+  cup.onPreview(first);
+  assert.equal(app.view.cupPreview.opponent.id,first.opponent.id);
+  cup.onPlay();app.draw();
+  game.finishMatch(app.liveState,0,'获胜','scored');
+  app.draw();app.click('rematch');
+  assert.equal(app.liveState,null);
+  assert.equal(app.view.cupVenue,null);
+  const next=drawModel.cupVenueForDraw(cup.getRun());
+  assert.notEqual(next.opponent.id,first.opponent.id);
+  cup.onPreview(next);
+  assert.equal(app.view.cupPreview.selfName,'海湾选手');
+  cup.onPreview(null);
+  assert.equal(app.view.cupPreview,null);
 });

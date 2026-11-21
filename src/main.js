@@ -1,7 +1,7 @@
 import { applyHandPreference } from '../shared/handedness.js';
 import { captureMotion, presentLocal } from './local-presentation.js';
 import { createTraining, setTrainingOptions, stepTraining } from '../shared/training.js';
-import { CUP_EVENTS, createCup, getCupOpponent, advanceCup, roundLabel } from './cup-draw.js';
+import { CUP_EVENTS, createCup, cupVenueForDraw, advanceCup, roundLabel } from './cup-draw.js';
 import { readCupSave, writeCupSave, CUP_STORAGE_KEY } from './cup-save.js';
 import { bindCupUI } from './cup-ui.js';
 import { bindTrainingUI } from './training-ui.js';
@@ -441,7 +441,7 @@ function endCupAward(){
   return true;
 }
 function showChampionRoad(){
-  if(endCupAward())cupUI.open();
+  if(endCupAward()&&leaveCupCourt())cupUI.open();
 }
 $('skip-cup-award').addEventListener('click',showChampionRoad);
 function leaveCupCourt() {
@@ -468,11 +468,15 @@ const cupUI=bindCupUI({
   onWithdraw(){saveCup(null);},
   onFinish(){saveCup(null);},
   onClose:leaveCupCourt,
+  onPreview(venue){
+    view?.setCupPreview(venue ? {...venue,hand:venue.opponent?'right':racketHand} : null);
+  },
   onPlay(){
     if(cupMatch&&!leaveCupCourt())return;
     const draw=readCup();
     if(mode!=='menu'||!controls||!draw||draw.status!=='active')return;
-    const opponent=getCupOpponent(draw), event=CUP_EVENTS.find(item=>item.id===draw.eventId);
+    const venue=cupVenueForDraw(draw), opponent=venue.opponent;
+    const event=CUP_EVENTS.find(item=>item.id===draw.eventId);
     const remaining=event.size/2**draw.roundIndex;
     const saved=cupSave.match;
     const restored=saved?.rulesVersion===RULES_VERSION && saved.format==='singles' &&
@@ -482,8 +486,9 @@ const cupUI=bindCupUI({
     if(!saveCup(draw,state)){state=null;cupUI.open();return;}
     cupMatch={opponent,label:event.name+' · '+roundLabel(remaining),selfName:draw.players[0].name,settled:false};
     mode='ai';side=0;playback.reset();lastRtt=null;
-    view.setCupVenue({eventId:event.id,centerCourt:remaining<=4,opponent,selfName:cupMatch.selfName});
+    view.setCupVenue(venue);
     enterMatch();
+    return true;
   }
 });
 window.addEventListener('storage',event=>{
@@ -728,7 +733,7 @@ $('rematch').addEventListener('click',()=>{
   if(finale.blocking)return;
   if(peerMode&&peerDisconnected){exitToMenu();dialog('friends-dialog');return;}
   if(mode==='online'){send({type:'rematch'});rematchRequested=true;setText('rematch','等待球友同意…');}
-  else if(cupMatch){if(checkpointCup()){dialog(null);cupUI.open();}}
+  else if(cupMatch){if(leaveCupCourt())cupUI.open();}
   else if(state?.challenge)startHell();
   else startAI();
 });
@@ -1082,6 +1087,13 @@ try{
       // Read-only diagnostics for reproducible browser QA and user bug reports.
       window.rallyDiagnostics={render:stats,network,rtt:lastRtt,renderer,peer:peerStats,
         stateTime:state?.time??null,statePhase:state?.phase??null,venue:view.mode,
+        get cupScene(){
+          const venue=view.cupPreview||view.cupVenue;
+          if(!venue)return null;
+          return {eventId:venue.eventId,centerCourt:venue.centerCourt,phase:view.cupPreview?'preview':'match',
+            athlete:view.cupPreview?(venue.opponent?'opponent':'self'):null,opponentId:venue.opponent?.id??null,
+            opponentName:venue.opponent?.name??null,opponentHeight:venue.opponent?.height??null,model:view.cupHall?.group.name??null};
+        },
         get matchStroke(){return mode==='ai' ? structuredClone(state?.lastShotInfo??null) : null;},
         get training(){
           if(mode!=='training'||!state?.training)return null;
