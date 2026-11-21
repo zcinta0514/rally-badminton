@@ -83,7 +83,7 @@ try {
     const ui = page.locator('#arena-ui');
     await ui.fill('0');
     const clicks = await countClicks();
-    await tap(settings);
+    await tap('#settings-back');
     assert.equal(await countClicks(), clicks);
     await playing('know-the-game.mp3');
     await tap(settings);
@@ -92,7 +92,7 @@ try {
     await paused();
     await page.locator('#arena-music').fill('25');
     await playing('know-the-game.mp3');
-    await tap(settings);
+    await tap('#settings-back');
     await tap('#sound');
     await paused();
     await tap('#sound');
