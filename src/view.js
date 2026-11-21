@@ -783,7 +783,7 @@ export class CourtView {
     this.staminaHUD?.update(state, side, (x, y, z) => {
       const point = this.staminaProjection.set(x, y, z).project(this.camera);
       return { x: (point.x + 1) * this.width / 2, y: (1 - point.y) * this.height / 2, depth: point.z };
-    }, { left: 0, right: this.width, top: 0, bottom: this.height }, this.mode === 'match', info.playerNames);
+    }, { left: 0, right: this.width, top: 0, bottom: this.height }, this.mode === 'match' || (state.trainingServer != null && document.body.dataset.training === 'playing'), info.playerNames);
     const ghosts = phantomPositions(state), h = state.challenge, boss = state.players[1];
     const paper = h?.paper;
     const age = paper?.at == null ? -1 : state.time - paper.at;

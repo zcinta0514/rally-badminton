@@ -137,7 +137,7 @@
       <div class="launch-actions" id="home-actions">
         <button id="open-solo" class="lobby-action" type="button"><span>单人对战</span><span aria-hidden="true">›</span></button>
         <button id="open-friends" class="lobby-action" type="button" aria-label="好友对战"><span>好友对战</span><span aria-hidden="true">›</span></button>
-        <button id="open-training" class="lobby-action" type="button"><span>专项训练</span><span aria-hidden="true">›</span></button>
+        <button id="open-training" class="lobby-action" type="button"><span>训练模式</span><span aria-hidden="true">›</span></button>
       </div>
       <div class="launch-actions" id="solo-actions" hidden>
         <button id="start-ai" class="lobby-action" type="button" aria-label="人机对战"><span class="entry-copy"><strong>人机对战</strong></span><span aria-hidden="true">›</span></button>
@@ -198,12 +198,12 @@
     </div>
   </main>
   <footer class="lobby-update" aria-label="游戏版本与更新">
-    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.28.0</a>
+    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.29.0</a>
     <button id="lobby-history" type="button">近期更新</button>
     <button id="lobby-check-update" type="button">检查更新</button>
   </footer>
   <aside id="court-caption" class="court-caption"><div class="live-tag"><i></i> 球场预览</div><div class="court-strip"><b>01</b><span>比赛场地</span><span>RALLY COURT</span></div></aside>
-  <section id="training-ui" aria-label="专项训练馆" hidden>
+  <section id="training-ui" aria-label="训练模式" hidden>
     <header class="training-bar">
       <div class="training-heading"><strong>训练馆</strong><span id="training-session">场馆预览</span><span id="training-count" hidden></span></div>
       <nav aria-label="训练操作">
@@ -217,7 +217,8 @@
     </div>
     <div id="training-setup">
       <div class="training-fields">
-        <label>训练专项
+        <label>训练模式<select id="training-kind"><option value="drill">专项训练</option><option value="free">自由训练</option></select></label>
+        <label data-drill-only>训练专项
           <select id="training-drill">
             <option value="cross">网前勾对角</option><option value="lift">起球（挑后场）</option><option value="netFree">网前自由连练</option>
             <option value="defense">接杀</option><option value="smash">定点击杀</option><option value="serve">定点发球</option>
@@ -232,7 +233,10 @@
         <label data-feed-only>喂球线路
           <select id="training-line"><option value="right">右路</option><option value="left">左路</option><option value="alternate">左右交替</option></select>
         </label>
-        <label>落点目标
+        <label data-free-only hidden>我的打法<select id="free-role"><option value="balanced">均衡</option><option value="swift">灵巧</option><option value="power">力量</option></select></label>
+        <label data-free-only hidden>对方打法<select id="free-opponent"><option value="balanced">均衡</option><option value="swift">灵巧</option><option value="power">力量</option></select></label>
+        <label data-free-only hidden>每球发球方<select id="free-server"><option value="0">我方发球</option><option value="1">对方发球</option></select></label>
+        <label data-drill-only>落点目标
           <select id="training-target"><option value="auto">随专项</option><option value="left">左区</option><option value="right">右区</option></select>
         </label>
       </div>

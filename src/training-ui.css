@@ -1,5 +1,5 @@
 /* Keep the shot keys and floating stick on the same hit surfaces as a match. */
-body[data-training] :is(#hud, #countdown, .player-stamina-layer, .assist-panel) { display:none !important; }
+body[data-training] :is(#hud, #countdown, .assist-panel) { display:none !important; }
 /* The layout editor measures the toolbar and both instruction rows to fit
    custom keys. Keep their geometry available while in the training venue. */
 body[data-training] .topbar, body[data-training] .shot-instruction,

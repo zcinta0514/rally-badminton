@@ -28,7 +28,7 @@ import { createLeaderboard, getLeaderboardURL, resultRecordText } from './leader
 import { openPeerRoom } from './peer-network.js';
 import { createPeerRecords } from './peer-records.js';
 import { resolveShotAim, toWorldInput } from './play-input.js';
-import { createMatch, getScoringRules, getDifficultyProfile, stepMatch, aiInput, pauseMatch, resumeMatch, finishMatch, RULES_VERSION, ROLES, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
+import { createMatch, getScoringRules, getDifficultyProfile, stepMatch, pauseMatch, resumeMatch, finishMatch, RULES_VERSION, ROLES, getShotAvailability, getInterceptAdvice, getShotTarget } from '../shared/game.js';
 
 const $=id=>document.getElementById(id);
 const demoMode=globalThis.RALLY_CONFIG?.demoMode===true;
@@ -362,7 +362,7 @@ function resetTraining(options){
   trainingPlaying=false;
   accumulator=0;
   lastFrame=performance.now();
-  state=state?.training ? setTrainingOptions(state,options) : createTraining(options);
+  state=options.free ? createMatch({humanSlots:[0],roles:options.roles,trainingServer:options.server,difficulty:'medium',seed:Math.floor(Math.random()*0x7fffffff)}) : state?.training ? setTrainingOptions(state,options) : createTraining(options);
   arenaAudio.reset();
 }
 const trainingUI=bindTrainingUI({
@@ -848,7 +848,8 @@ try{
         while(accumulator>=1/60){
           const input=worldInput(controls.sample());
           if(pendingShot){Object.assign(input,pendingShot);pendingShot=null;}
-          stepTraining(state,input,1/60);
+          if (state.trainingServer != null) stepMatch(state,practiceInputs(state,input,state),1/60);
+          else stepTraining(state,input,1/60);
           accumulator-=1/60;
         }
         arenaAudio.setListener(view.camera.position);
@@ -856,7 +857,7 @@ try{
       }
       const input=controls.sample();
       const held=input.prepare ? worldInput(input) : null;
-      const liveStroke=trainingPlaying && (state.training.stage==='feed' ||
+      const liveStroke=trainingPlaying && (state.trainingServer != null || state.training.stage==='feed' ||
         (state.training.stage==='ready' && state.phase==='serve'));
       const guidanceStart=performance.now();
       const info=liveStroke ? shotGuidance(state,input) : {};
@@ -864,13 +865,14 @@ try{
       const renderStart=performance.now();
       view.render(state,0,Math.min(elapsed,.1),{
         ...info,
-        trainingTarget:state.training.target,
-        trainingTargets:state.training.targets,
-        trainingActiveTarget:state.training.returnShot?.technique,
+        trainingTarget:state.training?.target,
+        trainingTargets:state.training?.targets,
+        trainingActiveTarget:state.training?.returnShot?.technique,
       });
       renderMs=performance.now()-renderStart;
-      paintShotControls(held,trainingPlaying && Boolean(state.training.canSmash),state.phase);
-      trainingUI.update(state.training,held);
+      paintShotControls(held,trainingPlaying && Boolean(info.availability?.canSmash ?? state.training?.canSmash),state.phase);
+      if (state.trainingServer != null) trainingUI.updateFree(state,held);
+      else trainingUI.update(state.training,held);
     }else if(state){
       view.advanceEntrance?.(elapsed,{hidden:document.hidden,phase:state.phase,remaining:state.timer});
       document.body.dataset.entering=String(view.entranceActive===true);
@@ -931,7 +933,7 @@ try{
         stateTime:state?.time??null,statePhase:state?.phase??null,venue:view.mode,
         get matchStroke(){return mode==='ai' ? structuredClone(state?.lastShotInfo??null) : null;},
         get training(){
-          if(mode!=='training')return null;
+          if(mode!=='training'||!state?.training)return null;
           const pose=view.players[0].root.userData.pose;
           const project=(x,y,z)=>{
             const p=view.shuttle.position.clone().set(x,y,z).project(view.camera);
