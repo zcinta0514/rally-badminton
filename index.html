@@ -62,6 +62,8 @@
         <div class="settings-column">
           <section class="settings-card" aria-labelledby="settings-controls-title">
             <h3 id="settings-controls-title">操作</h3>
+            <div class="setup-row"><span id="hand-label">持拍手</span><div class="segments" id="racket-hand" role="group" aria-labelledby="hand-label"><button type="button" data-hand="left">左手</button><button type="button" data-hand="right">右手</button></div></div>
+            <small id="hand-pending" role="status" hidden>下一分生效</small>
             <button id="edit-shot-layout" class="shot-layout-settings" type="button"><span>击球键布局</span><span aria-hidden="true">›</span></button>
             <small id="shot-layout-restriction" hidden>请在开局前或回到大厅后调整击球键。</small>
             <label class="arena-haptics" for="haptics-enabled"><input id="haptics-enabled" type="checkbox" checked><span>触感反馈</span></label><small id="haptics-note" class="arena-haptics-note">击球与杀球时轻振；可在本机关闭。</small>
@@ -154,7 +156,7 @@
       <div class="entry-submit"><button id="start-hell-confirm" class="primary-btn" type="button">开始挑战</button></div>
       <details class="setup-reference" id="hell-more">
         <summary>查看对手技能说明</summary>
-        <div class="hell-skills"><article><b>幻影球</b><p>一真三假。追踪实线尾迹，虚影过网前消散，也会突袭短吊和平抽。</p></article><article><b>蓄力重炮</b><p>提前亮出线路。挡住重杀，趁对手回位慢打空当。</p></article><article><b>极限救球</b><p>难接低球才鱼跃。侧身落地、撑地起身，两次扑救至少间隔3秒。活球中小心看台飞来的纸团。</p></article></div>
+        <div class="hell-skills"><article><b>幻影球</b><p>一真三假。追踪实线尾迹，虚影过网前消散，也会突袭短吊和平抽。</p></article><article><b>蓄力重炮</b><p>提前亮出线路。挡住重杀，趁对手回位慢打空当。</p></article><article><b>极限救球</b><p>难接低球才鱼跃。侧身落地、撑地起身，两次扑救至少间隔3秒。活球中小心看台飞来的纸团。</p></article><article><b>看台点招</b><p>每分换一种球路。按提示回击一次，看台会帮你识破本分下一记幻影。</p></article></div>
       </details>
     </section>
     <section id="friends-dialog" class="entry-content friend-setup" hidden aria-labelledby="entry-title">
@@ -200,7 +202,7 @@
     </div>
   </main>
   <footer class="lobby-update" aria-label="游戏版本与更新">
-    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.31.2</a>
+    <a class="lobby-version" href="./src/preview/arena.html">场馆预览版 1.33.0</a>
     <button id="lobby-history" type="button">近期更新</button>
     <button id="lobby-check-update" type="button">检查更新</button>
   </footer>

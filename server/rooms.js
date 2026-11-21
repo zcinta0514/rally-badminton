@@ -1,3 +1,4 @@
+import { applyHandPreference } from '../shared/handedness.js';
 import { randomBytes, randomInt } from 'node:crypto';
 import { createMatch, stepMatch, pauseMatch, resumeMatch, finishMatch, RULES_VERSION, ROLES } from '../shared/game.js';
 import { cleanName, playerIdentity, validPlayerKey } from './leaderboard.js';
@@ -146,6 +147,7 @@ export class Rooms {
     if(m.type==='leave'){this.leave(ctx);return;}
     const s=room.state;if(!s)return;
     if(m.type==='input'){
+      applyHandPreference(s, slot, m.hand);
       if(!['serve','rally'].includes(s.phase))return;
       let x=clamp(m.x,-1,1),z=clamp(m.z,-1,1);const length=Math.hypot(x,z);if(length>1){x/=length;z/=length;}
       const existing=room.inputs[slot];

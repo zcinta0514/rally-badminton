@@ -1,6 +1,6 @@
 import { separateTeammates, contactOrder, doublesAssignment } from './doubles.js';
 import { NET_PHYSICS, resolveNetImpact } from './net-physics.js';
-import { HELL, createHellChallenge, resetHellRally } from './hell-mode.js';
+import { HELL, crowdRequest, createHellChallenge, resetHellRally } from './hell-mode.js';
 import { contactQuality, contactDrift } from './shot-quality.js';
 import { SHUTTLE_FLIGHT, VERTICAL_DRAG, verticalLaunch, timeToHeight, flightApex, verticalFlight, sampleShuttleFlight, horizontalLaunch, timeToShuttleZ, horizontalTimeFraction } from './shuttle-flight.js';
 import { staminaEffects, movementStaminaRate, shotStaminaCost, STAMINA_TUNING } from './stamina.js';
@@ -607,11 +607,19 @@ function playShot(state, side, request, serving = false) {
   state.phase = 'rally'; state.hitId++; state.rally++; state.lastShot = type;
   if (h) {
     h.active = null;
+    if (!boss && !serving && !h.crowdEarned && type === crowdRequest(state)) {
+      h.crowdEarned = true;
+      h.spotlight = true;
+    }
     if (skill) {
       h.counts[skill]++;
       const netTime = timeToShuttleZ(ball, 0);
       h.active = { kind: skill, at: state.time, hitId: state.hitId, launch: { ...ball },
         fadeAt: Math.max(.005, Math.min(.65, netTime * .86)) };
+      if (h.spotlight && ['phantom', 'netDrop', 'drive'].includes(skill)) {
+        h.active.revealed = true;
+        h.spotlight = false;
+      }
     }
   }
   state.lastShotInfo = {hitId: state.hitId, side: playerTeam(state, side), playerSlot: side, at: state.time, type, requested: target.requested,

@@ -116,7 +116,7 @@ export function installAthleteModel(visual, { scene }) {
     }
   };
   const pose = visual.root.userData.pose;
-  const side = Math.cos(visual.root.rotation.y-(pose?.heading || 0)) < 0 ? 1 : 0;
+  const side = Math.cos(visual.root.rotation.y-visual.root.scale.x*(pose?.heading || 0)) < 0 ? 1 : 0;
   const ankleYaws = Object.fromEntries(['left','right'].map(name => [name, visual.bones[name+'Ankle'].rotation.y+(pose?.heading || 0)]));
   try {
     // Pose the candidate before releasing the fallback. A failed installation

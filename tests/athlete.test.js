@@ -401,3 +401,16 @@ test('an airborne recovery step redirects after a reversal and a stop settles in
     assert.ok(Math.hypot(foot.world.x-x-sign*.18,foot.world.z-player.z)<.23,'stopping cannot leave the next stroke in a twisted overextended stance');
   }
 });
+
+test('left-handed racket reaches both lateral contacts on either end of court',()=>{
+  for(const side of [0,1]) for(const lateral of [-.65,.65]){
+    const visual=makeAthlete(new THREE.Scene(),side);
+    const p={...player,x:.8,z:side?-3.8:3.8,hand:'left'};
+    const contact={x:p.x+lateral,y:2.8,z:p.z+(side?.35:-.35)};
+    p.action={...action,contact};
+    updateAthlete(visual,p,side,contact,action.contactAt,1/60,true);
+    const face=visual.racket.localToWorld(new THREE.Vector3(0,.54,0));
+    assert.ok(face.distanceTo(new THREE.Vector3(contact.x,contact.y,contact.z))<.0001);
+    assert.equal(visual.root.scale.x,-1);
+  }
+});

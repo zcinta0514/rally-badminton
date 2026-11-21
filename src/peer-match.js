@@ -1,3 +1,4 @@
+import { applyHandPreference } from '../shared/handedness.js';
 import { createMatch, stepMatch, pauseMatch, resumeMatch, finishMatch, ROLES } from '../shared/game.js';
 import { confirmsRoomRules, startRoomCountdown } from '../shared/room-readiness.js';
 
@@ -155,6 +156,7 @@ export class PeerMatch {
     const state = this.state;
     if (!state) return;
     if (message.type === 'input') {
+      applyHandPreference(state, slot, message.hand);
       if (!['serve', 'rally'].includes(state.phase)) return;
       let x = clamp(message.x, -1, 1), z = clamp(message.z, -1, 1);
       const length = Math.hypot(x, z);
