@@ -63,7 +63,7 @@ function registration(event, name) {
         <fieldset><legend>本届分制</legend><div class="cup-score-options">${choices}</div></fieldset></div>
       <div class="cup-rules"><p id="cup-score-rule" aria-live="polite">${scoreHint(5)}</p>
       <p>连赢 ${Math.log2(event.size)} 场夺冠，单败淘汰。</p>
-      <p>全程使用同一分制。离开可续赛，退赛清除进度。</p></div>
+      <p>本届分制固定。退出游戏可续赛，退赛后须重新报名。</p></div>
       <div class="cup-actions"><button type="submit" class="cup-primary" data-cup="create" data-action="save">确认参赛 ↗</button></div>
     </form>`;
 }
@@ -100,7 +100,7 @@ export function bindCupUI({ getRun, getScore, getDefaultName, onCreate, onPlay, 
     }
     const backToHub = ['preview', 'withdraw', 'draw'].includes(page);
     back.dataset.cup = backToHub ? 'hub' : 'close';
-    back.textContent = page === 'preview' ? '← 返回选赛' : backToHub ? '← 返回赛事' : '← 返回大厅';
+    back.textContent = page === 'preview' ? '← 返回选赛' : backToHub ? '← 返回赛事' : '← 返回单人对战';
     dialog.dataset.page = page;
     dialog.dataset.event = event?.id || '';
     body.innerHTML = content;
