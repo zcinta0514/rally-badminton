@@ -11,7 +11,8 @@ test('one bounded GPU skin carries the jersey and all four continuous limbs',()=
   const rig=makeAthlete(new THREE.Scene(),0),skin=rig.skin;
   assert.ok(skin?.isSkinnedMesh);
   const skins=[];rig.root.traverse(o=>{if(o.isSkinnedMesh)skins.push(o);});
-  assert.equal(skins.length,1);
+  assert.deepEqual(skins,[skin,rig.shorts],'body and continuous shorts have one draw each');
+  assert.equal(rig.shorts.skeleton,skin.skeleton,'clothing reuses the body bones');
   assert.equal(rig.skeleton,skin.skeleton,'preview cleanup disposes the active skeleton');
   assert.ok(skin.skeleton.bones.length<=16);
   assert.ok(skin.geometry.getAttribute('position').count<3000);
@@ -26,6 +27,29 @@ test('one bounded GPU skin carries the jersey and all four continuous limbs',()=
     const touches=(start,end)=>{let found=false;for(let i=0;i<triangles.length;i+=3){const tri=triangles.slice(i,i+3);if(tri.some(v=>v>=joint&&v<joint+limb.sides)&&tri.some(v=>v>=start&&v<end)){found=true;break;}}return found;};
     assert.ok(touches(joint-limb.sides,joint)&&touches(joint+limb.sides,joint+2*limb.sides),'a single elbow/knee ring joins both sides');
   }
+});
+
+test('shorts stay joined from waist to both thighs with openings only at the waist and cuffs',()=>{
+  const {shorts}=makeAthlete(new THREE.Scene(),0),geometry=shorts.geometry;
+  const indices=geometry.index.array,positions=geometry.attributes.position,edges=new Map();
+  for(let i=0;i<indices.length;i+=3){
+    for(let side=0;side<3;side++){
+      const a=indices[i+side],b=indices[i+(side+1)%3];
+      const key=a<b?`${a},${b}`:`${b},${a}`;
+      edges.set(key,(edges.get(key)??0)+1);
+    }
+  }
+  let waistEdges=0,cuffEdges=0;
+  for(const [edge,count] of edges){
+    if(count===2)continue;
+    assert.equal(count,1,'no edge carries overlapping panels');
+    const ys=edge.split(',').map(i=>positions.getY(Number(i)));
+    if(ys.every(y=>Math.abs(y-.924)<1e-5))waistEdges++;
+    else if(ys.every(y=>Math.abs(y-.648)<1e-5))cuffEdges++;
+    else assert.fail('open seam inside the garment');
+  }
+  assert.equal(waistEdges,32);
+  assert.equal(cuffEdges,48);
 });
 
 test('bending preserves joint volume, finite surfaces, exact grip and frozen skin transforms',()=>{

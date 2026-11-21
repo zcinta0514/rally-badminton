@@ -733,7 +733,10 @@ export class CourtView {
     this.finaleAnchors=[];
     for(let index=0;index<2;index++){
       const loser=index===finale.loser,player=this.players[index],x=loser?-.9:.9;
-      const pose=sampleFinalePose(loser?'loser':'winner',finale.age,loser?-Math.PI/2:Math.PI/2);
+      // The finale is staged in court space. Convert its facing angle to the
+      // same handed coordinate frame as the player that just finished the rally.
+      const facing=(loser?-Math.PI/2:Math.PI/2)*Math.sign(player.root.scale.x);
+      const pose=sampleFinalePose(loser?'loser':'winner',finale.age,facing);
       applyAthletePose(player,pose,{x,z:3.4,side:0,selected:false});
       player.racket.visible=false;player.ground.visible=false;
       // Keep identity labels steady while the head bows down; the voice bubble

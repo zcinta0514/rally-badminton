@@ -1,6 +1,6 @@
 // Frozen pre-SMASH-1 runtime from 0a0e9c7e; comparison preview only.
 import * as THREE from 'three';
-import { makeAthleteModel } from '../athlete-model.js';
+import { makeAthleteModel } from './legacy-c7c388f/athlete-model.js';
 
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const smooth=n=>{n=clamp(n,0,1);return n*n*(3-2*n);};

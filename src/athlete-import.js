@@ -29,6 +29,45 @@ function repairArmWeights(geometry, bones) {
   }
 }
 
+// Fit the overlapping pieces of the prepared player in its metre-scale bind
+// pose. This runs once per instance, before upload, in player-local coordinates.
+function fitShouldersAndNape(mesh, bones) {
+  const { position, skinIndex, skinWeight } = mesh.geometry.attributes;
+  if (mesh.material.name === 'rally-shirt') {
+    const shoulders = new Set(bones.flatMap((bone, index) =>
+      bone.name === 'leftShoulder' || bone.name === 'rightShoulder' ? [index] : []));
+    for (let i = 0; i < position.count; i++) {
+      const x = position.getX(i), width = Math.abs(x), y = position.getY(i);
+      let sleeve = false;
+      for (let j = 0; j < 4; j++) {
+        if (skinWeight.getComponent(i, j) > 0 && shoulders.has(skinIndex.getComponent(i, j))) sleeve = true;
+      }
+      if (sleeve) {
+        const cap = Math.max(0, 1 - Math.abs(width - .23) / .12);
+        position.setY(i, y - Math.max(0, y - 1.435) * cap * .30);
+      } else if (y > 1.454 && width > .077) {
+        const ridge = Math.max(0, 1 - Math.abs(y - 1.475) / .055) * Math.min(1, (width - .077) / .15);
+        position.setX(i, x + Math.sign(x) * .014 * ridge);
+        position.setY(i, y + .014 * ridge);
+      }
+    }
+    mesh.geometry.computeVertexNormals();
+  } else if (mesh.material.name === 'rally-skin') {
+    const head = bones.findIndex(bone => bone.name === 'head'), neck = bones.findIndex(bone => bone.name === 'neck');
+    for (let i = 0; i < position.count; i++) {
+      // Only the back of the rigidly cut head extends below the jaw. Taper
+      // its cut edge inside the retained procedural neck as the head turns.
+      const y = position.getY(i), z = position.getZ(i);
+      if (skinIndex.getX(i) !== head || skinWeight.getX(i) < .99999 || y >= 1.636 || z < -.005) continue;
+      const blend = THREE.MathUtils.smoothstep(1.636 - y, 0, .045);
+      position.setX(i, position.getX(i) * (1 - .55 * blend));
+      position.setZ(i, z - .012 * blend);
+      skinIndex.setY(i, neck);
+      skinWeight.setXY(i, 1 - blend, blend);
+    }
+  }
+}
+
 function disposeScene(scene) {
   const geometries = new Set(), materials = new Set(), textures = new Set(), skeletons = new Set();
   scene.traverse(object => {
@@ -76,6 +115,7 @@ export function installAthleteModel(visual, { scene }) {
   for (const mesh of meshes) {
     repairArmWeights(mesh.geometry, sourceBones);
     mesh.geometry.applyMatrix4(mesh.matrixWorld);
+    fitShouldersAndNape(mesh, sourceBones);
     mesh.position.set(0, 0, 0); mesh.quaternion.identity(); mesh.scale.set(1, 1, 1);
     if (palette[mesh.material.name] !== undefined) mesh.material.color.setHex(palette[mesh.material.name]);
     mesh.castShadow = true; mesh.receiveShadow = true; mesh.frustumCulled = false;
@@ -130,6 +170,7 @@ export function installAthleteModel(visual, { scene }) {
   // Keep clothing, neck, shoes and grip adapters. Their original material is
   // shared, so only release the replaced surfaces and unused skin skeleton.
   const previous = visual.skin;
+  visual.shorts.userData.bindToBody?.(skeleton, ['pelvis', 'leftHip', 'rightHip']);
   for (const object of [previous, visual.head]) {
     object.removeFromParent(); object.geometry.dispose();
   }

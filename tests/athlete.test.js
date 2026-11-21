@@ -348,8 +348,30 @@ test('ready stance keeps both elbows below the shoulders and the racket above th
   const pose=sampleAthletePose(player,0,ball,0),j=pose.joints;
   assert.ok(j.rightElbow.y<j.rightShoulder.y-.12);
   assert.ok(j.leftElbow.y<j.leftShoulder.y-.12);
+  assert.ok(j.rightElbow.x>j.rightShoulder.x+.10 && j.leftElbow.x<j.leftShoulder.x-.10,
+    'leave visible space between each upper arm and the ribs');
   assert.ok(j.rightWrist.z<j.rightElbow.z-.1,'the forearm reaches forward from the elbow');
   assert.ok(pose.racketHead.y>j.rightWrist.y+.08,'the racket is held up, not dangling from the wrist');
+});
+
+test('the free arm balances a chasse and counter-swings on forward and backward steps',()=>{
+  const reach=(vx,vz,phase)=>{
+    const pose=sampleAthletePose({...player,vx,vz},0,ball,0,{moveCycle:phase});
+    const j=pose.joints;
+    const inChestFrame=point=>new THREE.Vector3(point.x-j.chest.x,point.y-j.chest.y,point.z-j.chest.z)
+      .applyAxisAngle(new THREE.Vector3(0,1,0),-pose.chestYaw);
+    return {free:inChestFrame(j.leftWrist),racket:inChestFrame(j.rightWrist)};
+  };
+  const idle=reach(0,0,0);
+  for(const vx of [-4,4]){
+    const side=reach(vx,0,0);
+    assert.ok(side.free.x<idle.free.x-.05,'extend the balancing arm on a lateral step');
+  }
+  for(const vz of [-4,4]){
+    const a=reach(0,vz,Math.PI/2), b=reach(0,vz,-Math.PI/2);
+    assert.ok((a.free.z-b.free.z)*Math.sign(vz)>.25);
+    assert.ok((a.racket.z-b.racket.z)*Math.sign(vz)<0);
+  }
 });
 
 test('a real shortened windup still reaches the exact contact without a next-frame jump',()=>{

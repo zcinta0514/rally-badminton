@@ -123,6 +123,14 @@ test('installation preserves both players semantic joints, world root and exact 
     const before = anchors(imported.visual), pose = structuredClone(imported.visual.root.userData.pose);
     assert.ok(Math.abs(imported.visual.root.rotation.y - (side === 0 ? 0 : Math.PI)) > .1, 'install after the player has already turned');
     installAthleteModel(imported.visual, model());
+    const shorts = imported.visual.shorts;
+    assert.equal(shorts.skeleton, imported.visual.skeleton, 'clothing follows the installed body');
+    const linkedBones = new Set();
+    const { skinIndex, skinWeight } = shorts.geometry.attributes;
+    for (let v = 0; v < skinIndex.count; v++) for (let slot = 0; slot < 4; slot++) {
+      if (skinWeight.getComponent(v, slot) > 0) linkedBones.add(shorts.skeleton.bones[skinIndex.getComponent(v, slot)].name);
+    }
+    assert.deepEqual(linkedBones, new Set(['pelvis', 'leftHip', 'rightHip']));
     assertAnchorsEqual(anchors(imported.visual), before);
     assert.deepEqual(imported.visual.root.userData.pose, pose);
     assert.ok(new THREE.Vector3(...anchors(imported.visual).racket).distanceTo(vector(player.action.contact)) < 1e-7);

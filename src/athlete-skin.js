@@ -34,17 +34,21 @@ export function makeAthleteSkin(root,material,jersey,colors) {
       [upper-band,.048],[upper-band/2,.045],[upper,radius],[upper+band/2,.044],[upper+band,.046],
       [upper+.15,.042],[upper+lower-.045,.031],[upper+lower,.028]
     ]:[
-      [-.025,.069],[0,.093],[.075,.095],[.15,.09],[.25,.074],
+      // The upper thigh is inside the shorts. End it just inside the cuff so
+      // its round hip cap cannot poke through the garment on bent legs.
+      [.175,.064],[.205,.076],[.25,.074],
       [upper-band,.060],[upper-band/2,.056],[upper,radius],[upper+band/2,.056],[upper+band,.063],
       [upper+.16,.064],[upper+.26,.05],[upper+lower-.035,.037],[upper+lower,.034]
     ];
     const sides=16,positions=[],rgb=[],indices=[];
     for(const [distance,r]of rings)for(let n=0;n<sides;n++){
       const angle=n/sides*Math.PI*2,x=Math.cos(angle)*r,z=Math.sin(angle)*r*(arm?.96:.94);
-      positions.push(start[0]+x,start[1]-distance,z);
+      // Tuck the sleeve cap towards the collar and let its inner edge follow
+      // the chest. A rigid cap centred on the shoulder reads as a separate ball.
+      const inset=arm?Math.min(0,distance)*1.18:0;
+      const capDrop=arm?Math.max(0,-distance)*.24:0;
+      positions.push(start[0]+sign*inset+x,start[1]-distance-capDrop,z);
       const cloth=arm&&distance<.14,color=new THREE.Color(cloth?(distance>.095?colors.accent:colors.shirt):colors.skin);
-      // A quiet seam is vertex colour, with no texture download or extra draw.
-      if(cloth&&Math.abs(x)>.066)color.set(colors.dark);
       rgb.push(color.r,color.g,color.b);
     }
     for(let r=0;r<rings.length-1;r++)for(let n=0;n<sides;n++){
@@ -62,6 +66,7 @@ export function makeAthleteSkin(root,material,jersey,colors) {
     geometry.setIndex(indices);geometry.computeVertexNormals();
     attributes(geometry,i=>{
       const distance=rings[Math.floor(i/sides)][0];
+      if(arm&&distance<.045)return [body.chest,upperBone,smooth((distance+.065)/.11)];
       return distance<=upper?[upperBone,bendBone,smooth((distance-upper+band)/band)]:[bendBone,lowerBone,smooth((distance-upper)/band)];
     });
     limbs.push({from,joint,to,upperBone,bendBone,lowerBone,sides,jointRing:rings.findIndex(([d])=>d===upper),jointRadius:radius,geometry});

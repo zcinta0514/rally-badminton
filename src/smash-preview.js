@@ -1,7 +1,8 @@
 import { CourtView } from './view.js';
 import { createMatch, stepMatch } from '../shared/game.js';
-import { makeAthlete as makeBaseline, updateAthlete as updateBaseline } from './preview/smash-baseline.js';
-import { upgradeAthlete } from './athlete-import.js';
+import { updateAthlete as updateBaseline } from './preview/smash-baseline.js';
+import { makeAthlete as makeBaseline } from './preview/legacy-c7c388f/athlete.js';
+import { upgradeAthlete } from './preview/legacy-c7c388f/athlete-import.js';
 
 document.title='开拍 · 杀球新旧对比';
 document.body.removeAttribute('data-screen');
