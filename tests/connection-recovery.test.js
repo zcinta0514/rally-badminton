@@ -112,6 +112,9 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
       view = this; this.rallyEnding = false; this.crowdResets = 0; this.finaleClears = 0;
       this.finaleAnchors = [{ x: 170, y: 210 }, { x: 830, y: 260 }];
     }
+    beginCupAward(award) {this.award=award;}
+    endCupAward() {this.award=null;}
+    renderCupAward() {}
     setCupVenue(venue) { this.cupVenue=venue; }
     prepareTournament() {}
     setMode(mode) { this.mode = mode;if(mode!=='match')this.entrance?.cancel(); }
@@ -166,6 +169,7 @@ async function fixture(phase = 'serve', {entrance=false,demoMode=false, peerMode
       constructor() { audio = this; this.context = null; this.unlocks = 0; this.finaleCalls = []; this.stoppedVoices = []; }
     reset() {} update() {} setVisible() {} setListener() {} setEnabled(value) { this.enabled=value; }
       stopVoices(group) { this.stoppedVoices.push(group); }
+      playCupApplause(){this.applause=true;}
       playFinale(key) { this.finaleCalls.push(key); }
       unlock() { this.unlocks++; this.context = { state: 'running' }; }
     },
@@ -972,20 +976,52 @@ for(const {id,size} of drawModel.CUP_EVENTS){
   test(id+' advances once per scored win through the production match loop',async()=>{
     const app=await fixture('serve',{demoMode:true});
     const cup=app.cupActions;
-    cup.onCreate(id);
+    const target=id==='bay'?15:21;
+    cup.onCreate(id,'林小满',target);
+    assert.equal(cup.getDefaultName(),'林小满');
     for(let remaining=size;remaining>=2;remaining/=2){
       cup.onPlay();
       app.draw();
       assert.equal(app.view.cupVenue.centerCourt,remaining<=4);
+      assert.equal(app.liveState.target,target);
+      assert.equal(app.element('name-self').textContent,'林小满');
       assert.equal(app.element('name-other').textContent,drawModel.getCupOpponent(cup.getRun()).name);
-      app.liveState.score=[5,2];
+      app.liveState.score=[target,2];
       game.finishMatch(app.liveState,0,'获胜','scored');
       app.draw();app.draw();
       assert.equal(cup.getRun().status,remaining===2?'champion':'active');
       if(remaining>2)assert.equal(cup.getRun().rounds.at(-1).length,remaining/4);
     }
+    assert.equal(app.view.award.name,'林小满');
+    assert.equal(app.view.award.eventId,id);
+    assert.equal(app.element('skip-cup-award').hidden,false);
+    if(id==='bay')app.click('skip-cup-award');
+    else {
+      app.document.hidden=true;app.draw(15000);
+      assert.equal(app.view.award.name,'林小满');
+      app.document.hidden=false;app.draw(4000);app.draw(2100);
+      assert.equal(app.audio.applause,true);
+    }
+    assert.equal(app.view.award,null);
+    assert.equal(app.element('skip-cup-award').hidden,true);
     cup.onClose();
     assert.equal(app.view.cupVenue,null);
     assert.equal(app.liveState,null);
   });
 }
+
+test('losing a cup final keeps the result screen and never starts the podium',async()=>{
+  const app=await fixture('serve',{demoMode:true});
+  const cup=app.cupActions;
+  cup.onCreate('bay','海湾选手',15);
+  for(let i=0;i<5;i++){
+    cup.onPlay();
+    app.draw();
+    assert.equal(app.view.cupVenue.selfName,'海湾选手');
+    game.finishMatch(app.liveState,i===4?1:0,'完赛','scored');
+    app.draw();
+  }
+  assert.equal(cup.getRun().status,'eliminated');
+  assert.equal(app.view.award,undefined);
+  assert.equal(app.element('result-dialog').hidden,false);
+});

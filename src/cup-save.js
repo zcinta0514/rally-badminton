@@ -5,7 +5,10 @@ export const CUP_STORAGE_KEY = 'rally.cup.v1';
 export function readCupSave(storage) {
   try {
     const saved = JSON.parse(storage.getItem(CUP_STORAGE_KEY));
-    if (saved && isValidCup(saved.draw)) return saved;
+    if (saved && isValidCup(saved.draw)) {
+      saved.draw.target ??= 5;
+      return saved;
+    }
   } catch {}
   return null;
 }

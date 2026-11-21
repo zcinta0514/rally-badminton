@@ -16,13 +16,13 @@ test('assigned boundary follows the active singles or doubles rectangle', () => 
 });
 
 async function loadHall(t) {
-  const text = [];
-  const context = {fillRect(){},fillText(value){text.push(value);}};
+  const text = [], labels = [];
+  const context = {fillRect(){},fillText(value,x,y,width){text.push(value);labels.push({value,x,y,width});}};
   globalThis.document = {createElement:()=>({getContext:()=>context})};
   t.after(()=>{ delete globalThis.document; });
   const bytes = await readFile(new URL('../src/models/tournament-hall.glb',import.meta.url));
   const gltf = await new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength),'');
-  return { hall: installTournamentArena(gltf), text };
+  return { hall: installTournamentArena(gltf), text, labels };
 }
 
 test('exported scoreboard uses the game brand and only the playing surface and apron change palettes', async t => {
@@ -68,7 +68,7 @@ test('real exported clips signal a point once, independently of the umpire and o
   assert.deepEqual(text.slice(-2),['00','00']);
 });
 test('cup signage, stands and court return to the chosen ordinary-match palette', async t => {
-  const { hall, text } = await loadHall(t);
+  const { hall, text, labels } = await loadHall(t);
   const { cupVenueTheme } = await import('../src/cup-venue.js');
   const seats = hall.scene.getObjectByName('AR__East__formed_seat_shells').material.color;
   const mat = hall.scene.getObjectByName('Court_|_sprung_competition_mat').material.color;
@@ -76,15 +76,18 @@ test('cup signage, stands and court return to the chosen ordinary-match palette'
   const state = {time:0, pointId:0, phase:'serve', score:[0,0], format:'singles'};
   for (const id of ['bay','crown']) {
     const theme = cupVenueTheme(id);
-    hall.palette('green', theme, '许嘉音');
+    const near='开拍球员·南城小林', far='阿斯特丽德·尼尔森';
+    hall.palette('green', theme, far, near);
     hall.update(state,0);
     assert.equal(mat.getHex(), theme.court);
     assert.equal(seats.getHex(), theme.seat);
-    assert.ok(text.slice(-5).includes('许嘉音'));
+    const pair=labels.slice(-5).filter(label=>label.y===114);
+    assert.deepEqual(pair.map(label=>label.value),[near,far]);
+    assert.ok(pair.every(label=>label.width===322));
   }
   hall.palette('pink');
   hall.update(state,0);
   assert.equal(mat.getHex(), COURT_PALETTES.pink.court);
   assert.equal(seats.getHex(), originalSeats);
-  assert.ok(text.slice(-5).includes('FAR'));
+  assert.deepEqual(text.slice(-4,-2),['NEAR','FAR']);
 });

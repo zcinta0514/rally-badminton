@@ -1,3 +1,6 @@
+import { CUP_TARGETS } from '../shared/game.js';
+export { CUP_TARGETS };
+
 export const CUP_EVENTS = Object.freeze([
   { id: 'bay', name: '开拍海湾挑战赛', size: 32, venue: '海湾日光馆', centerVenue: '海湾中心球场' },
   { id: 'crown', name: '开拍冠军杯', size: 64, venue: '都会星夜馆', centerVenue: '都会冠军球场' },
@@ -61,9 +64,10 @@ function pair(slots) {
   }));
 }
 
-export function createCup(eventId, playerName = '你', seed = Math.floor(Math.random() * 0x100000000)) {
+export function createCup(eventId, playerName = '你', seed = Math.floor(Math.random() * 0x100000000), target = 5) {
   const event = CUP_EVENTS.find(item => item.id === eventId);
   if (!event) throw new RangeError('未知赛事');
+  if (!CUP_TARGETS.includes(target)) throw new RangeError('杯赛分制无效');
   seed = seed >>> 0;
   const random = randomStream(seed);
   const name = String(playerName || '你').trim().slice(0, 32) || '你';
@@ -74,7 +78,7 @@ export function createCup(eventId, playerName = '你', seed = Math.floor(Math.ra
     const band = shuffled(Array.from({ length: slots.length }, (_, i) => slots.length + i), random);
     slots = slots.flatMap((id, i) => random() < 0.5 ? [id, band[i]] : [band[i], id]);
   }
-  return { version: 1, id: eventId + '-' + seed, eventId, seed, status: 'active',
+  return { version: 1, id: eventId + '-' + seed, eventId, seed, target, status: 'active',
     roundIndex: 0, players, rounds: [pair(slots)] };
 }
 
@@ -111,6 +115,7 @@ export function advanceCup(cup, won) {
 export function isValidCup(cup) {
   const size = CUP_EVENTS.find(event => event.id === cup?.eventId)?.size;
   if (!size || cup.version !== 1 || !Number.isInteger(cup.seed) || cup.seed !== (cup.seed >>> 0)
+      || (cup.target !== undefined && !CUP_TARGETS.includes(cup.target))
       || cup.id !== cup.eventId + '-' + cup.seed || !Array.isArray(cup.players) || cup.players.length !== size
       || !Array.isArray(cup.rounds) || !Number.isInteger(cup.roundIndex) || cup.roundIndex < 0
       || cup.roundIndex >= Math.log2(size) || cup.rounds.length !== cup.roundIndex + 1

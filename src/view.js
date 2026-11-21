@@ -1,3 +1,4 @@
+import { makeCupAward, frameCupAwardCamera, STAGE_HEIGHT } from './cup-award.js';
 import { applyCupKit, cupVenueTheme, makeCupBoards } from './cup-venue.js';
 import { localTeam } from './match-lineup.js';
 import { normalizeBrightness } from './arena-preferences.js';
@@ -392,7 +393,7 @@ export class CourtView {
   installPreparedTournament() {
     const hall = this.preparedTournament;
     if (!hall || this.mode === 'training') return;
-    hall.palette(this.courtPalette, this.cupTheme, this.cupVenue?.opponent?.name);
+    hall.palette(this.courtPalette, this.cupTheme, this.cupVenue?.opponent?.name, this.cupVenue?.selfName);
     this.prepareFollowScenery(hall.scene);
     this.venue.add(hall.scene);
     this.fallbackCourt.removeFromParent();
@@ -406,6 +407,7 @@ export class CourtView {
 
   setMode(mode) {
     if(this.mode===mode)return;
+    if (mode !== 'match' && this.cupAward) this.endCupAward();
     if (mode !== 'match' && this.cupVenue) this.setCupVenue(null);
     const leavingTraining = this.mode === 'training';
     this.mode=mode;
@@ -463,6 +465,57 @@ export class CourtView {
     applyCupKit(player, this.cupTheme, player.index === 1 && this.cupVenue?.opponent?.height);
   }
 
+  beginCupAward({name,eventId}) {
+    this.endCupAward();
+    this.clearFinale();
+    const award = makeCupAward({name,eventId});
+    const winner = this.players[0];
+    const hidden = [winner.racket, ...this.players.map(p => p.ground),
+      ...this.players.slice(1).map(p => p.root), this.shuttle, this.paperBall,
+      this.trail, this.groundMarker, this.impactMarker, this.bossRing, this.cannonLine,
+      ...this.phantoms, ...[this.landingHint,this.interceptHint,this.targetHint,this.readyHint].map(h => h.group)];
+    this.cupAward = { ...award, age:0, previousSide:this.cameraSide ?? 0,
+      hidden:hidden.map(obj => [obj,obj.visible]), winnerVisible:winner.root.visible,
+      winnerPosition:winner.root.position.clone(), winnerRotation:winner.root.rotation.clone() };
+    hidden.forEach(obj => { obj.visible=false; });
+    winner.root.visible=true;
+    this.scene.add(award.stage);
+    this.staminaHUD?.hide();
+    this.edgeIndicator.hidden=true;
+    if(this.fatigueEdge)this.fatigueEdge.hidden=true;
+    this.renderCupAward(0);
+  }
+
+  renderCupAward(dt=0) {
+    const award=this.cupAward;
+    if(!award)return;
+    award.age=Math.min(6,award.age+Math.max(0,Number.isFinite(dt)?dt:0));
+    const reduced=this.reducedMotion?.matches===true;
+    const pose=award.frame(award.age,reduced), player=this.players[0], stage=award.stage;
+    applyAthletePose(player,pose,{x:stage.position.x,z:stage.position.z,side:1});
+    player.root.position.y=STAGE_HEIGHT;
+    player.root.rotation.y+=stage.rotation.y;
+    frameCupAwardCamera(this.camera,stage,this.width/this.height,award.age,reduced);
+    this.renderer.localClippingEnabled=false;
+    this.renderer.render(this.scene,this.camera);
+  }
+
+  endCupAward() {
+    const award=this.cupAward;
+    if(!award)return;
+    this.cupAward=null;
+    award.stage.removeFromParent();
+    disposeSceneResources(award.stage);
+    for(const [obj,visible] of award.hidden)obj.visible=visible;
+    const winner=this.players[0];
+    winner.root.visible=award.winnerVisible;
+    winner.root.position.copy(award.winnerPosition);
+    winner.root.rotation.copy(award.winnerRotation);
+    winner.motion=null;
+    this.initialized=false;
+    this.updateCamera(award.previousSide);
+  }
+
   setCupVenue(venue) {
     if (!venue && !this.cupVenue) return;
     if (this.cupBoards) {
@@ -486,7 +539,7 @@ export class CourtView {
 
   setCourtPalette(name) {
     this.courtPalette = normalizeCourtPalette(name);
-    this.tournament?.palette(this.courtPalette, this.cupTheme, this.cupVenue?.opponent?.name);
+    this.tournament?.palette(this.courtPalette, this.cupTheme, this.cupVenue?.opponent?.name, this.cupVenue?.selfName);
     const palette = this.cupTheme ?? resolveCourtPalette(this.courtPalette);
     if (this.courtMaterials) {
       this.courtMaterials.court.color.setHex(palette.court);
@@ -703,6 +756,7 @@ export class CourtView {
   }
 
   render(state, side=0, dt=1/60, info={}) {
+    if(this.cupAward){this.renderCupAward(dt);return;}
     if(!state?.players||!state.shuttle)return;
     if (this.mode === 'training') {
       this.trainingHall.setTarget(info.trainingTarget, info.trainingTargets, info.trainingActiveTarget);
@@ -860,6 +914,7 @@ export class CourtView {
     this.renderer.localClippingEnabled = false;
   }
   dispose() {
+    if (this.cupAward) this.endCupAward();
     this.disposed = true;
     if (this.preparedTournament) disposeSceneResources(this.preparedTournament.scene);
     this.scene.add(this.venue);
