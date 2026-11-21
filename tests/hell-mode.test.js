@@ -244,3 +244,37 @@ test('paper throws use live play and respect the match budget', () => {
     }
   }
 });
+
+test('a rushed short serve exposes the backcourt while a central receiver can cover it', () => {
+  function deepReturns(rush) {
+    let deep = 0;
+    for (let seed = 1; seed <= 96; seed++) {
+      const s = createMatch({ challenge: 'hell', seed: Math.imul(seed, 2654435761) >>> 0 });
+      for (let frame = 0; frame < 500 && s.hitId < 2 && s.phase !== 'point'; frame++) {
+        const human = s.phase === 'serve' ? { shot: 'drop', aimDepth: -.65, charge: .05 } : { z: rush ? -1 : 0 };
+        stepMatch(s, [human, aiInput(s, 1, 'hard')], dt);
+      }
+      assert.equal(s.hitId, 2);
+      if (s.lastShot === 'clear' && predictLanding(s).z > 4) deep++;
+    }
+    return deep;
+  }
+  const rushed = deepReturns(true);
+  assert.ok(rushed > 48 && rushed < 96, String(rushed));
+  assert.equal(deepReturns(false), 0);
+});
+
+test('a low forced contact still gives the rushing server a short reply', () => {
+  const s = createMatch({ challenge: 'hell', seed: 17 });
+  s.phase = 'rally';
+  s.service.active = false;
+  s.lastShot = 'drop';
+  Object.assign(s.players[0], { x: 0, z: 1 });
+  Object.assign(s.players[1], { x: 0, z: -1.4 });
+  Object.assign(s.shuttle, { active: true, lastHit: 0, x: 0, z: -1.4, y: .86, vy: -1, vx: 0, vz: 0 });
+  for (let frame = 0; frame < 60 && !s.hitId; frame++) {
+    stepMatch(s, [{}, aiInput(s, 1, 'hard')], dt);
+  }
+  assert.equal(s.lastShotInfo?.playerSlot, 1);
+  assert.equal(s.lastShotInfo.type, 'drop');
+});
